@@ -14,7 +14,12 @@
 
 import sys
 import os
-import sphinx_rtd_theme
+on_rtd = os.environ.get('READTHEDOCS', None) == 'True'
+
+if not on_rtd:  # only import and set the theme if we're building docs locally
+    import sphinx_rtd_theme
+    html_theme = 'sphinx_rtd_theme'
+    html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
 
 # Below is some juice to keep ReadTheDocks from failing
 from mock import Mock as MagicMock
@@ -121,8 +126,6 @@ todo_include_todos = False
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 # html_theme = 'alabaster'
-html_theme = "sphinx_rtd_theme"
-html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
@@ -236,7 +239,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'gbdxtools.tex', u'gbdx\\_tools Documentation',
+    (master_doc, 'gbdxtools.tex', u'gbdxtools Documentation',
      u'Kostas Stamatiou', 'manual'),
 ]
 
