@@ -11,7 +11,7 @@ if sys.version_info > (3,):
 # long_description=readme,
       
 setup(name='gbdxtools',
-      version='0.0.1',
+      version='0.0.2',
       description='Python tools to order imagery and launch workflows on DigitalGlobe GBDX platform.',
       classifiers=[],
       keywords='',
