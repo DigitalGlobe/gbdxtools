@@ -1,5 +1,5 @@
 """
-author: Kostas Stamatiou
+authors: Kostas Stamatiou, Dan Getman
 contact: kostas.stamatiou@digitalglobe.com
 
 Functions to interface with GBDX API.
