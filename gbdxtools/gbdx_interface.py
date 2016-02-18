@@ -11,34 +11,6 @@ import requests
 from boto import s3
 
 
-def read_json(json_file):
-    """Creates a dictionary from a json file.
-
-    Args:
-        json_file (str): A filename ending in .json.
-
-    Returns:
-        Dictionary corresponding to json_file (dict)
-    """
-
-    def deunicodify_hook(pairs):
-        """This is an auxiliary function for reading in ascii.
-        """
-        new_pairs = []
-        for key, value in pairs:
-            if isinstance(value, unicode):
-                value = value.encode('utf-8')
-            if isinstance(key, unicode):
-                key = key.encode('utf-8')
-            new_pairs.append((key, value))
-        return dict(new_pairs)
-
-    dictionary = json.load(open(json_file, 'r'), 
-                           object_pairs_hook = deunicodify_hook)
-
-    return dictionary
-
-
 def get_access_token(username, password, api_key):
     """Returns a GBDX access token from user GBDX credentials.
        The access token is good for 7 days.
