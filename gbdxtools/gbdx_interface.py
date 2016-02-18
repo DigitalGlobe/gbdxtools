@@ -9,6 +9,7 @@ import os
 import json
 import requests
 from boto import s3
+import re
 
 
 def get_access_token(username, password, api_key):
@@ -36,6 +37,54 @@ def get_access_token(username, password, api_key):
     print "Obtained access token " + access_token
 
     return access_token
+
+
+def get_s3tmp_cred(access_token):
+    """Request temporary credentials for the GBDX S3 Storage Service
+       The access token is good for 10 hours.
+
+    Args:
+        access_token (str): GBDX access token
+
+    Returns:
+        S3 Credentials (dict): Set of credentials needed to access S3 Storage
+    """
+    url = 'https://geobigdata.io/s3creds/v1/prefix?duration=36000'
+    headers = {'Content-Type': 'application/json', "Authorization": "Bearer " + access_token}
+    s3tmp_cred = requests.get(url, headers=headers)
+
+    print "Obtained S3 Credentials"
+
+    return s3tmp_cred
+
+
+def s3tmp_cred_reg(s3_cred):
+    """Modify the local .aws/credentials file so that it has the current credentials
+
+    Args:
+        S3 Credentials (dict): Set of credentials needed to access S3 Storage
+
+    Returns:
+        Success (bool): Indicates whether the action was successful
+    """
+    response = False
+
+    # TODO: This has not been tested on a fresh install or something like a docker. 
+    # It may only work after the user has run the aws configure command
+    try:
+        f1 = open(os.path.join(os.path.expanduser('~'),'.aws/credentials'), 'w+')
+        # Write the credentials file
+        f1.write("[default]" + '\n')
+        f1.write("aws_secret_access_key=" + s3_cred['S3_secret_key'] + '\n')
+        f1.write("aws_access_key_id=" + s3_cred['S3_access_key'] + '\n')
+        f1.write("aws_session_token=" + s3_cred['S3_session_token'] + '\n')
+        f1.close()
+        response = True
+        print "Stored S3 Credentials Locally"
+    except:
+        print "Unexpected error:", sys.exc_info()[0]
+
+    return response
 
 
 def order_imagery(image_catalog_ids, access_token):
@@ -89,6 +138,109 @@ def check_order_status(sales_order_number, access_token):
 
     return status 
 
+
+def traverse_request(access_token, identifier, labels=None, maxdepth=None):
+    """Runs a simple catalog traverse for an ID
+
+    Args:       
+        access_token (str): GBDX access token.
+        identifier (str): Value to search for (rootRecordId).
+        labels (list): Object types filter.
+        maxdepth (int): Number of relationships to traverse.
+
+    Returns:
+        Search Results (dict): Dict of search results
+    """
+
+    if labels is None:
+        labels = ["_acquisition", "_imageFiles", "_fulfillsPartOf"]
+    if maxdepth is None:
+        maxdepth = 1
+
+    url = 'https://geobigdata.io/catalog/v1/traverse?includeRelationships=false'
+    headers = {"Authorization": "Bearer " + access_token,"Content-Type": "application/json"}
+    body = {"rootRecordId": identifier, "maxdepth": maxdepth, "direction": "both", "labels": labels}
+    r = requests.post(url, headers=headers, data=json.dumps(body), verify=False)
+
+    return r
+
+
+def get_landsat_properties(access_token, identifier):
+    """Queries main properties (Complete S3 Bucket Reference (source), footprintWkt, timestamp, identifier) 
+        for a simple catalog traverse on a Landsat CatalogID.
+        Return Dict is keyed by image identifier.
+        Properties can be added as needed. 
+
+    Args:       
+        access_token (str): GBDX access token.
+        identifier (str): Value to search for (CatalogID for Landsat Image).
+
+    Returns:
+        Image Properties (dict): Dict of image properties
+    """
+
+    return_set = {}
+
+    results_set = traverse_request(access_token, identifier, ["_landsatacquisition"], 1).json()
+
+    if "results" in results_set:
+        if len(results_set) > 0:
+            results_set['results'][0]['properties']['source'] = re.sub('.+?(?=landsat)', 'https://', results_set['results'][0]['properties']['browseURL'])
+            results_set['results'][0]['properties']['source'] = re.sub('([^/]+$)', '', results_set['results'][0]['properties']['source'])
+            return_set[identifier] = {}
+            return_set[identifier]['source'] = results_set['results'][0]['properties']['source']
+            return_set[identifier]['footprintWkt'] = results_set['results'][0]['properties']['footprintWkt']
+            return_set[identifier]['timestamp'] = results_set['results'][0]['properties']['timestamp']
+            return_set[identifier]['identifier'] = results_set['results'][0]['identifier']
+
+    return return_set
+
+
+def get_dg_properties(access_token, sales_order_num):
+    """Queries main properties (Complete S3 Bucket Reference (source), footprintWkt, timestamp, identifier) 
+        for a simple catalog traverse using a sales order number and filtering to only DG imagery.
+        Return Dict is keyed by image identifier.
+        Properties can be added as needed.
+
+        Note, if all we want is the bucket, this could also just pull all ObjectStoreData objects and get their buckets.
+        This gives us additional details in case we need to filter the parts of each acquisition by footprint.
+
+    Args:       
+        access_token (str): GBDX access token.
+        sales_order_num (str): Value to search for (Sales Order Number).
+
+    Returns:
+        Image Properties (dict): Dict of image properties
+    """
+
+    return_set = {}
+
+    results_set = traverse_request(access_token, sales_order_num, ["_acquisition", "_imageFiles", "_fulfillsPartOf"], 1).json()
+
+    if "results" in results_set:
+        if len(results_set) > 0:
+            for val in results_set['results']:
+                if val['type'] == "DigitalGlobeProduct":
+                    if not val['properties']['productCatalogId'] in return_set:
+                        return_set[val['properties']['productCatalogId']] = {}
+
+                    return_set[val['properties']['productCatalogId']][val['properties']['bands']] = {
+                        'DGPIdentifier': val['identifier'],
+                        'productCatalogId': val['properties']['productCatalogId'],
+                        'footprintWkt': val['properties']['footprintWkt'],
+                        'timestamp': val['properties']['timestamp']
+                    }
+
+            for key, val_1 in return_set.iteritems():
+                for key, val_2 in val_1.iteritems():
+                    results_set = traverse_request(access_token, val_2['DGPIdentifier'], ["_acquisition", "_imageFiles", "_fulfillsPartOf"], 1).json()
+                    for val_3 in results_set['results']:
+                        if val_3['type'] == "ObjectStoreData":
+                            val_2['bucket'] = val_3['properties']['bucketName']
+                            val_2['objectIdentifier'] = val_3['properties']['objectIdentifier']
+                            val_2['source'] = "https://" + val_3['properties']['bucketName'] + "/" + re.search('([^/]+)', val_3['properties']['objectIdentifier']).group(1)
+
+    return return_set
 
 def launch_workflow(workflow, access_token):
     """Launches GBDX workflow.
@@ -160,7 +312,7 @@ def has_this_been_ordered(image_catalog_id, access_token):
     except TypeError:
         return 'False'          
 
-
+# TODO: Might need to check to see if this works with multiple images in a single order.
 def get_location_of_ordered_imagery(sales_order_number, access_token):
     """Find location of ordered imagery.
 
