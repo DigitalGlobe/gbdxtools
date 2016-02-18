@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>User Guide &mdash; gbdx_tools 0.0.1 documentation</title>
+  <title>User Guide &mdash; gbdxtools 0.0.1 documentation</title>
   
 
   
@@ -30,8 +30,9 @@
   
 
   
-    <link rel="top" title="gbdx_tools 0.0.1 documentation" href="index.html"/>
-        <link rel="prev" title="gbdx_tools: Python tools for using GBDX" href="index.html"/> 
+    <link rel="top" title="gbdxtools 0.0.1 documentation" href="index.html"/>
+        <link rel="next" title="API Documentation" href="gbdxtools.html"/>
+        <link rel="prev" title="gbdxtools: Python tools for using GBDX" href="index.html"/> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -49,7 +50,7 @@
           
 
           
-            <a href="index.html" class="icon icon-home"> gbdx_tools
+            <a href="index.html" class="icon icon-home"> gbdxtools
           
 
           
@@ -88,6 +89,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#launching-a-workflow">Launching a workflow</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="gbdxtools.html">API Documentation</a></li>
 </ul>
 
             
@@ -101,7 +103,7 @@
       
       <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
         <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="index.html">gbdx_tools</a>
+        <a href="index.html">gbdxtools</a>
       </nav>
 
 
@@ -200,6 +202,7 @@ processed image in your S3 bucket.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="s1">u&#39;4270202770861644904&#39;</span>
 </pre></div>
 </div>
+<p>Your input location is where your ordered imagery sits on s3. Your output location has to be within your assigned s3-bucket/s3-prefix, which is &#8216;gbd-customer-data/58600248-2927-4523-b44b-5fec3d278c09/&#8217; in this example. If the directory does not exist, it will automatically be created.</p>
 <p>You can check on the status of your workflow as follows:</p>
 <div class="highlight-pycon"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">gi</span><span class="o">.</span><span class="n">check_workflow_status</span><span class="p">(</span><span class="s1">&#39;4270202770861644904&#39;</span><span class="p">,</span> <span class="n">access_token</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">Get</span> <span class="n">status</span> <span class="n">of</span> <span class="n">workflow</span><span class="p">:</span> <span class="mi">4270202770861644904</span>
@@ -216,8 +219,10 @@ processed image in your S3 bucket.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
+        <a href="gbdxtools.html" class="btn btn-neutral float-right" title="API Documentation" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
       
-        <a href="index.html" class="btn btn-neutral" title="gbdx_tools: Python tools for using GBDX" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+        <a href="index.html" class="btn btn-neutral" title="gbdxtools: Python tools for using GBDX" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>API Documentation &mdash; gbdx_tools 0.0.1 documentation</title>
+  <title>API Documentation &mdash; gbdxtools 0.0.1 documentation</title>
   
 
   
@@ -30,7 +30,7 @@
   
 
   
-    <link rel="top" title="gbdx_tools 0.0.1 documentation" href="index.html"/>
+    <link rel="top" title="gbdxtools 0.0.1 documentation" href="index.html"/>
         <link rel="prev" title="User Guide" href="user_guide.html"/> 
 
   
@@ -49,7 +49,7 @@
           
 
           
-            <a href="index.html" class="icon icon-home"> gbdx_tools
+            <a href="index.html" class="icon icon-home"> gbdxtools
           
 
           
@@ -99,7 +99,7 @@
       
       <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
         <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="index.html">gbdx_tools</a>
+        <a href="index.html">gbdxtools</a>
       </nav>
 
 
@@ -246,6 +246,69 @@ preceded with nor followed by a backslash.</li>
 </dd></dl>
 
 <dl class="function">
+<dt id="gbdxtools.gbdx_interface.get_dg_properties">
+<code class="descclassname">gbdxtools.gbdx_interface.</code><code class="descname">get_dg_properties</code><span class="sig-paren">(</span><em>access_token</em>, <em>sales_order_num</em><span class="sig-paren">)</span><a class="headerlink" href="#gbdxtools.gbdx_interface.get_dg_properties" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Queries main properties (Complete S3 Bucket Reference (source), footprintWkt, timestamp, identifier)</dt>
+<dd><p class="first">for a simple catalog traverse using a sales order number and filtering to only DG imagery.
+Return Dict is keyed by image identifier.
+Properties can be added as needed.</p>
+<p class="last">Note, if all we want is the bucket, this could also just pull all ObjectStoreData objects and get their buckets.
+This gives us additional details in case we need to filter the parts of each acquisition by footprint.</p>
+</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>access_token</strong> (<em>str</em>) &#8211; GBDX access token.</li>
+<li><strong>sales_order_num</strong> (<em>str</em>) &#8211; Value to search for (Sales Order Number).</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>Image Properties</strong> &#8211;
+Dict of image properties</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">dict</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="gbdxtools.gbdx_interface.get_landsat_properties">
+<code class="descclassname">gbdxtools.gbdx_interface.</code><code class="descname">get_landsat_properties</code><span class="sig-paren">(</span><em>access_token</em>, <em>identifier</em><span class="sig-paren">)</span><a class="headerlink" href="#gbdxtools.gbdx_interface.get_landsat_properties" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Queries main properties (Complete S3 Bucket Reference (source), footprintWkt, timestamp, identifier)</dt>
+<dd>for a simple catalog traverse on a Landsat CatalogID.
+Return Dict is keyed by image identifier.
+Properties can be added as needed.</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>access_token</strong> (<em>str</em>) &#8211; GBDX access token.</li>
+<li><strong>identifier</strong> (<em>str</em>) &#8211; Value to search for (CatalogID for Landsat Image).</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>Image Properties</strong> &#8211;
+Dict of image properties</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">dict</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
 <dt id="gbdxtools.gbdx_interface.get_location_of_ordered_imagery">
 <code class="descclassname">gbdxtools.gbdx_interface.</code><code class="descname">get_location_of_ordered_imagery</code><span class="sig-paren">(</span><em>sales_order_number</em>, <em>access_token</em><span class="sig-paren">)</span><a class="headerlink" href="#gbdxtools.gbdx_interface.get_location_of_ordered_imagery" title="Permalink to this definition">¶</a></dt>
 <dd><p>Find location of ordered imagery.</p>
@@ -276,12 +339,7 @@ preceded with nor followed by a backslash.</li>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>access_token</strong> (<em>str</em>) &#8211; GBDX access token.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>access_key</strong> &#8211;
-S3 access key
-secret_key (str): S3 secret key
-session_token (str): S3 session token</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">str</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">S3 access key (str),  S3 secret key (str), S3 session token (str)</td>
 </tr>
 </tbody>
 </table>
@@ -297,11 +355,29 @@ session_token (str): S3 session token</td>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>access_token</strong> (<em>str</em>) &#8211; GBDX access token.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>bucket</strong> &#8211;
-S3 personal bucket
-prefix (str): S3 personal prefix</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">S3 personal bucket (str), S3 personal prefix (str)</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">str</td>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="gbdxtools.gbdx_interface.get_s3tmp_cred">
+<code class="descclassname">gbdxtools.gbdx_interface.</code><code class="descname">get_s3tmp_cred</code><span class="sig-paren">(</span><em>access_token</em><span class="sig-paren">)</span><a class="headerlink" href="#gbdxtools.gbdx_interface.get_s3tmp_cred" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Request temporary credentials for the GBDX S3 Storage Service</dt>
+<dd>The access token is good for 10 hours.</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>access_token</strong> (<em>str</em>) &#8211; GBDX access token</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>S3 Credentials</strong> &#8211;
+Set of credentials needed to access S3 Storage</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
 </tr>
 </tbody>
 </table>
@@ -399,16 +475,46 @@ launch_workflow function.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="gbdxtools.gbdx_interface.read_json">
-<code class="descclassname">gbdxtools.gbdx_interface.</code><code class="descname">read_json</code><span class="sig-paren">(</span><em>json_file</em><span class="sig-paren">)</span><a class="headerlink" href="#gbdxtools.gbdx_interface.read_json" title="Permalink to this definition">¶</a></dt>
-<dd><p>Creates a dictionary from a json file.</p>
+<dt id="gbdxtools.gbdx_interface.s3tmp_cred_reg">
+<code class="descclassname">gbdxtools.gbdx_interface.</code><code class="descname">s3tmp_cred_reg</code><span class="sig-paren">(</span><em>s3_cred</em><span class="sig-paren">)</span><a class="headerlink" href="#gbdxtools.gbdx_interface.s3tmp_cred_reg" title="Permalink to this definition">¶</a></dt>
+<dd><p>Modify the local .aws/credentials file so that it has the current credentials</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>json_file</strong> (<em>str</em>) &#8211; A filename ending in .json.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>Credentials</strong> (<em>S3</em>) &#8211; Set of credentials needed to access S3 Storage</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Dictionary corresponding to json_file (dict)</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>Success</strong> &#8211;
+Indicates whether the action was successful</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="gbdxtools.gbdx_interface.traverse_request">
+<code class="descclassname">gbdxtools.gbdx_interface.</code><code class="descname">traverse_request</code><span class="sig-paren">(</span><em>access_token</em>, <em>identifier</em>, <em>labels=None</em>, <em>maxdepth=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gbdxtools.gbdx_interface.traverse_request" title="Permalink to this definition">¶</a></dt>
+<dd><p>Runs a simple catalog traverse for an ID</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>access_token</strong> (<em>str</em>) &#8211; GBDX access token.</li>
+<li><strong>identifier</strong> (<em>str</em>) &#8211; Value to search for (rootRecordId).</li>
+<li><strong>labels</strong> (<em>list</em>) &#8211; Object types filter.</li>
+<li><strong>maxdepth</strong> (<em>int</em>) &#8211; Number of relationships to traverse.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>Search Results</strong> &#8211;
+Dict of search results</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">dict</p>
+</td>
 </tr>
 </tbody>
 </table>

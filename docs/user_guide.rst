@@ -28,6 +28,8 @@ Simply call:
    >>> Get S3 bucket info
    >>> (u'gbd-customer-data', u'58600248-2927-4523-b44b-5fec3d278c09')
 
+You can see the contents of your bucket/prefix using this link: http://s3browser-env.elasticbeanstalk.com/login.html.
+
 
 Ordering imagery
 ----------------

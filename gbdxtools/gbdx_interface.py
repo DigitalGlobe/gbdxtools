@@ -22,7 +22,7 @@ def get_access_token(username, password, api_key):
         api_key (str): GBDX API key.
 
     Returns:
-        GBDX access token (str)
+        GBDX access token (str).
     """
 
     # get access token
@@ -44,10 +44,10 @@ def get_s3tmp_cred(access_token):
        The access token is good for 10 hours.
 
     Args:
-        access_token (str): GBDX access token
+        access_token (str): GBDX access token.
 
     Returns:
-        S3 Credentials (dict): Set of credentials needed to access S3 Storage
+        Set of credentials needed to access S3 Storage (dict).
     """
     url = 'https://geobigdata.io/s3creds/v1/prefix?duration=36000'
     headers = {'Content-Type': 'application/json', "Authorization": "Bearer " + access_token}
@@ -59,13 +59,13 @@ def get_s3tmp_cred(access_token):
 
 
 def s3tmp_cred_reg(s3_cred):
-    """Modify the local .aws/credentials file so that it has the current credentials
+    """Modify the local .aws/credentials file so that it has the current credentials.
 
     Args:
-        S3 Credentials (dict): Set of credentials needed to access S3 Storage
+        S3 Credentials (dict): Set of credentials needed to access S3 Storage.
 
     Returns:
-        Success (bool): Indicates whether the action was successful
+        Indicator of successful action (bool).
     """
     response = False
 
@@ -149,7 +149,7 @@ def traverse_request(access_token, identifier, labels=None, maxdepth=None):
         maxdepth (int): Number of relationships to traverse.
 
     Returns:
-        Search Results (dict): Dict of search results
+        Search Results (dict).
     """
 
     if labels is None:
@@ -176,7 +176,7 @@ def get_landsat_properties(access_token, identifier):
         identifier (str): Value to search for (CatalogID for Landsat Image).
 
     Returns:
-        Image Properties (dict): Dict of image properties
+        Image Properties (dict).
     """
 
     return_set = {}
@@ -210,7 +210,7 @@ def get_dg_properties(access_token, sales_order_num):
         sales_order_num (str): Value to search for (Sales Order Number).
 
     Returns:
-        Image Properties (dict): Dict of image properties
+        Image Properties (dict)
     """
 
     return_set = {}
@@ -241,6 +241,7 @@ def get_dg_properties(access_token, sales_order_num):
                             val_2['source'] = "https://" + val_3['properties']['bucketName'] + "/" + re.search('([^/]+)', val_3['properties']['objectIdentifier']).group(1)
 
     return return_set
+
 
 def launch_workflow(workflow, access_token):
     """Launches GBDX workflow.
@@ -311,6 +312,7 @@ def has_this_been_ordered(image_catalog_id, access_token):
             return 'False'
     except TypeError:
         return 'False'          
+
 
 # TODO: Might need to check to see if this works with multiple images in a single order.
 def get_location_of_ordered_imagery(sales_order_number, access_token):
@@ -429,7 +431,7 @@ def get_s3_info(access_token):
            access_token (str): GBDX access token.
 
        Returns:
-           S3 personal bucket (str), S3 personal prefix (str)    
+           S3 personal bucket (str), S3 personal prefix (str).    
     """
 
     print "Get S3 bucket info"
@@ -451,7 +453,7 @@ def get_s3_credentials(access_token):
            access_token (str): GBDX access token.
 
        Returns:
-           S3 access key (str),  S3 secret key (str), S3 session token (str)
+           S3 access key (str),  S3 secret key (str), S3 session token (str).
     """
 
     url = 'https://geobigdata.io/s3creds/v1/prefix?duration=36000'

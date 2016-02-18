@@ -89,6 +89,8 @@ More detailed explanations will be added here in the future. For the time being,
    >>> Workflow 4270202770861644904 placed
    >>> u'4270202770861644904'
 
+Your input location is where your ordered imagery sits on s3. Your output location has to be within your assigned s3-bucket/s3-prefix, which is 'gbd-customer-data/58600248-2927-4523-b44b-5fec3d278c09/' in this example. If the directory does not exist, it will automatically be created.
+
 You can check on the status of your workflow as follows:
 
 .. code-block:: pycon
