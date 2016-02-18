@@ -277,8 +277,7 @@ def get_s3_info(access_token):
            access_token (str): GBDX access token.
 
        Returns:
-           bucket (str): S3 personal bucket
-           prefix (str): S3 personal prefix    
+           S3 personal bucket (str), S3 personal prefix (str)    
     """
 
     print "Get S3 bucket info"
@@ -300,9 +299,7 @@ def get_s3_credentials(access_token):
            access_token (str): GBDX access token.
 
        Returns:
-           access_key (str): S3 access key
-           secret_key (str): S3 secret key
-           session_token (str): S3 session token
+           S3 access key (str),  S3 secret key (str), S3 session token (str)
     """
 
     url = 'https://geobigdata.io/s3creds/v1/prefix?duration=36000'
