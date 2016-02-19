@@ -1,14 +1,14 @@
-## gbdxtools: Python tools for using GBDX
+======================================
+gbdxtools: Python tools for using GBDX
+======================================
 
 gbdxtools is a package for ordering imagery and launching workflows on DigitalGlobe's GBDX platform.
 
 Full documentation is hosted here: http://gbdxtools.readthedocs.org/en/latest/
 
-Installation is easy:
+Installation is easy::
 
-~~~
 pip install gbdxtools
-~~~
 
 In order to use gbdxtools, you need GBDX credentials. Talk to Jordan Winkler (jordan.winkler@digitalglobe.com) 
 to get those.
