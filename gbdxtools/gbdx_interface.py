@@ -16,13 +16,13 @@ def get_access_token(username, password, api_key):
     """Returns a GBDX access token from user GBDX credentials.
        The access token is good for 7 days.
 
-    Args:
-        username (str): GBDX user name.
-        password (str): GBDX password.
-        api_key (str): GBDX API key.
+       Args:
+           username (str): GBDX user name.
+           password (str): GBDX password.
+           api_key (str): GBDX API key.
 
-    Returns:
-        GBDX access token (str).
+       Returns:
+           GBDX access token (str).
     """
 
     # get access token
@@ -43,11 +43,11 @@ def get_s3tmp_cred(access_token):
     """Request temporary credentials for the GBDX S3 Storage Service
        The access token is good for 10 hours.
 
-    Args:
-        access_token (str): GBDX access token.
+       Args:
+           access_token (str): GBDX access token.
 
-    Returns:
-        Set of credentials needed to access S3 Storage (dict).
+       Returns: 
+           Set of credentials needed to access S3 Storage (dict).
     """
     url = 'https://geobigdata.io/s3creds/v1/prefix?duration=36000'
     headers = {'Content-Type': 'application/json', "Authorization": "Bearer " + access_token}
@@ -61,11 +61,11 @@ def get_s3tmp_cred(access_token):
 def s3tmp_cred_reg(s3_cred):
     """Modify the local .aws/credentials file so that it has the current credentials.
 
-    Args:
-        S3 Credentials (dict): Set of credentials needed to access S3 Storage.
+       Args:
+           S3 Credentials (dict): Set of credentials needed to access S3 Storage.
 
-    Returns:
-        Indicator of successful action (bool).
+       Returns:
+           Indicator of successful action (bool).
     """
     response = False
 
@@ -90,12 +90,12 @@ def s3tmp_cred_reg(s3_cred):
 def order_imagery(image_catalog_ids, access_token):
     """Orders images from GBDX.
 
-    Args: 
-        image_catalog_ids (list): A list of image catalog ids.
-        access_token (str): GBDX access token string.
+       Args: 
+           image_catalog_ids (list): A list of image catalog ids.
+           access_token (str): GBDX access token string.
     
-    Returns:
-        sales order number (str).
+       Returns:
+           sales order number (str).
     """
 
     # hit ordering api
@@ -113,12 +113,12 @@ def order_imagery(image_catalog_ids, access_token):
 def check_order_status(sales_order_number, access_token):
     """Checks imagery order status.
 
-    Args:
-        sales_order_number (str): Sales order number.        
-        access_token (str): GBDX access token.
+       Args:
+           sales_order_number (str): Sales order number.        
+           access_token (str): GBDX access token.
 
-    Returns:
-        'done' if imagery has been ordered; 'processing' if not (str).
+       Returns:
+           'done' if imagery has been ordered; 'processing' if not (str).
     """
         
     print "Get status of order " + sales_order_number
@@ -142,14 +142,14 @@ def check_order_status(sales_order_number, access_token):
 def traverse_request(access_token, identifier, labels=None, maxdepth=None):
     """Runs a simple catalog traverse for an ID
 
-    Args:       
-        access_token (str): GBDX access token.
-        identifier (str): Value to search for (rootRecordId).
-        labels (list): Object types filter.
-        maxdepth (int): Number of relationships to traverse.
+       Args:       
+           access_token (str): GBDX access token.
+           identifier (str): Value to search for (rootRecordId).
+           labels (list): Object types filter.
+           maxdepth (int): Number of relationships to traverse.
 
-    Returns:
-        Search Results (dict).
+       Returns:
+           Search Results (dict).
     """
 
     if labels is None:
@@ -167,16 +167,16 @@ def traverse_request(access_token, identifier, labels=None, maxdepth=None):
 
 def get_landsat_properties(access_token, identifier):
     """Queries main properties (Complete S3 Bucket Reference (source), footprintWkt, timestamp, identifier) 
-        for a simple catalog traverse on a Landsat CatalogID.
-        Return Dict is keyed by image identifier.
-        Properties can be added as needed. 
+       for a simple catalog traverse on a Landsat CatalogID.
+       Return Dict is keyed by image identifier.
+       Properties can be added as needed. 
 
-    Args:       
-        access_token (str): GBDX access token.
-        identifier (str): Value to search for (CatalogID for Landsat Image).
+       Args:       
+           access_token (str): GBDX access token.
+           identifier (str): Value to search for (CatalogID for Landsat Image).
 
-    Returns:
-        Image Properties (dict).
+       Returns:
+           Image Properties (dict).
     """
 
     return_set = {}
@@ -198,19 +198,19 @@ def get_landsat_properties(access_token, identifier):
 
 def get_dg_properties(access_token, sales_order_num):
     """Queries main properties (Complete S3 Bucket Reference (source), footprintWkt, timestamp, identifier) 
-        for a simple catalog traverse using a sales order number and filtering to only DG imagery.
-        Return Dict is keyed by image identifier.
-        Properties can be added as needed.
+       for a simple catalog traverse using a sales order number and filtering to only DG imagery.
+       Return Dict is keyed by image identifier.
+       Properties can be added as needed.
 
-        Note, if all we want is the bucket, this could also just pull all ObjectStoreData objects and get their buckets.
-        This gives us additional details in case we need to filter the parts of each acquisition by footprint.
+       Note, if all we want is the bucket, this could also just pull all ObjectStoreData objects and get their buckets.
+       This gives us additional details in case we need to filter the parts of each acquisition by footprint.
 
-    Args:       
-        access_token (str): GBDX access token.
-        sales_order_num (str): Value to search for (Sales Order Number).
+       Args:       
+           access_token (str): GBDX access token.
+           sales_order_num (str): Value to search for (Sales Order Number).
 
-    Returns:
-        Image Properties (dict)
+       Returns:
+           Image Properties (dict).
     """
 
     return_set = {}
@@ -246,12 +246,12 @@ def get_dg_properties(access_token, sales_order_num):
 def launch_workflow(workflow, access_token):
     """Launches GBDX workflow.
 
-    Args:
-        workflow (dict): Dictionary specifying workflow tasks.
-        access_token (str): GBDX access token.
+       Args:
+           workflow (dict): Dictionary specifying workflow tasks.
+           access_token (str): GBDX access token.
 
-    Returns:
-        Workflow id (str).
+       Returns:
+           Workflow id (str).
     """
 
     # hit workflow api
@@ -270,12 +270,12 @@ def launch_workflow(workflow, access_token):
 def check_workflow_status(workflow_id, access_token):
     """Checks workflow status.
 
-    Args:
-        workflow_id (str): Workflow id.
-        access_token (str): GBDX access token.
+       Args:
+           workflow_id (str): Workflow id.
+           access_token (str): GBDX access token.
 
-    Returns:
-        Workflow status (str).
+       Returns:
+           Workflow status (str).
     """
     print 'Get status of workflow: ' + workflow_id
     url = 'https://geobigdata.io/workflows/v1/workflows/' + workflow_id 
@@ -289,12 +289,12 @@ def check_workflow_status(workflow_id, access_token):
 def has_this_been_ordered(image_catalog_id, access_token):
     """Checks if image has been ordered.
 
-    Args:
-        image_catalog_id (str): Image Catalog id in DG factory.
-        access_token (str): GBDX access token.
+       Args:
+           image_catalog_id (str): Image Catalog id in DG factory.
+           access_token (str): GBDX access token.
     
-    Returns:
-        'True' if image has been ordered; 'False' if not (str).
+       Returns:
+           'True' if image has been ordered; 'False' if not (str).
     """
     print 'Check if ' + image_catalog_id + ' has been ordered'
     url = 'https://geobigdata.io/catalog/v1/traverse?includeRelationships=False'
@@ -318,12 +318,12 @@ def has_this_been_ordered(image_catalog_id, access_token):
 def get_location_of_ordered_imagery(sales_order_number, access_token):
     """Find location of ordered imagery.
 
-    Args:
-        sales_order_number (str): Sales order number.
-        access_token (str): GBDX access token.
+       Args:
+           sales_order_number (str): Sales order number.
+           access_token (str): GBDX access token.
     
-    Returns:
-        Imagery location in S3 (str). 
+       Returns:
+           Imagery location in S3 (str). 
     """
 
     url = "https://geobigdata.io/catalog/v1/traverse"
