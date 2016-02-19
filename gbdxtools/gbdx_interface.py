@@ -341,9 +341,29 @@ def get_location_of_ordered_imagery(sales_order_number, access_token):
         print 'Imagery has probably not been delivered'
 
 
+def get_task_definition(task_name, access_token):
+    """Get task definition.
+
+       Args:
+           task_name (str): The task name.
+           access_token (str): GBDX access token.
+
+       Return:
+           Task definition (dict).
+    """
+
+    url = "https://geobigdata.io/workflows/v1/tasks/" + task_name
+    headers = {"Content-Type": "application/json", 
+               "Authorization": "Bearer " + access_token}
+    r = requests.get(url, headers=headers)
+    
+    return r.json()
+
+
 def launch_aop_to_s3_workflow(input_images_location, 
                               output_images_location,
                               access_token,
+                              bands = "Auto",
                               enable_acomp = "false",
                               enable_dra = "false",
                               ortho_epsg = "EPSG:4326",
@@ -357,6 +377,7 @@ def launch_aop_to_s3_workflow(input_images_location,
        Args:
            input_images_location (str): Imagery location on S3.
            output_images_location (str): Output imagery location on S3.
+           bands (str): Bands to process (choices are "PAN+MS", "PAN", "MS")
            enable_acomp (str): Apply ACOMP; "true" or "false".
            enable_dra (str): Apply dynamic range adjustment; "true" or "false".
            ortho_epsg (str): Choose projection.
@@ -376,6 +397,10 @@ def launch_aop_to_s3_workflow(input_images_location,
             "name": "data",
             "value": "INPUT_BUCKET"
         }, {
+            "name": "bands",
+            "value": "Auto"
+        },
+           {
             "name": "enable_acomp",
             "value": "false"
         }, {
@@ -412,10 +437,11 @@ def launch_aop_to_s3_workflow(input_images_location,
     }""")
 
     aop_to_s3['tasks'][0]['inputs'][0]['value'] = input_images_location
-    aop_to_s3['tasks'][0]['inputs'][1]['value'] = enable_acomp
-    aop_to_s3['tasks'][0]['inputs'][2]['value'] = enable_dra
-    aop_to_s3['tasks'][0]['inputs'][3]['value'] = ortho_epsg
-    aop_to_s3['tasks'][0]['inputs'][4]['value'] = enable_pansharpen
+    aop_to_s3['tasks'][0]['inputs'][1]['value'] = bands
+    aop_to_s3['tasks'][0]['inputs'][2]['value'] = enable_acomp
+    aop_to_s3['tasks'][0]['inputs'][3]['value'] = enable_dra
+    aop_to_s3['tasks'][0]['inputs'][4]['value'] = ortho_epsg
+    aop_to_s3['tasks'][0]['inputs'][5]['value'] = enable_pansharpen
     aop_to_s3['tasks'][1]['inputs'][1]['value'] = output_images_location
 
     # launch workflow
