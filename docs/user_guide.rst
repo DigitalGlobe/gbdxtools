@@ -34,6 +34,9 @@ You can see the contents of your bucket/prefix using this link: http://s3browser
 Ordering imagery
 ----------------
 
+(Note: this guide uses v1 of the GBDX ordering API. Ordering API v2 is scheduled to deploy 02/25/2016. 
+Changes will need to be made to this section to accommodate Ordering API v2.)
+ 
 To order the image with DG factory catalog id 10400100143FC900:
 
 .. code-block:: pycon
