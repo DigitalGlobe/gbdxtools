@@ -1,5 +1,5 @@
 API Documentation
-=======================
+=================
 
 gbdxtools.gbdx_interface module
 --------------------------------
