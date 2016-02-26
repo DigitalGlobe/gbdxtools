@@ -1,7 +1,0 @@
-gbdx_tools
-==========
-
-.. toctree::
-   :maxdepth: 4
-
-   gbdx_interface

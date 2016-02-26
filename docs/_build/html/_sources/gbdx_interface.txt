@@ -1,7 +1,0 @@
-gbdx_interface module
-=====================
-
-.. automodule:: gbdx_interface
-    :members:
-    :undoc-members:
-    :show-inheritance:
