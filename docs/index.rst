@@ -29,4 +29,4 @@ For general information on the GBDX platform and API, see `here`_.
    :maxdepth: 2
 
    user_guide
-   gbdxtools
+   api_docs
