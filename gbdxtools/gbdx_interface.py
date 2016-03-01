@@ -109,6 +109,27 @@ def order_imagery(image_catalog_ids, access_token):
     print "Order " + str(sales_order_number) + ' placed'
     return sales_order_number
 
+def order_imagery_v2(image_catalog_ids, access_token):
+    """Orders images from GBDX.
+
+       Args: 
+           image_catalog_ids (list): A list of image catalog ids.
+           access_token (str): GBDX access token string.
+    
+       Returns:
+           sales order number (str).
+    """
+
+    # hit ordering api
+    print "Place order..."
+    url = "https://geobigdata.io/orders/v2/order/"
+    headers = {"Content-Type": "application/json", 
+               "Authorization": "Bearer " + access_token}
+    r = requests.post(url, headers=headers, data=json.dumps(image_catalog_ids))     
+    sales_order_number = r.json().get("order_id", {})
+
+    print "Order " + str(sales_order_number) + ' placed'
+    return sales_order_number
 
 def check_order_status(sales_order_number, access_token):
     """Checks imagery order status.
@@ -138,6 +159,33 @@ def check_order_status(sales_order_number, access_token):
 
     return status 
 
+def check_order_status_v2(sales_order_number, access_token):
+    """Checks imagery order status.
+
+       Args:
+           sales_order_number (str): Sales order number.        
+           access_token (str): GBDX access token.
+
+       Returns:
+           'done' if imagery has been ordered; 'processing' if not (str).
+    """
+        
+    print "Get status of order " + sales_order_number
+    url = "https://geobigdata.io/orders/v2/order/"
+    headers = {"Content-Type": "application/json", 
+               "Authorization": "Bearer " + access_token}
+    r = requests.get(url + sales_order_number, headers=headers)
+    lines = r.json().get("acquisitions", {})
+    status = "done"
+    for line in lines:
+        if line["state"] == "delivered":
+            continue
+        else:
+            status = "processing"
+    
+    print "Order " + sales_order_number + ": " + status
+
+    return status 
 
 def traverse_request(access_token, identifier, labels=None, maxdepth=None):
     """Runs a simple catalog traverse for an ID
