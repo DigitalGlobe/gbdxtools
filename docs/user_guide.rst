@@ -34,27 +34,24 @@ You can see the contents of your bucket/prefix using this link: http://s3browser
 Ordering imagery
 ----------------
 
-(Note: this guide uses v1 of the GBDX ordering API. Ordering API v2 is scheduled to deploy 02/25/2016. 
-Changes will need to be made to this section to accommodate Ordering API v2.)
+This guide uses v2 of the GBDX ordering API. Ordering API v1 was set to phase out on 02/25/2016. 
  
 To order the image with DG factory catalog id 10400100143FC900:
 
 .. code-block:: pycon
 
-   >>> sales_order_number = gi.order_imagery(['10400100143FC900'], access_token)
+   >>> order_id = gi.order_imagery_v2(['10400100143FC900'], access_token)
    >>> Place order...
-   >>> Order 055045505 placed
-   >>> print sales_order_number	
-   >>> 055045505
+   >>> Order 6dc78d08-9b25-4901-bab0-72f61857a631 placed
 
-The sales order number is unique to your image order and can be used to track the progress of your order
+The order_id is unique to your image order and can be used to track the progress of your order.
+The ordered image sits in a directory on S3. The output of the following describes where:
 
 .. code-block:: pycon
 
-   >>> gi.check_order_status(sales_order_number, access_token)
-   >>> Get status of order 055045505
-   >>> Order 055045505: done
-   >>> 'done'
+   >>> gi.check_order_status_v2(order_id, access_token)
+   >>> Get status of order 6dc78d08-9b25-4901-bab0-72f61857a631
+   >>> {u's3://receiving-dgcs-tdgplatform-com/055085517010_01_003': u'delivered'}
 
 Before ordering an image, you can check if the image is already on GBDX:
 
@@ -63,13 +60,6 @@ Before ordering an image, you can check if the image is already on GBDX:
    >>> gi.has_this_been_ordered('10400100143FC900', access_token)
    >>> Check if 10400100143FC900 has been ordered
    >>> 'True'
-
-The ordered image sits in a directory on S3. Here is how you can find where:
-
-.. code-block:: pycon
-   
-   >>> gi.get_location_of_ordered_imagery(sales_order_number, access_token)
-   >>> u'https://receiving-dgcs-tdgplatform-com/055045505010_01_003'
 
 
 Launching a workflow

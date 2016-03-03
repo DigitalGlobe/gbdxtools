@@ -117,7 +117,7 @@ def order_imagery_v2(image_catalog_ids, access_token):
            access_token (str): GBDX access token string.
     
        Returns:
-           sales order number (str).
+           order_id (str): The ID of the order placed.
     """
 
     # hit ordering api
@@ -126,10 +126,10 @@ def order_imagery_v2(image_catalog_ids, access_token):
     headers = {"Content-Type": "application/json", 
                "Authorization": "Bearer " + access_token}
     r = requests.post(url, headers=headers, data=json.dumps(image_catalog_ids))     
-    sales_order_number = r.json().get("order_id", {})
+    order_id = r.json().get("order_id", {})
 
-    print "Order " + str(sales_order_number) + ' placed'
-    return sales_order_number
+    print "Order " + str(order_id) + ' placed'
+    return order_id
 
 def check_order_status(sales_order_number, access_token):
     """Checks imagery order status.
@@ -159,33 +159,33 @@ def check_order_status(sales_order_number, access_token):
 
     return status 
 
-def check_order_status_v2(sales_order_number, access_token):
-    """Checks imagery order status.
+def check_order_status_v2(order_id, access_token):
+    """Checks imagery order status.  There can be more than one image per order and this function returns the 
+    status of all images within the order.
 
        Args:
-           sales_order_number (str): Sales order number.        
+           order_id (str): The ID of the order placed.        
            access_token (str): GBDX access token.
 
        Returns:
-           'done' if imagery has been ordered; 'processing' if not (str).
+           dict (str) with keys = locations of ordered images and values = status of each ordered image.
     """
         
-    print "Get status of order " + sales_order_number
+    print "Get status of order " + order_id
     url = "https://geobigdata.io/orders/v2/order/"
     headers = {"Content-Type": "application/json", 
                "Authorization": "Bearer " + access_token}
-    r = requests.get(url + sales_order_number, headers=headers)
+    r = requests.get(url + order_id, headers=headers)
     lines = r.json().get("acquisitions", {})
-    status = "done"
+    results = []
     for line in lines:
-        if line["state"] == "delivered":
-            continue
-        else:
-            status = "processing"
-    
-    print "Order " + sales_order_number + ": " + status
+        location = line['location']
+        status = line["state"]
+        results.append((location, status))
+        
+    resultsdict = dict(results)        
 
-    return status 
+    return resultsdict
 
 def traverse_request(access_token, identifier, labels=None, maxdepth=None):
     """Runs a simple catalog traverse for an ID
@@ -333,7 +333,7 @@ def check_workflow_status(workflow_id, access_token):
 
     return r.json()['state']
 
-
+# This function seems to be redundant with check_order_status_v2.
 def has_this_been_ordered(image_catalog_id, access_token):
     """Checks if image has been ordered.
 
@@ -348,10 +348,11 @@ def has_this_been_ordered(image_catalog_id, access_token):
     url = 'https://geobigdata.io/catalog/v1/traverse?includeRelationships=False'
     headers = {"Content-Type": "application/json", 
                "Authorization": "Bearer " + access_token}
-    body = {"rootRecordId": image_catalog_id, "maxdepth":2, 
+    body = json.dumps({"rootRecordId": image_catalog_id, "maxdepth":2, 
             "direction":"both", 
-            "labels": ["_fulfillsPartOf", "_acquisition", "_imageFiles"]}
-    r = requests.post(url, headers=headers, json=body)
+            "labels": ["_fulfillsPartOf", "_acquisition", "_imageFiles"]})
+    r = requests.post(url, headers=headers, data=body)
+    
     try:
         productLevel = r.json()['results'][1]['properties']['productLevel']
         if productLevel == 'LV1B':
@@ -363,7 +364,8 @@ def has_this_been_ordered(image_catalog_id, access_token):
 
 
 # TODO: Might need to check to see if this works with multiple images in a single order.
-def get_location_of_ordered_imagery(sales_order_number, access_token):
+# Also this function seems to be redundant with check_order_status_v2.
+def get_location_of_ordered_imagery(order_id, access_token):
     """Find location of ordered imagery.
 
        Args:
@@ -377,9 +379,10 @@ def get_location_of_ordered_imagery(sales_order_number, access_token):
     url = "https://geobigdata.io/catalog/v1/traverse"
     headers = {"Content-Type": "application/json", 
                "Authorization": "Bearer " + access_token}
-    body = {"rootRecordId": sales_order_number, "maxdepth": 2, 
-            "direction": "both", "labels": ["_fulfillsPartOf", "_imageFiles"]}
-    r = requests.post(url, headers=headers, json=body)
+    body = json.dumps({"rootRecordId": order_id, "maxdepth": 2, 
+            "direction": "both", "labels": ["_fulfillsPartOf", "_imageFiles"]})
+    r = requests.post(url, headers=headers, data=body)
+    print r.json()
     try:
         s3_bucket = r.json()["results"][2]["properties"]["bucketName"]
         s3_prefix_all = r.json()["results"][2]["properties"]["objectIdentifier"]
