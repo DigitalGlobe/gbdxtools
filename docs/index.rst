@@ -16,7 +16,7 @@ Installation is easy::
 
 Then::
 
-    import gbdxtools
+    from gbdxtools import Interface
 
 In order to use gbdxtools, you need GBDX credentials. Talk to Jordan Winkler (jordan.winkler@digitalglobe.com) 
 to get those. 
