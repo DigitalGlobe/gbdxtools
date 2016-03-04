@@ -1,10 +1,10 @@
 API Documentation
 =================
 
-gbdxtools.gbdx_interface module
---------------------------------
+gbdxtools.gbdxtools module
+--------------------------
 
-.. automodule:: gbdxtools.gbdx_interface
+.. automodule:: gbdxtools.gbdxtools
     :members:
     :undoc-members:
     :show-inheritance:
