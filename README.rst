@@ -2,9 +2,8 @@
 gbdxtools: Python tools for using GBDX
 ======================================
 
-.. image:: https://pypip.in/v/gbdxtools/badge.png
-    :target: https://crate.io/packages/gbdxtools/
-    :alt: Latest PyPI version
+.. image:: https://badge.fury.io/py/gbdxtools.svg
+    :target: https://badge.fury.io/py/gbdxtools
 
 gbdxtools is a package for ordering imagery and launching workflows on DigitalGlobe's GBDX platform.
 
