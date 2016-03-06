@@ -28,9 +28,9 @@ Development
 
 Clone the repo::
 
-   git clone git@github.com:kostasthebarbarian/mltools.git
+   git clone git@github.com:kostasthebarbarian/gbdxtools.git
    
-   cd mltools
+   cd gbdxtools
 
 Start a virtual environment::
    
