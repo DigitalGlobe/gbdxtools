@@ -24,25 +24,19 @@ The long-term plan is to merge this repo with https://github.com/TDG-Platform/gb
 DevOps
 ------
 
-Clone the repo:
-
-.. highlights::
+Clone the repo::
 
    git clone git@github.com:kostasthebarbarian/mltools.git
    
    cd mltools
 
 Start a virtual environment::
-
-.. highlights::
    
    virtualenv venv
    
    . venv/bin/activate
  
-Install the requirements:
-
-.. highlights::
+Install the requirements::
 
    pip install -r requirements.txt
 
