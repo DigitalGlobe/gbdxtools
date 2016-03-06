@@ -1,1 +1,1 @@
-from . import interface
+from interface import Interface
