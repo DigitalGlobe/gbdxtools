@@ -14,9 +14,12 @@ from gbdx_auth import gbdx_auth
 class Interface():
 
   gbdx_connection = None
-  def __init__(self):
-    # This will throw an exception if your .ini file is not set properly
-    self.gbdx_connection = gbdx_auth.get_session()
+  def __init__(self, **kwargs):
+    if kwargs.get('username') and kwargs.get('password') and kwargs.get('client_id') and kwargs.get('client_secret'):
+        self.gbdx_connection = gbdx_auth.session_from_kwargs(**kwargs)
+    else:
+      # This will throw an exception if your .ini file is not set properly
+      self.gbdx_connection = gbdx_auth.get_session()
 
   def get_s3tmp_cred(self):
       """Request temporary credentials for the GBDX S3 Storage Service
