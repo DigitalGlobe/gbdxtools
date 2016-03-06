@@ -1,0 +1,3 @@
+requests
+boto
+gbdx-auth
