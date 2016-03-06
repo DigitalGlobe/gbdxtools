@@ -19,10 +19,10 @@ setup(name='gbdxtools',
       author_email='kostas.stamatiou@digitalglobe.com',
       url='https://github.com/kostasthebarbarian/gbdxtools',
       license='MIT',
-      packages=find_packages(exclude=['docs']),
+      packages=find_packages(exclude=['docs','tests']),
       include_package_data=True,
       zip_safe=False,
-      install_requires=['requests',
-                        'boto',
-                        'gbdx-auth']
+      install_requires=['requests==2.9.1',
+                        'boto==2.39.0',
+                        'gbdx-auth==0.1.2']
       )
