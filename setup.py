@@ -11,8 +11,8 @@ if sys.version_info > (3,):
 # long_description=readme,
       
 setup(name='gbdxtools',
-      version='0.0.9',
-      description='Python tools to order imagery and launch workflows on DigitalGlobe GBDX platform.',
+      version='0.1.0',
+      description='Python tools to order imagery and launch workflows on DigitalGlobe GBDX platform. Refactored to use gbdx-auth',
       classifiers=[],
       keywords='',
       author='Kostas Stamatiou',

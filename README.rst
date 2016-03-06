@@ -24,7 +24,7 @@ The long-term plan is to merge this repo with https://github.com/TDG-Platform/gb
 
 
 Development
-------
+-----------
 
 Clone the repo::
 
@@ -42,3 +42,4 @@ Install the requirements::
 
    pip install -r requirements.txt
 
+Please follow this python style guide: https://google.github.io/styleguide/pyguide.html
