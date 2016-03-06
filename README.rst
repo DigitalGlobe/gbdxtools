@@ -22,7 +22,8 @@ This repo is intended as a useful exercise in elegant open source Python develop
 A presentation which outlines the principles can be found here http://youngpm.github.io/python-brownbag/#1.
 The long-term plan is to merge this repo with https://github.com/TDG-Platform/gbdx-py.
 
-DevOps
+
+Development
 ------
 
 Clone the repo::
