@@ -165,7 +165,7 @@ class Interface():
         """Orders images from GBDX.
 
            Args: 
-               image_catalog_ids (list): A list of image catalog ids.
+               image_catalog_ids (list or string): A list of image catalog ids or a single image catalog id.
 
            Returns:
                order_id (str): The ID of the order placed.
@@ -174,8 +174,15 @@ class Interface():
         # hit ordering api
         print "Place order"
         url = "https://geobigdata.io/orders/v2/order/"
-        r = self.gbdx_connection.post(url,data=json.dumps(image_catalog_ids))     
+        
+        # determine if the user inputted a list of image_catalog_ids or a string of one
+        if type(image_catalog_ids).__name__=='list':
+            r = self.gbdx_connection.post(url,data=json.dumps(image_catalog_ids)) 
+        else:
+            r = self.gbdx_connection.post(url,data=json.dumps([image_catalog_ids]))
+        
         order_id = r.json().get("order_id", {})
+        print r.json()
 
         return order_id
 
