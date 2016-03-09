@@ -1,5 +1,5 @@
 """
-Authors: Kostas Stamatiou, Dan Getman, Nate Ricklin
+Authors: Kostas Stamatiou, Dan Getman, Nate Ricklin, Dahl Winters
 Contact: kostas.stamatiou@digitalglobe.com
 
 Functions to interface with GBDX API.
