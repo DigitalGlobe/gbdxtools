@@ -42,4 +42,5 @@ Install the requirements::
 
    pip install -r requirements.txt
 
-Please follow this python style guide: https://google.github.io/styleguide/pyguide.html
+Please follow this python style guide: https://google.github.io/styleguide/pyguide.html.
+80-90 columns is fine. 
