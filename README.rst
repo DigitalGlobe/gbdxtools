@@ -15,8 +15,7 @@ Installation is easy::
 
     pip install gbdxtools
 
-In order to use gbdxtools, you need GBDX credentials. Talk to Jordan Winkler (jordan.winkler@digitalglobe.com) 
-to get those.
+In order to use gbdxtools, you need GBDX credentials. Email geobigdata@digitalglobe.com to get these.
 
 This repo is intended as a useful exercise in elegant open source Python development. 
 A presentation which outlines the principles can be found here http://youngpm.github.io/python-brownbag/#1.
