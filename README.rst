@@ -15,6 +15,10 @@ Installation is easy::
 
     pip install gbdxtools
 
+If you have a previous version of gbdxtools install then::
+
+    pip install --upgrade gbdxtools
+
 In order to use gbdxtools, you need GBDX credentials. Email geobigdata@digitalglobe.com to get these.
 
 This repo is intended as a useful exercise in elegant open source Python development. 
