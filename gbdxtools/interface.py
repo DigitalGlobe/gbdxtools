@@ -9,8 +9,6 @@ import json
 import os
 import requests
 
-
-
 from boto import s3
 from gbdx_auth import gbdx_auth
 from StringIO import StringIO
