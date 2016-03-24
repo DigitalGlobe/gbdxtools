@@ -130,13 +130,14 @@ class Interface():
 
 
     def launch_aop_to_s3_workflow(self,
-                                input_images_location, 
-                                output_images_location,
-                                bands = "Auto",
-                                enable_acomp = "false",
-                                enable_dra = "false",
-                                ortho_epsg = "EPSG:4326",
-                                enable_pansharpen = "false"):
+                                input_location, 
+                                output_location,
+                                bands = 'Auto',
+                                enable_acomp = 'true',
+                                ortho_epsg = 'EPSG:4326',
+                                enable_pansharpen = 'false',
+                                enable_dra = 'false',
+                                ):
 
       """Launch aop_to_s3 workflow with choice of select parameters. There
          are more parameter choices to this workflow than the ones provided 
@@ -144,13 +145,17 @@ class Interface():
          launch_workflow function. 
 
          Args:
-             input_images_location (str): Imagery location on S3.
-             output_images_location (str): Output imagery location on S3.
-             bands (str): Bands to process (choices are "PAN+MS", "PAN", "MS")
-             enable_acomp (str): Apply ACOMP; "true" or "false".
-             enable_dra (str): Apply dynamic range adjust; "true" or "false".
-             ortho_epsg (str): Choose projection.
-             enable_pansharpen (str): Apply pansharpening; "true" or "false".
+             input_location (str): Imagery location on S3.
+             output_location (str): Output imagery S3 location within user prefix.
+                                    This should not be preceded with nor followed
+                                    by a backslash.
+             bands (str): Bands to process (choices are 'Auto', 'MS', 'PAN', default 
+                          is Auto). If enable_pansharpen = 'true', leave the default
+                          setting.     
+             enable_acomp (str): Apply ACOMP (default 'true').
+             ortho_epsg (str): Choose projection (default 'EPSG:4326').
+             enable_dra (str): Apply dynamic range adjust (default 'false').
+             enable_pansharpen (str): Apply pansharpening (default 'false').
 
          Returns:
              Workflow id (str).
@@ -205,13 +210,19 @@ class Interface():
       "name": "aop_to_s3"
       }""")
 
-      aop_to_s3['tasks'][0]['inputs'][0]['value'] = input_images_location
+      aop_to_s3['tasks'][0]['inputs'][0]['value'] = input_location
       aop_to_s3['tasks'][0]['inputs'][1]['value'] = bands
       aop_to_s3['tasks'][0]['inputs'][2]['value'] = enable_acomp
       aop_to_s3['tasks'][0]['inputs'][3]['value'] = enable_dra
       aop_to_s3['tasks'][0]['inputs'][4]['value'] = ortho_epsg
       aop_to_s3['tasks'][0]['inputs'][5]['value'] = enable_pansharpen
-      aop_to_s3['tasks'][1]['inputs'][1]['value'] = output_images_location
+
+      # use the user bucket and prefix information to set output location
+      s3_info = self.get_s3_info()
+      bucket = s3_info['bucket']
+      prefix = s3_info['prefix']
+      output_location_final = 's3://' + '/'.join([bucket, prefix, output_location])
+      aop_to_s3['tasks'][1]['inputs'][1]['value'] = output_location_final
 
       # launch workflow
       print 'Launch workflow'

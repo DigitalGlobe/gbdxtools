@@ -44,7 +44,7 @@ To order the image with DG factory catalog id 10400100143FC900:
 
 .. code-block:: pycon
 
-   >>> order_id = gi.order_imagery(['10400100143FC900'])
+   >>> order_id = gi.order_imagery('10400100143FC900')
    >>> Place order
    >>> print order_id
    >>> 8bd8f797-11cd-4e3b-8bfa-c592d41af223
@@ -67,7 +67,7 @@ You can define workflows consisting of custom tasks. A detailed description of w
 
 This example will walk you through launching an aop_to_s3 workflow. 
 This workflow applies a series of one or more processing steps to the image you ordered in the previous section and stores the
-processed image in your S3 bucket. 
+processed image under your S3 bucket/prefix. 
 
 First, define the location of the ordered image:
 
@@ -81,9 +81,10 @@ If the directory does not exist, it will automatically be created.
 .. code-block:: pycon
 
    >>> s3_info = gi.get_s3_info()
-   >>> output_location = 's3://' + s3_info['bucket'] + '/' + s3_info['prefix'] + '/' + 'my_directory'
+   >>> output_location = 'my_directory'
 
-We launch an aop_to_s3 workflow that produces a pansharpened image.
+This means that the output image will be stored in s3://bucket/prefix/my_directory.
+We now launch an aop_to_s3 workflow that produces a pansharpened image.
 
 .. code-block:: pycon
 
