@@ -133,9 +133,9 @@ class Interface():
                                 input_location, 
                                 output_location,
                                 bands = 'Auto',
-                                enable_acomp = 'true',
                                 ortho_epsg = 'EPSG:4326',
                                 enable_pansharpen = 'false',
+                                enable_acomp = 'false',
                                 enable_dra = 'false',
                                 ):
 
@@ -152,9 +152,9 @@ class Interface():
              bands (str): Bands to process (choices are 'Auto', 'MS', 'PAN', default 
                           is 'Auto'). If enable_pansharpen = 'true', leave the default
                           setting.     
-             enable_acomp (str): Apply ACOMP (default 'true').
              ortho_epsg (str): Choose projection (default 'EPSG:4326').
              enable_pansharpen (str): Apply pansharpening (default 'false').
+             enable_acomp (str): Apply ACOMP (default 'false').
              enable_dra (str): Apply dynamic range adjust (default 'false').
          Returns:
              Workflow id (str).
