@@ -150,13 +150,12 @@ class Interface():
                                     This should not be preceded with nor followed
                                     by a backslash.
              bands (str): Bands to process (choices are 'Auto', 'MS', 'PAN', default 
-                          is Auto). If enable_pansharpen = 'true', leave the default
+                          is 'Auto'). If enable_pansharpen = 'true', leave the default
                           setting.     
              enable_acomp (str): Apply ACOMP (default 'true').
              ortho_epsg (str): Choose projection (default 'EPSG:4326').
-             enable_dra (str): Apply dynamic range adjust (default 'false').
              enable_pansharpen (str): Apply pansharpening (default 'false').
-
+             enable_dra (str): Apply dynamic range adjust (default 'false').
          Returns:
              Workflow id (str).
       """

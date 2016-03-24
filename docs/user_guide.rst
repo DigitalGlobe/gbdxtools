@@ -75,7 +75,7 @@ First, define the location of the ordered image:
 
    >>> input_location = 's3://receiving-dgcs-tdgplatform-com/055093376010_01_003'
 
-Now define the location where the output image will be stored. This HAS to be a directory under bucket/prefix.
+Now define the location under bucket/prefix where the output image will be stored. 
 If the directory does not exist, it will automatically be created.
 
 .. code-block:: pycon
