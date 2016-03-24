@@ -7,11 +7,14 @@ Functions to interface with GBDX API.
 
 import json
 import os
-import sys
+import requests
+
+
 
 from boto import s3
 from gbdx_auth import gbdx_auth
-
+from StringIO import StringIO
+from PIL import Image
 
 class Interface():
 
@@ -20,7 +23,7 @@ class Interface():
     def __init__(self):
     # This will throw an exception if your .ini file is not set properly
         self.gbdx_connection = gbdx_auth.get_session()
-
+        
 
 # ordering API v1 to be deprecated -----------------------------------------
 
@@ -451,3 +454,141 @@ class Interface():
           b.delete_key(key)
 
       print 'Done!'
+      
+    def get_strip_footprint(self, catID):
+       """ Retrieves the strip footprint given a cat ID.
+
+       Args:
+           
+           catID (str): The source catalog ID from the platform catalog.
+           
+       Returns: 
+       
+           footprint (str): a POLYGON of coordinates.
+           
+       """
+       
+       print "Retrieving strip footprint"
+       url = ("https://geobigdata.io/catalog/v1/record/" + catID + 
+              "?includeRelationships=false")
+        
+       #retrieving strip footprint using token (still necessary for catalog)
+       bearer = 'Bearer ' + self.gbdx_connection.access_token
+       header = {'Authorization': bearer}
+       r = requests.get(url, headers=header) 
+       footprint = r.json()["properties"]["footprintWkt"]
+       
+       return footprint
+       
+    def get_idaho_metadata(self, catID):
+       """ Retrieves the metadata of all IDAHO tiles of a given catID.
+
+       Args:
+           
+           catID (str): The source catalog ID from the platform catalog.
+           
+       Returns: 
+       
+           metadata (json): the full metadata for the tiles within the catID.
+           
+       """
+       
+       print "Retrieving IDAHO metadata"
+       
+       #get the footprint of the catID's strip
+       footprint = self.get_strip_footprint(catID)
+       
+       #use the footprint to get the IDAHO ID
+       url = ('https://geobigdata.io/catalog/v1/'
+             'search?includeRelationships=false')
+       bearer = 'Bearer ' + self.gbdx_connection.access_token
+       header = {'Authorization': bearer, 'Content-Type':'application/json'}
+       
+       body = {"startDate": None, 
+              "filters": ["vendorDatasetIdentifier3 = '" + catID + "'"], 
+              "endDate": None,
+              "types": ["IDAHOImage"],
+              "searchAreaWkt": footprint}
+
+       r = self.gbdx_connection.post(url, headers=header, 
+                                     data=json.dumps(body), verify=True)
+       metadata = r.json();
+       
+       return metadata
+       
+    def get_idaho_tile_locations(self, catID):
+       """ Retrieves all IDAHO tile locations of a given catID.
+
+       Args:
+           
+           catID (str): The source catalog ID from the platform catalog.
+           
+       Returns: 
+       
+           results (list of tuples): element 1 = bucket name
+                                     element 2 = IDAHO image ID
+           
+       """
+       
+       print "Retrieving IDAHO tile locations"
+       
+       #get the bucket name and image ID of each tile within the catID
+       metadata = self.get_idaho_metadata(catID)
+       results = []
+       tileResults = json.loads(json.dumps(metadata))["results"]
+       for tile in tileResults:
+            bucket_name = json.loads(json.dumps(tile))["properties"]
+            ["imageBucketName"]
+            imageId = json.loads(json.dumps(tile))["properties"]["imageId"]
+            results.append((bucket_name, imageId))
+       
+       return results
+       
+    def get_idaho_tiles_by_zxy(self, catID, z, x, y, outputFolder):
+       """ Retrieves IDAHO tiles of a given catID for a particular z, x, and
+           y.  The z, x, and y must be known ahead of time and must intersect
+           the strip boundaries of the particular catID to return content.
+
+       Args:
+           
+           catID (str): The source catalog ID from the platform catalog.
+           
+       Returns: 
+       
+           Confirmation (str) that tile processing was done.
+           
+       """
+       
+       print "Retrieving IDAHO tiles"
+       
+       #get the bucket name and IDAHO ID of each tile within the catID
+       locations = self.get_idaho_tile_locations(catID)
+       access_token = self.gbdx_connection.access_token
+       for location in locations:
+           bucket_name = location[0]["imageBucketName"]
+           idaho_id = location[1]
+           
+           #form request
+           url = ('http://idahotms-env.us-west-2.elasticbeanstalk.com/'
+                 'v1/tile/' + bucket_name  + '/' + idaho_id + '/' + str(z)
+                 + '/' + str(x) + '/' + str(y) + '?token=' + access_token)
+           bearer = 'Bearer ' + access_token
+           header = {'Authorization': bearer, 'Content-Type': 
+                     'application/json'}
+           body = {"token": access_token} 
+
+           r = requests.get(url, headers=header, data=json.dumps(body), 
+                              stream=True)
+           
+           #form output path                   
+           file_path = os.path.join(outputFolder, catID + "-" + str(z) + "-" + 
+                                    str(x) + "-" + str(y) + ".tif")
+           
+           #save returned image
+           i = Image.open(StringIO(r.content))
+           saved = i.save(file_path)
+           
+       if saved == None:
+           return "Retrieval complete; please check output folder."
+       else:
+           return "There was a problem saving the file at " + file_path + "."
