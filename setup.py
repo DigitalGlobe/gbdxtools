@@ -11,8 +11,8 @@ if sys.version_info > (3,):
 # long_description=readme,
       
 setup(name='gbdxtools',
-      version='0.1.2',
-      description='Output of launch_aop_to_s3 workflow is automatically stored under bucket/prefix. Updated docs.',
+      version='0.1.3',
+      description='Parameter enable_acomp of launch_aop_to_s3 set to false by default.',
       classifiers=[],
       keywords='',
       author='Kostas Stamatiou',
