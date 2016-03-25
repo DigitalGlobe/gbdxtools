@@ -80,7 +80,6 @@ If the directory does not exist, it will automatically be created.
 
 .. code-block:: pycon
 
-   >>> s3_info = gi.get_s3_info()
    >>> output_location = 'my_directory'
 
 This means that the output image will be stored in s3://bucket/prefix/my_directory.
