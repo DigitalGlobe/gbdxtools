@@ -11,7 +11,7 @@ if sys.version_info > (3,):
 # long_description=readme,
       
 setup(name='gbdxtools',
-      version='0.1.3',
+      version='0.1.4',
       description='Parameter enable_acomp of launch_aop_to_s3 set to false by default.',
       classifiers=[],
       keywords='',
