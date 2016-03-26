@@ -2,9 +2,8 @@
 gbdxtools: Python tools for using GBDX
 ======================================
 
-.. image:: https://pypip.in/v/gbdxtools/badge.png
-    :target: https://crate.io/packages/gbdxtools/
-    :alt: Latest PyPI version
+.. image:: https://badge.fury.io/py/gbdxtools.svg
+    :target: https://badge.fury.io/py/gbdxtools
 
 gbdxtools is a package for ordering imagery and launching workflows on DigitalGlobe's GBDX platform.
 
@@ -16,21 +15,25 @@ Installation is easy::
 
     pip install gbdxtools
 
-In order to use gbdxtools, you need GBDX credentials. Talk to Jordan Winkler (jordan.winkler@digitalglobe.com) 
-to get those.
+If you have a previous version of gbdxtools install then::
+
+    pip install --upgrade gbdxtools
+
+In order to use gbdxtools, you need GBDX credentials. Email geobigdata@digitalglobe.com to get these.
 
 This repo is intended as a useful exercise in elegant open source Python development. 
 A presentation which outlines the principles can be found here http://youngpm.github.io/python-brownbag/#1.
 The long-term plan is to merge this repo with https://github.com/TDG-Platform/gbdx-py.
 
-DevOps
-------
+
+Development
+-----------
 
 Clone the repo::
 
-   git clone git@github.com:kostasthebarbarian/mltools.git
+   git clone git@github.com:kostasthebarbarian/gbdxtools.git
    
-   cd mltools
+   cd gbdxtools
 
 Start a virtual environment::
    
@@ -42,3 +45,5 @@ Install the requirements::
 
    pip install -r requirements.txt
 
+Please follow this python style guide: https://google.github.io/styleguide/pyguide.html.
+80-90 columns is fine. 
