@@ -403,6 +403,54 @@ class Interface():
 
             return results
 
+    def describe_idaho_images(self, idaho_image_results):
+        """ Describe a set of IDAHO images, as returned in catalog search results.
+
+        Args:
+
+            idaho_image_results (dict): IDAHO image result set as returned from the catalog.
+
+        Returns:
+
+            results (json): the full catalog-search response for IDAHO images within the catID.
+
+        """
+
+        results = idaho_image_results['results']
+
+        # filter only idaho images:
+        results = [r for r in results if r['type']=='IDAHOImage']
+        print "Describing %s IDAHO images." % len(results)
+
+        # figure out which catids are represented in this set of images
+        catids = set([r['properties']['vendorDatasetIdentifier3'] for r in results])
+
+        description = {}
+
+        for catid in catids:
+            # images associated with a single catid
+            description[catid] = {}
+            description[catid]['parts'] = {}
+            description[catid]['sensorPlatformName'] = results[0]['properties']['sensorPlatformName']
+            images = [r for r in results if r['properties']['vendorDatasetIdentifier3'] == catid]
+            for image in images:
+                part = int(image['properties']['vendorDatasetIdentifier2'][-3:])
+                color = image['properties']['colorInterpretation']
+                bucket = image['properties']['imageBucketName']
+                id = image['identifier']
+                boundstr = image['properties']['imageBoundsWGS84']
+
+                try:
+                    description[catid]['parts'][part]
+                except:
+                    description[catid]['parts'][part] = {}
+
+                description[catid]['parts'][part][color] = {}
+                description[catid]['parts'][part][color]['id'] = id
+                description[catid]['parts'][part][color]['bucket'] = bucket
+                description[catid]['parts'][part][color]['boundstr'] = boundstr
+
+        return description
 
     def get_idaho_tile_locations(self, catID):
         """ Retrieves all IDAHO tile locations of a given catID.
