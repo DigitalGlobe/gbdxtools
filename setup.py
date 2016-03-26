@@ -24,5 +24,6 @@ setup(name='gbdxtools',
       zip_safe=False,
       install_requires=['requests==2.9.1',
                         'boto==2.39.0',
-                        'gbdx-auth==0.1.2']
+                        'gbdx-auth==0.1.2',
+                        'Pillow==3.1.1']
       )
