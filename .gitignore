@@ -1,3 +1,4 @@
 gbdxtools.egg-info/
 dist/
 *.pyc
+/.project
