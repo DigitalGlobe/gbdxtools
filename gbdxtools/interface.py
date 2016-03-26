@@ -361,11 +361,9 @@ class Interface():
         else:
             r.raise_for_status()
 
-        return None
-
 
     def get_idaho_images_by_catid(self, catid):
-        """ Retrieves the metadata of all IDAHO tiles of a given catID.
+        """ Retrieves the IDAHO image records associated with a given catid.
 
         Args:
 
@@ -373,7 +371,7 @@ class Interface():
 
         Returns:
 
-            metadata (json): the full metadata for the tiles within the catID.
+            results (json): the full catalog-search response for IDAHO images within the catID.
 
         """
 
@@ -397,9 +395,13 @@ class Interface():
         headers = {'Content-Type': 'application/json'}
 
         r = self.gbdx_connection.post(url, data=json.dumps(body), headers=headers)
-        metadata = r.json()
+        r.raise_for_status()
+        if r.status_code == 200:
+            results = r.json()
+            numresults = len(results['results'])
+            print "%s IDAHO images found associated with catid %s" % (numresults, catid)
 
-        return metadata
+            return results
 
 
     def get_idaho_tile_locations(self, catID):
