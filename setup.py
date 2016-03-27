@@ -25,5 +25,6 @@ setup(name='gbdxtools',
       install_requires=['requests==2.9.1',
                         'boto==2.39.0',
                         'gbdx-auth==0.1.2',
-                        'Pillow==3.1.1']
+                        'Pillow==3.1.1',
+                        'pygeoif==0.6']
       )
