@@ -357,10 +357,11 @@ class Interface():
         if r.status_code == 200:
             footprint = r.json()["properties"]["footprintWkt"]
             return footprint
-        elif r.status_code == 400:
+        elif r.status_code == 404:
             print "Strip not found: %s" % catID
-            return None
+            r.raise_for_status()
         else:
+            print "There was a problem retrieving catid: %s" % catID
             r.raise_for_status()
 
 
