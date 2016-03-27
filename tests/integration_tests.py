@@ -14,7 +14,7 @@ class GBDXToolsTests(unittest.TestCase):
 
     def test_get_s3tmp_cred(self):
         gi = Interface()
-        s3creds = gi.get_s3tmp_cred()
+        s3creds = gi.get_s3_info()
         self.assertTrue("bucket" in s3creds.keys() )
         self.assertTrue("prefix" in s3creds.keys() )
         self.assertTrue("S3_secret_key" in s3creds.keys() )

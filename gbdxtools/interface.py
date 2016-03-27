@@ -1,9 +1,9 @@
-"""
+'''
 Authors: Kostas Stamatiou, Dan Getman, Nate Ricklin, Dahl Winters
 Contact: kostas.stamatiou@digitalglobe.com
 
 Functions to interface with GBDX API.
-"""
+'''
 
 import json
 import os
@@ -17,35 +17,39 @@ import codecs
 
 
 class Interface():
-    gbdx_connection = None
 
+
+    gbdx_connection = None
     def __init__(self, **kwargs):
-        if kwargs.get('username') and kwargs.get('password') and kwargs.get('client_id') and kwargs.get(
-                'client_secret'):
+        if (kwargs.get('username') and kwargs.get('password') and 
+            kwargs.get('client_id') and kwargs.get('client_secret')):
             self.gbdx_connection = gbdx_auth.session_from_kwargs(**kwargs)
         else:
             # This will throw an exception if your .ini file is not set properly
             self.gbdx_connection = gbdx_auth.get_session()
 
-    def get_s3tmp_cred(self):
-        """Request temporary credentials for the GBDX S3 Storage Service
-           The access token is good for 10 hours.
+
+    def get_s3_info(self):
+        '''Get user info for GBDX S3.
 
            Args:
                None.
 
            Returns:
-               Set of credentials needed to access S3 Storage (dict).
-        """
+               Dictionary with S3 access key, S3 secret key, S3 session token,
+               user bucket and user prefix (dict).
+        '''
+
         url = 'https://geobigdata.io/s3creds/v1/prefix?duration=36000'
         r = self.gbdx_connection.get(url)
-        s3tmp_cred = r.json()
-        print "Obtained S3 Credentials"
+        s3_info = r.json()
+        print 'Obtained S3 Credentials'
 
-        return s3tmp_cred
+        return s3_info
+        
 
     def order_imagery(self, image_catalog_ids):
-        """Orders images from GBDX.
+        '''Orders images from GBDX.
 
            Args:
                image_catalog_ids (list or string): A list of image catalog ids
@@ -53,11 +57,11 @@ class Interface():
 
            Returns:
                order_id (str): The ID of the order placed.
-        """
+        '''
 
         # hit ordering api
-        print "Place order"
-        url = "https://geobigdata.io/orders/v2/order/"
+        print 'Place order'
+        url = 'https://geobigdata.io/orders/v2/order/'
 
         # determine if the user inputted a list of image_catalog_ids
         # or a string of one
@@ -72,8 +76,9 @@ class Interface():
 
         return order_id
 
+
     def check_order_status(self, order_id):
-        """Checks imagery order status.  There can be more than one image per
+        '''Checks imagery order status.  There can be more than one image per
            order and this function returns the status of all images
            within the order.
 
@@ -83,10 +88,10 @@ class Interface():
            Returns:
                dict (str) with keys = locations of ordered images and
                values = status of each ordered image.
-        """
+        '''
 
-        print "Get status of order " + order_id
-        url = "https://geobigdata.io/orders/v2/order/"
+        print 'Get status of order ' + order_id
+        url = 'https://geobigdata.io/orders/v2/order/'
         r = self.gbdx_connection.get(url + order_id)
         lines = r.json().get("acquisitions", {})
         results = []
@@ -97,54 +102,58 @@ class Interface():
 
         return dict(results)
 
+
     def launch_workflow(self, workflow):
-        """Launches GBDX workflow.
+        '''Launches GBDX workflow.
 
            Args:
                workflow (dict): Dictionary specifying workflow tasks.
 
            Returns:
                Workflow id (str).
-        """
+        '''
 
         # hit workflow api
         url = 'https://geobigdata.io/workflows/v1/workflows'
         try:
             r = self.gbdx_connection.post(url, json=workflow)
-            workflow_id = r.json()["id"]
+            workflow_id = r.json()['id']
             return workflow_id
         except TypeError:
             print 'Workflow not launched!'
 
+
     def check_workflow_status(self, workflow_id):
-        """Checks workflow status.
+        '''Checks workflow status.
 
          Args:
              workflow_id (str): Workflow id.
 
          Returns:
              Workflow status (str).
-        """
+        '''
         print 'Get status of workflow: ' + workflow_id
         url = 'https://geobigdata.io/workflows/v1/workflows/' + workflow_id
         r = self.gbdx_connection.get(url)
 
         return r.json()['state']
 
+
     def get_task_definition(self, task_name):
-        """Get task definition.
+        '''Get task definition.
 
          Args:
              task_name (str): The task name.
 
          Return:
              Task definition (dict).
-        """
+        '''
 
-        url = "https://geobigdata.io/workflows/v1/tasks/" + task_name
+        url = 'https://geobigdata.io/workflows/v1/tasks/' + task_name
         r = self.gbdx_connection.get(url)
 
         return r.json()
+
 
     def launch_aop_to_s3_workflow(self,
                                   input_location,
@@ -156,7 +165,7 @@ class Interface():
                                   enable_dra='false',
                                   ):
 
-        """Launch aop_to_s3 workflow with choice of select parameters. There
+        '''Launch aop_to_s3 workflow with choice of select parameters. There
            are more parameter choices to this workflow than the ones provided
            by this function. In this case, use the more general
            launch_workflow function.
@@ -175,11 +184,11 @@ class Interface():
                enable_dra (str): Apply dynamic range adjust (default 'false').
            Returns:
                Workflow id (str).
-        """
+        '''
 
         # create workflow dictionary
         aop_to_s3 = json.loads("""{
-    "tasks": [{
+        "tasks": [{
         "containerDescriptors": [{
             "properties": {"domain": "raid"}}],
         "name": "AOP",
@@ -211,7 +220,7 @@ class Interface():
         "timeout": 36000,
         "taskType": "AOP_Strip_Processor",
         "containerDescriptors": [{"properties": {"domain": "raid"}}]
-    }, {
+        }, {
         "inputs": [{
             "source": "AOP:data",
             "name": "data"
@@ -222,9 +231,9 @@ class Interface():
         "name": "StageToS3",
         "taskType": "StageDataToS3",
         "containerDescriptors": [{"properties": {"domain": "raid"}}]
-    }],
-    "name": "aop_to_s3"
-    }""")
+        }],
+        "name": "aop_to_s3"
+        }""")
 
         aop_to_s3['tasks'][0]['inputs'][0]['value'] = input_location
         aop_to_s3['tasks'][0]['inputs'][1]['value'] = bands
@@ -246,26 +255,9 @@ class Interface():
 
         return workflow_id
 
-    def get_s3_info(self):
-        """Get user info for GBDX S3.
-
-           Args:
-               None.
-
-           Returns:
-               Dictionary with S3 access key, S3 secret key, S3 session token,
-               user bucket and user prefix (dict).
-        """
-
-        url = 'https://geobigdata.io/s3creds/v1/prefix?duration=36000'
-        r = self.gbdx_connection.get(url)
-        s3_info = r.json()
-        print "Obtained S3 Credentials"
-
-        return s3_info
-
+    
     def download_from_s3(self, location, local_dir='.'):
-        """Download content from bucket/prefix/location.
+        '''Download content from bucket/prefix/location.
            If location is a directory, all files in the directory are
            downloaded. If it is a file, then that file is downloaded.
 
@@ -274,15 +266,15 @@ class Interface():
                                preceded with nor followed by a backslash.
                local_dir (str): Local directory where file(s) will be stored.
                                 Default is here.
-        """
+        '''
 
         print 'Getting S3 info'
         s3_info = self.get_s3_info()
-        bucket = s3_info["bucket"]
-        prefix = s3_info["prefix"]
-        access_key = s3_info["S3_access_key"]
-        secret_key = s3_info["S3_secret_key"]
-        session_token = s3_info["S3_session_token"]
+        bucket = s3_info['bucket']
+        prefix = s3_info['prefix']
+        access_key = s3_info['S3_access_key']
+        secret_key = s3_info['S3_secret_key']
+        session_token = s3_info['S3_session_token']
 
         print 'Connecting to S3'
         s3conn = s3.connect_to_region('us-east-1', aws_access_key_id=access_key,
@@ -302,23 +294,24 @@ class Interface():
 
         print 'Done!'
 
+
     def delete_in_s3(self, location):
-        """Delete content in bucket/prefix/location.
+        '''Delete content in bucket/prefix/location.
            If location is a directory, all files in the directory are
            deleted. If it is a file, then that file is deleted.
 
            Args:
                location (str): S3 location within prefix. It should not be
                                preceded with nor followed by a backslash.
-        """
+        '''
 
         print 'Getting S3 info'
         s3_info = self.get_s3_info()
-        bucket = s3_info["bucket"]
-        prefix = s3_info["prefix"]
-        access_key = s3_info["S3_access_key"]
-        secret_key = s3_info["S3_secret_key"]
-        session_token = s3_info["S3_session_token"]
+        bucket = s3_info['bucket']
+        prefix = s3_info['prefix']
+        access_key = s3_info['S3_access_key']
+        secret_key = s3_info['S3_secret_key']
+        session_token = s3_info['S3_session_token']
 
         print 'Connecting to S3'
         s3conn = s3.connect_to_region('us-east-1', aws_access_key_id=access_key,
@@ -337,53 +330,51 @@ class Interface():
 
         print 'Done!'
 
+
     def get_strip_footprint_wkt(self, catID):
-        """ Retrieves the strip footprint WKT string given a cat ID.
+        '''Retrieves the strip footprint WKT string given a cat ID.
 
         Args:
-
-         catID (str): The source catalog ID from the platform catalog.
+            catID (str): The source catalog ID from the platform catalog.
 
         Returns:
+            footprint (str): A POLYGON of coordinates.
+        '''
 
-         footprint (str): a POLYGON of coordinates.
-
-        """
-
-        print "Retrieving strip footprint"
-        url = "https://geobigdata.io/catalog/v1/record/" + catID + "?includeRelationships=false"
+        print 'Retrieving strip footprint'
+        url = ('https://geobigdata.io/catalog/v1/record/' 
+               + catID + '?includeRelationships=false')
 
         r = self.gbdx_connection.get(url)
         if r.status_code == 200:
-            footprint = r.json()["properties"]["footprintWkt"]
+            footprint = r.json()['properties']['footprintWkt']
             return footprint
         elif r.status_code == 404:
-            print "Strip not found: %s" % catID
+            print 'Strip not found: %s' % catID
             r.raise_for_status()
         else:
-            print "There was a problem retrieving catid: %s" % catID
+            print 'There was a problem retrieving catid: %s' % catID
             r.raise_for_status()
 
 
     def get_idaho_images_by_catid(self, catid):
-        """ Retrieves the IDAHO image records associated with a given catid.
+        ''' Retrieves the IDAHO image records associated with a given catid.
 
         Args:
-
             catid (str): The source catalog ID from the platform catalog.
 
         Returns:
+            results (json): The full catalog-search response for IDAHO images 
+                            within the catID.
 
-            results (json): the full catalog-search response for IDAHO images within the catID.
+        '''
 
-        """
-
-        print "Retrieving IDAHO metadata"
+        print 'Retrieving IDAHO metadata'
 
         # get the footprint of the catid's strip
         footprint = self.get_strip_footprint_wkt(catid)
         if not footprint:
-            print "Cannot get IDAHO metadata for strip %s, footprint not found" % catid
+            print 'Cannot get IDAHO metadata for strip %s, footprint not found' % catid
             return None
 
         # use the footprint to get the IDAHO ID
@@ -402,28 +393,27 @@ class Interface():
         if r.status_code == 200:
             results = r.json()
             numresults = len(results['results'])
-            print "%s IDAHO images found associated with catid %s" % (numresults, catid)
+            print '%s IDAHO images found associated with catid %s' % (numresults, catid)
 
             return results
 
+
     def describe_idaho_images(self, idaho_image_results):
-        """ Describe a set of IDAHO images, as returned in catalog search results.
+        ''' Describe a set of IDAHO images, as returned in catalog search results.
 
         Args:
-
-            idaho_image_results (dict): IDAHO image result set as returned from the catalog.
-
+            idaho_image_results (dict): IDAHO image result set as returned from 
+                                        the catalog.
         Returns:
-
-            results (json): the full catalog-search response for IDAHO images within the catID.
-
-        """
+            results (json): the full catalog-search response for IDAHO images 
+                            within the catID.
+        '''
 
         results = idaho_image_results['results']
 
         # filter only idaho images:
         results = [r for r in results if r['type']=='IDAHOImage']
-        print "Describing %s IDAHO images." % len(results)
+        print 'Describing %s IDAHO images.' % len(results)
 
         # figure out which catids are represented in this set of images
         catids = set([r['properties']['vendorDatasetIdentifier3'] for r in results])
@@ -455,18 +445,15 @@ class Interface():
 
         return description
 
+
     def create_idaho_leaflet_viewer(self, idaho_image_results, outputfilename):
-        """ Create a leaflet viewer html file for viewing idaho images
+        '''Create a leaflet viewer html file for viewing idaho images
 
         Args:
-
             idaho_image_results (dict): IDAHO image result set as returned from the catalog.
             outputfilename (str): where to save an output html file
+        '''
 
-        Returns:
-
-
-        """
         description = self.describe_idaho_images(idaho_image_results)
         for catid, images in description.iteritems():
             functionstring = ''
@@ -518,27 +505,24 @@ class Interface():
 
 
     def get_idaho_tiles_by_zxy(self, catID, z, x, y, outputFolder):
-        """ Retrieves IDAHO tiles of a given catID for a particular z, x, and
-            y.  The z, x, and y must be known ahead of time and must intersect
-            the strip boundaries of the particular catID to return content.
+        '''Retrieves IDAHO tiles of a given catID for a particular z, x, and
+           y.  The z, x, and y must be known ahead of time and must intersect
+           the strip boundaries of the particular catID to return content.
 
         Args:
-
             catID (str): The source catalog ID from the platform catalog.
 
         Returns:
-
             Confirmation (str) that tile processing was done.
+        '''
 
-        """
-
-        print "Retrieving IDAHO tiles"
+        print 'Retrieving IDAHO tiles'
 
         # get the bucket name and IDAHO ID of each tile within the catID
         locations = self.get_idaho_tile_locations(catID)
         access_token = self.gbdx_connection.access_token
         for location in locations:
-            bucket_name = location[0]["imageBucketName"]
+            bucket_name = location[0]['imageBucketName']
             idaho_id = location[1]
 
             # form request
@@ -547,18 +531,17 @@ class Interface():
                    + '/' + str(x) + '/' + str(y) + '?token=' + access_token)
             body = {"token": access_token}
 
-            r = self.gbdx_connection.get(url, data=json.dumps(body),
-                                         stream=True)
+            r = self.gbdx_connection.get(url, data=json.dumps(body), stream=True)
 
             # form output path
-            file_path = os.path.join(outputFolder, catID + "-" + str(z) + "-" +
-                                     str(x) + "-" + str(y) + ".tif")
+            file_path = os.path.join(outputFolder, 
+                                     catID + '-'.join(map(str, [z, x, y])) + '.tif')
 
             # save returned image
             i = Image.open(StringIO(r.content))
             saved = i.save(file_path)
 
         if saved == None:
-            return "Retrieval complete; please check output folder."
+            return 'Retrieval complete; please check output folder.'
         else:
-            return "There was a problem saving the file at " + file_path + "."
+            return 'There was a problem saving the file at ' + file_path + '.'
