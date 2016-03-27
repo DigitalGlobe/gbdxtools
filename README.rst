@@ -9,8 +9,6 @@ gbdxtools is a package for ordering imagery and launching workflows on DigitalGl
 
 gbdxtools is MIT licenced.
 
-Full documentation is hosted here: http://gbdxtools.readthedocs.org/en/latest/
-
 Installation is easy::
 
     pip install gbdxtools
@@ -21,9 +19,8 @@ If you have a previous version of gbdxtools install then::
 
 In order to use gbdxtools, you need GBDX credentials. Email geobigdata@digitalglobe.com to get these.
 
-This repo is intended as a useful exercise in elegant open source Python development. 
-A presentation which outlines the principles can be found here http://youngpm.github.io/python-brownbag/#1.
-The long-term plan is to merge this repo with https://github.com/TDG-Platform/gbdx-py.
+Documentation is hosted here: http://gbdxtools.readthedocs.org/en/latest/. 
+Example scripts can be found under the /examples directory of this repo.
 
 
 Development
