@@ -258,12 +258,12 @@ class Interface():
     
     def download_from_s3(self, location, local_dir='.'):
         '''Download content from bucket/prefix/location.
+           Location can be a directory or a file (e.g., my_dir or my_dir/my_image.tif)
            If location is a directory, all files in the directory are
            downloaded. If it is a file, then that file is downloaded.
 
            Args:
-               location (str): S3 location within prefix. It should not be
-                               preceded with nor followed by a backslash.
+               location (str): S3 location within prefix. 
                local_dir (str): Local directory where file(s) will be stored.
                                 Default is here.
         '''
@@ -284,6 +284,12 @@ class Interface():
         b = s3conn.get_bucket(bucket, validate=False,
                               headers={'x-amz-security-token': session_token})
 
+        # remove head and/or trail backslash from location
+        if location[0] == '/':
+            location = location[1:]
+        if location[-1] == '/':
+            location = location[:-2]    
+
         whats_in_here = b.list(prefix + '/' + location)
 
         print 'Downloading contents'
@@ -297,12 +303,13 @@ class Interface():
 
     def delete_in_s3(self, location):
         '''Delete content in bucket/prefix/location.
-           If location is a directory, all files in the directory are
-           deleted. If it is a file, then that file is deleted.
+           Location can be a directory or a file (e.g., my_dir or my_dir/my_image.tif)
+           If location is a directory, all files in the directory are deleted. 
+           If it is a file, then that file is deleted.
 
            Args:
-               location (str): S3 location within prefix. It should not be
-                               preceded with nor followed by a backslash.
+               location (str): S3 location within prefix. Can be a directory or
+                               a file (e.g., my_dir or my_dir/my_image.tif)
         '''
 
         print 'Getting S3 info'
@@ -320,6 +327,12 @@ class Interface():
 
         b = s3conn.get_bucket(bucket, validate=False,
                               headers={'x-amz-security-token': session_token})
+
+        # remove head and/or trail backslash from location
+        if location[0] == '/':
+            location = location[1:]
+        if location[-1] == '/':
+            location = location[:-2]
 
         whats_in_here = b.list(prefix + '/' + location)
 
