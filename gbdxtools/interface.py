@@ -515,35 +515,6 @@ class Interface():
             print "Saving %s" % outputfilename
             outputfile.write(data)
 
-    def get_idaho_tile_locations(self, catID):
-        """ Retrieves all IDAHO tile locations of a given catID.
-
-        Args:
-
-            catID (str): The source catalog ID from the platform catalog.
-
-        Returns:
-
-            results (list of tuples): element 1 = bucket name
-                                      element 2 = IDAHO image ID
-
-        """
-
-        print "Retrieving IDAHO tile locations"
-
-        # get the bucket name and image ID of each tile within the catID
-        metadata = self.get_idaho_metadata(catID)
-        print metadata
-        asdfadsfad
-        results = []
-        tileResults = json.loads(json.dumps(metadata))["results"]
-        for tile in tileResults:
-            bucket_name = json.loads(json.dumps(tile))["properties"]["imageBucketName"]
-            imageId = json.loads(json.dumps(tile))["properties"]["imageId"]
-            results.append((bucket_name, imageId))
-
-        return results
-
 
     def get_idaho_tiles_by_zxy(self, catID, z, x, y, outputFolder):
         """ Retrieves IDAHO tiles of a given catID for a particular z, x, and
