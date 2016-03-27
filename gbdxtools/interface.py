@@ -12,6 +12,8 @@ from boto import s3
 from gbdx_auth import gbdx_auth
 from StringIO import StringIO
 from PIL import Image
+from pygeoif import geometry
+import codecs
 
 
 class Interface():
@@ -451,6 +453,67 @@ class Interface():
                 description[catid]['parts'][part][color]['boundstr'] = boundstr
 
         return description
+
+    def create_idaho_leaflet_viewer(self, idaho_image_results, outputfilename):
+        """ Create a leaflet viewer html file for viewing idaho images
+
+        Args:
+
+            idaho_image_results (dict): IDAHO image result set as returned from the catalog.
+            outputfilename (str): where to save an output html file
+
+        Returns:
+
+
+        """
+        description = self.describe_idaho_images(idaho_image_results)
+        for catid, images in description.iteritems():
+            functionstring = ''
+            for partnum, part in images['parts'].iteritems():
+
+                num_images = len(part.keys())
+                partname = None
+                if num_images == 1:
+                    # there is only one image, use the PAN
+                    partname = [p for p in part.keys() if p.upper() == 'PAN'][0]
+                    pan_image_id = ''
+                elif num_images == 2:
+                    # there are two images in this part, use the multi (or pansharpen)
+                    partname = [p for p in part.keys() if p is not 'PAN'][0]
+                    pan_image_id = part['PAN']['id']
+
+                if not partname:
+                    print "Cannot find part for idaho image."
+                    continue
+
+                bandstr = {
+                    'RGBN': '0,1,2',
+                    'WORLDVIEW_8_BAND': '4,3,2',
+                    'PAN': '0'
+                }.get(partname, '0,1,2')
+
+                part_boundstr_wkt = part[partname]['boundstr']
+                part_polygon = geometry.from_wkt(part_boundstr_wkt)
+                bucketname = part[partname]['bucket']
+                image_id = part[partname]['id']
+                W, S, E, N = part_polygon.bounds
+
+                functionstring += "addLayerToMap('%s','%s',%s,%s,%s,%s,'%s');\n" % (bucketname, image_id, W,S,E,N, pan_image_id)
+
+        __location__ = os.path.realpath(
+            os.path.join(os.getcwd(), os.path.dirname(__file__)))
+        with open(os.path.join(__location__, 'leafletmap_template.html'), 'r') as htmlfile:
+            data=htmlfile.read().decode("utf8")
+
+        data = data.replace('FUNCTIONSTRING',functionstring)
+        data = data.replace('CENTERLAT',str(S))
+        data = data.replace('CENTERLON',str(W))
+        data = data.replace('BANDS',bandstr)
+        data = data.replace('TOKEN',self.gbdx_connection.access_token)
+
+        with codecs.open(outputfilename,'w','utf8') as outputfile:
+            print "Saving %s" % outputfilename
+            outputfile.write(data)
 
     def get_idaho_tile_locations(self, catID):
         """ Retrieves all IDAHO tile locations of a given catID.
