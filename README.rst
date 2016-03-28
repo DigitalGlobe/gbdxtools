@@ -26,9 +26,9 @@ Example scripts can be found under the /examples directory of this repo.
 Development
 -----------
 
-Clone the repo::
+Clone the repo dev branch::
 
-   git clone git@github.com:kostasthebarbarian/gbdxtools.git
+   git clone -b dev git@github.com:kostasthebarbarian/gbdxtools.git
    
    cd gbdxtools
 
