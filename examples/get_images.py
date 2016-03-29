@@ -8,7 +8,6 @@ from gbdxtools import Interface
 start_time = time.time()
 
 catalog_ids = ['1030010045539700', '10200100414F0100', '10200100417A8C00']
-no_images = len(catalog_ids)
 
 print 'Order imagery from GBDX'
 gi = Interface()
