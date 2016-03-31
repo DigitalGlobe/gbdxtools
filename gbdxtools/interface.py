@@ -7,13 +7,17 @@ Functions to interface with GBDX API.
 
 import json
 import os
+import requests
 
 from boto import s3
 from gbdx_auth import gbdx_auth
 from StringIO import StringIO
 from PIL import Image
 from pygeoif import geometry
+from sympy.geometry import Point, Polygon
+
 import codecs
+
 
 
 class Interface():
@@ -502,7 +506,7 @@ class Interface():
                 functionstring += "addLayerToMap('%s','%s',%s,%s,%s,%s,'%s');\n" % (bucketname, image_id, W,S,E,N, pan_image_id)
 
         __location__ = os.path.realpath(
-            os.path.join(os.getcwd(), os.path.dirname(__file__)))
+            os.path.join(os.getcwd(), os.path.dirname(os.path.realpath('__file__'))))
         with open(os.path.join(__location__, 'leafletmap_template.html'), 'r') as htmlfile:
             data=htmlfile.read().decode("utf8")
 
@@ -532,7 +536,8 @@ class Interface():
         print 'Retrieving IDAHO tiles'
 
         # get the bucket name and IDAHO ID of each tile within the catID
-        locations = self.get_idaho_tile_locations(catID)
+
+        locations = self.get_idaho_images_by_catid(catID)
         access_token = self.gbdx_connection.access_token
         for location in locations:
             bucket_name = location[0]['imageBucketName']
@@ -558,3 +563,201 @@ class Interface():
             return 'Retrieval complete; please check output folder.'
         else:
             return 'There was a problem saving the file at ' + file_path + '.'
+
+    def get_idaho_chip(self, bucket_name, idaho_id, center_lat, center_lon, 
+                       pixel_res_meters, output_folder):
+        '''Downloads an orthorectified IDAHO chip.
+
+        Args:
+            bucket_name (str): The S3 bucket name.
+            idaho_id (str): The IDAHO ID of the chip.
+            center_lat (str): The latitude of the center of the desired chip.
+            center_lon (str): The longitude of the center of the desired chip.
+            pixel_res_meters (str): Pixel resolution in meters.
+            output_folder (str): The folder the chip should be output to.
+
+        Returns:
+            Confirmation (str) that tile processing was done.
+        '''
+
+        print 'Retrieving IDAHO chip'
+        
+        # form request
+        url = ('http://idaho.geobigdata.io/'
+               'v1/chip/' + bucket_name + '/' + idaho_id + '?lat=' 
+               + str(center_lat) + '&long=' + str(center_lon) + '&resolution='
+               + str(pixel_res_meters))
+       
+        r = requests.get(url)
+
+        if r.status_code == 200:
+            # form output path
+            file_path = output_folder + '/' + idaho_id + '.tif'
+    
+            # save returned image
+            i = Image.open(StringIO(r.content))
+            i.save(file_path)
+    
+        elif r.status_code == 404:
+            print 'IDAHO ID not found: %s' % idaho_id
+            r.raise_for_status()
+        else:
+            print 'There was a problem retrieving IDAHO ID: %s' % idaho_id
+            r.raise_for_status()
+
+    def view_idaho_tiles_by_bbox(self, catId, bbox, outputfilename):
+        '''Retrieve and view just the IDAHO chips in a particular bounding box
+           for a catID.
+
+        Args:
+            catid (str): The source catalog ID from the platform catalog.
+            bbox (list): List of coords: minx(W), miny(S), maxx(E), maxy(N).
+            outputfilename (str): a Leaflet Viewer file showing the IDAHO
+               images as tiles.
+        '''
+        
+        minx, miny, maxx, maxy = bbox
+        
+        #validate bbox values
+        if (minx > maxx):
+            print ('The west value is not less than the east value.')
+            exit
+        if (miny > maxy):
+            print ('The south value is not less than the north value.')
+            exit
+        
+        #create bbox polygon
+        bp1 = Point(minx, miny)
+        bp2 = Point(minx, maxy)
+        bp3 = Point(maxx, maxy)
+        bp4 = Point(maxx, miny)
+        bbox_polygon = Polygon(bp1, bp2, bp3, bp4)
+        
+        #get IDAHO image results: parts
+        idaho_image_results = self.get_idaho_images_by_catid(catId)
+        description = self.describe_idaho_images(idaho_image_results)
+        
+        tile_count = 0
+        for catid, images in description.iteritems():
+            functionstring = ''
+            for partnum, part in images['parts'].iteritems():
+
+                num_images = len(part.keys())
+                partname = None
+                if num_images == 1:
+                    # there is only one image, use the PAN
+                    partname = [p for p in part.keys() if p.upper() == 'PAN'][0]
+                    pan_image_id = ''
+                elif num_images == 2:
+                    # there are two images in this part, use the multi (or pansharpen)
+                    partname = [p for p in part.keys() if p is not 'PAN'][0]
+                    pan_image_id = part['PAN']['id']
+
+                if not partname:
+                    print "Cannot find part for idaho image."
+                    continue
+
+                bandstr = {
+                    'RGBN': '0,1,2',
+                    'WORLDVIEW_8_BAND': '4,3,2',
+                    'PAN': '0'
+                }.get(partname, '0,1,2')
+
+                part_boundstr_wkt = part[partname]['boundstr']
+                part_polygon = geometry.from_wkt(part_boundstr_wkt) 
+                bucketname = part[partname]['bucket']
+                image_id = part[partname]['id']
+                W, S, E, N = part_polygon.bounds
+                pp1, pp2, pp3, pp4 = Point(W, S), Point(W, N), Point(E, N), Point(E, S)
+                part_bbox_polygon = Polygon(pp1, pp2, pp3, pp4)
+                if (bbox_polygon.intersection(part_bbox_polygon)):
+                    functionstring += ("addLayerToMap('%s','%s',%s,%s,%s,%s,'%s');\n" % 
+                                      (bucketname, image_id, W,S,E,N, pan_image_id))
+                    tile_count += 1
+                    
+        print ('There were ' + str(tile_count) + ' IDAHO images found to ' +
+              'intersect with the provided bounding box.')
+        
+        __location__ = os.path.realpath(
+            os.path.join(os.getcwd(), os.path.dirname(os.path.realpath('__file__'))))
+        with open(os.path.join(__location__, 'leafletmap_template.html'), 'r') as htmlfile:
+            data=htmlfile.read().decode("utf8")
+
+        data = data.replace('FUNCTIONSTRING',functionstring)
+        data = data.replace('CENTERLAT',str(S + (N-S)/2))
+        data = data.replace('CENTERLON',str(W + (E-W)/2))
+        data = data.replace('BANDS',bandstr)
+        data = data.replace('TOKEN',self.gbdx_connection.access_token)
+
+        with codecs.open(outputfilename,'w','utf8') as outputfile:
+            print "Saving %s" % outputfilename
+            outputfile.write(data)
+            
+    def download_idaho_tiles_by_bbox(self, catId, bbox, resolution, outputfolder):
+        '''Retrieve and view just the IDAHO chips in a particular bounding box
+           for a catID.
+
+        Args:
+            catid (str): The source catalog ID from the platform catalog.
+            bbox (list): List of coords: minx(W), miny(S), maxx(E), maxy(N).
+            resolution (str): The desired floating point resolution of the tiles.
+            outputfolder (str): The desired output location of the IDAHO tiles.
+        '''
+        
+        minx, miny, maxx, maxy = bbox
+        
+        #validate bbox values
+        if (minx > maxx):
+            print ('The west value is not less than the east value.')
+            exit
+        if (miny > maxy):
+            print ('The south value is not less than the north value.')
+            exit
+        
+        #create bbox polygon
+        bp1 = Point(minx, miny)
+        bp2 = Point(minx, maxy)
+        bp3 = Point(maxx, maxy)
+        bp4 = Point(maxx, miny)
+        bbox_polygon = Polygon(bp1, bp2, bp3, bp4)
+        
+        #get IDAHO image results: parts
+        idaho_image_results = self.get_idaho_images_by_catid(catId)
+        description = self.describe_idaho_images(idaho_image_results)
+        
+        tile_count = 0
+        for catid, images in description.iteritems():
+            for partnum, part in images['parts'].iteritems():
+
+                num_images = len(part.keys())
+                partname = None
+                if num_images == 1:
+                    # there is only one image, use the PAN
+                    partname = [p for p in part.keys() if p.upper() == 'PAN'][0]
+                elif num_images == 2:
+                    # there are two images in this part, use the multi (or pansharpen)
+                    partname = [p for p in part.keys() if p is not 'PAN'][0]
+
+                if not partname:
+                    print "Cannot find part for idaho image."
+                    continue
+
+                part_boundstr_wkt = part[partname]['boundstr']
+                part_polygon = geometry.from_wkt(part_boundstr_wkt) 
+                bucketname = part[partname]['bucket']
+                image_id = part[partname]['id']
+                W, S, E, N = part_polygon.bounds
+                pp1, pp2, pp3, pp4 = Point(W, S), Point(W, N), Point(E, N), Point(E, S)
+                part_bbox_polygon = Polygon(pp1, pp2, pp3, pp4)
+                if (bbox_polygon.intersection(part_bbox_polygon)):
+                    center_lat = (S + (N-S)/2)
+                    center_lon = (W + (E-W)/2)
+                    print center_lat, center_lon
+                    self.get_idaho_chip(bucketname, image_id, center_lat, 
+                                        center_lon, resolution, outputfolder)
+                    tile_count+=1
+                    
+        print ('There were ' + str(tile_count) + ' IDAHO images downloaded that ' +
+              'intersect with the provided bounding box.')
+        
+       
