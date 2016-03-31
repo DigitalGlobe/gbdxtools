@@ -33,9 +33,9 @@ s3_location = 'my_directory'
 
 # launch AOP workflows
 print 'Launch AOP workflows'
-workflow_ids = [gbdx.workflow.launch_aop_to_s3_workflow(location,
-                                             s3_location,
-                                             enable_acomp='true') for location in locations]
+workflow_ids = [gbdx.workflow.launch_aop_to_s3(location,
+                                               s3_location,
+                                               enable_acomp='true') for location in locations]
 
 # check workflow status
 pending_workflow_ids = workflow_ids

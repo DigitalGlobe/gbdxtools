@@ -89,15 +89,15 @@ class Workflow():
 
         return r.json()
 
-    def launch_aop_to_s3_workflow(self,
-                                  input_location,
-                                  output_location,
-                                  bands='Auto',
-                                  ortho_epsg='EPSG:4326',
-                                  enable_pansharpen='false',
-                                  enable_acomp='false',
-                                  enable_dra='false',
-                                  ):
+    def launch_aop_to_s3(self,
+                         input_location,
+                         output_location,
+                         bands='Auto',
+                         ortho_epsg='EPSG:4326',
+                         enable_pansharpen='false',
+                         enable_acomp='false',
+                         enable_dra='false',
+                        ):
 
         '''Launch aop_to_s3 workflow with choice of select parameters. There
            are more parameter choices to this workflow than the ones provided
