@@ -7,30 +7,32 @@ GBDX Workflow interface
 
 class Workflow():
 
-    def __init__(self, connection, s3):
+    def __init__(self, interface):
         '''Construct the Workflow instance
         
-            Args:
-                connection: a ref to the GBDX Connection
+        Args:
+            interface (Interface): A reference to the GBDX Interface.
 
-            Returns:
-                an instance of the Workflow class
+        Returns:
+            An instance of the Workflow class.
         '''
         # store a reference to the GBDX Connection
-        self.gbdx_connection = connection
+        self.gbdx_connection = interface.gbdx_connection
 
         # store a ref to the s3 interface
-        self.s3 = s3
+        self.s3 = interface.s3
 
+        # the logger
+        self.logger = interface.logger
 
     def launch(self, workflow):
         '''Launches GBDX workflow.
 
-           Args:
-               workflow (dict): Dictionary specifying workflow tasks.
+        Args:
+            workflow (dict): Dictionary specifying workflow tasks.
 
-           Returns:
-               Workflow id (str).
+        Returns:
+            Workflow id (str).
         '''
 
         # hit workflow api
@@ -40,7 +42,7 @@ class Workflow():
             workflow_id = r.json()['id']
             return workflow_id
         except TypeError:
-            print 'Workflow not launched!'
+            self.logger.debug('Workflow not launched!')
 
     def status(self, workflow_id):
         '''Checks workflow status.
@@ -51,7 +53,7 @@ class Workflow():
          Returns:
              Workflow status (str).
         '''
-        print 'Get status of workflow: ' + workflow_id
+        self.logger.debug('Get status of workflow: ' + workflow_id)
         url = 'https://geobigdata.io/workflows/v1/workflows/' + workflow_id
         r = self.gbdx_connection.get(url)
 
@@ -181,7 +183,7 @@ class Workflow():
         aop_to_s3['tasks'][1]['inputs'][1]['value'] = output_location_final
 
         # launch workflow
-        print 'Launch workflow'
-        workflow_id = self.launch_workflow(aop_to_s3)
+        self.logger.debug('Launch workflow')
+        workflow_id = self.launch(aop_to_s3)
 
         return workflow_id

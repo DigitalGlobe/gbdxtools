@@ -5,30 +5,23 @@ Contact: kostas.stamatiou@digitalglobe.com
 Unit test the workflow class
 '''
 
-from gbdx_auth import gbdx_auth
-from gbdxtools.s3 import S3
+from gbdxtools import Interface
 from gbdxtools.workflow import Workflow
 
 def test_init():
-    gc = gbdx_auth.get_session()
-    s3 = S3(gc)
-    wf = Workflow(gc, s3)
+    wf = Workflow(Interface())
     assert isinstance(wf, Workflow)
     assert wf.s3 is not None
     assert wf.gbdx_connection is not None
     
 def test_list_tasks():
-    gc = gbdx_auth.get_session()
-    s3 = S3(gc)
-    wf = Workflow(gc, s3)
+    wf = Workflow(Interface())
     taskinfo = wf.list_tasks()
     assert taskinfo is not None
     assert 'HelloGBDX' in taskinfo['tasks']
 
 def test_describe_tasks():
-    gc = gbdx_auth.get_session()
-    s3 = S3(gc)
-    wf = Workflow(gc, s3)
+    wf = Workflow(Interface())
     taskinfo = wf.list_tasks()
     assert len(taskinfo) > 0
     desc = wf.describe_task(taskinfo['tasks'][0])

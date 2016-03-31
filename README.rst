@@ -23,8 +23,31 @@ Documentation is hosted here: http://gbdxtools.readthedocs.org/en/latest/.
 Example scripts can be found under the /examples directory of this repo.
 
 
-Tests
------
+
+Development
+-----------
+
+Clone the repo dev branch::
+
+   git clone -b dev git@github.com:kostasthebarbarian/gbdxtools.git
+   
+   cd gbdxtools
+
+Start a virtual environment::
+   
+   virtualenv venv
+   
+   . venv/bin/activate
+ 
+Install the requirements::
+
+   pip install -r requirements.txt
+
+
+Please follow this python style guide: https://google.github.io/styleguide/pyguide.html.
+80-90 columns is fine.
+
+*Tests*
 
 This package uses pytest http://pytest.org/latest/contents.html
 
@@ -46,26 +69,3 @@ If you want only the unit or integration tests do either of::
 Note: you may have to issue the follwing in your virtualenv for the tests to find gbdxtools properly::
 
     pip install -e .
-
-
-Development
------------
-
-Clone the repo dev branch::
-
-   git clone -b dev git@github.com:kostasthebarbarian/gbdxtools.git
-   
-   cd gbdxtools
-
-Start a virtual environment::
-   
-   virtualenv venv
-   
-   . venv/bin/activate
- 
-Install the requirements::
-
-   pip install -r requirements.txt
-
-Please follow this python style guide: https://google.github.io/styleguide/pyguide.html.
-80-90 columns is fine. 

@@ -11,15 +11,15 @@ class Task:
     def __init__(self, **kwargs):
         '''Construct an instance of GBDX Task
 
-            Args:
-                optional:
-                    name (string): the task name
-                    input_port_descriptors (list): a list of the input port descriptors
-                    output_port_descriptors (list): a list of the output port descriptors
-                    container_descriptors (list): a list of the container descriptors
-                    properties (dict): a dictionary of task properties
-            Returns:
-                an instance of Task
+         Args:
+            optional keywords:
+                name (string): The task name.
+                input_port_descriptors (list): A list of the input port descriptors.
+                output_port_descriptors (list): A list of the output port descriptors.
+                container_descriptors (list): A list of the container descriptors.
+                properties (dict): A dictionary of task properties.
+        Returns:
+            An instance of Task.
             
         '''
 
@@ -54,11 +54,11 @@ class Task:
     def from_json(cls,task_desc):
         '''Contstruct a new instance of task from the task descriptor
 
-            Args:
-                task_desc (string): Json string task description
+        Args:
+            task_desc (string): JSON string task description.
 
-            Returns:
-                an instance of Task
+        Returns:
+            An instance of Task.
 
         '''
         js_task = json.loads(task_desc)
