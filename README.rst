@@ -49,9 +49,9 @@ Please follow this python style guide: https://google.github.io/styleguide/pygui
 
 *Tests*
 
-This package uses pytest http://pytest.org/latest/contents.html
+This package uses pytest http://pytest.org/latest/contents.html.
 
-pytest allows for tests to be written using various frameworks, so unittest.TestCase, pytest, and nose style tests will be detected and run
+pytest allows for tests to be written using various frameworks, so unittest.TestCase, pytest, and nose style tests will be detected and run.
 
 To run all of the tests you can either::
 
@@ -66,6 +66,6 @@ If you want only the unit or integration tests do either of::
     py.test tests/integration
     py.test tests/unit
 
-Note: you may have to issue the follwing in your virtualenv for the tests to find gbdxtools properly::
+Note: you may have to issue the following in your virtualenv for the tests to find gbdxtools properly::
 
     pip install -e .
