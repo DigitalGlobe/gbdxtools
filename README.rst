@@ -23,6 +23,7 @@ Documentation is hosted here: http://gbdxtools.readthedocs.org/en/latest/.
 Example scripts can be found under the /examples directory of this repo.
 
 
+
 Development
 -----------
 
@@ -42,5 +43,29 @@ Install the requirements::
 
    pip install -r requirements.txt
 
+
 Please follow this python style guide: https://google.github.io/styleguide/pyguide.html.
-80-90 columns is fine. 
+80-90 columns is fine.
+
+*Tests*
+
+This package uses pytest http://pytest.org/latest/contents.html
+
+pytest allows for tests to be written using various frameworks, so unittest.TestCase, pytest, and nose style tests will be detected and run
+
+To run all of the tests you can either::
+
+    python setup.py test
+
+or::
+    
+    py.test
+
+If you want only the unit or integration tests do either of::
+
+    py.test tests/integration
+    py.test tests/unit
+
+Note: you may have to issue the follwing in your virtualenv for the tests to find gbdxtools properly::
+
+    pip install -e .

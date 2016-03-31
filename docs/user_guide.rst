@@ -9,7 +9,7 @@ All operations on GBDX require credentials. Instantiating an Interface object au
 .. code-block:: pycon
 
    >>> from gbdxtools import Interface
-   >>> gi = Interface()
+   >>> gbdx = Interface()
 
 gbdxtools expects a config file to exist at ~/.gbdx-config with your GBDX credentials.  
 See formatting for this file here:  https://github.com/tdg-platform/gbdx-auth#ini-file.
@@ -20,17 +20,18 @@ For future reference, remember that your credentials are listed in https://gbdx.
 Getting your S3 information
 ---------------------------
 
-Simply call:
+Use the s3 member of the Interface:
 
 .. code-block:: pycon
 
-   >>> gi.get_s3_info()
-   >>> Obtained S3 credentials
+   >>> gbdx.s3.info
    >>> {u'S3_access_key': u'blah',
  u'S3_secret_key': u'blah',
  u'S3_session_token': u'blah',
  u'bucket': u'gbd-customer-data',
  u'prefix': u'58600248-2927-4523-b44b-5fec3d278c09'}
+   >>> item = 'testdata/test1.tif'
+   >>> gbdx.s3.download(item)
 
 You can see the contents of your bucket/prefix using this link: http://s3browser-env.elasticbeanstalk.com/login.html.
 
@@ -39,27 +40,27 @@ Ordering imagery
 ----------------
 
 This guide uses v2 of the GBDX ordering API. Ordering API v1 was set to phase out on 02/25/2016. 
- 
+
+Use the ordering member of the Interface to order and status imagery
+
 To order the image with DG factory catalog id 10400100143FC900:
 
 .. code-block:: pycon
 
-   >>> order_id = gi.order_imagery('10400100143FC900')
-   >>> Place order
+   >>> order_id = gbdx.ordering.order('10400100143FC900')
    >>> print order_id
-   >>> 8bd8f797-11cd-4e3b-8bfa-c592d41af223
+   u'8bd8f797-11cd-4e3b-8bfa-c592d41af223'
 
 The order_id is unique to your image order and can be used to track the progress of your order.
 The ordered image sits in a directory on S3. The output of the following describes where:
 
 .. code-block:: pycon
 
-   >>> gi.check_order_status(order_id)
-   >>> Get status of order 8bd8f797-11cd-4e3b-8bfa-c592d41af223
-   >>> {u's3://receiving-dgcs-tdgplatform-com/055093376010_01_003': u'delivered'}
+   >>> gbdx.ordering.status(order_id)
+   {u's3://receiving-dgcs-tdgplatform-com/055093376010_01_003': u'delivered'}
 
 
-Launching a workflow
+GBDX Workflows
 --------------------
 
 Welcome to the magical world of GBDX workflows. Workflows are sequences of tasks performed on a DG image.
@@ -69,6 +70,16 @@ This example will walk you through launching an aop_to_s3 workflow.
 This workflow applies a series of one or more processing steps to the image you ordered in the previous section and stores the
 processed image under your S3 bucket/prefix. 
 
+Use the workflow member of the Interface to interact with the workflow engine and manage workflows
+
+.. code-block:: pycon
+
+   >>> gbdx = Interface()
+   >>> gbdx.workflow.list_tasks()
+   {u'tasks': [u'HelloGBDX', u'Downsample', u'protogenRAW', u'protogenUBFP', u'AComp' ...
+   >>> gbdx.workflow.describe_task('HelloGBDX')
+   {u'containerDescriptors': [{u'type': u'DOCKER', u'command': u'', u'properties': {u'image': u'tdgp/hello_gbdx:latest'}}], u'description': u'Get a personalized greeting to GBDX', u'inputPortDescriptors': [{u'required': True, u'type': u'string', u'description': u'Enter your name here for a personalized greeting to the platform.', u'name': u'your_name'}], u'outputPortDescriptors': [{u'required': True, u'type': u'txt', u'description': u'The output directory of text file', u'name': u'data'}], u'properties': {u'isPublic': True, u'timeout': 7200}, u'name': u'HelloGBDX'}  
+ 
 First, define the location of the ordered image:
 
 .. code-block:: pycon
@@ -87,18 +98,18 @@ We now launch an aop_to_s3 workflow that produces a pansharpened image.
 
 .. code-block:: pycon
 
-   >>> gi.launch_aop_to_s3_workflow(input_location, output_location, enable_pansharpen='true')
-   >>> Launch workflow
-   >>> u'4283225389760382164'
+   >>> gbdx.workflow.launch_aop_to_s3_workflow(input_location, output_location, enable_pansharpen='true')
+  Launching workflow ...
+  u'4283225389760382164'
 
 The output of this function is the workflow id. 
 You can check on the status of this workflow as follows:
 
 .. code-block:: pycon
 
-   >>> gi.check_workflow_status('4283225389760382164')
-   >>> Get status of workflow: 4283225389760382164
-   >>> {u'event': u'scheduled', u'state': u'pending'}
+   >>> gbdx.workflow.status('4283225389760382164')
+   Getting status of workflow: 4283225389760382164 ...
+   {u'event': u'scheduled', u'state': u'pending'}
 
 .. _`here`: http://gbdxdocs.digitalglobe.com/docs/workflow-api-course
 
