@@ -6,31 +6,32 @@ Abstraction for the GBDX Ordering interface
 '''
 class Ordering:
 
-    def __init__(self, connection):
+    def __init__(self, interface):
         '''Instantiate the GBDX Ordering Interface
 
-            Args: 
-                connection: a ref to the GBDX connection
+        Args: 
+            interface (Interface): A reference to the GBDX interface.
     
-            Returns:
-                an instance of the Ordering interface
+        Returns:
+            An instance of the Ordering interface.
 
         '''
-        self.gbdx_connection = connection
+        self.gbdx_connection = interface.gbdx_connection
+        self.logger = interface.logger
     
     def order(self, image_catalog_ids):
         '''Orders images from GBDX.
 
-           Args:
-               image_catalog_ids (list or string): A list of image catalog ids
-               or a single image catalog id.
+        Args:
+            image_catalog_ids (list or string): A list of image catalog ids
+            or a single image catalog id.
 
-           Returns:
-               order_id (str): The ID of the order placed.
+        Returns:
+            order_id (str): The ID of the order placed.
         '''
 
         # hit ordering api
-        print 'Place order'
+        self.logger.debug('Place order')
         url = 'https://geobigdata.io/orders/v2/order/'
 
         # determine if the user inputted a list of image_catalog_ids
@@ -59,7 +60,7 @@ class Ordering:
                values = status of each ordered image.
         '''
 
-        print 'Get status of order ' + order_id
+        self.logger.debug('Get status of order ' + order_id)
         url = 'https://geobigdata.io/orders/v2/order/'
         r = self.gbdx_connection.get(url + order_id)
         r.raise_for_status()

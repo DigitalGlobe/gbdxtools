@@ -5,11 +5,10 @@ Contact: dmarino@digitalglobe.com
 Unit tests for the gbdxtools.Idaho class
 '''
 
-from gbdx_auth import gbdx_auth
+from gbdxtools import Interface
 from gbdxtools.idaho import Idaho
 
 def test_init():
-    gc = gbdx_auth.get_session()
-    i = Idaho(gc)
+    i = Idaho(Interface())
     assert isinstance(i, Idaho)
 

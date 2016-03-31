@@ -5,11 +5,10 @@ Contact: dmarino@digitalglobe.com
 Unit tests for the gbdxtools.Catalog class
 '''
 
-from gbdx_auth import gbdx_auth
+from gbdxtools import Interface
 from gbdxtools.catalog import Catalog
 
 def test_init():
-    gc = gbdx_auth.get_session()
-    c = Catalog(gc)
+    c = Catalog(Interface())
     assert isinstance(c, Catalog)
 

@@ -14,18 +14,19 @@ from gbdxtools.catalog import Catalog
 
 class Idaho():
 
-    def __init__(self, connection):
+    def __init__(self, interface):
         ''' Construct the Idaho interface class
-            Args:
-                connection: a ref to the GBDX Connection
+            
+        Args:
+            connection (gbdx_session): A reference to the GBDX Connection.
 
-            Returns:
-                an instance of the Idaho interface class
+        Returns:
+            An instance of the Idaho interface class.
 
         '''
-        self.gbdx_connection = connection
-        self.catalog = Catalog(self.gbdx_connection)
-
+        self.gbdx_connection = interface.gbdx_connection
+        self.catalog = Catalog(interface)
+        self.logger = interface.logger
 
     def get_images_by_catid(self, catid):
         ''' Retrieves the IDAHO image records associated with a given catid.
@@ -39,12 +40,12 @@ class Idaho():
 
         '''
 
-        print 'Retrieving IDAHO metadata'
+        self.logger.debug('Retrieving IDAHO metadata')
 
         # get the footprint of the catid's strip
         footprint = self.catalog.get_strip_footprint_wkt(catid)
         if not footprint:
-            print 'Cannot get IDAHO metadata for strip %s, footprint not found' % catid
+            self.logger.debug('Cannot get IDAHO metadata for strip %s, footprint not found' % catid)
             return None
 
         # use the footprint to get the IDAHO ID
@@ -63,7 +64,7 @@ class Idaho():
         if r.status_code == 200:
             results = r.json()
             numresults = len(results['results'])
-            print '%s IDAHO images found associated with catid %s' % (numresults, catid)
+            self.logger.debug('%s IDAHO images found associated with catid %s' % (numresults, catid))
 
             return results
 
@@ -82,7 +83,7 @@ class Idaho():
 
         # filter only idaho images:
         results = [r for r in results if r['type']=='IDAHOImage']
-        print 'Describing %s IDAHO images.' % len(results)
+        self.logger.debug('Describing %s IDAHO images.' % len(results))
 
         # figure out which catids are represented in this set of images
         catids = set([r['properties']['vendorDatasetIdentifier3'] for r in results])
@@ -126,7 +127,7 @@ class Idaho():
             Confirmation (str) that tile processing was done.
         '''
 
-        print 'Retrieving IDAHO tiles'
+        self.logger.debug('Retrieving IDAHO tiles')
 
         # get the bucket name and IDAHO ID of each tile within the catID
         locations = self.get_tile_locations(catID)
@@ -182,7 +183,7 @@ class Idaho():
                     pan_image_id = part['PAN']['id']
 
                 if not partname:
-                    print "Cannot find part for idaho image."
+                    self.logger.debug("Cannot find part for idaho image.")
                     continue
 
                 bandstr = {
@@ -211,5 +212,5 @@ class Idaho():
         data = data.replace('TOKEN',self.gbdx_connection.access_token)
 
         with codecs.open(outputfilename,'w','utf8') as outputfile:
-            print "Saving %s" % outputfilename
+            self.logger.debug("Saving %s" % outputfilename)
             outputfile.write(data)

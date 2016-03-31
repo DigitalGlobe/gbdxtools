@@ -7,30 +7,34 @@ Abstract the GBDX Customer s3 bucket as part of the GBDXTools interface
 
 class S3:
 
-    def __init__(self, connection):
+    def __init__(self, interface):
         '''Instantiate the s3 interface
         
-            Args:
-                a reference to the Interface's GBDX connection
+        Args:
+            interface (Interface): A reference to the Interface that owns this instance.
 
-            Returns:
-                an instance of gbdxtools.S3 or error
+        Returns:
+            An instance of gbdxtools.S3.
 
         '''
         # store a ref to the GBDX connection
-        self.gbdx_connection = connection
+        self.gbdx_connection = interface.gbdx_connection
+
+        # store a ref to the logger
+        self.logger = interface.logger
+
         # call for the s3 info and store, to avoid repeated fetches
         self.info = self._load_info()
 
     def _load_info(self):
-        '''Get user info for GBDX S3, put into instance vars for convenience
+        '''Get user info for GBDX S3, put into instance vars for convenience.
 
-           Args:
-               None.
+        Args:
+            None.
 
-           Returns:
-               Dictionary with S3 access key, S3 secret key, S3 session token,
-               user bucket and user prefix (dict).
+        Returns:
+            Dictionary with S3 access key, S3 secret key, S3 session token,
+            user bucket and user prefix (dict).
         '''
 
         url = 'https://geobigdata.io/s3creds/v1/prefix?duration=36000'
@@ -50,14 +54,14 @@ class S3:
                                 Default is here.
         '''
 
-        print 'Getting S3 info'
+        self.logger.debug('Getting S3 info')
         bucket = self.info['bucket']
         prefix = self.info['prefix']
         access_key = self.info['S3_access_key']
         secret_key = self.info['S3_secret_key']
         session_token = self.info['S3_session_token']
 
-        print 'Connecting to S3'
+        self.logger.debug('Connecting to S3')
         s3conn = s3.connect_to_region('us-east-1', aws_access_key_id=access_key,
                                       aws_secret_access_key=secret_key,
                                       security_token=session_token)
@@ -73,13 +77,13 @@ class S3:
 
         whats_in_here = b.list(prefix + '/' + location)
 
-        print 'Downloading contents'
+        self.logger.debug('Downloading contents')
         for key in whats_in_here:
             filename = key.name.split('/')[-1]
-            print filename
+            self.logger.debug(filename)
             res = key.get_contents_to_filename(local_dir + '/' + filename)
 
-        print 'Done!'
+        self.logger.debug('Done!')
 
     def delete(self, location):
         '''Delete content in bucket/prefix/location.
@@ -89,7 +93,7 @@ class S3:
 
            Args:
                location (str): S3 location within prefix. Can be a directory or
-                               a file (e.g., my_dir or my_dir/my_image.tif)
+                               a file (e.g., my_dir or my_dir/my_image.tif).
         '''
 
         bucket = self.info['bucket']
@@ -98,7 +102,7 @@ class S3:
         secret_key = self.info['S3_secret_key']
         session_token = self.info['S3_session_token']
 
-        print 'Connecting to S3'
+        self.logger.debug('Connecting to S3')
         s3conn = s3.connect_to_region('us-east-1', aws_access_key_id=access_key,
                                       aws_secret_access_key=secret_key,
                                       security_token=session_token)
@@ -114,10 +118,10 @@ class S3:
 
         whats_in_here = b.list(prefix + '/' + location)
 
-        print 'Deleting contents'
+        self.logger.debug('Deleting contents')
 
         for key in whats_in_here:
             b.delete_key(key)
 
-        print 'Done!'
+        self.logger.debug('Done!')
 

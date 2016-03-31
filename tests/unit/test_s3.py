@@ -1,18 +1,16 @@
 import pytest
 
-from gbdx_auth import gbdx_auth
+from gbdxtools import Interface
 from gbdxtools.s3 import S3
 
-
+gbdx = Interface()
 
 def test_bucket_init():
-    gx_conn = gbdx_auth.get_session()
-    s = S3(gx_conn)
+    s = S3(gbdx)
     assert isinstance(s, S3)
 
 def test_info():
-    gx_conn = gbdx_auth.get_session()
-    s = S3(gx_conn)
+    s = S3(gbdx)
     assert s.info is not None
     assert "bucket" in s.info.keys()
     assert "prefix" in s.info.keys()
