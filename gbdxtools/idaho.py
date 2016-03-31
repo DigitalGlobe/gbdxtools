@@ -27,7 +27,7 @@ class Idaho():
         self.catalog = Catalog(self.gbdx_connection)
 
 
-    def get_by_catid(self, catid):
+    def get_images_by_catid(self, catid):
         ''' Retrieves the IDAHO image records associated with a given catid.
 
         Args:

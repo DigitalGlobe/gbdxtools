@@ -10,8 +10,8 @@ start_time = time.time()
 catalog_ids = ['1030010045539700', '10200100414F0100', '10200100417A8C00']
 
 print 'Order imagery from GBDX'
-gi = Interface()
-order_ids = [gi.ordering.order(catalog_id) for catalog_id in catalog_ids]
+gbdx = Interface()
+order_ids = [gbdx.ordering.order(catalog_id) for catalog_id in catalog_ids]
 
 # check order status
 pending_order_ids = order_ids
@@ -19,7 +19,7 @@ locations = []
 while len(pending_order_ids)>0:
     print 'Pending orders', pending_order_ids
     for order_id in pending_order_ids:
-        result = gi.ordering.status(order_id)
+        result = gbdx.ordering.status(order_id)
         print result
         location, status = result.keys()[0], result.values()[0]
         if status == 'delivered':
@@ -34,7 +34,7 @@ s3_location = 'my_directory'
 
 # launch AOP workflows
 print 'Launch AOP workflows'
-workflow_ids = [gi.workflow.launch_aop_to_s3_workflow(location,
+workflow_ids = [gbdx.workflow.launch_aop_to_s3_workflow(location,
                                              s3_location,
                                              enable_acomp='true') for location in locations]
 
@@ -43,7 +43,7 @@ pending_workflow_ids = workflow_ids
 while len(pending_workflow_ids) > 0:
     print 'Pending workflows', pending_workflow_ids
     for workflow_id in pending_workflow_ids:
-        result = gi.workflow.status(workflow_id)
+        result = gbdx.workflow.status(workflow_id)
         if result['state'] == 'complete':
             pending_workflow_ids.remove(workflow_id)
     time.sleep(300)
@@ -51,4 +51,4 @@ while len(pending_workflow_ids) > 0:
 print 'Elapsed time: {} min'.format(round((time.time() - start_time)/60))
 
 # download
-gi.s3.download(s3_location)
+gbdx.s3.download(s3_location)
