@@ -17,4 +17,20 @@ def test_init():
     assert wf.s3 is not None
     assert wf.gbdx_connection is not None
     
+def test_list_tasks():
+    gc = gbdx_auth.get_session()
+    s3 = S3(gc)
+    wf = Workflow(gc, s3)
+    taskinfo = wf.list_tasks()
+    assert taskinfo is not None
+    assert 'HelloGBDX' in taskinfo['tasks']
 
+def test_describe_tasks():
+    gc = gbdx_auth.get_session()
+    s3 = S3(gc)
+    wf = Workflow(gc, s3)
+    taskinfo = wf.list_tasks()
+    assert len(taskinfo) > 0
+    desc = wf.describe_task(taskinfo['tasks'][0])
+    assert isinstance(desc, dict)
+    assert len(desc['description']) > 0   
