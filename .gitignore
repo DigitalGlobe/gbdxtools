@@ -2,5 +2,7 @@ gbdxtools.egg-info/
 dist/
 *.pyc
 /.project
+.eggs
+.cache
 /test-reports
 /venv
