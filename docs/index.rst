@@ -18,8 +18,7 @@ Then::
 
     from gbdxtools import Interface
 
-In order to use gbdxtools, you need GBDX credentials. Talk to Jordan Winkler (jordan.winkler@digitalglobe.com) 
-to get those. 
+In order to use gbdxtools, you need GBDX credentials. Email geobigdata@digitalglobe.com to get these. 
 
 For general information on the GBDX platform and API, see `here`_.
 
