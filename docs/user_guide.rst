@@ -75,9 +75,9 @@ Use the workflow member of the Interface to interact with the workflow engine an
 .. code-block:: pycon
 
    >>> gbdx = Interface()
-   >>> gbdx.workflows.list_tasks()
+   >>> gbdx.workflow.list_tasks()
    {u'tasks': [u'HelloGBDX', u'Downsample', u'protogenRAW', u'protogenUBFP', u'AComp' ...
-   >>> gbdx.workflows.describe_task('HelloGBDX')
+   >>> gbdx.workflow.describe_task('HelloGBDX')
    {u'containerDescriptors': [{u'type': u'DOCKER', u'command': u'', u'properties': {u'image': u'tdgp/hello_gbdx:latest'}}], u'description': u'Get a personalized greeting to GBDX', u'inputPortDescriptors': [{u'required': True, u'type': u'string', u'description': u'Enter your name here for a personalized greeting to the platform.', u'name': u'your_name'}], u'outputPortDescriptors': [{u'required': True, u'type': u'txt', u'description': u'The output directory of text file', u'name': u'data'}], u'properties': {u'isPublic': True, u'timeout': 7200}, u'name': u'HelloGBDX'}  
  
 First, define the location of the ordered image:
