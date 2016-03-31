@@ -57,9 +57,23 @@ class Workflow():
 
         return r.json()['state']
 
+    def list_tasks(self):
+        '''Get a list of all the workflow task definitions I'm allowed to see
+            
+            Args:
+                None
+    
+            Returns:
+                Task list (list)
 
-    def task_definitions(self, task_name):
-        '''Get task definition.
+        '''
+        url = 'https://geobigdata.io/workflows/v1/tasks'
+        r = self.gbdx_connection.get(url)
+        r.raise_for_status()
+        return r.json()
+
+    def describe_task(self, task_name):
+        '''Get the task definition.
 
          Args:
              task_name (str): The task name.
