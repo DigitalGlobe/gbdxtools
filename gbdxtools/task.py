@@ -50,6 +50,38 @@ class Task:
         else:
             self.name = ""
     
+    @classmethod
+    def from_json(cls,task_desc):
+        '''Contstruct a new instance of task from the task descriptor
+
+            Args:
+                task_desc (string): Json string task description
+
+            Returns:
+                an instance of Task
+
+        '''
+        js_task = json.loads(task_desc)
+        
+        # validate the descriptor
+        if (
+                (js_task["name"] is None) or 
+                (js_task["properties"] is None) or 
+                (js_task["inputPortDescriptors"] is None) or 
+                (js_task["outputPortDescriptors"] is None) or 
+                (js_task["containerDescriptors"] is None)
+           ):
+            raise("Incomplete task descriptor")
+
+        t = Task(
+            name=js_task["name"],
+            properties=js_task["properties"],
+            input_port_descriptors=js_task["inputPortDescriptors"],
+            output_port_descriptors=js_task["outputPortDescriptors"],
+            container_descriptors=js_task["containerDescriptors"]
+        )
+
+        return t
 
     def to_json(self):
         d = {
