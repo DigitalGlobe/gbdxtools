@@ -1,0 +1,23 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      User-Agent: [python-requests/2.9.1]
+    method: GET
+    uri: https://geobigdata.io/s3creds/v1/prefix?duration=36000
+  response:
+    body: {string: !!python/unicode '{"S3_secret_key": "fdsafdsa",
+        "prefix": "dummy", "bucket": "dummybucket",
+        "S3_access_key": "asdfasdfasdf", "S3_session_token": "fkjhgkjgkjghjkghjghjghjkgkjhjg"}'}
+    headers:
+      connection: [keep-alive]
+      content-length: ['787']
+      content-type: [application/json]
+      date: ['Fri, 01 Apr 2016 23:18:58 GMT']
+      server: [Apache/2.4.16 (Amazon) mod_wsgi/3.5 Python/2.7.10]
+      via: [kong/0.5.2]
+    status: {code: 200, message: OK}
+version: 1
