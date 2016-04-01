@@ -1,0 +1,52 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      User-Agent: [python-requests/2.9.1]
+    method: GET
+    uri: https://geobigdata.io/workflows/v1/tasks
+  response:
+    body:
+      string: !!binary |
+        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
+    headers:
+      connection: [keep-alive]
+      content-encoding: [gzip]
+      content-length: ['1634']
+      content-type: [application/json]
+      date: ['Fri, 01 Apr 2016 23:36:30 GMT']
+      server: [nginx/1.8.0]
+      via: [kong/0.5.2]
+    status: {code: 200, message: OK}
+version: 1

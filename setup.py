@@ -28,5 +28,5 @@ setup(name='gbdxtools',
                         'Pillow==3.1.1',
                         'pygeoif==0.6'],
       setup_requires=['pytest-runner'],
-      tests_require=['pytest']
+      tests_require=['pytest','vcrpy']
       )
