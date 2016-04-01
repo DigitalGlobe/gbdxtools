@@ -2,7 +2,7 @@
 Authors: Kostas Stamatiou, Dan Getman, Nate Ricklin, Dahl Winters, Donnie Marino
 Contact: kostas.stamatiou@digitalglobe.com
 
-Abstract the GBDX Customer s3 bucket as part of the GBDXTools interface
+Abstract the GBDX Customer s3 bucket as part of the GBDXTools interface.
 '''
 
 from boto import s3 as botos3

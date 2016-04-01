@@ -5,6 +5,8 @@ Contact: kostas.stamatiou@digitalglobe.com
 GBDX Workflow interface
 '''
 
+import json
+
 class Workflow():
 
     def __init__(self, interface):

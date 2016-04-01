@@ -2,7 +2,7 @@
 Authors: Kostas Stamatiou, Dan Getman, Nate Ricklin, Dahl Winters, Donnie Marino
 Contact: kostas.stamatiou@digitalglobe.com
 
-GBDX IDAHO Interface
+GBDX IDAHO Interface.
 '''
 
 from StringIO import StringIO
