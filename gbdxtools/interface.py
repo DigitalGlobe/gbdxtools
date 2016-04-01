@@ -17,6 +17,7 @@ from gbdxtools.workflow import Workflow
 from gbdxtools.catalog import Catalog
 from gbdxtools.idaho import Idaho
 
+
 class Interface():
 
     gbdx_connection = None
@@ -55,4 +56,3 @@ class Interface():
 
         # create and store an instance of the Idaho Client
         self.idaho = Idaho(self)
-
