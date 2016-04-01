@@ -4,6 +4,9 @@ Contact: kostas.stamatiou@digitalglobe.com
 
 Abstraction for the GBDX Ordering interface
 '''
+
+import json
+
 class Ordering:
 
     def __init__(self, interface):
