@@ -9,6 +9,8 @@ from StringIO import StringIO
 from PIL import Image
 from pygeoif import geometry
 import codecs
+import json
+import os
 
 from gbdxtools.catalog import Catalog
 
