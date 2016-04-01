@@ -5,6 +5,8 @@ Contact: kostas.stamatiou@digitalglobe.com
 Abstract the GBDX Customer s3 bucket as part of the GBDXTools interface
 '''
 
+from boto import s3 as botos3
+
 class S3:
 
     def __init__(self, interface):
@@ -62,7 +64,7 @@ class S3:
         session_token = self.info['S3_session_token']
 
         self.logger.debug('Connecting to S3')
-        s3conn = s3.connect_to_region('us-east-1', aws_access_key_id=access_key,
+        s3conn = botos3.connect_to_region('us-east-1', aws_access_key_id=access_key,
                                       aws_secret_access_key=secret_key,
                                       security_token=session_token)
 
@@ -103,7 +105,7 @@ class S3:
         session_token = self.info['S3_session_token']
 
         self.logger.debug('Connecting to S3')
-        s3conn = s3.connect_to_region('us-east-1', aws_access_key_id=access_key,
+        s3conn = botos3.connect_to_region('us-east-1', aws_access_key_id=access_key,
                                       aws_secret_access_key=secret_key,
                                       security_token=session_token)
 
