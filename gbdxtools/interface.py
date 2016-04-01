@@ -24,6 +24,9 @@ class Interface():
         if (kwargs.get('username') and kwargs.get('password') and 
             kwargs.get('client_id') and kwargs.get('client_secret')):
             self.gbdx_connection = gbdx_auth.session_from_kwargs(**kwargs)
+        elif kwargs.get('gbdx_connection'):
+            # Pass in a custom gbdx connection object, for testing purposes
+            self.gbdx_connection = kwargs.get('gbdx_connection')
         else:
             # This will throw an exception if your .ini file is not set properly
             self.gbdx_connection = gbdx_auth.get_session()
