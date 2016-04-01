@@ -13,7 +13,7 @@ All operations on GBDX require credentials. Instantiating an Interface object au
 
 gbdxtools expects a config file to exist at ~/.gbdx-config with your GBDX credentials.  
 See formatting for this file here:  https://github.com/tdg-platform/gbdx-auth#ini-file.
-To get a GBDX username, password and API key, please email geobigdata@digitalglobe.com . 
+To get a GBDX username, password and API key, please email geobigdata@digitalglobe.com. 
 For future reference, remember that your credentials are listed in https://gbdx.geobigdata.io/account/user/settings/.
 
 
@@ -70,7 +70,7 @@ This example will walk you through launching an aop_to_s3 workflow.
 This workflow applies a series of one or more processing steps to the image you ordered in the previous section and stores the
 processed image under your S3 bucket/prefix. 
 
-Use the workflow member of the Interface to interact with the workflow engine and manage workflows
+Use the workflow member of the Interface to interact with the workflow engine and manage workflows.
 
 .. code-block:: pycon
 
@@ -80,7 +80,8 @@ Use the workflow member of the Interface to interact with the workflow engine an
    >>> gbdx.workflow.describe_task('HelloGBDX')
    {u'containerDescriptors': [{u'type': u'DOCKER', u'command': u'', u'properties': {u'image': u'tdgp/hello_gbdx:latest'}}], u'description': u'Get a personalized greeting to GBDX', u'inputPortDescriptors': [{u'required': True, u'type': u'string', u'description': u'Enter your name here for a personalized greeting to the platform.', u'name': u'your_name'}], u'outputPortDescriptors': [{u'required': True, u'type': u'txt', u'description': u'The output directory of text file', u'name': u'data'}], u'properties': {u'isPublic': True, u'timeout': 7200}, u'name': u'HelloGBDX'}  
  
-First, define the location of the ordered image:
+First, define the location of the ordered image. This is the location you obtained when your order was delivered 
+('s3://receiving-dgcs-tdgplatform-com/055093376010_01_003' in the example of the previous section.)
 
 .. code-block:: pycon
 
@@ -98,7 +99,7 @@ We now launch an aop_to_s3 workflow that produces a pansharpened image.
 
 .. code-block:: pycon
 
-   >>> gbdx.workflow.launch_aop_to_s3_workflow(input_location, output_location, enable_pansharpen='true')
+   >>> gbdx.workflow.launch_aop_to_s3(input_location, output_location, enable_pansharpen='true')
   Launching workflow ...
   u'4283225389760382164'
 
