@@ -23,8 +23,17 @@ class S3:
         # store a ref to the logger
         self.logger = interface.logger
 
-        # call for the s3 info and store, to avoid repeated fetches
-        self.info = self._load_info()
+        self._info = None
+
+    @property
+    def info(self):
+        if not self._info:
+            self._info = self._load_info()
+        return self._info
+
+    @info.setter
+    def info(self, value):
+        self._info = value
 
     def _load_info(self):
         '''Get user info for GBDX S3, put into instance vars for convenience.
