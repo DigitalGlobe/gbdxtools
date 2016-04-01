@@ -57,7 +57,7 @@ The ordered image sits in a directory on S3. The output of the following describ
 .. code-block:: pycon
 
    >>> gbdx.ordering.status(order_id)
-   {u's3://receiving-dgcs-tdgplatform-com/055093376010_01_003': u'delivered'}
+   >>> {u's3://receiving-dgcs-tdgplatform-com/055093376010_01_003': u'delivered'}
 
 
 GBDX Workflows
@@ -99,18 +99,17 @@ We now launch an aop_to_s3 workflow that produces a pansharpened image.
 
 .. code-block:: pycon
 
-   >>> gbdx.workflow.launch_aop_to_s3(input_location, output_location, enable_pansharpen='true')
-  Launching workflow ...
-  u'4283225389760382164'
+   >>> workflow_id = gbdx.workflow.launch_aop_to_s3(input_location, output_location, enable_pansharpen='true')
+   >>> print workflow_id
+   u'4302104652966891585'
 
 The output of this function is the workflow id. 
 You can check on the status of this workflow as follows:
 
 .. code-block:: pycon
 
-   >>> gbdx.workflow.status('4283225389760382164')
-   Getting status of workflow: 4283225389760382164 ...
-   {u'event': u'scheduled', u'state': u'pending'}
+   >>> gbdx.workflow.status(workflow_id)
+   >>> {u'event': u'scheduled', u'state': u'pending'}
 
 .. _`here`: http://gbdxdocs.digitalglobe.com/docs/workflow-api-course
 
