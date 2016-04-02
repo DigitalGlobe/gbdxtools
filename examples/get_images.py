@@ -18,9 +18,9 @@ locations = []
 while len(pending_order_ids)>0:
     print 'Pending orders', pending_order_ids
     for order_id in pending_order_ids:
-        result = gbdx.ordering.status(order_id)
-        print result
-        location, status = result.keys()[0], result.values()[0]
+        results = gbdx.ordering.status(order_id)
+        print results
+        location, status = results[0]['location'], results[0]['state']
         if status == 'delivered':
             pending_order_ids.remove(order_id)
             locations.append(location)
