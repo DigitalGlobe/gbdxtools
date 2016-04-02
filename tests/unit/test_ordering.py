@@ -41,7 +41,10 @@ def test_order_multi_catids():
 @vcr.use_cassette('tests/unit/cassettes/test_get_order_status.yaml',filter_headers=['authorization'])
 def test_get_order_status():
 	o = Ordering(gbdx)
-	r = o.status('c5cd8157-3001-4a03-a716-4ef673748c7a')
-	print r.keys()
-	assert 's3://bucketname/prefixname' in r.keys()
+	results = o.status('c5cd8157-3001-4a03-a716-4ef673748c7a')
+	print results
+	for result in results:
+		assert 'acquisition_id' in result.keys()
+		assert 'state' in result.keys()
+		assert 'location' in result.keys()
 
