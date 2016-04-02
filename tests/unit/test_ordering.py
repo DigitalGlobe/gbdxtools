@@ -23,3 +23,25 @@ gbdx = Interface(gbdx_connection = mock_gbdx_session)
 def test_init():
     o = Ordering(gbdx)
     assert isinstance(o, Ordering)
+
+@vcr.use_cassette('tests/unit/cassettes/test_order_single_catid.yaml',filter_headers=['authorization'])
+def test_order_single_catid():
+	o = Ordering(gbdx)
+	order_id = o.order('10400100120FEA00')
+	# assert order_id == 'c5cd8157-3001-4a03-a716-4ef673748c7a'
+	assert len(order_id) == 36
+
+@vcr.use_cassette('tests/unit/cassettes/test_order_multi_catids.yaml',filter_headers=['authorization'])
+def test_order_multi_catids():
+	o = Ordering(gbdx)
+	order_id = o.order(['10400100120FEA00','101001000DB2FB00'])
+	# assert order_id == '2b3ba38e-4d7e-4ef6-ac9d-2e2e0a8ca1e7'
+	assert len(order_id) == 36
+
+@vcr.use_cassette('tests/unit/cassettes/test_get_order_status.yaml',filter_headers=['authorization'])
+def test_get_order_status():
+	o = Ordering(gbdx)
+	r = o.status('c5cd8157-3001-4a03-a716-4ef673748c7a')
+	print r.keys()
+	assert 's3://bucketname/prefixname' in r.keys()
+
