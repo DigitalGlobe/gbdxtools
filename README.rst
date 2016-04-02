@@ -50,13 +50,9 @@ This package uses pytest http://pytest.org/latest/contents.html.
 
 pytest allows for tests to be written using various frameworks, so unittest.TestCase, pytest, and nose style tests will be detected and run.
 
-To run all of the tests you can either::
+To run all of the tests::
 
-    python setup.py test
-
-or::
-    
-    py.test
+    py.test tests
 
 If you want only the unit or integration tests do either of::
 
