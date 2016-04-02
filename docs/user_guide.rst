@@ -57,7 +57,7 @@ The ordered image sits in a directory on S3. The output of the following describ
 .. code-block:: pycon
 
    >>> gbdx.ordering.status(order_id)
-   >>> {u's3://receiving-dgcs-tdgplatform-com/055093376010_01_003': u'delivered'}
+   >>> [{u'acquisition_id': u'10400100120FEA00', u'state': u'delivered', u'location': u's3://bucketname/prefixname'}]
 
 
 GBDX Workflows
