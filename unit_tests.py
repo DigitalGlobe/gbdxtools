@@ -1,2 +1,4 @@
 import pytest
-pytest.main("-s tests/unit")
+r = pytest.main("-s tests/unit")
+if r:
+	raise Exception("There were test failures or errors.")
