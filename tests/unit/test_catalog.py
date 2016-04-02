@@ -22,6 +22,5 @@ gbdx = Interface(gbdx_connection = mock_gbdx_session)
 
 def test_init():
     c = Catalog(gbdx)
-    asdf
     assert isinstance(c, Catalog)
 
