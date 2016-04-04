@@ -1,0 +1,26 @@
+interactions:
+- request:
+    body: '["10400100120FEA00"]'
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      Content-Length: ['20']
+      User-Agent: [python-requests/2.9.1]
+    method: POST
+    uri: https://geobigdata.io/orders/v2/order/
+  response:
+    body: {string: !!python/unicode '{"order_id": "c5cd8157-3001-4a03-a716-4ef673748c7a",
+        "acquisitions": [{"acquisition_id": "10400100120FEA00", "state": "delivered",
+        "location": "s3://bucket/prefix"}]}'}
+    headers:
+      connection: [keep-alive]
+      content-length: ['203']
+      content-type: [application/json]
+      date: ['Sat, 02 Apr 2016 15:27:53 GMT']
+      via: [kong/0.5.2]
+      x-amz-cf-id: [I-asdfasdf-PY3tdqVS6fEBuiFCbeXXyGOZA==]
+      x-amzn-requestid: [77824d9d-f8e7-11e5-9bb8-352d050ed02a]
+      x-cache: [Miss from cloudfront]
+    status: {code: 200, message: OK}
+version: 1
