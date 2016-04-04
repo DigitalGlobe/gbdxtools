@@ -141,7 +141,7 @@ class Idaho():
             idaho_id = location[1]
 
             # form request
-            url = ('http://idahotms-env.us-west-2.elasticbeanstalk.com/'
+            url = ('http://idaho.geobigdata.io/'
                    'v1/tile/' + bucket_name + '/' + idaho_id + '/' + str(z)
                    + '/' + str(x) + '/' + str(y) + '?token=' + access_token)
             body = {"token": access_token}
@@ -171,54 +171,56 @@ class Idaho():
         '''
 
         description = self.describe_images(idaho_image_results)
-        for catid, images in description.iteritems():
-            functionstring = ''
-            for partnum, part in images['parts'].iteritems():
-
-                num_images = len(part.keys())
-                partname = None
-                if num_images == 1:
-                    # there is only one image, use the PAN
-                    partname = [p for p in part.keys() if p.upper() == 'PAN'][0]
-                    pan_image_id = ''
-                elif num_images == 2:
-                    # there are two images in this part, use the multi (or pansharpen)
-                    partname = [p for p in part.keys() if p is not 'PAN'][0]
-                    pan_image_id = part['PAN']['id']
-
-                if not partname:
-                    self.logger.debug("Cannot find part for idaho image.")
-                    continue
-
-                bandstr = {
-                    'RGBN': '0,1,2',
-                    'WORLDVIEW_8_BAND': '4,3,2',
-                    'PAN': '0'
-                }.get(partname, '0,1,2')
-
-                part_boundstr_wkt = part[partname]['boundstr']
-                part_polygon = geometry.from_wkt(part_boundstr_wkt)
-                bucketname = part[partname]['bucket']
-                image_id = part[partname]['id']
-                W, S, E, N = part_polygon.bounds
-
-                functionstring += "addLayerToMap('%s','%s',%s,%s,%s,%s,'%s');\n" % (bucketname, image_id, W,S,E,N, pan_image_id)
-
-        __location__ = os.path.realpath(
-            os.path.join(os.getcwd(), os.path.dirname(__file__)))
-        with open(os.path.join(__location__, 'leafletmap_template.html'), 'r') as htmlfile:
-            data=htmlfile.read().decode("utf8")
-
-        data = data.replace('FUNCTIONSTRING',functionstring)
-        data = data.replace('CENTERLAT',str(S))
-        data = data.replace('CENTERLON',str(W))
-        data = data.replace('BANDS',bandstr)
-        data = data.replace('TOKEN',self.gbdx_connection.access_token)
-
-        with codecs.open(outputfilename,'w','utf8') as outputfile:
-            self.logger.debug("Saving %s" % outputfilename)
-            outputfile.write(data)
-
+        if len(description) > 0:
+            for catid, images in description.iteritems():
+                functionstring = ''
+                for partnum, part in images['parts'].iteritems():
+    
+                    num_images = len(part.keys())
+                    partname = None
+                    if num_images == 1:
+                        # there is only one image, use the PAN
+                        partname = [p for p in part.keys() if p.upper() == 'PAN'][0]
+                        pan_image_id = ''
+                    elif num_images == 2:
+                        # there are two images in this part, use the multi (or pansharpen)
+                        partname = [p for p in part.keys() if p is not 'PAN'][0]
+                        pan_image_id = part['PAN']['id']
+    
+                    if not partname:
+                        self.logger.debug("Cannot find part for idaho image.")
+                        continue
+    
+                    bandstr = {
+                        'RGBN': '0,1,2',
+                        'WORLDVIEW_8_BAND': '4,3,2',
+                        'PAN': '0'
+                    }.get(partname, '0,1,2')
+    
+                    part_boundstr_wkt = part[partname]['boundstr']
+                    part_polygon = geometry.from_wkt(part_boundstr_wkt)
+                    bucketname = part[partname]['bucket']
+                    image_id = part[partname]['id']
+                    W, S, E, N = part_polygon.bounds
+    
+                    functionstring += "addLayerToMap('%s','%s',%s,%s,%s,%s,'%s');\n" % (bucketname, image_id, W,S,E,N, pan_image_id)
+    
+            __location__ = os.path.realpath(
+                os.path.join(os.getcwd(), os.path.dirname(__file__)))
+            with open(os.path.join(__location__, 'leafletmap_template.html'), 'r') as htmlfile:
+                data=htmlfile.read().decode("utf8")
+    
+            data = data.replace('FUNCTIONSTRING',functionstring)
+            data = data.replace('CENTERLAT',str(S))
+            data = data.replace('CENTERLON',str(W))
+            data = data.replace('BANDS',bandstr)
+            data = data.replace('TOKEN',self.gbdx_connection.access_token)
+    
+            with codecs.open(outputfilename,'w','utf8') as outputfile:
+                self.logger.debug("Saving %s" % outputfilename)
+                outputfile.write(data)
+        else:
+            print "No items returned."
     def get_idaho_chip(self, bucket_name, idaho_id, center_lat, center_lon, 
                        pixel_res_meters, output_folder):
         '''Downloads an orthorectified IDAHO chip.
