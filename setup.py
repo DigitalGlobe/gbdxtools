@@ -11,8 +11,8 @@ if sys.version_info > (3,):
 # long_description=readme,
       
 setup(name='gbdxtools',
-      version='0.1.5',
-      description='Introduced basic idaho functionality.',
+      version='0.1.6',
+      description='Ongoing work on refactoring the repo to separate ordering, workflows, s3, idaho.',
       classifiers=[],
       keywords='',
       author='Kostas Stamatiou',
@@ -26,5 +26,7 @@ setup(name='gbdxtools',
                         'boto==2.39.0',
                         'gbdx-auth==0.1.2',
                         'Pillow==3.1.1',
-                        'pygeoif==0.6']
+                        'pygeoif==0.6'],
+      setup_requires=['pytest-runner'],
+      tests_require=['pytest','vcrpy']
       )

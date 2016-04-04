@@ -1,6 +1,8 @@
 requests==2.9.1
 boto==2.39.0
 gbdx-auth==0.1.2
-xmlrunner==1.7.7
 Pillow==3.1.1
 pygeoif==0.6
+pytest==2.9.1
+pytest-runner==2.7
+vcrpy
