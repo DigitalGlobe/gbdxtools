@@ -49,7 +49,7 @@ To order the image with DG factory catalog id 10400100143FC900:
 
    >>> order_id = gbdx.ordering.order('10400100143FC900')
    >>> print order_id
-   u'8bd8f797-11cd-4e3b-8bfa-c592d41af223'
+   04aa8df5-8ac8-4b86-8b58-aa55d7353987
 
 The order_id is unique to your image order and can be used to track the progress of your order.
 The ordered image sits in a directory on S3. The output of the following describes where:
@@ -57,8 +57,9 @@ The ordered image sits in a directory on S3. The output of the following describ
 .. code-block:: pycon
 
    >>> gbdx.ordering.status(order_id)
-   >>> [{u'acquisition_id': u'10400100120FEA00', u'state': u'delivered', u'location': u's3://bucketname/prefixname'}]
-
+   >>> [{u'acquisition_id': u'10400100143FC900',
+         u'location': u's3://receiving-dgcs-tdgplatform-com/055093431010_01_003',
+         u'state': u'delivered'}]
 
 GBDX Workflows
 --------------------
@@ -81,11 +82,11 @@ Use the workflow member of the Interface to interact with the workflow engine an
    {u'containerDescriptors': [{u'type': u'DOCKER', u'command': u'', u'properties': {u'image': u'tdgp/hello_gbdx:latest'}}], u'description': u'Get a personalized greeting to GBDX', u'inputPortDescriptors': [{u'required': True, u'type': u'string', u'description': u'Enter your name here for a personalized greeting to the platform.', u'name': u'your_name'}], u'outputPortDescriptors': [{u'required': True, u'type': u'txt', u'description': u'The output directory of text file', u'name': u'data'}], u'properties': {u'isPublic': True, u'timeout': 7200}, u'name': u'HelloGBDX'}  
  
 First, define the location of the ordered image. This is the location you obtained when your order was delivered 
-('s3://receiving-dgcs-tdgplatform-com/055093376010_01_003' in the example of the previous section.)
+('s3://receiving-dgcs-tdgplatform-com/055093431010_01_003' in the example of the previous section.)
 
 .. code-block:: pycon
 
-   >>> input_location = 's3://receiving-dgcs-tdgplatform-com/055093376010_01_003'
+   >>> input_location = 's3://receiving-dgcs-tdgplatform-com/055093431010_01_003'
 
 Now define the location under bucket/prefix where the output image will be stored. 
 If the directory does not exist, it will automatically be created.
