@@ -47,7 +47,8 @@ class Idaho():
         # get the footprint of the catid's strip
         footprint = self.catalog.get_strip_footprint_wkt(catid)
         if not footprint:
-            self.logger.debug('Cannot get IDAHO metadata for strip %s, footprint not found' % catid)
+            self.logger.debug('''Cannot get IDAHO metadata for strip %s, 
+                                 footprint not found''' % catid)
             return None
 
         # use the footprint to get the IDAHO ID
@@ -66,7 +67,8 @@ class Idaho():
         if r.status_code == 200:
             results = r.json()
             numresults = len(results['results'])
-            self.logger.debug('%s IDAHO images found associated with catid %s' % (numresults, catid))
+            self.logger.debug('%s IDAHO images found associated with catid %s'
+                              % (numresults, catid))
 
             return results
 
@@ -77,7 +79,7 @@ class Idaho():
             idaho_image_results (dict): IDAHO image result set as returned from 
                                         the catalog.
         Returns:
-            results (json): the full catalog-search response for IDAHO images 
+            results (json): The full catalog-search response for IDAHO images 
                             within the catID.
         '''
 
@@ -160,12 +162,13 @@ class Idaho():
         else:
             return 'There was a problem saving the file at ' + file_path + '.'
 
-    def create_leaflet_viewer(self, idaho_image_results, outputfilename):
+    def create_leaflet_viewer(self, idaho_image_results, output_filename):
         '''Create a leaflet viewer html file for viewing idaho images
 
         Args:
-            idaho_image_results (dict): IDAHO image result set as returned from the catalog.
-            outputfilename (str): where to save an output html file
+            idaho_image_results (dict): IDAHO image result set as returned from 
+                                        the catalog.
+            output_filename (str): where to save an output html file
         '''
 
         description = self.describe_images(idaho_image_results)
@@ -185,7 +188,7 @@ class Idaho():
                     pan_image_id = part['PAN']['id']
 
                 if not partname:
-                    self.logger.debug("Cannot find part for idaho image.")
+                    self.logger.debug('Cannot find part for idaho image.')
                     continue
 
                 bandstr = {
@@ -200,19 +203,20 @@ class Idaho():
                 image_id = part[partname]['id']
                 W, S, E, N = part_polygon.bounds
 
-                functionstring += "addLayerToMap('%s','%s',%s,%s,%s,%s,'%s');\n" % (bucketname, image_id, W,S,E,N, pan_image_id)
+                functionstring += ("addLayerToMap('%s', '%s', %s, %s, %s, %s, '%s');\n" 
+                                  % (bucketname, image_id, W,S,E,N, pan_image_id))
 
         __location__ = os.path.realpath(
             os.path.join(os.getcwd(), os.path.dirname(__file__)))
         with open(os.path.join(__location__, 'leafletmap_template.html'), 'r') as htmlfile:
-            data=htmlfile.read().decode("utf8")
+            data = htmlfile.read().decode("utf8")
 
-        data = data.replace('FUNCTIONSTRING',functionstring)
-        data = data.replace('CENTERLAT',str(S))
-        data = data.replace('CENTERLON',str(W))
-        data = data.replace('BANDS',bandstr)
-        data = data.replace('TOKEN',self.gbdx_connection.access_token)
+        data = data.replace('FUNCTIONSTRING', functionstring)
+        data = data.replace('CENTERLAT', str(S))
+        data = data.replace('CENTERLON', str(W))
+        data = data.replace('BANDS', bandstr)
+        data = data.replace('TOKEN', self.gbdx_connection.access_token)
 
-        with codecs.open(outputfilename,'w','utf8') as outputfile:
-            self.logger.debug("Saving %s" % outputfilename)
+        with codecs.open(output_filename, 'w', 'utf8') as outputfile:
+            self.logger.debug('Saving %s' % output_filename)
             outputfile.write(data)
