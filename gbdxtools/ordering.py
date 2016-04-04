@@ -67,11 +67,5 @@ class Ordering:
         url = 'https://geobigdata.io/orders/v2/order/'
         r = self.gbdx_connection.get(url + order_id)
         r.raise_for_status()
-        lines = r.json().get("acquisitions", {})
-        results = []
-        for line in lines:
-            location = line['location']
-            status = line["state"]
-            results.append((location, status))
-
-        return dict(results)
+        return r.json().get("acquisitions", {})
+        
