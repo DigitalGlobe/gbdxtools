@@ -12,7 +12,7 @@ if sys.version_info > (3,):
       
 setup(name='gbdxtools',
       version='0.1.6',
-      description='Ongoing work on refactoring the repo to separate ordering, workflows, s3, idaho.',
+      description='Refactored to separate ordering, workflows, s3, idaho. New idaho functionality added.',
       classifiers=[],
       keywords='',
       author='Kostas Stamatiou',
