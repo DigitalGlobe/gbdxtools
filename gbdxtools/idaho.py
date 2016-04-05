@@ -219,8 +219,8 @@ class Idaho():
             data = data.replace('BANDS',bandstr)
             data = data.replace('TOKEN',self.gbdx_connection.access_token)
     
-            with codecs.open(outputfilename,'w','utf8') as outputfile:
-                self.logger.debug("Saving %s" % outputfilename)
+            with codecs.open(output_filename,'w','utf8') as outputfile:
+                self.logger.debug("Saving %s" % output_filename)
                 outputfile.write(data)
         else:
             print "No items returned."
@@ -266,14 +266,14 @@ class Idaho():
             print 'There was a problem retrieving IDAHO ID: %s' % idaho_id
             r.raise_for_status()
 
-    def view_idaho_tiles_by_bbox(self, catId, bbox, outputfilename):
+    def view_idaho_tiles_by_bbox(self, catId, bbox, output_filename):
         '''Retrieve and view just the IDAHO chips in a particular bounding box
            for a catID.
 
         Args:
             catid (str): The source catalog ID from the platform catalog.
             bbox (list): List of coords: minx(W), miny(S), maxx(E), maxy(N).
-            outputfilename (str): a Leaflet Viewer file showing the IDAHO
+            output_filename (str): a Leaflet Viewer file showing the IDAHO
                images as tiles.
         '''
         
@@ -350,8 +350,8 @@ class Idaho():
         data = data.replace('BANDS',bandstr)
         data = data.replace('TOKEN',self.gbdx_connection.access_token)
 
-        with codecs.open(outputfilename,'w','utf8') as outputfile:
-            print "Saving %s" % outputfilename
+        with codecs.open(output_filename,'w','utf8') as outputfile:
+            print "Saving %s" % output_filename
             outputfile.write(data)
             
     def download_idaho_tiles_by_bbox(self, catId, bbox, resolution, outputfolder):
