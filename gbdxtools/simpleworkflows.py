@@ -12,6 +12,9 @@ class InvalidInputPort(Exception):
 class InvalidOutputPort(Exception):
     pass
 
+class WorkflowError(Exception):
+    pass
+
 class Task:
 
     def __init__(self, interface, task_type, **kwargs):
@@ -125,6 +128,8 @@ class Workflow:
         for task in tasks:
             self.definition['tasks'].append( task.generate_task_workflow_json() )
 
+        self.tasks = tasks
+
     def workflow_skeleton(self):
         return {
             "tasks": [],
@@ -132,11 +137,15 @@ class Workflow:
         }
 
     def execute(self):
+        if not self.tasks:
+            raise WorkflowError('Workflow contains no tasks, and cannot be executed.')
         self.id = self.interface.workflow.launch(self.definition)
         return self.id
 
     @property
     def status(self):
+        if not self.id:
+            raise WorkflowError('Workflow is not running.  Cannot check status.')
         return self.interface.workflow.status(self.id)
 
     @status.setter
@@ -145,11 +154,69 @@ class Workflow:
 
     @property
     def complete(self):
+        if not self.id:
+            return False
         return self.status['state'] == 'complete'
 
     @complete.setter
     def complete(self, value):
-        print 'hi'
         raise NotImplementedError("Cannot set workflow complete, readonly.")
+
+    @property
+    def failed(self):
+        if not self.id:
+            return False
+        status = self.status
+        return status['state'] == 'complete' and status['event'] == 'failed'
+
+    @failed.setter
+    def failed(self, value):
+        raise NotImplementedError("Cannot set workflow failed, readonly.")
+
+    @property
+    def canceled(self):
+        if not self.id:
+            return False
+        status = self.status
+        return status['state'] == 'complete' and status['event'] == 'canceled'
+
+    @canceled.setter
+    def canceled(self, value):
+        raise NotImplementedError("Cannot set workflow canceled, readonly.")
+
+    @property
+    def succeeded(self):
+        if not self.id:
+            return False
+        status = self.status
+        return status['state'] == 'complete' and status['event'] == 'succeeded'
+
+    @succeeded.setter
+    def succeeded(self, value):
+        raise NotImplementedError("Cannot set workflow succeeded, readonly.")
+
+    @property
+    def running(self):
+        if not self.id:
+            return False
+        status = self.status
+        return status['state'] == 'complete' and status['event'] == 'running'
+
+    @running.setter
+    def running(self, value):
+        raise NotImplementedError("Cannot set workflow running, readonly.")
+
+    @property
+    def timedout(self):
+        if not self.id:
+            return False
+        status = self.status
+        return status['state'] == 'complete' and status['event'] == 'timedout'
+
+    @timedout.setter
+    def timedout(self, value):
+        raise NotImplementedError("Cannot set workflow timedout, readonly.")
+
+    
 
 
