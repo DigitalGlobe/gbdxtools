@@ -65,3 +65,4 @@ If you want only the unit or integration tests do either of::
 Note: you may have to issue the following in your virtualenv for the tests to find gbdxtools properly::
 
     pip install -e .
+
