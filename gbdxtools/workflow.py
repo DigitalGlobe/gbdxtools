@@ -41,6 +41,7 @@ class Workflow():
         url = 'https://geobigdata.io/workflows/v1/workflows'
         try:
             r = self.gbdx_connection.post(url, json=workflow)
+            r.raise_for_status()
             workflow_id = r.json()['id']
             return workflow_id
         except TypeError:
@@ -88,6 +89,7 @@ class Workflow():
 
         url = 'https://geobigdata.io/workflows/v1/tasks/' + task_name
         r = self.gbdx_connection.get(url)
+        r.raise_for_status()
 
         return r.json()
 
