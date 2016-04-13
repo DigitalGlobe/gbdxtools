@@ -14,7 +14,7 @@ import re
 # 4. Run the tests (existing test shouldn't be affected by use of a real token).  This will record a "cassette".
 # 5. replace the real gbdx token with "dummytoken" again
 # 6. Edit the cassette to remove any possibly sensitive information (s3 creds for example)
-mock_gbdx_session = get_mock_gbdx_session(token="igCxqms7Ko696uB7hfM2Zv6Ysctesa")
+mock_gbdx_session = get_mock_gbdx_session(token="dummytoken")
 gbdx = Interface(gbdx_connection = mock_gbdx_session)
 
 @vcr.use_cassette('tests/unit/cassettes/test_simpleworkflows_initialize_task.yaml',filter_headers=['authorization'])
