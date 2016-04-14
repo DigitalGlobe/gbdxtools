@@ -17,12 +17,13 @@ class WorkflowError(Exception):
 
 
 class Port:
-    def __init__(self, name, type, required, description, value):
+    def __init__(self, name, type, required, description, value, is_input_port=True):
         self.name = name
         self.type = type
         self.description = description
         self.required = required
         self.value = value
+        self.is_input_port = is_input_port
 
     def __repr__(self):
         return self.__str__()
@@ -32,6 +33,8 @@ class Port:
         out += "Port %s:" % self.name
         out += "\n\ttype: %s" % self.type
         out += "\n\tdescription: %s" % self.description
+        if not self.is_input_port:
+            return out
         out += "\n\trequired: %s" % self.required
         out += "\n\tValue: %s" % self.value
         return out
@@ -69,7 +72,13 @@ class Inputs(PortList):
             object.__setattr__(self, k, v)
 
 class Outputs(PortList):
-    pass
+    """
+    Output ports show a name & description.  output_port_name.value returns the link to use as input to next tasks.
+    """
+    def __init__(self, ports, task_name):
+        self._portnames = [p['name'] for p in ports]
+        for p in ports:
+            self.__setattr__(p['name'], Port(p['name'], p['type'], p['required'], p['description'], value="source:" + task_name + ":" + p['name'], is_input_port=False))
 
 
 
@@ -98,32 +107,24 @@ class Task:
         self.domain = self.definition['containerDescriptors'][0]['properties'].get('domain','default')
 
         self.inputs = Inputs(self.input_ports)
-        self.outputs = Outputs(self.output_ports)
+        self.outputs = Outputs(self.output_ports, self.name)
 
         # all the other kwargs are input port values or sources
         self.set(**kwargs)
    
     # get a reference to the output port
     def get_output(self, port_name):
-        output_port_names = [p['name'] for p in self.output_ports]
-        if port_name not in output_port_names:
-            raise InvalidOutputPort('Invalid output port %s.  Valid output ports for task %s are: %s' % (port_name, self.type, output_port_names))
+        return self.outputs.__getattribute__(port_name).value
+        # output_port_names = [p['name'] for p in self.output_ports]
+        # if port_name not in output_port_names:
+        #     raise InvalidOutputPort('Invalid output port %s.  Valid output ports for task %s are: %s' % (port_name, self.type, output_port_names))
 
-        return "source:" + self.name + ":" + port_name
+        # return "source:" + self.name + ":" + port_name
 
     # set input ports source or value
     def set( self, **kwargs ):
         for port_name, port_value in kwargs.iteritems():
             self.inputs.__getattribute__(port_name).value = port_value
-        # input_port_names = [p['name'] for p in self.input_ports]
-        # for input_port in kwargs.keys():
-        #     if input_port in input_port_names:
-        #         self.input_data.append( { 
-        #                                     'name': input_port,
-        #                                     'value': kwargs[input_port]
-        #                                 })
-        #     else:
-        #         raise InvalidInputPort('Invalid input port %s.  Valid input ports for task %s are: %s' % (input_port, self.type, input_port_names))
 
     @property
     def input_ports(self):
