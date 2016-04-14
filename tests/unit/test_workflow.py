@@ -41,3 +41,4 @@ def test_describe_tasks():
     desc = wf.describe_task(taskinfo['tasks'][0])
     assert isinstance(desc, dict)
     assert len(desc['description']) > 0   
+
