@@ -7,6 +7,8 @@ Contact: kostas.stamatiou@digitalglobe.com
 GBDX Catalog Interface
 '''
 import requests
+from pygeoif import geometry
+import json
 
 class Catalog():
 
@@ -63,6 +65,42 @@ class Catalog():
         lat = results[0]['geometry']['location']['lat']
         lng = results[0]['geometry']['location']['lng']
         return lat, lng
+
+    def search_address(self, address):
+        ''' Perform a catalog search over an address string
+
+        Args:
+            address: any address string
+
+        Returns:
+            catalog resultset dictionary
+        '''
+        lat, lng = self.get_address_coords(address)
+        return self.search_point(lat,lng)
+
+    def search_point(self, lat, lng):
+        ''' Perform a catalog search over a specific point, specified by lat,lng
+
+        Args:
+            lat: latitude
+            lng: longitude
+
+        Returns:
+            catalog resultset dictionary
+        '''
+        postdata = {  
+            "searchAreaWkt":"POLYGON ((%s %s, %s %s, %s %s, %s %s, %s %s))" % (lng, lat,lng,lat,lng,lat,lng,lat,lng,lat),
+            "filters":[  
+            ],
+            "types":[  
+                "Acquisition"
+            ]
+        }
+        url = 'https://geobigdata.io/catalog/v1/search?includeRelationships=false'
+        headers = {'Content-Type':'application/json'}
+        r = self.gbdx_connection.post(url, headers=headers, data=json.dumps(postdata))
+        r.raise_for_status()
+        return r.json()
 
 
 

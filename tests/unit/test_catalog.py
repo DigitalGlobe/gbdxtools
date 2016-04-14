@@ -31,3 +31,20 @@ def test_catalog_get_address_coords():
 	assert lat == 40.0149856
 	assert lng == -105.2705456
 
+@vcr.use_cassette('tests/unit/cassettes/test_catalog_search_point.yaml',filter_headers=['authorization'])
+def test_catalog_search_point():
+	c = Catalog(gbdx)
+	lat = 40.0149856
+	lng = -105.2705456
+	results = c.search_point(lat,lng)
+
+	assert results['stats']['totalRecords'] == 310
+
+@vcr.use_cassette('tests/unit/cassettes/test_catalog_search_address.yaml',filter_headers=['authorization'])
+def test_catalog_search_address():
+	c = Catalog(gbdx)
+	results = c.search_address('Boulder, CO')
+
+	assert results['stats']['totalRecords'] == 310
+	
+
