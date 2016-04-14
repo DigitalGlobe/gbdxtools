@@ -22,7 +22,6 @@ def test_simpleworkflows_initialize_task():
     aoptask = gbdx.Task("AOP_Strip_Processor")
     assert isinstance(aoptask, Task)
     assert aoptask.domain == 'raid'
-    assert aoptask.input_data == []
     assert 'data' in [p['name'] for p in aoptask.input_ports]
     assert 'bands' in [p['name'] for p in aoptask.input_ports]
     assert 'data' in [p['name'] for p in aoptask.output_ports]
