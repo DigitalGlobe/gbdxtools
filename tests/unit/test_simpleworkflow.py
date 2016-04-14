@@ -33,12 +33,12 @@ def test_simpleworkflows_initialize_task():
 
 @vcr.use_cassette('tests/unit/cassettes/test_initialize_simpleworkflows_task_with_valid_inputs.yaml',filter_headers=['authorization'])
 def test_initialize_simpleworkflows_task_with_valid_inputs():
-    a = gbdx.Task("AOP_Strip_Processor", data='dummy', enable_acomp=False, enable_pansharpen=False)
+    a = gbdx.Task("AOP_Strip_Processor", data='dummy', enable_acomp=False, enable_pansharpen=True)
 
     # verify the input data is set
-    assert 'data' in [p['name'] for p in a.input_data]
-    assert 'enable_acomp' in [p['name'] for p in a.input_data]
-    assert 'enable_pansharpen' in [p['name'] for p in a.input_data]
+    assert 'dummy' == a.inputs.data.value
+    assert False == a.inputs.enable_acomp.value
+    assert True == a.inputs.enable_pansharpen.value
 
 @vcr.use_cassette('tests/unit/cassettes/test_simpleworkflows_task_output_reference.yaml',filter_headers=['authorization'])
 def test_simpleworkflows_task_output_reference():
@@ -52,7 +52,7 @@ def test_simpleworkflows_task_output_reference():
 def test_initialize_simpleworkflows_task_with_invalid_inputs_fails():
     try:
         aoptask = gbdx.Task("AOP_Strip_Processor", invalidinput='dummy', invalidinput2='dummy2')
-    except InvalidInputPort as e:
+    except AttributeError as e:
         pass
     else:
         raise Exception('Failed test')

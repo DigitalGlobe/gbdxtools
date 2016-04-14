@@ -6,7 +6,7 @@ Class to represent a workflow task
 '''
 import json, uuid
 
-class InvalidInputPort(Exception):
+class InvalidInputPort(AttributeError):
     pass
 
 class InvalidOutputPort(Exception):
@@ -17,11 +17,12 @@ class WorkflowError(Exception):
 
 
 class Port:
-    def __init__(self, name, type, required, description):
+    def __init__(self, name, type, required, description, value):
         self.name = name
         self.type = type
         self.description = description
         self.required = required
+        self.value = value
 
     def __repr__(self):
         return self.__str__()
@@ -32,35 +33,41 @@ class Port:
         out += "\n\ttype: %s" % self.type
         out += "\n\tdescription: %s" % self.description
         out += "\n\trequired: %s" % self.required
+        out += "\n\tValue: %s" % self.value
         return out
 
-class Ports:
+class Inputs(object):
     def __init__(self, task):
-        self.__task = task
+        self._task = task
+        self._portnames = [p['name'] for p in task.input_ports]
+        for p in task.input_ports:
+            self.__setattr__(p['name'], Port(p['name'], p['type'], p['required'], p['description'], value=None))
 
-    def __getattr__(self, name):
-        # Ignore specials (Otherwise shallow copying causes infinite loops)
-        if name.startswith('__'):
-            raise AttributeError(name)
-        
-        p = None
-        for input_port in self.__task.input_ports:
-            if name == input_port['name']:
-                p = input_port
+    # allow setting task input values like this:
+    # task.inputs.port_name = value
+    def __setattr__(self, k, v):
+        # special handling for setting task & portname:
+        if k in ['_portnames', '_task']:
+            object.__setattr__(self, k, v)
 
-        if not p:
-            raise InvalidInputPort('No such input port: %s' % name)
+        # special handling for port names
+        elif k in self._portnames and hasattr(self, k):
+            port = self.__getattribute__(k)
+            port.value = v
 
-        return Port(name, p['type'], p['required'], p['description'])
+        # default for everything else
+        else:
+            object.__setattr__(self, k, v)
 
     def __repr__(self):
         return self.__str__()
 
     def __str__(self):
         out = ""
-        for input_port in self.__task.input_ports:
+        for input_port in self._task.input_ports:
             out += input_port['name'] + "\n"
         return out
+
 
 class Task:
 
@@ -88,7 +95,7 @@ class Task:
         self.definition = self.interface.workflow.describe_task(task_type)
         self.domain = self.definition['containerDescriptors'][0]['properties'].get('domain','default')
 
-        self.inputs = Ports(self)
+        self.inputs = Inputs(self)
 
         # all the other kwargs are input port values or sources
         self.set(**kwargs)
@@ -103,15 +110,17 @@ class Task:
 
     # set input ports source or value
     def set( self, **kwargs ):
-        input_port_names = [p['name'] for p in self.input_ports]
-        for input_port in kwargs.keys():
-            if input_port in input_port_names:
-                self.input_data.append( { 
-                                            'name': input_port,
-                                            'value': kwargs[input_port]
-                                        })
-            else:
-                raise InvalidInputPort('Invalid input port %s.  Valid input ports for task %s are: %s' % (input_port, self.type, input_port_names))
+        for port_name, port_value in kwargs.iteritems():
+            self.inputs.__getattribute__(port_name).value = port_value
+        # input_port_names = [p['name'] for p in self.input_ports]
+        # for input_port in kwargs.keys():
+        #     if input_port in input_port_names:
+        #         self.input_data.append( { 
+        #                                     'name': input_port,
+        #                                     'value': kwargs[input_port]
+        #                                 })
+        #     else:
+        #         raise InvalidInputPort('Invalid input port %s.  Valid input ports for task %s are: %s' % (input_port, self.type, input_port_names))
 
     @property
     def input_ports(self):
@@ -138,12 +147,15 @@ class Task:
                     "containerDescriptors": [{"properties": {"domain": self.domain}}]
                 }
 
-        for input_port in self.input_data:
-            input_port_name = input_port['name']
-            input_port_value = input_port['value']
+        for input_port_name in self.inputs._portnames:
+            input_port_value = self.inputs.__getattribute__(input_port_name).value
+            if input_port_value == None:
+                continue
 
             if input_port_value == False:
                 input_port_value = 'false'
+            if input_port_value == True:
+                input_port_value = 'true'
 
             if input_port_value.startswith('source:'):
                 # this port is linked from a previous output task
