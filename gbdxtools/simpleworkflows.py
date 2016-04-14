@@ -36,18 +36,27 @@ class Port:
         out += "\n\tValue: %s" % self.value
         return out
 
-class Inputs(object):
-    def __init__(self, task):
-        self._task = task
-        self._portnames = [p['name'] for p in task.input_ports]
-        for p in task.input_ports:
+class PortList(object):
+    def __init__(self, ports):
+        self._portnames = [p['name'] for p in ports]
+        for p in ports:
             self.__setattr__(p['name'], Port(p['name'], p['type'], p['required'], p['description'], value=None))
 
+    def __repr__(self):
+        return self.__str__()
+
+    def __str__(self):
+        out = ""
+        for input_port_name in self._portnames:
+            out += input_port_name + "\n"
+        return out
+
+class Inputs(PortList):
     # allow setting task input values like this:
     # task.inputs.port_name = value
     def __setattr__(self, k, v):
         # special handling for setting task & portname:
-        if k in ['_portnames', '_task']:
+        if k in ['_portnames']:
             object.__setattr__(self, k, v)
 
         # special handling for port names
@@ -59,14 +68,6 @@ class Inputs(object):
         else:
             object.__setattr__(self, k, v)
 
-    def __repr__(self):
-        return self.__str__()
-
-    def __str__(self):
-        out = ""
-        for input_port in self._task.input_ports:
-            out += input_port['name'] + "\n"
-        return out
 
 
 class Task:
@@ -95,7 +96,7 @@ class Task:
         self.definition = self.interface.workflow.describe_task(task_type)
         self.domain = self.definition['containerDescriptors'][0]['properties'].get('domain','default')
 
-        self.inputs = Inputs(self)
+        self.inputs = Inputs(self.input_ports)
 
         # all the other kwargs are input port values or sources
         self.set(**kwargs)
