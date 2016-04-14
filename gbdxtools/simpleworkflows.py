@@ -15,6 +15,53 @@ class InvalidOutputPort(Exception):
 class WorkflowError(Exception):
     pass
 
+
+class Port:
+    def __init__(self, name, type, required, description):
+        self.name = name
+        self.type = type
+        self.description = description
+        self.required = required
+
+    def __repr__(self):
+        return self.__str__()
+
+    def __str__(self):
+        out = ""
+        out += "Port %s:" % self.name
+        out += "\n\ttype: %s" % self.type
+        out += "\n\tdescription: %s" % self.description
+        out += "\n\trequired: %s" % self.required
+        return out
+
+class Ports:
+    def __init__(self, task):
+        self.__task = task
+
+    def __getattr__(self, name):
+        # Ignore specials (Otherwise shallow copying causes infinite loops)
+        if name.startswith('__'):
+            raise AttributeError(name)
+        
+        p = None
+        for input_port in self.__task.input_ports:
+            if name == input_port['name']:
+                p = input_port
+
+        if not p:
+            raise InvalidInputPort('No such input port: %s' % name)
+
+        return Port(name, p['type'], p['required'], p['description'])
+
+    def __repr__(self):
+        return self.__str__()
+
+    def __str__(self):
+        out = ""
+        for input_port in self.__task.input_ports:
+            out += input_port['name'] + "\n"
+        return out
+
 class Task:
 
     def __init__(self, interface, task_type, **kwargs):
@@ -40,6 +87,8 @@ class Task:
         self.type = task_type
         self.definition = self.interface.workflow.describe_task(task_type)
         self.domain = self.definition['containerDescriptors'][0]['properties'].get('domain','default')
+
+        self.inputs = Ports(self)
 
         # all the other kwargs are input port values or sources
         self.set(**kwargs)
