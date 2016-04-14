@@ -62,6 +62,20 @@ class Workflow():
 
         return r.json()['state']
 
+    def cancel(self, workflow_id):
+        '''Cancels a running workflow.
+
+           Args:
+               workflow_id (str): Workflow id.
+
+           Returns:
+               Nothing
+        '''
+        self.logger.debug('Canceling workflow: ' + workflow_id)
+        url = 'https://geobigdata.io/workflows/v1/workflows/' + workflow_id + '/cancel'
+        r = self.gbdx_connection.post(url, data='')
+        r.raise_for_status()
+
     def list_tasks(self):
         '''Get a list of all the workflow task definitions I'm allowed to see
             

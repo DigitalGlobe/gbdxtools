@@ -203,6 +203,12 @@ class Workflow:
         self.id = self.interface.workflow.launch(self.definition)
         return self.id
 
+    def cancel(self):
+        if not self.id:
+            raise WorkflowError('Workflow is not running.  Cannot cancel.')
+
+        self.interface.workflow.cancel(self.id)
+
     @property
     def status(self):
         if not self.id:
