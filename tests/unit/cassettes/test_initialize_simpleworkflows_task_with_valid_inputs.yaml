@@ -1,0 +1,47 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      User-Agent: [python-requests/2.9.1]
+    method: GET
+    uri: https://geobigdata.io/workflows/v1/tasks/AOP_Strip_Processor
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA7VYUW/bNhD+Kwe/eMNcWW62oMmbEwddsLk2ku5lwyBQ0sliK4kaSSV1g/z33ZGK
+        YynOhtruiy0dT3ff95E8nvQwSFRlhaxQz9AkWtZWaTM4h78eaKQsRZXSzWAcy2ocC5PDOF2Nxb0Z
+        i7o24+li+WapVYLGyMrbV3H6ZSxUHRlLwaLajyodWWE+vzoQ6aYiCIHJByMY2HWNnHW2uPzt6oYt
+        5F2jthIZ2sNAlmLlPGy6qjnoeSEsGsuuqSqJDg9qIdPB4+PfbGy5SeVGWsxoQMDkAhwiaJgD2ByB
+        aEGLj03GiuRzwLFlVTd2qbR9oZXGfxqpkcWyusEtEimZE3JcO3BdHLcnUKhE8C2ojKG4DJAKK9i9
+        EqWPwfePI+jkyURh9kx00VRpgXBBts8wTT81xpZYWdBomsKa7dRx/P+ZWb9qtSPtVSXiAsepNPwP
+        00tV1gFc5komrL1GGLJaQ1Aahi7qMIAZZoJQgDTtqJP+CQ+6kJGgxVkfDVgtKjC50DVW5H8chBSz
+        DXk0mOmacsgEtKhWCGIzb8cBnOrjzbRqLK9jK4tv1fPJdp21niO3JYe06XIV+YCRSXIsKYjfLSXJ
+        ADGCQbuLl39mf2oXVAMNWPVUEnp0ltMPP81vCSZf8Z+/mTZW9ag50wjuc5nkBFZoYmEgIyViSgHX
+        M0OE4Ho+g0wWaDpc2MPsz+GSS/kbg7XQVChTKCRJRoWgakrUtKJ8BaRR22W6Bf/ZDKIotp/oAHWW
+        /YEueJrhann7nrN9ooJGAwHcOn8Y/vFxPmQwFE4xDHWPKY3WmMhsTQZFTvfS5uCXSy2/YBEZ+RUD
+        WNyh1jJNsYJ43Y53lhPIDIyLJDno9swxnvOfT96edjeOD4K1OWB1ecIOKDBQXgIlWtTmP3hxysMY
+        ddZiwych77ItGLQ42PJ8Hu1g/izvofw9bGhh8274qlQJBd5hMQIMiO1w9v5XUWRz1uZ88m644U/Y
+        n1Vxz/bR7YDe0elQ9LOr+UZnTbjccFsePlzNuBzc3nycn4RPV2dhrzQ8GV8CTbGMNrEPBernV1Yk
+        Ya0K3w7wo33MVJuom2K0F6wT3fL1ZRPLpAe8tb3E3UkSOXx7g3d9A3VlM1jRfPe2CVBj6Il1kE3C
+        DijXL0RCpRGHOHDNLjvtApQq7Ss4k9yLsWhXVS6qBFN3QLQV7a5/6G0PdIvpUw8RcZKjIY6VMtQ1
+        TCErFE0QWWpFE8bHQUxqxmjvkapKGIRuP02CcOTLj4BcrnJyaT1VlqGrzKUi2ui5ulZScemh2KKA
+        FOkFo3CHmysp3LyPXGABd6JoXLHhXJtolfqWWAHAR7pOW0F9SJI1DH55TU0nwP5yzl5pxHYthWva
+        CJWRdu37bLephMHfxRr1XNgk762Fvn/wwp/dkkZrSlhQ3a/oh1c3CcStl5unzYHVEYA6vAPX0avE
+        6SQmTJZmkPdjQiY3MTfOj/Bmmsp5yE3EJAw7hHmWYMEk6BhKXTv0QgOva58K5Yx8zu9AiNf5nozO
+        zoKzfTlx2u9HaiWoDfQbpFssg7f7AnYhvwPU9g0iltR9YG3zbtf9jt8fJqcdEu/2ZEApIpdifxZ/
+        bpoV+EEGpC2fLz9y3Xp+ESLk1I61jQ7B9W8n3bZs8raDrm1SuBWKXPSB+5jhYx7xMwRXzxYod3rQ
+        8d1ItesbxH5JCrXanYMGPMX+9x6zbOJCJlsZZYkUjQwnp2EYPm4FmS6WEb8v1FH7mUdR3/QvUPQ2
+        rOgSAAA=
+    headers:
+      connection: [keep-alive]
+      content-encoding: [gzip]
+      content-length: ['1316']
+      content-type: [application/json]
+      date: ['Wed, 13 Apr 2016 17:00:51 GMT']
+      server: [nginx/1.8.0]
+      via: [kong/0.5.2]
+    status: {code: 200, message: OK}
+version: 1
