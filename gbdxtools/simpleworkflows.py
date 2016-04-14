@@ -68,6 +68,9 @@ class Inputs(PortList):
         else:
             object.__setattr__(self, k, v)
 
+class Outputs(PortList):
+    pass
+
 
 
 class Task:
@@ -87,9 +90,7 @@ class Task:
             
         '''
 
-        self.input_data = []
         self.name = task_type + '_' + str(uuid.uuid4())
-        self.id = None
 
         self.interface = interface
         self.type = task_type
@@ -97,6 +98,7 @@ class Task:
         self.domain = self.definition['containerDescriptors'][0]['properties'].get('domain','default')
 
         self.inputs = Inputs(self.input_ports)
+        self.outputs = Outputs(self.output_ports)
 
         # all the other kwargs are input port values or sources
         self.set(**kwargs)
