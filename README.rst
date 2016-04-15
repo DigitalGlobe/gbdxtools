@@ -79,5 +79,7 @@ Please contribute!  Please make pull requests directly to master.  Before making
 
 * Ensure that all new functionality is covered by unit tests.
 * Verify that all unit tests are passing.
+* Ensure that all functionality is properly documented.
+* Ensure that all functions/classes have proper docstrings so sphinx can autogenerate documentation.
 * Fix all versions in setup.py (and requirements.txt)
 
