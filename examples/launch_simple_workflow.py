@@ -1,6 +1,4 @@
 from gbdxtools import Interface
-import json
-
 gbdx = Interface()
 
 data = "s3://receiving-dgcs-tdgplatform-com/054813633050_01_003" # WV02 Image over San Francisco

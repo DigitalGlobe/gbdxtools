@@ -5,7 +5,7 @@ gbdx = Interface()
 
 #catid = '101001000DB2FB00'
 #catid = '1020010013C4CF00'
-catid = '10400100120FEA00'
+catid = '1040010019B4A600' # boulder wv03
 
 idaho_images = gbdx.idaho.get_images_by_catid(catid)
 description = gbdx.idaho.describe_images(idaho_images)
