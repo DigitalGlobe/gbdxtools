@@ -32,7 +32,7 @@ Development
 
 Clone the repo dev branch::
 
-   git clone -b dev git@github.com:kostasthebarbarian/gbdxtools.git
+   git clone -b dev https://github.com/digitalglobe/gbdxtools
    
    cd gbdxtools
 
