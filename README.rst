@@ -66,7 +66,7 @@ Note: you may have to issue the following in your virtualenv for the tests to fi
 
     pip install -e .
 
-To create a new version:
+To create a new version::
 
     bumpversion ( major | minor | patch )
     git push --tags
