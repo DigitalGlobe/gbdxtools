@@ -71,5 +71,13 @@ To create a new version::
     bumpversion ( major | minor | patch )
     git push --tags
 
-Don't forget to upload to pipy.
+Don't forget to upload to pypi.
+
+**Contributing**
+
+Please contribute!  Please make pull requests directly to master.  Before making a pull request, please:
+
+* Ensure that all new functionality is covered by unit tests.
+* Verify that all unit tests are passing.
+* Fix all versions in setup.py (and requirements.txt)
 
