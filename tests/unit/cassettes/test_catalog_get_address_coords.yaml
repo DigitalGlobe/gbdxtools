@@ -1,0 +1,36 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      User-Agent: [python-requests/2.9.1]
+    method: GET
+    uri: https://maps.googleapis.com/maps/api/geocode/json?&address=Boulder,%20CO
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAC/+1UXW+CMBR991c0fUYDyofsjZklc8vE6MyWLIZU6LQJtIQWjTH+97VoMhA3nPFx
+        PEDLPb3n3K/uWgAAmGGex4JDcAc+1A/57I5fZUZRJBE8CFmSMoppFVnDH0/FjC4DihKswPCe5XGE
+        M6jVcHzFMnEJUGxTfGBWzkMUE7GFGoApkysi9xDMK4f22jUSwYDlVHm+UOnP+LJgFCWEEi4yJMga
+        ByjDKIjxGsdB95YxDFjMMhSxZvUD/2rFxi0VzygROAJTgYSkbpQ9mzbIDlU1sobG+N7NS97gJ8sS
+        JKSc4Njy5TprYOBrYDb1ygLgErMEKz6JrIYKF1JJxOsGZaMyqBVGXJw1F1lChc3UO7prWpbu1sIu
+        UHSpUG1DtzqG0zdc5xS1P5NSlovVBjeT99yOa5u63W8m7+mGYzlujf231iimWBBGz+eolAHDdPuW
+        XY+krKDr6JZp2RcRBqpjiuJ64/HEfx++eK8PJ40F1wRvUlmn/wqe3ZVlwTRGIQ5IdLhaVsMn3W6P
+        5GuEzHDyNvQW7HHj+OGyMjt/uNAL3sOsQi6vivwwmv4zbO1bX3QBuqHFBgAA
+    headers:
+      access-control-allow-origin: ['*']
+      alt-svc: ['quic=":443"; ma=2592000; v="32,31,30,29,28,27,26,25"']
+      alternate-protocol: ['443:quic']
+      cache-control: ['public, max-age=86400']
+      content-encoding: [gzip]
+      content-type: [application/json; charset=UTF-8]
+      date: ['Thu, 14 Apr 2016 21:26:21 GMT']
+      expires: ['Fri, 15 Apr 2016 21:26:21 GMT']
+      server: [mafe]
+      vary: [Accept-Language]
+      x-frame-options: [SAMEORIGIN]
+      x-xss-protection: [1; mode=block]
+    status: {code: 200, message: OK}
+version: 1
