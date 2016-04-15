@@ -14,7 +14,7 @@ import re
 # 4. Run the tests (existing test shouldn't be affected by use of a real token).  This will record a "cassette".
 # 5. replace the real gbdx token with "dummytoken" again
 # 6. Edit the cassette to remove any possibly sensitive information (s3 creds for example)
-mock_gbdx_session = get_mock_gbdx_session(token="dummytoken")
+mock_gbdx_session = get_mock_gbdx_session(token="yvVqtsi8Uu9yprzMs0oE8cm8gi54o0")
 gbdx = Interface(gbdx_connection = mock_gbdx_session)
 
 @vcr.use_cassette('tests/unit/cassettes/test_simpleworkflows_initialize_task.yaml',filter_headers=['authorization'])
@@ -97,6 +97,20 @@ def test_simpleworkflow_completed_status():
     assert not workflow.succeeded
     assert not workflow.running
     assert workflow.timedout  # this particular workflow timed out
+
+@vcr.use_cassette('tests/unit/cassettes/test_simpleworkflow_autostage_to_s3.yaml',record_mode='new_episodes',filter_headers=['authorization'])
+def test_simpleworkflow_autostage_to_s3():
+    data = "s3://receiving-dgcs-tdgplatform-com/054813633050_01_003"
+    aoptask = gbdx.Task("AOP_Strip_Processor")
+    workflow = gbdx.Workflow([ aoptask])
+
+    # try several ways to add save tasks:
+    workflow.savedata(aoptask.outputs.log)
+    workflow.savedata(aoptask.outputs.data, location='myfolder')
+    workflow.savedata(aoptask.outputs.log.value)
+    workflow.savedata(aoptask.outputs.data.value, location='myfolder2')
+
+    assert len(workflow.tasks) == 5
 
 
 

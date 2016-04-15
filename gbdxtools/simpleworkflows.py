@@ -190,10 +190,30 @@ class Workflow:
 
         self.definition = self.workflow_skeleton()
 
-        for task in tasks:
-            self.definition['tasks'].append( task.generate_task_workflow_json() )
-
         self.tasks = tasks
+
+    def savedata(self, input, location=None):
+
+        # handle inputs of task.inputs.portname as well as task.inputs.portname.value
+        if isinstance(input, Port):
+            input_value = input.value
+        else:
+            input_value = input
+
+        # determine the location to save data to:
+        s3info = self.interface.s3.info
+        bucket = s3info['bucket']
+        prefix = s3info['prefix']
+        if location:
+            location = location.strip('/')
+            s3location = "s3://" + bucket + '/' + prefix + '/' + location
+        else:
+            s3location = "s3://" + bucket + '/' + prefix + '/' + str(uuid.uuid4())
+
+        s3task = self.interface.Task("StageDataToS3", data=input_value, destination=s3location)
+        self.tasks.append(s3task)
+
+
 
     def workflow_skeleton(self):
         return {
@@ -204,6 +224,10 @@ class Workflow:
     def execute(self):
         if not self.tasks:
             raise WorkflowError('Workflow contains no tasks, and cannot be executed.')
+
+        for task in self.tasks:
+            self.definition['tasks'].append( task.generate_task_workflow_json() )
+
         self.id = self.interface.workflow.launch(self.definition)
         return self.id
 
