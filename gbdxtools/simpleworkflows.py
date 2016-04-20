@@ -120,6 +120,14 @@ class Task:
 
     # set input ports source or value
     def set( self, **kwargs ):
+        '''Set input values on task
+
+        Args:
+            arbitrary_keys: values for the keys
+
+        Returns:
+            None
+        '''
         for port_name, port_value in kwargs.iteritems():
             self.inputs.__getattribute__(port_name).value = port_value
 
