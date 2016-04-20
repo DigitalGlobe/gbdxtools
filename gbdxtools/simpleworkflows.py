@@ -120,10 +120,11 @@ class Task:
 
     # set input ports source or value
     def set( self, **kwargs ):
-        '''Set input values on task
+        '''
+        Set input values on task
 
         Args:
-            arbitrary_keys: values for the keys
+               arbitrary_keys: values for the keys
 
         Returns:
             None
