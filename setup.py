@@ -27,7 +27,8 @@ setup(name='gbdxtools',
                         'gbdx-auth==0.1.2',
                         'Pillow==3.1.1',
                         'pygeoif==0.6',
-                        'sympy==1.0'],
+                        'sympy==1.0',
+                        'ndg-httpsclient==0.4.0'],
       setup_requires=['pytest-runner'],
       tests_require=['pytest','vcrpy']
       )
