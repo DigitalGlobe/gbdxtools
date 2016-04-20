@@ -7,6 +7,10 @@ gbdxtools: Python tools for using GBDX
     
 .. image:: https://travis-ci.org/DigitalGlobe/gbdxtools.svg?branch=master
     :target: https://travis-ci.org/DigitalGlobe/gbdxtools
+    
+.. image:: https://readthedocs.org/projects/gbdxtools/badge/?version=latest
+    :target: http://gbdxtools.readthedocs.org/en/latest/?badge=latest
+    :alt: Documentation Status
 
 gbdxtools is a package for ordering imagery and launching workflows on DigitalGlobe's GBDX platform.
 
@@ -85,4 +89,3 @@ Please contribute!  Please make pull requests directly to master.  Before making
 * Ensure that all functionality is properly documented.
 * Ensure that all functions/classes have proper docstrings so sphinx can autogenerate documentation.
 * Fix all versions in setup.py (and requirements.txt)
-
