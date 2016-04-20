@@ -4,6 +4,7 @@ Contact: dmarino@digitalglobe.com
 
 Class to represent a workflow task
 '''
+
 import json, uuid
 
 class InvalidInputPort(AttributeError):
@@ -83,17 +84,13 @@ class Outputs(PortList):
 
 
 class Task:
-
     def __init__(self, interface, task_type, **kwargs):
         '''Construct an instance of GBDX Task
 
-         Args:
-            optional keywords:
-                name (string): The task name.
-                input_port_descriptors (list): A list of the input port descriptors.
-                output_port_descriptors (list): A list of the output port descriptors.
-                container_descriptors (list): A list of the container descriptors.
-                properties (dict): A dictionary of task properties.
+        Args:
+            interface: gbdx interface object
+            task_type: name of the task
+
         Returns:
             An instance of Task.
             
