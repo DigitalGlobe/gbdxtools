@@ -14,6 +14,11 @@ gbdxtools.interface module
     :undoc-members:
     :show-inheritance:
 
+.. automodule:: gbdxtools.simpleworkflows
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 .. automodule:: gbdxtools.s3
     :members:
     :undoc-members:
