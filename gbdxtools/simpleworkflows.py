@@ -198,13 +198,23 @@ class Workflow:
 
         self.tasks = tasks
 
-    def savedata(self, input, location=None):
+    def savedata(self, output, location=None):
+        '''
+        Save output data from any task in this workflow to S3
+
+        Args:
+               output: reference task output (e.g. task.inputs.output1)
+               location (optional): subfolder to save data to in S3.  Leave blank to autogenerate an output location.
+
+        Returns:
+            None
+        '''
 
         # handle inputs of task.inputs.portname as well as task.inputs.portname.value
-        if isinstance(input, Port):
-            input_value = input.value
+        if isinstance(output, Port):
+            input_value = output.value
         else:
-            input_value = input
+            input_value = output
 
         # determine the location to save data to:
         s3info = self.interface.s3.info
@@ -228,6 +238,15 @@ class Workflow:
         }
 
     def execute(self):
+        '''
+        Execute the workflow.
+
+        Args:
+            None
+
+        Returns:
+            Workflow_id
+        '''
         if not self.tasks:
             raise WorkflowError('Workflow contains no tasks, and cannot be executed.')
 
@@ -238,6 +257,15 @@ class Workflow:
         return self.id
 
     def cancel(self):
+        '''
+        Cancel a running workflow.
+
+        Args:
+            None
+
+        Returns:
+            None
+        '''
         if not self.id:
             raise WorkflowError('Workflow is not running.  Cannot cancel.')
 

@@ -1,4 +1,4 @@
-User Guide
+Running Workflows
 ==========
 
 Quick workflow example
@@ -22,6 +22,31 @@ At this point the workflow is launched, and you can get status as follows:
    >>> workflow.status
    >>> {u'state': u'pending', u'event': u'submitted'}
 
-Workflow Tasks
+Tasks
 -----------------------
 
+A task is instantiated as follows:
+
+.. code-block:: pycon
+
+    task = gbdx.Task("Task_Name")
+
+The task name must be a valid gbdx task name.
+
+
+Setting Task Inputs
+-----------------------
+
+The following are all equivalent ways of setting the input values on a task:
+
+.. code-block:: pycon
+
+    # upon task instantiation:
+    task = gbdx.Task("Task_Name", input1="value1", input2="value2")
+
+    # with set function:
+    task.set(input1="value1", input2="value2")
+
+    # using input setter:
+    task.inputs.input1 = "value1"
+    task.inputs.input2 = "value2"
