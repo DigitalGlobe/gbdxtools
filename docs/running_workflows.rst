@@ -50,3 +50,62 @@ The following are all equivalent ways of setting the input values on a task:
     # using input setter:
     task.inputs.input1 = "value1"
     task.inputs.input2 = "value2"
+
+You can interactively determine the inputs of a task by typing:
+
+.. code-block:: pycon
+
+    >>> task = gbdx.Task("AOP_Strip_Processor")
+    >>> task.inputs
+    enable_tiling
+    enable_dra
+    bands
+    enable_acomp
+    ...
+
+You can also interactively get more info on a particular input:
+
+.. code-block:: pycon
+
+    >>> task.inputs.enable_acomp
+    Port enable_acomp:
+       type: string
+       description: Enable/disable AComp. Choices are 'true' or 'false'. Default is 'true'.
+       required: False
+       Value: None
+
+Task Outputs
+-----------------------
+
+Task outputs can be interactively explored the same way as task inputs:
+
+.. code-block:: pycon
+
+    >>> task = gbdx.Task("AOP_Strip_Processor")
+    >>> task.outputs
+    data
+    log
+
+    >>> task.outputs.log
+    Port log:
+       type: directory
+       description: The output log directory
+
+
+Linking Outputs from one task into Inputs of Another Task
+-----------------------
+
+The whole point of the workflow system is to build complex workflows with 
+automagic data movement between tasks. This can be done as follows:
+
+.. code-block:: pycon
+
+    task1 = gbdx.Task("AOP_Strip_Processor")
+
+    task2 = gbdx.Task("Some_Other_task")
+    task2.inputs.<input_name> = task1.outputs.<output_name>.value
+
+
+
+
+
