@@ -1,5 +1,6 @@
 '''
 Authors: Kostas Stamatiou, Donnie Marino
+
 Contact: kostas.stamatiou@digitalglobe.com
 
 Abstraction for the GBDX Ordering interface.

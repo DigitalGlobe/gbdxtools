@@ -1,8 +1,9 @@
 '''
 Authors: Kostas Stamatiou, Donnie Marino, Dan Getman, Dahl Winters, Nate Ricklin
+
 Contact: kostas.stamatiou@digitalglobe.com
 
-GBDX Workflow interface
+GBDX Workflow interface.
 '''
 
 import json

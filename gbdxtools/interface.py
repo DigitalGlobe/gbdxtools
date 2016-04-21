@@ -1,5 +1,6 @@
 '''
 Authors: Kostas Stamatiou, Dan Getman, Nate Ricklin, Dahl Winters, Donnie Marino
+
 Contact: kostas.stamatiou@digitalglobe.com
 
 Functions to interface with GBDX API.
