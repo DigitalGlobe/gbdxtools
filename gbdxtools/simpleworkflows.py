@@ -86,7 +86,8 @@ class Outputs(PortList):
 
 class Task:
     def __init__(self, interface, task_type, **kwargs):
-        '''Construct an instance of GBDX Task
+        '''
+        Construct an instance of GBDX Task
 
         Args:
             interface: gbdx interface object
@@ -237,6 +238,23 @@ class Workflow:
             "tasks": [],
             "name": self.name
         }
+
+    def list_workflow_outputs(self):
+        '''
+        Get a dictionary of outputs from the workflow that are saved to S3.  Keys are output port names, values are S3 locations.
+        Args:
+            None
+
+        Returns:
+            dictionary
+        '''
+        workflow_outputs = []
+        for task in self.tasks:
+            if task.type == "StageDataToS3":
+                workflow_outputs.append( {task.inputs.data.value: task.inputs.destination.value } )
+
+        return workflow_outputs
+
 
     def execute(self):
         '''
