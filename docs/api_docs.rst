@@ -9,25 +9,40 @@ gbdxtools.interface module
     :undoc-members:
     :show-inheritance:
 
+gbdxtools.catalog module
+--------------------------
+
 .. automodule:: gbdxtools.catalog
     :members:
     :undoc-members:
     :show-inheritance:
+
+gbdxtools.s3 module
+--------------------------
 
 .. automodule:: gbdxtools.s3
     :members:
     :undoc-members:
     :show-inheritance:
 
+gbdxtools.ordering module
+--------------------------
+
 .. automodule:: gbdxtools.ordering
     :members:
     :undoc-members:
     :show-inheritance:
 
+gbdxtools.workflow module
+--------------------------
+
 .. automodule:: gbdxtools.workflow
     :members:
     :undoc-members:
     :show-inheritance:
+
+gbdxtools.idaho module
+--------------------------
 
 .. automodule:: gbdxtools.idaho
     :members:

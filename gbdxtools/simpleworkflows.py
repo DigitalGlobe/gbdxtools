@@ -1,8 +1,9 @@
 '''
 Authors: Donnie Marino, Kostas Stamatiou, Nate Ricklin
+
 Contact: dmarino@digitalglobe.com
 
-Class to represent a workflow task
+Class to represent a workflow task.
 '''
 
 import json, uuid
