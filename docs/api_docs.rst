@@ -25,6 +25,14 @@ gbdxtools.s3 module
     :undoc-members:
     :show-inheritance:
 
+gbdxtools.simpleworkflows module
+--------------------------
+
+.. automodule:: gbdxtools.simpleworkflows
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 gbdxtools.ordering module
 --------------------------
 
