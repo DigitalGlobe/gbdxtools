@@ -1,8 +1,5 @@
 Running Workflows
-=================
-
-Welcome to the exciting world of GBDX workflows. Workflows are sequences of tasks performed on a DG image.
-You can define workflows consisting of custom tasks. A detailed description of workflows and tasks can be found `here`_.
+==========
 
 Quick workflow example
 -----------------------
@@ -108,7 +105,102 @@ automagic data movement between tasks. This can be done as follows:
     task2 = gbdx.Task("Some_Other_task")
     task2.inputs.<input_name> = task1.outputs.<output_name>.value
 
+Running a Workflow
+-----------------------
+
+A workflow is just a set of tasks with inputs and outputs linked appropriately.  Create/setup a few tasks and construct and run a workflow:
+
+.. code-block:: pycon
+
+    data = "s3://receiving-dgcs-tdgplatform-com/054813633050_01_003" # WV02 Image over San Francisco
+    aoptask = gbdx.Task("AOP_Strip_Processor", data=data)
+
+    s3task = gbdx.Task("StageDataToS3")
+    s3task.inputs.data = aoptask.outputs.data.value
+    s3task.inputs.destination = "s3://path/to/destination"
+
+    workflow = gbdx.Workflow([ s3task, aoptask ])
+    workflow.execute()
+
+Note that a workflow is instantiated with a list of tasks.  The tasks will get executed when their inputs are satisfied and ready to go.
 
 
+Workflow Status
+-----------------------
+
+There are a few ways to check the status of a running workflow.
+
+Checking the status directly:
+
+.. code-block:: pycon
+
+   >>> workflow.status
+   {u'state': u'pending', u'event': u'submitted'}
+
+Checking whether a workflow is running:
+
+.. code-block:: pycon
+
+   >>> workflow.running
+   True
+
+Checking whether a workflow has failed:
+
+.. code-block:: pycon
+
+   >>> workflow.failed
+   False
+
+Checking whether a workflow has been canceled:
+
+.. code-block:: pycon
+
+   >>> workflow.canceled
+   False
+
+Checking whether a workflow has succeeded:
+
+.. code-block:: pycon
+
+   >>> workflow.succeeded
+   True
+
+Checking whether a workflow is complete (whether canceled, failed, or succeeded):
+
+.. code-block:: pycon
+
+   >>> workflow.complete
+   True
 
 
+Cancel a Running Workflow
+-----------------------
+
+To cancel a workflow:
+
+.. code-block:: pycon
+
+   workflow.cancel()
+
+If you need to cancel a workflow for which you have the id:
+
+.. code-block:: pycon
+
+   workflow = gbdx.Workflow( [] )  # instantiate a blank workflow
+   workflow.id = <known_workflow_id>
+   workflow.cancel()
+
+This works reasonably well for now, but we'll probably come up with a better way to deal with already running workflows in the future.
+
+Saving Output Data to S3
+-----------------------
+
+Here's a shortcut for saving data to S3.  Rather than creating a "StageDataToS3" task, you can simply do:
+
+.. code-block:: pycon
+
+   workflow.savedata(aoptask.outputs.data, location='some_folder')
+
+This will end up saving the output to: s3://gbd-customer-data/<account_id>/some_folder
+
+You can omit the location parameter and the output location will be s3://gbd-customer-data/<account_id>/<random-GUID>
