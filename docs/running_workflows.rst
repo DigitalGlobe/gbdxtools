@@ -1,5 +1,8 @@
 Running Workflows
-==========
+=================
+
+Welcome to the exciting world of GBDX workflows. Workflows are sequences of tasks performed on a DG image.
+You can define workflows consisting of custom tasks. A detailed description of workflows and tasks can be found `here`_.
 
 Quick workflow example
 -----------------------
