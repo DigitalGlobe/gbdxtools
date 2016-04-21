@@ -112,7 +112,24 @@ def test_simpleworkflow_autostage_to_s3():
 
     assert len(workflow.tasks) == 5
 
+@vcr.use_cassette('tests/unit/cassettes/test_simpleworkflow_autostage_to_s3.yaml',record_mode='new_episodes',filter_headers=['authorization'])
+def test_simpleworkflow_get_outputs_list():
+    data = "s3://receiving-dgcs-tdgplatform-com/054813633050_01_003"
+    aoptask = gbdx.Task("AOP_Strip_Processor")
+    workflow = gbdx.Workflow([ aoptask])
 
+    # try several ways to add save tasks:
+    workflow.savedata(aoptask.outputs.log)
+    workflow.savedata(aoptask.outputs.data, location='myfolder')
+    workflow.savedata(aoptask.outputs.log.value)
+    workflow.savedata(aoptask.outputs.data.value, location='myfolder2')
+
+    outputs = workflow.list_workflow_outputs()
+
+    assert len(outputs) == 4
+    for output in outputs:
+        assert output.keys()[0].startswith('source:')
+        assert output.values()[0].startswith('s3://')
 
 
 

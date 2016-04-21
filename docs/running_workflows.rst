@@ -199,8 +199,15 @@ Here's a shortcut for saving data to S3.  Rather than creating a "StageDataToS3"
 
 .. code-block:: pycon
 
-   workflow.savedata(aoptask.outputs.data, location='some_folder')
+    workflow.savedata(aoptask.outputs.data, location='some_folder')
 
 This will end up saving the output to: s3://gbd-customer-data/<account_id>/some_folder
 
 You can omit the location parameter and the output location will be s3://gbd-customer-data/<account_id>/<random-GUID>
+
+To find out where workflow output data is getting saved, you can do:
+
+.. code-block:: pycon
+
+    >>> workflow.list_workflow_outputs()
+    {u'source:AOP_Strip_Processor_35cb77ea-ffa8-4565-8c31-7f7c2cabb3ce:data': u's3://dummybucket/7b216bd9-6523-4ca9-aa3b-1d8a5994f054/some_folder'}
