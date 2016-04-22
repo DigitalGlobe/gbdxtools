@@ -20,7 +20,7 @@ Installation is easy::
 
     pip install gbdxtools
 
-If you have a previous version of gbdxtools install then::
+If you have a previous version of gbdxtools installed, then::
 
     pip install --upgrade gbdxtools
 
@@ -54,7 +54,7 @@ Install the requirements::
 Please follow this python style guide: https://google.github.io/styleguide/pyguide.html.
 80-90 columns is fine.
 
-*Tests*
+**Tests**
 
 This package uses pytest http://pytest.org/latest/contents.html.
 
