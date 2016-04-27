@@ -2,17 +2,22 @@
 gbdxtools CLI: Command Line Interface for GBDX
 ==============================================
 
-gbdxtools includes a Command Line Interface for ease of use.
+The gbdxtools package includes a Command Line Interface for ease of use.
+
 Access to the GBDX API is provided without the need for programming.
 
 **Installation**
+
 The command is 'gbdx' and it is installed when you pip install the gbdxtools package into your virtualenv.
 
 **Usage**
+
 Help and usage information are built into the tool, use the --help switch or just throw bad commands to see it.
+
 Note how you can walk through the command group and subcommands to get more specific help.
 
 ::
+
     ]$ gbdx --help
     Usage: gbdx [OPTIONS] COMMAND [ARGS]...
 
@@ -55,6 +60,7 @@ Note how you can walk through the command group and subcommands to get more spec
 **Examples**
 
 ::
+
     ]$ gbdx workflow list_tasks
     {
     "tasks": [
@@ -88,5 +94,6 @@ Note how you can walk through the command group and subcommands to get more spec
 **Development**
 
 gbdx cli is a Click application. Learn more about Click at http://click.pocoo.org/5/
-installation is done via the setup.py file in the project's home dir. Look for the entry_points clause.
+
+Installation is done via the setup.py file in the project's home dir. Look for the entry_points clause.
 
