@@ -1,5 +1,6 @@
 gbdxtools.egg-info/
 dist/
+build/
 *.pyc
 /.project
 .eggs
