@@ -4,8 +4,8 @@ Running Workflows
 Quick workflow example
 -----------------------
 
-Here's a quick workflow that starts with a Worldview 2 image over san francisco, runs it through
-DigitalGlobe's "Fast Ortho" and "Acomp" task, then saves to an s3 location.
+Here's a quick workflow that starts with a Worldview 2 image over San Francisco, runs it through
+DigitalGlobe's "Fast Ortho" and "Acomp" tasks, then saves to an s3 location.
 
 .. code-block:: pycon
 
