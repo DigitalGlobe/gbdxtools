@@ -12,6 +12,9 @@ The command is 'gbdx' and it is installed when you pip install the gbdxtools pac
 
 **Usage**
 
+Note: gbdx cli uses the gbdxtools package, which requires GBDX credentials to be present in the users home dir.
+In order to use gbdx cli, you need GBDX credentials. Email geobigdata@digitalglobe.com to get these.
+
 Help and usage information are built into the tool, use the --help switch or just throw bad commands to see it.
 
 Note how you can walk through the command group and subcommands to get more specific help.

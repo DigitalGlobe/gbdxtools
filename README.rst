@@ -26,6 +26,8 @@ If you have a previous version of gbdxtools installed, then::
 
 In order to use gbdxtools, you need GBDX credentials. Email geobigdata@digitalglobe.com to get these.
 
+See https://gbdxdocs.digitalglobe.com/docs for more information about getting started with GBDX.
+
 Documentation is hosted here: http://gbdxtools.readthedocs.org/en/latest/. 
 Example scripts can be found under the /examples directory of this repo.
 
