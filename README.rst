@@ -30,6 +30,13 @@ Documentation is hosted here: http://gbdxtools.readthedocs.org/en/latest/.
 Example scripts can be found under the /examples directory of this repo.
 
 
+Command Line Interface
+----------------------
+
+The gbdxtools package includes a Command Line Interface for ease of use.
+
+See the Documentation hosted here: https://github.com/DigitalGlobe/gbdxtools/blob/cli-dev/cli/README.rst
+
 
 Development
 -----------
