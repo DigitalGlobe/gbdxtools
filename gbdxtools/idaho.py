@@ -176,15 +176,15 @@ class Idaho():
 
         description = self.describe_images(idaho_image_results)
         if len(description) > 0:
+            functionstring = ''
             for catid, images in description.iteritems():
-                functionstring = ''
                 for partnum, part in images['parts'].iteritems():
     
                     num_images = len(part.keys())
                     partname = None
                     if num_images == 1:
                         # there is only one image, use the PAN
-                        partname = [p for p in part.keys() if p.upper() == 'PAN'][0]
+                        partname = [p for p in part.keys()][0]
                         pan_image_id = ''
                     elif num_images == 2:
                         # there are two images in this part, use the multi (or pansharpen)
