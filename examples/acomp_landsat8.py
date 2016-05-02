@@ -1,5 +1,4 @@
 # Run atmospheric compensation on Landsat8 data
-
 from gbdxtools import Interface
 gbdx = Interface()
 
