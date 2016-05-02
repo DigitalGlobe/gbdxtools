@@ -1,12 +1,12 @@
 '''
 Authors: Kostas Stamatiou, Dan Getman, Nate Ricklin, Dahl Winters, Donnie Marino
-
 Contact: kostas.stamatiou@digitalglobe.com
 
 GBDX IDAHO Interface.
 '''
 
 from StringIO import StringIO
+
 from PIL import Image
 from pygeoif import geometry
 from sympy.geometry import Point, Polygon
@@ -227,7 +227,7 @@ class Idaho():
             print "No items returned."
 
     def get_idaho_chip(self, bucket_name, idaho_id, center_lat, center_lon, 
-                       pixel_res_meters, output_folder):
+                       output_folder, pan_id=None):
         '''Downloads an orthorectified IDAHO chip.
 
         Args:
@@ -235,7 +235,7 @@ class Idaho():
             idaho_id (str): The IDAHO ID of the chip.
             center_lat (str): The latitude of the center of the desired chip.
             center_lon (str): The longitude of the center of the desired chip.
-            pixel_res_meters (str): Pixel resolution in meters.
+            pan_id (str): The associated PAN ID for pan sharpening a multispectral image
             output_folder (str): The folder the chip should be output to.
 
         Returns:
@@ -243,22 +243,26 @@ class Idaho():
         '''
 
         print 'Retrieving IDAHO chip'
-        
+
+        access_token = self.gbdx_connection.access_token
+
         # form request
         url = ('http://idaho.geobigdata.io/'
-               'v1/chip/' + bucket_name + '/' + idaho_id + '?lat=' 
-               + str(center_lat) + '&long=' + str(center_lon) + '&resolution='
-               + str(pixel_res_meters))
-       
+               'v1/chip/centroid/' + bucket_name + '/' + idaho_id + '?lat='
+               + str(center_lat) + '&long=' + str(center_lon) +
+               '&format=tif' + '&token='+access_token)
+
+        if pan_id:
+            url += '&panId='+ pan_id
+
         r = requests.get(url)
 
         if r.status_code == 200:
             # form output path
-            file_path = output_folder + '/' + idaho_id + '.tif'
-    
-            # save returned image
-            i = Image.open(StringIO(r.content))
-            i.save(file_path)
+            file_path = os.path.join(output_folder, idaho_id+'.tif')
+
+            with open(file_path, 'wb') as the_file:
+                the_file.write(r.content)
     
         elif r.status_code == 404:
             print 'IDAHO ID not found: %s' % idaho_id
@@ -421,3 +425,6 @@ class Idaho():
                     
         print ('There were ' + str(tile_count) + ' IDAHO images downloaded that ' +
               'intersect with the provided bounding box.')
+
+
+

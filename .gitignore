@@ -6,3 +6,4 @@ dist/
 .cache
 /test-reports
 /venv
+/.idea/
