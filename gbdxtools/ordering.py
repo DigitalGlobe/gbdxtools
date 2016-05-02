@@ -1,10 +1,10 @@
-"""
+'''
 Authors: Kostas Stamatiou, Donnie Marino
 
 Contact: kostas.stamatiou@digitalglobe.com
 
 Abstraction for the GBDX Ordering interface.
-"""
+'''
 
 import json
 from itertools import izip
@@ -13,7 +13,7 @@ from itertools import izip
 class Ordering:
 
     def __init__(self, interface):
-        """Instantiate the GBDX Ordering Interface
+        '''Instantiate the GBDX Ordering Interface
 
         Args:
             interface (Interface): A reference to the GBDX interface.
@@ -21,12 +21,12 @@ class Ordering:
         Returns:
             An instance of the Ordering interface.
 
-        """
+        '''
         self.gbdx_connection = interface.gbdx_connection
         self.logger = interface.logger
     
     def order(self, image_catalog_ids, batch_size=100):
-        """Orders images from GBDX.
+        '''Orders images from GBDX.
 
         Args:
             image_catalog_ids (list or string): A list of image catalog ids
@@ -36,7 +36,7 @@ class Ordering:
 
         Returns:
             order_id (list): The list of Ids of orders placed.
-        """
+        '''
         def _order_single_batch(url_, ids, results_list):
             r = self.gbdx_connection.post(url_, data=json.dumps(ids))
             r.raise_for_status()
@@ -65,7 +65,7 @@ class Ordering:
         return res
 
     def status(self, order_id):
-        """Checks imagery order status. There can be more than one image per
+        '''Checks imagery order status. There can be more than one image per
            order and this function returns the status of all images
            within the order.
 
@@ -75,7 +75,7 @@ class Ordering:
            Returns:
                List of dictionaries, one per image. Each dictionary consists
                of the keys 'acquisition_id', 'location' and 'state'.
-        """
+        '''
 
         self.logger.debug('Get status of order ' + order_id)
         url = 'https://geobigdata.io/orders/v2/order/'
