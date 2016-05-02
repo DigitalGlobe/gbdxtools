@@ -1,0 +1,50 @@
+interactions:
+- request:
+    body: '["101001000DB2FB00"]'
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      Content-Length: ['20']
+      User-Agent: [python-requests/2.9.1]
+    method: POST
+    uri: https://geobigdata.io/orders/v2/order/
+  response:
+    body: {string: !!python/unicode '{"order_id": "345e6a9c-0093-4afd-a3e1-3300e04d0024",
+        "acquisitions": [{"acquisition_id": "101001000DB2FB00", "state": "delivered",
+        "location": "s3://receiving-dgcs-tdgplatform-com/055124209010_01_003"}]}'}
+    headers:
+      connection: [keep-alive]
+      content-length: ['203']
+      content-type: [application/json]
+      date: ['Mon, 02 May 2016 20:49:21 GMT']
+      via: [kong/0.5.2]
+      x-amz-cf-id: [4SZh4b9dKvXK9zZ3r0OlmHmPnagDVkumKesmSRXSsHGt3B4ttFCsRQ==]
+      x-amzn-requestid: [58c24c85-10a7-11e6-a8b9-c99a22d5483e]
+      x-cache: [Miss from cloudfront]
+    status: {code: 200, message: OK}
+- request:
+    body: '["10400100120FEA00"]'
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      Content-Length: ['20']
+      User-Agent: [python-requests/2.9.1]
+    method: POST
+    uri: https://geobigdata.io/orders/v2/order/
+  response:
+    body: {string: !!python/unicode '{"order_id": "69d74eba-ec84-4987-868e-78116e20053e",
+        "acquisitions": [{"acquisition_id": "10400100120FEA00", "state": "delivered",
+        "location": "s3://receiving-dgcs-tdgplatform-com/055124063010_01_003"}]}'}
+    headers:
+      connection: [keep-alive]
+      content-length: ['203']
+      content-type: [application/json]
+      date: ['Mon, 02 May 2016 20:49:22 GMT']
+      via: [kong/0.5.2]
+      x-amz-cf-id: [1D8oByZrZgP3sa4MI2cFSjCVTh7sCdjtL1w--UZfqldP5EOa6pPQPQ==]
+      x-amzn-requestid: [58f6c98f-10a7-11e6-a95b-bf27bdb634cb]
+      x-cache: [Miss from cloudfront]
+    status: {code: 200, message: OK}
+version: 1

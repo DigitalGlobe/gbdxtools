@@ -59,7 +59,8 @@ class Ordering:
 
         # Order reminder
         remain_count = len(sanitized_ids) % batch_size
-        _order_single_batch(url, sanitized_ids[-remain_count:], res)
+        if remain_count > 0:
+            _order_single_batch(url, sanitized_ids[-remain_count:], res)
 
         return res
 
