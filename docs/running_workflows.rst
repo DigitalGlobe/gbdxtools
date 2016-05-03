@@ -202,9 +202,10 @@ Here's a shortcut for saving data to S3.  Rather than creating a "StageDataToS3"
 
     workflow.savedata(aoptask.outputs.data, location='some_folder')
 
-This will end up saving the output to: s3://gbd-customer-data/<account_id>/some_folder
+This will end up saving the output to: s3://bucket/prefix/some_folder.
+(Remember that 'bucket' and 'prefix' are in your s3 credentials.)
 
-You can omit the location parameter and the output location will be s3://gbd-customer-data/<account_id>/<random-GUID>
+You can omit the location parameter and the output location will be s3://bucket/prefix/<random-GUID>
 
 To find out where workflow output data is getting saved, you can do:
 
