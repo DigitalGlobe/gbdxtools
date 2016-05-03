@@ -41,7 +41,7 @@ Ordering imagery
 
 This guide uses v2 of the GBDX ordering API. Ordering API v1 was deprecated on 02/25/2016. 
 
-Use the ordering member of the Interface to order and status imagery.
+Use the ordering member of the Interface to order imagery and check the status of your order.
 
 To order the image with DG factory catalog id 10400100143FC900:
 
