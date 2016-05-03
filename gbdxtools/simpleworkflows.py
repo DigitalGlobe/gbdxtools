@@ -205,8 +205,9 @@ class Workflow:
         Save output data from any task in this workflow to S3
 
         Args:
-               output: reference task output (e.g. task.inputs.output1)
-               location (optional): subfolder to save data to in S3.  Leave blank to autogenerate an output location.
+               output: Reference task output (e.g. task.inputs.output1).
+               location (optional): Subfolder within bucket/prefix/ to save data to in S3.  
+                                    Leave blank to autogenerate an output location.
 
         Returns:
             None
