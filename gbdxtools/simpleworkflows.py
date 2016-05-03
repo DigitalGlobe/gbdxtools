@@ -206,7 +206,7 @@ class Workflow:
 
         Args:
                output: Reference task output (e.g. task.inputs.output1).
-               location (optional): Subfolder within bucket/prefix/ to save data to in S3.  
+               location (optional): Subfolder within s3://bucket/prefix/ to save data to.  
                                     Leave blank to autogenerate an output location.
 
         Returns:
