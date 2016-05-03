@@ -24,7 +24,7 @@ If you have a previous version of gbdxtools installed, then::
 
     pip install --upgrade gbdxtools
 
-In order to use gbdxtools, you need GBDX credentials. Email geobigdata@digitalglobe.com to get these.
+In order to use gbdxtools, you need GBDX credentials. Email GBDX-Support@digitalglobe.com to get these.
 
 Documentation is hosted here: http://gbdxtools.readthedocs.org/en/latest/. 
 Example scripts can be found under the /examples directory of this repo.

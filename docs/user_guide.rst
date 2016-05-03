@@ -13,7 +13,7 @@ All operations on GBDX require credentials. Instantiating an Interface object au
 
 gbdxtools expects a config file to exist at ~/.gbdx-config with your GBDX credentials.  
 See formatting for this file here:  https://github.com/tdg-platform/gbdx-auth#ini-file.
-To get a GBDX username, password and API key, please email geobigdata@digitalglobe.com. 
+To get a GBDX username, password and API key, please email GBDX-Support@digitalglobe.com. 
 For future reference, remember that your credentials are listed in https://gbdx.geobigdata.io/account/user/settings/.
 
 
