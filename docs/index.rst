@@ -14,8 +14,6 @@ Installation is easy::
 
     pip install gbdxtools
 
-In order to use gbdxtools, you need GBDX credentials. Email geobigdata@digitalglobe.com to get these. 
-
 For general information on the GBDX platform and API, see `here`_.
 
 .. _`here`: http://gbdxdocs.digitalglobe.com/docs
