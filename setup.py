@@ -11,8 +11,8 @@ if sys.version_info > (3,):
 # long_description=readme,
       
 setup(name='gbdxtools',
-      version='0.2.3',
-      description='Refactored to separate ordering, workflows, s3, idaho. New idaho functionality added.',
+      version='0.2.4',
+      description='Added batch ordering. Removed Pillow from dependencies.',
       classifiers=[],
       keywords='',
       author='Kostas Stamatiou',
