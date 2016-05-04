@@ -2,16 +2,13 @@
 import os
 import tempfile
 from gbdxtools import Interface
-import json
 
 gbdx = Interface()
 
 multi_idahoID = '98ce43c5-b4a8-45aa-8597-ae7017ecefb2'
 pan_idahoID = '5e47dfec-4685-476a-94ec-8589e06df349'
 
-
-temp_path = os.environ.get('temp')
-
+temp_path = tempfile.gettempdir()
 
 result = gbdx.idaho.get_idaho_chip(bucket_name='idaho-images',
                                    idaho_id=multi_idahoID,
