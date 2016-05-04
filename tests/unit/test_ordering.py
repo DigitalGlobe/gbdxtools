@@ -18,33 +18,47 @@ from auth_mock import get_mock_gbdx_session
 # 5. replace the real gbdx token with "dummytoken" again
 # 6. Edit the cassette to remove any possibly sensitive information (s3 creds for example)
 mock_gbdx_session = get_mock_gbdx_session(token="dummytoken")
-gbdx = Interface(gbdx_connection = mock_gbdx_session)
+gbdx = Interface(gbdx_connection=mock_gbdx_session)
+
 
 def test_init():
     o = Ordering(gbdx)
     assert isinstance(o, Ordering)
 
-@vcr.use_cassette('tests/unit/cassettes/test_order_single_catid.yaml',filter_headers=['authorization'])
+
+@vcr.use_cassette('tests/unit/cassettes/test_order_single_catid.yaml', filter_headers=['authorization'])
 def test_order_single_catid():
-	o = Ordering(gbdx)
-	order_id = o.order('10400100120FEA00')
-	# assert order_id == 'c5cd8157-3001-4a03-a716-4ef673748c7a'
-	assert len(order_id) == 36
+    o = Ordering(gbdx)
+    order_id = o.order('10400100120FEA00')
+    # assert order_id == 'c5cd8157-3001-4a03-a716-4ef673748c7a'
+    assert len(order_id) == 1
+    assert len(order_id[0]) == 36
 
-@vcr.use_cassette('tests/unit/cassettes/test_order_multi_catids.yaml',filter_headers=['authorization'])
+
+@vcr.use_cassette('tests/unit/cassettes/test_order_multi_catids.yaml', filter_headers=['authorization'])
 def test_order_multi_catids():
-	o = Ordering(gbdx)
-	order_id = o.order(['10400100120FEA00','101001000DB2FB00'])
-	# assert order_id == '2b3ba38e-4d7e-4ef6-ac9d-2e2e0a8ca1e7'
-	assert len(order_id) == 36
+    o = Ordering(gbdx)
+    order_id = o.order(['10400100120FEA00', '101001000DB2FB00'])
+    # assert order_id == '2b3ba38e-4d7e-4ef6-ac9d-2e2e0a8ca1e7'
+    assert len(order_id) == 1
+    assert len(order_id[0]) == 36
 
-@vcr.use_cassette('tests/unit/cassettes/test_get_order_status.yaml',filter_headers=['authorization'])
+
+@vcr.use_cassette('tests/unit/cassettes/test_order_batching.yaml', filter_headers=['authorization'])
+def test_order_batching():
+    o = Ordering(gbdx)
+    order_id = o.order(['10400100120FEA00', '101001000DB2FB00'], batch_size=1)
+    # assert order_id == '2b3ba38e-4d7e-4ef6-ac9d-2e2e0a8ca1e7'
+    assert len(order_id) == 2
+    assert len(order_id[0]) == 36
+
+
+@vcr.use_cassette('tests/unit/cassettes/test_get_order_status.yaml', filter_headers=['authorization'])
 def test_get_order_status():
-	o = Ordering(gbdx)
-	results = o.status('c5cd8157-3001-4a03-a716-4ef673748c7a')
-	print results
-	for result in results:
-		assert 'acquisition_id' in result.keys()
-		assert 'state' in result.keys()
-		assert 'location' in result.keys()
-
+    o = Ordering(gbdx)
+    results = o.status('c5cd8157-3001-4a03-a716-4ef673748c7a')
+    print results
+    for result in results:
+        assert 'acquisition_id' in result.keys()
+        assert 'state' in result.keys()
+        assert 'location' in result.keys()
