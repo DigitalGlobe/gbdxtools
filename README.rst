@@ -16,6 +16,15 @@ gbdxtools is a package for ordering imagery and launching workflows on DigitalGl
 
 gbdxtools is MIT licenced.
 
+In order to use gbdxtools, you need GBDX credentials. Email GBDX-Support@digitalglobe.com to get these.
+
+Documentation is hosted here: http://gbdxtools.readthedocs.org/en/latest/. 
+Example scripts can be found under the /examples directory of this repo.
+
+
+Installation
+------------
+
 Installation is easy::
 
     pip install gbdxtools
@@ -24,11 +33,17 @@ If you have a previous version of gbdxtools installed, then::
 
     pip install --upgrade gbdxtools
 
-In order to use gbdxtools, you need GBDX credentials. Email GBDX-Support@digitalglobe.com to get these.
+**Troubleshooting**
 
-Documentation is hosted here: http://gbdxtools.readthedocs.org/en/latest/. 
-Example scripts can be found under the /examples directory of this repo.
+These are various tips to follow if your installation fails.
 
+Make sure you have the latest pip version::
+
+   pip install pip --upgrade
+
+Ubuntu users: if you run into trouble, make sure that the following dependencies are installed::
+
+   sudo apt-get install build-essential libssl-dev libffi-dev python-dev
 
 
 Development
