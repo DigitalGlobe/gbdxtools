@@ -41,9 +41,15 @@ Make sure you have the latest pip version::
 
    pip install pip --upgrade
 
-Ubuntu users: if you run into trouble, make sure that the following dependencies are installed::
+For Ubuntu users only:
+
+If you run into trouble with the installation of cryptography, make sure that the following dependencies are installed::
 
    sudo apt-get install build-essential libssl-dev libffi-dev python-dev
+
+If you run into trouble with the installation of Pillow, make sure that the following dependencies are installed::
+
+   sudo apt-get install libtiff5-dev libjpeg8-dev zlib1g-dev libfreetype6-dev liblcms2-dev libwebp-dev tcl8.6-dev tk8.6-dev python-tk
 
 
 Development
