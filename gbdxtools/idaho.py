@@ -6,9 +6,6 @@ Contact: kostas.stamatiou@digitalglobe.com
 GBDX IDAHO Interface.
 '''
 
-from StringIO import StringIO
-
-from PIL import Image
 from pygeoif import geometry
 from sympy.geometry import Point, Polygon
 import codecs
@@ -19,6 +16,7 @@ import requests
 from gbdxtools.catalog import Catalog
 
 class Idaho():
+
 
     def __init__(self, interface):
         ''' Construct the Idaho interface class
@@ -33,6 +31,7 @@ class Idaho():
         self.gbdx_connection = interface.gbdx_connection
         self.catalog = Catalog(interface)
         self.logger = interface.logger
+
 
     def get_images_by_catid(self, catid):
         ''' Retrieves the IDAHO image records associated with a given catid.
@@ -75,6 +74,7 @@ class Idaho():
                               % (numresults, catid))
 
             return results
+
 
     def describe_images(self, idaho_image_results):
         ''' Describe a set of IDAHO images, as returned in catalog search results.
@@ -123,48 +123,6 @@ class Idaho():
 
         return description
 
-    def get_tiles_by_zxy(self, catID, z, x, y, outputFolder):
-        '''Retrieves IDAHO tiles of a given catID for a particular z, x, and
-           y.  The z, x, and y must be known ahead of time and must intersect
-           the strip boundaries of the particular catID to return content.
-
-        Args:
-            catID (str): The source catalog ID from the platform catalog.
-
-        Returns:
-            Confirmation (str) that tile processing was done.
-        '''
-
-        self.logger.debug('Retrieving IDAHO tiles')
-
-        # get the bucket name and IDAHO ID of each tile within the catID
-        locations = self.get_tile_locations(catID)
-        access_token = self.gbdx_connection.access_token
-        for location in locations:
-            bucket_name = location[0]['imageBucketName']
-            idaho_id = location[1]
-
-            # form request
-            url = ('http://idaho.geobigdata.io/'
-                   'v1/tile/' + bucket_name + '/' + idaho_id + '/' + str(z)
-                   + '/' + str(x) + '/' + str(y) + '?token=' + access_token)
-            body = {"token": access_token}
-
-            r = self.gbdx_connection.get(url, data=json.dumps(body), stream=True)
-            r.raise_for_status()
-
-            # form output path
-            file_path = os.path.join(outputFolder, 
-                                     catID + '-'.join(map(str, [z, x, y])) + '.tif')
-
-            # save returned image
-            i = Image.open(StringIO(r.content))
-            saved = i.save(file_path)
-
-        if saved == None:
-            return 'Retrieval complete; please check output folder.'
-        else:
-            return 'There was a problem saving the file at ' + file_path + '.'
 
     def create_leaflet_viewer(self, idaho_image_results, output_filename):
         '''Create a leaflet viewer html file for viewing idaho images
@@ -227,6 +185,7 @@ class Idaho():
         else:
             print "No items returned."
 
+
     def get_idaho_chip(self, bucket_name, idaho_id, center_lat, center_lon, 
                        output_folder, pan_id=None):
         '''Downloads an orthorectified IDAHO chip.
@@ -271,6 +230,7 @@ class Idaho():
         else:
             print 'There was a problem retrieving IDAHO ID: %s' % idaho_id
             r.raise_for_status()
+
 
     def view_idaho_tiles_by_bbox(self, catId, bbox, output_filename):
         '''Retrieve and view just the IDAHO chips in a particular bounding box
@@ -359,6 +319,7 @@ class Idaho():
         with codecs.open(output_filename,'w','utf8') as outputfile:
             print "Saving %s" % output_filename
             outputfile.write(data)
+            
             
     def download_idaho_tiles_by_bbox(self, catId, bbox, resolution, outputfolder):
         '''Retrieve and view just the IDAHO chips in a particular bounding box
