@@ -42,7 +42,12 @@ class Workflow():
         url = 'https://geobigdata.io/workflows/v1/workflows'
         try:
             r = self.gbdx_connection.post(url, json=workflow)
-            r.raise_for_status()
+            try:
+                r.raise_for_status()
+            except:
+                print "GBDX API Status Code: %s" % r.status_code
+                print "GBDX API Response: %s" % r.text
+                r.raise_for_status()
             workflow_id = r.json()['id']
             return workflow_id
         except TypeError:
