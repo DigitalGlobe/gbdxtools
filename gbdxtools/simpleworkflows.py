@@ -45,7 +45,7 @@ class PortList(object):
     def __init__(self, ports):
         self._portnames = set([p['name'] for p in ports])
         for p in ports:
-            self.__setattr__(p['name'], Port(p['name'], p['type'], p.get('required'), p['description'], value=None))
+            self.__setattr__(p['name'], Port(p['name'], p['type'], p.get('required'), p.get('description'), value=None))
 
     def __repr__(self):
         return self.__str__()
