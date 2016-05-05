@@ -169,7 +169,7 @@ class Task:
             if input_port_value == True:
                 input_port_value = 'true'
 
-            if input_port_value.startswith('source:'):
+            if str(input_port_value).startswith('source:'):
                 # this port is linked from a previous output task
                 d['inputs'].append({
                                     "name": input_port_name,
