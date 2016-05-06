@@ -14,12 +14,12 @@ gbdxtools: Python tools for using GBDX
 
 gbdxtools is a package for ordering imagery and launching workflows on DigitalGlobe's GBDX platform.
 
-gbdxtools is MIT licenced.
-
 In order to use gbdxtools, you need GBDX credentials. Email GBDX-Support@digitalglobe.com to get these.
 
 Documentation is hosted here: http://gbdxtools.readthedocs.org/en/latest/. 
 Example scripts can be found under the /examples directory of this repo.
+
+See the license file for license rights and limitations (MIT).
 
 
 Installation
