@@ -1,10 +1,8 @@
-'''
-Authors: Kostas Stamatiou, Donnie Marino
+"""
+GBDX Ordering Interface.
 
 Contact: kostas.stamatiou@digitalglobe.com
-
-Abstraction for the GBDX Ordering interface.
-'''
+"""
 
 import json
 from itertools import izip

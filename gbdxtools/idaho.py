@@ -1,10 +1,8 @@
-'''
-Authors: Kostas Stamatiou, Dan Getman, Nate Ricklin, Dahl Winters, Donnie Marino
-
-Contact: kostas.stamatiou@digitalglobe.com
-
+"""
 GBDX IDAHO Interface.
-'''
+
+Contact: nate.ricklin@digitalglobe.com
+"""
 
 from pygeoif import geometry
 from sympy.geometry import Point, Polygon

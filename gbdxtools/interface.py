@@ -1,10 +1,8 @@
-'''
-Authors: Kostas Stamatiou, Dan Getman, Nate Ricklin, Dahl Winters, Donnie Marino
+"""
+Main Interface to GBDX API.
 
 Contact: kostas.stamatiou@digitalglobe.com
-
-Functions to interface with GBDX API.
-'''
+"""
 
 import json
 import os

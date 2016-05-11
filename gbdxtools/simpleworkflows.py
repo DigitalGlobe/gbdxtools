@@ -1,10 +1,8 @@
-'''
-Authors: Donnie Marino, Kostas Stamatiou, Nate Ricklin
+"""
+Classes to represent GBDX tasks and workflows.
 
 Contact: dmarino@digitalglobe.com
-
-Class to represent a workflow task.
-'''
+"""
 
 import json, uuid
 

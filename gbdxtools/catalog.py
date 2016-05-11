@@ -1,10 +1,8 @@
-'''
-Authors: Kostas Stamatiou, Dan Getman, Nate Ricklin, Dahl Winters, Donnie Marino
-
-Contact: kostas.stamatiou@digitalglobe.com
-
+"""
 GBDX Catalog Interface.
-'''
+
+Contact: nate.ricklin@digitalglobe.com
+"""
 
 import requests
 from pygeoif import geometry
