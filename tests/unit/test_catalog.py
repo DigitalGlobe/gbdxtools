@@ -159,3 +159,15 @@ def test_catalog_get_data_location_Landsat():
 	s3path = c.get_data_location(catalog_id='LC81740532014364LGN00')
 	assert s3path == 's3://landsat-pds/L8/174/053/LC81740532014364LGN00'
 
+@vcr.use_cassette('tests/unit/cassettes/test_catalog_get_data_location_nonexistent_catid.yaml',filter_headers=['authorization'])
+def test_catalog_get_data_location_nonexistent_catid():
+	c = Catalog(gbdx)
+	s3path = c.get_data_location(catalog_id='nonexistent_asdfasdfasdfdfasffds')
+	assert s3path == None
+
+@vcr.use_cassette('tests/unit/cassettes/test_catalog_get_data_location_catid_with_no_data.yaml',filter_headers=['authorization'])
+def test_catalog_get_data_location_catid_with_no_data():
+	c = Catalog(gbdx)
+	s3path = c.get_data_location(catalog_id='1010010011AD6E00')
+	assert s3path == None
+
