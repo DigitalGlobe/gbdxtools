@@ -153,8 +153,11 @@ class Catalog():
             postdata['filters'] = filters
 
         if searchAreaWkt:
+            # If we are searching over a polygon, break up the polygon into lots of small polygons of size 2-square degrees
+            # and get the results.
             results = catalog_search_aoi.search_materials_in_multiple_small_searches(postdata, self.gbdx_connection)
         else:
+            # If we are not searching over a polygon, just do the search directly.
             url = 'https://geobigdata.io/catalog/v1/search?includeRelationships=false'
             headers = {'Content-Type':'application/json'}
             r = self.gbdx_connection.post(url, headers=headers, data=json.dumps(postdata))
