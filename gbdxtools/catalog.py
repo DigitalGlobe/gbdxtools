@@ -8,6 +8,7 @@ import requests
 from pygeoif import geometry
 import json
 import datetime
+import catalog_search_aoi
 
 class Catalog():
 
@@ -150,11 +151,16 @@ class Catalog():
         if filters:
             postdata['filters'] = filters
 
-        url = 'https://geobigdata.io/catalog/v1/search?includeRelationships=false'
-        headers = {'Content-Type':'application/json'}
-        r = self.gbdx_connection.post(url, headers=headers, data=json.dumps(postdata))
-        r.raise_for_status()
-        return r.json()['results']
+        if searchAreaWkt:
+            results = catalog_search_aoi.search_materials_in_multiple_small_searches(postdata, self.gbdx_connection)
+        else:
+            url = 'https://geobigdata.io/catalog/v1/search?includeRelationships=false'
+            headers = {'Content-Type':'application/json'}
+            r = self.gbdx_connection.post(url, headers=headers, data=json.dumps(postdata))
+            r.raise_for_status()
+            results = r.json()['results']
+        
+        return results
 
     def get_most_recent_images(self, results, types=[], sensors=[], N=1):
         ''' Return the most recent image 

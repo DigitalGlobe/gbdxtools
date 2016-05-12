@@ -136,8 +136,13 @@ def test_catalog_search_types1():
 	for result in results:
 		assert result['type'] == 'LandsatAcquisition'
 
+@vcr.use_cassette('tests/unit/cassettes/test_catalog_search_huge_aoi.yaml',filter_headers=['authorization'])
+def test_catalog_search_huge_aoi():
+	"""
+	Search an AOI the size of utah, broken into multiple smaller searches
+	"""
+	c = Catalog(gbdx)
 
-
-
+	results = c.search(searchAreaWkt = "POLYGON((-113.88427734375 40.36642741921034,-110.28076171875 40.36642741921034,-110.28076171875 37.565262680889965,-113.88427734375 37.565262680889965,-113.88427734375 40.36642741921034))")
 	
-
+	assert len(results) == 2736
