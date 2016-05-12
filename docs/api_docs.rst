@@ -17,6 +17,14 @@ gbdxtools.catalog module
     :undoc-members:
     :show-inheritance:
 
+gbdxtools.catalog_search_aoi module
+--------------------------
+
+.. automodule:: gbdxtools.catalog_search_aoi
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 gbdxtools.s3 module
 --------------------------
 
