@@ -128,6 +128,12 @@ class Catalog():
         }
 
         r = self.gbdx_connection.post(url, headers=headers, data=json.dumps(traverse_body))
+
+        # Check for invalid record ID upon traverse:
+        if r.status_code == 400:
+            if 'rootRecordId does not exist' in r.json()['message']:
+                return None
+
         r.raise_for_status()
 
         results = r.json()['results']
@@ -151,9 +157,19 @@ class Catalog():
             ## Find any ObjectStoreData object, get its s3 bucket & prefix:
             object_store_records = [r for r in results if r['type'] == 'ObjectStoreData']
 
+            # If the traverse didn't find any object store data, return None
+            if not object_store_records:
+                return None
+
             # Another hacky thing: let's only grab data in a particular bucket that we know contains good full strips:
-            object_store_record = [r for r in object_store_records 
-                                        if r['properties']['bucketName'] == 'receiving-dgcs-tdgplatform-com'][0]
+            object_store_records = [r for r in object_store_records 
+                                        if r['properties']['bucketName'] == 'receiving-dgcs-tdgplatform-com']
+
+            # If we didn't find any records with the correct bucket, return None
+            if not object_store_records:
+                return None
+
+            object_store_record = object_store_records[0]
 
             bucket = object_store_record['properties']['bucketName']
             prefix = object_store_record['properties']['objectIdentifier']
