@@ -88,7 +88,6 @@ def search_materials_in_multiple_small_searches(search_request, gbdx_connection)
     # print searchAreaWkt
 
     records = []
-    exit = False
     # Loop pairwise
     row = 0
     col = 0
