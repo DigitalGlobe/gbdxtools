@@ -1,5 +1,8 @@
 """
-GBDX Catalog Search Functions.
+GBDX Catalog Search Helper Functions.
+
+This set of functions is used for breaking up a large AOI into smaller AOIs to search, because the catalog API 
+can only handle 2 square degrees at a time.
 
 """
 
