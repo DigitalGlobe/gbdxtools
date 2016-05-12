@@ -46,5 +46,98 @@ def test_catalog_search_address():
 	results = c.search_address('Boulder, CO')
 
 	assert results['stats']['totalRecords'] == 310
+
+@vcr.use_cassette('tests/unit/cassettes/test_catalog_search_wkt_only.yaml',filter_headers=['authorization'])
+def test_catalog_search_wkt_only():
+	c = Catalog(gbdx)
+	results = c.search(searchAreaWkt="POLYGON ((30.1 9.9, 30.1 10.1, 29.9 10.1, 29.9 9.9, 30.1 9.9))")
+	assert len(results) == 395
+
+@vcr.use_cassette('tests/unit/cassettes/test_catalog_search_wkt_and_startDate.yaml',filter_headers=['authorization'])
+def test_catalog_search_wkt_and_startDate():
+	c = Catalog(gbdx)
+	results = c.search(searchAreaWkt="POLYGON ((30.1 9.9, 30.1 10.1, 29.9 10.1, 29.9 9.9, 30.1 9.9))",
+		               startDate='2012-01-01T00:00:00.000Z')
+	assert len(results) == 317
+
+@vcr.use_cassette('tests/unit/cassettes/test_catalog_search_wkt_and_endDate.yaml',filter_headers=['authorization'])
+def test_catalog_search_wkt_and_endDate():
+	c = Catalog(gbdx)
+	results = c.search(searchAreaWkt="POLYGON ((30.1 9.9, 30.1 10.1, 29.9 10.1, 29.9 9.9, 30.1 9.9))",
+		               endDate='2012-01-01T00:00:00.000Z')
+	assert len(results) == 78
+
+@vcr.use_cassette('tests/unit/cassettes/test_catalog_search_startDate_and_endDate_only_more_than_one_week_apart.yaml',filter_headers=['authorization'])
+def test_catalog_search_startDate_and_endDate_only_more_than_one_week_apart():
+	c = Catalog(gbdx)
+
+	try:
+		results = c.search(startDate='2004-01-01T00:00:00.000Z',
+					   	endDate='2012-01-01T00:00:00.000Z')
+	except Exception as e:
+		pass
+	else:
+		raise Exception('failed test')
+
+
+@vcr.use_cassette('tests/unit/cassettes/test_catalog_search_startDate_and_endDate_only_less_than_one_week_apart.yaml',filter_headers=['authorization'])
+def test_catalog_search_startDate_and_endDate_only_less_than_one_week_apart():
+	c = Catalog(gbdx)
+
+	results = c.search(startDate='2008-01-01T00:00:00.000Z',
+					   	endDate='2008-01-03T00:00:00.000Z')
+
+	assert len(results) == 759
+
+
+@vcr.use_cassette('tests/unit/cassettes/test_catalog_search_filters1.yaml',filter_headers=['authorization'])
+def test_catalog_search_filters1():
+	c = Catalog(gbdx)
+
+	filters = [  
+                    "(sensorPlatformName = 'WORLDVIEW01' OR sensorPlatformName ='QUICKBIRD02')",
+                    "cloudCover < 10",
+                    "offNadirAngle < 10"
+                ]
+
+	results = c.search(startDate='2008-01-01T00:00:00.000Z',
+					   	endDate='2012-01-03T00:00:00.000Z',
+					   	filters=filters,
+					   	searchAreaWkt="POLYGON ((30.1 9.9, 30.1 10.1, 29.9 10.1, 29.9 9.9, 30.1 9.9))")
+
+	for result in results:
+		assert result['properties']['sensorPlatformName'] in ['WORLDVIEW01','QUICKBIRD02']
+		assert float(result['properties']['cloudCover']) < 10
+		assert float(result['properties']['offNadirAngle']) < 10
+
+@vcr.use_cassette('tests/unit/cassettes/test_catalog_search_filters2.yaml',filter_headers=['authorization'])
+def test_catalog_search_filters2():
+	c = Catalog(gbdx)
+
+	filters = [  
+                    "sensorPlatformName = 'WORLDVIEW03'"
+                ]
+
+	results = c.search(filters=filters,
+					   searchAreaWkt="POLYGON ((30.1 9.9, 30.1 10.1, 29.9 10.1, 29.9 9.9, 30.1 9.9))")
+
+	for result in results:
+		assert result['properties']['sensorPlatformName'] in ['WORLDVIEW03']
+
+@vcr.use_cassette('tests/unit/cassettes/test_catalog_search_types1.yaml',filter_headers=['authorization'])
+def test_catalog_search_types1():
+	c = Catalog(gbdx)
+
+	types = [ "LandsatAcquisition" ]
+
+	results = c.search(types=types,
+					   searchAreaWkt="POLYGON ((30.1 9.9, 30.1 10.1, 29.9 10.1, 29.9 9.9, 30.1 9.9))")
+
+	for result in results:
+		assert result['type'] == 'LandsatAcquisition'
+
+
+
+
 	
 
