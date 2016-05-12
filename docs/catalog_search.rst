@@ -49,7 +49,7 @@ Search the catalog by AOI, as defined by a WKT polygon.  All imagery that inters
 .. code-block:: pycon
 
 	wkt_string = "POLYGON((-113.88427734375 40.36642741921034,-110.28076171875 40.36642741921034,-110.28076171875 37.565262680889965,-113.88427734375 37.565262680889965,-113.88427734375 40.36642741921034))"
-    results = gbdx.catalog.search(searchAreaWkt=wkt_string)
+	results = gbdx.catalog.search(searchAreaWkt=wkt_string)
 
 
 Search by Dates
@@ -61,7 +61,7 @@ date searches of of one week intervals at a time.
 .. code-block:: pycon
 
 	wkt_string = "POLYGON((-113.88427734375 40.36642741921034,-110.28076171875 40.36642741921034,-110.28076171875 37.565262680889965,-113.88427734375 37.565262680889965,-113.88427734375 40.36642741921034))"
-    results = gbdx.catalog.search(searchAreaWkt=wkt_string,
+	results = gbdx.catalog.search(searchAreaWkt=wkt_string,
                                   startDate="2004-01-01T00:00:00.000Z",
                                   endDate="2012-01-01T00:00:00.000Z")
 
@@ -76,7 +76,7 @@ images:
 
 	filters = ["sensorPlatformName = 'QUICKBIRD02'"]
 
-    results = gbdx.catalog.search(searchAreaWkt=wkt_string,
+	results = gbdx.catalog.search(searchAreaWkt=wkt_string,
                                   startDate="2004-01-01T00:00:00.000Z",
                                   endDate="2012-01-01T00:00:00.000Z",
                                   filters=filters)
@@ -102,7 +102,7 @@ To search only Landsat imagery for example:
 
 	types = [ "LandsatAcquisition" ]
 
-    results = gbdx.catalog.search(searchAreaWkt=wkt_string,
+	results = gbdx.catalog.search(searchAreaWkt=wkt_string,
                                   startDate="2004-01-01T00:00:00.000Z",
                                   endDate="2012-01-01T00:00:00.000Z",
                                   types=types)
