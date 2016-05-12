@@ -108,3 +108,23 @@ To search only Landsat imagery for example:
                                   types=types)
 
 
+Find Data Location given a Catalog ID
+-----------------------
+Once you've found a catalog ID of an image you want, you can get the data location for further processing like this:
+
+.. code-block:: pycon
+
+	s3path = gbdx.catalog.get_data_location(catalog_id='1030010045539700')
+	s3path
+	>>> 's3://receiving-dgcs-tdgplatform-com/055158926010_01_003/055158926010_01'
+
+This also works with Landsat data:
+
+.. code-block:: pycon
+
+	s3path = gbdx.catalog.get_data_location(catalog_id='LC81740532014364LGN00')
+	s3path
+	>>> 's3://landsat-pds/L8/174/053/LC81740532014364LGN00'
+
+
+
