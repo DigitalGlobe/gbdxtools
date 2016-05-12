@@ -36,10 +36,75 @@ The results will be a list of items, each of which contains quite a lot of metad
 		}
 	}
 
+You could get a list of catalog IDs by doing this, for example:
+
+.. code-block:: pycon
+	
+	catalog_ids = [r['identifier'] for r in results]
+
 Search by AOI
 -----------------------
 Search the catalog by AOI, as defined by a WKT polygon.  All imagery that intersects the polygon will be returned.
 
 .. code-block:: pycon
 
-    results = gbdx.catalog.search(searchAreaWkt = "POLYGON((-113.88427734375 40.36642741921034,-110.28076171875 40.36642741921034,-110.28076171875 37.565262680889965,-113.88427734375 37.565262680889965,-113.88427734375 40.36642741921034))")
+	wkt_string = "POLYGON((-113.88427734375 40.36642741921034,-110.28076171875 40.36642741921034,-110.28076171875 37.565262680889965,-113.88427734375 37.565262680889965,-113.88427734375 40.36642741921034))"
+    results = gbdx.catalog.search(searchAreaWkt=wkt_string)
+
+
+Search by Dates
+-----------------------
+The catalog can also be searched by date.  Note that if no search-polygon is supplied, the catalog only supports 
+date searches of of one week intervals at a time.
+
+
+.. code-block:: pycon
+
+	wkt_string = "POLYGON((-113.88427734375 40.36642741921034,-110.28076171875 40.36642741921034,-110.28076171875 37.565262680889965,-113.88427734375 37.565262680889965,-113.88427734375 40.36642741921034))"
+    results = gbdx.catalog.search(searchAreaWkt=wkt_string,
+                                  startDate="2004-01-01T00:00:00.000Z",
+                                  endDate="2012-01-01T00:00:00.000Z")
+
+Search with Filters
+-----------------------
+You can add filters for any properties in the catalog items you are searching for.  For example, here's how you return only Quickbird 2 
+images:
+
+.. code-block:: pycon
+
+	wkt_string = "POLYGON((-113.88427734375 40.36642741921034,-110.28076171875 40.36642741921034,-110.28076171875 37.565262680889965,-113.88427734375 37.565262680889965,-113.88427734375 40.36642741921034))"
+
+	filters = ["sensorPlatformName = 'QUICKBIRD02'"]
+
+    results = gbdx.catalog.search(searchAreaWkt=wkt_string,
+                                  startDate="2004-01-01T00:00:00.000Z",
+                                  endDate="2012-01-01T00:00:00.000Z",
+                                  filters=filters)
+
+Here's a more complicated set of filters that can be applied:
+
+.. code-block:: pycon
+
+	filters = [  
+                    "(sensorPlatformName = 'WORLDVIEW01' OR sensorPlatformName ='QUICKBIRD02')",
+                    "cloudCover < 10",
+                    "offNadirAngle > 10"
+               ]
+
+Search by Types
+-----------------------
+You can search by type as well.  The usual type for Digital Globe Imagery is "DigitalGlobeAcquisition".  
+To search only Landsat imagery for example:
+
+.. code-block:: pycon
+
+	wkt_string = "POLYGON((-113.88427734375 40.36642741921034,-110.28076171875 40.36642741921034,-110.28076171875 37.565262680889965,-113.88427734375 37.565262680889965,-113.88427734375 40.36642741921034))"
+
+	types = [ "LandsatAcquisition" ]
+
+    results = gbdx.catalog.search(searchAreaWkt=wkt_string,
+                                  startDate="2004-01-01T00:00:00.000Z",
+                                  endDate="2012-01-01T00:00:00.000Z",
+                                  types=types)
+
+
