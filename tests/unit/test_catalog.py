@@ -146,3 +146,16 @@ def test_catalog_search_huge_aoi():
 	results = c.search(searchAreaWkt = "POLYGON((-113.88427734375 40.36642741921034,-110.28076171875 40.36642741921034,-110.28076171875 37.565262680889965,-113.88427734375 37.565262680889965,-113.88427734375 40.36642741921034))")
 	
 	assert len(results) == 2736
+
+@vcr.use_cassette('tests/unit/cassettes/test_catalog_get_data_location_DG.yaml',filter_headers=['authorization'])
+def test_catalog_get_data_location_DG():
+	c = Catalog(gbdx)
+	s3path = c.get_data_location(catalog_id='1030010045539700')
+	assert s3path == 's3://receiving-dgcs-tdgplatform-com/055158926010_01_003/055158926010_01'
+
+@vcr.use_cassette('tests/unit/cassettes/test_catalog_get_data_location_Landsat.yaml',filter_headers=['authorization'])
+def test_catalog_get_data_location_Landsat():
+	c = Catalog(gbdx)
+	s3path = c.get_data_location(catalog_id='LC81740532014364LGN00')
+	assert s3path == 's3://landsat-pds/L8/174/053/LC81740532014364LGN00'
+
