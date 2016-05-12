@@ -23,4 +23,5 @@ For general information on the GBDX platform and API, see `here`_.
 
    user_guide
    running_workflows
+   catalog_search
    api_docs
