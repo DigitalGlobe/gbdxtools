@@ -131,6 +131,14 @@ def test_simpleworkflow_get_outputs_list():
         assert output.keys()[0].startswith('source:')
         assert output.values()[0].startswith('s3://')
 
+@vcr.use_cassette('tests/unit/cassettes/test_task_name_input.yaml',record_mode='new_episodes',filter_headers=['authorization'])
+def test_task_name_input():
+    """
+    Having an input port named "task_name" currently doesn't work upon Task() instantiation.  Fix this bug.
+    """
+
+    # this statement will raise an Exception if the bug is in place:
+    task = gbdx.Task("ENVI_SpectralIndex", task_name="dummy")
 
 
 

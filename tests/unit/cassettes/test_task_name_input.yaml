@@ -1,0 +1,34 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      User-Agent: [python-requests/2.9.1]
+    method: GET
+    uri: https://geobigdata.io/workflows/v1/tasks/ENVI_SpectralIndex
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA7VU72vbMBD9Vw5/brOyL4N+29oyukFS0nQMxjCKfY6PyZIrnZqGkv99d3LD0pj+
+        oLAvxpLeu3t6d6eHovKODTkM5xirQD37EItT+PVQ8KZH+SvOZ2ffL+bFERR98D0GJlTEQ0GdWWUE
+        16v+A7o7KtnEP2VITuKdWsMYudhufwu1foxO3ilj0VIEBUMVUHFgIPZYcTAWyNV4D8FExgBN8B14
+        h9AHPK6xEan1AXQC13trqjRaQKh8tyRnNGUE30BMoTEVQsDGCtw4+TcMvPbgA3ReKGtzhxbdiltR
+        18phjif6hCTXoTthLJOrM1dCNqI9BczhyYlcufBEnSLXJ77ygUeuBrxNFLCWFYeEgt35HDmQWyn7
+        wKyvX85/wnzgdeh4AlPT5fzc4uAie1gi4D1WiSW2xHACybXRiuTF9giepG+Mje/Mf+a7TgqG0g1i
+        Tg2WIqseWXfEutOQFWkSWUQxuqhFmMBNlM1ceq8IrW92KsPjvmzdKJUfR7rfaps2BTUb7awMkRpK
+        D0W5gC7UuudbSgWavrcb/VHoIHPoyVzhndAMf01jLduV9MDmRZn7Hb9uqWo1+QpdNvm5ATkQIyrL
+        4WCk6c31Hhm3Jm6zC02ydnN8m4ylhsS03siBcUO5VQQ0Mkqzm8XVzaKcf75eXMyf6POJ/wksU6By
+        RyzyKzGcvzY3hxd5yd1x785yDrC+yk9DVpxnqEM2UBv5xCTem/g4TwqyfpXvOQiEb9ez6WjIlF8q
+        f+T8u7rhv3s/WH74psertLRU7ammDoUrG58+npxs9yJeTH9clrun93KYg7/zkuzhUQYAAA==
+    headers:
+      connection: [keep-alive]
+      content-encoding: [gzip]
+      content-length: ['622']
+      content-type: [application/json]
+      date: ['Fri, 13 May 2016 16:08:24 GMT']
+      server: [nginx/1.8.0]
+      via: [kong/0.5.2]
+    status: {code: 200, message: OK}
+version: 1
