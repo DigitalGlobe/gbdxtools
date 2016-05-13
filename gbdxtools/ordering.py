@@ -46,6 +46,9 @@ class Ordering:
         url = 'https://geobigdata.io/orders/v2/order/'
 
         batch_size = min(100, batch_size)
+        
+        if not isinstance(image_catalog_ids, list):
+            image_catalog_ids = [image_catalog_ids]
 
         sanitized_ids = [id_.strip() for id_ in set(image_catalog_ids) if id_]
 
