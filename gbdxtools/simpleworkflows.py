@@ -83,24 +83,25 @@ class Outputs(PortList):
 
 
 class Task:
-    def __init__(self, interface, task_type, **kwargs):
+    def __init__(self, __interface, __task_type, **kwargs):
         '''
         Construct an instance of GBDX Task
 
         Args:
-            interface: gbdx interface object
-            task_type: name of the task
+            __interface: gbdx __interface object
+            __task_type: name of the task
+            **kwargs: key=value pairs for inputs to set on the task
 
         Returns:
             An instance of Task.
             
         '''
 
-        self.name = task_type + '_' + str(uuid.uuid4())
+        self.name = __task_type + '_' + str(uuid.uuid4())
 
-        self.interface = interface
-        self.type = task_type
-        self.definition = self.interface.workflow.describe_task(task_type)
+        self.__interface = __interface
+        self.type = __task_type
+        self.definition = self.__interface.workflow.describe_task(__task_type)
         self.domain = self.definition['containerDescriptors'][0]['properties'].get('domain','default')
 
         self.inputs = Inputs(self.input_ports)
@@ -189,8 +190,8 @@ class Task:
 
 
 class Workflow:
-    def __init__(self, interface, tasks, **kwargs):
-        self.interface = interface
+    def __init__(self, __interface, tasks, **kwargs):
+        self.__interface = __interface
         self.name = kwargs.get('name', str(uuid.uuid4()) )
         self.id = None
 
@@ -218,7 +219,7 @@ class Workflow:
             input_value = output
 
         # determine the location to save data to:
-        s3info = self.interface.s3.info
+        s3info = self.__interface.s3.info
         bucket = s3info['bucket']
         prefix = s3info['prefix']
         if location:
@@ -227,7 +228,7 @@ class Workflow:
         else:
             s3location = "s3://" + bucket + '/' + prefix + '/' + str(uuid.uuid4())
 
-        s3task = self.interface.Task("StageDataToS3", data=input_value, destination=s3location)
+        s3task = self.__interface.Task("StageDataToS3", data=input_value, destination=s3location)
         self.tasks.append(s3task)
 
 
@@ -271,7 +272,7 @@ class Workflow:
         for task in self.tasks:
             self.definition['tasks'].append( task.generate_task_workflow_json() )
 
-        self.id = self.interface.workflow.launch(self.definition)
+        self.id = self.__interface.workflow.launch(self.definition)
         return self.id
 
     def cancel(self):
@@ -287,13 +288,13 @@ class Workflow:
         if not self.id:
             raise WorkflowError('Workflow is not running.  Cannot cancel.')
 
-        self.interface.workflow.cancel(self.id)
+        self.__interface.workflow.cancel(self.id)
 
     @property
     def status(self):
         if not self.id:
             raise WorkflowError('Workflow is not running.  Cannot check status.')
-        return self.interface.workflow.status(self.id)
+        return self.__interface.workflow.status(self.id)
 
     @status.setter
     def status(self, value):

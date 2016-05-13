@@ -59,8 +59,8 @@ class Interface():
         # create and store an instance of the Idaho Client
         self.idaho = Idaho(self)
 
-    def Task(self, task_name, **kwargs):
-        return gbdxtools.simpleworkflows.Task(self, task_name, **kwargs)
+    def Task(self, __task_name, **kwargs):
+        return gbdxtools.simpleworkflows.Task(self, __task_name, **kwargs)
 
     def Workflow(self, tasks, **kwargs):
         return gbdxtools.simpleworkflows.Workflow(self, tasks, **kwargs)
