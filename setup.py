@@ -11,8 +11,8 @@ if sys.version_info > (3,):
 # long_description=readme,
       
 setup(name='gbdxtools',
-      version='0.2.4',
-      description='Added batch ordering. Removed Pillow from dependencies.',
+      version='0.2.5',
+      description='Additional s3 functionality.',
       classifiers=[],
       keywords='',
       author='Kostas Stamatiou',
