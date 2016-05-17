@@ -36,11 +36,7 @@ class Ordering:
                                   than 100 it will be truncated.
 
         Returns:
-            order_ids (list or string): If there is only one batch, then the 
-                                        function returns a string with the 
-                                        order id. If there are multiple batches,
-                                        the function returns a list of order ids,
-                                        one for each batch.
+            order_ids (list): Returns a list of order ids, one for each batch.
         '''
         def _order_single_batch(url_, ids, results_list):
             r = self.gbdx_connection.post(url_, data=json.dumps(ids))
@@ -70,11 +66,8 @@ class Ordering:
         if remain_count > 0:
             _order_single_batch(url, sanitized_ids[-remain_count:], res)
 
-        if len(res) == 1:
-            return res[0]
-        elif len(res) > 1:
-            return res
-                
+        return res
+        
 
     def status(self, order_id):
         '''Checks imagery order status. There can be more than one image per
