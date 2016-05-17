@@ -25,13 +25,15 @@ See the license file for license rights and limitations (MIT).
 Installation
 ------------
 
-Installation is easy::
+To install the latest stable version on pypi::
 
     pip install gbdxtools
 
-If you have a previous version of gbdxtools installed, then::
+Optional: you can install the current version of the master branch with::
 
-    pip install --upgrade gbdxtools
+    pip install git+https://github.com/digitalglobe/gbdxtools
+
+Keep in mind that the master branch is constantly under development. 
 
 **Troubleshooting**
 
