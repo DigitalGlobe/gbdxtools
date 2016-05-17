@@ -51,7 +51,7 @@ def test_order_batching():
 @vcr.use_cassette('tests/unit/cassettes/test_get_order_status.yaml', filter_headers=['authorization'])
 def test_get_order_status():
     o = Ordering(gbdx)
-    results = o.status('89ea0330-6846-41d3-b7ce-bb9ebaa05f65')
+    results = o.status('c5cd8157-3001-4a03-a716-4ef673748c7a')
     print results
     for result in results:
         assert 'acquisition_id' in result.keys()
