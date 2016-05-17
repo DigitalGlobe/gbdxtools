@@ -1,7 +1,4 @@
 '''
-Authors: Donnie Marino, Kostas Stamatiou
-Contact: dmarino@digitalglobe.com
-
 Unit tests for the gbdxtools.Ordering class
 '''
 
@@ -31,17 +28,15 @@ def test_order_single_catid():
     o = Ordering(gbdx)
     order_id = o.order('10400100120FEA00')
     # assert order_id == 'c5cd8157-3001-4a03-a716-4ef673748c7a'
-    assert len(order_id) == 1
-    assert len(order_id[0]) == 36
-
+    assert len(order_id) == 36
+    
 
 @vcr.use_cassette('tests/unit/cassettes/test_order_multi_catids.yaml', filter_headers=['authorization'])
 def test_order_multi_catids():
     o = Ordering(gbdx)
     order_id = o.order(['10400100120FEA00', '101001000DB2FB00'])
     # assert order_id == '2b3ba38e-4d7e-4ef6-ac9d-2e2e0a8ca1e7'
-    assert len(order_id) == 1
-    assert len(order_id[0]) == 36
+    assert len(order_id) == 36
 
 
 @vcr.use_cassette('tests/unit/cassettes/test_order_batching.yaml', filter_headers=['authorization'])
@@ -56,7 +51,7 @@ def test_order_batching():
 @vcr.use_cassette('tests/unit/cassettes/test_get_order_status.yaml', filter_headers=['authorization'])
 def test_get_order_status():
     o = Ordering(gbdx)
-    results = o.status('c5cd8157-3001-4a03-a716-4ef673748c7a')
+    results = o.status('89ea0330-6846-41d3-b7ce-bb9ebaa05f65')
     print results
     for result in results:
         assert 'acquisition_id' in result.keys()

@@ -13,12 +13,11 @@ class Ordering:
     def __init__(self, interface):
         '''Instantiate the GBDX Ordering Interface
 
-        Args:
-            interface (Interface): A reference to the GBDX interface.
+           Args:
+               interface (Interface): A reference to the GBDX interface.
 
-        Returns:
-            An instance of the Ordering interface.
-
+           Returns:
+               An instance of the Ordering interface.
         '''
         self.gbdx_connection = interface.gbdx_connection
         self.logger = interface.logger
@@ -27,16 +26,18 @@ class Ordering:
     def order(self, image_catalog_ids, batch_size=100):
         '''Orders images from GBDX.
 
-        Args:
-            image_catalog_ids (list or string): A list of image catalog ids
-            or a single image catalog id.
-            batch_size (integer): The image_catalog_ids will be split into 
-                                  batches of batch_size. The ordering API max 
-                                  batch size is 100, if batch_size is greater 
-                                  than 100 it will be truncated.
+           Args:
+               image_catalog_ids (str or list): A single catalog id or a list of 
+                                                catalog ids.
+               batch_size (int): The image_catalog_ids will be split into 
+                                 batches of batch_size. The ordering API max 
+                                 batch size is 100, if batch_size is greater 
+                                 than 100 it will be truncated.
 
-        Returns:
-            order_ids (list): Returns a list of order ids, one for each batch.
+           Returns:
+               order_ids (str or list): If one batch, returns a string. If more
+                                        than one batch, returns a list of order ids, 
+                                        one for each batch.
         '''
         def _order_single_batch(url_, ids, results_list):
             r = self.gbdx_connection.post(url_, data=json.dumps(ids))
@@ -66,8 +67,11 @@ class Ordering:
         if remain_count > 0:
             _order_single_batch(url, sanitized_ids[-remain_count:], res)
 
-        return res
-        
+        if len(res) == 1:
+            return res[0]
+        elif len(res)>1:
+            return res
+
 
     def status(self, order_id):
         '''Checks imagery order status. There can be more than one image per
@@ -75,7 +79,7 @@ class Ordering:
            within the order.
 
            Args:
-               order_id (str): The ID of the order placed.
+               order_id (str): The id of the order placed.
 
            Returns:
                List of dictionaries, one per image. Each dictionary consists
