@@ -51,9 +51,9 @@ If you run into trouble with the installation of cryptography, make sure that th
 Development
 -----------
 
-Clone the repo dev branch::
+Clone the repo::
 
-   git clone -b dev https://github.com/digitalglobe/gbdxtools
+   git clone https://github.com/digitalglobe/gbdxtools.git
    
    cd gbdxtools
 
