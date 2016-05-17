@@ -1,41 +1,42 @@
 # Order a list of cat ids, launch AOP workflow for each one and download locally.
 
 import json
+import time
 
 from gbdxtools import Interface
 
 start_time = time.time()
 
-catalog_ids = ['1030010045539700', '10200100414F0100', '10200100417A8C00']
+catalog_ids = ['1030010034AFCE00',
+               '103001003696B200',
+               '105041001126A900',
+               '1050410011360600',
+               '1050410011360700']
 
 print 'Order imagery from GBDX'
 gbdx = Interface()
-order_ids = [gbdx.ordering.order(catalog_id) for catalog_id in catalog_ids]
+order_id = gbdx.ordering.order(catalog_ids) 
 
 # check order status
-pending_order_ids = order_ids
-locations = []
-while len(pending_order_ids)>0:
-    print 'Pending orders', pending_order_ids
-    for order_id in pending_order_ids:
-        results = gbdx.ordering.status(order_id)
-        print results
-        location, status = results[0]['location'], results[0]['state']
-        if status == 'delivered':
-            pending_order_ids.remove(order_id)
-            locations.append(location)
-    time.sleep(300)   # check every five minutes
+while True:
+    states, locations = zip(*[(order['state'],order['location']) 
+                            for order in gbdx.ordering.status(order_id)])
+    if any(state != 'delivered' for state in states):
+        time.sleep(300)
+    else:
+        break    
 
 print 'Elapsed time: {} min'.format(round((time.time() - start_time)/60))
 
 # where in bucket/prefix to store my AOP'ed imagery
-s3_location = 'my_directory'
+s3_location = 'kostas/yunnanearthquake2014'
 
 # launch AOP workflows
 print 'Launch AOP workflows'
 workflow_ids = [gbdx.workflow.launch_aop_to_s3(location,
                                                s3_location,
-                                               enable_acomp='true') for location in locations]
+                                               enable_acomp='true',
+                                               enable_pansharpen='true') for location in locations]
 
 # check workflow status
 pending_workflow_ids = workflow_ids
