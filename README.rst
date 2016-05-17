@@ -92,6 +92,8 @@ Note: you may have to issue the following in your virtualenv for the tests to fi
 
     pip install -e .
 
+**Create a new version**
+
 To create a new version::
 
     bumpversion ( major | minor | patch )
@@ -101,7 +103,7 @@ Don't forget to upload to pypi.
 
 **Contributing**
 
-Please contribute!  Please make pull requests directly to master.  Before making a pull request, please:
+Please contribute! Please make pull requests directly to master. Before making a pull request, please:
 
 * Ensure that all new functionality is covered by unit tests.
 * Verify that all unit tests are passing.
