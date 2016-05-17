@@ -154,7 +154,7 @@ class Idaho():
     
                     bandstr = {
                         'RGBN': '0,1,2',
-                        'WORLDVIEW_8_BAND': '4,3,2',
+                        'WORLDVIEW_8_BAND': '5,3,2',
                         'PAN': '0'
                     }.get(partname, '0,1,2')
     
