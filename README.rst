@@ -47,7 +47,8 @@ These are various tips to follow if your installation fails.
 
    sudo apt-get install build-essential libssl-dev libffi-dev python-dev
 
-3) Try creating a conda environment and installing gbdxtools within this environment.
+3) Try creating a conda environment and installing gbdxtools within this environment. 
+
 For Ubuntu, install conda with the following commands (choose default options at prompt)::
 
    wget https://repo.continuum.io/miniconda/Miniconda2-latest-Linux-x86_64.sh
