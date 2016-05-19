@@ -35,19 +35,26 @@ Optional: you can install the current version of the master branch with::
 
 Keep in mind that the master branch is constantly under development. 
 
-**Troubleshooting**
+Troubleshooting
+~~~~~~~~~~~~~~~
 
 These are various tips to follow if your installation fails.
 
-- Make sure you have the latest pip version::
+** pip **
+
+Make sure you have the latest pip version::
 
    pip install pip --upgrade
 
-- For Ubuntu users, if you run into trouble with the installation of cryptography, make sure that the following dependencies are installed::
+** Ubuntu users **
+
+If you run into trouble with the installation of cryptography, make sure that the following dependencies are installed::
 
    sudo apt-get install build-essential libssl-dev libffi-dev python-dev
 
-- Try creating a conda environment and installing gbdxtools within this environment. 
+** Conda **
+
+If your installation keeps failing, try creating a conda environment and installing gbdxtools within this environment. 
 
 For Ubuntu, install conda with the following commands (choose default options at prompt)::
 
