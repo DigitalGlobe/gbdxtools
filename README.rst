@@ -40,19 +40,19 @@ Troubleshooting
 
 These are various tips to follow if your installation fails.
 
-** pip **
+**pip**
 
 Make sure you have the latest pip version::
 
    pip install pip --upgrade
 
-** Ubuntu users **
+**Ubuntu users**
 
 If you run into trouble with the installation of cryptography, make sure that the following dependencies are installed::
 
    sudo apt-get install build-essential libssl-dev libffi-dev python-dev
 
-** Conda **
+**Conda**
 
 If your installation keeps failing, try creating a conda environment and installing gbdxtools within this environment. 
 
