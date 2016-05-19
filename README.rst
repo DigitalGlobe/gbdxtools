@@ -49,6 +49,33 @@ If you run into trouble with the installation of cryptography, make sure that th
 
    sudo apt-get install build-essential libssl-dev libffi-dev python-dev
 
+If your installation keeps failing, try creating a conda environment and installing gbdxtools within this environment.
+For Ubuntu, install conda with the following commands (choose default options at prompt)::
+
+   wget https://repo.continuum.io/miniconda/Miniconda2-latest-Linux-x86_64.sh
+   bash Miniconda2-latest-Linux-x86_64.sh
+
+For OS X, install conda with the following commands (choose default options at prompt)::
+
+   wget https://repo.continuum.io/miniconda/Miniconda2-latest-MacOSX-x86_64.sh
+   bash Miniconda2-latest-MacOSX-x86_64.sh
+
+Make sure that conda is in your path. Then create a conda environment::
+
+   conda create -n env python ipython   
+   
+Activate the environment::
+
+   source activate env
+
+Upgrade pip (if required)::
+
+   pip install pip --upgrade
+
+Install gbdxtools::
+
+   pip install gbdxtools
+
 
 Development
 -----------
