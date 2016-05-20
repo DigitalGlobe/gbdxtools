@@ -52,9 +52,9 @@ If you run into trouble with the installation of cryptography, make sure that th
 
    sudo apt-get install build-essential libssl-dev libffi-dev python-dev
 
-**Conda**
+**conda**
 
-If your installation keeps failing, try creating a conda environment and installing gbdxtools within this environment. 
+If your installation with pip keeps failing, try creating a conda environment and installing gbdxtools within this environment. 
 
 For Ubuntu, install conda with the following commands (choose default options at prompt)::
 
