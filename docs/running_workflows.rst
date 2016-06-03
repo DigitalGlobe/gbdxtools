@@ -8,7 +8,7 @@ Here's a quick workflow that starts with a Worldview 2 image over San Francisco,
 DigitalGlobe's "Fast Ortho" and "Acomp" tasks, then saves to a user-specified location 
 under s3://bucket/prefix.
 
-.. code-block:: pycon
+.. code-block:: python
 
    data = "s3://receiving-dgcs-tdgplatform-com/054813633050_01_003" # WV02 Image over San Francisco
    aoptask = gbdx.Task("AOP_Strip_Processor", data=data, enable_acomp=True, enable_pansharpen=True)
@@ -23,12 +23,28 @@ At this point the workflow is launched, and you can get status as follows:
    >>> workflow.status
    >>> {u'state': u'pending', u'event': u'submitted'}
 
+You can also get workflow events:
+
+.. code-block:: pycon
+
+   >>> for event in workflow.events:
+   >>>     print event['task'], event['event']
+   
+   >>> gdal-task submitted
+   >>> Stage-data submitted
+   >>> gdal-task scheduled
+   >>> gdal-task started
+   >>> gdal-task succeeded
+   >>> Stage-data scheduled
+   >>> Stage-data started
+   >>> Stage-data succeeded
+
 Tasks
 -----------------------
 
 A task is instantiated as follows:
 
-.. code-block:: pycon
+.. code-block:: python
 
     task = gbdx.Task("Task_Name")
 
@@ -40,7 +56,7 @@ Setting Task Inputs
 
 The following are all equivalent ways of setting the input values on a task:
 
-.. code-block:: pycon
+.. code-block:: python
 
     # upon task instantiation:
     task = gbdx.Task("Task_Name", input1="value1", input2="value2")
@@ -54,7 +70,7 @@ The following are all equivalent ways of setting the input values on a task:
 
 You can interactively determine the inputs of a task by typing:
 
-.. code-block:: pycon
+.. code-block:: python
 
     >>> task = gbdx.Task("AOP_Strip_Processor")
     >>> task.inputs
@@ -66,7 +82,7 @@ You can interactively determine the inputs of a task by typing:
 
 You can also interactively get more info on a particular input:
 
-.. code-block:: pycon
+.. code-block:: python
 
     >>> task.inputs.enable_acomp
     Port enable_acomp:
@@ -80,7 +96,7 @@ Task Outputs
 
 Task outputs can be interactively explored the same way as task inputs:
 
-.. code-block:: pycon
+.. code-block:: python
 
     >>> task = gbdx.Task("AOP_Strip_Processor")
     >>> task.outputs
@@ -99,7 +115,7 @@ Linking Outputs from one task into Inputs of Another Task
 The whole point of the workflow system is to build complex workflows with 
 automagic data movement between tasks. This can be done as follows:
 
-.. code-block:: pycon
+.. code-block:: python
 
     task1 = gbdx.Task("AOP_Strip_Processor")
 
@@ -111,7 +127,7 @@ Running a Workflow
 
 A workflow is just a set of tasks with inputs and outputs linked appropriately.  Create/setup a few tasks and construct and run a workflow:
 
-.. code-block:: pycon
+.. code-block:: python
 
     data = "s3://receiving-dgcs-tdgplatform-com/054813633050_01_003" # WV02 Image over San Francisco
     aoptask = gbdx.Task("AOP_Strip_Processor", data=data)
@@ -133,42 +149,42 @@ There are a few ways to check the status of a running workflow.
 
 Checking the status directly:
 
-.. code-block:: pycon
+.. code-block:: python
 
    >>> workflow.status
    {u'state': u'pending', u'event': u'submitted'}
 
 Checking whether a workflow is running:
 
-.. code-block:: pycon
+.. code-block:: python
 
    >>> workflow.running
    True
 
 Checking whether a workflow has failed:
 
-.. code-block:: pycon
+.. code-block:: python
 
    >>> workflow.failed
    False
 
 Checking whether a workflow has been canceled:
 
-.. code-block:: pycon
+.. code-block:: python
 
    >>> workflow.canceled
    False
 
 Checking whether a workflow has succeeded:
 
-.. code-block:: pycon
+.. code-block:: python
 
    >>> workflow.succeeded
    True
 
 Checking whether a workflow is complete (whether canceled, failed, or succeeded):
 
-.. code-block:: pycon
+.. code-block:: python
 
    >>> workflow.complete
    True
@@ -179,13 +195,13 @@ Cancel a Running Workflow
 
 To cancel a workflow:
 
-.. code-block:: pycon
+.. code-block:: python
 
    workflow.cancel()
 
 If you need to cancel a workflow for which you have the id:
 
-.. code-block:: pycon
+.. code-block:: python
 
    workflow = gbdx.Workflow( [] )  # instantiate a blank workflow
    workflow.id = <known_workflow_id>
@@ -198,7 +214,7 @@ Saving Output Data to S3
 
 Here's a shortcut for saving data to S3.  Rather than creating a "StageDataToS3" task, you can simply do:
 
-.. code-block:: pycon
+.. code-block:: python
 
     workflow.savedata(aoptask.outputs.data, location='some_folder')
 

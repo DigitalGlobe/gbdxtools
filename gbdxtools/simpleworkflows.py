@@ -301,6 +301,16 @@ class Workflow:
         raise NotImplementedError("Cannot set workflow status, readonly.")
 
     @property
+    def events(self):
+        if not self.id:
+            raise WorkflowError('Workflow is not running.  Cannot check status.')
+        return self.__interface.workflow.events(self.id)
+
+    @events.setter
+    def events(self, value):
+        raise NotImplementedError("Cannot set workflow events, readonly.")
+
+    @property
     def complete(self):
         if not self.id:
             return False
