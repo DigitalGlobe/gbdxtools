@@ -209,6 +209,7 @@ If you need to cancel a workflow for which you have the id:
 
 This works reasonably well for now, but we'll probably come up with a better way to deal with already running workflows in the future.
 
+
 Saving Output Data to S3
 -----------------------
 
@@ -229,3 +230,85 @@ To find out where workflow output data is getting saved, you can do:
 
     >>> workflow.list_workflow_outputs()
     {u'source:AOP_Strip_Processor_35cb77ea-ffa8-4565-8c31-7f7c2cabb3ce:data': u's3://dummybucket/7b216bd9-6523-4ca9-aa3b-1d8a5994f054/some_folder'}
+
+
+Running workflows via the workflow module (advanced)
+----------------------------------------------------
+
+The workflow module is a low-level abstraction of the GBDX workflow API.
+Earlier in this section, you learned how to create Task objects and chain them together in Workflow objects
+which you can then execute. The workflow module allows you to launch workflows by directly passing the workflow dictionary as an argument to the launch() function (similarly to what you would do in POSTMAN).
+Here is a simple example of running a workflow that generates a water mask using the tasks protogenV2RAW
+and StageDataToS3:
+
+.. code-block:: pycon
+
+   >>> payload = {
+        "name": "my_workflow",
+        "tasks": [
+            {
+                "name": "AOP",
+                "inputs": [
+                    {
+                        "name": "data",
+                        "value": "s3://receiving-dgcs-tdgplatform-com/054813633050_01_003"
+                    }],
+                "outputs": [
+                    {
+                        "name": "data"
+                    },
+                    {
+                        "name": "log"
+                    }
+                ],
+                "taskType": "AOP_Strip_Processor"
+            },
+            {
+                "name": "StagetoS3",
+                "inputs": [
+                    {
+                        "name": "data",
+                        "value": "AOP:data"
+                    },
+                    {
+                        "name": "destination",
+                        "value": "s3://bucket/prefix/my_directory"
+                    }
+                ],
+                "taskType": "StageDataToS3"
+            }
+        ]
+    }
+   >>> gbdx.workflow.launch(payload)
+   >>> u'4350494649661385313' 
+
+The workflow module also provides additional functionality such as obtaining a list of available tasks
+
+.. code-block:: pycon
+
+   >>> print gbdx.workflow.list_tasks()['tasks'][:10]   # print 10 task names
+   >>> [u'ENVI_LowClipRaster', u'Downsample', u'pop_map_core2_map', u'protogenV2UF_LBL', u'AComp', u'protogenV2RAV', u'StageDataToS3', u'FastOrtho', u'RoadTracker', u'rt_support']
+
+as well as the definition of a given task. 
+
+.. code-block:: pycon
+
+   >>> gbdx.workflow.describe_task('protogenV2RAW')
+   >>> {u'containerDescriptors': [{u'command': u'python /protogenv2/bin/protogen.py RAW',
+   u'properties': {u'image': u'gouzounis/protogenv2:latest'},
+   u'type': u'DOCKER'}],
+ u'description': u"This task requires a single input 'raster' that is an 8-band WorldView 2/3 image that has been atmospherically compensated. It returns a binary mask raster image with 255: foreground, 0: background.",
+ u'inputPortDescriptors': [{u'description': u'Name of the geo-coded ACOMPed image file that will be processed. Supported formats: TIF, TIL, VRT, HDR raster images. Image must be UINT16x8 (visible + NIR bands).',
+   u'name': u'raster',
+   u'required': True,
+   u'type': u'input'}],
+ u'name': u'protogenV2RAW',
+ u'outputPortDescriptors': [{u'description': u'The output directory of text file',
+   u'name': u'data',
+   u'required': True,
+   u'type': u'output'}],
+ u'properties': {u'isPublic': True, u'timeout': 7200}}
+
+You can find more information in the API documentation.
+
+
