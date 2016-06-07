@@ -227,7 +227,7 @@ class Idaho():
             print "No items returned."
 
     def get_idaho_chip(self, bucket_name, idaho_id, center_lat, center_lon, 
-                       output_folder, pan_id=None):
+                       output_folder, resolution=None, pan_id=None):
         '''Downloads an orthorectified IDAHO chip.
 
         Args:
@@ -235,9 +235,9 @@ class Idaho():
             idaho_id (str): The IDAHO ID of the chip.
             center_lat (str): The latitude of the center of the desired chip.
             center_lon (str): The longitude of the center of the desired chip.
-            pan_id (str): The associated PAN ID for pan sharpening a multispectral image
             output_folder (str): The folder the chip should be output to.
-
+            resolution (str): output resolution in meters (default None = native resolution)
+            pan_id (str): The associated PAN ID for pan sharpening a multispectral image
         Returns:
             Confirmation (str) that tile processing was done.
         '''
@@ -253,7 +253,10 @@ class Idaho():
                '&format=tif' + '&token='+access_token)
 
         if pan_id:
-            url += '&panId='+ pan_id
+            url += '&panId=' + pan_id
+
+        if resolution:
+            url += '&resolution=' + str(resolution)
 
         r = requests.get(url)
 
@@ -419,8 +422,12 @@ class Idaho():
                     center_lat = (S + (N-S)/2)
                     center_lon = (W + (E-W)/2)
                     print center_lat, center_lon
-                    self.get_idaho_chip(bucketname, image_id, center_lat, 
-                                        center_lon, resolution, outputfolder)
+                    self.get_idaho_chip(bucket_name=bucketname,
+                                        idaho_id=image_id,
+                                        center_lat=str(center_lat),
+                                        center_lon=str(center_lon),
+                                        resolution=resolution,
+                                        output_folder=outputfolder)
                     tile_count+=1
                     
         print ('There were ' + str(tile_count) + ' IDAHO images downloaded that ' +
