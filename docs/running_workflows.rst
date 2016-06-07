@@ -238,8 +238,7 @@ Running workflows via the workflow module (advanced)
 The workflow module is a low-level abstraction of the GBDX workflow API.
 Earlier in this section, you learned how to create Task objects and chain them together in Workflow objects
 which you can then execute. The workflow module allows you to launch workflows by directly passing the workflow dictionary as an argument to the launch() function (similarly to what you would do in POSTMAN).
-Here is a simple example of running a workflow that generates a water mask using the tasks protogenV2RAW
-and StageDataToS3:
+Here is a simple example of running a workflow that uses the tasks AOP_Strip_Processor and StageDataToS3:
 
 .. code-block:: pycon
 
