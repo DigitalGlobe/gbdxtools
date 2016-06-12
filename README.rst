@@ -132,7 +132,7 @@ To create a new version::
     bumpversion ( major | minor | patch )
     git push --tags
 
-Don't forget to upload to pypi.
+Don't forget to update the changelog and upload to pypi.
 
 **Contributing**
 
