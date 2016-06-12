@@ -1,3 +1,7 @@
+Next
+-----
+* Added ability to get events from simpleworkflows module: ```workflow.events```
+
 0.2.7
 -----
 * Correct band ordering in the idaho leaflet map viewer
