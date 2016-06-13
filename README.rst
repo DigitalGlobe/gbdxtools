@@ -14,46 +14,81 @@ gbdxtools: Python tools for using GBDX
 
 gbdxtools is a package for ordering imagery and launching workflows on DigitalGlobe's GBDX platform.
 
-gbdxtools is MIT licenced.
-
 In order to use gbdxtools, you need GBDX credentials. Email GBDX-Support@digitalglobe.com to get these.
 
 Documentation is hosted here: http://gbdxtools.readthedocs.org/en/latest/. 
 Example scripts can be found under the /examples directory of this repo.
 
+See the license file for license rights and limitations (MIT).
+
 
 Installation
 ------------
 
-Installation is easy::
+To install the latest stable version on pypi::
 
     pip install gbdxtools
 
-If you have a previous version of gbdxtools installed, then::
+Optional: you can install the current version of the master branch with::
 
-    pip install --upgrade gbdxtools
+    pip install git+https://github.com/digitalglobe/gbdxtools
 
-**Troubleshooting**
+Keep in mind that the master branch is constantly under development. 
+
+Troubleshooting
+~~~~~~~~~~~~~~~
 
 These are various tips to follow if your installation fails.
+
+**pip**
 
 Make sure you have the latest pip version::
 
    pip install pip --upgrade
 
-For Ubuntu users only:
+**Ubuntu users**
 
 If you run into trouble with the installation of cryptography, make sure that the following dependencies are installed::
 
    sudo apt-get install build-essential libssl-dev libffi-dev python-dev
 
+**conda**
+
+If your installation with pip keeps failing, try creating a conda environment and installing gbdxtools within this environment. 
+
+For Ubuntu, install conda with the following commands (choose default options at prompt)::
+
+   wget https://repo.continuum.io/miniconda/Miniconda2-latest-Linux-x86_64.sh
+   bash Miniconda2-latest-Linux-x86_64.sh
+
+For OS X, install conda with the following commands (choose default options at prompt)::
+
+   wget https://repo.continuum.io/miniconda/Miniconda2-latest-MacOSX-x86_64.sh
+   bash Miniconda2-latest-MacOSX-x86_64.sh
+
+Make sure that conda is in your path. Then create a conda environment::
+
+   conda create -n env python ipython   
+   
+Activate the environment::
+
+   source activate env
+
+Upgrade pip (if required)::
+
+   pip install pip --upgrade
+
+Install gbdxtools::
+
+   pip install gbdxtools
+
 
 Development
 -----------
 
-Clone the repo dev branch::
+Clone the repo::
 
-   git clone -b dev https://github.com/digitalglobe/gbdxtools
+   git clone https://github.com/digitalglobe/gbdxtools.git
    
    cd gbdxtools
 
@@ -90,16 +125,18 @@ Note: you may have to issue the following in your virtualenv for the tests to fi
 
     pip install -e .
 
+**Create a new version**
+
 To create a new version::
 
     bumpversion ( major | minor | patch )
     git push --tags
 
-Don't forget to upload to pypi.
+Don't forget to update the changelog and upload to pypi.
 
 **Contributing**
 
-Please contribute!  Please make pull requests directly to master.  Before making a pull request, please:
+Please contribute! Please make pull requests directly to master. Before making a pull request, please:
 
 * Ensure that all new functionality is covered by unit tests.
 * Verify that all unit tests are passing.

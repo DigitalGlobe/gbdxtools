@@ -1,10 +1,8 @@
-'''
-Authors: Kostas Stamatiou, Dan Getman, Nate Ricklin, Dahl Winters, Donnie Marino
-
-Contact: kostas.stamatiou@digitalglobe.com
-
+"""
 GBDX IDAHO Interface.
-'''
+
+Contact: nate.ricklin@digitalglobe.com
+"""
 
 from pygeoif import geometry
 from sympy.geometry import Point, Polygon
@@ -156,7 +154,7 @@ class Idaho():
     
                     bandstr = {
                         'RGBN': '0,1,2',
-                        'WORLDVIEW_8_BAND': '4,3,2',
+                        'WORLDVIEW_8_BAND': '4,2,1',
                         'PAN': '0'
                     }.get(partname, '0,1,2')
     
@@ -286,7 +284,7 @@ class Idaho():
 
                 bandstr = {
                     'RGBN': '0,1,2',
-                    'WORLDVIEW_8_BAND': '4,3,2',
+                    'WORLDVIEW_8_BAND': '4,2,1',
                     'PAN': '0'
                 }.get(partname, '0,1,2')
 

@@ -1,0 +1,30 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      User-Agent: [python-requests/2.9.1]
+    method: GET
+    uri: https://geobigdata.io/workflows/v1/workflows/4347109104758907277/events
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA72TTWsbMRCG/4rYa61l9LW70rm99tDkVooZ68MW2dUarzY5hPz3SjQQ3B6aunZA
+        iJmX0TAP8+q5+fLoU14aQ74/NxmXhxI1p2gfxpjo3uFIs1/ylmPPATtBBZRLOt9R5NZStH2QfYCd
+        Cl2zIU2OUynH6VjbcGAdhXLEPTAjtZFDy4QQWn4CMAD1wdPBp1rLJDnM62khuJ+rnubsq17j0vBX
+        cvTJxbSvmq9jV21Zd1PM2bvmZUPeEO4y7v1nzHg/34mtR2c7HnY0AHNUajnQHdOSMkCF/cBtr/t3
+        jt8x2d1+/JtsQDHDWKu5AgXvR4iptEvWb6MzJFKrecBe4t/J7MG7dfwwMt6ClrrjF5MpNXjpnNgQ
+        N08YkyHOB1zHfIZ6WlP6AzXj6YNWyA3wtlNykPoKoORrqTDkGyay5DWE9gzVztNx9CU+N6y13rvf
+        aa/+35QwAtphAN2ri0n/16w3oWJtkUBcTnVlo94CUqlWK6H1NSBfTfpP1vzx8hNpWwCP2gYAAA==
+    headers:
+      connection: [keep-alive]
+      content-encoding: [gzip]
+      content-length: ['397']
+      content-type: [application/json]
+      date: ['Fri, 03 Jun 2016 16:02:12 GMT']
+      server: [nginx/1.8.0]
+      via: [kong/0.5.2]
+    status: {code: 200, message: OK}
+version: 1
