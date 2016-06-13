@@ -358,7 +358,7 @@ class Workflow:
         if not self.id:
             return False
         status = self.status
-        return status['state'] == 'complete' and status['event'] == 'running'
+        return status['state'] == 'started' and status['event'] == 'running'
 
     @running.setter
     def running(self, value):
