@@ -1,9 +1,9 @@
 """
 Authors: Kostas Stamatiou, Donnie Marino, Dan Getman, Dahl Winters, Nate Ricklin
 
-Contact: kostas.stamatiou@digitalglobe.com
 
 GBDX Workflow interface.
+
 """
 
 import json
@@ -67,6 +67,21 @@ class Workflow(object):
         r = self.gbdx_connection.get(url)
 
         return r.json()['state']
+
+    def events(self, workflow_id):
+        '''Get workflow events.
+
+         Args:
+             workflow_id (str): Workflow id.
+
+         Returns:
+             List of workflow events.
+        '''
+        self.logger.debug('Get events of workflow: ' + workflow_id)
+        url = 'https://geobigdata.io/workflows/v1/workflows/' + workflow_id + '/events'
+        r = self.gbdx_connection.get(url)
+
+        return r.json()['Events']
 
     def cancel(self, workflow_id):
         """Cancels a running workflow.

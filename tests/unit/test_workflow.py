@@ -89,3 +89,21 @@ class WorkflowTests(unittest.TestCase):
 
         for workflow in workflows:
             self.assertTrue(workflow.get('state') in ["canceling", "canceled"])
+
+    @vcr.use_cassette('tests/unit/cassettes/test_workflow_events.yaml',filter_headers=['authorization'])
+    def test_workflow_events(self):
+        wf = Workflow(self.gbdx)
+        workflow_id = '4347109104758907277'
+        events = wf.events(workflow_id)
+        assert len(events) > 0
+        assert isinstance(events, list)
+        for event in events:
+            assert 'task' in event.keys()
+            assert 'state' in event.keys()
+            assert 'event' in event.keys()
+            assert 'timestamp' in event.keys()
+            assert 'when' in event.keys()
+            assert 'note' in event.keys()
+            assert event['state'] in ['pending','running','complete']
+            assert event['event'] in ['submitted','scheduled','rescheduling','started','succeeded','failed','timedout']
+

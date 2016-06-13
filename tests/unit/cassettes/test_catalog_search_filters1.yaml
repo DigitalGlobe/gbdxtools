@@ -1,0 +1,32 @@
+interactions:
+- request:
+    body: '{"startDate": "2008-01-01T00:00:00.000Z", "filters": ["(sensorPlatformName
+      = ''WORLDVIEW01'' OR sensorPlatformName =''QUICKBIRD02'')", "cloudCover < 10",
+      "offNadirAngle < 10"], "endDate": "2012-01-03T00:00:00.000Z", "types": ["Acquisition"],
+      "searchAreaWkt": "POLYGON ((30.1 9.9, 30.1 10.1, 29.9 10.1, 29.9 9.9, 30.1 9.9))"}'
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      Content-Length: ['320']
+      Content-Type: [application/json]
+      User-Agent: [python-requests/2.9.1]
+    method: POST
+    uri: https://geobigdata.io/catalog/v1/search?includeRelationships=false
+  response:
+    body: {string: !!python/unicode '{"searchTag":null,"results":[{"identifier":"101001000E823000","owner":"7b216bd9-6523-4ca9-aa3b-1d8a5994f054","type":"DigitalGlobeAcquisition","properties":{"sunElevation":"49.72966","targetAzimuth":"261.0096","sensorPlatformName":"QUICKBIRD02","browseURL":"https://browse.digitalglobe.com/imagefinder/showBrowseMetadata?catalogId=101001000E823000","sunAzimuth":"139.5513","footprintWkt":"POLYGON
+        ((30.000888 10.977624, 30.004488 10.977624, 30.0042 10.94868, 30.003912 10.885176,
+        30.00348 10.847448, 30.003192 10.582488, 30.003768 9.966312, 29.845224 9.966744,
+        29.844936 10.126152, 29.844216 10.36044, 29.84292 10.671336, 29.842488 10.840536,
+        29.842776 10.975608, 29.867832 10.97604, 29.976696 10.977192, 30.000888 10.977624))","cloudCover":"0.0","multiResolution":"2.580733061","vendorName":"DigitalGlobe","offNadirAngle":"8.0","panResolution":"0.646541238","catalogID":"101001000E823000","imageBands":"Pan_MS1","timestamp":"2011-11-23T00:00:00.000Z"}},{"identifier":"1010010007B89F00","owner":"7b216bd9-6523-4ca9-aa3b-1d8a5994f054","type":"DigitalGlobeAcquisition","properties":{"sunElevation":"61.76012","targetAzimuth":"263.53714","sensorPlatformName":"QUICKBIRD02","browseURL":"https://browse.digitalglobe.com/imagefinder/showBrowseMetadata?catalogId=1010010007B89F00","sunAzimuth":"132.9655","footprintWkt":"POLYGON
+        ((30.040344 9.994536, 30.061224 9.994536, 30.060504 9.816264, 29.906424 9.816264,
+        29.90628 9.993672, 30.040344 9.994536))","cloudCover":"5.0","multiResolution":"2.491807699","vendorName":"DigitalGlobe","offNadirAngle":"9.0","panResolution":"0.62322408","catalogID":"1010010007B89F00","imageBands":"Pan_MS1","timestamp":"2008-02-24T00:00:00.000Z"}}],"stats":{"totalRecords":2,"recordsReturned":2,"typeCounts":{"DigitalGlobeAcquisition":2}}}'}
+    headers:
+      connection: [keep-alive]
+      content-length: ['1760']
+      content-type: [application/json]
+      date: ['Thu, 12 May 2016 03:14:10 GMT']
+      server: [Apache-Coyote/1.1]
+      via: [kong/0.5.2]
+    status: {code: 200, message: OK}
+version: 1
