@@ -54,7 +54,7 @@ class Ordering:
         if not isinstance(image_catalog_ids, list):
             image_catalog_ids = [image_catalog_ids]
 
-        sanitized_ids = [id_.strip() for id_ in set(image_catalog_ids) if id_]
+        sanitized_ids = list(set([id_.strip() for id_ in image_catalog_ids if id_]))
 
         res = []
         # Use itertool batch recipe
