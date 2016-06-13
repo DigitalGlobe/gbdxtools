@@ -209,6 +209,11 @@ If you need to cancel a workflow for which you have the id:
 
 This works reasonably well for now, but we'll probably come up with a better way to deal with already running workflows in the future.
 
+Using Batch Workflows
+-----------------------
+
+Coming soon...
+
 
 Saving Output Data to S3
 -----------------------

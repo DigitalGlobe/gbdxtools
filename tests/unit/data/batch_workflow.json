@@ -1,0 +1,64 @@
+{
+        "name": "fastortho_stagetos3",
+        "batch_values": [
+            {
+                "name": "input_data",
+                "values": [
+                    "http://test-tdgplatform-com/data/QB02/LV1B/053702625010_01_004/053702625010_01/053702625010_01_P013_MUL",
+                    "http://test-tdgplatform-com/data/QB02/LV1B/053702625010_01_004/053702625010_01/053702625010_01_P013_MUL",
+                    "http://test-tdgplatform-com/data/QB02/LV1B/053702625010_01_004/053702625010_01/053702625010_01_P013_MUL"
+                ]
+            },
+            {
+                "name": "input_dem",
+                "values": [
+                    "SRTM90",
+                    "SRTM120",
+                    "SRTM150"
+                ]
+            },
+            {
+                "name": "destination",
+                "values": [
+                    "http://test-tdgplatform-com/temp/1",
+                    "http://test-tdgplatform-com/temp/2",
+                    "http://test-tdgplatform-com/temp/3"
+                ]
+            }
+        ],
+        "tasks": [
+            {
+                "name": "FastOrtho",
+                "outputs": [
+                    {
+                        "name": "data"
+                    }
+                ],
+                "inputs": [
+                    {
+                        "name": "data",
+                        "value": "$batch_value:input_data"
+                    },
+                    {
+                        "name": "demspecifier",
+                        "value": "$batch_value:input_dem"
+                    }
+                ],
+                "taskType": "FastOrtho"
+            },
+            {
+                "name": "StagetoS3",
+                "inputs": [
+                    {
+                        "name": "data",
+                        "source": "FastOrtho:data"
+                    },
+                    {
+                        "name": "destination",
+                        "value": "$batch_value:destination"
+                    }
+                ],
+                "taskType": "StageDataToS3"
+            }
+        ]
+    }
