@@ -17,13 +17,14 @@ class WorkflowError(Exception):
 
 
 class Port:
-    def __init__(self, name, type, required, description, value, is_input_port=True):
+    def __init__(self, name, type, required, description, value, is_input_port=True, is_multiplex=False):
         self.name = name
         self.type = type
         self.description = description
         self.required = required
         self.value = value
         self.is_input_port = is_input_port
+        self.is_multiplex = is_multiplex
 
     def __repr__(self):
         return self.__str__()
@@ -33,6 +34,7 @@ class Port:
         out += "Port %s:" % self.name
         out += "\n\ttype: %s" % self.type
         out += "\n\tdescription: %s" % self.description
+        out += "\n\tmultiplex: %s" % self.is_multiplex
         if not self.is_input_port:
             return out
         out += "\n\trequired: %s" % self.required
@@ -43,7 +45,16 @@ class PortList(object):
     def __init__(self, ports):
         self._portnames = set([p['name'] for p in ports])
         for p in ports:
-            self.__setattr__(p['name'], Port(p['name'], p['type'], p.get('required'), p.get('description'), value=None))
+            self.__setattr__(p['name'], 
+                             Port(
+                                    p['name'], 
+                                    p['type'], 
+                                    p.get('required'), 
+                                    p.get('description'), 
+                                    value=None, 
+                                    is_multiplex=p.get('multiplex',False)
+                                 )
+                             )
 
     def __repr__(self):
         return self.__str__()
@@ -57,19 +68,38 @@ class PortList(object):
 class Inputs(PortList):
     # allow setting task input values like this:
     # task.inputs.port_name = value
+    # Also allow initial setup of all internal stuff & multiplex ports
     def __setattr__(self, k, v):
-        # special handling for setting task & portname:
+        # special attributes for internal use
         if k in ['_portnames']:
             object.__setattr__(self, k, v)
+            return
 
-        # special handling for port names
-        elif k in self._portnames and hasattr(self, k):
+        # special handling for setting port values
+        if k in self._portnames and hasattr(self, k):
             port = self.__getattribute__(k)
             port.value = v
+            return
+
+        # find out if this is a valid multiplex port, i.e. this portname is prefixed by a multiplex port
+        potential_multiplex_ports = [p for p in self._portnames if k.startswith(p) and k != p]
+        for mp_port_name in potential_multiplex_ports:
+            if not hasattr(self, mp_port_name): continue  # make sure we're dealing with a port that exists already
+            port = self.__getattribute__(mp_port_name)
+            if port.is_multiplex:
+                new_multiplex_port = Port(
+                    k, 
+                    port.type, 
+                    port.required, 
+                    port.description, 
+                    value=v
+                )
+                object.__setattr__(self, k, new_multiplex_port)
+                self._portnames.update([k])
+                return
 
         # default for everything else
-        else:
-            object.__setattr__(self, k, v)
+        object.__setattr__(self, k, v)
 
 class Outputs(PortList):
     """
