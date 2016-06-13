@@ -1,4 +1,4 @@
-Next
+0.2.8
 -----
 * Added ability to get events from simpleworkflows module: ```workflow.events```
 
