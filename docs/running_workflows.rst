@@ -221,6 +221,7 @@ Some inputs are flagged as "multiplex", which means you can assign an arbitrary 
 values to a task.  For example, if a task has a multiplex input port named "data", you can set extra inputs as follows:
 
 .. code-block:: python
+
     task = gbdx.Task('Task-Name')
     task.data1 = 'some value for data1'
     task.data_foo = 'some value for data_foo'
