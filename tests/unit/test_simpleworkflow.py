@@ -7,6 +7,7 @@ from auth_mock import get_mock_gbdx_session
 from gbdxtools import Interface
 import vcr
 import unittest
+import json
 
 """
 How to use the mock_gbdx_session and vcr to create unit tests:
@@ -157,4 +158,60 @@ class SimpleWorkflowTests(unittest.TestCase):
 
         # this statement will raise an Exception if the bug is in place:
         task = self.gbdx.Task("ENVI_SpectralIndex", task_name="dummy")
+
+    @vcr.use_cassette('tests/unit/cassettes/test_multiplex_port_inputs.yaml',record_mode='new_episodes',filter_headers=['authorization'])
+    def test_multiplex_input_port_succeeds(self):
+        """
+        Test allowing multiplex port inputs
+        """
+        task = self.gbdx.Task('gdal-cli-multiplex')
+
+        # The following will not raise an exception because "data" is a multiplex port
+        task.inputs.data1 = 's3://location1/'
+        task.inputs.data2 = 's3://location2/'
+
+        task.inputs.command = "dummycommand"
+        workflow = self.gbdx.Workflow([task])
+        workflow.savedata(task.outputs.data, location='gdal-multiplex-task-output')
+
+        # execution should fail if json is incorrect
+        workflow.execute()
+
+        assert task.inputs.data1.value == 's3://location1/'
+        assert task.inputs.data2.value == 's3://location2/'
+        assert len(workflow.id) > 0
+
+    @vcr.use_cassette('tests/unit/cassettes/test_non_multiplex_input_port_fails.yaml',record_mode='new_episodes',filter_headers=['authorization'])
+    def test_non_multiplex_input_port_fails(self):
+        "A non-multiplex port should fail if attempted to set an invalid portname"
+        aoptask = self.gbdx.Task("AOP_Strip_Processor")
+
+        # a completely unknown input port raises an AttributeError
+        with self.assertRaises(AttributeError) as context:
+            aoptask.inputs.asdf = 'this will fail because asdf is not an input port'
+
+        # trying to use a non-multiplex port like a multiplex port raises an AttributeError
+        with self.assertRaises(AttributeError) as context:
+            aoptask.inputs.data1 = 'this will fail because data is not a multiplex port'
+
+        aoptask.inputs.data = 'success!'
+        assert aoptask.inputs.data.value == 'success!'
+
+
+    @vcr.use_cassette('tests/unit/cassettes/test_multiplex_input_port_succeeds_during_task_instantiation.yaml',record_mode='new_episodes',filter_headers=['authorization'])
+    def test_multiplex_input_port_succeeds_during_task_instantiation(self):
+        """
+        Test allowing multiplex port inputs
+        """
+        task = self.gbdx.Task('gdal-cli-multiplex', data1='asdf', data2='fdsa')
+
+        assert task.inputs.data1.value == 'asdf'
+        assert task.inputs.data2.value == 'fdsa'
+
+        # for kicks, re-assign one of the port inputs:
+        task.inputs.data1 = 'data1 is changed'
+        assert task.inputs.data1.value == 'data1 is changed'
+
+
+
 
