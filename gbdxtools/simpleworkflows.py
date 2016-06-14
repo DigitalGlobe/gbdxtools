@@ -115,7 +115,7 @@ class Outputs(PortList):
 
 
 
-class Task:
+class Task(object):
     def __init__(self, __interface, __task_type, **kwargs):
         '''
         Construct an instance of GBDX Task
@@ -136,6 +136,7 @@ class Task:
         self.type = __task_type
         self.definition = self.__interface.workflow.describe_task(__task_type)
         self.domain = self.definition['containerDescriptors'][0]['properties'].get('domain','default')
+        self._timeout = self.definition['properties'].get('timeout')
 
         self.inputs = Inputs(self.input_ports)
         self.outputs = Outputs(self.output_ports, self.name)
@@ -175,6 +176,16 @@ class Task:
         raise NotImplementedError("Cannot set input ports")
 
     @property
+    def timeout(self):
+        return self._timeout
+
+    @timeout.setter
+    def timeout(self, value):
+        if not 0 < value < 40000:
+            raise ValueError('timeout of %s is not a valid number' % value)
+        self._timeout = value
+
+    @property
     def output_ports(self):
         return self.definition['outputPortDescriptors']
 
@@ -188,6 +199,7 @@ class Task:
                     "outputs": [],
                     "inputs": [],
                     "taskType": self.type,
+                    "timeout": self.timeout,
                     "containerDescriptors": [{"properties": {"domain": self.domain}}]
                 }
 

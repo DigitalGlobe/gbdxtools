@@ -212,6 +212,34 @@ class SimpleWorkflowTests(unittest.TestCase):
         task.inputs.data1 = 'data1 is changed'
         assert task.inputs.data1.value == 'data1 is changed'
 
+    @vcr.use_cassette('tests/unit/cassettes/test_task_timeout.yaml',record_mode='new_episodes',filter_headers=['authorization'])
+    def test_task_timeout(self):
+        """ 
+        Verify we can set task timeouts, it appears in the json, and launching a workflow works
+        """
+        aoptask = self.gbdx.Task("AOP_Strip_Processor", data='testing')
+
+        # check the pre-existing timeout:
+        assert aoptask.timeout == 36000
+
+        # can't set equal to a string
+        with self.assertRaises(ValueError) as context:
+            aoptask.timeout = '12345'
+
+        # set the timeout and verify it makes it to the task json
+        aoptask.timeout = 1
+        assert aoptask.timeout == 1
+
+        task_json = aoptask.generate_task_workflow_json()
+
+        assert 1 == task_json['timeout']
+
+        # launch a workflow and verify it launches:
+        w = self.gbdx.Workflow([aoptask])
+        w.execute()
+
+        
+
 
 
 
