@@ -209,6 +209,17 @@ If you need to cancel a workflow for which you have the id:
 
 This works reasonably well for now, but we'll probably come up with a better way to deal with already running workflows in the future.
 
+Timeouts
+-----------------------
+
+Timeouts can be set on a task to ensure they don't run too long, causing a workflow failure if triggered.  Tasks come with default timeouts which can be overridden as follows:
+
+. code-block:: python
+
+    task.timeout = 300
+
+The integer value is number of seconds, with a maximum of 10 hours (36000 seconds).
+
 Using Batch Workflows
 -----------------------
 
