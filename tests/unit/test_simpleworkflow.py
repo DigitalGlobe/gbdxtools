@@ -7,6 +7,7 @@ from auth_mock import get_mock_gbdx_session
 from gbdxtools import Interface
 import vcr
 import unittest
+import json
 
 """
 How to use the mock_gbdx_session and vcr to create unit tests:
@@ -197,6 +198,19 @@ class SimpleWorkflowTests(unittest.TestCase):
         assert aoptask.inputs.data.value == 'success!'
 
 
+    @vcr.use_cassette('tests/unit/cassettes/test_multiplex_input_port_succeeds_during_task_instantiation.yaml',record_mode='new_episodes',filter_headers=['authorization'])
+    def test_multiplex_input_port_succeeds_during_task_instantiation(self):
+        """
+        Test allowing multiplex port inputs
+        """
+        task = self.gbdx.Task('gdal-cli-multiplex', data1='asdf', data2='fdsa')
+
+        assert task.inputs.data1.value == 'asdf'
+        assert task.inputs.data2.value == 'fdsa'
+
+        # for kicks, re-assign one of the port inputs:
+        task.inputs.data1 = 'data1 is changed'
+        assert task.inputs.data1.value == 'data1 is changed'
 
 
 
