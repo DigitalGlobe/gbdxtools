@@ -79,7 +79,7 @@ class Catalog():
         lat, lng = self.get_address_coords(address)
         return self.search_point(lat,lng, type)
 
-    def search_point(self, lat, lng, type="Acquisition"):
+    def search_point(self, lat, lng, type="Acquisition", filters=None):
         ''' Perform a catalog search over a specific point, specified by lat,lng
 
         Args:
@@ -98,6 +98,10 @@ class Catalog():
                 type
             ]
         }
+        
+        if filters:
+            postdata['filters'] = filters
+
         url = 'https://geobigdata.io/catalog/v1/search?includeRelationships=false'
         headers = {'Content-Type':'application/json'}
         r = self.gbdx_connection.post(url, headers=headers, data=json.dumps(postdata))
