@@ -98,8 +98,11 @@ class Inputs(PortList):
                 self._portnames.update([k])
                 return
 
-        # default for everything else
-        object.__setattr__(self, k, v)
+        # default for initially setting up ports
+        if k in self._portnames:
+            object.__setattr__(self, k, v)
+        else:
+            raise AttributeError('Task has no input port named %s.' % k)
 
 class Outputs(PortList):
     """
