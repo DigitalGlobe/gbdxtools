@@ -214,7 +214,7 @@ Timeouts
 
 Timeouts can be set on a task to ensure they don't run too long, causing a workflow failure if triggered.  Tasks come with default timeouts which can be overridden as follows:
 
-. code-block:: python
+.. code-block:: python
 
     task.timeout = 300
 
