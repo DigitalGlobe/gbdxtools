@@ -226,7 +226,7 @@ values to a task.  For example, if a task has a multiplex input port named "data
     task.data1 = 'some value for data1'
     task.data_foo = 'some value for data_foo'
 
-As long as you use the task name as the prefix for your inputs, it will be handled correctly.
+As long as you use the original input port name as the prefix for your inputs, it will be handled correctly.
 
 
 Saving Output Data to S3
