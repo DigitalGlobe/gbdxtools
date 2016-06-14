@@ -164,7 +164,7 @@ class Task:
             None
         '''
         for port_name, port_value in kwargs.iteritems():
-            self.inputs.__getattribute__(port_name).value = port_value
+            self.inputs.__setattr__(port_name, port_value)
 
     @property
     def input_ports(self):
