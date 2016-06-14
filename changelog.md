@@ -1,3 +1,7 @@
+0.2.10
+-----
+* Added task timeout control to simepleworkflow tasks.
+
 0.2.9
 -----
 * Added multiplex input port support to simpleworkflow tasks.
