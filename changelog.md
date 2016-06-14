@@ -1,3 +1,8 @@
+Next
+-----
+* Added multiplex input port support to simpleworkflow tasks.
+
+
 0.2.8
 -----
 * Added ability to get events from simpleworkflows module: ```workflow.events```
