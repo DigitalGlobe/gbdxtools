@@ -1,4 +1,4 @@
-Next
+0.2.9
 -----
 * Added multiplex input port support to simpleworkflow tasks.
 
