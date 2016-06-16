@@ -83,6 +83,11 @@ def search_materials_in_multiple_small_searches(search_request, gbdx_connection)
     Ys = [i for i in xfrange(S,N,D)]
     Xs = [i for i in xfrange(W,E,D)]
 
+    # Handle point searches:
+    if W == E and N == S:
+        Ys = [S, N]
+        Xs = [W, E]
+
     # print Xs
     # print Ys
     # print searchAreaWkt
@@ -99,7 +104,7 @@ def search_materials_in_multiple_small_searches(search_request, gbdx_connection)
             subsearchpoly = polygon_from_bounds(bbox)
 
             # # verify that the subsearchpoly is inside the searchAreaPolygon.  If not break.
-            if not bbox_in_poly(subsearchpoly,searchAreaPolygon) and not bbox_in_poly(searchAreaPolygon, subsearchpoly):
+            if not bbox_in_poly(subsearchpoly,searchAreaPolygon) and not bbox_in_poly(searchAreaPolygon, subsearchpoly) and not (y == y1 and x == x1):
                 pass
             else:
 

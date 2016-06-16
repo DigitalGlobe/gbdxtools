@@ -1,3 +1,8 @@
+0.3.0
+-----
+* catalog.search_address() and catalog.search_point() now take the same search filtering parameters as catalog.search().  As a breaking-change side effect, catalog.search_address() and catalog.search_point() now return a list of results, rather than a result-set dictionary.  Also, rather than a singular 'type' parameter, they now both take a list of types in the 'types' argument.
+
+
 0.2.10
 -----
 * Added task timeout control to simepleworkflow tasks.
