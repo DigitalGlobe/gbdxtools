@@ -125,7 +125,11 @@ automagic data movement between tasks. This can be done as follows:
 Running a Workflow
 -----------------------
 
-A workflow is just a set of tasks with inputs and outputs linked appropriately.  Create/setup a few tasks and construct and run a workflow:
+A GBDX workflow is a set of tasks with inputs and outputs linked appropriately.  
+Note that in gbdxtools, a workflow object is instantiated with a list of tasks.  
+The tasks will get executed when their inputs are satisfied and ready to go.
+Here is an example of a workflow which consists of the AOP_Strip_Processor task followed by 
+the StageDataToS3 task.
 
 .. code-block:: python
 
@@ -139,8 +143,17 @@ A workflow is just a set of tasks with inputs and outputs linked appropriately. 
     workflow = gbdx.Workflow([ s3task, aoptask ])
     workflow.execute()
 
-Note that a workflow is instantiated with a list of tasks.  The tasks will get executed when their inputs are satisfied and ready to go.
+Here is another example of a more complicated workflow.
 
+.. code-block:: python
+
+    data = "s3://receiving-dgcs-tdgplatform-com/054813633050_01_003" 
+    aoptask = gbdx.Task("AOP_Strip_Processor", data=data, enable_acomp=True, enable_pansharpen=False, enable_dra=False, bands='MS')
+    pp_task = gbdx.Task("ProtogenPrep",raster=aoptask.outputs.data.value)      # ProtogenPrep task is used to get AOP output into proper format for protogen task
+    prot_lulc = gbdx.Task("protogenV2LULC", raster=pp_task.outputs.data.value)
+    workflow = gbdx.Workflow([ aoptask, pp_task, prot_lulc ]) 
+    workflow.savedata(prot_lulc.outputs.data.value, location="some_folder_under_your_bucket_prefix")
+    workflow.execute()
 
 Workflow Status
 -----------------------
