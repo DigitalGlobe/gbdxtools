@@ -141,6 +141,20 @@ A workflow is just a set of tasks with inputs and outputs linked appropriately. 
 
 Note that a workflow is instantiated with a list of tasks.  The tasks will get executed when their inputs are satisfied and ready to go.
 
+Running Workflow With Multiple Tasks
+-----------------------
+
+A workflow with multiple tasks will behave like a workflow with a single task. See example python script "run_protogen_lulc_gbdxtools.py" for more detail on how to chain tasks together.  The code sample below shows how these tasks are declared and connected before they create the final workflow json.
+
+.. code-block:: python
+
+    aoptask = gbdx.Task("AOP_Strip_Processor", data=data, enable_acomp=True, enable_pansharpen=False,enable_dra=False,bands='MS')
+    pp_task = gbdx.Task("ProtogenPrep",raster=aoptask.outputs.data.value)      # ProtogenPrep task is used to get AOP output into proper format for protogen task
+    prot_lulc = gbdx.Task("protogenV2LULC",raster=pp_task.outputs.data.value)
+    # build the workflow ( AOP -> ProtogenPrep -> protogenV2LULC )
+    workflow = gbdx.Workflow([ aoptask,pp_task,prot_lulc ]) 
+    workflow.savedata(prot_lulc.outputs.data.value, location=out_data_loc)
+
 
 Workflow Status
 -----------------------
