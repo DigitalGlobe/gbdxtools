@@ -1,0 +1,31 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      User-Agent: [python-requests/2.9.1]
+    method: GET
+    uri: https://geobigdata.io/workflows/v1/tasks/DGLayers_v_2_0
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA41TwW4aMRD9lZFPrYQoSg+VcoWKQyOBAj1V1crszi4jeW3XHqdQxL937AWaEKL0
+        tjt+8968N/ZB1c6yJothhrEO5NmFqO7hx0Hx3qN8qdli+u3roxqB8sF5DEyYEQdFve4KgpvOf2o6
+        o/cY4v1TdVdN1PH4UzqaEyk5m4FzekILGhoKWIvSHlwL0aVQIxS2CB/m6NbUtvEjaNsIVpDkERh3
+        DC0ZhIFzQ7aT09a435kkD6azTAR2sEHQ3hvCJv+hrrcD/QgAd1gnFiHe4pk7C7nEPvGpGpPhOM6W
+        yUp16QK/iufK2uozeM1bOOWZpyu9MKRSyAL+SuK8ETyHJNNcMr4EkmG9qJM3uPuHs7ovuNXjVB1H
+        kv3bVJGDiGeec9PgssrhlVIhuKl81SFnL8GvuW3qq9qnmGtXiawlSjneYMgLmi6/l9UkJkN/EFoX
+        JKteEiprG6tyX4Yt3Mz7bcf/G95stb4x5mJY/IVk/F7AL+TeISs2jevKzR0uwXmah8V8NZi+flZx
+        mTaG6mfK1KMkI4Uvd5PJ8bml+UO5XtXp0f0FKjeUHdADAAA=
+    headers:
+      connection: [keep-alive]
+      content-encoding: [gzip]
+      content-length: ['434']
+      content-type: [application/json]
+      date: ['Fri, 17 Jun 2016 16:09:47 GMT']
+      server: [nginx/1.8.0]
+      via: [kong/0.5.2]
+    status: {code: 200, message: OK}
+version: 1
