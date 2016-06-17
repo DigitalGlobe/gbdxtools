@@ -65,6 +65,27 @@ class PortList(object):
             out += input_port_name + "\n"
         return out
 
+    def get_matching_multiplex_port(self,name):
+        """
+        Given a name, figure out if a multiplex port prefixes this name and return it.  Otherwise return none.
+        """
+
+        # short circuit:  if the attribute name already exists return none
+        # if name in self._portnames: return None
+        # if not len([p for p in self._portnames if name.startswith(p) and name != p]): return None
+
+        matching_multiplex_ports = [self.__getattribute__(p) for p in self._portnames 
+            if name.startswith(p) 
+            and name != p 
+            and hasattr(self, p) 
+            and self.__getattribute__(p).is_multiplex
+        ]
+
+        for port in matching_multiplex_ports:
+            return port
+
+        return None
+
 class Inputs(PortList):
     # allow setting task input values like this:
     # task.inputs.port_name = value
@@ -82,21 +103,18 @@ class Inputs(PortList):
             return
 
         # find out if this is a valid multiplex port, i.e. this portname is prefixed by a multiplex port
-        potential_multiplex_ports = [p for p in self._portnames if k.startswith(p) and k != p]
-        for mp_port_name in potential_multiplex_ports:
-            if not hasattr(self, mp_port_name): continue  # make sure we're dealing with a port that exists already
-            port = self.__getattribute__(mp_port_name)
-            if port.is_multiplex:
-                new_multiplex_port = Port(
-                    k, 
-                    port.type, 
-                    port.required, 
-                    port.description, 
-                    value=v
-                )
-                object.__setattr__(self, k, new_multiplex_port)
-                self._portnames.update([k])
-                return
+        mp_port = self.get_matching_multiplex_port(k)
+        if mp_port:
+            new_multiplex_port = Port(
+                k,
+                mp_port.type, 
+                mp_port.required, 
+                mp_port.description, 
+                value=v
+            )
+            object.__setattr__(self, k, new_multiplex_port)
+            self._portnames.update([k])
+            return
 
         # default for initially setting up ports
         if k in self._portnames:
@@ -109,6 +127,7 @@ class Outputs(PortList):
     Output ports show a name & description.  output_port_name.value returns the link to use as input to next tasks.
     """
     def __init__(self, ports, task_name):
+        self._task_name = task_name
         self._portnames = set([p['name'] for p in ports])
         for p in ports:
             self.__setattr__(
@@ -118,14 +137,44 @@ class Outputs(PortList):
                     p['type'], 
                     p.get('required'), 
                     p['description'], 
-                    value="source:" + task_name + ":" + p['name'], 
+                    value="source:" + self._task_name + ":" + p['name'], 
                     is_input_port=False,
                     is_multiplex=p.get('multiplex',False)
                     )
                 )
 
-    # def __set
+    def __getattribute__(self, k):
+        """
+        Overwride getattribute for multiplex ports.  If we try to get a port for which a multiplex port
+        is a prefix, create the port object and then return it.
+        """
+        # handle regular properties or internal methods normally
+        if k in ['_portnames', '_task_name', 'get_matching_multiplex_port'] or k.startswith('__'):
+            return object.__getattribute__(self, k)
 
+        # if this port already exists, retrieve it
+        if k in self._portnames:
+            return object.__getattribute__(self, k)
+
+        # determine if we're trying to get the value for a multiplex output port
+        if not k in self._portnames:
+            mp_port = self.get_matching_multiplex_port(k)
+            if mp_port:
+                self.__setattr__(
+                    k, 
+                    Port(
+                        mp_port.name, 
+                        mp_port.type, 
+                        mp_port.required, 
+                        mp_port.description, 
+                        value="source:" + self._task_name + ":" + k, 
+                        is_input_port=False,
+                        is_multiplex=False
+                        )
+                    )
+
+        return object.__getattribute__(self, k)
+        
 
 class Task(object):
     def __init__(self, __interface, __task_type, **kwargs):
