@@ -263,10 +263,8 @@ class Catalog():
         Returns:
             single catalog item, or none if not found
         '''
-        if not len(results['results']):
+        if not len(results):
             return None
-
-        results = results['results']
 
         # filter on type
         if types:
