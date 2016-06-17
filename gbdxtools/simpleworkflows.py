@@ -111,8 +111,20 @@ class Outputs(PortList):
     def __init__(self, ports, task_name):
         self._portnames = set([p['name'] for p in ports])
         for p in ports:
-            self.__setattr__(p['name'], Port(p['name'], p['type'], p.get('required'), p['description'], value="source:" + task_name + ":" + p['name'], is_input_port=False))
+            self.__setattr__(
+                p['name'], 
+                Port(
+                    p['name'], 
+                    p['type'], 
+                    p.get('required'), 
+                    p['description'], 
+                    value="source:" + task_name + ":" + p['name'], 
+                    is_input_port=False,
+                    is_multiplex=p.get('multiplex',False)
+                    )
+                )
 
+    # def __set
 
 
 class Task(object):
