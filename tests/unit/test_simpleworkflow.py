@@ -270,8 +270,15 @@ class SimpleWorkflowTests(unittest.TestCase):
         assert len(dglayers.outputs.DST_multiplex_prefix.value) > 0
         assert 'source' in dglayers.outputs.DST_multiplex_prefix.value
 
-        
+        workflow = self.gbdx.Workflow([aoptask, dglayers])
+        definition = workflow.generate_workflow_description()
 
+        # check that the new output port made it into the workflow output definition
+        tasks = definition['tasks']
+        dglayersdef = [task for task in tasks if task['name'] == dglayers.name][0]
+        outputs = dglayersdef['outputs']
+        dstprefixoutput = [output for output in outputs if output['name'] == 'DST_multiplex_prefix']
+        assert len(dstprefixoutput) == 1
 
 
 
