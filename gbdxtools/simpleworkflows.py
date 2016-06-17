@@ -172,6 +172,7 @@ class Outputs(PortList):
                         is_multiplex=False
                         )
                     )
+                self._portnames.update([k])
 
         return object.__getattribute__(self, k)
         
@@ -286,8 +287,7 @@ class Task(object):
                                     "value": input_port_value
                                 })
 
-        for output_port in self.output_ports:
-            output_port_name = output_port['name']
+        for output_port_name in self.outputs._portnames:
             d['outputs'].append(  {
                     "name": output_port_name
                 } )
@@ -301,7 +301,7 @@ class Workflow:
         self.name = kwargs.get('name', str(uuid.uuid4()) )
         self.id = None
 
-        self.definition = self.workflow_skeleton()
+        self.definition = None
 
         self.tasks = tasks
 
@@ -361,6 +361,25 @@ class Workflow:
 
         return workflow_outputs
 
+    def generate_workflow_description(self):
+        '''
+        Generate workflow json for launching the workflow against the gbdx api
+
+        Args:
+            None
+
+        Returns:
+            json string
+        '''
+        if not self.tasks:
+            raise WorkflowError('Workflow contains no tasks, and cannot be executed.')
+
+        self.definition = self.workflow_skeleton()
+
+        for task in self.tasks:
+            self.definition['tasks'].append( task.generate_task_workflow_json() )
+
+        return self.definition
 
     def execute(self):
         '''
@@ -372,11 +391,13 @@ class Workflow:
         Returns:
             Workflow_id
         '''
-        if not self.tasks:
-            raise WorkflowError('Workflow contains no tasks, and cannot be executed.')
+        # if not self.tasks:
+        #     raise WorkflowError('Workflow contains no tasks, and cannot be executed.')
 
-        for task in self.tasks:
-            self.definition['tasks'].append( task.generate_task_workflow_json() )
+        # for task in self.tasks:
+        #     self.definition['tasks'].append( task.generate_task_workflow_json() )
+
+        self.generate_workflow_description()
 
         self.id = self.__interface.workflow.launch(self.definition)
         return self.id
