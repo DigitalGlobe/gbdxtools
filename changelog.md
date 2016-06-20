@@ -1,3 +1,7 @@
+0.3.2
+-----
+* quick change to catalog.get_most_recent_images(): now it takes a list of catalog results as an argument.
+
 0.3.1
 -----
 * Added multiplex output support to simpleworkflow tasks.
