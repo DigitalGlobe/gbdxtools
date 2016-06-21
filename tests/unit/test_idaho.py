@@ -65,8 +65,8 @@ class IdahoTest(unittest.TestCase):
 
     def test_get_idaho_chip_by_bbox(self):
 
-        multi_id = '98ce43c5-b4a8-45aa-8597-ae7017ecefb2'
-        pan_id = '5e47dfec-4685-476a-94ec-8589e06df349'
+        multi_id = '293adef4-0853-4bc1-882b-74c0e88035b7'
+        pan_id = '21d1fdb-193a-46e7-844b-d4a3a2c1a595'
 
         i = Idaho(gbdx)
         i.get_idaho_chip_by_bbox(bucket_name='idaho-images',
