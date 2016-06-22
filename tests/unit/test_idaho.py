@@ -77,8 +77,8 @@ class IdahoTest(unittest.TestCase):
                          maxy = -35.1016173039523,
                          high_cutoff = 0.99,
                          low_cutoff = 0.01,
-                         format = 'tif'
-                         return_fp = False
+                         format = 'tif',
+                         return_fp = False,
                          pan_id=pan_id,
                          output_folder=self._temp_path)
         assert os.path.isfile(os.path.join(self._temp_path, multi_id+'.tif'))
