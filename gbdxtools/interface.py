@@ -17,12 +17,13 @@ from gbdxtools.catalog import Catalog
 from gbdxtools.idaho import Idaho
 import gbdxtools.simpleworkflows
 
-class Interface():
 
+class Interface(object):
     gbdx_connection = None
+
     def __init__(self, **kwargs):
-        if (kwargs.get('username') and kwargs.get('password') and 
-            kwargs.get('client_id') and kwargs.get('client_secret')):
+        if (kwargs.get('username') and kwargs.get('password') and
+                kwargs.get('client_id') and kwargs.get('client_secret')):
             self.gbdx_connection = gbdx_auth.session_from_kwargs(**kwargs)
         elif kwargs.get('gbdx_connection'):
             # Pass in a custom gbdx connection object, for testing purposes
