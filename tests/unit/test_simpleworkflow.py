@@ -166,9 +166,23 @@ class SimpleWorkflowTests(unittest.TestCase):
         """
         task = self.gbdx.Task('gdal-cli-multiplex')
 
+        assert task.inputs.data.is_multiplex
+
+        assert task.inputs.get_matching_multiplex_port('asdf') is None
+        assert task.inputs.get_matching_multiplex_port('data123') is not None
+        assert task.inputs.get_matching_multiplex_port('data123').name == 'data'
+
         # The following will not raise an exception because "data" is a multiplex port
         task.inputs.data1 = 's3://location1/'
         task.inputs.data2 = 's3://location2/'
+
+        # The newly generated port is itself not multiplex
+        assert task.inputs.data2.is_multiplex is False
+
+        assert task.inputs.get_matching_multiplex_port('data1').name == 'data'
+
+        # Refer to the original multiplex port, not one of the newly generated ports
+        assert task.inputs.get_matching_multiplex_port('data111').name == 'data'
 
         task.inputs.command = "dummycommand"
         workflow = self.gbdx.Workflow([task])
@@ -238,8 +252,33 @@ class SimpleWorkflowTests(unittest.TestCase):
         w = self.gbdx.Workflow([aoptask])
         w.execute()
 
-        
+    @vcr.use_cassette('tests/unit/cassettes/test_multiplex_output_port_is_set.yaml',record_mode='new_episodes',filter_headers=['authorization'])
+    def test_multiplex_output_port_is_set(self):
+        dglayers = self.gbdx.Task('DGLayers_v_2_0')
 
+        assert dglayers.outputs.DST.is_multiplex
+        assert not dglayers.outputs.LOGS.is_multiplex
+
+    @vcr.use_cassette('tests/unit/cassettes/test_multiplex_output_as_another_input.yaml',record_mode='new_episodes',filter_headers=['authorization'])
+    def test_multiplex_output_as_another_input(self):
+        dglayers = self.gbdx.Task('DGLayers_v_2_0')
+        aoptask = self.gbdx.Task("AOP_Strip_Processor")
+
+        aoptask.inputs.data = dglayers.outputs.DST_multiplex_prefix.value
+
+        assert not dglayers.outputs.DST_multiplex_prefix.is_multiplex
+        assert len(dglayers.outputs.DST_multiplex_prefix.value) > 0
+        assert 'source' in dglayers.outputs.DST_multiplex_prefix.value
+
+        workflow = self.gbdx.Workflow([aoptask, dglayers])
+        definition = workflow.generate_workflow_description()
+
+        # check that the new output port made it into the workflow output definition
+        tasks = definition['tasks']
+        dglayersdef = [task for task in tasks if task['name'] == dglayers.name][0]
+        outputs = dglayersdef['outputs']
+        dstprefixoutput = [output for output in outputs if output['name'] == 'DST_multiplex_prefix']
+        assert len(dstprefixoutput) == 1
 
 
 
