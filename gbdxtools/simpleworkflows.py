@@ -447,13 +447,24 @@ class Workflow(object):
         if not self.id:
             raise WorkflowError('Workflow is not running.  Cannot cancel.')
 
-        self.__interface.workflow.cancel(self.id)
+        if self.batch_values:
+            self.__interface.workflow.batch_workflow_cancel(self.id)
+        else:
+            self.__interface.workflow.cancel(self.id)
 
     @property
     def status(self):
         if not self.id:
             raise WorkflowError('Workflow is not running.  Cannot check status.')
-        return self.__interface.workflow.status(self.id)
+
+        status = None
+
+        if self.batch_values:
+            status = self.__interface.workflow.batch_workflow_status(self.id)
+        else:
+            self.__interface.workflow.status(self.id)
+
+        return status
 
     @status.setter
     def status(self, value):
@@ -463,6 +474,8 @@ class Workflow(object):
     def events(self):
         if not self.id:
             raise WorkflowError('Workflow is not running.  Cannot check status.')
+        if self.batch_values:
+            raise NotImplementedError("Query Each Workflow Id within the Batch Workflow for Events")
         return self.__interface.workflow.events(self.id)
 
     @events.setter
@@ -473,6 +486,8 @@ class Workflow(object):
     def complete(self):
         if not self.id:
             return False
+        if self.batch_values:
+            raise NotImplementedError("Query Each Workflow Id within the Batch Workflow for Current State")
         return self.status['state'] == 'complete'
 
     @complete.setter
@@ -483,6 +498,8 @@ class Workflow(object):
     def failed(self):
         if not self.id:
             return False
+        if self.batch_values:
+            raise NotImplementedError("Query Each Workflow Id within the Batch Workflow for Current State")
         status = self.status
         return status['state'] == 'complete' and status['event'] == 'failed'
 
@@ -494,6 +511,8 @@ class Workflow(object):
     def canceled(self):
         if not self.id:
             return False
+        if self.batch_values:
+            raise NotImplementedError("Query Each Workflow Id within the Batch Workflow for Current State")
         status = self.status
         return status['state'] == 'complete' and status['event'] == 'canceled'
 
@@ -505,6 +524,8 @@ class Workflow(object):
     def succeeded(self):
         if not self.id:
             return False
+        if self.batch_values:
+            raise NotImplementedError("Query Each Workflow Id within the Batch Workflow for Current State")
         status = self.status
         return status['state'] == 'complete' and status['event'] == 'succeeded'
 
@@ -516,6 +537,8 @@ class Workflow(object):
     def running(self):
         if not self.id:
             return False
+        if self.batch_values:
+            raise NotImplementedError("Query Each Workflow Id within the Batch Workflow for Current State")
         status = self.status
         return status['state'] == 'complete' and status['event'] == 'running'
 
@@ -527,6 +550,8 @@ class Workflow(object):
     def timedout(self):
         if not self.id:
             return False
+        if self.batch_values:
+            raise NotImplementedError("Query Each Workflow Id within the Batch Workflow for Current State")
         status = self.status
         return status['state'] == 'complete' and status['event'] == 'timedout'
 
