@@ -230,8 +230,9 @@ class Idaho():
             r.raise_for_status()
 
     def get_idaho_chip_by_bbox(self, idaho_id, output_folder, minx, miny, maxx, maxy,
-                            bucket_name='idaho-images', high_cutoff = 0.99,
-                            low_cutoff = 0.01, pan_id=None, format='tif', return_fp=False):
+                               bucket_name='idaho-images', high_cutoff = 0.99,
+                               low_cutoff = 0.01, pan_id=None, format='tif',
+                               return_fp=False):
 
         '''Downloads an orthorectified IDAHO chip by bounding box.
 
