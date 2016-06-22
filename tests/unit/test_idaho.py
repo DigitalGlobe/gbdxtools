@@ -66,19 +66,19 @@ class IdahoTest(unittest.TestCase):
     def test_get_idaho_chip_by_bbox(self):
 
         multi_id = '293adef4-0853-4bc1-882b-74c0e88035b7'
-        pan_id = '21d1fdb-193a-46e7-844b-d4a3a2c1a595'
+        pan_id = '721d1fdb-193a-46e7-844b-d4a3a2c1a595'
 
         i = Idaho(gbdx)
-        i.get_idaho_chip_by_bbox(bucket_name='idaho-images',
-                         idaho_id=multi_id,
-                         minx = 138.52438540347904,
-                         miny = -35.10195820694827,
-                         maxx = 138.52462855543203,
-                         maxy = -35.1016173039523,
-                         high_cutoff = 0.99,
-                         low_cutoff = 0.01,
-                         format = 'tif',
-                         return_fp = False,
-                         pan_id=pan_id,
-                         output_folder=self._temp_path)
+        i.get_idaho_chip_by_bbox(idaho_id=multi_id,
+                                output_folder='self._temp_path',
+                                minx = 138.52438540347904,
+                                miny = -35.10195820694827,
+                                maxx = 138.52462855543203,
+                                maxy = -35.1016173039523,
+                                bucket_name='idaho-images',
+                                high_cutoff = 0.99,
+                                low_cutoff = 0.01,
+                                pan_id=pan_id,
+                                return_fp = False,
+                                format='tif')
         assert os.path.isfile(os.path.join(self._temp_path, multi_id+'.tif'))
