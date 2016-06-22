@@ -1,3 +1,11 @@
+0.3.2
+-----
+* quick change to catalog.get_most_recent_images(): now it takes a list of catalog results as an argument.
+
+0.3.1
+-----
+* Added multiplex output support to simpleworkflow tasks.
+
 0.3.0
 -----
 * catalog.search_address() and catalog.search_point() now take the same search filtering parameters as catalog.search().  As a breaking-change side effect, catalog.search_address() and catalog.search_point() now return a list of results, rather than a result-set dictionary.  Also, rather than a singular 'type' parameter, they now both take a list of types in the 'types' argument.
