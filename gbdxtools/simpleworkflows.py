@@ -234,8 +234,9 @@ class Task(object):
         for port_name, port_value in kwargs.iteritems():
             # if input type is of list, use batch workflows endpoint
             if isinstance(port_value, list):
-                self.inputs.__getattribute__(port_name).value = "$batch_value:{0}".format(port_name)
-                batch_values.append({"name": port_name, "values": port_value})
+                self.inputs.__getattribute__(port_name).value = "$batch_value:{0}".format(
+                    "batch_input_{0}".format(port_name))
+                batch_values.append({"name": "batch_input_{0}".format(port_name), "values": port_value})
             else:
                 self.inputs.__getattribute__(port_name).value = port_value
 
