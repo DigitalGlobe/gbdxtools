@@ -16,7 +16,7 @@ class WorkflowError(Exception):
     pass
 
 
-class Port:
+class Port(object):
     def __init__(self, name, type, required, description, value, is_input_port=True, is_multiplex=False):
         self.name = name
         self.type = type
@@ -40,6 +40,7 @@ class Port:
         out += "\n\trequired: %s" % self.required
         out += "\n\tValue: %s" % self.value
         return out
+
 
 class PortList(object):
     def __init__(self, ports):
@@ -202,6 +203,7 @@ class Task(object):
 
         self.inputs = Inputs(self.input_ports)
         self.outputs = Outputs(self.output_ports, self.name)
+        self.batch_values = None
 
         # all the other kwargs are input port values or sources
         self.set(**kwargs)
@@ -216,8 +218,8 @@ class Task(object):
         # return "source:" + self.name + ":" + port_name
 
     # set input ports source or value
-    def set( self, **kwargs ):
-        '''
+    def set(self, **kwargs):
+        """
         Set input values on task
 
         Args:
@@ -225,9 +227,21 @@ class Task(object):
 
         Returns:
             None
-        '''
+        """
+        # list used for batch values
+        batch_values = []
+
         for port_name, port_value in kwargs.iteritems():
-            self.inputs.__setattr__(port_name, port_value)
+            # if input type is of list, use batch workflows endpoint
+            if isinstance(port_value, list):
+                self.inputs.__getattribute__(port_name).value = "$batch_value:{0}".format(port_name)
+                batch_values.append({"name": port_name, "values": port_value})
+            else:
+                self.inputs.__getattribute__(port_name).value = port_value
+
+        # set the batch values object
+        if batch_values:
+            self.batch_values = batch_values
 
     @property
     def input_ports(self):
@@ -257,22 +271,22 @@ class Task(object):
 
     def generate_task_workflow_json(self):
         d = {
-                    "name": self.name,
-                    "outputs": [],
-                    "inputs": [],
-                    "taskType": self.type,
-                    "timeout": self.timeout,
-                    "containerDescriptors": [{"properties": {"domain": self.domain}}]
-                }
+            "name": self.name,
+            "outputs": [],
+            "inputs": [],
+            "taskType": self.type,
+            "timeout": self.timeout,
+            "containerDescriptors": [{"properties": {"domain": self.domain}}]
+        }
 
         for input_port_name in self.inputs._portnames:
             input_port_value = self.inputs.__getattribute__(input_port_name).value
-            if input_port_value == None:
+            if input_port_value is None:
                 continue
 
-            if input_port_value == False:
+            if input_port_value is False:
                 input_port_value = 'false'
-            if input_port_value == True:
+            if input_port_value is True:
                 input_port_value = 'true'
 
             if str(input_port_value).startswith('source:'):
@@ -288,14 +302,14 @@ class Task(object):
                                 })
 
         for output_port_name in self.outputs._portnames:
-            d['outputs'].append(  {
+            d['outputs'].append({
                     "name": output_port_name
-                } )
+                })
 
         return d
 
 
-class Workflow:
+class Workflow(object):
     def __init__(self, __interface, tasks, **kwargs):
         self.__interface = __interface
         self.name = kwargs.get('name', str(uuid.uuid4()) )
@@ -304,6 +318,15 @@ class Workflow:
         self.definition = None
 
         self.tasks = tasks
+
+        batch_values = []
+
+        for task in self.tasks:
+            if task.batch_values:
+                batch_values.extend(task.batch_values)
+
+        if batch_values:
+            self.batch_values = batch_values
 
     def savedata(self, output, location=None):
         '''
@@ -336,8 +359,6 @@ class Workflow:
 
         s3task = self.__interface.Task("StageDataToS3", data=input_value, destination=s3location)
         self.tasks.append(s3task)
-
-
 
     def workflow_skeleton(self):
         return {
@@ -377,7 +398,10 @@ class Workflow:
         self.definition = self.workflow_skeleton()
 
         for task in self.tasks:
-            self.definition['tasks'].append( task.generate_task_workflow_json() )
+            self.definition['tasks'].append(task.generate_task_workflow_json())
+
+        if self.batch_values:
+            self.definition["batch_values"] = self.batch_values
 
         return self.definition
 
@@ -399,7 +423,14 @@ class Workflow:
 
         self.generate_workflow_description()
 
-        self.id = self.__interface.workflow.launch(self.definition)
+        # hit batch workflow endpoint if batch values
+        if self.batch_values:
+            self.id = self.__interface.workflow.launch_batch_workflow(self.definition)
+
+        # use regular workflow endpoint if no batch values
+        else:
+            self.id = self.__interface.workflow.launch(self.definition)
+
         return self.id
 
     def cancel(self):
