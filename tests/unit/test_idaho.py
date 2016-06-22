@@ -63,6 +63,7 @@ class IdahoTest(unittest.TestCase):
                          output_folder=self._temp_path)
         assert os.path.isfile(os.path.join(self._temp_path, multi_id+'.tif'))
 
+    @vcr.use_cassette(cassette_name)
     def test_get_idaho_chip_by_bbox(self):
 
         multi_id = '293adef4-0853-4bc1-882b-74c0e88035b7'
