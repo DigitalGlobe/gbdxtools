@@ -30,6 +30,8 @@ gbdx = Interface(gbdx_connection=mock_gbdx_session)
 
 # generate the cassette name in a machine nutral way
 cassette_name = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'cassettes', 'test_get_idaho_chip.yaml')
+cassette_name1 = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'cassettes', 'test_get_idaho_chip_by_bbox.yaml')
+
 
 
 class IdahoTest(unittest.TestCase):
@@ -63,7 +65,7 @@ class IdahoTest(unittest.TestCase):
                          output_folder=self._temp_path)
         assert os.path.isfile(os.path.join(self._temp_path, multi_id+'.tif'))
 
-    @vcr.use_cassette(cassette_name)
+    @vcr.use_cassette(cassette_name1)
     def test_get_idaho_chip_by_bbox(self):
 
         multi_id = '293adef4-0853-4bc1-882b-74c0e88035b7'
