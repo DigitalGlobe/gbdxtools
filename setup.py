@@ -29,5 +29,7 @@ setup(name='gbdxtools',
                         'sympy==1.0',
                         'ndg-httpsclient==0.4.0'],
       setup_requires=['pytest-runner'],
-      tests_require=['pytest','vcrpy']
+      tests_require=['pytest','vcrpy'],
+      scripts=['scripts/set_s3_creds'
+               ]
       )
