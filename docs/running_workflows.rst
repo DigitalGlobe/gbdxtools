@@ -5,14 +5,14 @@ Quick workflow example
 -----------------------
 
 Here's a quick workflow that starts with a Worldview 2 image over San Francisco, runs it through
-DigitalGlobe's "Fast Ortho" and "Acomp" tasks, then saves to a user-specified location 
+DigitalGlobe's "Fast Ortho" and "Acomp" tasks, then saves to a user-specified location
 under s3://bucket/prefix.
 
 .. code-block:: python
 
    data = "s3://receiving-dgcs-tdgplatform-com/054813633050_01_003" # WV02 Image over San Francisco
    aoptask = gbdx.Task("AOP_Strip_Processor", data=data, enable_acomp=True, enable_pansharpen=True)
-   workflow = gbdx.Workflow([ aoptask ]) 
+   workflow = gbdx.Workflow([ aoptask ])
    workflow.savedata(aoptask.outputs.data, location='some_folder_under_your_bucket_prefix')
    workflow.execute()
 
@@ -29,7 +29,7 @@ You can also get workflow events:
 
    >>> for event in workflow.events:
    >>>     print event['task'], event['event']
-   
+
    >>> gdal-task submitted
    >>> Stage-data submitted
    >>> gdal-task scheduled
@@ -112,7 +112,7 @@ Task outputs can be interactively explored the same way as task inputs:
 Linking Outputs from one task into Inputs of Another Task
 -----------------------
 
-The whole point of the workflow system is to build complex workflows with 
+The whole point of the workflow system is to build complex workflows with
 automagic data movement between tasks. This can be done as follows:
 
 .. code-block:: python
@@ -125,10 +125,10 @@ automagic data movement between tasks. This can be done as follows:
 Running a Workflow
 -----------------------
 
-A GBDX workflow is a set of tasks with inputs and outputs linked appropriately.  
-Note that in gbdxtools, a workflow object is instantiated with a list of tasks.  
+A GBDX workflow is a set of tasks with inputs and outputs linked appropriately.
+Note that in gbdxtools, a workflow object is instantiated with a list of tasks.
 The tasks will get executed when their inputs are satisfied and ready to go.
-Here is an example of a workflow which consists of the AOP_Strip_Processor task followed by 
+Here is an example of a workflow which consists of the AOP_Strip_Processor task followed by
 the StageDataToS3 task.
 
 .. code-block:: python
@@ -140,18 +140,18 @@ the StageDataToS3 task.
     s3task.inputs.data = aoptask.outputs.data.value
     s3task.inputs.destination = "s3://path/to/destination"
 
-    workflow = gbdx.Workflow([ s3task, aoptask ])
+    workflow = gbdx.Workflow([ aoptask, s3task ])
     workflow.execute()
 
 Here is another example of a more complicated workflow.
 
 .. code-block:: python
 
-    data = "s3://receiving-dgcs-tdgplatform-com/054813633050_01_003" 
+    data = "s3://receiving-dgcs-tdgplatform-com/054813633050_01_003"
     aoptask = gbdx.Task("AOP_Strip_Processor", data=data, enable_acomp=True, enable_pansharpen=False, enable_dra=False, bands='MS')
     pp_task = gbdx.Task("ProtogenPrep",raster=aoptask.outputs.data.value)      # ProtogenPrep task is used to get AOP output into proper format for protogen task
     prot_lulc = gbdx.Task("protogenV2LULC", raster=pp_task.outputs.data.value)
-    workflow = gbdx.Workflow([ aoptask, pp_task, prot_lulc ]) 
+    workflow = gbdx.Workflow([ aoptask, pp_task, prot_lulc ])
     workflow.savedata(prot_lulc.outputs.data.value, location="some_folder_under_your_bucket_prefix")
     workflow.execute()
 
@@ -241,7 +241,7 @@ Coming soon...
 Multiplex Inputs
 -----------------------
 
-Some inputs are flagged as "multiplex", which means you can assign an arbitrary number of input sources or 
+Some inputs are flagged as "multiplex", which means you can assign an arbitrary number of input sources or
 values to a task.  For example, if a task has a multiplex input port named "data", you can set extra inputs as follows:
 
 .. code-block:: python
@@ -322,7 +322,7 @@ Here is a simple example of running a workflow that uses the tasks AOP_Strip_Pro
         ]
     }
    >>> gbdx.workflow.launch(payload)
-   >>> u'4350494649661385313' 
+   >>> u'4350494649661385313'
 
 The workflow module also provides additional functionality such as obtaining a list of available tasks
 
@@ -331,7 +331,7 @@ The workflow module also provides additional functionality such as obtaining a l
    >>> print gbdx.workflow.list_tasks()['tasks'][:10]   # print 10 task names
    >>> [u'ENVI_LowClipRaster', u'Downsample', u'pop_map_core2_map', u'protogenV2UF_LBL', u'AComp', u'protogenV2RAV', u'StageDataToS3', u'FastOrtho', u'RoadTracker', u'rt_support']
 
-as well as the definition of a given task. 
+as well as the definition of a given task.
 
 .. code-block:: pycon
 
@@ -352,5 +352,3 @@ as well as the definition of a given task.
  u'properties': {u'isPublic': True, u'timeout': 7200}}
 
 You can find more information in the API documentation.
-
-

@@ -62,7 +62,8 @@ class IdahoTest(unittest.TestCase):
                          center_lat='48.8611',
                          center_lon='2.3358',
                          pan_id=pan_id,
-                         output_folder=self._temp_path)
+                         output_folder=self._temp_path,
+                         resolution=50)
         assert os.path.isfile(os.path.join(self._temp_path, multi_id+'.tif'))
 
     @vcr.use_cassette(cassette_name1)
