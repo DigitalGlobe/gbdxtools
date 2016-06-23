@@ -17,13 +17,14 @@ class WorkflowError(Exception):
 
 
 class Port:
-    def __init__(self, name, type, required, description, value, is_input_port=True):
+    def __init__(self, name, type, required, description, value, is_input_port=True, is_multiplex=False):
         self.name = name
         self.type = type
         self.description = description
         self.required = required
         self.value = value
         self.is_input_port = is_input_port
+        self.is_multiplex = is_multiplex
 
     def __repr__(self):
         return self.__str__()
@@ -33,6 +34,7 @@ class Port:
         out += "Port %s:" % self.name
         out += "\n\ttype: %s" % self.type
         out += "\n\tdescription: %s" % self.description
+        out += "\n\tmultiplex: %s" % self.is_multiplex
         if not self.is_input_port:
             return out
         out += "\n\trequired: %s" % self.required
@@ -43,7 +45,16 @@ class PortList(object):
     def __init__(self, ports):
         self._portnames = set([p['name'] for p in ports])
         for p in ports:
-            self.__setattr__(p['name'], Port(p['name'], p['type'], p.get('required'), p.get('description'), value=None))
+            self.__setattr__(p['name'], 
+                             Port(
+                                    p['name'], 
+                                    p['type'], 
+                                    p.get('required'), 
+                                    p.get('description'), 
+                                    value=None, 
+                                    is_multiplex=p.get('multiplex',False)
+                                 )
+                             )
 
     def __repr__(self):
         return self.__str__()
@@ -54,35 +65,119 @@ class PortList(object):
             out += input_port_name + "\n"
         return out
 
+    def get_matching_multiplex_port(self,name):
+        """
+        Given a name, figure out if a multiplex port prefixes this name and return it.  Otherwise return none.
+        """
+
+        # short circuit:  if the attribute name already exists return none
+        # if name in self._portnames: return None
+        # if not len([p for p in self._portnames if name.startswith(p) and name != p]): return None
+
+        matching_multiplex_ports = [self.__getattribute__(p) for p in self._portnames 
+            if name.startswith(p) 
+            and name != p 
+            and hasattr(self, p) 
+            and self.__getattribute__(p).is_multiplex
+        ]
+
+        for port in matching_multiplex_ports:
+            return port
+
+        return None
+
 class Inputs(PortList):
     # allow setting task input values like this:
     # task.inputs.port_name = value
+    # Also allow initial setup of all internal stuff & multiplex ports
     def __setattr__(self, k, v):
-        # special handling for setting task & portname:
+        # special attributes for internal use
         if k in ['_portnames']:
             object.__setattr__(self, k, v)
+            return
 
-        # special handling for port names
-        elif k in self._portnames and hasattr(self, k):
+        # special handling for setting port values
+        if k in self._portnames and hasattr(self, k):
             port = self.__getattribute__(k)
             port.value = v
+            return
 
-        # default for everything else
-        else:
+        # find out if this is a valid multiplex port, i.e. this portname is prefixed by a multiplex port
+        mp_port = self.get_matching_multiplex_port(k)
+        if mp_port:
+            new_multiplex_port = Port(
+                k,
+                mp_port.type, 
+                mp_port.required, 
+                mp_port.description, 
+                value=v
+            )
+            object.__setattr__(self, k, new_multiplex_port)
+            self._portnames.update([k])
+            return
+
+        # default for initially setting up ports
+        if k in self._portnames:
             object.__setattr__(self, k, v)
+        else:
+            raise AttributeError('Task has no input port named %s.' % k)
 
 class Outputs(PortList):
     """
     Output ports show a name & description.  output_port_name.value returns the link to use as input to next tasks.
     """
     def __init__(self, ports, task_name):
+        self._task_name = task_name
         self._portnames = set([p['name'] for p in ports])
         for p in ports:
-            self.__setattr__(p['name'], Port(p['name'], p['type'], p.get('required'), p['description'], value="source:" + task_name + ":" + p['name'], is_input_port=False))
+            self.__setattr__(
+                p['name'], 
+                Port(
+                    p['name'], 
+                    p['type'], 
+                    p.get('required'), 
+                    p['description'], 
+                    value="source:" + self._task_name + ":" + p['name'], 
+                    is_input_port=False,
+                    is_multiplex=p.get('multiplex',False)
+                    )
+                )
 
+    def __getattribute__(self, k):
+        """
+        Overwride getattribute for multiplex ports.  If we try to get a port for which a multiplex port
+        is a prefix, create the port object and then return it.
+        """
+        # handle regular properties or internal methods normally
+        if k in ['_portnames', '_task_name', 'get_matching_multiplex_port'] or k.startswith('__'):
+            return object.__getattribute__(self, k)
 
+        # if this port already exists, retrieve it
+        if k in self._portnames:
+            return object.__getattribute__(self, k)
 
-class Task:
+        # determine if we're trying to get the value for a multiplex output port
+        if not k in self._portnames:
+            mp_port = self.get_matching_multiplex_port(k)
+            if mp_port:
+                self.__setattr__(
+                    k, 
+                    Port(
+                        mp_port.name, 
+                        mp_port.type, 
+                        mp_port.required, 
+                        mp_port.description, 
+                        value="source:" + self._task_name + ":" + k, 
+                        is_input_port=False,
+                        is_multiplex=False
+                        )
+                    )
+                self._portnames.update([k])
+
+        return object.__getattribute__(self, k)
+        
+
+class Task(object):
     def __init__(self, __interface, __task_type, **kwargs):
         '''
         Construct an instance of GBDX Task
@@ -103,6 +198,7 @@ class Task:
         self.type = __task_type
         self.definition = self.__interface.workflow.describe_task(__task_type)
         self.domain = self.definition['containerDescriptors'][0]['properties'].get('domain','default')
+        self._timeout = self.definition['properties'].get('timeout')
 
         self.inputs = Inputs(self.input_ports)
         self.outputs = Outputs(self.output_ports, self.name)
@@ -131,7 +227,7 @@ class Task:
             None
         '''
         for port_name, port_value in kwargs.iteritems():
-            self.inputs.__getattribute__(port_name).value = port_value
+            self.inputs.__setattr__(port_name, port_value)
 
     @property
     def input_ports(self):
@@ -140,6 +236,16 @@ class Task:
     @input_ports.setter
     def input_ports(self, value):
         raise NotImplementedError("Cannot set input ports")
+
+    @property
+    def timeout(self):
+        return self._timeout
+
+    @timeout.setter
+    def timeout(self, value):
+        if not 0 < value < 40000:
+            raise ValueError('timeout of %s is not a valid number' % value)
+        self._timeout = value
 
     @property
     def output_ports(self):
@@ -155,6 +261,7 @@ class Task:
                     "outputs": [],
                     "inputs": [],
                     "taskType": self.type,
+                    "timeout": self.timeout,
                     "containerDescriptors": [{"properties": {"domain": self.domain}}]
                 }
 
@@ -180,8 +287,7 @@ class Task:
                                     "value": input_port_value
                                 })
 
-        for output_port in self.output_ports:
-            output_port_name = output_port['name']
+        for output_port_name in self.outputs._portnames:
             d['outputs'].append(  {
                     "name": output_port_name
                 } )
@@ -195,7 +301,7 @@ class Workflow:
         self.name = kwargs.get('name', str(uuid.uuid4()) )
         self.id = None
 
-        self.definition = self.workflow_skeleton()
+        self.definition = None
 
         self.tasks = tasks
 
@@ -253,21 +359,25 @@ class Workflow:
 
         return workflow_outputs
 
-    def as_json(self):
+    def generate_workflow_description(self):
         '''
-        Create the json form of the workflow.
+        Generate workflow json for launching the workflow against the gbdx api
 
         Args:
             None
-        :Returns:
-            Workflow json as a native Python data structure.
+
+        Returns:
+            json string
         '''
-        definition = self.workflow_skeleton()
+        if not self.tasks:
+            raise WorkflowError('Workflow contains no tasks, and cannot be executed.')
+
+        self.definition = self.workflow_skeleton()
 
         for task in self.tasks:
-            definition['tasks'].append(task.generate_task_workflow_json())
+            self.definition['tasks'].append( task.generate_task_workflow_json() )
 
-        return definition
+        return self.definition
 
     def execute(self):
         '''
@@ -279,11 +389,13 @@ class Workflow:
         Returns:
             Workflow_id
         '''
-        if not self.tasks:
-            raise WorkflowError('Workflow contains no tasks, and cannot be executed.')
+        # if not self.tasks:
+        #     raise WorkflowError('Workflow contains no tasks, and cannot be executed.')
 
-        for task in self.tasks:
-            self.definition['tasks'].append( task.generate_task_workflow_json() )
+        # for task in self.tasks:
+        #     self.definition['tasks'].append( task.generate_task_workflow_json() )
+
+        self.generate_workflow_description()
 
         self.id = self.__interface.workflow.launch(self.definition)
         return self.id

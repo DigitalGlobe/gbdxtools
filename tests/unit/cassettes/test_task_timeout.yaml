@@ -1,0 +1,81 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      User-Agent: [python-requests/2.9.1]
+    method: GET
+    uri: https://geobigdata.io/workflows/v1/tasks/AOP_Strip_Processor
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA7VY33PiNhD+V3Z4oZ0mBkIvk+SNhEyaabkwIX1pp+OR7TXWnW25kpyEy+R/765s
+        CDZcO3XIC+DVavf71tof4qUXqtwKmaOeogm1LKzSpncBf77QSpaJPKKH3iCQ+SAQJoFBtByIJzMQ
+        RWEGk7v58VyrEI2ReSVfBtHzQKjCN5aM+UW1qrRvhfn63QVflzlB8EzSO4KeXRXIXqd3V79e37OE
+        tAvUViJDe+nJTCydho2WBRu9SIVFY1k1UhnR4UUtZNR7ff2LhTU3qdxKjRkNCBhdgkMEJXMAmyAQ
+        LajxschYEX712LbMi9LOlbY7sdL4dyk1crCsLnGLRETikBRXDlwTx2IMqQoFP4KKGYrzAJGwgtVz
+        kVU2+Pn1CBp+YpGajo4uyzxKES5J9hUm0ZfS2AxzCxpNmVqz7ToI/tszxy9f7nF7nYsgxUEkDX/D
+        5EplhQdXiZIhx14j9DlafVAa+s5q34MpxoJQgDT1qgv9Gg86k76gw1kcDFghcjCJ0AXmpH8YhGSz
+        NnkwmNGKfMgQtMiXCGLz3g4DONKHe9OqtHyOrUz/bzzXstu41jxyKdmnpEuUXxn0TZhgRkaqbMko
+        DBAgGLT7eFV7ulO7pBpowKp1SWjRmU8+/zRbEEz+xV/Vw6S0qkXNiY7gKZFhQmCFJhYGYopEQC7g
+        dmqIENzOphDLFE2DC2uY7hyuuJQfGyyEpkIZQSopZFQI8jJDTSeqqoC0aptMt+C/iUGk6faOBlAn
+        6Q70jl8zXM8XN+ztCxU0WvBg4fSh//vDrM9gyJxiGOoJI1otMJTxigSKlJ6kTaA6LoV8xtQ38ht6
+        cPeIWssowhyCVb3eOE4gYzDOkmSj22+O8Vz8PD45bSZOZQQL847TVRF2QIGB8hHI0KI2/8KLXb6P
+        UeMsltwJOcu2YNDhYMlbP9rD/C287+VfwYYaNmfDN6UySPER0yNAj9j2pze/iDSecWwuRmf9DX/C
+        /hYVt7eNbg/0Rpzei356PdvEWRMut1yXh8/XUy4Hi/uH2Xi4/nU+bJWGtXAXaISZv7H9XqDV+5U5
+        hbBQaTUO8NY2ZqpNNE0x2kuOEz3y76sykGELeC3bxd1w4jt8ncFPv9P3IFNRG/st+c2NtKtqrHEc
+        hMHfxAr1TNgwaRFo63s7+qwWllqTw5TSLKcPHj6IGHc6l5Wb+tAIBDVUnxF+AHEqfITJqjgGmotD
+        EtFA7MG90yO8sabsGXLNHg2HDcJD7xNFjElQ1keu++zEoIprmwr59CufH0AokcukI6Pzc++8Kyd2
+        +3GkloK6LjyKtMQG4pF30hWwM/kBUOuBLZBU7LGwSXPIOeNxbXTaIHHWkQG58J2L7iwWYxoOMJbP
+        3KXoVoqQcro6FNP7CTQTuK4SW9DN+GJA99hj3up2Dh5PBp7bVlsyiSrTiIdKahTEj47d9KbVpVxz
+        gvNdgmurfgWyO88/Nj0QfpAeceBm9iOTfpuv6Q1Rl6+REbdq6G12+9FJA2Td+7jD+s56z92RK5sH
+        vN0+JJuLAA8Q0NDdRGzf1babk1Qt9/ughYpi+28EMy+DVIZbHmWGZI0E49PhcPi6ZWRyN/d5DC38
+        +t8DRe34H8Ok6PM/EQAA
+    headers:
+      connection: [keep-alive]
+      content-encoding: [gzip]
+      content-length: ['1212']
+      content-type: [application/json]
+      date: ['Tue, 14 Jun 2016 23:44:47 GMT']
+      server: [nginx/1.8.0]
+      via: [kong/0.5.2]
+    status: {code: 200, message: OK}
+- request:
+    body: '{"tasks": [{"containerDescriptors": [{"properties": {"domain": "raid"}}],
+      "name": "AOP_Strip_Processor_3b0ddcff-c2b8-4c71-b4d1-4adf10b16f31", "inputs":
+      [{"name": "data", "value": "testing"}], "outputs": [{"name": "data"}, {"name":
+      "log"}], "timeout": 1, "taskType": "AOP_Strip_Processor"}], "name": "21db075b-226b-4108-b4ee-d77e95c25b9a"}'
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      Content-Length: ['338']
+      Content-Type: [application/json]
+      User-Agent: [python-requests/2.9.1]
+    method: POST
+    uri: https://geobigdata.io/workflows/v1/workflows
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA61T247bIBD9lQj1rfHajsll89Yv6Erdt2qFMGAHBQMCnDSK8u+dIZeNVtk+VPtk
+        mGHOnDlnfCSJx20k68nvI9HWj+lyjm4MQsHZjsZMJ0TyxDvj9kxsuLXKvGfSweM7InVQIrlwIBC0
+        fDgHoQzvO27GHEgqJm17cnqDqBvTl3c0rr9viCWn6eTL4D8OlPFxlph4SCzp/OyKBNq+XtB+/Hxh
+        v1LQnr0EJ1SMLiCOlpikzXy+pA19XlbP1Yqu5g29b/qgljVtJaXoukLM2lVBxbIuWirrgnLZ1VVb
+        L7qmzhgu3TES3JiWi+17BHjnB8fbiXhlJXoEWbVTNmEsju2gU1KSgJokjJZ5HoBeUgH9O5LBjfZq
+        ZVBcMmfNAa4dN1FN0RfojUjlYFPZmzFCaRexiXA2cW1VeJDO3v0T7xuqzNAXBo49xtu7sD2vnB54
+        f15E2fuSO782HHfyXDcM3GZDylbbsuVxMyllX/J9LLn3sQQjiosFIFCO9638gzgsZoP8zSCk9WmC
+        gYJA8ClusLFUOw1JFO8N5cUtgn8D7jVStuCMFYpp27mstXQDzIc8A4cFOuXJgL034If8sIT/ZfDt
+        dgUjs6peFNWiqOnrrFlTuqbLp+Wc1g39XlXrqkIwt7+IboMWWwMUkf7HDV+t4DOb1eT0F/G3EH9+
+        BAAA
+    headers:
+      connection: [keep-alive]
+      content-encoding: [gzip]
+      content-length: ['516']
+      content-type: [application/json]
+      date: ['Tue, 14 Jun 2016 23:44:47 GMT']
+      server: [nginx/1.8.0]
+      via: [kong/0.5.2]
+    status: {code: 200, message: OK}
+version: 1

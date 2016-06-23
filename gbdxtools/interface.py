@@ -36,7 +36,7 @@ class Interface():
         # with at least logger.info or logger.debug statements
         # later, we can log to a service, file, or some other aggregator
         self.logger = logging.getLogger('gbdxtools')
-        self.logger.setLevel(logging.DEBUG)
+        self.logger.setLevel(logging.ERROR)
         console_handler = logging.StreamHandler()
         console_handler.setLevel(logging.ERROR)
         formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')

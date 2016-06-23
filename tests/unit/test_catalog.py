@@ -48,14 +48,14 @@ class TestCatalog(unittest.TestCase):
         lng = -105.2705456
         results = c.search_point(lat, lng)
 
-        self.assertTrue(results['stats']['totalRecords'] == 310)
+        self.assertEqual(len(results),310)
 
     @vcr.use_cassette('tests/unit/cassettes/test_catalog_search_address.yaml', filter_headers=['authorization'])
     def test_catalog_search_address(self):
         c = Catalog(self.gbdx)
         results = c.search_address('Boulder, CO')
 
-        self.assertTrue(results['stats']['totalRecords'] == 310)
+        self.assertEqual(len(results), 310)
 
 
 
