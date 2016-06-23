@@ -7,7 +7,7 @@ interactions:
       Connection: [keep-alive]
       User-Agent: [python-requests/2.9.1]
     method: GET
-    uri: http://idaho.geobigdata.io/v1/chip/bbox/idaho-images/293adef4-0853-4bc1-882b-74c0e88035b7?upperLeft=138.524385403,-35.101617304&lowerRight=138.524628555,-35.1019582069&lowCutoff=0.01&highCutoff=0.99&format=tif&token=dumdummytoken=721d1fdb-193a-46e7-844b-d4a3a2c1a595
+    uri: http://idaho.geobigdata.io/v1/chip/bbox/idaho-images/293adef4-0853-4bc1-882b-74c0e88035b7?upperLeft=138.524385403,-35.101617304&lowerRight=138.524628555,-35.1019582069&lowCutoff=0.01&highCutoff=0.99&format=tif&token=dummytoken&panId=721d1fdb-193a-46e7-844b-d4a3a2c1a595
   response:
     body:
       string: !!binary |
@@ -1175,8 +1175,8 @@ interactions:
     headers:
       connection: [keep-alive]
       content-type: [image/tif]
-      date: ['Wed, 22 Jun 2016 18:03:12 GMT']
+      date: ['Thu, 23 Jun 2016 22:03:58 GMT']
       server: [Apache-Coyote/1.1]
-      set-cookie: [JSESSIONID=6BA2AB6993B945F4616C1F292CFC71D9; Path=/; HttpOnly]
+      set-cookie: [JSESSIONID=D5DF5645D74D0318EFD8C6ED4C35877E; Path=/; HttpOnly]
     status: {code: 200, message: OK}
 version: 1

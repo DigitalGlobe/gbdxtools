@@ -74,11 +74,11 @@ class IdahoTest(unittest.TestCase):
 
         i = Idaho(gbdx)
         i.get_idaho_chip_by_bbox(idaho_id=multi_id,
-                                output_folder='self._temp_path',
-                                minx = 138.52438540347904,
-                                miny = -35.10195820694827,
-                                maxx = 138.52462855543203,
-                                maxy = -35.1016173039523,
+                                output_folder=self._temp_path,
+                                minx = 138.524385403479,
+                                miny = -35.101958206948,
+                                maxx = 138.524628555432,
+                                maxy = -35.10161730395,
                                 bucket_name='idaho-images',
                                 high_cutoff = 0.99,
                                 low_cutoff = 0.01,
