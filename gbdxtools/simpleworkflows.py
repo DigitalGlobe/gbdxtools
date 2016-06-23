@@ -231,8 +231,6 @@ class Workflow:
         s3task = self.__interface.Task("StageDataToS3", data=input_value, destination=s3location)
         self.tasks.append(s3task)
 
-
-
     def workflow_skeleton(self):
         return {
             "tasks": [],
@@ -255,6 +253,21 @@ class Workflow:
 
         return workflow_outputs
 
+    def as_json(self):
+        '''
+        Create the json form of the workflow.
+
+        Args:
+            None
+        :Returns:
+            Workflow json as a native Python data structure.
+        '''
+        definition = self.workflow_skeleton()
+
+        for task in self.tasks:
+            definition['tasks'].append(task.generate_task_workflow_json())
+
+        return definition
 
     def execute(self):
         '''
