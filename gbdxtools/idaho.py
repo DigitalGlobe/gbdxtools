@@ -230,9 +230,9 @@ class Idaho():
             r.raise_for_status()
 
     def get_idaho_chip_by_bbox(self, idaho_id, output_folder, minx, miny, maxx, maxy,
-                               bucket_name='idaho-images', high_cutoff = 0.99,
-                               low_cutoff = 0.01, pan_id=None, format='tif',
-                               return_fp=False):
+                               filename=None, bucket_name='idaho-images',
+                               high_cutoff = 0.99, low_cutoff = 0.01, pan_id=None,
+                               format='tif', return_fp=False):
 
         '''Downloads an orthorectified IDAHO chip by bounding box.
 
@@ -243,6 +243,7 @@ class Idaho():
             miny (float): smallest y-value for bounding box corner
             maxx (float): largest x-value for bounding box corner
             maxy (float): largest y-value for bounding box corner
+            filename (str): optional- name under which to save the chip
             bucket_name (str): The S3 bucket name.
             high_cutoff (float): high threshold cutoff for the DRA opertaion
             low_cutoff (float): low threshold cutoff for the DRA opertaion
@@ -256,6 +257,9 @@ class Idaho():
         print 'Retrieving IDAHO chip'
 
         access_token = self.gbdx_connection.access_token
+
+        if not filename:
+            filename = idaho_id
 
         # form request
         url = ('http://idaho.geobigdata.io/'
@@ -271,7 +275,7 @@ class Idaho():
 
         if r.status_code == 200:
             # form output path
-            file_path = os.path.join(output_folder, idaho_id+'.tif')
+            file_path = os.path.join(output_folder, filename+'.tif')
 
             with open(file_path, 'wb') as the_file:
                 the_file.write(r.content)
