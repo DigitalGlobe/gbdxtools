@@ -442,17 +442,13 @@ class Idaho():
                     center_lat = (S + (N-S)/2)
                     center_lon = (W + (E-W)/2)
                     print center_lat, center_lon
-<<<<<<< HEAD
-                    self.get_idaho_chip(bucketname, image_id, center_lat,
-                                        center_lon, resolution, outputfolder)
-=======
                     self.get_idaho_chip(bucket_name=bucketname,
                                         idaho_id=image_id,
                                         center_lat=str(center_lat),
                                         center_lon=str(center_lon),
                                         resolution=resolution,
                                         output_folder=outputfolder)
->>>>>>> 8e5f8eb73d309df9209e8e558b3eb842ed05b9ec
+
                     tile_count+=1
 
         print ('There were ' + str(tile_count) + ' IDAHO images downloaded that ' +
