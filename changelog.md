@@ -1,3 +1,7 @@
+0.3.3
+-----
+* Fix bug with output multiplex ports.  Now the root multiplex port is not added to the workflow launched unless another input from another task explicitly refers to it.
+
 0.3.2
 -----
 * quick change to catalog.get_most_recent_images(): now it takes a list of catalog results as an argument.
