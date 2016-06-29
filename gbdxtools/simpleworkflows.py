@@ -392,7 +392,7 @@ class Workflow:
             multiplex_output_port_names = [portname for portname in task.outputs._portnames if task.outputs.__getattribute__(portname).is_multiplex]
             for p in multiplex_output_port_names:
                 output_port_reference = 'source:' + task.name + ':' + p
-                if p not in all_input_port_values:
+                if output_port_reference not in all_input_port_values:
                     output_multiplex_ports_to_exclude.append(p)
 
             task_def = task.generate_task_workflow_json(output_multiplex_ports_to_exclude=output_multiplex_ports_to_exclude)
