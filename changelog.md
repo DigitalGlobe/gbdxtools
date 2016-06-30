@@ -1,3 +1,7 @@
+0.3.4
+-----
+* Fix bug with multiplex port assignment.
+
 0.3.3
 -----
 * Fix bug with output multiplex ports.  Now the root multiplex port is not added to the workflow launched unless another input from another task explicitly refers to it.
