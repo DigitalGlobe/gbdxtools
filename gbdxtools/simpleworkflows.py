@@ -16,7 +16,7 @@ class WorkflowError(Exception):
     pass
 
 
-class Port:
+class Port(object):
     def __init__(self, name, type, required, description, value, is_input_port=True, is_multiplex=False):
         self.name = name
         self.type = type
@@ -40,6 +40,7 @@ class Port:
         out += "\n\trequired: %s" % self.required
         out += "\n\tValue: %s" % self.value
         return out
+
 
 class PortList(object):
     def __init__(self, ports):
@@ -202,6 +203,7 @@ class Task(object):
 
         self.inputs = Inputs(self.input_ports)
         self.outputs = Outputs(self.output_ports, self.name)
+        self.batch_values = None
 
         # all the other kwargs are input port values or sources
         self.set(**kwargs)
@@ -216,8 +218,8 @@ class Task(object):
         # return "source:" + self.name + ":" + port_name
 
     # set input ports source or value
-    def set( self, **kwargs ):
-        '''
+    def set(self, **kwargs):
+        """
         Set input values on task
 
         Args:
@@ -225,9 +227,25 @@ class Task(object):
 
         Returns:
             None
-        '''
+        """
+        # list used for batch values
+        batch_values = []
+
         for port_name, port_value in kwargs.iteritems():
-            self.inputs.__setattr__(port_name, port_value)
+            # if input type is of list, use batch workflows endpoint
+            if isinstance(port_value, list):
+                self.inputs.__getattribute__(port_name).value = "$batch_value:{0}".format(
+                    "batch_input_{0}".format(port_name))
+                batch_values.append({"name": "batch_input_{0}".format(port_name), "values": port_value})
+            else:
+                self.inputs.__setattr__(port_name, port_value)
+                # self.inputs.__getattribute__(port_name).value = port_value
+
+        # set the batch values object
+        if batch_values:
+            self.batch_values = batch_values
+        else:
+            self.batch_values = None
 
     @property
     def input_ports(self):
@@ -259,22 +277,22 @@ class Task(object):
         if not output_multiplex_ports_to_exclude:
             output_multiplex_ports_to_exclude = []
         d = {
-                    "name": self.name,
-                    "outputs": [],
-                    "inputs": [],
-                    "taskType": self.type,
-                    "timeout": self.timeout,
-                    "containerDescriptors": [{"properties": {"domain": self.domain}}]
-                }
+            "name": self.name,
+            "outputs": [],
+            "inputs": [],
+            "taskType": self.type,
+            "timeout": self.timeout,
+            "containerDescriptors": [{"properties": {"domain": self.domain}}]
+        }
 
         for input_port_name in self.inputs._portnames:
             input_port_value = self.inputs.__getattribute__(input_port_name).value
-            if input_port_value == None:
+            if input_port_value is None:
                 continue
 
-            if input_port_value == False:
+            if input_port_value is False:
                 input_port_value = 'false'
-            if input_port_value == True:
+            if input_port_value is True:
                 input_port_value = 'true'
 
             if str(input_port_value).startswith('source:'):
@@ -300,7 +318,7 @@ class Task(object):
         return d
 
 
-class Workflow:
+class Workflow(object):
     def __init__(self, __interface, tasks, **kwargs):
         self.__interface = __interface
         self.name = kwargs.get('name', str(uuid.uuid4()) )
@@ -309,6 +327,17 @@ class Workflow:
         self.definition = None
 
         self.tasks = tasks
+
+        batch_values = []
+
+        for task in self.tasks:
+            if task.batch_values:
+                batch_values.extend(task.batch_values)
+
+        if batch_values:
+            self.batch_values = batch_values
+        else:
+            self.batch_values = None
 
     def savedata(self, output, location=None):
         '''
@@ -341,8 +370,6 @@ class Workflow:
 
         s3task = self.__interface.Task("StageDataToS3", data=input_value, destination=s3location)
         self.tasks.append(s3task)
-
-
 
     def workflow_skeleton(self):
         return {
@@ -381,22 +408,27 @@ class Workflow:
 
         self.definition = self.workflow_skeleton()
 
+        if self.batch_values:
+            self.definition["batch_values"] = self.batch_values
 
-        all_input_port_values = [t.inputs.__getattribute__(input_port_name).value  for t in self.tasks for input_port_name in t.inputs._portnames]
+        all_input_port_values = [t.inputs.__getattribute__(input_port_name).value for t in self.tasks for
+                                 input_port_name in t.inputs._portnames]
         for task in self.tasks:
             # only include multiplex output ports in this task if other tasks refer to them in their inputs.
             # 1. find the multplex output port_names in this task
             # 2. see if they are referred to in any other tasks inputs
             # 3. If not, exclude them from the workflow_def
             output_multiplex_ports_to_exclude = []
-            multiplex_output_port_names = [portname for portname in task.outputs._portnames if task.outputs.__getattribute__(portname).is_multiplex]
+            multiplex_output_port_names = [portname for portname in task.outputs._portnames if
+                                           task.outputs.__getattribute__(portname).is_multiplex]
             for p in multiplex_output_port_names:
                 output_port_reference = 'source:' + task.name + ':' + p
                 if output_port_reference not in all_input_port_values:
                     output_multiplex_ports_to_exclude.append(p)
 
-            task_def = task.generate_task_workflow_json(output_multiplex_ports_to_exclude=output_multiplex_ports_to_exclude)
-            self.definition['tasks'].append( task_def )
+            task_def = task.generate_task_workflow_json(
+                output_multiplex_ports_to_exclude=output_multiplex_ports_to_exclude)
+            self.definition['tasks'].append(task_def)
 
         return self.definition
 
@@ -418,7 +450,14 @@ class Workflow:
 
         self.generate_workflow_description()
 
-        self.id = self.__interface.workflow.launch(self.definition)
+        # hit batch workflow endpoint if batch values
+        if self.batch_values:
+            self.id = self.__interface.workflow.launch_batch_workflow(self.definition)
+
+        # use regular workflow endpoint if no batch values
+        else:
+            self.id = self.__interface.workflow.launch(self.definition)
+
         return self.id
 
     def cancel(self):
@@ -434,13 +473,22 @@ class Workflow:
         if not self.id:
             raise WorkflowError('Workflow is not running.  Cannot cancel.')
 
-        self.__interface.workflow.cancel(self.id)
+        if self.batch_values:
+            self.__interface.workflow.batch_workflow_cancel(self.id)
+        else:
+            self.__interface.workflow.cancel(self.id)
 
     @property
     def status(self):
         if not self.id:
             raise WorkflowError('Workflow is not running.  Cannot check status.')
-        return self.__interface.workflow.status(self.id)
+
+        if self.batch_values:
+            status = self.__interface.workflow.batch_workflow_status(self.id)
+        else:
+            status = self.__interface.workflow.status(self.id)
+
+        return status
 
     @status.setter
     def status(self, value):
@@ -450,6 +498,8 @@ class Workflow:
     def events(self):
         if not self.id:
             raise WorkflowError('Workflow is not running.  Cannot check status.')
+        if self.batch_values:
+            raise NotImplementedError("Query Each Workflow Id within the Batch Workflow for Events")
         return self.__interface.workflow.events(self.id)
 
     @events.setter
@@ -460,7 +510,13 @@ class Workflow:
     def complete(self):
         if not self.id:
             return False
-        return self.status['state'] == 'complete'
+
+        # check if all sub workflows are either done, failed, or timedout
+        if self.batch_values:
+            return all(workflow.get("state") in ["succeeded", "failed", "timedout"] for workflow in
+                       self.status['workflows'])
+        else:
+            return self.status['state'] == 'complete'
 
     @complete.setter
     def complete(self, value):
@@ -470,6 +526,8 @@ class Workflow:
     def failed(self):
         if not self.id:
             return False
+        if self.batch_values:
+            raise NotImplementedError("Query Each Workflow Id within the Batch Workflow for Current State")
         status = self.status
         return status['state'] == 'complete' and status['event'] == 'failed'
 
@@ -481,6 +539,8 @@ class Workflow:
     def canceled(self):
         if not self.id:
             return False
+        if self.batch_values:
+            raise NotImplementedError("Query Each Workflow Id within the Batch Workflow for Current State")
         status = self.status
         return status['state'] == 'complete' and status['event'] == 'canceled'
 
@@ -492,6 +552,11 @@ class Workflow:
     def succeeded(self):
         if not self.id:
             return False
+
+        # check if all sub workflows are succeeded
+        if self.batch_values:
+            return all(workflow.get("state") == "succeeded" for workflow in self.status['workflows'])
+
         status = self.status
         return status['state'] == 'complete' and status['event'] == 'succeeded'
 
@@ -503,6 +568,10 @@ class Workflow:
     def running(self):
         if not self.id:
             return False
+        if self.batch_values:
+            # check if any sub workflows are running
+            return any(workflow.get("state") not in ["succeeded", "failed", "timedout"] for workflow in
+                       self.status['workflows'])
         status = self.status
         return status['state'] == 'complete' and status['event'] == 'running'
 
@@ -514,6 +583,8 @@ class Workflow:
     def timedout(self):
         if not self.id:
             return False
+        if self.batch_values:
+            raise NotImplementedError("Query Each Workflow Id within the Batch Workflow for Current State")
         status = self.status
         return status['state'] == 'complete' and status['event'] == 'timedout'
 
