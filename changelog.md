@@ -1,3 +1,7 @@
+0.4.0
+-----
+* Batch workflow creation supported.  When you send in an array of values to a workflow input, a batch workflow is automatically created.
+
 0.3.4
 -----
 * Fix bug with multiplex port assignment.
