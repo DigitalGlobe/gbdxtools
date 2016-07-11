@@ -238,11 +238,14 @@ class Task(object):
                     "batch_input_{0}".format(port_name))
                 batch_values.append({"name": "batch_input_{0}".format(port_name), "values": port_value})
             else:
-                self.inputs.__getattribute__(port_name).value = port_value
+                self.inputs.__setattr__(port_name, port_value)
+                # self.inputs.__getattribute__(port_name).value = port_value
 
         # set the batch values object
         if batch_values:
             self.batch_values = batch_values
+        else:
+            self.batch_values = None
 
     @property
     def input_ports(self):
@@ -328,6 +331,8 @@ class Workflow(object):
 
         if batch_values:
             self.batch_values = batch_values
+        else:
+            self.batch_values = None
 
     def savedata(self, output, location=None):
         '''
@@ -462,7 +467,7 @@ class Workflow(object):
         if self.batch_values:
             status = self.__interface.workflow.batch_workflow_status(self.id)
         else:
-            self.__interface.workflow.status(self.id)
+            status = self.__interface.workflow.status(self.id)
 
         return status
 
