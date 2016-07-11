@@ -483,8 +483,6 @@ class Workflow(object):
         if not self.id:
             raise WorkflowError('Workflow is not running.  Cannot check status.')
 
-        status = None
-
         if self.batch_values:
             status = self.__interface.workflow.batch_workflow_status(self.id)
         else:
@@ -512,9 +510,13 @@ class Workflow(object):
     def complete(self):
         if not self.id:
             return False
+
+        # check if all sub workflows are either done, failed, or timedout
         if self.batch_values:
-            raise NotImplementedError("Query Each Workflow Id within the Batch Workflow for Current State")
-        return self.status['state'] == 'complete'
+            return all(workflow.get("state") in ["succeeded", "failed", "timedout"] for workflow in
+                       self.status['workflows'])
+        else:
+            return self.status['state'] == 'complete'
 
     @complete.setter
     def complete(self, value):
@@ -550,8 +552,11 @@ class Workflow(object):
     def succeeded(self):
         if not self.id:
             return False
+
+        # check if all sub workflows are succeeded
         if self.batch_values:
-            raise NotImplementedError("Query Each Workflow Id within the Batch Workflow for Current State")
+            return all(workflow.get("state") == "succeeded" for workflow in self.status['workflows'])
+
         status = self.status
         return status['state'] == 'complete' and status['event'] == 'succeeded'
 
@@ -564,7 +569,9 @@ class Workflow(object):
         if not self.id:
             return False
         if self.batch_values:
-            raise NotImplementedError("Query Each Workflow Id within the Batch Workflow for Current State")
+            # check if any sub workflows are running
+            return any(workflow.get("state") not in ["succeeded", "failed", "timedout"] for workflow in
+                       self.status['workflows'])
         status = self.status
         return status['state'] == 'complete' and status['event'] == 'running'
 
