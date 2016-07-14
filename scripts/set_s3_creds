@@ -1,7 +1,5 @@
 #!/usr/bin/env python
 
-__version__='0.1'
-
 import ConfigParser
 import argparse
 import os
@@ -9,6 +7,8 @@ import sys
 import traceback
 
 from gbdx_auth import gbdx_auth
+
+__version__ = '0.1'
 
 
 def set_awscli_creds(s3_access_key, s3_secret_key, s3_session_token, profile_name, config_file):
@@ -31,14 +31,14 @@ def print_environ_creds(s3_access_key, s3_secret_key, s3_session_token, export):
     vardict = dict(AWS_ACCESS_KEY_ID=s3_access_key,
                    AWS_SECRET_ACCESS_KEY=s3_secret_key,
                    AWS_SESSION_TOKEN=s3_session_token)
-    _print_environ(vardict, export)
+    _print_aws_environ(vardict, export)
 
 
 def _set_config(vardict, profile_name, config_file):
     fname = os.path.expanduser(config_file)
     cfp = ConfigParser.SafeConfigParser()
     cfp.read(fname)
-    for k,v in vardict.items():
+    for k, v in vardict.items():
         try:
             cfp.set(profile_name, k, v)
         except ConfigParser.NoSectionError:
@@ -47,17 +47,6 @@ def _set_config(vardict, profile_name, config_file):
 
     with open(fname, 'w+') as fh:
         cfp.write(fh)
-
-
-def _print_environ(vardict, export=False):
-    export_str = 'export ' if export else ''
-
-    print
-    print "#-------------------------------"
-    for k,v in vardict.items():
-        print '{}{}={}'.format(export_str, k, v)
-    print "#-------------------------------"
-    print
 
 
 def get_temp_s3creds(gbdx_conn=None):
@@ -93,6 +82,25 @@ def set_temp_creds(gbdx_conn, awscli, awscli_profile, s3cmd, s3cmd_config, envir
         print_environ_creds(s3_access_key, s3_secret_key, s3_session_token, export=environ_export)
 
 
+def _print_aws_environ(vardict, export=False):
+    export_str = 'export ' if export else ''
+
+    print
+    print "#------------------ AWS bash environment variables -------------------"
+    for k, v in vardict.items():
+        print '{}{}={}'.format(export_str, k, v)
+    print "#---------------------------------------------------------------------"
+    print
+
+
+def _print_gbdx_token_info(gbdx_conn):
+    print
+    print "#------------------------- GBDX Token Info ---------------------------"
+    for k, v in gbdx_conn.token.items():
+        print '{}={}'.format(k, v)
+    print "#---------------------------------------------------------------------"
+    print
+
 
 def main():
 
@@ -122,6 +130,9 @@ def main():
     parser.add_argument("--environ_export", dest="environ_export", action="store_true",
                         required=False, help="If true, then prefix each environment variable with 'export'")
 
+    parser.add_argument("-d", "--display-token", dest="print_token", action="store_true", required=False, default=False,
+                        help="If set, then print the GBDX token information.")
+
     args = parser.parse_args()
 
     if not any((args.awscli, args.s3cmd, args.environ)):
@@ -133,6 +144,9 @@ def main():
 
     try:
         gbdx_conn = gbdx_auth.get_session()
+
+        if args.print_token:
+            _print_gbdx_token_info(gbdx_conn)
 
         set_temp_creds(gbdx_conn,
                        awscli=args.awscli, awscli_profile=args.awscli_profile,
