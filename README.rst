@@ -52,6 +52,14 @@ If you run into trouble with the installation of cryptography, make sure that th
 
    sudo apt-get install build-essential libssl-dev libffi-dev python-dev
 
+**Mac OSX Users**
+
+If you run into trouble with the installation of cryptography and see a message that <ffi.h> could not be found, you can run 
+
+   xcode-select --install
+   
+Then run "pip install gbdxtools" again. See stackoverflow for dicussion on what is going wrong and why this fixes it http://stackoverflow.com/questions/27328049/missing-usr-include-after-yosemite-and-xcode-install   
+
 **conda**
 
 If your installation with pip keeps failing, try creating a conda environment and installing gbdxtools within this environment. 
