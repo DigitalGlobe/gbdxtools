@@ -11,7 +11,7 @@ if sys.version_info > (3,):
 # long_description=readme,
       
 setup(name='gbdxtools',
-      version='0.3.4',
+      version='0.4.0',
       description='Additional s3 functionality.',
       classifiers=[],
       keywords='',

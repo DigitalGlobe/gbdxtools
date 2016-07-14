@@ -1,83 +1,19 @@
 from gbdxtools import Interface
 
 """
-Example using batch workflow endpoint to create multiple workflows with 1 submission
+Example using multiple inputs with 1 submission
 """
 
-batch_workflow_json = {
-    "name": "fastortho_stagetos3",
-    "batch_values": [
-        {
-            "name": "input_data",
-            "values": [
-                "http://test-tdgplatform-com/temp/1",
-                "http://test-tdgplatform-com/temp/2",
-                "http://test-tdgplatform-com/temp/3"
-            ]
-        },
-        {
-            "name": "input_dem",
-            "values": [
-                "SRTM90",
-                "SRTM120",
-                "SRTM150"
-            ]
-        },
-        {
-            "name": "destination",
-            "values": [
-                "http://test-tdgplatform-com/temp/1",
-                "http://test-tdgplatform-com/temp/2",
-                "http://test-tdgplatform-com/temp/3"
-            ]
-        }
-    ],
-    "tasks": [
-        {
-            "name": "FastOrtho",
-            "outputs": [
-                {
-                    "name": "data"
-                }
-            ],
-            "inputs": [
-                {
-                    "name": "data",
-                    "value": "$batch_value:input_data"
-                },
-                {
-                    "name": "demspecifier",
-                    "value": "$batch_value:input_dem"
-                }
-            ],
-            "taskType": "FastOrtho"
-        },
-        {
-            "name": "StagetoS3",
-            "inputs": [
-                {
-                    "name": "data",
-                    "source": "FastOrtho:data"
-                },
-                {
-                    "name": "destination",
-                    "value": "$batch_value:destination"
-                }
-            ],
-            "taskType": "StageDataToS3"
-        }
-    ]
-}
+gbdx = Interface()
 
+# note there are 2 inputs
+data = ["s3://receiving-dgcs-tdgplatform-com/054813633050_01_003",
+        "http://test-tdgplatform-com/data/QB02/LV1B/053702625010_01_004/053702625010_01/053702625010_01_P013_MUL"]
 
-def go():
-    # create batch workflow
-    batch_workflow_id = gbdx.workflow.launch_batch_workflow(batch_workflow_json)
-    # check status
-    print gbdx.workflow.batch_workflow_status(batch_workflow_id)
-    # cancel batch workflow
-    print gbdx.workflow.batch_workflow_cancel(batch_workflow_id)
+aoptask = gbdx.Task("AOP_Strip_Processor", data=data, enable_acomp=True, enable_pansharpen=True)
 
-if __name__ == "__main__":
-    gbdx = Interface()
-    go()
+workflow = gbdx.Workflow([aoptask])
+
+workflow.savedata(aoptask.outputs.data, location='some_folder')
+
+batch_workflow_id = workflow.execute()
