@@ -4,6 +4,10 @@ GBDX IDAHO Interface.
 Contact: nate.ricklin@digitalglobe.com
 """
 from __future__ import print_function
+from __future__ import division
+from builtins import str
+from builtins import object
+from past.utils import old_div
 
 from pygeoif import geometry
 from sympy.geometry import Point, Polygon
@@ -14,7 +18,7 @@ import requests
 
 from gbdxtools.catalog import Catalog
 
-class Idaho():
+class Idaho(object):
 
 
     def __init__(self, interface):
@@ -135,18 +139,18 @@ class Idaho():
         description = self.describe_images(idaho_image_results)
         if len(description) > 0:
             functionstring = ''
-            for catid, images in description.iteritems():
-                for partnum, part in images['parts'].iteritems():
+            for catid, images in description.items():
+                for partnum, part in images['parts'].items():
     
-                    num_images = len(part.keys())
+                    num_images = len(list(part.keys()))
                     partname = None
                     if num_images == 1:
                         # there is only one image, use the PAN
-                        partname = [p for p in part.keys()][0]
+                        partname = [p for p in list(part.keys())][0]
                         pan_image_id = ''
                     elif num_images == 2:
                         # there are two images in this part, use the multi (or pansharpen)
-                        partname = [p for p in part.keys() if p is not 'PAN'][0]
+                        partname = [p for p in list(part.keys()) if p is not 'PAN'][0]
                         pan_image_id = part['PAN']['id']
     
                     if not partname:
@@ -267,19 +271,19 @@ class Idaho():
         description = self.describe_images(idaho_image_results)
         
         tile_count = 0
-        for catid, images in description.iteritems():
+        for catid, images in description.items():
             functionstring = ''
-            for partnum, part in images['parts'].iteritems():
+            for partnum, part in images['parts'].items():
 
-                num_images = len(part.keys())
+                num_images = len(list(part.keys()))
                 partname = None
                 if num_images == 1:
                     # there is only one image, use the PAN
-                    partname = [p for p in part.keys() if p.upper() == 'PAN'][0]
+                    partname = [p for p in list(part.keys()) if p.upper() == 'PAN'][0]
                     pan_image_id = ''
                 elif num_images == 2:
                     # there are two images in this part, use the multi (or pansharpen)
-                    partname = [p for p in part.keys() if p is not 'PAN'][0]
+                    partname = [p for p in list(part.keys()) if p is not 'PAN'][0]
                     pan_image_id = part['PAN']['id']
 
                 if not partname:
@@ -313,8 +317,8 @@ class Idaho():
             data=htmlfile.read().decode("utf8")
 
         data = data.replace('FUNCTIONSTRING',functionstring)
-        data = data.replace('CENTERLAT',str(S + (N-S)/2))
-        data = data.replace('CENTERLON',str(W + (E-W)/2))
+        data = data.replace('CENTERLAT',str(S + old_div((N-S),2)))
+        data = data.replace('CENTERLON',str(W + old_div((E-W),2)))
         data = data.replace('BANDS',bandstr)
         data = data.replace('TOKEN',self.gbdx_connection.access_token)
 
@@ -356,17 +360,17 @@ class Idaho():
         description = self.describe_images(idaho_image_results)
         
         tile_count = 0
-        for catid, images in description.iteritems():
-            for partnum, part in images['parts'].iteritems():
+        for catid, images in description.items():
+            for partnum, part in images['parts'].items():
 
-                num_images = len(part.keys())
+                num_images = len(list(part.keys()))
                 partname = None
                 if num_images == 1:
                     # there is only one image, use the PAN
-                    partname = [p for p in part.keys() if p.upper() == 'PAN'][0]
+                    partname = [p for p in list(part.keys()) if p.upper() == 'PAN'][0]
                 elif num_images == 2:
                     # there are two images in this part, use the multi (or pansharpen)
-                    partname = [p for p in part.keys() if p is not 'PAN'][0]
+                    partname = [p for p in list(part.keys()) if p is not 'PAN'][0]
 
                 if not partname:
                     print("Cannot find part for idaho image.")
@@ -380,8 +384,8 @@ class Idaho():
                 pp1, pp2, pp3, pp4 = Point(W, S), Point(W, N), Point(E, N), Point(E, S)
                 part_bbox_polygon = Polygon(pp1, pp2, pp3, pp4)
                 if (bbox_polygon.intersection(part_bbox_polygon)):
-                    center_lat = (S + (N-S)/2)
-                    center_lon = (W + (E-W)/2)
+                    center_lat = (S + old_div((N-S),2))
+                    center_lon = (W + old_div((E-W),2))
                     print(center_lat, center_lon)
                     self.get_idaho_chip(bucket_name=bucketname,
                                         idaho_id=image_id,
