@@ -1,1 +1,2 @@
-from interface import Interface
+from __future__ import absolute_import
+from .interface import Interface
