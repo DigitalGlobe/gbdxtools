@@ -3,6 +3,8 @@ Classes to represent GBDX tasks and workflows.
 
 Contact: dmarino@digitalglobe.com
 """
+from builtins import str
+from builtins import object
 
 import json, uuid
 
@@ -231,7 +233,7 @@ class Task(object):
         # list used for batch values
         batch_values = []
 
-        for port_name, port_value in kwargs.iteritems():
+        for port_name, port_value in kwargs.items():
             # if input type is of list, use batch workflows endpoint
             if isinstance(port_value, list):
                 self.inputs.__getattribute__(port_name).value = "$batch_value:{0}".format(

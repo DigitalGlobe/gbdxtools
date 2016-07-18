@@ -6,6 +6,7 @@ GBDX Workflow interface.
 
 """
 from __future__ import print_function
+from builtins import object
 
 import json
 

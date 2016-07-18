@@ -5,6 +5,8 @@ This set of functions is used for breaking up a large AOI into smaller AOIs to s
 can only handle 2 square degrees at a time.
 
 """
+from builtins import zip
+from builtins import range
 
 from pygeoif import geometry
 import json
