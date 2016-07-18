@@ -146,8 +146,8 @@ class SimpleWorkflowTests(unittest.TestCase):
 
         assert len(outputs) == 4
         for output in outputs:
-            assert output.keys()[0].startswith('source:')
-            assert output.values()[0].startswith('s3://')
+            assert list(output.keys())[0].startswith('source:')
+            assert list(output.values())[0].startswith('s3://')
 
 
     @vcr.use_cassette('tests/unit/cassettes/test_task_name_input.yaml',record_mode='new_episodes',filter_headers=['authorization'])
@@ -236,9 +236,9 @@ class SimpleWorkflowTests(unittest.TestCase):
         # check the pre-existing timeout:
         assert aoptask.timeout == 36000
 
-        # can't set equal to a string
-        with self.assertRaises(ValueError) as context:
-            aoptask.timeout = '12345'
+        # can set equal to a string
+        aoptask.timeout = '12345'
+        assert aoptask.timeout == 12345
 
         # set the timeout and verify it makes it to the task json
         aoptask.timeout = 1

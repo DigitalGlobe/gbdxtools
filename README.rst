@@ -12,6 +12,13 @@ gbdxtools: Python tools for using GBDX
     :target: http://gbdxtools.readthedocs.org/en/latest/?badge=latest
     :alt: Documentation Status
 
+Versions supported:
+
+- 2.7
+- 3.3
+- 3.4
+- 3.5
+
 gbdxtools is a package for ordering imagery and launching workflows on DigitalGlobe's GBDX platform.
 
 In order to use gbdxtools, you need GBDX credentials. Email GBDX-Support@digitalglobe.com to get these.
