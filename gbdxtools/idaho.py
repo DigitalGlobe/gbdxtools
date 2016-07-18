@@ -3,6 +3,7 @@ GBDX IDAHO Interface.
 
 Contact: nate.ricklin@digitalglobe.com
 """
+from __future__ import print_function
 
 from pygeoif import geometry
 from sympy.geometry import Point, Polygon
@@ -181,7 +182,7 @@ class Idaho():
                 self.logger.debug("Saving %s" % output_filename)
                 outputfile.write(data)
         else:
-            print "No items returned."
+            print("No items returned.")
 
 
     def get_idaho_chip(self, bucket_name, idaho_id, center_lat, center_lon, 
@@ -200,7 +201,7 @@ class Idaho():
             Confirmation (str) that tile processing was done.
         '''
 
-        print 'Retrieving IDAHO chip'
+        print('Retrieving IDAHO chip')
 
         access_token = self.gbdx_connection.access_token
 
@@ -226,10 +227,10 @@ class Idaho():
                 the_file.write(r.content)
     
         elif r.status_code == 404:
-            print 'IDAHO ID not found: %s' % idaho_id
+            print('IDAHO ID not found: %s' % idaho_id)
             r.raise_for_status()
         else:
-            print 'There was a problem retrieving IDAHO ID: %s' % idaho_id
+            print('There was a problem retrieving IDAHO ID: %s' % idaho_id)
             r.raise_for_status()
 
 
@@ -282,7 +283,7 @@ class Idaho():
                     pan_image_id = part['PAN']['id']
 
                 if not partname:
-                    print "Cannot find part for idaho image."
+                    print("Cannot find part for idaho image.")
                     continue
 
                 bandstr = {
@@ -318,7 +319,7 @@ class Idaho():
         data = data.replace('TOKEN',self.gbdx_connection.access_token)
 
         with codecs.open(output_filename,'w','utf8') as outputfile:
-            print "Saving %s" % output_filename
+            print("Saving %s" % output_filename)
             outputfile.write(data)
             
             
@@ -368,7 +369,7 @@ class Idaho():
                     partname = [p for p in part.keys() if p is not 'PAN'][0]
 
                 if not partname:
-                    print "Cannot find part for idaho image."
+                    print("Cannot find part for idaho image.")
                     continue
 
                 part_boundstr_wkt = part[partname]['boundstr']
@@ -381,7 +382,7 @@ class Idaho():
                 if (bbox_polygon.intersection(part_bbox_polygon)):
                     center_lat = (S + (N-S)/2)
                     center_lon = (W + (E-W)/2)
-                    print center_lat, center_lon
+                    print(center_lat, center_lon)
                     self.get_idaho_chip(bucket_name=bucketname,
                                         idaho_id=image_id,
                                         center_lat=str(center_lat),
