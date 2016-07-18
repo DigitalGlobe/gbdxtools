@@ -3,6 +3,7 @@ Main Interface to GBDX API.
 
 Contact: kostas.stamatiou@digitalglobe.com
 """
+from __future__ import absolute_import
 from builtins import object
 
 import json
