@@ -1,3 +1,7 @@
+0.5.0
+-----
+* Python 3 support (3.3, 3.4, 3.5)
+
 0.4.0
 -----
 * Batch workflow creation supported.  When you send in an array of values to a workflow input, a batch workflow is automatically created.
