@@ -263,9 +263,9 @@ class Task(object):
 
     @timeout.setter
     def timeout(self, value):
-        if not 0 < value < 40000:
+        if not 0 < int(value) < 40000:
             raise ValueError('timeout of %s is not a valid number' % value)
-        self._timeout = value
+        self._timeout = int(value)
 
     @property
     def output_ports(self):

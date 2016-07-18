@@ -59,7 +59,7 @@ class OrderingTests(unittest.TestCase):
     def test_get_order_status(self):
         o = Ordering(self.gbdx)
         results = o.status('c5cd8157-3001-4a03-a716-4ef673748c7a')
-        print results
+        print(results)
         for result in results:
             assert 'acquisition_id' in result.keys()
             assert 'state' in result.keys()
