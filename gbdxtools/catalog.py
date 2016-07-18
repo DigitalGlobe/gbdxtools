@@ -3,12 +3,13 @@ GBDX Catalog Interface.
 
 Contact: nate.ricklin@digitalglobe.com
 """
+from __future__ import absolute_import
 
 import requests
 from pygeoif import geometry
 import json
 import datetime
-import catalog_search_aoi
+from . import catalog_search_aoi
 
 class Catalog():
 

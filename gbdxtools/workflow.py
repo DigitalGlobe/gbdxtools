@@ -5,6 +5,7 @@ Authors: Kostas Stamatiou, Donnie Marino, Dan Getman, Dahl Winters, Nate Ricklin
 GBDX Workflow interface.
 
 """
+from __future__ import print_function
 
 import json
 
@@ -45,8 +46,8 @@ class Workflow(object):
             try:
                 r.raise_for_status()
             except:
-                print "GBDX API Status Code: %s" % r.status_code
-                print "GBDX API Response: %s" % r.text
+                print("GBDX API Status Code: %s" % r.status_code)
+                print("GBDX API Response: %s" % r.text)
                 r.raise_for_status()
             workflow_id = r.json()['id']
             return workflow_id
