@@ -146,8 +146,8 @@ class SimpleWorkflowTests(unittest.TestCase):
 
         assert len(outputs) == 4
         for output in outputs:
-            assert output.keys()[0].startswith('source:')
-            assert output.values()[0].startswith('s3://')
+            assert list(output.keys())[0].startswith('source:')
+            assert list(output.values())[0].startswith('s3://')
 
 
     @vcr.use_cassette('tests/unit/cassettes/test_task_name_input.yaml',record_mode='new_episodes',filter_headers=['authorization'])
