@@ -19,6 +19,7 @@ from gbdxtools.workflow import Workflow
 from gbdxtools.catalog import Catalog
 from gbdxtools.idaho import Idaho
 import gbdxtools.simpleworkflows
+from gbdxtools.cloudharness_task import CloudHarnessTask, TaskCreationError
 
 
 class Interface(object):
@@ -36,7 +37,7 @@ class Interface(object):
             self.gbdx_connection = gbdx_auth.get_session()
 
         # create a logger
-        # for now, just log to the console. We'll replace all the 'print' statements 
+        # for now, just log to the console. We'll replace all the 'print' statements
         # with at least logger.info or logger.debug statements
         # later, we can log to a service, file, or some other aggregator
         self.logger = logging.getLogger('gbdxtools')
@@ -64,7 +65,12 @@ class Interface(object):
         self.idaho = Idaho(self)
 
     def Task(self, __task_name, **kwargs):
-        return gbdxtools.simpleworkflows.Task(self, __task_name, **kwargs)
+        try:
+            # Attempt to create a cloudharness gbdxtools task object
+            return CloudHarnessTask(self, __task_name, **kwargs)
+        except TaskCreationError:
+            # Create a standard gbdxtools task object.
+            return gbdxtools.simpleworkflows.Task(self, __task_name, **kwargs)
 
     def Workflow(self, tasks, **kwargs):
         return gbdxtools.simpleworkflows.Workflow(self, tasks, **kwargs)
