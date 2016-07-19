@@ -26,7 +26,7 @@ setup(name='gbdxtools',
                         'boto==2.39.0',
                         'gbdx-auth==0.2.0',
                         'pygeoif==0.6',
-                        'ndg-httpsclient==0.4.2'
+                        'ndg-httpsclient==0.4.2',
                         'sympy==1.0',
                         'six==1.10.0',
                         'future==0.15.2'],
