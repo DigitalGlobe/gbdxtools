@@ -1,3 +1,7 @@
+0.5.1
+-----
+* Fix bumpversioning bug.
+
 0.5.0
 -----
 * Python 3 support (3.3, 3.4, 3.5)
