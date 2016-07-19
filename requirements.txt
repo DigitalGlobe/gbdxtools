@@ -8,5 +8,5 @@ pytest==2.9.1
 pytest-runner==2.7
 sympy==1.0
 vcrpy
-ndg-httpsclient==0.4.0
+ndg-httpsclient==0.4.2
 bumpversion
