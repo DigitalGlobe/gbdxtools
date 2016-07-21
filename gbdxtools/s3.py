@@ -3,10 +3,11 @@ GBDX S3 Interface.
 
 Contact: kostas.stamatiou@digitalglobe.com
 """
+from builtins import object
 
 from boto import s3 as botos3
 
-class S3:
+class S3(object):
 
     def __init__(self, interface):
         '''Instantiate the s3 interface
