@@ -3,14 +3,16 @@ GBDX Catalog Interface.
 
 Contact: nate.ricklin@digitalglobe.com
 """
+from __future__ import absolute_import
+from builtins import object
 
 import requests
 from pygeoif import geometry
 import json
 import datetime
-import catalog_search_aoi
+from . import catalog_search_aoi
 
-class Catalog():
+class Catalog(object):
 
     def __init__(self, interface):
         ''' Construct the Catalog interface class
