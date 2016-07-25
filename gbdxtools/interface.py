@@ -64,11 +64,11 @@ class Interface(object):
         # create and store an instance of the Idaho Client
         self.idaho = Idaho(self)
 
-    def Task(self, __task_name, **kwargs):
-        try:
-            # Attempt to create a cloudharness gbdxtools task object
+    def Task(self, __task_name=None, cloudharness_obj=None, **kwargs):
+        if __task_name is None:
+            # Create a cloudharness gbdxtools task object
             return CloudHarnessTask(self, __task_name, **kwargs)
-        except TaskCreationError:
+        else:
             # Create a standard gbdxtools task object.
             return gbdxtools.simpleworkflows.Task(self, __task_name, **kwargs)
 
