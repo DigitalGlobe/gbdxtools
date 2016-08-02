@@ -3,13 +3,15 @@ from builtins import str
 import uuid
 
 from gbdxtools.simpleworkflows import Task, Inputs, Outputs
-from cloud_harness import AppController
+from gbdx_cloud_harness import TaskController
+
 
 class TaskCreationError(Exception):
     pass
 
 
 class CloudHarnessTask(Task):
+
     def __init__(self, __interface, cloudharness_obj, **kwargs):
         '''
         Construct an instance of GBDX Task
@@ -27,13 +29,15 @@ class CloudHarnessTask(Task):
         if not hasattr(cloudharness_obj, 'task_json'):
             raise TaskCreationError('Not a cloudharness TaskTemplate instance')
 
+        self.task = cloudharness_obj
+
         self.definition = cloudharness_obj.task_json
         self.type = self.definition['name']
         self.name = self.type + '_' + str(uuid.uuid4())
 
         self.__interface = __interface
 
-        self.domain = self.definition['containerDescriptors'][0]['properties'].get('domain','default')
+        self.domain = self.definition['containerDescriptors'][0]['properties'].get('domain', 'default')
         self._timeout = self.definition['properties'].get('timeout')
 
         self.inputs = Inputs(self.input_ports)
@@ -43,22 +47,22 @@ class CloudHarnessTask(Task):
         # all the other kwargs are input port values or sources
         self.set(**kwargs)
 
+    # # set input ports source or value
+    # def set(self, **kwargs):
+    #     """
+    #     Set input values on task
+    #
+    #     Args:
+    #            arbitrary_keys: values for the keys
+    #
+    #     Returns:
+    #         None
+    #     """
+    #
+    #     for port_name, port_value in kwargs.iteritems():
+    #         self.inputs.__setattr__(port_name, port_value)
+
     def generate_task_workflow_json(self, output_multiplex_ports_to_exclude=None):
-
-        #### --> use cloudharness_obj.workflow_json??, use AppController
-        arguments = {
-            '--destination': dest_name,
-            '--download': False,
-            '--remote': False,
-            '--upload': False,
-            '--verbose': False,
-            '<file_name>': None,
-            '<dir_name>': dir_name,
-            'create': True,
-            'run': False
-        }
-
-        app = AppController(arguments)
 
         definition = {
             "name": self.name,
@@ -83,19 +87,23 @@ class CloudHarnessTask(Task):
 
             if str(input_port_value).startswith('source:'):
                 # this port is linked from a previous output task
-                definition['inputs'].append({
-                                    "name": input_port_name,
-                                    "source": input_port_value.replace('source:','')
-                                })
+                definition['inputs'].append(
+                    {
+                        "name": input_port_name,
+                        "source": input_port_value.replace('source:', '')
+                    }
+                )
             else:
-                definition['inputs'].append({
-                                    "name": input_port_name,
-                                    "value": input_port_value
-                                })
+                definition['inputs'].append(
+                    {
+                        "name": input_port_name,
+                        "value": input_port_value
+                    }
+                )
 
         for output_port_name in self.outputs._portnames:
-            definition['outputs'].append(  {
-                    "name": output_port_name
-                } )
+            definition['outputs'].append(
+                {"name": output_port_name}
+            )
 
         return definition
