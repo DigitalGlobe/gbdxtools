@@ -62,6 +62,16 @@ If you run into trouble with the installation of cryptography and see a message 
 
 Then run "pip install gbdxtools" again. See stackoverflow for discussion on what is going wrong and why this fixes it (http://stackoverflow.com/questions/27328049/missing-usr-include-after-yosemite-and-xcode-install)
 
+If you are running in a virtualenv and run into issues you may need upgrade pip in the virtualenv::
+
+	cd <your_project_folder>
+	pip install --upgrade pip
+	pip install gbdxtools
+	# you might also need to remove token from your .gbdx-config file
+	nano -w ~.gbdx-config
+	# then, remove the [gbdx_token] section and json= part
+    
+
 **conda**
 
 If your installation with pip keeps failing, try creating a conda environment and installing gbdxtools within this environment. 
