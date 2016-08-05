@@ -65,6 +65,7 @@ Then run "pip install gbdxtools" again. See stackoverflow for discussion on what
 If you are running in a virtualenv and run into issues you may need upgrade pip in the virtualenv::
 
 	cd <your_project_folder>
+	. venv/bin/activate
 	pip install --upgrade pip
 	pip install gbdxtools
 	# you might also need to remove token from your .gbdx-config file
