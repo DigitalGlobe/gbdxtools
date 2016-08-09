@@ -65,7 +65,7 @@ class SimpleWorkflowTests(unittest.TestCase):
         wf = self.gbdx.Workflow([ch_task])
         wf.savedata(ch_task.outputs.output_port)
         wf_json = wf.generate_workflow_description()
-        assert wf_json.keys() == ['tasks', 'name']
+        assert set(wf_json.keys()) == {'tasks', 'name'}
         # TODO: add more assertions
 
     @vcr.use_cassette('tests/unit/cassettes/test_cloud_harness_workflow_chain.yaml',
