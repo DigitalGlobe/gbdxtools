@@ -10,3 +10,4 @@ sympy==1.0
 vcrpy
 ndg-httpsclient==0.4.2
 bumpversion
+gbdx-cloud-harness>=0.2.9

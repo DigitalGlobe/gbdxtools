@@ -29,7 +29,8 @@ setup(name='gbdxtools',
                         'ndg-httpsclient==0.4.2',
                         'sympy==1.0',
                         'six==1.10.0',
-                        'future==0.15.2'],
+                        'future==0.15.2',
+                        'gbdx-cloud-harness>=0.2.9'],
       setup_requires=['pytest-runner'],
       tests_require=['pytest','vcrpy']
       )
