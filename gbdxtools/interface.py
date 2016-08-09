@@ -19,7 +19,8 @@ from gbdxtools.workflow import Workflow
 from gbdxtools.catalog import Catalog
 from gbdxtools.idaho import Idaho
 import gbdxtools.simpleworkflows
-from gbdxtools.cloudharness_task import CloudHarnessTask, TaskCreationError
+from gbdxtools.cloudharness import CloudHarnessTask, CloudHarnessWorkflow
+from gbdx_task_template import TaskTemplate
 
 
 class Interface(object):
@@ -64,13 +65,28 @@ class Interface(object):
         # create and store an instance of the Idaho Client
         self.idaho = Idaho(self)
 
-    def Task(self, __task_name=None, cloudharness_obj=None, **kwargs):
-        if __task_name is None:
+    def Task(self, __task_name=None, cloudharness=None, **kwargs):
+
+        # Check if __task_name has been passed as a CloudHarnessTask object,
+        #  or the keyword cloudharness has been provied.
+        task_is_subclass = False
+        if not isinstance(__task_name, str) and __task_name is not None:
+            task_is_subclass = issubclass(__task_name, TaskTemplate)
+
+        if task_is_subclass or __task_name is None and cloudharness is not None:
             # Create a cloudharness gbdxtools task object
-            return CloudHarnessTask(self, __task_name, **kwargs)
+            return CloudHarnessTask(
+                self,
+                __task_name if task_is_subclass else cloudharness,
+                **kwargs
+            )
         else:
             # Create a standard gbdxtools task object.
             return gbdxtools.simpleworkflows.Task(self, __task_name, **kwargs)
 
     def Workflow(self, tasks, **kwargs):
+        # Check if any of the tasks are CloudHarnessTasks
+        if len([task for task in tasks if isinstance(task, CloudHarnessTask)]) > 0:
+            return CloudHarnessWorkflow(self, tasks, **kwargs)
+
         return gbdxtools.simpleworkflows.Workflow(self, tasks, **kwargs)
