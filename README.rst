@@ -12,19 +12,14 @@ gbdxtools: Python tools for using GBDX
     :target: http://gbdxtools.readthedocs.org/en/latest/?badge=latest
     :alt: Documentation Status
 
-Versions supported:
-
-- 2.7
-- 3.3
-- 3.4
-- 3.5
-
 gbdxtools is a package for ordering imagery and launching workflows on DigitalGlobe's GBDX platform.
 
 In order to use gbdxtools, you need GBDX credentials. Email GBDX-Support@digitalglobe.com to get these.
 
 Documentation is hosted here: http://gbdxtools.readthedocs.org/en/latest/. 
 Example scripts can be found under the /examples directory of this repo.
+
+Currently, the following Python versions are supported: 2.7, 3.3, 3.4, 3.5
 
 See the license file for license rights and limitations (MIT).
 
@@ -66,6 +61,17 @@ If you run into trouble with the installation of cryptography and see a message 
 	xcode-select --install
 
 Then run "pip install gbdxtools" again. See stackoverflow for discussion on what is going wrong and why this fixes it (http://stackoverflow.com/questions/27328049/missing-usr-include-after-yosemite-and-xcode-install)
+
+If you are running in a virtualenv and run into issues you may need upgrade pip in the virtualenv::
+
+	cd <your_project_folder>
+	. venv/bin/activate
+	pip install --upgrade pip
+	pip install --upgrade gbdxtools
+	# you might also need to remove token from your .gbdx-config file
+	nano -w ~.gbdx-config
+	# then, remove the [gbdx_token] section and json= part
+    
 
 **conda**
 
