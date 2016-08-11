@@ -41,6 +41,29 @@ class TestCatalog(unittest.TestCase):
         self.assertTrue(lat == 40.0149856)
         self.assertTrue(lng == -105.2705456)
 
+    @vcr.use_cassette('tests/unit/cassettes/test_catalog_get_record.yaml', filter_headers=['authorization'])
+    def test_catalog_get_record(self):
+        c = Catalog(self.gbdx)
+        catid = '1040010019B4A600'
+        record = c.get(catid)
+
+        self.assertEqual(record['identifier'], '1040010019B4A600')
+        self.assertEqual(record['type'], 'DigitalGlobeAcquisition')
+
+        self.assertTrue('inEdges' not in list(record.keys()))
+
+    @vcr.use_cassette('tests/unit/cassettes/test_catalog_get_record_with_relationships.yaml', filter_headers=['authorization'])
+    def test_catalog_get_record_with_relationships(self):
+        c = Catalog(self.gbdx)
+        catid = '1040010019B4A600'
+        record = c.get(catid, includeRelationships=True)
+
+        self.assertEqual(record['identifier'], '1040010019B4A600')
+        self.assertEqual(record['type'], 'DigitalGlobeAcquisition')
+
+        self.assertTrue('inEdges' in list(record.keys()))
+
+
     @vcr.use_cassette('tests/unit/cassettes/test_catalog_search_point.yaml', filter_headers=['authorization'])
     def test_catalog_search_point(self):
         c = Catalog(self.gbdx)
