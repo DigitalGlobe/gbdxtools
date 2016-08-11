@@ -1,7 +1,6 @@
 0.5.2
 -----
 * Add gbdx.catalog.get() and gbdx.catalog.get_strip_metadata()
-* Add gbdx.idaho.get_idaho_chip()
 * Fix bug in simpleworkflow status
 
 0.5.1
