@@ -51,6 +51,25 @@ class Catalog(object):
             self.logger.debug('There was a problem retrieving catid: %s' % catID)
             r.raise_for_status()
 
+    def get(self, catID, includeRelationships=False):
+        '''Retrieves the strip footprint WKT string given a cat ID.
+
+        Args:
+            catID (str): The source catalog ID from the platform catalog.
+            includeRelationships (bool): whether to include graph links to related objects.  Default False.
+
+        Returns:
+            record (dict): A dict object identical to the json representation of the catalog record
+        '''
+        if includeRelationships:
+            incR = 'true'
+        else:
+            incR = 'false'
+        url = 'https://geobigdata.io/catalog/v1/record/' + catID + '?includeRelationships='+incR
+        r = self.gbdx_connection.get(url)
+        r.raise_for_status()
+        return r.json()
+
     def get_address_coords(self, address):
         ''' Use the google geocoder to get latitude and longitude for an address string
 
