@@ -3,12 +3,14 @@ GBDX Ordering Interface.
 
 Contact: kostas.stamatiou@digitalglobe.com
 """
+from builtins import zip
+from builtins import object
 
 import json
-from itertools import izip
 
 
-class Ordering:
+
+class Ordering(object):
 
     def __init__(self, interface):
         '''Instantiate the GBDX Ordering Interface
@@ -54,11 +56,11 @@ class Ordering:
         if not isinstance(image_catalog_ids, list):
             image_catalog_ids = [image_catalog_ids]
 
-        sanitized_ids = [id_.strip() for id_ in set(image_catalog_ids) if id_]
+        sanitized_ids = list(set((id for id in (_id.strip() for _id in image_catalog_ids) if id)))
 
         res = []
         # Use itertool batch recipe
-        acq_ids_by_batch = izip(*([iter(sanitized_ids)] * batch_size))
+        acq_ids_by_batch = zip(*([iter(sanitized_ids)] * batch_size))
         for ids_batch in acq_ids_by_batch:
             _order_single_batch(url, ids_batch, res)
 

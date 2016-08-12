@@ -3,6 +3,11 @@ GBDX IDAHO Interface.
 
 Contact: nate.ricklin@digitalglobe.com
 """
+from __future__ import print_function
+from __future__ import division
+from builtins import str
+from builtins import object
+from past.utils import old_div
 
 from pygeoif import geometry
 from sympy.geometry import Point, Polygon
@@ -13,7 +18,7 @@ import requests
 
 from gbdxtools.catalog import Catalog
 
-class Idaho():
+class Idaho(object):
 
 
     def __init__(self, interface):
@@ -134,18 +139,18 @@ class Idaho():
         description = self.describe_images(idaho_image_results)
         if len(description) > 0:
             functionstring = ''
-            for catid, images in description.iteritems():
-                for partnum, part in images['parts'].iteritems():
+            for catid, images in description.items():
+                for partnum, part in images['parts'].items():
 
-                    num_images = len(part.keys())
+                    num_images = len(list(part.keys()))
                     partname = None
                     if num_images == 1:
                         # there is only one image, use the PAN
-                        partname = [p for p in part.keys()][0]
+                        partname = [p for p in list(part.keys())][0]
                         pan_image_id = ''
                     elif num_images == 2:
                         # there are two images in this part, use the multi (or pansharpen)
-                        partname = [p for p in part.keys() if p is not 'PAN'][0]
+                        partname = [p for p in list(part.keys()) if p is not 'PAN'][0]
                         pan_image_id = part['PAN']['id']
 
                     if not partname:
@@ -181,7 +186,7 @@ class Idaho():
                 self.logger.debug("Saving %s" % output_filename)
                 outputfile.write(data)
         else:
-            print "No items returned."
+            print("No items returned.")
 
 
     def get_idaho_chip(self, bucket_name, idaho_id, center_lat, center_lon,
@@ -200,7 +205,7 @@ class Idaho():
             Confirmation (str) that tile processing was done.
         '''
 
-        print 'Retrieving IDAHO chip'
+        print('Retrieving IDAHO chip')
 
         access_token = self.gbdx_connection.access_token
 
@@ -226,10 +231,10 @@ class Idaho():
                 the_file.write(r.content)
 
         elif r.status_code == 404:
-            print 'IDAHO ID not found: %s' % idaho_id
+            print('IDAHO ID not found: %s' % idaho_id)
             r.raise_for_status()
         else:
-            print 'There was a problem retrieving IDAHO ID: %s' % idaho_id
+            print('There was a problem retrieving IDAHO ID: %s' % idaho_id)
             r.raise_for_status()
 
     def get_idaho_chip_by_bbox(self, idaho_id, output_folder, minx, miny, maxx, maxy,
@@ -326,23 +331,23 @@ class Idaho():
         description = self.describe_images(idaho_image_results)
 
         tile_count = 0
-        for catid, images in description.iteritems():
+        for catid, images in description.items():
             functionstring = ''
-            for partnum, part in images['parts'].iteritems():
+            for partnum, part in images['parts'].items():
 
-                num_images = len(part.keys())
+                num_images = len(list(part.keys()))
                 partname = None
                 if num_images == 1:
                     # there is only one image, use the PAN
-                    partname = [p for p in part.keys() if p.upper() == 'PAN'][0]
+                    partname = [p for p in list(part.keys()) if p.upper() == 'PAN'][0]
                     pan_image_id = ''
                 elif num_images == 2:
                     # there are two images in this part, use the multi (or pansharpen)
-                    partname = [p for p in part.keys() if p is not 'PAN'][0]
+                    partname = [p for p in list(part.keys()) if p is not 'PAN'][0]
                     pan_image_id = part['PAN']['id']
 
                 if not partname:
-                    print "Cannot find part for idaho image."
+                    print("Cannot find part for idaho image.")
                     continue
 
                 bandstr = {
@@ -372,13 +377,13 @@ class Idaho():
             data=htmlfile.read().decode("utf8")
 
         data = data.replace('FUNCTIONSTRING',functionstring)
-        data = data.replace('CENTERLAT',str(S + (N-S)/2))
-        data = data.replace('CENTERLON',str(W + (E-W)/2))
+        data = data.replace('CENTERLAT',str(S + old_div((N-S),2)))
+        data = data.replace('CENTERLON',str(W + old_div((E-W),2)))
         data = data.replace('BANDS',bandstr)
         data = data.replace('TOKEN',self.gbdx_connection.access_token)
 
         with codecs.open(output_filename,'w','utf8') as outputfile:
-            print "Saving %s" % output_filename
+            print("Saving %s" % output_filename)
             outputfile.write(data)
 
 
@@ -415,20 +420,20 @@ class Idaho():
         description = self.describe_images(idaho_image_results)
 
         tile_count = 0
-        for catid, images in description.iteritems():
-            for partnum, part in images['parts'].iteritems():
+        for catid, images in description.items():
+            for partnum, part in images['parts'].items():
 
-                num_images = len(part.keys())
+                num_images = len(list(part.keys()))
                 partname = None
                 if num_images == 1:
                     # there is only one image, use the PAN
-                    partname = [p for p in part.keys() if p.upper() == 'PAN'][0]
+                    partname = [p for p in list(part.keys()) if p.upper() == 'PAN'][0]
                 elif num_images == 2:
                     # there are two images in this part, use the multi (or pansharpen)
-                    partname = [p for p in part.keys() if p is not 'PAN'][0]
+                    partname = [p for p in list(part.keys()) if p is not 'PAN'][0]
 
                 if not partname:
-                    print "Cannot find part for idaho image."
+                    print("Cannot find part for idaho image.")
                     continue
 
                 part_boundstr_wkt = part[partname]['boundstr']
@@ -439,9 +444,9 @@ class Idaho():
                 pp1, pp2, pp3, pp4 = Point(W, S), Point(W, N), Point(E, N), Point(E, S)
                 part_bbox_polygon = Polygon(pp1, pp2, pp3, pp4)
                 if (bbox_polygon.intersection(part_bbox_polygon)):
-                    center_lat = (S + (N-S)/2)
-                    center_lon = (W + (E-W)/2)
-                    print center_lat, center_lon
+                    center_lat = (S + old_div((N-S),2))
+                    center_lon = (W + old_div((E-W),2))
+                    print(center_lat, center_lon)
                     self.get_idaho_chip(bucket_name=bucketname,
                                         idaho_id=image_id,
                                         center_lat=str(center_lat),

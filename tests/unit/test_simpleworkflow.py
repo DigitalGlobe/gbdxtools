@@ -146,8 +146,8 @@ class SimpleWorkflowTests(unittest.TestCase):
 
         assert len(outputs) == 4
         for output in outputs:
-            assert output.keys()[0].startswith('source:')
-            assert output.values()[0].startswith('s3://')
+            assert list(output.keys())[0].startswith('source:')
+            assert list(output.values())[0].startswith('s3://')
 
 
     @vcr.use_cassette('tests/unit/cassettes/test_task_name_input.yaml',record_mode='new_episodes',filter_headers=['authorization'])
@@ -236,9 +236,9 @@ class SimpleWorkflowTests(unittest.TestCase):
         # check the pre-existing timeout:
         assert aoptask.timeout == 36000
 
-        # can't set equal to a string
-        with self.assertRaises(ValueError) as context:
-            aoptask.timeout = '12345'
+        # can set equal to a string
+        aoptask.timeout = '12345'
+        assert aoptask.timeout == 12345
 
         # set the timeout and verify it makes it to the task json
         aoptask.timeout = 1
@@ -280,5 +280,69 @@ class SimpleWorkflowTests(unittest.TestCase):
         dstprefixoutput = [output for output in outputs if output['name'] == 'DST_multiplex_prefix']
         assert len(dstprefixoutput) == 1
 
+    @vcr.use_cassette('tests/unit/cassettes/test_batch_workflows_works.yaml', record_mode='new_episodes', filter_headers=['authorization'])
+    def test_batch_workflows_works(self):
+        """
+        submit a workflow with multiple params, hit batch workflow endpoint, test status of running and completed
+        :return:
+        """
+        # note there are 2 inputs
+        data = ["s3://receiving-dgcs-tdgplatform-com/054813633050_01_003",
+                "http://test-tdgplatform-com/data/QB02/LV1B/053702625010_01_004/053702625010_01/053702625010_01_P013_MUL"]
+        aoptask = self.gbdx.Task("AOP_Strip_Processor", data=data, enable_acomp=True, enable_pansharpen=True)
+        workflow = self.gbdx.Workflow([aoptask])
+        workflow.savedata(aoptask.outputs.data, location='some_folder')
+        batch_workflow_id = workflow.execute()
 
+        assert len(batch_workflow_id) > 0
 
+        # will fail if string is not base 10
+        assert type(int(batch_workflow_id)) == int
+
+        # sub workflows should be still running
+        assert workflow.running is True
+
+        # sub workflows should not be completed yet
+        assert workflow.complete is False
+
+    @vcr.use_cassette('tests/unit/cassettes/test_batch_workflows_works_2.yaml', record_mode='new_episodes', filter_headers=['authorization'])
+    def test_batch_workflows_states_work(self):
+        """
+        test batch workflow status with a batch workflow that contains 1 succeeded wf and 1 failed wf
+        :return:
+        """
+        # note there are 2 inputs
+        data = ["s3://receiving-dgcs-tdgplatform-com/054813633050_01_003",
+                "http://test-tdgplatform-com/data/QB02/LV1B/053702625010_01_004/053702625010_01/053702625010_01_P013_MUL"]
+        aoptask = self.gbdx.Task("AOP_Strip_Processor", data=data, enable_acomp=True, enable_pansharpen=True)
+        workflow = self.gbdx.Workflow([aoptask])
+
+        # change the workflow id to one that contains 1 successful and 1 failed workflow.
+        workflow.id = '4375109287457211238'
+
+        # sub workflows should not be still running
+        assert workflow.running is False
+
+        # sub workflows should be complete
+        assert workflow.complete is True
+
+        # not all sub workflows succeeded
+        assert workflow.succeeded is False
+
+        # verify batch workflow status is correct
+        assert workflow.status == {
+            "owner": "gbdsvc",
+            "batch_workflow_id": "4375109287457211238",
+            "workflow_name": "a4d93ecb-a602-48f0-8e5b-20e1124c5a75",
+            "submitted_time": "2016-07-11T17:01:09.864805+00:00",
+            "workflows": [
+                {
+                    "workflow_id": "4375109287467549772",
+                    "state": "succeeded"
+                },
+                {
+                    "workflow_id": "4375109287484753874",
+                    "state": "failed"
+                }
+            ]
+        }

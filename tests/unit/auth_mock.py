@@ -7,7 +7,9 @@ if you want to actually make requests.
 import os
 import base64
 import json
-from ConfigParser import ConfigParser
+from future import standard_library
+standard_library.install_aliases()
+from configparser import ConfigParser
 from datetime import datetime
 
 from oauthlib.oauth2 import LegacyApplicationClient

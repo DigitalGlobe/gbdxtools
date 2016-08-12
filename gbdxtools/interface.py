@@ -3,6 +3,9 @@ Main Interface to GBDX API.
 
 Contact: kostas.stamatiou@digitalglobe.com
 """
+from __future__ import absolute_import
+from builtins import object
+from future import standard_library
 
 import json
 import os
@@ -17,19 +20,20 @@ from gbdxtools.catalog import Catalog
 from gbdxtools.idaho import Idaho
 import gbdxtools.simpleworkflows
 
-class Interface():
 
+class Interface(object):
     gbdx_connection = None
+
     def __init__(self, **kwargs):
-        if (kwargs.get('username') and kwargs.get('password') and 
-            kwargs.get('client_id') and kwargs.get('client_secret')):
+        if (kwargs.get('username') and kwargs.get('password') and
+                kwargs.get('client_id') and kwargs.get('client_secret')):
             self.gbdx_connection = gbdx_auth.session_from_kwargs(**kwargs)
         elif kwargs.get('gbdx_connection'):
             # Pass in a custom gbdx connection object, for testing purposes
             self.gbdx_connection = kwargs.get('gbdx_connection')
         else:
             # This will throw an exception if your .ini file is not set properly
-            self.gbdx_connection = gbdx_auth.get_session()
+            self.gbdx_connection = gbdx_auth.get_session(kwargs.get('config_file'))
 
         # create a logger
         # for now, just log to the console. We'll replace all the 'print' statements 

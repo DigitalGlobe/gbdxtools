@@ -1,3 +1,28 @@
+0.5.2
+-----
+* Add gbdx.catalog.get() and gbdx.catalog.get_strip_metadata()
+* Fix bug in simpleworkflow status
+
+0.5.1
+-----
+* Fix bumpversioning bug.
+
+0.5.0
+-----
+* Python 3 support (3.3, 3.4, 3.5)
+
+0.4.0
+-----
+* Batch workflow creation supported.  When you send in an array of values to a workflow input, a batch workflow is automatically created.
+
+0.3.4
+-----
+* Fix bug with multiplex port assignment.
+
+0.3.3
+-----
+* Fix bug with output multiplex ports.  Now the root multiplex port is not added to the workflow launched unless another input from another task explicitly refers to it.
+
 0.3.2
 -----
 * quick change to catalog.get_most_recent_images(): now it takes a list of catalog results as an argument.
