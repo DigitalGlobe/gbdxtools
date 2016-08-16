@@ -11,7 +11,7 @@ class CloudHarnessTask(Task):
 
     def __init__(self, __interface, cloudharness_obj, **kwargs):
         """
-        Construct an instance of GBDX Task
+        Construct an instance of GBDX Task from a gbdx-cloud-harness task.
 
         Args:
             __interface: gbdx __interface object
@@ -79,7 +79,7 @@ class CloudHarnessTask(Task):
         for port in ch_input_ports:
             gbdx_task_port = self._get_input_port(port.name)
 
-            if gbdx_task_port is not None and gbdx_task_port.value is None:
+            if gbdx_task_port is not None and gbdx_task_port.value != port.value:
                 # If there is no gbdxtools value, use the cloud-harness value (after uploading).
                 gbdx_task_port.value = port.value
 
