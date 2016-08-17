@@ -575,7 +575,7 @@ class Workflow(object):
             return any(workflow.get("state") not in ["succeeded", "failed", "timedout"] for workflow in
                        self.status['workflows'])
         status = self.status
-        return status['state'] == 'complete' and status['event'] == 'running'
+        return status['state'] == 'running' and status['event'] == 'started'
 
     @running.setter
     def running(self, value):

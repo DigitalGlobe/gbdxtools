@@ -35,7 +35,7 @@ class Interface(object):
             self.gbdx_connection = kwargs.get('gbdx_connection')
         else:
             # This will throw an exception if your .ini file is not set properly
-            self.gbdx_connection = gbdx_auth.get_session()
+            self.gbdx_connection = gbdx_auth.get_session(kwargs.get('config_file'))
 
         # create a logger
         # for now, just log to the console. We'll replace all the 'print' statements
