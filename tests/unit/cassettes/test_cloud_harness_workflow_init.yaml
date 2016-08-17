@@ -9,14 +9,14 @@ interactions:
     method: GET
     uri: https://geobigdata.io/s3creds/v1/prefix?duration=36000
   response:
-    body: {string: !!python/unicode '{"S3_secret_key": "gBr9jm8RlqEaeblWV76d8kcysR77mGX+FltbQFD5",
-        "prefix": "7b216bd9-6523-4ca9-aa3b-1d8a5994f054", "bucket": "gbd-customer-data",
-        "S3_access_key": "ASIAIKYH6KZCCIS4AAHA", "S3_session_token": "FQoDYXdzELD//////////wEaDDWz+684Y9/rG3SN/SKUAwqJIhsPLm2MoPEMOWLHdKVjAg0TE/3Qiz4StiuKaKkuKe52oXTlVc9pnZoRKz6mPOEGzMuIGxbtH5ioL2eq+nPNENKv5H+8fjIYEsXh8yZTEnAiBYrdO4QK6/WMfWHWGihU7+lE7HO4YghpbBSj5XSL6lHuoraAVoii1fgrs1xGPLD53wD8armnOMbsFUn8xhO1Im4Ng7WvKB1Vp3zKKfH5GSwEqZ9cOTD1qiDwqS8Kfe390iZOGJYALXbaQwlKFPLNrmBWq5A9VTOZh7YG9tutKsRmADL71rtZJi40w85ms7gGok4ar+gaKPwUXDlUFJNr43j7IfVWfaBnBENRAHI7jpoZm/lyvMr1Px55kpRW4sJhsSbIgnkkLlXN+rqRrZd7TdAHUScHQStvIzqgTsiWSztX9Ff/6T2WUSRNm/ybhHrrMe3iyurjzlIDQlOXr6tqQoYEKQBC0Mm0GMX5QVlVbsPLLIsuTzP68/7CBT4cNmyumqgNggW7kYYjr21warYKbNE/q5dgEsNg7WLxiApNae9nKN24lL0F"}'}
+    body: {string: !!python/unicode '{"S3_secret_key": "uNXQ4HmPNcTUFLORd615v9BYcNR3q7NejSAHZx/s",
+        "prefix": "a157fdce-bb1d-42b3-96a9-66942896a787", "bucket": "gbd-customer-data",
+        "S3_access_key": "ASIAIFME6ZBUB4SUOJRQ", "S3_session_token": "FQoDYXdzEN3//////////wEaDNx1QlrjDxiQ90qFBCKTA6j/cPodFyFoFdUKLCjtTCa8XglffgtrThsIVckRKlNaQk/uP4WZ1aeECkBjPkgTJ2SD9UytdtuxArL0LiX5CoYa+/Ps6Qg0KqmzebwTCUJbAV9vZ6RguLP5+17PUBW9Tb3X+jGj41nxch3YAllQc5bP734hEj5k3OmOSvxc+veZ0NSlc4cDRNH3mpxK5jCU4o6MJLjDlKX13xy4gH1xoq6+ogSToTpNJn2a7D8w9puzYBtkmSp/6N5Yzt485SfVSU6KNOoBxN01RK4mAa5zBTRgLKpHIHdPqms2g/PtK/2y+kmDosERb00IWd5VDuiqBgPSYpC74j5jBe6MyYsjdvhL4G9S2EpxE5jSP35dEk9gxLVXpNMKmM9yFEnygZ7BXchVwdQFm7LU203q/lkxmYHZD6m7vHvz9+HW2FFa0hk3ymPax8dRY8HflQ6ZPCb7W6KftkfCZtybHXioeNBW6CXMkqTXvSyX2eeyOpCmnFmBStuZeqpT/+2dFEalLtxG4JnM5ihmaBDh8s7/xqlxJpf9Irco1orTvQU="}'}
     headers:
       connection: [keep-alive]
       content-length: ['799']
       content-type: [application/json]
-      date: ['Fri, 05 Aug 2016 23:08:13 GMT']
+      date: ['Wed, 17 Aug 2016 20:13:10 GMT']
       server: [Apache/2.4.18 (Amazon) mod_wsgi/3.5 Python/2.7.10]
       via: [kong/0.5.2]
     status: {code: 200, message: OK}
@@ -43,7 +43,7 @@ interactions:
       content-encoding: [gzip]
       content-length: ['289']
       content-type: [application/json]
-      date: ['Fri, 05 Aug 2016 23:08:14 GMT']
+      date: ['Wed, 17 Aug 2016 20:13:11 GMT']
       server: [nginx/1.8.0]
       via: [kong/0.5.2]
     status: {code: 200, message: OK}
