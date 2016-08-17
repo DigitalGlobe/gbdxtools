@@ -18,7 +18,7 @@ See test_simpleworkflow.py for notes on using vcr and mock_auth.
 
 # So vcr doesn't record Amazon requests, moto will mock this.
 my_vcr = vcr.VCR(
-    ignore_hosts=['gbd-customer-data.s3.amazonaws.com'],
+    ignore_hosts=['gbd-customer-data.s3.amazonaws.com', '169.254.169.254'],
 )
 
 
