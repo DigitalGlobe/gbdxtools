@@ -11,6 +11,11 @@ gbdxtools: Python tools for using GBDX
 .. image:: https://readthedocs.org/projects/gbdxtools/badge/?version=latest
     :target: http://gbdxtools.readthedocs.org/en/latest/?badge=latest
     :alt: Documentation Status
+    
+.. image:: https://codecov.io/gh/DigitalGlobe/gbdxtools/branch/master/graph/badge.svg
+    :target: https://codecov.io/gh/DigitalGlobe/gbdxtools
+
+
 
 gbdxtools is a package for ordering imagery and launching workflows on DigitalGlobe's GBDX platform.
 
