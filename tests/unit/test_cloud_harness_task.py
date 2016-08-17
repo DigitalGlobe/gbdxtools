@@ -40,11 +40,9 @@ class CloudHarnessTaskTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         # create mock session, replace dummytoken with real token to create cassette
-        mock_gbdx_session = get_mock_gbdx_session(token="dummytoken")
-        cls.gbdx = Interface(gbdx_connection=mock_gbdx_session)
+        cls.mock_gbdx_session = get_mock_gbdx_session(token="dummytoken")
+        cls.gbdx = Interface(gbdx_connection=cls.mock_gbdx_session)
 
-    @vcr.use_cassette('tests/unit/cassettes/test_cloud_harness_initialize_task.yaml',
-                      filter_headers=['authorization'])
     def test_cloud_harness_initialize_task(self):
         ch_task = self.gbdx.Task(BasicApp)
         assert isinstance(ch_task, CloudHarnessTask)
@@ -123,8 +121,6 @@ class CloudHarnessTaskTests(unittest.TestCase):
                 # Check timeout
                 assert 9600 == int(task['timeout'])
 
-    @vcr.use_cassette('tests/unit/cassettes/test_cloud_harness_workflow_chain.yaml',
-                      filter_headers=['authorization'])
     def test_cloud_harness_workflow_chain(self):
         ch_task = self.gbdx.Task(cloudharness=BasicApp)
         ch_task.inputs.first_port = "HI"
@@ -156,7 +152,7 @@ class CloudHarnessTaskTests(unittest.TestCase):
     @mock.patch('gbdx_cloud_harness.services.task_service.gbdx_auth.get_session')
     def test_cloud_harness_upload_ports(self, mock_auth):
         # Set the mock auth object
-        mock_auth.return_value = get_mock_gbdx_session()
+        mock_auth.return_value = self.mock_gbdx_session
 
         ch_task = self.gbdx.Task(cloudharness=BasicApp)
         test_dir = os.path.join(
