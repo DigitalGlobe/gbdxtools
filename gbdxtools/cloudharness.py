@@ -19,7 +19,7 @@ class CloudHarnessTask(Task):
             **kwargs: key=value pairs for inputs to set on the task
 
         Returns:
-            An instance of Task.
+            An instance of CloudHarnessTask.
 
         """
         self.task_template = cloudharness_obj
@@ -43,8 +43,14 @@ class CloudHarnessTask(Task):
 
     def upload_input_ports(self):
         """
-        Use gbdx-cloud-harness.TaskController to push ports to S3,
-        then add the new ports and their values to the CloudHarnessTask
+        Upload any local ports the users account storage prior to the
+        execution of the workflow.
+
+        Args:
+            None
+
+        Returns:
+            None
         """
         task_ctl = TaskController(
             {
@@ -59,7 +65,7 @@ class CloudHarnessTask(Task):
 
         # There are 2 versions of the input ports. The ones defined in the cloud-harness.TaskTemplate subclass,
         #  and the ones defined through gbdxtools.Task. If the input port is overridden by gbdxtools.Task, then the
-        #  value in the class cloud-harness.TaskTemplate must be replaced.
+        #  value in the class cloud-harness.TaskTemplate must be replaced.s
 
         # Task ports before uploading.
         ch_input_ports = self.task.input_ports
@@ -95,7 +101,8 @@ class CloudHarnessWorkflow(Workflow):
 
     def execute(self):
         """
-        Iterate through tasks, if cloud-harness, upload ports.
+        Iterate through the workflows tasks, if the task is a cloud-harness Task then upload the ports.
+        Otherwise, call the super class Workflow.execute().
         """
         for task in self.tasks:
             if isinstance(task, CloudHarnessTask):
