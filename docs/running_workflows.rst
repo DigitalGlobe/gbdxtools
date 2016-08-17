@@ -55,7 +55,7 @@ Cloud Harness Tasks
 
 Alternately, gbdxtools Tasks can be initialized using a subclass of the :code:`gbdx-cloud-harness` package, called :code:`TaskTemplate`. See the cloud-harness documentation (http://cloud-harness.readthedocs.io/) for details on how to create a subclass.
 
-..code-block:: python
+.. code-block:: python
 
    from my_custom_task import MyCustomTask
    task = gbdx.Task(MyCustomTask)  # or more explicitly: gbdx.Task(cloudharness=MyCustomTask)
