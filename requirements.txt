@@ -11,3 +11,4 @@ vcrpy
 ndg-httpsclient==0.4.2
 bumpversion
 gbdx-cloud-harness>=0.2.9
+mock>=2.0.0

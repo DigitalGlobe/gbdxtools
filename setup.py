@@ -32,5 +32,5 @@ setup(name='gbdxtools',
                         'future==0.15.2',
                         'gbdx-cloud-harness>=0.2.9'],
       setup_requires=['pytest-runner'],
-      tests_require=['pytest','vcrpy']
+      tests_require=['pytest', 'vcrpy', 'mock']
       )
