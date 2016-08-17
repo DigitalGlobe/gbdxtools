@@ -3,6 +3,7 @@ import unittest
 import re
 import os
 import shutil
+import mock
 
 from gbdxtools.cloudharness import CloudHarnessTask
 from gbdx_task_template import TaskTemplate, Task as CHTask, InputPort, OutputPort
@@ -152,7 +153,11 @@ class CloudHarnessTaskTests(unittest.TestCase):
 
     @vcr.use_cassette('tests/unit/cassettes/test_cloud_harness_upload_ports.yaml',
                       filter_headers=['authorization'])
-    def test_cloud_harness_upload_ports(self):
+    @mock.patch('gbdx_cloud_harness.services.task_service.gbdx_auth.get_session')
+    def test_cloud_harness_upload_ports(self, mock_auth):
+        # Set the mock auth object
+        mock_auth.return_value = get_mock_gbdx_session()
+
         ch_task = self.gbdx.Task(cloudharness=BasicApp)
         test_dir = os.path.join(
             os.path.dirname(os.path.abspath(__file__)),
