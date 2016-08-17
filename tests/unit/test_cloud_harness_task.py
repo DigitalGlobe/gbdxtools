@@ -1,9 +1,9 @@
 import vcr
 import unittest
 import re
-import os
-import shutil
+import boto3
 import mock
+from moto import mock_s3
 
 from gbdxtools.cloudharness import CloudHarnessTask
 from gbdx_task_template import TaskTemplate, Task as CHTask, InputPort, OutputPort
@@ -14,6 +14,13 @@ from gbdxtools import Interface
 """
 See test_simpleworkflow.py for notes on using vcr and mock_auth.
 """
+
+
+# So vcr doesn't record Amazon requests, moto will mock this.
+my_vcr = vcr.VCR(
+    ignore_hosts=['gbd-customer-data.s3.amazonaws.com'],
+)
+
 
 UUID_RE = re.compile(r'^[\da-f]{8}-([\da-f]{4}-){3}[\da-f]{12}$', re.IGNORECASE)
 
@@ -147,31 +154,23 @@ class CloudHarnessTaskTests(unittest.TestCase):
             elif port['name'] == ch_task2.inputs.first_port.name:
                 assert port['value'] == ch_task2.inputs.first_port.value
 
-    @vcr.use_cassette('tests/unit/cassettes/test_cloud_harness_upload_ports.yaml',
+    @my_vcr.use_cassette('tests/unit/cassettes/test_cloud_harness_upload_ports.yaml',
                       filter_headers=['authorization'])
     @mock.patch('gbdx_cloud_harness.services.task_service.gbdx_auth.get_session')
     def test_cloud_harness_upload_ports(self, mock_auth):
         # Set the mock auth object
         mock_auth.return_value = self.mock_gbdx_session
 
+        s3_mock = mock_s3()
+
         ch_task = self.gbdx.Task(cloudharness=BasicApp)
-        test_dir = os.path.join(
-            os.path.dirname(os.path.abspath(__file__)),
-            'ch_test'
-        )
-
-        os.makedirs(test_dir)
-        with open(os.path.join(test_dir, 'test.txt'), 'w') as f:
-            f.write('Hello World!')
-
-        ch_task.inputs.source_bundle = test_dir
         ch_task.inputs.second_port = 'https://s3.amazonaws.com/test-tdgplatform-com/data/idl_src/demo/gaus_stretch.pro'
 
         # Upload the ports
-        try:
-            ch_task.upload_input_ports()
-        finally:
-            shutil.rmtree(test_dir)
+        s3_mock.start()
+        self._create_mock_bucket()
+        ch_task.upload_input_ports()
+        s3_mock.stop()
 
         task_wf_json = ch_task.generate_task_workflow_json()
 
@@ -179,3 +178,11 @@ class CloudHarnessTaskTests(unittest.TestCase):
 
         assert 'gbd-customer-data' in input_port_values['source_bundle']
         assert BasicApp.task.name in input_port_values['source_bundle']
+
+    def _create_mock_bucket(self):
+        # Session creds don't matter because of the mock_s3 decorator
+        session = boto3.session.Session(
+            region_name='us-east-1'
+        )
+        self.client = session.client('s3')
+        self.client.create_bucket(Bucket='gbd-customer-data')
