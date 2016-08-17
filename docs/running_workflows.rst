@@ -60,7 +60,7 @@ Alternately, gbdxtools Tasks can be initialized using a subclass of the :code:`g
    from my_custom_task import MyCustomTask
    task = gbdx.Task(MyCustomTask)  # or more explicitly: gbdx.Task(cloudharness=MyCustomTask)
 
-It should be noted that subclasses of :code:`TaskTemplate` can have viable ports already configured. Any input ports defined using gbdxtools will override the ports defined with in the cloud-harness class.
+It should be noted that subclasses of :code:`TaskTemplate` can have viable ports already configured. Any input ports defined using gbdxtools will override the ports defined in the cloud-harness class.
 
 Setting Task Inputs
 -----------------------
