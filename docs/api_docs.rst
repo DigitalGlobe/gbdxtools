@@ -41,6 +41,13 @@ gbdxtools.simpleworkflows module
     :undoc-members:
     :show-inheritance:
 
+gbdxtools.cloudharness module
+-----------------------------
+.. automodule:: gbdxtools.cloudharness
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 gbdxtools.ordering module
 --------------------------
 

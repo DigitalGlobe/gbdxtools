@@ -50,6 +50,17 @@ A task is instantiated as follows:
 
 The task name must be a valid gbdx task name.
 
+Cloud Harness Tasks
+-------------------
+
+Alternately, gbdxtools Tasks can be initialized using a subclass of the :code:`gbdx-cloud-harness` package, called :code:`TaskTemplate`. See the cloud-harness documentation (http://cloud-harness.readthedocs.io/) for details on how to create a subclass.
+
+..code-block:: python
+
+   from my_custom_task import MyCustomTask
+   task = gbdx.Task(MyCustomTask)  # or more explicitly: gbdx.Task(cloudharness=MyCustomTask)
+
+It should be noted that subclasses of :code:`TaskTemplate` can have viable ports already configured. Any input ports defined using gbdxtools will override the ports defined with in the cloud-harness class.
 
 Setting Task Inputs
 -----------------------
