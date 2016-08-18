@@ -30,6 +30,8 @@ gbdx = Interface(gbdx_connection=mock_gbdx_session)
 
 # generate the cassette name in a machine nutral way
 cassette_name = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'cassettes', 'test_get_idaho_chip.yaml')
+cassette_name1 = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'cassettes', 'test_get_idaho_chip_by_bbox.yaml')
+
 
 
 class IdahoTest(unittest.TestCase):
@@ -64,4 +66,23 @@ class IdahoTest(unittest.TestCase):
                          resolution=50)
         assert os.path.isfile(os.path.join(self._temp_path, multi_id+'.tif'))
 
+    @vcr.use_cassette(cassette_name1)
+    def test_get_idaho_chip_by_bbox(self):
 
+        multi_id = '293adef4-0853-4bc1-882b-74c0e88035b7'
+        pan_id = '721d1fdb-193a-46e7-844b-d4a3a2c1a595'
+
+        i = Idaho(gbdx)
+        i.get_idaho_chip_by_bbox(idaho_id=multi_id,
+                                output_folder=self._temp_path,
+                                minx = 138.524385403479,
+                                miny = -35.101958206948,
+                                maxx = 138.524628555432,
+                                maxy = -35.10161730395,
+                                bucket_name='idaho-images',
+                                high_cutoff = 0.99,
+                                low_cutoff = 0.01,
+                                pan_id=pan_id,
+                                return_fp = False,
+                                format='tif')
+        assert os.path.isfile(os.path.join(self._temp_path, multi_id+'.tif'))

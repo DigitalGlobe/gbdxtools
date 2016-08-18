@@ -23,7 +23,7 @@ class Idaho(object):
 
     def __init__(self, interface):
         ''' Construct the Idaho interface class
-            
+
         Args:
             connection (gbdx_session): A reference to the GBDX Connection.
 
@@ -43,7 +43,7 @@ class Idaho(object):
             catid (str): The source catalog ID from the platform catalog.
 
         Returns:
-            results (json): The full catalog-search response for IDAHO images 
+            results (json): The full catalog-search response for IDAHO images
                             within the catID.
 
         '''
@@ -53,7 +53,7 @@ class Idaho(object):
         # get the footprint of the catid's strip
         footprint = self.catalog.get_strip_footprint_wkt(catid)
         if not footprint:
-            self.logger.debug('''Cannot get IDAHO metadata for strip %s, 
+            self.logger.debug('''Cannot get IDAHO metadata for strip %s,
                                  footprint not found''' % catid)
             return None
 
@@ -83,10 +83,10 @@ class Idaho(object):
         ''' Describe a set of IDAHO images, as returned in catalog search results.
 
         Args:
-            idaho_image_results (dict): IDAHO image result set as returned from 
+            idaho_image_results (dict): IDAHO image result set as returned from
                                         the catalog.
         Returns:
-            results (json): The full catalog-search response for IDAHO images 
+            results (json): The full catalog-search response for IDAHO images
                             within the catID.
         '''
 
@@ -131,7 +131,7 @@ class Idaho(object):
         '''Create a leaflet viewer html file for viewing idaho images
 
         Args:
-            idaho_image_results (dict): IDAHO image result set as returned from 
+            idaho_image_results (dict): IDAHO image result set as returned from
                                         the catalog.
             output_filename (str): where to save an output html file
         '''
@@ -141,7 +141,7 @@ class Idaho(object):
             functionstring = ''
             for catid, images in description.items():
                 for partnum, part in images['parts'].items():
-    
+
                     num_images = len(list(part.keys()))
                     partname = None
                     if num_images == 1:
@@ -152,36 +152,36 @@ class Idaho(object):
                         # there are two images in this part, use the multi (or pansharpen)
                         partname = [p for p in list(part.keys()) if p is not 'PAN'][0]
                         pan_image_id = part['PAN']['id']
-    
+
                     if not partname:
                         self.logger.debug("Cannot find part for idaho image.")
                         continue
-    
+
                     bandstr = {
                         'RGBN': '0,1,2',
                         'WORLDVIEW_8_BAND': '4,2,1',
                         'PAN': '0'
                     }.get(partname, '0,1,2')
-    
+
                     part_boundstr_wkt = part[partname]['boundstr']
                     part_polygon = geometry.from_wkt(part_boundstr_wkt)
                     bucketname = part[partname]['bucket']
                     image_id = part[partname]['id']
                     W, S, E, N = part_polygon.bounds
-    
+
                     functionstring += "addLayerToMap('%s','%s',%s,%s,%s,%s,'%s');\n" % (bucketname, image_id, W,S,E,N, pan_image_id)
-    
+
             __location__ = os.path.realpath(
                 os.path.join(os.getcwd(), os.path.dirname(__file__)))
             with open(os.path.join(__location__, 'leafletmap_template.html'), 'r') as htmlfile:
                 data=htmlfile.read().decode("utf8")
-    
+
             data = data.replace('FUNCTIONSTRING',functionstring)
             data = data.replace('CENTERLAT',str(S))
             data = data.replace('CENTERLON',str(W))
             data = data.replace('BANDS',bandstr)
             data = data.replace('TOKEN',self.gbdx_connection.access_token)
-    
+
             with codecs.open(output_filename,'w','utf8') as outputfile:
                 self.logger.debug("Saving %s" % output_filename)
                 outputfile.write(data)
@@ -189,7 +189,7 @@ class Idaho(object):
             print("No items returned.")
 
 
-    def get_idaho_chip(self, bucket_name, idaho_id, center_lat, center_lon, 
+    def get_idaho_chip(self, bucket_name, idaho_id, center_lat, center_lon,
                        output_folder, resolution=None, pan_id=None):
         '''Downloads an orthorectified IDAHO chip.
 
@@ -229,7 +229,7 @@ class Idaho(object):
 
             with open(file_path, 'wb') as the_file:
                 the_file.write(r.content)
-    
+
         elif r.status_code == 404:
             print('IDAHO ID not found: %s' % idaho_id)
             r.raise_for_status()
@@ -237,6 +237,66 @@ class Idaho(object):
             print('There was a problem retrieving IDAHO ID: %s' % idaho_id)
             r.raise_for_status()
 
+    def get_idaho_chip_by_bbox(self, idaho_id, output_folder, minx, miny, maxx, maxy,
+                               filename=None, bucket_name='idaho-images',
+                               high_cutoff = 0.99, low_cutoff = 0.01, pan_id=None,
+                               format='tif', return_fp=False):
+
+        '''Downloads an orthorectified IDAHO chip by bounding box.
+
+        Args:
+            idaho_id (str): The IDAHO ID of the chip
+            output_folder (str): folder in which to save output image
+            minx (float): smallest x-value for bounding box corner
+            miny (float): smallest y-value for bounding box corner
+            maxx (float): largest x-value for bounding box corner
+            maxy (float): largest y-value for bounding box corner
+            filename (str): optional- name under which to save the chip
+            bucket_name (str): The S3 bucket name.
+            high_cutoff (float): high threshold cutoff for the DRA opertaion
+            low_cutoff (float): low threshold cutoff for the DRA opertaion
+            pan_id (str): The associated PAN ID for pan sharpening a multispectral image
+            return_fp (bool): return name of the chip file
+
+        Returns:
+            Confirmation (str) that tile processing was done.
+        '''
+
+        print 'Retrieving IDAHO chip'
+
+        access_token = self.gbdx_connection.access_token
+
+        if not filename:
+            filename = idaho_id
+
+        # form request
+        url = ('http://idaho.geobigdata.io/'
+               'v1/chip/bbox/' + bucket_name + '/' + idaho_id + '?upperLeft='
+               + str(minx) + ',' + str(maxy) + '&lowerRight=' + str(maxx) + ','
+               + str(miny) + '&lowCutoff=' + str(low_cutoff) + '&highCutoff=' +
+               str(high_cutoff) + '&format=' + str(format) + '&token=' + access_token)
+
+        if pan_id:
+            url += '&panId='+ pan_id
+
+        r = requests.get(url)
+
+        if r.status_code == 200:
+            # form output path
+            file_path = os.path.join(output_folder, filename+'.tif')
+
+            with open(file_path, 'wb') as the_file:
+                the_file.write(r.content)
+
+                if return_fp:
+                    return file_path
+
+        elif r.status_code == 404:
+            print 'IDAHO ID not found: %s' % idaho_id
+            r.raise_for_status()
+        else:
+            print 'There was a problem retrieving IDAHO ID: %s' % idaho_id
+            r.raise_for_status()
 
     def view_idaho_tiles_by_bbox(self, catId, bbox, output_filename):
         '''Retrieve and view just the IDAHO chips in a particular bounding box
@@ -248,9 +308,9 @@ class Idaho(object):
             output_filename (str): a Leaflet Viewer file showing the IDAHO
                images as tiles.
         '''
-        
+
         minx, miny, maxx, maxy = bbox
-        
+
         #validate bbox values
         if (minx > maxx):
             print ('The west value is not less than the east value.')
@@ -258,18 +318,18 @@ class Idaho(object):
         if (miny > maxy):
             print ('The south value is not less than the north value.')
             exit
-        
+
         #create bbox polygon
         bp1 = Point(minx, miny)
         bp2 = Point(minx, maxy)
         bp3 = Point(maxx, maxy)
         bp4 = Point(maxx, miny)
         bbox_polygon = Polygon(bp1, bp2, bp3, bp4)
-        
+
         #get IDAHO image results: parts
         idaho_image_results = self.get_images_by_catid(catId)
         description = self.describe_images(idaho_image_results)
-        
+
         tile_count = 0
         for catid, images in description.items():
             functionstring = ''
@@ -297,20 +357,20 @@ class Idaho(object):
                 }.get(partname, '0,1,2')
 
                 part_boundstr_wkt = part[partname]['boundstr']
-                part_polygon = geometry.from_wkt(part_boundstr_wkt) 
+                part_polygon = geometry.from_wkt(part_boundstr_wkt)
                 bucketname = part[partname]['bucket']
                 image_id = part[partname]['id']
                 W, S, E, N = part_polygon.bounds
                 pp1, pp2, pp3, pp4 = Point(W, S), Point(W, N), Point(E, N), Point(E, S)
                 part_bbox_polygon = Polygon(pp1, pp2, pp3, pp4)
                 if (bbox_polygon.intersection(part_bbox_polygon)):
-                    functionstring += ("addLayerToMap('%s','%s',%s,%s,%s,%s,'%s');\n" % 
+                    functionstring += ("addLayerToMap('%s','%s',%s,%s,%s,%s,'%s');\n" %
                                       (bucketname, image_id, W,S,E,N, pan_image_id))
                     tile_count += 1
-                    
+
         print ('There were ' + str(tile_count) + ' IDAHO images found to ' +
               'intersect with the provided bounding box.')
-        
+
         __location__ = os.path.realpath(
             os.path.join(os.getcwd(), os.path.dirname(os.path.realpath('__file__'))))
         with open(os.path.join(__location__, 'leafletmap_template.html'), 'r') as htmlfile:
@@ -325,8 +385,8 @@ class Idaho(object):
         with codecs.open(output_filename,'w','utf8') as outputfile:
             print("Saving %s" % output_filename)
             outputfile.write(data)
-            
-            
+
+
     def download_idaho_tiles_by_bbox(self, catId, bbox, resolution, outputfolder):
         '''Retrieve and view just the IDAHO chips in a particular bounding box
            for a catID.
@@ -337,9 +397,9 @@ class Idaho(object):
             resolution (str): The desired floating point resolution of the tiles.
             outputfolder (str): The desired output location of the IDAHO tiles.
         '''
-        
+
         minx, miny, maxx, maxy = bbox
-        
+
         #validate bbox values
         if (minx > maxx):
             print ('The west value is not less than the east value.')
@@ -347,18 +407,18 @@ class Idaho(object):
         if (miny > maxy):
             print ('The south value is not less than the north value.')
             exit
-        
+
         #create bbox polygon
         bp1 = Point(minx, miny)
         bp2 = Point(minx, maxy)
         bp3 = Point(maxx, maxy)
         bp4 = Point(maxx, miny)
         bbox_polygon = Polygon(bp1, bp2, bp3, bp4)
-        
+
         #get IDAHO image results: parts
         idaho_image_results = self.get_images_by_catid(catId)
         description = self.describe_images(idaho_image_results)
-        
+
         tile_count = 0
         for catid, images in description.items():
             for partnum, part in images['parts'].items():
@@ -377,7 +437,7 @@ class Idaho(object):
                     continue
 
                 part_boundstr_wkt = part[partname]['boundstr']
-                part_polygon = geometry.from_wkt(part_boundstr_wkt) 
+                part_polygon = geometry.from_wkt(part_boundstr_wkt)
                 bucketname = part[partname]['bucket']
                 image_id = part[partname]['id']
                 W, S, E, N = part_polygon.bounds
@@ -393,10 +453,8 @@ class Idaho(object):
                                         center_lon=str(center_lon),
                                         resolution=resolution,
                                         output_folder=outputfolder)
+
                     tile_count+=1
-                    
+
         print ('There were ' + str(tile_count) + ' IDAHO images downloaded that ' +
               'intersect with the provided bounding box.')
-
-
-
