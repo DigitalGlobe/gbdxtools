@@ -1,3 +1,7 @@
+0.5.3
+-----
+* bugfix in idaho.describe_idaho_images function (was showing wrong sensorPlatformName)
+
 0.5.2
 -----
 * Add gbdx.catalog.get() and gbdx.catalog.get_strip_metadata()
