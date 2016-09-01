@@ -105,9 +105,9 @@ class Idaho(object):
             # images associated with a single catid
             description[catid] = {}
             description[catid]['parts'] = {}
-            description[catid]['sensorPlatformName'] = results[0]['properties']['sensorPlatformName']
             images = [r for r in results if r['properties']['vendorDatasetIdentifier3'] == catid]
             for image in images:
+                description[catid]['sensorPlatformName'] = image['properties']['sensorPlatformName']
                 part = int(image['properties']['vendorDatasetIdentifier2'][-3:])
                 color = image['properties']['colorInterpretation']
                 bucket = image['properties']['imageBucketName']
