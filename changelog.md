@@ -1,3 +1,7 @@
+0.5.4
+-----
+* add get_idaho_chip_url function
+
 0.5.3
 -----
 * bugfix in idaho.describe_idaho_images function (was showing wrong sensorPlatformName)
