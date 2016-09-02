@@ -54,8 +54,8 @@ class CloudHarnessTaskTests(unittest.TestCase):
         ch_task = self.gbdx.Task(BasicApp)
         assert isinstance(ch_task, CloudHarnessTask)
         assert ch_task.domain == 'default'
-        assert BasicApp.task.name in ch_task.name
-        assert BasicApp.task.name == ch_task.type
+        assert BasicApp.task.name in ch_task.task.name
+        assert 'CloudHarness_Anonymous_Task' == ch_task.type
 
         expected_inports = [p.name for p in BasicApp.task.input_ports]
         expected_outports = [p.name for p in BasicApp.task.output_ports]
