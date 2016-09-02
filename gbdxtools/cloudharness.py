@@ -77,10 +77,10 @@ class CloudHarnessTask(Task):
                 # Overwrite the cloud-harness value with the gbdxtools value.
                 port.value = gbdx_task_port.value
 
-        task_ctl.invoke()
+        task = task_ctl.invoke()
 
         # Get uploaded port locations
-        ch_input_ports = task_ctl.task.input_ports
+        ch_input_ports = task.input_ports
 
         for port in ch_input_ports:
             gbdx_task_port = self._get_input_port(port.name)
