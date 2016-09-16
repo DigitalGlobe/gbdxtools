@@ -189,7 +189,7 @@ class Idaho(object):
             print("No items returned.")
 
     def get_idaho_chip_url(self, bucket_name, idaho_id, center_lat, center_lon, 
-                       resolution=None, pan_id=None):
+                       resolution=None, pan_id=None, format='tif', bands=None):
         '''Gets the URL for an orthorectified IDAHO chip.
 
         Args:
@@ -200,6 +200,8 @@ class Idaho(object):
             output_folder (str): The folder the chip should be output to.
             resolution (str): output resolution in meters (default None = native resolution)
             pan_id (str): The associated PAN ID for pan sharpening a multispectral image
+            format (str): File format.  Defaults to 'tif'.
+            bands (str): band string.  Defaults to None.
         Returns:
             URL (str)
         '''
@@ -208,13 +210,16 @@ class Idaho(object):
         url = ('http://idaho.geobigdata.io/'
                'v1/chip/centroid/' + bucket_name + '/' + idaho_id + '?lat='
                + str(center_lat) + '&long=' + str(center_lon) +
-               '&format=tif' + '&token='+access_token)
+               '&format=' + format + '&token='+access_token)
 
         if pan_id:
             url += '&panId=' + pan_id
 
         if resolution:
             url += '&resolution=' + str(resolution)
+
+        if bands:
+            url += '&bands=' + bands
 
         return url
 
