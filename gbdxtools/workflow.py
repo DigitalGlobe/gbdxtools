@@ -80,37 +80,6 @@ class Workflow():
         r = self.gbdx_connection.post(url, data='')
         r.raise_for_status()
 
-    def list_tasks(self):
-        '''Get a list of all the workflow task definitions I'm allowed to see
-            
-            Args:
-                None
-    
-            Returns:
-                Task list (list)
-
-        '''
-        url = 'https://geobigdata.io/workflows/v1/tasks'
-        r = self.gbdx_connection.get(url)
-        r.raise_for_status()
-        return r.json()
-
-    def describe_task(self, task_name):
-        '''Get the task definition.
-
-         Args:
-             task_name (str): The task name.
-
-         Return:
-             Task definition (dict).
-        '''
-
-        url = 'https://geobigdata.io/workflows/v1/tasks/' + task_name
-        r = self.gbdx_connection.get(url)
-        r.raise_for_status()
-
-        return r.json()
-
     def launch_aop_to_s3(self,
                          input_location,
                          output_location,

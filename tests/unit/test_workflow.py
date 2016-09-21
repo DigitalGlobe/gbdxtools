@@ -25,20 +25,3 @@ def test_init():
     assert isinstance(wf, Workflow)
     assert wf.s3 is not None
     assert wf.gbdx_connection is not None
-
-@vcr.use_cassette('tests/unit/cassettes/test_list_tasks.yaml',filter_headers=['authorization'])
-def test_list_tasks():
-    wf = Workflow(gbdx)
-    taskinfo = wf.list_tasks()
-    assert taskinfo is not None
-    assert 'HelloGBDX' in taskinfo['tasks']
-
-@vcr.use_cassette('tests/unit/cassettes/test_describe_tasks.yaml',filter_headers=['authorization'])
-def test_describe_tasks():
-    wf = Workflow(gbdx)
-    taskinfo = wf.list_tasks()
-    assert len(taskinfo) > 0
-    desc = wf.describe_task(taskinfo['tasks'][0])
-    assert isinstance(desc, dict)
-    assert len(desc['description']) > 0   
-
