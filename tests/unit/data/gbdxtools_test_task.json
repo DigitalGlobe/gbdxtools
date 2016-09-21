@@ -1,0 +1,26 @@
+{
+  "inputPortDescriptors": [
+    {
+      "description": "A string input.",
+      "name": "inputstring",
+      "type": "string"
+    }
+  ],
+  "outputPortDescriptors": [
+    {
+      "name": "output",
+      "type": "string"
+    }
+  ],
+  "containerDescriptors": [
+    {
+      "type": "DOCKER",
+      "command": "",
+      "properties": {
+        "image": "test/gbdxtools-test-task"
+      }
+    }
+  ],
+  "description": "Test task",
+  "name": "gbdxtools-test-task"
+}

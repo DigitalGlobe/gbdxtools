@@ -1,0 +1,104 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      User-Agent: [python-requests/2.9.1]
+    method: GET
+    uri: https://geobigdata.io/workflows/v1/tasks
+  response:
+    body:
+      string: !!binary |
+        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
+    headers:
+      connection: [keep-alive]
+      content-encoding: [gzip]
+      content-length: ['3223']
+      content-type: [application/json]
+      date: ['Wed, 21 Sep 2016 18:16:48 GMT']
+      server: [nginx/1.8.0]
+      via: [kong/0.5.2]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      Content-Length: ['0']
+      User-Agent: [python-requests/2.9.1]
+    method: DELETE
+    uri: https://geobigdata.io/workflows/v1/tasks/gbdxtools-test-task
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA0tPSqkoyc/PKdYtSS0u0S1JLM5WKC5NTk4tLk4rzcmpVEhJzUktSU3RAwAszp0i
+        KQAAAA==
+    headers:
+      connection: [keep-alive]
+      content-encoding: [gzip]
+      content-length: ['61']
+      content-type: [text/html;charset=utf-8]
+      date: ['Wed, 21 Sep 2016 18:16:48 GMT']
+      server: [nginx/1.8.0]
+      via: [kong/0.5.2]
+    status: {code: 200, message: OK}
+version: 1
