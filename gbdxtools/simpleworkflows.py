@@ -199,7 +199,7 @@ class Task(object):
 
         self.__interface = __interface
         self.type = __task_type
-        self.definition = self.__interface.workflow.describe_task(__task_type)
+        self.definition = self.__interface.task_registry.get_task_definition(__task_type)
         self.domain = self.definition['containerDescriptors'][0]['properties'].get('domain','default')
         self._timeout = self.definition['properties'].get('timeout')
 

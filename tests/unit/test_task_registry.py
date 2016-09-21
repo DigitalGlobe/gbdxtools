@@ -28,7 +28,7 @@ def test_init():
 @vcr.use_cassette('tests/unit/cassettes/test_list_tasks.yaml',filter_headers=['authorization'])
 def test_list_tasks():
     tr = TaskRegistry(gbdx)
-    taskinfo = tr.list_tasks()
+    taskinfo = tr.list()
     assert taskinfo is not None
     assert 'HelloGBDX' in taskinfo['tasks']
 
@@ -36,9 +36,9 @@ def test_list_tasks():
 @vcr.use_cassette('tests/unit/cassettes/test_describe_tasks.yaml',filter_headers=['authorization'])
 def test_describe_tasks():
     tr = TaskRegistry(gbdx)
-    taskinfo = tr.list_tasks()
+    taskinfo = tr.list()
     assert len(taskinfo) > 0
-    desc = tr.describe_task(taskinfo['tasks'][0])
+    desc = tr.get_task_definition(taskinfo['tasks'][0])
     assert isinstance(desc, dict)
     assert len(desc['description']) > 0   
 
@@ -65,12 +65,12 @@ def test_register_task():
                 "type": "DOCKER",
                 "command": "",
                 "properties": {
-                    "image": "test/test-task"
+                    "image": "test/gbdxtools-test-task"
                 }
             }
         ],
         "description": "Test task",
-        "name": "test-task"
+        "name": "gbdxtools-test-task"
     }
 
     rv = tr.register(task_json)
@@ -81,7 +81,8 @@ def test_register_task():
 @vcr.use_cassette('tests/unit/cassettes/test_delete_task.yaml',filter_headers=['authorization'])
 def test_delete_task():
     tr = TaskRegistry(gbdx)
-    taskinfo = tr.list_tasks()
-    assert len(taskinfo) > 0
-    rv = tr.delete_task(taskinfo['tasks'][0])
+    tasks = tr.list()
+    if not 'gbdxtools-test-task' in tasks:
+        test_list_tasks()
+    rv = tr.delete_task('gbdxtools-test-task')
     assert 'successfully deleted' in rv.lower()

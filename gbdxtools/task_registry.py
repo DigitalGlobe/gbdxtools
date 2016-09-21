@@ -30,7 +30,7 @@ class TaskRegistry(object):
         r = self.gbdx_connection.post(self._base_url, json=task_json)
         r.raise_for_status()
 
-        return r.text()
+        return r.text
 
     def get_task_definition(self, task_name):
         r = self.gbdx_connection.get(self._base_url + '/' + task_name)
@@ -42,4 +42,4 @@ class TaskRegistry(object):
         r = self.gbdx_connection.delete(self._base_url + '/' + task_name)
         r.raise_for_status()
 
-        return r.text()
+        return r.text
