@@ -3,6 +3,7 @@ Contact: dmitry.zviagintsev@digitalglobe.com
 
 Unit test the task registry class
 '''
+import os
 
 from gbdxtools import Interface
 from gbdxtools.task_registry import TaskRegistry
@@ -28,24 +29,34 @@ def test_init():
 @vcr.use_cassette('tests/unit/cassettes/test_list_tasks.yaml',filter_headers=['authorization'])
 def test_list_tasks():
     tr = TaskRegistry(gbdx)
-    taskinfo = tr.list()
-    assert taskinfo is not None
-    assert 'HelloGBDX' in taskinfo['tasks']
+    task_list = tr.list()
+    assert task_list is not None
+    assert 'HelloGBDX' in task_list
 
 
 @vcr.use_cassette('tests/unit/cassettes/test_describe_tasks.yaml',filter_headers=['authorization'])
 def test_describe_tasks():
     tr = TaskRegistry(gbdx)
-    taskinfo = tr.list()
-    assert len(taskinfo) > 0
-    desc = tr.get_task_definition(taskinfo['tasks'][0])
+    task_list = tr.list()
+    assert len(task_list) > 0
+    desc = tr.get_definition(task_list[0])
     assert isinstance(desc, dict)
     assert len(desc['description']) > 0   
 
 
 @vcr.use_cassette('tests/unit/cassettes/test_register_task.yaml',filter_headers=['authorization'])
-def test_register_task():
+def _test_register_task(task_json=None, filename=None):
     tr = TaskRegistry(gbdx)
+
+    if task_json:
+        rv = tr.register(task_json)
+    else:
+        rv = tr.register(filename)
+
+    assert 'successfully registered' in rv.lower()
+
+
+def test_register_task_from_json():
     task_json = {
         "inputPortDescriptors": [
             {
@@ -73,9 +84,37 @@ def test_register_task():
         "name": "gbdxtools-test-task"
     }
 
-    rv = tr.register(task_json)
+    _test_register_task(task_json=task_json)
 
-    assert 'successfully registered' in rv.lower()
+
+def test_register_task_from_file():
+    filename = os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), "data/gbdxtools_test_task.json"))
+
+    _test_register_task(filename=filename)
+
+
+def test_register_fails_when_both_json_and_file():
+    tr = TaskRegistry(gbdx)
+
+    try:
+        tr.register(task_json={'any': 'thing'}, json_filename="any")
+    except Exception as e:
+        if "Both task json and filename can't be provided." in str(e):
+            pass
+        else:
+            raise
+
+
+def test_register_fails_when_both_json_and_file_none():
+    tr = TaskRegistry(gbdx)
+
+    try:
+        tr.register(task_json=None, json_filename=None)
+    except Exception as e:
+        if "Both task json and filename can't be none." in str(e):
+            pass
+        else:
+            raise
 
 
 @vcr.use_cassette('tests/unit/cassettes/test_delete_task.yaml',filter_headers=['authorization'])
@@ -84,5 +123,5 @@ def test_delete_task():
     tasks = tr.list()
     if not 'gbdxtools-test-task' in tasks:
         test_list_tasks()
-    rv = tr.delete_task('gbdxtools-test-task')
+    rv = tr.delete('gbdxtools-test-task')
     assert 'successfully deleted' in rv.lower()
