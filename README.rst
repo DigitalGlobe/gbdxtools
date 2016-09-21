@@ -11,6 +11,11 @@ gbdxtools: Python tools for using GBDX
 .. image:: https://readthedocs.org/projects/gbdxtools/badge/?version=latest
     :target: http://gbdxtools.readthedocs.org/en/latest/?badge=latest
     :alt: Documentation Status
+    
+.. image:: https://codecov.io/gh/DigitalGlobe/gbdxtools/branch/master/graph/badge.svg
+    :target: https://codecov.io/gh/DigitalGlobe/gbdxtools
+
+
 
 gbdxtools is a package for ordering imagery and launching workflows on DigitalGlobe's GBDX platform.
 
@@ -18,6 +23,8 @@ In order to use gbdxtools, you need GBDX credentials. Email GBDX-Support@digital
 
 Documentation is hosted here: http://gbdxtools.readthedocs.org/en/latest/. 
 Example scripts can be found under the /examples directory of this repo.
+
+Currently, the following Python versions are supported: 2.7, 3.3, 3.4, 3.5
 
 See the license file for license rights and limitations (MIT).
 
@@ -51,6 +58,25 @@ Make sure you have the latest pip version::
 If you run into trouble with the installation of cryptography, make sure that the following dependencies are installed::
 
    sudo apt-get install build-essential libssl-dev libffi-dev python-dev
+
+**Mac OSX Users**
+
+If you run into trouble with the installation of cryptography and see a message that <ffi.h> could not be found, you can run::
+
+	xcode-select --install
+
+Then run "pip install gbdxtools" again. See stackoverflow for discussion on what is going wrong and why this fixes it (http://stackoverflow.com/questions/27328049/missing-usr-include-after-yosemite-and-xcode-install)
+
+If you are running in a virtualenv and run into issues you may need upgrade pip in the virtualenv::
+
+	cd <your_project_folder>
+	. venv/bin/activate
+	pip install --upgrade pip
+	pip install --upgrade gbdxtools
+	# you might also need to remove token from your .gbdx-config file
+	nano -w ~.gbdx-config
+	# then, remove the [gbdx_token] section and json= part
+    
 
 **conda**
 
@@ -132,7 +158,7 @@ To create a new version::
     bumpversion ( major | minor | patch )
     git push --tags
 
-Don't forget to upload to pypi.
+Don't forget to update the changelog and upload to pypi.
 
 **Contributing**
 

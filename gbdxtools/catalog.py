@@ -3,14 +3,16 @@ GBDX Catalog Interface.
 
 Contact: nate.ricklin@digitalglobe.com
 """
+from __future__ import absolute_import
+from builtins import object
 
 import requests
 from pygeoif import geometry
 import json
 import datetime
-import catalog_search_aoi
+from . import catalog_search_aoi
 
-class Catalog():
+class Catalog(object):
 
     def __init__(self, interface):
         ''' Construct the Catalog interface class
@@ -49,6 +51,53 @@ class Catalog():
             self.logger.debug('There was a problem retrieving catid: %s' % catID)
             r.raise_for_status()
 
+    def get(self, catID, includeRelationships=False):
+        '''Retrieves the strip footprint WKT string given a cat ID.
+
+        Args:
+            catID (str): The source catalog ID from the platform catalog.
+            includeRelationships (bool): whether to include graph links to related objects.  Default False.
+
+        Returns:
+            record (dict): A dict object identical to the json representation of the catalog record
+        '''
+        if includeRelationships:
+            incR = 'true'
+        else:
+            incR = 'false'
+        url = 'https://geobigdata.io/catalog/v1/record/' + catID + '?includeRelationships='+incR
+        r = self.gbdx_connection.get(url)
+        r.raise_for_status()
+        return r.json()
+
+
+    def get_strip_metadata(self, catID):
+        '''Retrieves the strip catalog metadata given a cat ID.
+
+        Args:
+            catID (str): The source catalog ID from the platform catalog.
+
+        Returns:
+            metadata (dict): A metadata dictionary .
+
+            TODO: have this return a class object with interesting information exposed.
+        '''
+
+        self.logger.debug('Retrieving strip catalog metadata')
+        url = ('https://geobigdata.io/catalog/v1/record/'
+               + catID + '?includeRelationships=false')
+
+        r = self.gbdx_connection.get(url)
+        if r.status_code == 200:
+            return r.json()['properties']
+        elif r.status_code == 404:
+            self.logger.debug('Strip not found: %s' % catID)
+            r.raise_for_status()
+        else:
+            self.logger.debug('There was a problem retrieving catid: %s' % catID)
+            r.raise_for_status()
+
+
     def get_address_coords(self, address):
         ''' Use the google geocoder to get latitude and longitude for an address string
 
@@ -66,43 +115,49 @@ class Catalog():
         lng = results[0]['geometry']['location']['lng']
         return lat, lng
 
-    def search_address(self, address, type="Acquisition"):
+    def search_address(self, address, filters=None, startDate=None, endDate=None, types=None):
         ''' Perform a catalog search over an address string
 
         Args:
             address: any address string
-            type: type, default=Acquisition
+            filters: Array of filters.  Optional.  Example:
+                [  
+                    "(sensorPlatformName = 'WORLDVIEW01' OR sensorPlatformName ='QUICKBIRD02')",
+                    "cloudCover < 10",
+                    "offNadirAngle < 10"
+                ]
+            startDate: string.  Optional.  Example: "2004-01-01T00:00:00.000Z"
+            endDate: string.  Optional.  Example: "2004-01-01T00:00:00.000Z"
+            types: Array of types to search for.  Optional.  Example (and default):  ["Acquisition"]
 
         Returns:
-            catalog resultset dictionary
+            catalog search resultset
         '''
         lat, lng = self.get_address_coords(address)
-        return self.search_point(lat,lng, type)
+        return self.search_point(lat,lng, filters=filters, startDate=startDate, endDate=endDate, types=types)
 
-    def search_point(self, lat, lng, type="Acquisition"):
+    #def search_point(self, lat, lng, type="Acquisition")
+    def search_point(self, lat, lng, filters=None, startDate=None, endDate=None, types=None, type=None):
         ''' Perform a catalog search over a specific point, specified by lat,lng
 
         Args:
             lat: latitude
             lng: longitude
-            type: type, default=Acquisition
+            filters: Array of filters.  Optional.  Example:
+                [  
+                    "(sensorPlatformName = 'WORLDVIEW01' OR sensorPlatformName ='QUICKBIRD02')",
+                    "cloudCover < 10",
+                    "offNadirAngle < 10"
+                ]
+            startDate: string.  Optional.  Example: "2004-01-01T00:00:00.000Z"
+            endDate: string.  Optional.  Example: "2004-01-01T00:00:00.000Z"
+            types: Array of types to search for.  Optional.  Example (and default):  ["Acquisition"]
 
         Returns:
-            catalog resultset dictionary
+            catalog search resultset
         '''
-        postdata = {  
-            "searchAreaWkt":"POLYGON ((%s %s, %s %s, %s %s, %s %s, %s %s))" % (lng, lat,lng,lat,lng,lat,lng,lat,lng,lat),
-            "filters":[  
-            ],
-            "types":[  
-                type
-            ]
-        }
-        url = 'https://geobigdata.io/catalog/v1/search?includeRelationships=false'
-        headers = {'Content-Type':'application/json'}
-        r = self.gbdx_connection.post(url, headers=headers, data=json.dumps(postdata))
-        r.raise_for_status()
-        return r.json()
+        searchAreaWkt = "POLYGON ((%s %s, %s %s, %s %s, %s %s, %s %s))" % (lng, lat,lng,lat,lng,lat,lng,lat,lng,lat)
+        return self.search(searchAreaWkt=searchAreaWkt, filters=filters, startDate=startDate, endDate=endDate, types=types)
 
     def get_data_location(self, catalog_id):
         """
@@ -257,10 +312,8 @@ class Catalog():
         Returns:
             single catalog item, or none if not found
         '''
-        if not len(results['results']):
+        if not len(results):
             return None
-
-        results = results['results']
 
         # filter on type
         if types:

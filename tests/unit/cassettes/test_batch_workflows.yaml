@@ -1,0 +1,90 @@
+interactions:
+- request:
+    body: '{"tasks": [{"outputs": [{"name": "data"}], "taskType": "FastOrtho", "name":
+      "FastOrtho", "inputs": [{"name": "data", "value": "$batch_value:input_data"},
+      {"name": "demspecifier", "value": "$batch_value:input_dem"}]}, {"inputs": [{"source":
+      "FastOrtho:data", "name": "data"}, {"name": "destination", "value": "$batch_value:destination"}],
+      "name": "StagetoS3", "taskType": "StageDataToS3"}], "name": "fastortho_stagetos3",
+      "batch_values": [{"values": ["http://test-tdgplatform-com/data/QB02/LV1B/053702625010_01_004/053702625010_01/053702625010_01_P013_MUL",
+      "http://test-tdgplatform-com/data/QB02/LV1B/053702625010_01_004/053702625010_01/053702625010_01_P013_MUL",
+      "http://test-tdgplatform-com/data/QB02/LV1B/053702625010_01_004/053702625010_01/053702625010_01_P013_MUL"],
+      "name": "input_data"}, {"values": ["SRTM90", "SRTM120", "SRTM150"], "name":
+      "input_dem"}, {"values": ["http://test-tdgplatform-com/temp/1", "http://test-tdgplatform-com/temp/2",
+      "http://test-tdgplatform-com/temp/3"], "name": "destination"}]}'
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      Content-Length: ['1013']
+      Content-Type: [application/json]
+      User-Agent: [python-requests/2.9.1]
+    method: POST
+    uri: https://geobigdata.io/workflows/v1/batch_workflows
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA52QywrCMBBFf6Vka5W8m/Q73ImE9F20DTSjXZT+u02FKiguhFkMzLlzhpmQG/ty
+        QGmE6qzw9xzFEcos5I0Z3XCprm40bRHGnFGZcKykIJhRrTVVgd2o3nZl4CrrwQ3QOOPB1iU4zwLn
+        b1nXApSFgfYJUkzkHouljpSllKScH4TWgokdxinG79v9EjhNL9nHSUQqRRMiVxVYWA2bE81x9Csd
+        GqqE+C/NeKJFItd3fEuf5wdWO0/MZgEAAA==
+    headers:
+      connection: [keep-alive]
+      content-encoding: [gzip]
+      content-length: ['196']
+      content-type: [application/json]
+      date: ['Thu, 05 May 2016 23:21:46 GMT']
+      server: [nginx/1.8.0]
+      via: [kong/0.5.2]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      User-Agent: [python-requests/2.9.1]
+    method: GET
+    uri: https://geobigdata.io/workflows/v1/batch_workflows/4326740865103299928
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA4WQywrCMBBFf6Vk64O8m+Q73ImUtE1tsTXQjHYh/XebClVRFGYxMOfOGeaG/HB2
+        PTIJOuZluBZonaDcQlFng+9PVeuHrCnjmDMqU46VFAQzqrWmKrILdbadi1xlA/geap8FsEcHPrDI
+        hUveNQCuzKB5gBQTucFiqh1lhhLD+VZoLZhYYWwwft0epsD+9pR9nESkUjQlclaBhdmwONG4Tn6l
+        Y0OVEO/ponblpf2fZjzVIpXzO765D+Md8uXK02YBAAA=
+    headers:
+      connection: [keep-alive]
+      content-encoding: [gzip]
+      content-length: ['203']
+      content-type: [application/json]
+      date: ['Thu, 05 May 2016 23:21:47 GMT']
+      server: [nginx/1.8.0]
+      via: [kong/0.5.2]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      Content-Length: ['0']
+      User-Agent: [python-requests/2.9.1]
+    method: POST
+    uri: https://geobigdata.io/workflows/v1/batch_workflows/4326740865103299928/cancel
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA52Q2wqCQBCGX0X2Nos9u+tzdBchq64HUhfcKS/Ed881qKDoIpiLgfm++YeZkZsG
+        O6I0QnVe+luB4gjlBoomm9x4qTo3ZW0ZxpxRmXCspCCYUa01VYF9UoPpbeAq48GN0LjMg6ktOM8C
+        56953wLYMoP2AVJM5B6LtY6UpZSknB+E1oKJHcYpxu/b/Sqc5lfYx0lEKkUTIrcoMLAlFGYobGdL
+        tMTRLzk0VAnxl8x4okUit2d8kc/LHeAngFVjAQAA
+    headers:
+      connection: [keep-alive]
+      content-encoding: [gzip]
+      content-length: ['201']
+      content-type: [application/json]
+      date: ['Thu, 05 May 2016 23:21:47 GMT']
+      server: [nginx/1.8.0]
+      via: [kong/0.5.2]
+    status: {code: 200, message: OK}
+version: 1
