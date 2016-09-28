@@ -1,3 +1,7 @@
+0.6.0
+-----
+* add TaskRegistry class to Interface
+
 0.5.5
 -----
 * add format & bands parameters to get_idaho_chip_url() function
