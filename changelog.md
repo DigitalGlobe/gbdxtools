@@ -1,3 +1,7 @@
+0.6.1
+-----
+* handle case of spurious keys in s3.download()
+
 0.6.0
 -----
 * add TaskRegistry class to Interface
