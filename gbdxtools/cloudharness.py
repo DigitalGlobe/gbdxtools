@@ -25,7 +25,7 @@ class CloudHarnessTask(Task):
         self.task_template = cloudharness_obj
         self.task = cloudharness_obj.task
 
-        self.definition = json.loads(self.task.json())
+        self.definition = None
         self.type = self.definition['name']
         self.name = self.type + '_' + str(uuid.uuid4())
 
@@ -34,7 +34,7 @@ class CloudHarnessTask(Task):
         self.domain = self.definition['containerDescriptors'][0]['properties'].get('domain', 'default')
         self._timeout = self.definition['properties'].get('timeout')
 
-        self.inputs = Inputs(self.input_ports)
+        self.inputs = CloudHarnessInputs(self.input_ports)
         self.outputs = Outputs(self.output_ports, self.name)
         self.batch_values = None
 
@@ -59,6 +59,7 @@ class CloudHarnessTask(Task):
                 '--dry-run': True,  # Flag to skip the execution of the task.
                 '<file_name>': self.task_template,
                 'create': False,
+                'register': False,
                 'run': True
             }
         )
@@ -109,3 +110,18 @@ class CloudHarnessWorkflow(Workflow):
                 task.upload_input_ports()
 
         return super(CloudHarnessWorkflow, self).execute()
+
+
+class CloudHarnessInputs(Inputs):
+
+    def __setattr__(self, k, v):
+        # The key name can be the multiplex postfix.
+        # However the parent class will only know the full key name
+        if k != '_portnames':
+            multiplex_prefix_names = ['str', 'dir']
+            for prefix in multiplex_prefix_names:
+                full_port_name = '%s_%s' % (prefix, k)
+                if full_port_name in self._portnames:
+                    k = full_port_name
+
+        super(CloudHarnessInputs, self).__setattr__(k, v)
