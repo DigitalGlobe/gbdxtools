@@ -1,3 +1,7 @@
+0.6.2
+-----
+* Added support for image location API orders.location()
+
 0.6.1
 -----
 * handle case of spurious keys in s3.download()
