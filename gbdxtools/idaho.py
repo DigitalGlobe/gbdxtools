@@ -105,9 +105,9 @@ class Idaho(object):
             # images associated with a single catid
             description[catid] = {}
             description[catid]['parts'] = {}
-            description[catid]['sensorPlatformName'] = results[0]['properties']['sensorPlatformName']
             images = [r for r in results if r['properties']['vendorDatasetIdentifier3'] == catid]
             for image in images:
+                description[catid]['sensorPlatformName'] = image['properties']['sensorPlatformName']
                 part = int(image['properties']['vendorDatasetIdentifier2'][-3:])
                 color = image['properties']['colorInterpretation']
                 bucket = image['properties']['imageBucketName']
@@ -188,6 +188,41 @@ class Idaho(object):
         else:
             print("No items returned.")
 
+    def get_idaho_chip_url(self, bucket_name, idaho_id, center_lat, center_lon, 
+                       resolution=None, pan_id=None, format='tif', bands=None):
+        '''Gets the URL for an orthorectified IDAHO chip.
+
+        Args:
+            bucket_name (str): The S3 bucket name.
+            idaho_id (str): The IDAHO ID of the chip.
+            center_lat (str): The latitude of the center of the desired chip.
+            center_lon (str): The longitude of the center of the desired chip.
+            output_folder (str): The folder the chip should be output to.
+            resolution (str): output resolution in meters (default None = native resolution)
+            pan_id (str): The associated PAN ID for pan sharpening a multispectral image
+            format (str): File format.  Defaults to 'tif'.
+            bands (str): band string.  Defaults to None.
+        Returns:
+            URL (str)
+        '''
+        # form request
+        access_token = self.gbdx_connection.access_token
+        url = ('http://idaho.geobigdata.io/'
+               'v1/chip/centroid/' + bucket_name + '/' + idaho_id + '?lat='
+               + str(center_lat) + '&long=' + str(center_lon) +
+               '&format=' + format + '&token='+access_token)
+
+        if pan_id:
+            url += '&panId=' + pan_id
+
+        if resolution:
+            url += '&resolution=' + str(resolution)
+
+        if bands:
+            url += '&bands=' + bands
+
+        return url
+
 
     def get_idaho_chip(self, bucket_name, idaho_id, center_lat, center_lon, 
                        output_folder, resolution=None, pan_id=None):
@@ -207,19 +242,7 @@ class Idaho(object):
 
         print('Retrieving IDAHO chip')
 
-        access_token = self.gbdx_connection.access_token
-
-        # form request
-        url = ('http://idaho.geobigdata.io/'
-               'v1/chip/centroid/' + bucket_name + '/' + idaho_id + '?lat='
-               + str(center_lat) + '&long=' + str(center_lon) +
-               '&format=tif' + '&token='+access_token)
-
-        if pan_id:
-            url += '&panId=' + pan_id
-
-        if resolution:
-            url += '&resolution=' + str(resolution)
+        url = self.get_idaho_chip_url(bucket_name, idaho_id, center_lat, center_lon, resolution, pan_id)
 
         r = requests.get(url)
 

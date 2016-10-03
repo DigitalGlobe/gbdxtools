@@ -48,22 +48,6 @@ class WorkflowTests(unittest.TestCase):
         self.assertTrue(wf.s3 is not None)
         self.assertTrue(wf.gbdx_connection is not None)
 
-    @vcr.use_cassette('tests/unit/cassettes/test_list_tasks.yaml', filter_headers=['authorization'])
-    def test_list_tasks(self):
-        wf = Workflow(self.gbdx)
-        taskinfo = wf.list_tasks()
-        self.assertTrue(taskinfo is not None)
-        self.assertTrue('HelloGBDX' in taskinfo['tasks'])
-
-    @vcr.use_cassette('tests/unit/cassettes/test_describe_tasks.yaml', filter_headers=['authorization'])
-    def test_describe_tasks(self):
-        wf = Workflow(self.gbdx)
-        taskinfo = wf.list_tasks()
-        self.assertTrue(len(taskinfo) > 0)
-        desc = wf.describe_task(taskinfo['tasks'][0])
-        self.assertTrue(isinstance(desc, dict))
-        self.assertTrue(len(desc['description']) > 0)
-
     @vcr.use_cassette('tests/unit/cassettes/test_batch_workflows.yaml', filter_headers=['authorization'])
     def test_batch_workflows(self):
         """
@@ -89,21 +73,3 @@ class WorkflowTests(unittest.TestCase):
 
         for workflow in workflows:
             self.assertTrue(workflow.get('state') in ["canceling", "canceled"])
-
-    @vcr.use_cassette('tests/unit/cassettes/test_workflow_events.yaml',filter_headers=['authorization'])
-    def test_workflow_events(self):
-        wf = Workflow(self.gbdx)
-        workflow_id = '4347109104758907277'
-        events = wf.events(workflow_id)
-        assert len(events) > 0
-        assert isinstance(events, list)
-        for event in events:
-            assert 'task' in event.keys()
-            assert 'state' in event.keys()
-            assert 'event' in event.keys()
-            assert 'timestamp' in event.keys()
-            assert 'when' in event.keys()
-            assert 'note' in event.keys()
-            assert event['state'] in ['pending','running','complete']
-            assert event['event'] in ['submitted','scheduled','rescheduling','started','succeeded','failed','timedout']
-

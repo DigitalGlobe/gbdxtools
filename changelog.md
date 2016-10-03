@@ -1,3 +1,23 @@
+0.6.1
+-----
+* handle case of spurious keys in s3.download()
+
+0.6.0
+-----
+* add TaskRegistry class to Interface
+
+0.5.5
+-----
+* add format & bands parameters to get_idaho_chip_url() function
+
+0.5.4
+-----
+* add get_idaho_chip_url function
+
+0.5.3
+-----
+* bugfix in idaho.describe_idaho_images function (was showing wrong sensorPlatformName)
+
 0.5.2
 -----
 * Add gbdx.catalog.get() and gbdx.catalog.get_strip_metadata()

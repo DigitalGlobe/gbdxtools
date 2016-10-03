@@ -18,6 +18,7 @@ from gbdxtools.ordering import Ordering
 from gbdxtools.workflow import Workflow
 from gbdxtools.catalog import Catalog
 from gbdxtools.idaho import Idaho
+from gbdxtools.task_registry import TaskRegistry
 import gbdxtools.simpleworkflows
 from gbdxtools.cloudharness import CloudHarnessTask, CloudHarnessWorkflow
 from gbdx_task_template import TaskTemplate
