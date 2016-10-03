@@ -64,3 +64,12 @@ class OrderingTests(unittest.TestCase):
             assert 'acquisition_id' in result.keys()
             assert 'state' in result.keys()
             assert 'location' in result.keys()
+
+    @vcr.use_cassette('tests/unit/cassettes/test_image_location.yaml', filter_headers=['authorization'])
+    def test_order_batching(self):
+        o = Ordering(self.gbdx)
+        res = o.location(['10400100120FEA00', '101001000DB2FB00'], batch_size=1)
+        acq_list = res['acquisitions']
+        assert len(acq_list) == 2
+        for entry in res['acquisitions']:
+            assert entry['location'].startswith('s3')
