@@ -74,7 +74,6 @@ class Ordering(object):
         elif len(res)>1:
             return res
 
-
     def status(self, order_id):
         '''Checks imagery order status. There can be more than one image per
            order and this function returns the status of all images
@@ -94,3 +93,31 @@ class Ordering(object):
         r.raise_for_status()
         return r.json().get("acquisitions", {})
 
+    def location(self, image_catalog_ids, batch_size=100):
+        def _process_single_batch(url_, ids, results_dict):
+            query_string = 'acquisitionIds=[' + ','.join(['"{}"'.format(id_) for id_ in ids]) + ']'
+            r = self.gbdx_connection.get(url_, params=query_string)
+            r.raise_for_status()
+            results_dict['acquisitions'].extend(r.json()['acquisitions'])
+
+        url = 'https://geobigdata.io/orders/v2/location'
+
+        batch_size = min(100, batch_size)
+
+        if not isinstance(image_catalog_ids, list):
+            image_catalog_ids = [image_catalog_ids]
+
+        sanitized_ids = list(set((stripped_id for stripped_id in (_id.strip() for _id in image_catalog_ids) if stripped_id)))
+
+        res = {'acquisitions': []}
+        # Use itertool batch recipe
+        acq_ids_by_batch = zip(*([iter(sanitized_ids)] * batch_size))
+        for ids_batch in acq_ids_by_batch:
+            _process_single_batch(url, ids_batch, res)
+
+        # Process reminder
+        remain_count = len(sanitized_ids) % batch_size
+        if remain_count > 0:
+            _process_single_batch(url, sanitized_ids[-remain_count:], res)
+
+        return res
