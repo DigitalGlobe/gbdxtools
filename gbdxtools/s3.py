@@ -92,6 +92,8 @@ class S3(object):
         for key in whats_in_here:
             filename = key.name.split('/')[-1]
             self.logger.debug(filename)
+            if not filename:
+                continue
             res = key.get_contents_to_filename(local_dir + '/' + filename)
 
         self.logger.debug('Done!')

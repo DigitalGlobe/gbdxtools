@@ -323,32 +323,3 @@ Here is a simple example of running a workflow that uses the tasks AOP_Strip_Pro
     }
    >>> gbdx.workflow.launch(payload)
    >>> u'4350494649661385313'
-
-The workflow module also provides additional functionality such as obtaining a list of available tasks
-
-.. code-block:: pycon
-
-   >>> print gbdx.workflow.list_tasks()['tasks'][:10]   # print 10 task names
-   >>> [u'ENVI_LowClipRaster', u'Downsample', u'pop_map_core2_map', u'protogenV2UF_LBL', u'AComp', u'protogenV2RAV', u'StageDataToS3', u'FastOrtho', u'RoadTracker', u'rt_support']
-
-as well as the definition of a given task.
-
-.. code-block:: pycon
-
-   >>> gbdx.workflow.describe_task('protogenV2RAW')
-   >>> {u'containerDescriptors': [{u'command': u'python /protogenv2/bin/protogen.py RAW',
-   u'properties': {u'image': u'gouzounis/protogenv2:latest'},
-   u'type': u'DOCKER'}],
- u'description': u"This task requires a single input 'raster' that is an 8-band WorldView 2/3 image that has been atmospherically compensated. It returns a binary mask raster image with 255: foreground, 0: background.",
- u'inputPortDescriptors': [{u'description': u'Name of the geo-coded ACOMPed image file that will be processed. Supported formats: TIF, TIL, VRT, HDR raster images. Image must be UINT16x8 (visible + NIR bands).',
-   u'name': u'raster',
-   u'required': True,
-   u'type': u'input'}],
- u'name': u'protogenV2RAW',
- u'outputPortDescriptors': [{u'description': u'The output directory of text file',
-   u'name': u'data',
-   u'required': True,
-   u'type': u'output'}],
- u'properties': {u'isPublic': True, u'timeout': 7200}}
-
-You can find more information in the API documentation.
