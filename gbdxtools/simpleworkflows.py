@@ -45,7 +45,8 @@ class Port(object):
 
 
 class PortList(object):
-    def __init__(self, ports):
+    def __init__(self, ports, task=None):
+        self.task = task
         self._portnames = set([p['name'] for p in ports])
         for p in ports:
             self.__setattr__(p['name'],
@@ -94,6 +95,10 @@ class Inputs(PortList):
     # task.inputs.port_name = value
     # Also allow initial setup of all internal stuff & multiplex ports
     def __setattr__(self, k, v):
+        if k == "task":
+            object.__setattr__(self, k, v)
+            return
+
         # special attributes for internal use
         if k in ['_portnames']:
             object.__setattr__(self, k, v)
@@ -101,8 +106,26 @@ class Inputs(PortList):
 
         # special handling for setting port values
         if k in self._portnames and hasattr(self, k):
-            port = self.__getattribute__(k)
-            port.value = v
+            port_key_value = {k: v}
+
+            batch_values = []
+
+            for port_name, port_value in port_key_value.items():
+                # if input type is of list, use batch workflows endpoint
+                if isinstance(port_value, list):
+                    self.__getattribute__(port_name).value = "$batch_value:{0}".format(
+                        "batch_input_{0}".format(port_name))
+                    batch_values.append({"name": "batch_input_{0}".format(port_name), "values": port_value})
+                else:
+                    port = self.__getattribute__(k)
+                    port.value = v
+                    return
+
+            # set the batch values object
+            if batch_values:
+                self.task.batch_values = batch_values
+            else:
+                self.task.batch_values = None
             return
 
         # find out if this is a valid multiplex port, i.e. this portname is prefixed by a multiplex port
@@ -124,6 +147,7 @@ class Inputs(PortList):
             object.__setattr__(self, k, v)
         else:
             raise AttributeError('Task has no input port named %s.' % k)
+
 
 class Outputs(PortList):
     """
@@ -203,7 +227,7 @@ class Task(object):
         self.domain = self.definition['containerDescriptors'][0]['properties'].get('domain','default')
         self._timeout = self.definition['properties'].get('timeout')
 
-        self.inputs = Inputs(self.input_ports)
+        self.inputs = Inputs(self.input_ports, task=self)
         self.outputs = Outputs(self.output_ports, self.name)
         self.batch_values = None
 
