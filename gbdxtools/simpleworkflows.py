@@ -106,20 +106,18 @@ class Inputs(PortList):
 
         # special handling for setting port values
         if k in self._portnames and hasattr(self, k):
-            port_key_value = {k: v}
-
+            # parse batch inputs vs regular
             batch_values = []
 
-            for port_name, port_value in port_key_value.items():
-                # if input type is of list, use batch workflows endpoint
-                if isinstance(port_value, list):
-                    self.__getattribute__(port_name).value = "$batch_value:{0}".format(
-                        "batch_input_{0}".format(port_name))
-                    batch_values.append({"name": "batch_input_{0}".format(port_name), "values": port_value})
-                else:
-                    port = self.__getattribute__(k)
-                    port.value = v
-                    return
+            # if input type is of list, use batch workflows endpoint
+            if isinstance(v, list):
+                self.__getattribute__(k).value = "$batch_value:{0}".format(
+                    "batch_input_{0}".format(k))
+                batch_values.append({"name": "batch_input_{0}".format(k), "values": k})
+            else:
+                port = self.__getattribute__(k)
+                port.value = v
+                return
 
             # set the batch values object
             if batch_values:
