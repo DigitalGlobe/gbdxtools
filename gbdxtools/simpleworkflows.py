@@ -48,13 +48,13 @@ class PortList(object):
     def __init__(self, ports):
         self._portnames = set([p['name'] for p in ports])
         for p in ports:
-            self.__setattr__(p['name'], 
+            self.__setattr__(p['name'],
                              Port(
-                                    p['name'], 
-                                    p['type'], 
-                                    p.get('required'), 
-                                    p.get('description'), 
-                                    value=None, 
+                                    p['name'],
+                                    p['type'],
+                                    p.get('required'),
+                                    p.get('description'),
+                                    value=None,
                                     is_multiplex=p.get('multiplex',False)
                                  )
                              )
@@ -77,10 +77,10 @@ class PortList(object):
         # if name in self._portnames: return None
         # if not len([p for p in self._portnames if name.startswith(p) and name != p]): return None
 
-        matching_multiplex_ports = [self.__getattribute__(p) for p in self._portnames 
-            if name.startswith(p) 
-            and name != p 
-            and hasattr(self, p) 
+        matching_multiplex_ports = [self.__getattribute__(p) for p in self._portnames
+            if name.startswith(p)
+            and name != p
+            and hasattr(self, p)
             and self.__getattribute__(p).is_multiplex
         ]
 
@@ -110,9 +110,9 @@ class Inputs(PortList):
         if mp_port:
             new_multiplex_port = Port(
                 k,
-                mp_port.type, 
-                mp_port.required, 
-                mp_port.description, 
+                mp_port.type,
+                mp_port.required,
+                mp_port.description,
                 value=v
             )
             object.__setattr__(self, k, new_multiplex_port)
@@ -134,13 +134,13 @@ class Outputs(PortList):
         self._portnames = set([p['name'] for p in ports])
         for p in ports:
             self.__setattr__(
-                p['name'], 
+                p['name'],
                 Port(
-                    p['name'], 
-                    p['type'], 
-                    p.get('required'), 
-                    p['description'], 
-                    value="source:" + self._task_name + ":" + p['name'], 
+                    p['name'],
+                    p['type'],
+                    p.get('required'),
+                    p.get('description'), 
+                    value="source:" + self._task_name + ":" + p['name'],
                     is_input_port=False,
                     is_multiplex=p.get('multiplex',False)
                     )
@@ -164,13 +164,13 @@ class Outputs(PortList):
             mp_port = self.get_matching_multiplex_port(k)
             if mp_port:
                 self.__setattr__(
-                    k, 
+                    k,
                     Port(
-                        mp_port.name, 
-                        mp_port.type, 
-                        mp_port.required, 
-                        mp_port.description, 
-                        value="source:" + self._task_name + ":" + k, 
+                        mp_port.name,
+                        mp_port.type,
+                        mp_port.required,
+                        mp_port.description,
+                        value="source:" + self._task_name + ":" + k,
                         is_input_port=False,
                         is_multiplex=False
                         )
@@ -178,7 +178,7 @@ class Outputs(PortList):
                 self._portnames.update([k])
 
         return object.__getattribute__(self, k)
-        
+
 
 class Task(object):
     def __init__(self, __interface, __task_type, **kwargs):
@@ -192,7 +192,7 @@ class Task(object):
 
         Returns:
             An instance of Task.
-            
+
         '''
 
         self.name = __task_type + '_' + str(uuid.uuid4())
@@ -209,7 +209,7 @@ class Task(object):
 
         # all the other kwargs are input port values or sources
         self.set(**kwargs)
-   
+
     # get a reference to the output port
     def get_output(self, port_name):
         return self.outputs.__getattribute__(port_name).value
@@ -347,7 +347,7 @@ class Workflow(object):
 
         Args:
                output: Reference task output (e.g. task.inputs.output1).
-               location (optional): Subfolder within s3://bucket/prefix/ to save data to.  
+               location (optional): Subfolder within s3://bucket/prefix/ to save data to.
                                     Leave blank to autogenerate an output location.
 
         Returns:
@@ -593,7 +593,3 @@ class Workflow(object):
     @timedout.setter
     def timedout(self, value):
         raise NotImplementedError("Cannot set workflow timedout, readonly.")
-
-    
-
-
