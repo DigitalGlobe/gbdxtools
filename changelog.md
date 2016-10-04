@@ -1,3 +1,7 @@
+0.6.3
+-----
+* Handle case where output port description is absent
+
 0.6.2
 -----
 * Added support for image location API orders.location()
