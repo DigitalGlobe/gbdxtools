@@ -228,7 +228,7 @@ class SimpleWorkflowTests(unittest.TestCase):
 
     @vcr.use_cassette('tests/unit/cassettes/test_task_timeout.yaml',record_mode='new_episodes',filter_headers=['authorization'])
     def test_task_timeout(self):
-        """ 
+        """
         Verify we can set task timeouts, it appears in the json, and launching a workflow works
         """
         aoptask = self.gbdx.Task("AOP_Strip_Processor", data='testing')
@@ -346,3 +346,33 @@ class SimpleWorkflowTests(unittest.TestCase):
                 }
             ]
         }
+
+    @vcr.use_cassette('tests/unit/cassettes/test_batch_workflows_works_with_setters.yaml', record_mode='new_episodes', filter_headers=['authorization'])
+    def test_batch_workflows_works_with_setters(self):
+        """
+        submit using setters with batch inputs
+        :return:
+        """
+        # note there are 2 inputs
+        data = ["s3://receiving-dgcs-tdgplatform-com/054813633050_01_003",
+                "http://test-tdgplatform-com/data/QB02/LV1B/053702625010_01_004/053702625010_01/053702625010_01_P013_MUL"]
+
+        aoptask = self.gbdx.Task("AOP_Strip_Processor")
+        aoptask.inputs.data = data
+        aoptask.inputs.enable_acomp = True
+        aoptask.inputs.enable_pansharpen = True
+
+        workflow = self.gbdx.Workflow([aoptask])
+        workflow.savedata(aoptask.outputs.data, location='some_folder')
+        batch_workflow_id = workflow.execute()
+
+        assert len(batch_workflow_id) > 0
+
+        # will fail if string is not base 10
+        assert type(int(batch_workflow_id)) == int
+
+        # sub workflows should be still running
+        assert workflow.running is True
+
+        # sub workflows should not be completed yet
+        assert workflow.complete is False

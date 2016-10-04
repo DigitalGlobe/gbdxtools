@@ -113,7 +113,7 @@ class Inputs(PortList):
             if isinstance(v, list):
                 self.__getattribute__(k).value = "$batch_value:{0}".format(
                     "batch_input_{0}".format(k))
-                batch_values.append({"name": "batch_input_{0}".format(k), "values": k})
+                batch_values.append({"name": "batch_input_{0}".format(k), "values": v})
             else:
                 port = self.__getattribute__(k)
                 port.value = v
