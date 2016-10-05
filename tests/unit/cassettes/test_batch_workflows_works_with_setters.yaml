@@ -1,0 +1,282 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      User-Agent: [python-requests/2.9.1]
+    method: GET
+    uri: https://geobigdata.io/workflows/v1/tasks/AOP_Strip_Processor
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA7VY0VLrRgz9FU1e0k7BSaCXAd4CZijTBjKEvrTT8axtOd6L7XV310Auw79XWpsQ
+        m9x2asJLbEta6Rx5V5LzPIhUYYUsUPtoIi1Lq7QZnMKfz6TJc1HE9DAYhbIYhcKkMIqXI/FoRqIs
+        zWh6M9+faxWhMbKo5cswfhoJVQbGkrOgrLVKB1aY++8qAl0VBMEz6WAPBnZVIkf1b85/vbhlCVmX
+        qK1EhvY8kLlYOgsbL0t2epoJi8ayaaxyosNKLWQ8eHn5i4UNN6mcpsGMBgRMzsAhgoo5gE0RiBY0
+        +FhkrIjuPfYti7Kyc6Xtu1xp/LuSGjlZVle4QSImcUSGKweujWNxCJmKBD+CShiKiwCxsILNC5HX
+        Pvj5ZQ9acRKRmZ6BzqoizhDOSHYP0/hrZWyOhQWNpsqs2Qwdhv8dmfNXLLeEvShEmOEoloavMD1X
+        eenBeapkxLnXCEPO1hCUhqHzOvTAx0QQCpCm0brUv+JB5zIQtDnLnQErRQEmFbrEgux3g5B8Ni53
+        BjNeUQwZgRbFEkGs39tuAMd6d29aVZb3sZXZ/83nq+wqaSz33JEc0qFLVVA7DEyUYk5O6tOSUxog
+        RDBot/Gq1/SndkY10IBVryWhQ2c+vf5ptiCYfMeX+mFaWdWh5kR78JjKKCWwQhMLAwllIqQQcOUb
+        IgRXMx8SmaFpcWEL05/DOZfyfYOl0FQoY8gkpYwKQVHlqGlH1RWQtLbNdAP+mxhElm2uaAF1kv5A
+        b/g1w8V8ccnRvlJBI4UHC2cPw9/vZkMGQ+4Uw1CPGJO2xEgmKxIoMnqUNoV6u5TyCbPAyG/owc0D
+        ai3jGAsIV42+tZ1AJmCcJ8lON98c4zn9+fDgqH1waidYmg/srpqwAwoMlLdAjha1+RdeHPJjjFp7
+        seJOyKdsAwZtDpa89aMtzN/S+1H+NWxoYPNp+KZUDhk+YLYH6BHboX/5i8iSGefmdHI8XPMn7G9Z
+        cWu76LZAb+Xpo+j9i9k6z5pwOXVTHvxL0nJBuL7w+bK4vZsdjl/vTsadGlGbbwEcYx6sY3wUcP2e
+        ZUGpLFVWjwW8tIP9mmoUTVUM9ozzRY98f16FMurgbmTvcbeCBA5fb/D+d/of5CruYr+iuIWRdlWP
+        N46DMPibWKGeCRulHQJde++dPZtFldYUMKPjVtAPDyFEjDueO53rOtFKBDXWgBF+AnEqgITJqiQB
+        mo8jEtFg7MGtsyO8iaZTNObaPRmPW4TH3hfKGJOg0x+7LvQuB3Veu1QoZlDH/ARCqVymPRmdnHgn
+        fTlx2M8jtRTUfeFBZBW2EE+8g76AnctPgNoMbqGkoo+lTdvDzjGPbZOjFonjngwoROBC9GexOKQh
+        ARP5xN2Kvk4RMj6uDoV/O4X2AW6qxAZ0c3g6ou/ZfV7qVo4eDkaeW9Z4MqmqspiHS2oYxI+2nX/Z
+        6VauScHJe4KvXoMaZH+ef6x7IfwgPeLATe1HJv02Z9Mbom7fICNu9fDb7vqTgxbIpgdypw2c94H7
+        Vq597vAr9y5dfxDwIAEt23XGtn3i9guSqeX2GKSoKXb/TjDzKsxktBFR5kjeSHB4NB6PXzacTG/m
+        AY+jZdD8i6CoHf8DVNyUwEcRAAA=
+    headers:
+      connection: [keep-alive]
+      content-encoding: [gzip]
+      content-length: ['1217']
+      content-type: [application/json]
+      date: ['Tue, 04 Oct 2016 20:39:47 GMT']
+      server: [nginx/1.8.0]
+      via: [kong/0.5.2]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      User-Agent: [python-requests/2.9.1]
+    method: GET
+    uri: https://geobigdata.io/s3creds/v1/prefix?duration=36000
+  response:
+    body: {string: !!python/unicode '{"S3_secret_key": "TEST",
+        "prefix": "TEST", "bucket": "gbd-customer-data",
+        "S3_access_key": "TEST", "S3_session_token": "TEST'}
+    headers:
+      connection: [keep-alive]
+      content-length: ['799']
+      content-type: [application/json]
+      date: ['Tue, 04 Oct 2016 20:39:49 GMT']
+      server: [Apache/2.4.18 (Amazon) mod_wsgi/3.5 Python/2.7.10]
+      via: [kong/0.5.2]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      User-Agent: [python-requests/2.9.1]
+    method: GET
+    uri: https://geobigdata.io/workflows/v1/tasks/StageDataToS3
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA32RTU/DMAyG/4qV8wQTPSDtSjmBxLSOE+KQtl5rrUmK46iaqv53kjJBGRO3+Ot9
+        HzujqpwVTRY5R18x9eLYqw28jbFijLZ1DJRagZJTj+mdvzw8Pe5SpmfXIwthGhgVGd3MHVI3/a2X
+        GInz2abTgl7UNL3HmfrsQs6m1iJ1Qa1Fw4GdAQ01MVYR4gRkxYG2UGRQhuqIkjzJ9kG2juUPLuNH
+        iLOJVzjggvhbMglcAOxbBO8CV/jjnNqsNl+zEU1NK/hP3wuTba6IH0LXJfzX3TMMLTKCtOdtB4ql
+        EmFgEkF788sznousnlXmo7kg17dOxctf8NtQdlQtMMlgVIiJ+7v1eloYzdfPI87eFZmaPgFIyyDR
+        DQIAAA==
+    headers:
+      connection: [keep-alive]
+      content-encoding: [gzip]
+      content-length: ['289']
+      content-type: [application/json]
+      date: ['Tue, 04 Oct 2016 20:39:50 GMT']
+      server: [nginx/1.8.0]
+      via: [kong/0.5.2]
+    status: {code: 200, message: OK}
+- request:
+    body: !!python/unicode '{"tasks": [{"containerDescriptors": [{"properties": {"domain":
+      "raid"}}], "name": "AOP_Strip_Processor_0f5dda45-1db4-4d99-9441-466f55416d24",
+      "inputs": [{"name": "enable_acomp", "value": "true"}, {"name": "enable_pansharpen",
+      "value": "true"}, {"name": "data", "value": "$batch_value:batch_input_data"}],
+      "outputs": [{"name": "data"}, {"name": "log"}], "timeout": 36000, "taskType":
+      "AOP_Strip_Processor"}, {"containerDescriptors": [{"properties": {"domain":
+      "default"}}], "name": "StageDataToS3_7a1b3cd0-1528-48c3-a213-e9f2fe73ce24",
+      "inputs": [{"name": "destination", "value": "s3://gbd-customer-data/7b216bd9-6523-4ca9-aa3b-1d8a5994f054/some_folder"},
+      {"source": "AOP_Strip_Processor_0f5dda45-1db4-4d99-9441-466f55416d24:data",
+      "name": "data"}], "outputs": [], "timeout": 7200, "taskType": "StageDataToS3"}],
+      "name": "bf8db954-c22a-4b53-b79d-fc7ae5ad0b67", "batch_values": [{"values":
+      ["s3://receiving-dgcs-tdgplatform-com/054813633050_01_003", "http://test-tdgplatform-com/data/QB02/LV1B/053702625010_01_004/053702625010_01/053702625010_01_P013_MUL"],
+      "name": "batch_input_data"}]}'
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      Content-Length: ['1085']
+      Content-Type: [application/json]
+      User-Agent: [python-requests/2.9.1]
+    method: POST
+    uri: https://geobigdata.io/workflows/v1/batch_workflows
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA33OQQ6CMBCF4auQbqVm2mkpwzncGUNaCkoUSKDKgnB3BRM1xrie9+ebiXVjW/Ys
+        i9jR+eFWsDhizobilI9df64u3ZjXfjkrhUkqNQptDBGBkLhsX6vWNuWyc1XqHWnFCyktV04jd4Y8
+        rwpjS209uMQs4XB1TR1C6fNQP0sJIuECOKidhAwp07g1OgFFG4AM4JMbHsF+euvfP6aAUqAWtFLB
+        hlV4mWyOo3+1IBKKcCV/1Yf5DonrbWY5AQAA
+    headers:
+      connection: [keep-alive]
+      content-encoding: [gzip]
+      content-length: ['198']
+      content-type: [application/json]
+      date: ['Tue, 04 Oct 2016 20:39:53 GMT']
+      server: [nginx/1.8.0]
+      via: [kong/0.5.2]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      User-Agent: [python-requests/2.9.1]
+    method: GET
+    uri: https://geobigdata.io/workflows/v1/batch_workflows/4436825315779990123
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA32O0QqCMBSGX0V2m4uznc15fI7uImRzWlIq6MoL6d1Tg4qC7g7838d3JtaNbdmz
+        LGJH54dbweKIORuKUz52/bm6dGNe+2VWCpNUahTaGCICIXFhX1Rrm3LhXJV6R1rxQkrLldPInSHP
+        q8LYUlsPLjGLOFxdU4dQ+jzUT1OCSLgADmonIUPKNG6NTkDRBiAD+MwNs7Cf3vXvH1NAKVALWlPB
+        hrUwH/1cZPc4+ucKIqEI1+Cve7g/ABMsCIU1AQAA
+    headers:
+      connection: [keep-alive]
+      content-encoding: [gzip]
+      content-length: ['201']
+      content-type: [application/json]
+      date: ['Tue, 04 Oct 2016 20:40:06 GMT']
+      server: [nginx/1.8.0]
+      via: [kong/0.5.2]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      User-Agent: [python-requests/2.9.1]
+    method: GET
+    uri: https://geobigdata.io/workflows/v1/batch_workflows/4436825315779990123
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA32O0QqCMBSGX0V2m4uznc15fI7uImRzWlIq6MoL6d1Tg4qC7g7838d3JtaNbdmz
+        LGJH54dbweKIORuKUz52/bm6dGNe+2VWCpNUahTaGCICIXFhX1Rrm3LhXJV6R1rxQkrLldPInSHP
+        q8LYUlsPLjGLOFxdU4dQ+jzUT1OCSLgADmonIUPKNG6NTkDRBiAD+MwNs7Cf3vXvH1NAKVALWlPB
+        hrUwH/1cZPc4+ucKIqEI1+Cve7g/ABMsCIU1AQAA
+    headers:
+      connection: [keep-alive]
+      content-encoding: [gzip]
+      content-length: ['201']
+      content-type: [application/json]
+      date: ['Tue, 04 Oct 2016 20:40:11 GMT']
+      server: [nginx/1.8.0]
+      via: [kong/0.5.2]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      User-Agent: [python-requests/2.9.1]
+    method: GET
+    uri: https://geobigdata.io/workflows/v1/batch_workflows/4436825315779990123
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA32O0QqCMBSGX0V2m4uznc15fI7uImRzWlIq6MoL6d1Tg4qC7g7838d3JtaNbdmz
+        LGJH54dbweKIORuKUz52/bm6dGNe+2VWCpNUahTaGCICIXFhX1Rrm3LhXJV6R1rxQkrLldPInSHP
+        q8LYUlsPLjGLOFxdU4dQ+jzUT1OCSLgADmonIUPKNG6NTkDRBiAD+MwNs7Cf3vXvH1NAKVALWlPB
+        hrUwH/1cZPc4+ucKIqEI1+Cve7g/ABMsCIU1AQAA
+    headers:
+      connection: [keep-alive]
+      content-encoding: [gzip]
+      content-length: ['201']
+      content-type: [application/json]
+      date: ['Tue, 04 Oct 2016 20:40:11 GMT']
+      server: [nginx/1.8.0]
+      via: [kong/0.5.2]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      User-Agent: [python-requests/2.9.1]
+    method: GET
+    uri: https://geobigdata.io/workflows/v1/batch_workflows/4436825315779990123
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA32O0QqCMBSGX0V2m4uznc15fI7uImRzWlIq6MoL6d1Tg4qC7g7838d3JtaNbdmz
+        LGJH54dbweKIORuKUz52/bm6dGNe+2VWCpNUahTaGCICIXFhX1Rrm3LhXJV6R1rxQkrLldPInSHP
+        q8LYUlsPLjGLOFxdU4dQ+jzUT1OCSLgADmonIUPKNG6NTkDRBiAD+MwNs7Cf3vXvH1NAKVALWlPB
+        hrUwH/1cZPc4+ucKIqEI1+Cve7g/ABMsCIU1AQAA
+    headers:
+      connection: [keep-alive]
+      content-encoding: [gzip]
+      content-length: ['201']
+      content-type: [application/json]
+      date: ['Tue, 04 Oct 2016 20:40:11 GMT']
+      server: [nginx/1.8.0]
+      via: [kong/0.5.2]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      User-Agent: [python-requests/2.9.1]
+    method: GET
+    uri: https://geobigdata.io/workflows/v1/batch_workflows/4436825315779990123
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA32O0QqCMBSGX0V2m4uznc15fI7uImRzWlIq6MoL6d1Tg4qC7g7838d3JtaNbdmz
+        LGJH54dbweKIORuKUz52/bm6dGNe+2VWCpNUahTaGCICIXFhX1Rrm3LhXJV6R1rxQkrLldPInSHP
+        q8LYUlsPLjGLOFxdU4dQ+jzUT1OCSLgADmonIUPKNG6NTkDRBiAD+MwNs7Cf3vXvH1NAKVALWlPB
+        hrUwH/1cZPc4+ucKIqEI1+Cve7g/ABMsCIU1AQAA
+    headers:
+      connection: [keep-alive]
+      content-encoding: [gzip]
+      content-length: ['201']
+      content-type: [application/json]
+      date: ['Tue, 04 Oct 2016 20:40:11 GMT']
+      server: [nginx/1.8.0]
+      via: [kong/0.5.2]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      User-Agent: [python-requests/2.9.1]
+    method: GET
+    uri: https://geobigdata.io/workflows/v1/batch_workflows/4436825315779990123
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA32O0QqCMBSGX0V2m4uznc15fI7uImRzWlIq6MoL6d1Tg4qC7g7838d3JtaNbdmz
+        LGJH54dbweKIORuKUz52/bm6dGNe+2VWCpNUahTaGCICIXFhX1Rrm3LhXJV6R1rxQkrLldPInSHP
+        q8LYUlsPLjGLOFxdU4dQ+jzUT1OCSLgADmonIUPKNG6NTkDRBiAD+MwNs7Cf3vXvH1NAKVALWlPB
+        hrUwH/1cZPc4+ucKIqEI1+Cve7g/ABMsCIU1AQAA
+    headers:
+      connection: [keep-alive]
+      content-encoding: [gzip]
+      content-length: ['201']
+      content-type: [application/json]
+      date: ['Tue, 04 Oct 2016 20:40:26 GMT']
+      server: [nginx/1.8.0]
+      via: [kong/0.5.2]
+    status: {code: 200, message: OK}
+version: 1
