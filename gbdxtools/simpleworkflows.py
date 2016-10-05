@@ -273,6 +273,15 @@ class Task(object):
             self.batch_values = None
 
     @property
+    def impersonation_allowed(self):
+        return self.impersonation_allowed
+
+    @impersonation_allowed.setter
+    def impersonation_allowed(self, value):
+        if value is True:
+            self.impersonation_allowed = True
+
+    @property
     def input_ports(self):
         return self.definition['inputPortDescriptors']
 
