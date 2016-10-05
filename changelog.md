@@ -1,3 +1,7 @@
+0.6.4
+-----
+* Fixed batch workflow bugs
+
 0.6.3
 -----
 * Handle case where output port description is absent
