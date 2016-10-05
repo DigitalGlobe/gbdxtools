@@ -206,6 +206,7 @@ class Task(object):
         self.inputs = Inputs(self.input_ports)
         self.outputs = Outputs(self.output_ports, self.name)
         self.batch_values = None
+        self.impersonation_allowed = None
 
         # all the other kwargs are input port values or sources
         self.set(**kwargs)
@@ -286,6 +287,8 @@ class Task(object):
             "timeout": self.timeout,
             "containerDescriptors": [{"properties": {"domain": self.domain}}]
         }
+        if self.impersonation_allowed:
+            d.update({"impersonation_allowed": self.impersonation_allowed})
 
         for input_port_name in self.inputs._portnames:
             input_port_value = self.inputs.__getattribute__(input_port_name).value
