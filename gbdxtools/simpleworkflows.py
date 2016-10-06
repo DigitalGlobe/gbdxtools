@@ -228,7 +228,7 @@ class Task(object):
         self.inputs = Inputs(self.input_ports, task=self)
         self.outputs = Outputs(self.output_ports, self.name)
         self.batch_values = None
-        self.impersonation_allowed = None
+        self._impersonation_allowed = None
 
         # all the other kwargs are input port values or sources
         self.set(**kwargs)
@@ -274,12 +274,12 @@ class Task(object):
 
     @property
     def impersonation_allowed(self):
-        return self.impersonation_allowed
+        return self._impersonation_allowed
 
     @impersonation_allowed.setter
     def impersonation_allowed(self, value):
         if value is True:
-            self.impersonation_allowed = True
+            self._impersonation_allowed = True
 
     @property
     def input_ports(self):
