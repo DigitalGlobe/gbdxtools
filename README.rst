@@ -28,6 +28,11 @@ Currently, the following Python versions are supported: 2.7, 3.3, 3.4, 3.5
 
 See the license file for license rights and limitations (MIT).
 
+Updates
+------------
+
+There have been reports of authentication errors while creating a gbdx interface if the file ~/.gbdx-config is already populated with an access token. In this case, delete everything below and including the line [gbdx_token] within ~/.gbdx-config and create a new gbdx interface. 
+
 
 Installation
 ------------
