@@ -376,3 +376,45 @@ class SimpleWorkflowTests(unittest.TestCase):
 
         # sub workflows should not be completed yet
         assert workflow.complete is False
+
+    @vcr.use_cassette('tests/unit/cassettes/test_adding_impersonation_allowed.yaml', record_mode='new_episodes', filter_headers=['authorization'])
+    def test_setting_impersonation_allowed_on_task(self):
+        """
+        test adding 'impersonation allowed' on the task object.
+        :return:
+        """
+        data = "s3://receiving-dgcs-tdgplatform-com/054813633050_01_003"
+        aoptask = self.gbdx.Task("AOP_Strip_Processor")
+        # add impersonation allowed
+        aoptask.impersonation_allowed = True
+
+        aoptask.inputs.data = data
+        aoptask.inputs.enable_acomp = True
+        aoptask.inputs.enable_pansharpen = True
+
+        workflow = self.gbdx.Workflow([aoptask])
+        self.assertTrue(workflow.tasks[0].impersonation_allowed)
+
+        wf_def = workflow.generate_workflow_description()
+        # impersonation_allowed should be True
+        self.assertTrue(wf_def.get("tasks")[0].get("impersonation_allowed"))
+
+    @vcr.use_cassette('tests/unit/cassettes/test_NOT_adding_impersonation_allowed.yaml', record_mode='new_episodes', filter_headers=['authorization'])
+    def test_NOT_setting_impersonation_allowed_on_task(self):
+        """
+        test 'impersonation allowed' is not a task attribute unless user sets 'impersonation allowed' to True
+        :return:
+        """
+        data = "s3://receiving-dgcs-tdgplatform-com/054813633050_01_003"
+        aoptask = self.gbdx.Task("AOP_Strip_Processor")
+
+        aoptask.inputs.data = data
+        aoptask.inputs.enable_acomp = True
+        aoptask.inputs.enable_pansharpen = True
+
+        workflow = self.gbdx.Workflow([aoptask])
+        self.assertFalse(workflow.tasks[0].impersonation_allowed)
+
+        wf_def = workflow.generate_workflow_description()
+        # impersonation_allowed should not be in task
+        self.assertFalse(hasattr(wf_def.get("tasks")[0], "impersonation_allowed"))
