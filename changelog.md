@@ -1,3 +1,7 @@
+0.6.5
+-----
+* Can now set impersonation_allowed flag 
+
 0.6.4
 -----
 * Fixed batch workflow bugs
