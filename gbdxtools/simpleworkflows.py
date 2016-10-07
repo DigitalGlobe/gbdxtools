@@ -228,6 +228,7 @@ class Task(object):
         self.inputs = Inputs(self.input_ports, task=self)
         self.outputs = Outputs(self.output_ports, self.name)
         self.batch_values = None
+        self._impersonation_allowed = None
 
         # all the other kwargs are input port values or sources
         self.set(**kwargs)
@@ -272,6 +273,15 @@ class Task(object):
             self.batch_values = None
 
     @property
+    def impersonation_allowed(self):
+        return self._impersonation_allowed
+
+    @impersonation_allowed.setter
+    def impersonation_allowed(self, value):
+        if value is True:
+            self._impersonation_allowed = True
+
+    @property
     def input_ports(self):
         return self.definition['inputPortDescriptors']
 
@@ -308,6 +318,8 @@ class Task(object):
             "timeout": self.timeout,
             "containerDescriptors": [{"properties": {"domain": self.domain}}]
         }
+        if self.impersonation_allowed:
+            d.update({"impersonation_allowed": self.impersonation_allowed})
 
         for input_port_name in self.inputs._portnames:
             input_port_value = self.inputs.__getattribute__(input_port_name).value
