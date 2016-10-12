@@ -49,7 +49,7 @@ class Port(object):
             return False
 
         try:
-            persist = self.__getattribute__('_persist')
+            persist = self._persist
         except AttributeError:
             persist = False
 
@@ -66,7 +66,7 @@ class Port(object):
             return None
 
         try:
-            persist_location = self.__getattribute__('_persist_location')
+            persist_location = self._persist_location
         except AttributeError:
             persist_location = None
 
