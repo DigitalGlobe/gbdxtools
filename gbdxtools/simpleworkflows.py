@@ -79,16 +79,17 @@ class Port(object):
 
 
 class PortList(object):
-    def __init__(self, ports):
+    def __init__(self, ports, task=None):
+        self.task = task
         self._portnames = set([p['name'] for p in ports])
         for p in ports:
-            self.__setattr__(p['name'], 
+            self.__setattr__(p['name'],
                              Port(
-                                    p['name'], 
-                                    p['type'], 
-                                    p.get('required'), 
-                                    p.get('description'), 
-                                    value=None, 
+                                    p['name'],
+                                    p['type'],
+                                    p.get('required'),
+                                    p.get('description'),
+                                    value=None,
                                     is_multiplex=p.get('multiplex',False)
                                  )
                              )
@@ -111,10 +112,10 @@ class PortList(object):
         # if name in self._portnames: return None
         # if not len([p for p in self._portnames if name.startswith(p) and name != p]): return None
 
-        matching_multiplex_ports = [self.__getattribute__(p) for p in self._portnames 
-            if name.startswith(p) 
-            and name != p 
-            and hasattr(self, p) 
+        matching_multiplex_ports = [self.__getattribute__(p) for p in self._portnames
+            if name.startswith(p)
+            and name != p
+            and hasattr(self, p)
             and self.__getattribute__(p).is_multiplex
         ]
 
@@ -128,6 +129,10 @@ class Inputs(PortList):
     # task.inputs.port_name = value
     # Also allow initial setup of all internal stuff & multiplex ports
     def __setattr__(self, k, v):
+        if k == "task":
+            object.__setattr__(self, k, v)
+            return
+
         # special attributes for internal use
         if k in ['_portnames']:
             object.__setattr__(self, k, v)
@@ -135,8 +140,24 @@ class Inputs(PortList):
 
         # special handling for setting port values
         if k in self._portnames and hasattr(self, k):
-            port = self.__getattribute__(k)
-            port.value = v
+            # parse batch inputs vs regular
+            batch_values = []
+
+            # if input type is of list, use batch workflows endpoint
+            if isinstance(v, list):
+                self.__getattribute__(k).value = "$batch_value:{0}".format(
+                    "batch_input_{0}".format(k))
+                batch_values.append({"name": "batch_input_{0}".format(k), "values": v})
+            else:
+                port = self.__getattribute__(k)
+                port.value = v
+                return
+
+            # set the batch values object
+            if batch_values:
+                self.task.batch_values = batch_values
+            else:
+                self.task.batch_values = None
             return
 
         # find out if this is a valid multiplex port, i.e. this portname is prefixed by a multiplex port
@@ -144,9 +165,9 @@ class Inputs(PortList):
         if mp_port:
             new_multiplex_port = Port(
                 k,
-                mp_port.type, 
-                mp_port.required, 
-                mp_port.description, 
+                mp_port.type,
+                mp_port.required,
+                mp_port.description,
                 value=v
             )
             object.__setattr__(self, k, new_multiplex_port)
@@ -159,6 +180,7 @@ class Inputs(PortList):
         else:
             raise AttributeError('Task has no input port named %s.' % k)
 
+
 class Outputs(PortList):
     """
     Output ports show a name & description.  output_port_name.value returns the link to use as input to next tasks.
@@ -168,13 +190,13 @@ class Outputs(PortList):
         self._portnames = set([p['name'] for p in ports])
         for p in ports:
             self.__setattr__(
-                p['name'], 
+                p['name'],
                 Port(
-                    p['name'], 
-                    p['type'], 
-                    p.get('required'), 
-                    p['description'], 
-                    value="source:" + self._task_name + ":" + p['name'], 
+                    p['name'],
+                    p['type'],
+                    p.get('required'),
+                    p.get('description'), 
+                    value="source:" + self._task_name + ":" + p['name'],
                     is_input_port=False,
                     is_multiplex=p.get('multiplex',False)
                     )
@@ -198,13 +220,13 @@ class Outputs(PortList):
             mp_port = self.get_matching_multiplex_port(k)
             if mp_port:
                 self.__setattr__(
-                    k, 
+                    k,
                     Port(
-                        mp_port.name, 
-                        mp_port.type, 
-                        mp_port.required, 
-                        mp_port.description, 
-                        value="source:" + self._task_name + ":" + k, 
+                        mp_port.name,
+                        mp_port.type,
+                        mp_port.required,
+                        mp_port.description,
+                        value="source:" + self._task_name + ":" + k,
                         is_input_port=False,
                         is_multiplex=False
                         )
@@ -212,7 +234,7 @@ class Outputs(PortList):
                 self._portnames.update([k])
 
         return object.__getattribute__(self, k)
-        
+
 
 class Task(object):
     def __init__(self, __interface, __task_type, **kwargs):
@@ -226,7 +248,7 @@ class Task(object):
 
         Returns:
             An instance of Task.
-            
+
         '''
 
         self.name = __task_type + '_' + str(uuid.uuid4())
@@ -237,13 +259,14 @@ class Task(object):
         self.domain = self.definition['containerDescriptors'][0]['properties'].get('domain','default')
         self._timeout = self.definition['properties'].get('timeout')
 
-        self.inputs = Inputs(self.input_ports)
+        self.inputs = Inputs(self.input_ports, task=self)
         self.outputs = Outputs(self.output_ports, self.name)
         self.batch_values = None
+        self._impersonation_allowed = None
 
         # all the other kwargs are input port values or sources
         self.set(**kwargs)
-   
+
     # get a reference to the output port
     def get_output(self, port_name):
         return self.outputs.__getattribute__(port_name).value
@@ -283,6 +306,15 @@ class Task(object):
             self.batch_values = None
 
     @property
+    def impersonation_allowed(self):
+        return self._impersonation_allowed
+
+    @impersonation_allowed.setter
+    def impersonation_allowed(self, value):
+        if value is True:
+            self._impersonation_allowed = True
+
+    @property
     def input_ports(self):
         return self.definition['inputPortDescriptors']
 
@@ -319,6 +351,8 @@ class Task(object):
             "timeout": self.timeout,
             "containerDescriptors": [{"properties": {"domain": self.domain}}]
         }
+        if self.impersonation_allowed:
+            d.update({"impersonation_allowed": self.impersonation_allowed})
 
         for input_port_name in self.inputs._portnames:
             input_port_value = self.inputs.__getattribute__(input_port_name).value
@@ -388,6 +422,7 @@ class Workflow(object):
 
         Args:
                output: Reference task output (e.g. task.inputs.output1).
+
                location (optional): Subfolder under which the output will be saved.
                                     It will be placed under the account directory in gbd-customer-data bucket:
                                     s3://gbd-customer-data/{account_id}/{location}
@@ -622,7 +657,3 @@ class Workflow(object):
     @timedout.setter
     def timedout(self, value):
         raise NotImplementedError("Cannot set workflow timedout, readonly.")
-
-    
-
-

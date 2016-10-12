@@ -1,3 +1,19 @@
+0.6.5
+-----
+* Can now set impersonation_allowed flag 
+
+0.6.4
+-----
+* Fixed batch workflow bugs
+
+0.6.3
+-----
+* Handle case where output port description is absent
+
+0.6.2
+-----
+* Added support for image location API orders.location()
+
 0.6.1
 -----
 * handle case of spurious keys in s3.download()
