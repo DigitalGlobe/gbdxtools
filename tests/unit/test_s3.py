@@ -27,7 +27,7 @@ class S3Tests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         # create mock session, replace dummytoken with real token to create cassette
-        mock_gbdx_session = get_mock_gbdx_session(token="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2RpZ2l0YWxnbG9iZS1wbGF0Zm9ybS5hdXRoMC5jb20vIiwic3ViIjoiYXV0aDB8Z2JkeHwxMDY5IiwiYXVkIjoidmhhTkVKeW1MNG0xVUNvNFRxWG11S3RrbjlKQ1lEa1QiLCJleHAiOjE0NzY5MDk3MTgsImlhdCI6MTQ3NjMwNDkxOH0.9ikJ8qoHLkk1JVAuEhana5i5JNwEQM36GV-PcVbsUYk")
+        mock_gbdx_session = get_mock_gbdx_session(token="dummytoken")
         cls.gbdx = Interface(gbdx_connection=mock_gbdx_session)
         cls._temp_path = tempfile.mkdtemp()
         print("Created: {}".format(cls._temp_path))
