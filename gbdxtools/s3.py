@@ -3,6 +3,7 @@ GBDX S3 Interface.
 
 Contact: kostas.stamatiou@digitalglobe.com
 """
+import os
 from builtins import object
 
 from boto import s3 as botos3
@@ -11,7 +12,7 @@ class S3(object):
 
     def __init__(self, interface):
         '''Instantiate the s3 interface
-        
+
         Args:
             interface (Interface): A reference to the Interface that owns this instance.
 
@@ -60,7 +61,7 @@ class S3(object):
            downloaded. If it is a file, then that file is downloaded.
 
            Args:
-               location (str): S3 location within prefix. 
+               location (str): S3 location within prefix.
                local_dir (str): Local directory where file(s) will be stored.
                                 Default is here.
         '''
@@ -81,27 +82,37 @@ class S3(object):
                               headers={'x-amz-security-token': session_token})
 
         # remove head and/or trail backslash from location
-        if location[0] == '/':
-            location = location[1:]
-        if location[-1] == '/':
-            location = location[:-2]    
+        location = location.strip('/')
 
         whats_in_here = b.list(prefix + '/' + location)
 
         self.logger.debug('Downloading contents')
         for key in whats_in_here:
+            # skip directory keys
+            if not key.name or key.name.endswith('/'):
+                continue
+
+            # get path to each file
+            filepath = key.name.replace(prefix + '/' + location, '', 1).lstrip('/')
             filename = key.name.split('/')[-1]
             self.logger.debug(filename)
-            if not filename:
-                continue
-            res = key.get_contents_to_filename(local_dir + '/' + filename)
+            file_dir = filepath.split('/')[:-1]
+            file_dir = '/'.join(file_dir)
+            full_dir = os.path.join(local_dir, file_dir)
+
+            # make sure directory exists
+            if not os.path.isdir(full_dir):
+                os.makedirs(full_dir)
+
+            # download file
+            key.get_contents_to_filename(full_dir + '/' + filename)
 
         self.logger.debug('Done!')
 
     def delete(self, location):
         '''Delete content in bucket/prefix/location.
            Location can be a directory or a file (e.g., my_dir or my_dir/my_image.tif)
-           If location is a directory, all files in the directory are deleted. 
+           If location is a directory, all files in the directory are deleted.
            If it is a file, then that file is deleted.
 
            Args:
@@ -137,4 +148,3 @@ class S3(object):
             b.delete_key(key)
 
         self.logger.debug('Done!')
-
