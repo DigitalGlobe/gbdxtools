@@ -124,10 +124,18 @@ class SimpleWorkflowTests(unittest.TestCase):
         # try several ways to add save tasks:
         workflow.savedata(aoptask.outputs.log)
         workflow.savedata(aoptask.outputs.data, location='myfolder')
-        workflow.savedata(aoptask.outputs.log.value)
-        workflow.savedata(aoptask.outputs.data.value, location='myfolder2')
 
-        assert len(workflow.tasks) == 5
+        assert len(workflow.tasks) == 1
+
+        to_submit = workflow.generate_workflow_description()
+
+        for output in to_submit['tasks'][0]['outputs']:
+            if output['name'] == 'log':
+                assert output.get('persist') is True
+
+            if output['name'] == 'data':
+                assert output.get('persist') is True
+                assert output.get('persistLocation') == 'myfolder'
 
     @vcr.use_cassette('tests/unit/cassettes/test_simpleworkflow_autostage_to_s3.yaml', record_mode='new_episodes',
                       filter_headers=['authorization'])
@@ -139,16 +147,13 @@ class SimpleWorkflowTests(unittest.TestCase):
         # try several ways to add save tasks:
         workflow.savedata(aoptask.outputs.log)
         workflow.savedata(aoptask.outputs.data, location='myfolder')
-        workflow.savedata(aoptask.outputs.log.value)
-        workflow.savedata(aoptask.outputs.data.value, location='myfolder2')
 
         outputs = workflow.list_workflow_outputs()
 
-        assert len(outputs) == 4
-        for output in outputs:
-            assert list(output.keys())[0].startswith('source:')
-            assert list(output.values())[0].startswith('s3://')
+        assert len(outputs) == 2
 
+        assert aoptask.name + ':' + 'log' in outputs
+        assert aoptask.name + ':' + 'data' in outputs
 
     @vcr.use_cassette('tests/unit/cassettes/test_task_name_input.yaml',record_mode='new_episodes',filter_headers=['authorization'])
     def test_task_name_input(self):

@@ -43,6 +43,40 @@ class Port(object):
         out += "\n\tValue: %s" % self.value
         return out
 
+    @property
+    def persist(self):
+        if self.is_input_port:
+            return False
+
+        try:
+            persist = self._persist
+        except AttributeError:
+            persist = False
+
+        return persist
+
+    @persist.setter
+    def persist(self, value):
+        if not self.is_input_port:
+            self._persist = value
+
+    @property
+    def persist_location(self):
+        if self.is_input_port:
+            return None
+
+        try:
+            persist_location = self._persist_location
+        except AttributeError:
+            persist_location = None
+
+        return persist_location
+
+    @persist_location.setter
+    def persist_location(self, value):
+        if not self.is_input_port:
+            self._persist_location = value
+
 
 class PortList(object):
     def __init__(self, ports, task=None):
@@ -236,11 +270,6 @@ class Task(object):
     # get a reference to the output port
     def get_output(self, port_name):
         return self.outputs.__getattribute__(port_name).value
-        # output_port_names = [p['name'] for p in self.output_ports]
-        # if port_name not in output_port_names:
-        #     raise InvalidOutputPort('Invalid output port %s.  Valid output ports for task %s are: %s' % (port_name, self.type, output_port_names))
-
-        # return "source:" + self.name + ":" + port_name
 
     # set input ports source or value
     def set(self, **kwargs):
@@ -257,6 +286,10 @@ class Task(object):
         batch_values = []
 
         for port_name, port_value in kwargs.items():
+            # Support both port and port.value
+            if hasattr(port_value, 'value'):
+                port_value = port_value.value
+
             # if input type is of list, use batch workflows endpoint
             if isinstance(port_value, list):
                 self.inputs.__getattribute__(port_name).value = "$batch_value:{0}".format(
@@ -347,9 +380,17 @@ class Task(object):
             if output_port_name in output_multiplex_ports_to_exclude:
                 continue
 
-            d['outputs'].append(  {
-                    "name": output_port_name
-                } )
+            output_port_dict = {"name": output_port_name}
+
+            if self.outputs.__getattribute__(output_port_name).persist:
+                output_port_dict["persist"] = True
+
+            persist_location = self.outputs.__getattribute__(output_port_name).persist_location
+
+            if persist_location:
+                output_port_dict["persistLocation"] = persist_location
+
+            d['outputs'].append(output_port_dict)
 
         return d
 
@@ -381,31 +422,19 @@ class Workflow(object):
 
         Args:
                output: Reference task output (e.g. task.inputs.output1).
-               location (optional): Subfolder within s3://bucket/prefix/ to save data to.
-                                    Leave blank to autogenerate an output location.
+
+               location (optional): Subfolder under which the output will be saved.
+                                    It will be placed under the account directory in gbd-customer-data bucket:
+                                    s3://gbd-customer-data/{account_id}/{location}
+                                    Leave blank to save to: workflow_output/{workflow_id}/{task_name}/{port_name}
 
         Returns:
             None
         '''
 
-        # handle inputs of task.inputs.portname as well as task.inputs.portname.value
-        if isinstance(output, Port):
-            input_value = output.value
-        else:
-            input_value = output
-
-        # determine the location to save data to:
-        s3info = self.__interface.s3.info
-        bucket = s3info['bucket']
-        prefix = s3info['prefix']
+        output.persist = True
         if location:
-            location = location.strip('/')
-            s3location = "s3://" + bucket + '/' + prefix + '/' + location
-        else:
-            s3location = "s3://" + bucket + '/' + prefix + '/' + str(uuid.uuid4())
-
-        s3task = self.__interface.Task("StageDataToS3", data=input_value, destination=s3location)
-        self.tasks.append(s3task)
+            output.persist_location = location
 
     def workflow_skeleton(self):
         return {
@@ -415,17 +444,18 @@ class Workflow(object):
 
     def list_workflow_outputs(self):
         '''
-        Get a dictionary of outputs from the workflow that are saved to S3.  Keys are output port names, values are S3 locations.
+        Get a list of outputs from the workflow that are saved to S3. To get resolved locations call workflow status.
         Args:
             None
 
         Returns:
-            dictionary
+            list
         '''
         workflow_outputs = []
         for task in self.tasks:
-            if task.type == "StageDataToS3":
-                workflow_outputs.append( {task.inputs.data.value: task.inputs.destination.value } )
+            for output_port_name in task.outputs._portnames:
+                if task.outputs.__getattribute__(output_port_name).persist:
+                    workflow_outputs.append(task.name + ':' + output_port_name)
 
         return workflow_outputs
 
