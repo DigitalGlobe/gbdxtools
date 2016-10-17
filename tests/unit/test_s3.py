@@ -36,15 +36,15 @@ class S3Tests(unittest.TestCase):
         s = S3(self.gbdx)
         assert isinstance(s, S3)
 
-    # @vcr.use_cassette('tests/unit/cassettes/test_get_s3creds.yaml', filter_headers=['authorization'])
-    # def test_get_s3_creds(self):
-    #     s = S3(self.gbdx)
-    #     assert s.info is not None
-    #     assert "bucket" in s.info.keys()
-    #     assert "prefix" in s.info.keys()
-    #     assert "S3_secret_key" in s.info.keys()
-    #     assert "S3_access_key" in s.info.keys()
-    #     assert "S3_session_token" in s.info.keys()
+    @vcr.use_cassette('tests/unit/cassettes/test_get_s3creds.yaml', filter_headers=['authorization'])
+    def test_get_s3_creds(self):
+        s = S3(self.gbdx)
+        assert s.info is not None
+        assert "bucket" in s.info.keys()
+        assert "prefix" in s.info.keys()
+        assert "S3_secret_key" in s.info.keys()
+        assert "S3_access_key" in s.info.keys()
+        assert "S3_session_token" in s.info.keys()
 
     @vcr.use_cassette(cassette_name, filter_headers=['authorization'])
     def test_download(self):
