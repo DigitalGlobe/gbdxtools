@@ -4,7 +4,6 @@ interactions:
     headers:
       Accept: ['*/*']
       Accept-Encoding: ['gzip, deflate']
-      Authorization: [!!python/unicode Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2RpZ2l0YWxnbG9iZS1wbGF0Zm9ybS5hdXRoMC5jb20vIiwic3ViIjoiYXV0aDB8Z2JkeHwxMDY5IiwiYXVkIjoidmhhTkVKeW1MNG0xVUNvNFRxWG11S3RrbjlKQ1lEa1QiLCJleHAiOjE0NzY5MDk3MTgsImlhdCI6MTQ3NjMwNDkxOH0.9ikJ8qoHLkk1JVAuEhana5i5JNwEQM36GV-PcVbsUYk]
       Connection: [keep-alive]
       User-Agent: [python-requests/2.9.1]
     method: GET
@@ -12,24 +11,23 @@ interactions:
   response:
     body: {string: !!python/unicode '{"S3_secret_key": "",
         "prefix": "58600248-2927-4523-b44b-5fec3d278c09", "bucket": "gbd-customer-data",
-        "S3_access_key": ""}'}
+        "S3_access_key": "", "S3_session_token": "FQoDYXdzEO7//////////wEaDAI8BhdYYZgsfuc3pCKUA+OBgGn1EI7FflatMz+IEaZG/G8iO0h4Ahh+7u/AJ9Ucwg1I9nkEgTRKpMDlSQR3hHkh23/nYv0pMPGTREWsU7IFn/VDVybfT6I3WQRRw9y/tpWWM1JH5yTGEahG7pFt0SNmVIESMMJ3wQ0CBaSxv4cKzR/CKWn2c3U1qRXC6IknCmV4SfLlJjpRRhbjahz12or6MWHKcHLDBIozwpnM+CjYQCmCf1fuOk37IaLxbMC8ctmgWEMTSeWClg/M1LGElgqgGnw+411Njv+SPfdOmqpKLmVrX3jrcAQK94pLcNcYYYTw9t7k7PIJO2InK+MIrfDuIxKBDHZYok52sO7RmQm4eUrFkeEucVbMAefA8nWHD3S70nCNSevqtrRxkIEx4PQW3aLYinDvmxEjYXQ+ALaYy7nL6BlZcmyHj7mpEb6IF+xMEBIu1rpfZxAz9u2gIwaihPG3nMOYj653EAsa6M/pTY2Zl7ZrkMQwxyKlcNV/uV1Nt9YsTztuBuKhRncpdWVu0rciXQqose9B2Xd7tkd86jlUKKiSk8AF"}'}
     headers:
       access-control-allow-origin: ['*']
       connection: [keep-alive]
       content-length: ['799']
       content-type: [application/json]
-      date: ['Fri, 14 Oct 2016 22:37:42 GMT']
+      date: ['Mon, 17 Oct 2016 12:50:48 GMT']
       server: [Apache/2.4.23 (Amazon) mod_wsgi/3.5 Python/2.7.10]
       via: [kong/0.5.2]
     status: {code: 200, message: OK}
 - request:
     body: !!python/unicode
     headers:
-      Authorization: [!!python/unicode 'AWS ASIAJV2G4O7GVRY5PQQQ:0f7VUmqbeK6pUb6K1uCl9ROFL5M=']
       Content-Length: ['0']
-      Date: ['Fri, 14 Oct 2016 22:37:42 GMT']
+      Date: ['Mon, 17 Oct 2016 12:50:48 GMT']
       User-Agent: [Boto/2.39.0 Python/2.7.12 Darwin/16.0.0]
-      x-amz-security-token: [!!python/unicode F]
+      x-amz-security-token: [!!python/unicode FQoDYXdzEO7//////////wEaDAI8BhdYYZgsfuc3pCKUA+OBgGn1EI7FflatMz+IEaZG/G8iO0h4Ahh+7u/AJ9Ucwg1I9nkEgTRKpMDlSQR3hHkh23/nYv0pMPGTREWsU7IFn/VDVybfT6I3WQRRw9y/tpWWM1JH5yTGEahG7pFt0SNmVIESMMJ3wQ0CBaSxv4cKzR/CKWn2c3U1qRXC6IknCmV4SfLlJjpRRhbjahz12or6MWHKcHLDBIozwpnM+CjYQCmCf1fuOk37IaLxbMC8ctmgWEMTSeWClg/M1LGElgqgGnw+411Njv+SPfdOmqpKLmVrX3jrcAQK94pLcNcYYYTw9t7k7PIJO2InK+MIrfDuIxKBDHZYok52sO7RmQm4eUrFkeEucVbMAefA8nWHD3S70nCNSevqtrRxkIEx4PQW3aLYinDvmxEjYXQ+ALaYy7nL6BlZcmyHj7mpEb6IF+xMEBIu1rpfZxAz9u2gIwaihPG3nMOYj653EAsa6M/pTY2Zl7ZrkMQwxyKlcNV/uV1Nt9YsTztuBuKhRncpdWVu0rciXQqose9B2Xd7tkd86jlUKKiSk8AF]
     method: GET
     uri: https://gbd-customer-data.s3.amazonaws.com/?prefix=58600248-2927-4523-b44b-5fec3d278c09/nikki/gbdxtools_test_s3
   response:
@@ -38,20 +36,19 @@ interactions:
         <ListBucketResult xmlns="http://s3.amazonaws.com/doc/2006-03-01/"><Name>gbd-customer-data</Name><Prefix>58600248-2927-4523-b44b-5fec3d278c09/nikki/gbdxtools_test_s3</Prefix><Marker></Marker><MaxKeys>1000</MaxKeys><IsTruncated>false</IsTruncated><Contents><Key>58600248-2927-4523-b44b-5fec3d278c09/nikki/gbdxtools_test_s3/</Key><LastModified>2016-10-14T20:44:06.000Z</LastModified><ETag>&quot;7215ee9c7d9dc229d2921a40e899ec5f&quot;</ETag><Size>1</Size><StorageClass>STANDARD</StorageClass></Contents><Contents><Key>58600248-2927-4523-b44b-5fec3d278c09/nikki/gbdxtools_test_s3/model.json</Key><LastModified>2016-10-14T20:44:21.000Z</LastModified><ETag>&quot;63e576e84e342c49f1e331eb588b9b8d&quot;</ETag><Size>9754</Size><StorageClass>STANDARD</StorageClass></Contents><Contents><Key>58600248-2927-4523-b44b-5fec3d278c09/nikki/gbdxtools_test_s3/test_dir/</Key><LastModified>2016-10-14T20:44:39.000Z</LastModified><ETag>&quot;7215ee9c7d9dc229d2921a40e899ec5f&quot;</ETag><Size>1</Size><StorageClass>STANDARD</StorageClass></Contents><Contents><Key>58600248-2927-4523-b44b-5fec3d278c09/nikki/gbdxtools_test_s3/test_dir/model.json</Key><LastModified>2016-10-14T22:37:16.000Z</LastModified><ETag>&quot;63e576e84e342c49f1e331eb588b9b8d&quot;</ETag><Size>9754</Size><StorageClass>STANDARD</StorageClass></Contents></ListBucketResult>'}
     headers:
       content-type: [application/xml]
-      date: ['Fri, 14 Oct 2016 22:37:44 GMT']
+      date: ['Mon, 17 Oct 2016 12:50:50 GMT']
       server: [AmazonS3]
       x-amz-bucket-region: [us-east-1]
-      x-amz-id-2: [+D8FKz2wa6AuB43JRpxSKuGQsY6yV4EHdld4LzXunsyD51NwyExqxB0l86rGljil8rTjeGbbmoU=]
-      x-amz-request-id: [4C61674D182C2F4A]
+      x-amz-id-2: [c5cdeph1O0d+cY9V5uxFvL6novMGxJlSISkTdQaOTNUnOKf0F+E6wauo8X1wdcF8njuwnTlGcu8=]
+      x-amz-request-id: [E00A01AEA84A9EB8]
     status: {code: 200, message: OK}
 - request:
     body: !!python/unicode
     headers:
-      Authorization: [!!python/unicode 'AWS ASIAJV2G4O7GVRY5PQQQ:5qdJVzN74zEF0hX9avAvxBoFxoU=']
       Content-Length: ['0']
-      Date: ['Fri, 14 Oct 2016 22:37:43 GMT']
+      Date: ['Mon, 17 Oct 2016 12:50:49 GMT']
       User-Agent: [Boto/2.39.0 Python/2.7.12 Darwin/16.0.0]
-      x-amz-security-token: [!!python/unicode FQoDYXdzELD//////////wEaDJRsMifp+hsMilGk7SKUA5NX8LX7nRjOZFdduyf/puErg3KSrO45OJfQwGIGsNDSR96jEd2FVs5xKCy+23VLXQ+CM+pc+qAM8MIjeVL6kyT07/bn+5aS8AzPW35ywN335JpaSFU0Y6b54L18KMnLFbgVYpl6WhL5w/tKwkygDT1hJrh3oSXI/yU6VL/Y/hDtttSpH1JB37gM9FNxI6XpYyZ4EpLeJ5EUsn38vC8Y9WcsmcVeiHDKTYnaxtRUqM2ijOOPzht1JC2EHntGIIVU34APEOyYhviUJ5eerxzmeYEZjvZFtepypZgYCJJu46+JqUo8uBSMgTtM3OfxmArk/3bJjyI289Q418VD57DCSmmsoneGuRWFd8uJtIyuOi2VhoCmOGL401Fnki59aLImlJzR1QzJc/nHeByA2rf1PKVaA9xtG0cxxbdHGF1dqy7f+IZlD2VbDPggvZXZ8JmzQp483WDasmz9BLB+Xnbwuc0Lz8aODarQfF09oxXE42qXoDrDsIQcl2Ww41mdLvi8h0pqkPLPFyN5tKeJpwAoK/jnDdBQKLa8hcAF]
+      x-amz-security-token: [!!python/unicode FQoDYXdzEO7//////////wEaDAI8BhdYYZgsfuc3pCKUA+OBgGn1EI7FflatMz+IEaZG/G8iO0h4Ahh+7u/AJ9Ucwg1I9nkEgTRKpMDlSQR3hHkh23/nYv0pMPGTREWsU7IFn/VDVybfT6I3WQRRw9y/tpWWM1JH5yTGEahG7pFt0SNmVIESMMJ3wQ0CBaSxv4cKzR/CKWn2c3U1qRXC6IknCmV4SfLlJjpRRhbjahz12or6MWHKcHLDBIozwpnM+CjYQCmCf1fuOk37IaLxbMC8ctmgWEMTSeWClg/M1LGElgqgGnw+411Njv+SPfdOmqpKLmVrX3jrcAQK94pLcNcYYYTw9t7k7PIJO2InK+MIrfDuIxKBDHZYok52sO7RmQm4eUrFkeEucVbMAefA8nWHD3S70nCNSevqtrRxkIEx4PQW3aLYinDvmxEjYXQ+ALaYy7nL6BlZcmyHj7mpEb6IF+xMEBIu1rpfZxAz9u2gIwaihPG3nMOYj653EAsa6M/pTY2Zl7ZrkMQwxyKlcNV/uV1Nt9YsTztuBuKhRncpdWVu0rciXQqose9B2Xd7tkd86jlUKKiSk8AF]
     method: GET
     uri: https://gbd-customer-data.s3.amazonaws.com/58600248-2927-4523-b44b-5fec3d278c09/nikki/gbdxtools_test_s3/model.json
   response:
@@ -182,21 +179,20 @@ interactions:
       accept-ranges: [bytes]
       content-length: ['9754']
       content-type: [application/json]
-      date: ['Fri, 14 Oct 2016 22:37:44 GMT']
+      date: ['Mon, 17 Oct 2016 12:50:50 GMT']
       etag: ['"63e576e84e342c49f1e331eb588b9b8d"']
       last-modified: ['Fri, 14 Oct 2016 20:44:21 GMT']
       server: [AmazonS3]
-      x-amz-id-2: [m9XDw0/hzzA2KQtXAqnPuBY2WJX86OMee1rxnxGzR295/WGCnmRnBsrdpdJth//O+NMR0TjRyaQ=]
-      x-amz-request-id: [7696B8662A61055D]
+      x-amz-id-2: [Vf8k2Q6TMuHSY3yFFSfREjE9Mti7p6avZNGpUBjcEFEZ7XhGqkGc29+W4VaA5/2VI6KhRW+LZSk=]
+      x-amz-request-id: [F7C9F077C305DA1E]
     status: {code: 200, message: OK}
 - request:
     body: !!python/unicode
     headers:
-      Authorization: [!!python/unicode 'AWS ASIAJV2G4O7GVRY5PQQQ:ClrDxIhVLO4kzvxVvKmL+AHaR54=']
       Content-Length: ['0']
-      Date: ['Fri, 14 Oct 2016 22:37:43 GMT']
+      Date: ['Mon, 17 Oct 2016 12:50:49 GMT']
       User-Agent: [Boto/2.39.0 Python/2.7.12 Darwin/16.0.0]
-      x-amz-security-token: [!!python/unicode FQoDYXdzELD//////////wEaDJRsMifp+hsMilGk7SKUA5NX8LX7nRjOZFdduyf/puErg3KSrO45OJfQwGIGsNDSR96jEd2FVs5xKCy+23VLXQ+CM+pc+qAM8MIjeVL6kyT07/bn+5aS8AzPW35ywN335JpaSFU0Y6b54L18KMnLFbgVYpl6WhL5w/tKwkygDT1hJrh3oSXI/yU6VL/Y/hDtttSpH1JB37gM9FNxI6XpYyZ4EpLeJ5EUsn38vC8Y9WcsmcVeiHDKTYnaxtRUqM2ijOOPzht1JC2EHntGIIVU34APEOyYhviUJ5eerxzmeYEZjvZFtepypZgYCJJu46+JqUo8uBSMgTtM3OfxmArk/3bJjyI289Q418VD57DCSmmsoneGuRWFd8uJtIyuOi2VhoCmOGL401Fnki59aLImlJzR1QzJc/nHeByA2rf1PKVaA9xtG0cxxbdHGF1dqy7f+IZlD2VbDPggvZXZ8JmzQp483WDasmz9BLB+Xnbwuc0Lz8aODarQfF09oxXE42qXoDrDsIQcl2Ww41mdLvi8h0pqkPLPFyN5tKeJpwAoK/jnDdBQKLa8hcAF]
+      x-amz-security-token: [!!python/unicode FQoDYXdzEO7//////////wEaDAI8BhdYYZgsfuc3pCKUA+OBgGn1EI7FflatMz+IEaZG/G8iO0h4Ahh+7u/AJ9Ucwg1I9nkEgTRKpMDlSQR3hHkh23/nYv0pMPGTREWsU7IFn/VDVybfT6I3WQRRw9y/tpWWM1JH5yTGEahG7pFt0SNmVIESMMJ3wQ0CBaSxv4cKzR/CKWn2c3U1qRXC6IknCmV4SfLlJjpRRhbjahz12or6MWHKcHLDBIozwpnM+CjYQCmCf1fuOk37IaLxbMC8ctmgWEMTSeWClg/M1LGElgqgGnw+411Njv+SPfdOmqpKLmVrX3jrcAQK94pLcNcYYYTw9t7k7PIJO2InK+MIrfDuIxKBDHZYok52sO7RmQm4eUrFkeEucVbMAefA8nWHD3S70nCNSevqtrRxkIEx4PQW3aLYinDvmxEjYXQ+ALaYy7nL6BlZcmyHj7mpEb6IF+xMEBIu1rpfZxAz9u2gIwaihPG3nMOYj653EAsa6M/pTY2Zl7ZrkMQwxyKlcNV/uV1Nt9YsTztuBuKhRncpdWVu0rciXQqose9B2Xd7tkd86jlUKKiSk8AF]
     method: GET
     uri: https://gbd-customer-data.s3.amazonaws.com/58600248-2927-4523-b44b-5fec3d278c09/nikki/gbdxtools_test_s3/test_dir/model.json
   response:
@@ -327,11 +323,11 @@ interactions:
       accept-ranges: [bytes]
       content-length: ['9754']
       content-type: [application/json]
-      date: ['Fri, 14 Oct 2016 22:37:44 GMT']
+      date: ['Mon, 17 Oct 2016 12:50:50 GMT']
       etag: ['"63e576e84e342c49f1e331eb588b9b8d"']
       last-modified: ['Fri, 14 Oct 2016 22:37:16 GMT']
       server: [AmazonS3]
-      x-amz-id-2: [p7US5BPNxAvWoKTMSDOV9qs5TnyaCGX1o89WRzROKw2KKZGZ0qe/jzcPZlbPOM3jW7Qx/JoWDc4=]
-      x-amz-request-id: [2DBE439BBBEFF30A]
+      x-amz-id-2: [HN9fT1et2NFKU6x88Q/Kjsi5t4VFej3QLY2cCtdCh4kQeYsAjx0Vom7C6ziS4cvlocSN16hSt9U=]
+      x-amz-request-id: [B26487076BA4AF62]
     status: {code: 200, message: OK}
 version: 1
