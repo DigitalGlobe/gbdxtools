@@ -1,3 +1,8 @@
+0.6.6
+-----
+* simpleworkflows.savedata now uses persist flag
+* s3.download maintains directory structure
+
 0.6.5
 -----
 * Can now set impersonation_allowed flag 
