@@ -75,8 +75,8 @@ class S3(object):
 
         self.logger.debug('Connecting to S3')
         s3conn = botos3.connect_to_region('us-east-1', aws_access_key_id=access_key,
-                                      aws_secret_access_key=secret_key,
-                                      security_token=session_token)
+                                          aws_secret_access_key=secret_key,
+                                          security_token=session_token)
 
         b = s3conn.get_bucket(bucket, validate=False,
                               headers={'x-amz-security-token': session_token})
