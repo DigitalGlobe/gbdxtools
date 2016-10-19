@@ -3,7 +3,7 @@ GBDX Vector Services Interface.
 
 Contact: nate.ricklin@digitalglobe.com
 """
-from __future__ import absolute_import
+#from __future__ import absolute_import
 from builtins import object
 
 import requests
