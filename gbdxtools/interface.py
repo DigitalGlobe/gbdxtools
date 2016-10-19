@@ -17,6 +17,7 @@ from gbdxtools.s3 import S3
 from gbdxtools.ordering import Ordering
 from gbdxtools.workflow import Workflow
 from gbdxtools.catalog import Catalog
+from gbdxtools.vectors import Vectors
 from gbdxtools.idaho import Idaho
 from gbdxtools.task_registry import TaskRegistry
 import gbdxtools.simpleworkflows
@@ -63,6 +64,8 @@ class Interface(object):
 
         # create and store an instance of the Idaho Client
         self.idaho = Idaho(self)
+
+        self.vectors = Vectors(self)
 
         self.task_registry = TaskRegistry(self)
 
