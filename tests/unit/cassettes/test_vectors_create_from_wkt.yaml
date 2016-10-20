@@ -1,0 +1,26 @@
+interactions:
+- request:
+    body: '[{"geometry": {"type": "Polygon", "coordinates": [[[0.0, 3.0], [3.0, 3.0],
+      [3.0, 0.0], [0.0, 0.0], [0.0, 3.0]]]}, "type": "Feature", "properties": {"item_type":
+      "test_type_123", "ingest_source": "api", "attributes": {"attribute2": "something",
+      "date": "2015-06-06", "attribute1": "nothing", "number": 6}}}]'
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      Content-Length: ['306']
+      User-Agent: [python-requests/2.11.1]
+    method: POST
+    uri: https://vector.geobigdata.io/insight-vector/api/vectors
+  response:
+    body: {string: !!python/unicode '["/insight-vector/api/vector/vector-web-s/b1af66c3-2e41-4696-9924-6ab264336692"]'}
+    headers:
+      connection: [keep-alive]
+      content-length: ['80']
+      content-type: [application/json]
+      date: ['Thu, 20 Oct 2016 19:07:48 GMT']
+      server: [WebLogic 12.2.1.1]
+      set-cookie: [JSESSIONID=2FF272B325004294DD8C54F45D0FD8DC.node01; Path=/insight-vector/;
+          Secure; HttpOnly, AWSELB=07A771471E264EA5ADF82F0AA634B8F4B8E2289A693234940AC73E6C15BF2CCE5EDDA668C8BCA6DAC16EEC33DF33F9C7475B52F12DDB45B8724B74F9BAF006F829FAB04EDB79A862EE1CBB6961EE836EB192603F29;PATH=/insight-vector/;SECURE;HTTPONLY]
+    status: {code: 201, message: Created}
+version: 1

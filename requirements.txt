@@ -7,6 +7,7 @@ pygeoif==0.6
 pytest==2.9.1
 pytest-runner==2.7
 sympy==1.0
+geomet==0.1.1
 vcrpy
 ndg-httpsclient==0.4.2
 bumpversion
