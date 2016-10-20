@@ -44,3 +44,91 @@ For example, to find WV03 imagery taken only on a certain date we can do so in a
 
     query = "item_type:WV03 AND attributes.ACQDATE:\"2014-05-16\""
     results = gbdx.vectors.query(colorado_aoi, query=query)
+
+Vector Creation
+-----------------------
+
+The following snippet will insert a polygon into the vector index:
+
+.. code-block:: python
+
+    aoi = "POLYGON((0 3,3 3,3 0,0 0,0 3))"
+    results = gbdx.vectors.create_from_wkt(
+        aoi,
+        item_type='my_arbitrary_item_type',
+        ingest_source='arbitrary_ingest_source',
+        attribute1='nothing',
+        attribute2='something',
+        number=6,
+        date='2015-06-06'
+    )
+
+item_type and ingest_source are required (and make searching and finding this vector easier later).  All other parameters are arbitrary attributes that will be included on the data.
+
+The resulting vector as stored and retrievable looks like this:
+
+.. code-block:: json
+
+    {  
+       "geometry":{  
+          "type":"Polygon",
+          "coordinates":[  
+             [  
+                [  
+                   0.0,
+                   3.0
+                ],
+                [  
+                   3.0,
+                   3.0
+                ],
+                [  
+                   3.0,
+                   0.0
+                ],
+                [  
+                   0.0,
+                   0.0
+                ],
+                [  
+                   0.0,
+                   3.0
+                ]
+             ]
+          ]
+       },
+       "type":"Feature",
+       "properties":{  
+          "name":null,
+          "format":null,
+          "ingest_date":"2016-10-20T20:08:48Z",
+          "text":"",
+          "source":null,
+          "ingest_attributes":{  
+             "_rest_url":"https://vector.geobigdata.io/insight-vector/api/vectors",
+             "_rest_user":"nricklin"
+          },
+          "original_crs":"EPSG:4326",
+          "access":{  
+             "users":[  
+                "_ALL_"
+             ],
+             "groups":[  
+                "_ALL_"
+             ]
+          },
+          "item_type":[  
+             "my_arbitrary_item_type"
+          ],
+          "ingest_source":"arbitrary_ingest_source",
+          "attributes":{  
+             "date":"2015-06-06",
+             "attribute2":"something",
+             "attribute1":"nothing",
+             "number":"6"
+          },
+          "id":"5b372eb0-a83e-4b52-a40b-9a6f411b129f",
+          "item_date":"2016-10-20T20:08:48Z"
+       }
+    }
+
