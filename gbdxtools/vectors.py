@@ -8,6 +8,8 @@ from builtins import object
 
 import requests
 from pygeoif import geometry
+from geomet import wkt as wkt2geojson
+import json
 
 class Vectors(object):
 
@@ -24,6 +26,84 @@ class Vectors(object):
         self.logger = interface.logger
         self.query_url = 'https://vector.geobigdata.io/insight-vector/api/vectors/query/items'
         self.get_url = 'https://vector.geobigdata.io/insight-vector/api/vector/%s/'
+        self.create_url = 'https://vector.geobigdata.io/insight-vector/api/vectors'
+
+    def create(self,vectors):
+        """
+        Create a vectors in the vector service.
+
+        Args:
+            vectors: A single geojson vector or a list of geojson vectors.  Each looks like:
+              {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [1.0,1.0]
+                },
+                "properties": {
+                    "text" : "item text",
+                    "name" : "item name",
+                    "item_type" : "type",
+                    "ingest_source" : "source",
+                    "attributes" : {
+                       "latitude" : 1,
+                       "institute_founded" : "2015-07-17",
+                       "mascot" : "moth"
+                    }
+                }
+              }
+
+            item_type and ingest_source are required.
+
+        Returns:
+            a list of IDs of the vectors created
+        """
+        if type(vectors) is dict:
+            vectors = [vectors]
+
+        # validate they all have item_type and ingest_source in properties
+        for vector in vectors:
+            if not 'properties' in list(vector.keys()):
+                raise Exception('Vector does not contain "properties" field.')
+
+            if not 'item_type' in list(vector['properties'].keys()):
+                raise Exception('Vector does not contain "item_type".')
+
+            if not 'ingest_source' in list(vector['properties'].keys()):
+                raise Exception('Vector does not contain "ingest_source".')
+
+        r = self.gbdx_connection.post(self.create_url, data=json.dumps(vectors))
+        r.raise_for_status()
+        return r.json()
+
+    def create_from_wkt(self, wkt, item_type, ingest_source, **attributes):
+        '''
+        Create a single vector in the vector service
+
+        Args:
+            wkt (str): wkt representation of the geometry
+            item_type (str): item_type of the vector
+            ingest_source (str): source of the vector
+            attributes: a set of key-value pairs of attributes
+
+        Returns:
+            id (str): string identifier of the vector created
+        '''
+        # verify the "depth" of the attributes is single layer
+
+        geojson = wkt2geojson.loads(wkt)
+        vector = {
+            'type': "Feature",
+            'geometry': geojson,
+            'properties': {
+                'item_type': item_type,
+                'ingest_source': ingest_source,
+                'attributes': attributes
+            }
+        }
+
+        return self.create(vector)[0]
+
 
     def get(self, ID, index='vector-web-s'):
         '''Retrieves a vector.  Not usually necessary because searching is the best way to find & get stuff.
