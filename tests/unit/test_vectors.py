@@ -40,3 +40,94 @@ class TestVectors(unittest.TestCase):
         results = v.query(aoi, query="item_type:WV03")
 
         assert len(results) == 100
+
+    @vcr.use_cassette('tests/unit/cassettes/test_vectors_create_single.yaml', filter_headers=['authorization'])
+    def test_vectors_create_single(self):
+        v = Vectors(self.gbdx)
+        results = v.create({
+            "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [1.0,1.0]
+                },
+                "properties": {
+                    "text" : "item text",
+                    "name" : "item name",
+                    "item_type" : "type",
+                    "ingest_source" : "source",
+                    "attributes" : {
+                       "latitude" : 1,
+                       "institute_founded" : "2015-07-17",
+                       "mascot" : "moth"
+                    }
+                }
+          })
+
+        for result in results:
+            assert result == '/insight-vector/api/vector/vector-web-s/ce0699f3-bef8-402f-a18e-d149dc2f5f90'
+
+    @vcr.use_cassette('tests/unit/cassettes/test_vectors_create_multiple.yaml', filter_headers=['authorization'])
+    def test_vectors_create_multiple(self):
+        v = Vectors(self.gbdx)
+        results = v.create([{
+            "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [1.0,1.0]
+                },
+                "properties": {
+                    "text" : "item text",
+                    "name" : "item name",
+                    "item_type" : "type",
+                    "ingest_source" : "source",
+                    "attributes" : {
+                       "latitude" : 1,
+                       "institute_founded" : "2015-07-17",
+                       "mascot" : "moth"
+                    }
+                }
+          },
+          {
+            "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [1.0,1.0]
+                },
+                "properties": {
+                    "text" : "item text",
+                    "name" : "item name",
+                    "item_type" : "type",
+                    "ingest_source" : "source",
+                    "attributes" : {
+                       "latitude" : 1,
+                       "institute_founded" : "2015-07-17",
+                       "mascot" : "asdfadsfadf"
+                    }
+                }
+          }])
+
+        assert len(results) == 2
+
+    @vcr.use_cassette('tests/unit/cassettes/test_vectors_create_from_wkt.yaml', filter_headers=['authorization'])
+    def test_vectors_create_from_wkt(self):
+        v = Vectors(self.gbdx)
+
+        aoi = "POLYGON((0 3,3 3,3 0,0 0,0 3))"
+        result = v.create_from_wkt(
+            aoi,
+            item_type='test_type_123',
+            ingest_source='api',
+            attribute1='nothing',
+            attribute2='something',
+            number=6,
+            date='2015-06-06'
+        )
+        assert result == '/insight-vector/api/vector/vector-web-s/b1af66c3-2e41-4696-9924-6ab264336692'
+
+
+
+
+
+
+
+
