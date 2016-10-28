@@ -1,3 +1,12 @@
+0.6.7
+-----
+* Add gbdx.vectors.query, gbdx.vectors.create, and gbdx.vectors.create_from_wkt
+
+0.6.6
+-----
+* simpleworkflows.savedata now uses persist flag
+* s3.download maintains directory structure
+
 0.6.5
 -----
 * Can now set impersonation_allowed flag 
