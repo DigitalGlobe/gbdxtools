@@ -65,3 +65,11 @@ gbdxtools.idaho module
     :undoc-members:
     :show-inheritance:
 
+gbdxtools.vectors module
+--------------------------
+
+.. automodule:: gbdxtools.vectors
+    :members:
+    :undoc-members:
+    :show-inheritance:
+

@@ -9,9 +9,9 @@ if sys.version_info > (3,):
 #     readme = f.read()
 
 # long_description=readme,
-      
+
 setup(name='gbdxtools',
-      version='0.6.6',
+      version='0.6.7',
       description='Additional s3 functionality.',
       classifiers=[],
       keywords='',
@@ -29,7 +29,8 @@ setup(name='gbdxtools',
                         'ndg-httpsclient==0.4.2',
                         'sympy==1.0',
                         'six==1.10.0',
-                        'future==0.15.2'],
+                        'future==0.15.2',
+                        'geomet==0.1.1'],
       setup_requires=['pytest-runner'],
       tests_require=['pytest','vcrpy']
       )

@@ -7,7 +7,6 @@ from __future__ import absolute_import
 from builtins import object
 
 import requests
-from pygeoif import geometry
 import json
 import datetime
 from . import catalog_search_aoi

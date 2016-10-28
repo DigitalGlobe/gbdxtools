@@ -1,0 +1,29 @@
+interactions:
+- request:
+    body: '[{"geometry": {"type": "Point", "coordinates": [1.0, 1.0]}, "type": "Feature",
+      "properties": {"text": "item text", "ingest_source": "source", "attributes":
+      {"latitude": 1, "institute_founded": "2015-07-17", "mascot": "moth"}, "name":
+      "item name", "item_type": "type"}}, {"geometry": {"type": "Point", "coordinates":
+      [1.0, 1.0]}, "type": "Feature", "properties": {"text": "item text", "ingest_source":
+      "source", "attributes": {"latitude": 1, "institute_founded": "2015-07-17", "mascot":
+      "asdfadsfadf"}, "name": "item name", "item_type": "type"}}]'
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      Content-Length: ['545']
+      User-Agent: [python-requests/2.11.1]
+    method: POST
+    uri: https://vector.geobigdata.io/insight-vector/api/vectors
+  response:
+    body: {string: !!python/unicode '["/insight-vector/api/vector/vector-web-s/2dc6b85f-64fc-4963-b43f-f4a1a8443d70","/insight-vector/api/vector/vector-web-s/8da235df-f0bb-45fd-ae43-0d9e487df1c1"]'}
+    headers:
+      connection: [keep-alive]
+      content-length: ['159']
+      content-type: [application/json]
+      date: ['Thu, 20 Oct 2016 19:03:16 GMT']
+      server: [WebLogic 12.2.1.1]
+      set-cookie: [JSESSIONID=9C6EAF75C678ED34FC7C22163086A499.node01; Path=/insight-vector/;
+          Secure; HttpOnly, AWSELB=07A771471E264EA5ADF82F0AA634B8F4B8E2289A69235AA39EF3013E806CECDD6420A00278F900569B5C547DA1ED166099EADAA2E0DB45B8724B74F9BAF006F829FAB04EDB79A862EE1CBB6961EE836EB192603F29;PATH=/insight-vector/;SECURE;HTTPONLY]
+    status: {code: 201, message: Created}
+version: 1
