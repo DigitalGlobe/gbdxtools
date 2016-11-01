@@ -28,9 +28,6 @@ from auth_mock import get_mock_gbdx_session
 mock_gbdx_session = get_mock_gbdx_session(token="dummytoken")
 gbdx = Interface(gbdx_connection=mock_gbdx_session)
 
-# generate the cassette name in a machine nutral way
-cassette_name = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'cassettes', 'test_get_idaho_chip.yaml')
-
 
 class IdahoTest(unittest.TestCase):
 
@@ -48,7 +45,19 @@ class IdahoTest(unittest.TestCase):
         print("Deleting: {}".format(cls._temp_path))
         shutil.rmtree(cls._temp_path)
 
-    @vcr.use_cassette(cassette_name)
+
+    @vcr.use_cassette(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'cassettes', 'test_find_idaho_by_catid_aoi.yaml'))
+    def test_find_idaho_by_catid_aoi(self):
+
+        # define the tile we wish to generate
+        catID = '1040010019C0BA00'
+        aoi = 'POLYGON((-122.44612884547678 37.80341457084377,-122.43866157557932 37.80341457084377,-122.43866157557932 37.79785341558664,-122.44612884547678 37.79785341558664,-122.44612884547678 37.80341457084377))'
+
+        i = Idaho(gbdx)
+        result = i.get_idaho_by_catid_and_aoi(catid=catID, aoiWKT=aoi)
+        assert len(result['results']) == 2
+
+    @vcr.use_cassette(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'cassettes', 'test_get_idaho_chip.yaml'))
     def test_get_idaho_chip(self):
 
         multi_id = '98ce43c5-b4a8-45aa-8597-ae7017ecefb2'

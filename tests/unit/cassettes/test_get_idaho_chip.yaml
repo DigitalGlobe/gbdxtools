@@ -18422,8 +18422,8 @@ interactions:
     headers:
       connection: [keep-alive]
       content-type: [image/tif]
-      date: ['Tue, 07 Jun 2016 14:51:06 GMT']
+      date: ['Tue, 01 Nov 2016 19:28:23 GMT']
       server: [Apache-Coyote/1.1]
-      set-cookie: [JSESSIONID=62883AF6ED9ADED67AEB7534CF3C937B; Path=/; HttpOnly]
+      set-cookie: [JSESSIONID=A8BCC12F77FC03F6710BFA2624D66BE2; Path=/; HttpOnly]
     status: {code: 200, message: OK}
 version: 1

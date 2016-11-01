@@ -1,0 +1,49 @@
+interactions:
+- request:
+    body: !!python/unicode '{"searchAreaWkt": "POLYGON((-122.44612884547678 37.80341457084377,-122.43866157557932
+      37.80341457084377,-122.43866157557932 37.79785341558664,-122.44612884547678
+      37.79785341558664,-122.44612884547678 37.80341457084377))", "types": ["IDAHOImage"],
+      "filters": ["vendorDatasetIdentifier3 = ''1040010019C0BA00''"]}'
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Authorization: [!!python/unicode Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2RpZ2l0YWxnbG9iZS1wbGF0Zm9ybS5hdXRoMC5jb20vIiwic3ViIjoiYXV0aDB8Z2JkeHw1NzUiLCJhdWQiOiJ2aGFORUp5bUw0bTFVQ280VHFYbXVLdGtuOUpDWURrVCIsImV4cCI6MTQ3ODYzMjcwNSwiaWF0IjoxNDc4MDI3OTA1fQ.Te0Y3SC9ECT62D83XR9B8sv-fs7qhGSZRA8H7oi9fTQ]
+      Connection: [keep-alive]
+      Content-Length: ['308']
+      Content-Type: [application/json]
+      User-Agent: [python-requests/2.9.1]
+    method: POST
+    uri: https://geobigdata.io/catalog/v1/search
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA+1XW2/aSBT+K8hPiYTRXHyZ4Y1LSpBSQIQNTVcrNPaMYVRjs2M71TbKf98zxlAa
+        hRXb1W77sAhQOJc543O+7zvKs1MoYeLNQqydblaladsxqqjSsnC6vz47Wqqs1IlWxuk6ikSJQEK6
+        CaWR6yEsXBah2GUMK8VlICmTTtvJP2d1eBgRHESSu4FPqOvFgrtCQCKWTPicewnyPQgv/9gpiB4P
+        e7fT8VasFdh2Jt8pU2oFt3h2smr7YaFT+8MhoU2BHzMB/lLnGRgRvPZZCXgmYmsPlOsVjsAq4t8r
+        XdShQ1FaD0E4cJHnomCBeRfTLsYdj/OP9ohMa2Pr0A5qCj1Ok6RQpS0DlkyU+knZ27yzn9xshXUt
+        xu/Aqe31+3mVyWI5umceOGbTu8fRdNK6unIxIR3fQ8hHjLZo2AlJgL0wDNutvYuGAQs5sy7mMcqJ
+        hxsXDUhAoImNi/mE+0cXpb7nNQcyhD12cL1V6/oarhnnaW7GWanMzqhSNE1cTud3w4fxzXLFVv3e
+        ZAiBTyqTuYGuCWjA+AgFDNF3D7gPEWpXrAe5tF31KAnO5xDbP9/HHO4RIIxWCK9mCOHzGRQyMIJn
+        wPDmA9Tv1UM+E2173atDER70Gff20XaAH+71l3rsflBbtqooxXb3LRAQ6tbvDkDp42GUSy3LDcQF
+        AbepRZXdpOrp0DA/6PiHyLG8nB+FyorczFJRJgCfBq3LB0SPvsbG3EhksnU1yAXcOG23+mml2q2R
+        USprtx5Vmuaf2625kvWXq+QavJPxHNff5Lr1Hnisi52KSyPS/QP0vuhtVT8U9kmHg3FtLGDvoSOp
+        GmoolMXqvQJw1HTrIGpnJKHfiz1Rf5ncj0eTm+Hq/nY6X4AvyfNyZ3RWLj+VPyvi07ySg/yp1iX0
+        ldqvkAFY+Ybs1tKv4k+qbCaipdjkbj3x4ojFxjfUaw1TGqV5BGMYZ3GnjjDFHi24rlqn3iq93tga
+        oR8SK5hJMhFSm162Tu1JIEfWDLLXh/nbMTA7PFF+HV7A65AzZGj42X2LcN3XnOq+QRso/XhQXIr2
+        xU+hH8JUjnp3tkEvL+1XG8SLaEgUwm6AKayEMPLdCFFgiPISLBMZ8pj82xsEI/+/WSH+31shs8no
+        8hUSYtKAnHAvwCeE4gEnDWtIiNgJn3B4oFNIMQ9P6OR5vDmOYcBKcEqnV5X+YoHMepP/d8ZxZ5Ag
+        JOSCpXEhJS5eGjPQ743JAVM6/i7JRx2Q0H8u+T8YoT+n4FNEGLtI8fEPVHyM+fdL/m+QCZJQy26Z
+        Q3/mKs6NfSZi/7Wo/56rsjKZkrXNqvcA8LhPORHxLnl5efkTj6WDWqAMAAA=
+    headers:
+      access-control-allow-origin: ['*']
+      connection: [keep-alive]
+      content-encoding: [gzip]
+      content-length: ['1013']
+      content-type: [application/json]
+      date: ['Tue, 01 Nov 2016 19:28:19 GMT']
+      server: [Apache-Coyote/1.1]
+      vary: [Origin, Accept-Encoding]
+      via: [kong/0.5.2]
+    status: {code: 200, message: OK}
+version: 1
