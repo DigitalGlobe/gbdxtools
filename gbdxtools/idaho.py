@@ -35,36 +35,27 @@ class Idaho(object):
         self.catalog = Catalog(interface)
         self.logger = interface.logger
 
-
-    def get_images_by_catid(self, catid):
+    def get_idaho_by_catid_and_aoi(self, catid, aoiWKT):
         ''' Retrieves the IDAHO image records associated with a given catid.
 
         Args:
             catid (str): The source catalog ID from the platform catalog.
+            cataoiWKTid (str): The well known text of the area of interest.
 
         Returns:
-            results (json): The full catalog-search response for IDAHO images 
+            results (json): The full catalog-search response for IDAHO images
                             within the catID.
 
         '''
 
         self.logger.debug('Retrieving IDAHO metadata')
 
-        # get the footprint of the catid's strip
-        footprint = self.catalog.get_strip_footprint_wkt(catid)
-        if not footprint:
-            self.logger.debug('''Cannot get IDAHO metadata for strip %s, 
-                                 footprint not found''' % catid)
-            return None
-
         # use the footprint to get the IDAHO ID
         url = 'https://geobigdata.io/catalog/v1/search'
 
-        body = {"startDate": None,
-                "filters": ["vendorDatasetIdentifier3 = '%s'" % catid],
-                "endDate": None,
+        body = {"filters": ["vendorDatasetIdentifier3 = '%s'" % catid],
                 "types": ["IDAHOImage"],
-                "searchAreaWkt": footprint}
+                "searchAreaWkt": aoiWKT}
 
         headers = {'Content-Type': 'application/json'}
 
@@ -78,6 +69,27 @@ class Idaho(object):
 
             return results
 
+    def get_images_by_catid(self, catid):
+        ''' Retrieves the IDAHO image records associated with a given catid.
+
+        Args:
+            catid (str): The source catalog ID from the platform catalog.
+
+        Returns:
+            results (json): The full catalog-search response for IDAHO images
+                            within the catID.
+        '''
+
+        self.logger.debug('Retrieving IDAHO metadata')
+
+        # get the footprint of the catid's strip
+        footprint = self.catalog.get_strip_footprint_wkt(catid)
+        if not footprint:
+            self.logger.debug('''Cannot get IDAHO metadata for strip %s,
+                                 footprint not found''' % catid)
+            return None
+
+        return self.get_idaho_by_catid_and_aoi(catid, footprint)
 
     def describe_images(self, idaho_image_results):
         ''' Describe a set of IDAHO images, as returned in catalog search results.
