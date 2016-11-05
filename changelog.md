@@ -1,3 +1,8 @@
+0.7.0
+-----
+* Get image chip from catalog id and rectangle
+* Removed shapely from dependencies
+
 0.6.8
 -----
 * Updated leaflet javascript links in leafletmap_template which is used to create idaho slippy maps
