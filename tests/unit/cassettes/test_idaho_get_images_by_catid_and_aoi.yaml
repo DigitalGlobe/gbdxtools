@@ -40,7 +40,7 @@ interactions:
       content-encoding: [gzip]
       content-length: ['1022']
       content-type: [application/json]
-      date: ['Sat, 05 Nov 2016 14:45:21 GMT']
+      date: ['Sat, 05 Nov 2016 15:12:41 GMT']
       server: [Apache-Coyote/1.1]
       vary: [Accept-Encoding]
       via: [kong/0.5.2]

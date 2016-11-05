@@ -11,6 +11,7 @@ import tempfile
 import unittest
 
 import shutil
+import tempfile
 
 from gbdxtools import Interface
 from gbdxtools.idaho import Idaho
@@ -27,10 +28,15 @@ from auth_mock import get_mock_gbdx_session
 
 
 class IdahoTest(unittest.TestCase):
+
+    _temp_path = None
+
     @classmethod
     def setUpClass(cls):
         mock_gbdx_session = get_mock_gbdx_session(token="dummytoken")
         cls.gbdx = Interface(gbdx_connection=mock_gbdx_session)
+        cls._temp_path = tempfile.mkdtemp()
+        print("Created: {}".format(cls._temp_path))
 
     def test_init(self):
         c = Idaho(self.gbdx)
@@ -63,7 +69,7 @@ class IdahoTest(unittest.TestCase):
         i = Idaho(self.gbdx)
         catid = '104001001838A000'
         coordinates = [-95.0990905612707, 29.740773208709868, -95.0925674289465, 29.74662324740119]
-        filename = 'chip_pan.tif'
+        filename = os.path.join(self._temp_path, 'chip_pan.tif')
         i.get_chip(coordinates=coordinates, catid = catid, filename=filename)
         assert os.path.isfile(filename)
 
@@ -72,7 +78,7 @@ class IdahoTest(unittest.TestCase):
         i = Idaho(self.gbdx)
         catid = '104001001838A000'
         coordinates = [-95.0990905612707, 29.740773208709868, -95.0925674289465, 29.74662324740119]
-        filename = 'chip_ms.tif'
+        filename = os.path.join(self._temp_path, 'chip_ms.tif')
         i.get_chip(coordinates=coordinates, catid = catid, chip_type='MS', filename=filename)
         assert os.path.isfile(filename)
 
@@ -81,7 +87,7 @@ class IdahoTest(unittest.TestCase):
         i = Idaho(self.gbdx)
         catid = '104001001838A000'
         coordinates = [-95.0990905612707, 29.740773208709868, -95.0925674289465, 29.74662324740119]
-        filename = 'chip_pan.png'
+        filename = os.path.join(self._temp_path, 'chip_pan.png')
         i.get_chip(coordinates=coordinates, catid = catid, chip_format='PNG', filename=filename)
         assert os.path.isfile(filename)
 
@@ -90,6 +96,6 @@ class IdahoTest(unittest.TestCase):
         i = Idaho(self.gbdx)
         catid = '104001001838A000'
         coordinates = [-95.0990905612707, 29.740773208709868, -95.0925674289465, 29.74662324740119]
-        filename = 'chip_ms.png'
+        filename = os.path.join(self._temp_path, 'chip_ms.png')
         i.get_chip(coordinates=coordinates, catid = catid, chip_type='MS', chip_format='PNG', filename=filename)
         assert os.path.isfile(filename)
