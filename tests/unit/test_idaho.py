@@ -5,18 +5,13 @@ Contact: dmarino@digitalglobe.com
 Unit tests for the gbdxtools.Idaho class
 '''
 
-from os.path import join, isfile, dirname, realpath
-import tempfile
-
-import unittest
-
-import shutil
-import tempfile
-
 from gbdxtools import Interface
 from gbdxtools.idaho import Idaho
-import vcr
 from auth_mock import get_mock_gbdx_session
+import vcr
+from os.path import join, isfile, dirname, realpath
+import tempfile
+import unittest
 
 # How to use the mock_gbdx_session and vcr to create unit tests:
 # 1. Add a new test that is dependent upon actually hitting GBDX APIs.
