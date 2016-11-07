@@ -28,7 +28,7 @@ class IdahoTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        mock_gbdx_session = get_mock_gbdx_session(token=dummytoken)
+        mock_gbdx_session = get_mock_gbdx_session(token='dymmytoken')
         cls.gbdx = Interface(gbdx_connection=mock_gbdx_session)
         cls._temp_path = tempfile.mkdtemp()
         print("Created: {}".format(cls._temp_path))
@@ -58,39 +58,3 @@ class IdahoTest(unittest.TestCase):
         catid = '10400100203F1300'
         description = i.describe_images(i.get_images_by_catid(catid=catid))
         assert description['10400100203F1300']['parts'][1]['PAN']['id'] =='b1f6448b-aecd-4d9b-99ec-9cad8d079043'
-
-    @vcr.use_cassette('tests/unit/cassettes/test_idaho_get_chip_pan_tif.yaml', filter_headers=['authorization'])
-    def test_idaho_get_chip_pan_tif(self):
-        i = Idaho(self.gbdx)
-        catid = '104001001838A000'
-        coordinates = [-95.01844977959989, 29.72549064332343, -95.01708721742034, 29.72659936487048]
-        filename = join(self._temp_path, 'chip_pan.tif')
-        i.get_chip(coordinates=coordinates, catid = catid, filename=filename)
-        assert isfile(filename)
-
-    # @vcr.use_cassette('tests/unit/cassettes/test_idaho_get_chip_ms_tif.yaml', filter_headers=['authorization'])
-    # def test_idaho_get_chip_ms_tif(self):
-    #     i = Idaho(self.gbdx)
-    #     catid = '104001001838A000'
-    #     coordinates = [-95.01844977959989, 29.72549064332343, -95.01708721742034, 29.72659936487048]
-    #     filename = join(self._temp_path, 'chip_ms.tif')
-    #     i.get_chip(coordinates=coordinates, catid = catid, chip_type='MS', filename=filename)
-    #     assert isfile(filename)
-    #
-    # @vcr.use_cassette('tests/unit/cassettes/test_idaho_get_chip_pan_png.yaml', filter_headers=['authorization'])
-    # def test_idaho_get_chip_pan_png(self):
-    #     i = Idaho(self.gbdx)
-    #     catid = '104001001838A000'
-    #     coordinates = [-95.01844977959989, 29.72549064332343, -95.01708721742034, 29.72659936487048]
-    #     filename = join(self._temp_path, 'chip_pan.png')
-    #     i.get_chip(coordinates=coordinates, catid = catid, chip_format='PNG', filename=filename)
-    #     assert isfile(filename)
-    #
-    # @vcr.use_cassette('tests/unit/cassettes/test_idaho_get_chip_ms_png.yaml', filter_headers=['authorization'])
-    # def test_idaho_get_chip_ms_png(self):
-    #     i = Idaho(self.gbdx)
-    #     catid = '104001001838A000'
-    #     coordinates = [-95.01844977959989, 29.72549064332343, -95.01708721742034, 29.72659936487048]
-    #     filename = join(self._temp_path, 'chip_ms.png')
-    #     i.get_chip(coordinates=coordinates, catid = catid, chip_type='MS', chip_format='PNG', filename=filename)
-    #     assert isfile(filename)
