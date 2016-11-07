@@ -65,7 +65,7 @@ class IdahoTest(unittest.TestCase):
     def test_idaho_get_chip_pan_tif(self):
         i = Idaho(self.gbdx)
         catid = '104001001838A000'
-        coordinates = [-95.0990905612707, 29.740773208709868, -95.0925674289465, 29.74662324740119]
+        coordinates = [-95.01844977959989, 29.72549064332343, -95.01708721742034, 29.72659936487048]
         filename = join(self._temp_path, 'chip_pan.tif')
         i.get_chip(coordinates=coordinates, catid = catid, filename=filename)
         assert isfile(filename)
@@ -74,7 +74,7 @@ class IdahoTest(unittest.TestCase):
     def test_idaho_get_chip_ms_tif(self):
         i = Idaho(self.gbdx)
         catid = '104001001838A000'
-        coordinates = [-95.0990905612707, 29.740773208709868, -95.0925674289465, 29.74662324740119]
+        coordinates = [-95.01844977959989, 29.72549064332343, -95.01708721742034, 29.72659936487048]
         filename = join(self._temp_path, 'chip_ms.tif')
         i.get_chip(coordinates=coordinates, catid = catid, chip_type='MS', filename=filename)
         assert isfile(filename)
@@ -83,7 +83,7 @@ class IdahoTest(unittest.TestCase):
     def test_idaho_get_chip_pan_png(self):
         i = Idaho(self.gbdx)
         catid = '104001001838A000'
-        coordinates = [-95.0990905612707, 29.740773208709868, -95.0925674289465, 29.74662324740119]
+        coordinates = [-95.01844977959989, 29.72549064332343, -95.01708721742034, 29.72659936487048]
         filename = join(self._temp_path, 'chip_pan.png')
         i.get_chip(coordinates=coordinates, catid = catid, chip_format='PNG', filename=filename)
         assert isfile(filename)
@@ -92,7 +92,7 @@ class IdahoTest(unittest.TestCase):
     def test_idaho_get_chip_ms_png(self):
         i = Idaho(self.gbdx)
         catid = '104001001838A000'
-        coordinates = [-95.0990905612707, 29.740773208709868, -95.0925674289465, 29.74662324740119]
+        coordinates = [-95.01844977959989, 29.72549064332343, -95.01708721742034, 29.72659936487048]
         filename = join(self._temp_path, 'chip_ms.png')
         i.get_chip(coordinates=coordinates, catid = catid, chip_type='MS', chip_format='PNG', filename=filename)
         assert isfile(filename)
