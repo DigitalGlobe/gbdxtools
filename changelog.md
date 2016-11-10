@@ -1,3 +1,7 @@
+0.7.1
+-----
+* Update batchworkflows in simpleworkflow to use new jinja templating
+
 0.7.0
 -----
 * Get image chip from catalog id and rectangle
