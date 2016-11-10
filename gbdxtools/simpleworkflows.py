@@ -140,24 +140,20 @@ class Inputs(PortList):
 
         # special handling for setting port values
         if k in self._portnames and hasattr(self, k):
-            # parse batch inputs vs regular
-            batch_values = []
-
             # if input type is of list, use batch workflows endpoint
             if isinstance(v, list):
                 self.__getattribute__(k).value = "{{{{{0}}}}}".format(
                     "batch_input_{0}".format(k))
-                batch_values.append({"name": "batch_input_{0}".format(k), "values": v})
+
+                if not self.task.batch_values:
+                    self.task.batch_values = []
+
+                self.task.batch_values.append({"name": "batch_input_{0}".format(k), "values": v})
             else:
                 port = self.__getattribute__(k)
                 port.value = v
                 return
 
-            # set the batch values object
-            if batch_values:
-                self.task.batch_values = batch_values
-            else:
-                self.task.batch_values = None
             return
 
         # find out if this is a valid multiplex port, i.e. this portname is prefixed by a multiplex port
@@ -256,7 +252,7 @@ class Task(object):
         self.__interface = __interface
         self.type = __task_type
         self.definition = self.__interface.task_registry.get_definition(__task_type)
-        self.domain = self.definition['containerDescriptors'][0]['properties'].get('domain','default')
+        self.domain = self.definition.get('containerDescriptors', [{'properties': {}}])[0]['properties'].get('domain', 'default')
         self._timeout = self.definition['properties'].get('timeout')
 
         self.inputs = Inputs(self.input_ports, task=self)
@@ -282,28 +278,12 @@ class Task(object):
         Returns:
             None
         """
-        # list used for batch values
-        batch_values = []
-
         for port_name, port_value in kwargs.items():
             # Support both port and port.value
             if hasattr(port_value, 'value'):
                 port_value = port_value.value
 
-            # if input type is of list, use batch workflows endpoint
-            if isinstance(port_value, list):
-                self.inputs.__getattribute__(port_name).value = "$batch_value:{0}".format(
-                    "batch_input_{0}".format(port_name))
-                batch_values.append({"name": "batch_input_{0}".format(port_name), "values": port_value})
-            else:
-                self.inputs.__setattr__(port_name, port_value)
-                # self.inputs.__getattribute__(port_name).value = port_value
-
-        # set the batch values object
-        if batch_values:
-            self.batch_values = batch_values
-        else:
-            self.batch_values = None
+            self.inputs.__setattr__(port_name, port_value)
 
     @property
     def impersonation_allowed(self):
