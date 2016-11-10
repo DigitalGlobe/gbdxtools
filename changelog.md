@@ -1,3 +1,7 @@
+0.7.2
+_____
+* Fix a bug in batchworkflow expansion
+
 0.7.1
 -----
 * Update batchworkflows in simpleworkflow to use new jinja templating
