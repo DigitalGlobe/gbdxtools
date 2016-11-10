@@ -1,9 +1,9 @@
 interactions:
 - request:
     body: '{"tasks": [{"outputs": [{"name": "data"}], "taskType": "FastOrtho", "name":
-      "FastOrtho", "inputs": [{"name": "data", "value": "$batch_value:input_data"},
-      {"name": "demspecifier", "value": "$batch_value:input_dem"}]}, {"inputs": [{"source":
-      "FastOrtho:data", "name": "data"}, {"name": "destination", "value": "$batch_value:destination"}],
+      "FastOrtho", "inputs": [{"name": "data", "value": "{{input_data}}"},
+      {"name": "demspecifier", "value": "{{input_dem}}"}]}, {"inputs": [{"source":
+      "FastOrtho:data", "name": "data"}, {"name": "destination", "value": "{{destination}}"}],
       "name": "StagetoS3", "taskType": "StageDataToS3"}], "name": "fastortho_stagetos3",
       "batch_values": [{"values": ["http://test-tdgplatform-com/data/QB02/LV1B/053702625010_01_004/053702625010_01/053702625010_01_P013_MUL",
       "http://test-tdgplatform-com/data/QB02/LV1B/053702625010_01_004/053702625010_01/053702625010_01_P013_MUL",
