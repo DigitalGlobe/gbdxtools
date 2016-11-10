@@ -297,6 +297,14 @@ class SimpleWorkflowTests(unittest.TestCase):
         aoptask = self.gbdx.Task("AOP_Strip_Processor", data=data, enable_acomp=True, enable_pansharpen=True)
         workflow = self.gbdx.Workflow([aoptask])
         workflow.savedata(aoptask.outputs.data, location='some_folder')
+
+        batch_workflow_json = workflow.generate_workflow_description()
+        aoptask_inputs_list = batch_workflow_json['tasks'][0]['inputs']
+        data_input_value = [aoptask_inputs_list[ind]['value'] for ind in range(len(aoptask_inputs_list))
+                            if aoptask_inputs_list[ind]['name'] == 'data'][0]
+
+        assert data_input_value == "{{batch_input_data}}"
+
         batch_workflow_id = workflow.execute()
 
         assert len(batch_workflow_id) > 0
