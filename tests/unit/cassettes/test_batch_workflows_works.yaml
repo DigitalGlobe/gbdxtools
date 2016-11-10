@@ -94,7 +94,7 @@ interactions:
     body: !!python/unicode '{"tasks": [{"containerDescriptors": [{"properties": {"domain":
       "raid"}}], "name": "AOP_Strip_Processor_8634d47c-2c59-46cf-a426-fec05ca90688",
       "inputs": [{"name": "enable_acomp", "value": "true"}, {"name": "enable_pansharpen",
-      "value": "true"}, {"name": "data", "value": "$batch_value:batch_input_data"}],
+      "value": "true"}, {"name": "data", "value": "{{batch_input_data}}"}],
       "outputs": [{"name": "data"}, {"name": "log"}], "timeout": 36000, "taskType":
       "AOP_Strip_Processor"}, {"containerDescriptors": [{"properties": {"domain":
       "default"}}], "name": "StageDataToS3_efdf6d5f-4295-4519-8891-9baea81228b2",
