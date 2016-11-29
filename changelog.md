@@ -3,7 +3,7 @@
 * Added get_tms_layers function to idaho module
 
 0.7.2
-_____
+-----
 * Fix a bug in batchworkflow expansion
 
 0.7.1
