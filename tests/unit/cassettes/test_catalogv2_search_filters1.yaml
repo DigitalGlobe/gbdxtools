@@ -1,0 +1,31 @@
+interactions:
+- request:
+    body: !!python/unicode '{"startDate": "2008-01-01T00:00:00.000Z", "filters": ["(sensorPlatformName
+      = ''WORLDVIEW01'' OR sensorPlatformName =''QUICKBIRD02'')", "cloudCover < 10",
+      "offNadirAngle < 26", "(offNadirAngle > 24 AND offNadirAngle < 26)"], "endDate":
+      "2012-01-03T00:00:00.000Z", "types": ["Acquisition"], "searchAreaWkt": "POLYGON((29.9
+      10.1, 30.1 10.1, 30.1 9.9, 29.9 9.9, 29.9 10.1))"}'
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      Content-Length: ['367']
+      Content-Type: [application/json]
+      User-Agent: [python-requests/2.9.1]
+    method: POST
+    uri: https://geobigdata.io/catalog/v1/search?includeRelationships=false
+  response:
+    body: {string: !!python/unicode '{"searchTag":null,"results":[{"identifier":"1020010003402B00","owner":"7b216bd9-6523-4ca9-aa3b-1d8a5994f054","type":"DigitalGlobeAcquisition","properties":{"sunElevation":"66.51424","targetAzimuth":"31.99842","sensorPlatformName":"WORLDVIEW01","browseURL":"https://browse.digitalglobe.com/imagefinder/showBrowseMetadata?catalogId=1020010003402B00","sunAzimuth":"54.32569","footprintWkt":"POLYGON
+        ((30.164328 10.007784, 30.164904 10.007784, 30.1662 8.97084, 29.980728 8.948952,
+        29.982744 9.98892, 30.164328 10.007784))","cloudCover":"4.0","multiResolution":"0.0","vendorName":"DigitalGlobe","offNadirAngle":"25.0","panResolution":"0.588240087","catalogID":"1020010003402B00","imageBands":"Pan","timestamp":"2008-06-02T00:00:00.000Z"}}],"stats":{"totalRecords":1,"recordsReturned":1,"typeCounts":{"DigitalGlobeAcquisition":1}}}'}
+    headers:
+      access-control-allow-origin: ['*']
+      connection: [keep-alive]
+      content-length: ['825']
+      content-type: [application/json]
+      date: ['Wed, 16 Nov 2016 23:30:30 GMT']
+      server: [Apache-Coyote/1.1]
+      vary: [Accept-Encoding]
+      via: [kong/0.5.2]
+    status: {code: 200, message: OK}
+version: 1
