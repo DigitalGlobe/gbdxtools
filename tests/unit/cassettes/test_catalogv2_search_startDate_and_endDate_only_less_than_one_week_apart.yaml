@@ -2838,7 +2838,7 @@ interactions:
         -115.322184 40.7898, -115.321608 40.799016, -115.321032 40.864824, -115.320456
         41.104728, -115.320312 41.242104))","cloudCover":"0.0","multiResolution":"2.656603575","vendorName":"DigitalGlobe","offNadirAngle":"17.0","panResolution":"0.664516985","catalogID":"1010010007887E00","imageBands":"Pan_MS1","timestamp":"2008-01-02T00:00:00.000Z"}},{"identifier":"1010010007884D00","owner":"7b216bd9-6523-4ca9-aa3b-1d8a5994f054","type":"DigitalGlobeAcquisition","properties":{"sunElevation":"56.11637","targetAzimuth":"11.429734","sensorPlatformName":"QUICKBIRD02","browseURL":"https://browse.digitalglobe.com/imagefinder/showBrowseMetadata?catalogId=1010010007884D00","sunAzimuth":"149.7036","footprintWkt":"POLYGON
         ((-7.547544 6.635448, -7.427736 6.635448, -7.397496 6.635448, -7.395192 5.788152,
-        -7.54956 5.785416, -7.54812 6.180264, -7.547544 6.635448))","cloudCover":"0.0","multiResolution":"2.460472107","vendorName":"DigitalGlobe","offNadirAngle":"13.0","panResolution":"0.61544764","catalogID":"1010010007884D00","imageBands":"Pan_MS1","timestamp":"2008-01-02T00:00:00.000Z"}},{"identifier":"1010010007882700","owner":"7b216bd9-6523-4ca9-aa3b-1d8a5994f054","type":"DigitalGlobeAcquisition","properties":{"sunElevation":"27.74937","targetAzimuth":"195.79193","sensorPlatformName":"QUICKBIRD02","browseURL":"https://browse.digitalglobe.com/imagefinder/showBrowseMetadata?catalogId=1010010007882700","sunAzimuth":"166.2529","footprintWkt":"POLYGON
+        -7.54956 5.785416, -7.54812 6.180264, -7.547544 6.635448))","cloudCover":"0.0","available":"true","multiResolution":"2.460472107","vendorName":"DigitalGlobe","offNadirAngle":"13.0","panResolution":"0.61544764","catalogID":"1010010007884D00","imageBands":"Pan_MS1","timestamp":"2008-01-02T00:00:00.000Z"}},{"identifier":"1010010007882700","owner":"7b216bd9-6523-4ca9-aa3b-1d8a5994f054","type":"DigitalGlobeAcquisition","properties":{"sunElevation":"27.74937","targetAzimuth":"195.79193","sensorPlatformName":"QUICKBIRD02","browseURL":"https://browse.digitalglobe.com/imagefinder/showBrowseMetadata?catalogId=1010010007882700","sunAzimuth":"166.2529","footprintWkt":"POLYGON
         ((46.235736 38.346552, 46.237176 38.346552, 46.237176 38.333448, 46.236168
         38.289816, 46.235304 38.16756, 46.19484 38.1654, 46.036296 38.15748, 46.025928
         38.157192, 46.025064 38.256696, 46.025352 38.286216, 46.025208 38.334744,
@@ -8167,9 +8167,9 @@ interactions:
     headers:
       access-control-allow-origin: ['*']
       connection: [keep-alive]
-      content-length: ['1198080']
+      content-length: ['1198099']
       content-type: [application/json]
-      date: ['Wed, 16 Nov 2016 23:31:25 GMT']
+      date: ['Fri, 09 Dec 2016 23:44:56 GMT']
       server: [Apache-Coyote/1.1]
       transfer-encoding: [chunked]
       vary: [Accept-Encoding]

@@ -49,22 +49,29 @@ class TestCatalogv2(unittest.TestCase):
         record = c.get(catid)
 
         self.assertEqual(record['identifier'], '1040010019B4A600')
-        self.assertTrue(isinstance(record['type'], list))
-        self.assertEqual(record['type'][0], 'DigitalGlobeAcquisition')
+        # self.assertTrue(isinstance(record['type'], list))   # catalog v2
+        # self.assertEqual(record['type'][0], 'DigitalGlobeAcquisition') # catalog v2
 
-        self.assertTrue('inEdges' not in record)
-        self.assertTrue('owner' not in record)
+        self.assertTrue('inEdges' not in list(record.keys()))
+        # self.assertTrue('owner' not in list(record.keys())) # catalog v2
 
     @vcr.use_cassette(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'cassettes', 'test_catalogv2_get_record_with_relationships.yaml'), filter_headers=['authorization'], decode_compressed_response=True)
     def test_catalogv2_get_record_with_relationships(self):
         c = Catalog(self.gbdx)
         catid = '1040010019B4A600'
-        try:
-            record = c.get(catid, includeRelationships=True)
-        except Exception:
-            assert True
-        else:
-            raise Exception('failed test')
+        record = c.get(catid, includeRelationships=True)
+
+        self.assertEqual(record['identifier'], '1040010019B4A600')
+        self.assertEqual(record['type'], 'DigitalGlobeAcquisition')
+
+        self.assertTrue('inEdges' in list(record.keys()))
+
+        # try: # catalog v2
+        #   record = c.get(catid, includeRelationships=True)
+        # except Exception:
+        #   assert True
+        # else:
+        #   raise Exception('failed test')
 
 
     @vcr.use_cassette(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'cassettes', 'test_catalogv2_search_point.yaml'), filter_headers=['authorization'], decode_compressed_response=True)
@@ -74,14 +81,14 @@ class TestCatalogv2(unittest.TestCase):
         lng = -105.2705456
         results = c.search_point(lat, lng)
 
-        self.assertEqual(len(results), 408)
+        self.assertEqual(len(results), 411)
 
     @vcr.use_cassette(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'cassettes', 'test_catalogv2_search_address.yaml'), filter_headers=['authorization'], decode_compressed_response=True)
     def test_catalogv2_search_address(self):
         c = Catalog(self.gbdx)
         results = c.search_address('Boulder, CO')
 
-        self.assertEqual(len(results), 408)
+        self.assertEqual(len(results), 411)
 
 
 
@@ -89,14 +96,14 @@ class TestCatalogv2(unittest.TestCase):
     def test_catalogv2_wkt_only(self):
         c = Catalog(self.gbdx)
         results = c.search(searchAreaWkt="POLYGON ((30.1 9.9, 30.1 10.1, 29.9 10.1, 29.9 9.9, 30.1 9.9))")
-        assert len(results) == 434
+        assert len(results) == 444
 
     @vcr.use_cassette(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'cassettes', 'test_catalogv2_search_wkt_and_startDate.yaml'), filter_headers=['authorization'], decode_compressed_response=True)
     def test_catalogv2_search_wkt_and_startDate(self):
         c = Catalog(self.gbdx)
         results = c.search(searchAreaWkt="POLYGON ((30.1 9.9, 30.1 10.1, 29.9 10.1, 29.9 9.9, 30.1 9.9))",
                            startDate='2012-01-01T00:00:00.000Z')
-        assert len(results) == 343
+        assert len(results) == 353
 
     @vcr.use_cassette(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'cassettes', 'test_catalogv2_search_wkt_and_endDate.yaml'), filter_headers=['authorization'], decode_compressed_response=True)
     def test_catalogv2_search_wkt_and_endDate(self):
@@ -184,7 +191,7 @@ class TestCatalogv2(unittest.TestCase):
 
         results = c.search(searchAreaWkt = "POLYGON((-113.88427734375 40.36642741921034,-110.28076171875 40.36642741921034,-110.28076171875 37.565262680889965,-113.88427734375 37.565262680889965,-113.88427734375 40.36642741921034))")
         
-        assert len(results) == 3694
+        assert len(results) == 3750
 
     @vcr.use_cassette(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'cassettes', 'test_catalogv2_get_data_location_DG.yaml'), filter_headers=['authorization'], decode_compressed_response=True)
     def test_catalogv2_get_data_location_DG(self):
@@ -209,3 +216,58 @@ class TestCatalogv2(unittest.TestCase):
         c = Catalog(self.gbdx)
         s3path = c.get_data_location(catalog_id='1010010011AD6E00')
         assert s3path == None
+
+    @vcr.use_cassette(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'cassettes', 'test_catalogv2_search_endDate_before_startDate.yaml'), filter_headers=['authorization'], decode_compressed_response=True)
+    def test_catalogv2_search_endDate_before_startDate(self):
+        c = Catalog(self.gbdx)
+
+        try:
+            results = c.search(startDate='2012-01-03T00:00:00.000Z', 
+                               endDate='2012-01-01T00:00:00.000Z')
+        except Exception as e:
+            pass
+        else:
+            raise Exception('failed test')
+
+    @vcr.use_cassette(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'cassettes', 'test_catalogv2_search_most_recent_image.yaml'), filter_headers=['authorization'], decode_compressed_response=True)
+    def test_catalogv2_search_most_recent_image(self):
+        c = Catalog(self.gbdx)
+
+        types = ['DigitalGlobeAcquisition']
+        sensors = ['WORLDVIEW02']
+
+        results = c.search(startDate='2012-01-01T00:00:00.000Z', 
+                           endDate='2012-03-01T00:00:00.000Z',
+                           searchAreaWkt="POLYGON ((30.1 9.9, 30.1 10.1, 29.9 10.1, 29.9 9.9, 30.1 9.9))")
+
+        recents = c.get_most_recent_images(results, types=types, sensors=sensors, N=1)
+
+        assert len(recents) == 1
+
+    @vcr.use_cassette(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'cassettes', 'test_catalogv2_get_strip_invalid.yaml'), filter_headers=['authorization'], decode_compressed_response=True)
+    def test_catalogv2_get_strip_invalid(self):
+        c = Catalog(self.gbdx)
+
+        try:
+            strip = c.get_strip_footprint_wkt("nonexistent_asdfasdfasdfdfasffds")
+        except Exception as e:
+            pass
+        else:
+            raise Exception('failed test')
+
+    @vcr.use_cassette(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'cassettes', 'test_catalogv2_get_strip_metadata.yaml'), filter_headers=['authorization'], decode_compressed_response=True)
+    def test_catalogv2_get_strip_metadata(self):
+        c = Catalog(self.gbdx)
+        properties = c.get_strip_metadata(catID='1010010011AD6E00')
+        assert properties['sensorPlatformName'] is not None
+
+    @vcr.use_cassette(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'cassettes', 'test_catalogv2_get_strip_metadata_invalid.yaml'), filter_headers=['authorization'], decode_compressed_response=True)
+    def test_catalogv2_get_strip_metadata_invalid(self):
+        c = Catalog(self.gbdx)
+
+        try:
+            properties = c.get_strip_metadata("nonexistent_asdfasdfasdfdfasffds")
+        except Exception as e:
+            pass
+        else:
+            raise Exception('failed test')

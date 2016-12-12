@@ -75,9 +75,8 @@ interactions:
       connection: [keep-alive]
       content-length: ['16014']
       content-type: [application/json]
-      date: ['Wed, 16 Nov 2016 23:30:22 GMT']
+      date: ['Fri, 09 Dec 2016 23:44:25 GMT']
       server: [Apache-Coyote/1.1]
-      transfer-encoding: [chunked]
       vary: [Accept-Encoding]
       via: [kong/0.5.2]
     status: {code: 200, message: OK}

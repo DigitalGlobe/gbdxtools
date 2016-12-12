@@ -1543,36 +1543,11 @@ interactions:
         ((29.24732 9.05108, 29.24732 11.16566, 31.35499 11.16566, 31.35499 9.05108,
         29.24732 9.05108))","cloudCover":"0.0","multiResolution":"30.0","row":"53","timestamp":"2014-12-14T00:00:00.000Z","timestampWkt":"2014-12-14T08:17:10.000Z"}},{"identifier":"LC81740532015079LGN00","owner":null,"type":"LandsatAcquisition","properties":{"path":"174","panResolution":"15.0","browseURL":"https://s3-us-west-2.amazonaws.com/landsat-pds/L8/174/053/LC81740532015079LGN00/LC81740532015079LGN00_thumb_large.jpg","epsgCode":"4326","footprintWkt":"POLYGON
         ((29.23087 9.05362, 29.23087 11.16546, 31.33861 11.16546, 31.33861 9.05362,
-        29.23087 9.05362))","cloudCover":"2.05","multiResolution":"30.0","row":"53","timestamp":"2015-03-20T00:00:00.000Z","timestampWkt":"2015-03-20T08:16:38.000Z"}},{"identifier":"103001005FC5B400","owner":"7b216bd9-6523-4ca9-aa3b-1d8a5994f054","type":"DigitalGlobeAcquisition","properties":{"ordered":"false","sunElevation":"62.77408","targetAzimuth":"184.50124","sensorPlatformName":"WORLDVIEW02","browseURL":"https://browse.digitalglobe.com/imagefinder/showBrowseMetadata?catalogId=103001005FC5B400","sunAzimuth":"142.0142","footprintWkt":"POLYGON
-        ((30.00496716 10.13444745, 30.17662956 10.13953712, 30.17675031 10.08338404,
-        30.17685628 10.02698018, 30.17697219 9.975449419, 30.00456591 9.970635231,
-        30.0046851 10.02198885, 30.00483595 10.07833964, 30.00496716 10.13444745))","available":"false","cloudCover":"2.0","multiResolution":"2.3241923","vendorName":"DigitalGlobe","timestampWkt":"2016-10-23T00:00:00.000Z","offNadirAngle":"28.0","panResolution":"0.57873285","catalogID":"103001005FC5B400","scanDirection":"Forward","imageBands":"Pan_MS1_MS2","timestamp":"2016-10-23T00:00:00.000Z"}},{"identifier":"1040010023218200","owner":"7b216bd9-6523-4ca9-aa3b-1d8a5994f054","type":"DigitalGlobeAcquisition","properties":{"ordered":"false","sunElevation":"65.44835","targetAzimuth":"274.1281","sensorPlatformName":"WORLDVIEW03","browseURL":"https://browse.digitalglobe.com/imagefinder/showBrowseMetadata?catalogId=1040010023218200","sunAzimuth":"142.6237","footprintWkt":"POLYGON
-        ((29.79312286 10.0226923, 29.93112539 10.02171506, 29.93106656 9.99188353,
-        29.93101565 9.962057199, 29.93097214 9.93224576, 29.93091548 9.902461045,
-        29.9308415 9.872666039, 29.93076883 9.842880853, 29.9306989 9.813115537, 29.93063545
-        9.783357128, 29.93057609 9.753614571, 29.93050449 9.723887977, 29.93043891
-        9.694169683, 29.93037872 9.664458465, 29.93030328 9.634763047, 29.93025165
-        9.605073243, 29.93018835 9.575400068, 29.9301314 9.545730015, 29.93005503
-        9.516065651, 29.92997626 9.486417406, 29.92990985 9.456776875, 29.92986028
-        9.427150504, 29.92980592 9.397543504, 29.9297426 9.367949109, 29.9296723 9.33835755,
-        29.92961386 9.308766074, 29.92956106 9.279188806, 29.92950589 9.249630858,
-        29.92944481 9.220087783, 29.9293844 9.190550319, 29.92932604 9.161012253,
-        29.92927536 9.131484901, 29.9292284 9.101973046, 29.92917143 9.072481016,
-        29.9291162 9.042996753, 29.92906513 9.013516697, 29.92903233 8.989428307,
-        29.79513137 8.990780016, 29.79507171 9.014727168, 29.79501629 9.04419995,
-        29.79495693 9.073677714, 29.79490112 9.103162352, 29.7948361 9.13266687, 29.79477739
-        9.162186538, 29.79472015 9.191717711, 29.79466915 9.221248242, 29.79462009
-        9.250784239, 29.79456771 9.280334417, 29.79451181 9.309903634, 29.79445177
-        9.339488718, 29.79439176 9.369074574, 29.79434074 9.398661781, 29.79428261
-        9.428261067, 29.79422586 9.45787938, 29.79416882 9.487513582, 29.79412588
-        9.517155186, 29.79408488 9.546812767, 29.79400614 9.576477239, 29.79397178
-        9.606142262, 29.79392104 9.635824304, 29.79386687 9.665513599, 29.7937957
-        9.695218455, 29.79374067 9.724930123, 29.79369369 9.75464975, 29.79363877
-        9.784385064, 29.7935784 9.814136977, 29.79351895 9.843895702, 29.79346536
-        9.873674473, 29.79341441 9.90346351, 29.79334338 9.933241068, 29.79326279
-        9.963046421, 29.79318897 9.99286675, 29.79312286 10.0226923))","available":"false","cloudCover":"11.0","multiResolution":"1.3586761","vendorName":"DigitalGlobe","timestampWkt":"2016-10-19T00:00:00.000Z","offNadirAngle":"19.0","panResolution":"0.33964288","catalogID":"1040010023218200","scanDirection":"Forward","imageBands":"Pan_MS1_MS2","timestamp":"2016-10-19T00:00:00.000Z"}},{"identifier":"LC81740532016290LGN00","owner":"7b216bd9-6523-4ca9-aa3b-1d8a5994f054","type":"LandsatAcquisition","properties":{"path":"174","panResolution":"15.0","browseURL":"https://s3-us-west-2.amazonaws.com/landsat-pds/L8/174/053/LC81740532016290LGN00/LC81740532016290LGN00_thumb_large.jpg","epsgCode":"4326","footprintWkt":"POLYGON
-        ((29.23087 9.05091, 29.23087 11.16546, 31.33862 11.16546, 31.33862 9.05091,
-        29.23087 9.05091))","cloudCover":"24.33","multiResolution":"30.0","row":"53","timestamp":"2016-10-16T00:00:00.000Z","timestampWkt":"2016-10-16T08:17:24.000Z"}},{"identifier":"2014012708403330000011627865","owner":null,"type":"IKONOSAcquisition","properties":{"targetAzimuth":"203.92651","sunElevation":"53.277763","components":"1","sensorPlatformName":"IKONOS","sunAzimuth":"141.04706","footprintWkt":"POLYGON
+        29.23087 9.05362))","cloudCover":"2.05","multiResolution":"30.0","row":"53","timestamp":"2015-03-20T00:00:00.000Z","timestampWkt":"2015-03-20T08:16:38.000Z"}},{"identifier":"10200100559A7C00","owner":"7b216bd9-6523-4ca9-aa3b-1d8a5994f054","type":"DigitalGlobeAcquisition","properties":{"ordered":"false","sunElevation":"52.3184","targetAzimuth":"288.18387","sensorPlatformName":"WORLDVIEW01","browseURL":"https://browse.digitalglobe.com/imagefinder/showBrowseMetadata?catalogId=10200100559A7C00","sunAzimuth":"222.6934","footprintWkt":"POLYGON
+        ((30.07042732 9.831703308, 29.87816231 9.839527051, 29.87806944 9.88949401,
+        29.87792283 9.93961938, 29.87772108 9.989862341, 29.87759092 10.01826424,
+        30.07073171 10.00587875, 30.07068264 9.978201878, 30.07059558 9.92924578,
+        30.07051423 9.880399122, 30.07042732 9.831703308))","available":"false","cloudCover":"17.0","multiResolution":"0.0","vendorName":"DigitalGlobe","timestampWkt":"2016-11-12T00:00:00.000Z","offNadirAngle":"23.0","panResolution":"0.5763787","catalogID":"10200100559A7C00","scanDirection":"Reverse","imageBands":"Pan","timestamp":"2016-11-12T00:00:00.000Z"}},{"identifier":"2014012708403330000011627865","owner":null,"type":"IKONOSAcquisition","properties":{"targetAzimuth":"203.92651","sunElevation":"53.277763","components":"1","sensorPlatformName":"IKONOS","sunAzimuth":"141.04706","footprintWkt":"POLYGON
         ((29.94300034589714 10.511871110948213, 29.985295162052843 10.520130845679281,
         30.03010152842436 10.529190978146325, 30.030142425408137 10.435414298406833,
         30.030123168956298 10.34172522113496, 30.030055247797502 10.248145134196182,
@@ -1584,7 +1559,16 @@ interactions:
         29.94300034589714 10.511871110948213))","cloudCover":"2.0","multiResolution":"4.8482236","filePrefix":"po_1582349","vendorName":"DigitalGlobe","timestampWkt":"2014-01-27T08:40:33.300Z","bucket":"s3://ikonos-product/po_1582349","offNadirAngle":"33.11105205122779","panResolution":"1.2120559","catalogID":"2014012708403330000011627865","zone":"35N","imageBands":"Pan_MS1","timestamp":"2014-01-27T00:00:00.000Z"}},{"identifier":"1030010061AE0C00","owner":"7b216bd9-6523-4ca9-aa3b-1d8a5994f054","type":"DigitalGlobeAcquisition","properties":{"ordered":"false","sunElevation":"61.44509","targetAzimuth":"168.15242","sensorPlatformName":"WORLDVIEW02","browseURL":"https://browse.digitalglobe.com/imagefinder/showBrowseMetadata?catalogId=1030010061AE0C00","sunAzimuth":"147.3128","footprintWkt":"POLYGON
         ((29.88849224 9.971952279, 30.06093787 9.959667656, 30.06109751 9.903957716,
         30.06122971 9.847993107, 30.06135799 9.796640286, 29.8880464 9.80959559, 29.88819119
-        9.860724918, 29.88836002 9.916450695, 29.88849224 9.971952279))","available":"false","cloudCover":"0.0","multiResolution":"2.320778","vendorName":"DigitalGlobe","timestampWkt":"2016-10-31T00:00:00.000Z","offNadirAngle":"28.0","panResolution":"0.57792985","catalogID":"1030010061AE0C00","scanDirection":"Forward","imageBands":"Pan_MS1_MS2","timestamp":"2016-10-31T00:00:00.000Z"}},{"identifier":"1020010058705400","owner":"7b216bd9-6523-4ca9-aa3b-1d8a5994f054","type":"DigitalGlobeAcquisition","properties":{"ordered":"false","sunElevation":"51.799","targetAzimuth":"52.103703","sensorPlatformName":"WORLDVIEW01","browseURL":"https://browse.digitalglobe.com/imagefinder/showBrowseMetadata?catalogId=1020010058705400","sunAzimuth":"228.2389","footprintWkt":"POLYGON
+        9.860724918, 29.88836002 9.916450695, 29.88849224 9.971952279))","available":"false","cloudCover":"0.0","multiResolution":"2.320778","vendorName":"DigitalGlobe","timestampWkt":"2016-10-31T00:00:00.000Z","offNadirAngle":"28.0","panResolution":"0.57792985","catalogID":"1030010061AE0C00","scanDirection":"Forward","imageBands":"Pan_MS1_MS2","timestamp":"2016-10-31T00:00:00.000Z"}},{"identifier":"1040010025CA8900","owner":"7b216bd9-6523-4ca9-aa3b-1d8a5994f054","type":"DigitalGlobeAcquisition","properties":{"ordered":"false","sunElevation":"55.70901","targetAzimuth":"304.393","sensorPlatformName":"WORLDVIEW03","browseURL":"https://browse.digitalglobe.com/imagefinder/showBrowseMetadata?catalogId=1040010025CA8900","sunAzimuth":"153.5261","footprintWkt":"POLYGON
+        ((29.90387128 9.975168201, 30.04894339 9.959999948, 30.04893839 9.927931037,
+        30.04890347 9.895862796, 30.04879363 9.863832175, 30.04871694 9.831813545,
+        30.04871448 9.830243535, 29.90421173 9.845333655, 29.90420802 9.846755435,
+        29.90416338 9.878818347, 29.90411624 9.910916378, 29.90400172 9.943047133,
+        29.90387128 9.975168201))","available":"false","cloudCover":"0.0","multiResolution":"1.4618082","vendorName":"DigitalGlobe","timestampWkt":"2016-11-25T00:00:00.000Z","offNadirAngle":"24.0","panResolution":"0.3655029","catalogID":"1040010025CA8900","scanDirection":"Forward","imageBands":"Pan_MS1_MS2","timestamp":"2016-11-25T00:00:00.000Z"}},{"identifier":"104001002597ED00","owner":"7b216bd9-6523-4ca9-aa3b-1d8a5994f054","type":"DigitalGlobeAcquisition","properties":{"ordered":"false","sunElevation":"55.6386","targetAzimuth":"313.62277","sensorPlatformName":"WORLDVIEW03","browseURL":"https://browse.digitalglobe.com/imagefinder/showBrowseMetadata?catalogId=104001002597ED00","sunAzimuth":"153.4111","footprintWkt":"POLYGON
+        ((29.91937642 9.824474775, 29.77106817 9.844727288, 29.77090791 9.87880457,
+        29.77065853 9.913099838, 29.7704359 9.947587904, 29.7702883 9.98229353, 29.77028208
+        9.983808948, 29.92034532 9.960359868, 29.92033441 9.959091242, 29.92002055
+        9.925136296, 29.91980605 9.8913809, 29.91962307 9.857825736, 29.91937642 9.824474775))","available":"false","cloudCover":"0.0","multiResolution":"1.5352051","vendorName":"DigitalGlobe","timestampWkt":"2016-11-25T00:00:00.000Z","offNadirAngle":"28.0","panResolution":"0.38422966","catalogID":"104001002597ED00","scanDirection":"Reverse","imageBands":"Pan_MS1_MS2","timestamp":"2016-11-25T00:00:00.000Z"}},{"identifier":"1020010058705400","owner":"7b216bd9-6523-4ca9-aa3b-1d8a5994f054","type":"DigitalGlobeAcquisition","properties":{"ordered":"false","sunElevation":"51.799","targetAzimuth":"52.103703","sensorPlatformName":"WORLDVIEW01","browseURL":"https://browse.digitalglobe.com/imagefinder/showBrowseMetadata?catalogId=1020010058705400","sunAzimuth":"228.2389","footprintWkt":"POLYGON
         ((29.8502247 11.00952966, 30.01568082 11.01330536, 30.01552842 10.96677898,
         30.0155055 10.9204222, 30.01545105 10.87408271, 30.01554517 10.82798097, 30.01546875
         10.78178344, 30.0152611 10.73551212, 30.01518447 10.6894117, 30.01528705 10.64350256,
@@ -1614,11 +1598,34 @@ interactions:
         29.84384504 10.5262805, 29.84403588 10.58144131, 29.84422694 10.6363073, 29.8444145
         10.69093236, 29.84459967 10.74517002, 29.84477896 10.79922297, 29.84495289
         10.8529395, 29.84513269 10.90643478, 29.84533185 10.95964114, 29.84552422
-        11.01259409))","available":"false","cloudCover":"0.0","multiResolution":"0.0","vendorName":"DigitalGlobe","timestampWkt":"2016-11-03T00:00:00.000Z","offNadirAngle":"27.0","panResolution":"0.5856125","catalogID":"102001005AD1E500","scanDirection":"Forward","imageBands":"Pan","timestamp":"2016-11-03T00:00:00.000Z"}},{"identifier":"10200100559A7C00","owner":"7b216bd9-6523-4ca9-aa3b-1d8a5994f054","type":"DigitalGlobeAcquisition","properties":{"ordered":"false","sunElevation":"52.3184","targetAzimuth":"288.18387","sensorPlatformName":"WORLDVIEW01","browseURL":"https://browse.digitalglobe.com/imagefinder/showBrowseMetadata?catalogId=10200100559A7C00","sunAzimuth":"222.6934","footprintWkt":"POLYGON
-        ((30.07042732 9.831703308, 29.87816231 9.839527051, 29.87806944 9.88949401,
-        29.87792283 9.93961938, 29.87772108 9.989862341, 29.87759092 10.01826424,
-        30.07073171 10.00587875, 30.07068264 9.978201878, 30.07059558 9.92924578,
-        30.07051423 9.880399122, 30.07042732 9.831703308))","available":"false","cloudCover":"17.0","multiResolution":"0.0","vendorName":"DigitalGlobe","timestampWkt":"2016-11-12T00:00:00.000Z","offNadirAngle":"23.0","panResolution":"0.5763787","catalogID":"10200100559A7C00","scanDirection":"Reverse","imageBands":"Pan","timestamp":"2016-11-12T00:00:00.000Z"}},{"identifier":"LC81740532015223LGN00","owner":"7b216bd9-6523-4ca9-aa3b-1d8a5994f054","type":"LandsatAcquisition","properties":{"path":"174","panResolution":"15.0","browseURL":"https://s3-us-west-2.amazonaws.com/landsat-pds/L8/174/053/LC81740532015223LGN00/LC81740532015223LGN00_thumb_large.jpg","epsgCode":"4326","footprintWkt":"POLYGON
+        11.01259409))","available":"false","cloudCover":"0.0","multiResolution":"0.0","vendorName":"DigitalGlobe","timestampWkt":"2016-11-03T00:00:00.000Z","offNadirAngle":"27.0","panResolution":"0.5856125","catalogID":"102001005AD1E500","scanDirection":"Forward","imageBands":"Pan","timestamp":"2016-11-03T00:00:00.000Z"}},{"identifier":"104001002510BE00","owner":"7b216bd9-6523-4ca9-aa3b-1d8a5994f054","type":"DigitalGlobeAcquisition","properties":{"ordered":"false","sunElevation":"55.54839","targetAzimuth":"280.3244","sensorPlatformName":"WORLDVIEW03","browseURL":"https://browse.digitalglobe.com/imagefinder/showBrowseMetadata?catalogId=104001002510BE00","sunAzimuth":"153.6933","footprintWkt":"POLYGON
+        ((30.01730501 10.13830757, 30.16092466 10.13403147, 30.16081081 10.1035499,
+        30.16069273 10.0730734, 30.16062373 10.04263257, 30.16059817 10.02363716,
+        30.0174531 10.02805169, 30.01739246 10.04689073, 30.01734382 10.0773352, 30.01732185
+        10.10781932, 30.01730501 10.13830757))","available":"false","cloudCover":"0.0","multiResolution":"1.4153074","vendorName":"DigitalGlobe","timestampWkt":"2016-11-25T00:00:00.000Z","offNadirAngle":"22.0","panResolution":"0.35381383","catalogID":"104001002510BE00","scanDirection":"Forward","imageBands":"Pan_MS1_MS2","timestamp":"2016-11-25T00:00:00.000Z"}},{"identifier":"2014020208572940000011604326","owner":null,"type":"IKONOSAcquisition","properties":{"targetAzimuth":"283.95248","sunElevation":"56.97275","components":"1","sensorPlatformName":"IKONOS","sunAzimuth":"144.48265","footprintWkt":"POLYGON
+        ((29.97277019810591 10.546377844540107, 30.03457943311383 10.53911243507543,
+        30.100198738604874 10.531577123472172, 30.100309792400836 10.446187565676782,
+        30.100529808761447 10.36060364784621, 30.10067450248396 10.274888335309926,
+        30.100981141894884 10.188981188280515, 30.10119461816003 10.102949828767564,
+        30.10144156851727 10.016773302449053, 30.034753071974972 10.024651458881253,
+        29.97218466387494 10.032182060249832, 29.90697592375694 10.04017876341856,
+        29.907281322670705 10.126172278660464, 29.907721567634326 10.211998141521383,
+        29.90812638631906 10.29768889884493, 29.908483683747615 10.383241608028216,
+        29.908840056843527 10.468647456324323, 29.909122405178326 10.553906394758869,
+        29.97277019810591 10.546377844540107))","cloudCover":"0.0","multiResolution":"4.512414","filePrefix":"po_1582264","vendorName":"DigitalGlobe","timestampWkt":"2014-02-02T08:57:29.400Z","bucket":"s3://ikonos-product/po_1582264","offNadirAngle":"39.633120938076374","panResolution":"1.1281035","catalogID":"2014020208572940000011604326","zone":"36N","imageBands":"Pan_MS1","timestamp":"2014-02-02T00:00:00.000Z"}},{"identifier":"103001006079B300","owner":"7b216bd9-6523-4ca9-aa3b-1d8a5994f054","type":"DigitalGlobeAcquisition","properties":{"ordered":"false","sunElevation":"53.58645","targetAzimuth":"284.3353","sensorPlatformName":"WORLDVIEW02","browseURL":"https://browse.digitalglobe.com/imagefinder/showBrowseMetadata?catalogId=103001006079B300","sunAzimuth":"150.6975","footprintWkt":"POLYGON
+        ((30.01616781 10.13229186, 30.16598611 10.13210196, 30.1659647 10.09029591,
+        30.16594491 10.04848741, 30.16591507 10.00982207, 30.01621326 10.00997657,
+        30.01620613 10.04863883, 30.01618872 10.09046613, 30.01616781 10.13229186))","available":"false","cloudCover":"0.0","multiResolution":"1.856382","vendorName":"DigitalGlobe","timestampWkt":"2016-11-30T00:00:00.000Z","offNadirAngle":"3.0","panResolution":"0.46297926","catalogID":"103001006079B300","scanDirection":"Forward","imageBands":"Pan_MS1_MS2","timestamp":"2016-11-30T00:00:00.000Z"}},{"identifier":"10300100623FDB00","owner":"7b216bd9-6523-4ca9-aa3b-1d8a5994f054","type":"DigitalGlobeAcquisition","properties":{"ordered":"false","sunElevation":"53.3824","targetAzimuth":"223.48274","sensorPlatformName":"WORLDVIEW02","browseURL":"https://browse.digitalglobe.com/imagefinder/showBrowseMetadata?catalogId=10300100623FDB00","sunAzimuth":"150.7143","footprintWkt":"POLYGON
+        ((29.99656193 10.51168198, 30.14783327 10.51289698, 30.14778311 10.47073544,
+        30.14776463 10.42854927, 30.14776697 10.38634615, 30.1477471 10.34414886,
+        30.1477272 10.30193348, 30.14772199 10.2597101, 30.14772157 10.21746934, 30.14771658
+        10.17521998, 30.14771114 10.13297287, 30.14769816 10.09069045, 30.14769694
+        10.04839274, 30.14768443 10.00608717, 30.14768555 9.989942889, 29.9966628
+        9.988608142, 29.99665568 10.00470895, 29.99664981 10.04702244, 29.99663932
+        10.08933616, 29.99663415 10.1316292, 29.99663676 10.17390207, 29.9966289 10.2161696,
+        29.99658703 10.25840317, 29.99655874 10.30062924, 29.99657696 10.34287641,
+        29.99656069 10.38507769, 29.99653235 10.42729442, 29.99652602 10.46949571,
+        29.99656193 10.51168198))","available":"false","cloudCover":"0.0","multiResolution":"1.8753103","vendorName":"DigitalGlobe","timestampWkt":"2016-11-30T00:00:00.000Z","offNadirAngle":"7.0","panResolution":"0.46758854","catalogID":"10300100623FDB00","scanDirection":"Forward","imageBands":"Pan_MS1_MS2","timestamp":"2016-11-30T00:00:00.000Z"}},{"identifier":"LC81740532015223LGN00","owner":"7b216bd9-6523-4ca9-aa3b-1d8a5994f054","type":"LandsatAcquisition","properties":{"path":"174","panResolution":"15.0","browseURL":"https://s3-us-west-2.amazonaws.com/landsat-pds/L8/174/053/LC81740532015223LGN00/LC81740532015223LGN00_thumb_large.jpg","epsgCode":"4326","footprintWkt":"POLYGON
         ((29.25006 9.05111, 29.25006 11.1657, 31.35772 11.1657, 31.35772 9.05111,
         29.25006 9.05111))","cloudCover":"4.93","multiResolution":"30.0","row":"53","timestamp":"2015-08-11T00:00:00.000Z","timestampWkt":"2015-08-11T08:16:45.000Z"}},{"identifier":"LC81740532015239LGN00","owner":"7b216bd9-6523-4ca9-aa3b-1d8a5994f054","type":"LandsatAcquisition","properties":{"path":"174","panResolution":"15.0","browseURL":"https://s3-us-west-2.amazonaws.com/landsat-pds/L8/174/053/LC81740532015239LGN00/LC81740532015239LGN00_thumb_large.jpg","epsgCode":"4326","footprintWkt":"POLYGON
         ((29.24457 9.05105, 29.24457 11.16563, 31.35226 11.16563, 31.35226 9.05105,
@@ -1634,29 +1641,68 @@ interactions:
         ((29.23361 9.05094, 29.23361 11.16549, 31.34135 11.16549, 31.34135 9.05094,
         29.23361 9.05094))","cloudCover":"0.05","multiResolution":"30.0","row":"53","timestamp":"2015-05-23T00:00:00.000Z","timestampWkt":"2015-05-23T08:16:08.000Z"}},{"identifier":"LC81740532015159LGN00","owner":null,"type":"LandsatAcquisition","properties":{"path":"174","panResolution":"15.0","browseURL":"https://s3-us-west-2.amazonaws.com/landsat-pds/L8/174/053/LC81740532015159LGN00/LC81740532015159LGN00_thumb_large.jpg","epsgCode":"4326","footprintWkt":"POLYGON
         ((29.23087 9.05091, 29.23087 11.16546, 31.34135 11.16546, 31.34135 9.05091,
-        29.23087 9.05091))","cloudCover":"2.26","multiResolution":"30.0","row":"53","timestamp":"2015-06-08T00:00:00.000Z","timestampWkt":"2015-06-08T08:16:17.000Z"}},{"identifier":"LC81740532015127LGN00","owner":null,"type":"LandsatAcquisition","properties":{"path":"174","panResolution":"15.0","browseURL":"https://s3-us-west-2.amazonaws.com/landsat-pds/L8/174/053/LC81740532015127LGN00/LC81740532015127LGN00_thumb_large.jpg","epsgCode":"4326","footprintWkt":"POLYGON
+        29.23087 9.05091))","cloudCover":"2.26","multiResolution":"30.0","row":"53","timestamp":"2015-06-08T00:00:00.000Z","timestampWkt":"2015-06-08T08:16:17.000Z"}},{"identifier":"LC81740532016322LGN00","owner":"7b216bd9-6523-4ca9-aa3b-1d8a5994f054","type":"LandsatAcquisition","properties":{"path":"174","panResolution":"15.0","browseURL":"https://s3-us-west-2.amazonaws.com/landsat-pds/L8/174/053/LC81740532016322LGN00/LC81740532016322LGN00_thumb_large.jpg","epsgCode":"4326","footprintWkt":"POLYGON
+        ((29.23087 9.05091, 29.23087 11.16546, 31.33862 11.16546, 31.33862 9.05091,
+        29.23087 9.05091))","cloudCover":"0.04","multiResolution":"30.0","row":"53","timestamp":"2016-11-17T00:00:00.000Z","timestampWkt":"2016-11-17T08:17:25.000Z"}},{"identifier":"LC81740532016306LGN00","owner":"7b216bd9-6523-4ca9-aa3b-1d8a5994f054","type":"LandsatAcquisition","properties":{"path":"174","panResolution":"15.0","browseURL":"https://s3-us-west-2.amazonaws.com/landsat-pds/L8/174/053/LC81740532016306LGN00/LC81740532016306LGN00_thumb_large.jpg","epsgCode":"4326","footprintWkt":"POLYGON
+        ((29.22812 9.05088, 29.22812 11.16542, 31.33862 11.16542, 31.33862 9.05088,
+        29.22812 9.05088))","cloudCover":"0.0","multiResolution":"30.0","row":"53","timestamp":"2016-11-01T00:00:00.000Z","timestampWkt":"2016-11-01T08:17:25.000Z"}},{"identifier":"LC81740532016338LGN00","owner":"7b216bd9-6523-4ca9-aa3b-1d8a5994f054","type":"LandsatAcquisition","properties":{"path":"174","panResolution":"15.0","browseURL":"https://s3-us-west-2.amazonaws.com/landsat-pds/L8/174/053/LC81740532016338LGN00/LC81740532016338LGN00_thumb_large.jpg","epsgCode":"4326","footprintWkt":"POLYGON
+        ((29.22812 9.05088, 29.22812 11.16542, 31.33589 11.16542, 31.33589 9.05088,
+        29.22812 9.05088))","cloudCover":"0.01","multiResolution":"30.0","row":"53","timestamp":"2016-12-03T00:00:00.000Z","timestampWkt":"2016-12-03T08:17:24.000Z"}},{"identifier":"LC81740532015127LGN00","owner":null,"type":"LandsatAcquisition","properties":{"path":"174","panResolution":"15.0","browseURL":"https://s3-us-west-2.amazonaws.com/landsat-pds/L8/174/053/LC81740532015127LGN00/LC81740532015127LGN00_thumb_large.jpg","epsgCode":"4326","footprintWkt":"POLYGON
         ((29.21442 9.05074, 29.21442 11.16525, 31.31952 11.16525, 31.31952 9.05074,
         29.21442 9.05074))","cloudCover":"0.26","multiResolution":"30.0","row":"53","timestamp":"2015-05-07T00:00:00.000Z","timestampWkt":"2015-05-07T08:16:11.000Z"}},{"identifier":"LC81740532015111LGN00","owner":null,"type":"LandsatAcquisition","properties":{"path":"174","panResolution":"15.0","browseURL":"https://s3-us-west-2.amazonaws.com/landsat-pds/L8/174/053/LC81740532015111LGN00/LC81740532015111LGN00_thumb_large.jpg","epsgCode":"4326","footprintWkt":"POLYGON
         ((29.19797 9.05328, 29.19797 11.16504, 31.30586 11.16504, 31.30586 9.05328,
-        29.19797 9.05328))","cloudCover":"1.18","multiResolution":"30.0","row":"53","timestamp":"2015-04-21T00:00:00.000Z","timestampWkt":"2015-04-21T08:16:26.000Z"}},{"identifier":"LC81740532016306LGN00","owner":"7b216bd9-6523-4ca9-aa3b-1d8a5994f054","type":"LandsatAcquisition","properties":{"path":"174","panResolution":"15.0","browseURL":"https://s3-us-west-2.amazonaws.com/landsat-pds/L8/174/053/LC81740532016306LGN00/LC81740532016306LGN00_thumb_large.jpg","epsgCode":"4326","footprintWkt":"POLYGON
-        ((29.22812 9.05088, 29.22812 11.16542, 31.33862 11.16542, 31.33862 9.05088,
-        29.22812 9.05088))","cloudCover":"0.0","multiResolution":"30.0","row":"53","timestamp":"2016-11-01T00:00:00.000Z","timestampWkt":"2016-11-01T08:17:25.000Z"}},{"identifier":"2014020208572940000011604326","owner":null,"type":"IKONOSAcquisition","properties":{"targetAzimuth":"283.95248","sunElevation":"56.97275","components":"1","sensorPlatformName":"IKONOS","sunAzimuth":"144.48265","footprintWkt":"POLYGON
-        ((29.97277019810591 10.546377844540107, 30.03457943311383 10.53911243507543,
-        30.100198738604874 10.531577123472172, 30.100309792400836 10.446187565676782,
-        30.100529808761447 10.36060364784621, 30.10067450248396 10.274888335309926,
-        30.100981141894884 10.188981188280515, 30.10119461816003 10.102949828767564,
-        30.10144156851727 10.016773302449053, 30.034753071974972 10.024651458881253,
-        29.97218466387494 10.032182060249832, 29.90697592375694 10.04017876341856,
-        29.907281322670705 10.126172278660464, 29.907721567634326 10.211998141521383,
-        29.90812638631906 10.29768889884493, 29.908483683747615 10.383241608028216,
-        29.908840056843527 10.468647456324323, 29.909122405178326 10.553906394758869,
-        29.97277019810591 10.546377844540107))","cloudCover":"0.0","multiResolution":"4.512414","filePrefix":"po_1582264","vendorName":"DigitalGlobe","timestampWkt":"2014-02-02T08:57:29.400Z","bucket":"s3://ikonos-product/po_1582264","offNadirAngle":"39.633120938076374","panResolution":"1.1281035","catalogID":"2014020208572940000011604326","zone":"36N","imageBands":"Pan_MS1","timestamp":"2014-02-02T00:00:00.000Z"}}],"stats":{"totalRecords":343,"recordsReturned":343,"typeCounts":{"IKONOSAcquisition":2,"LandsatAcquisition":43,"DigitalGlobeAcquisition":298}}}'}
+        29.19797 9.05328))","cloudCover":"1.18","multiResolution":"30.0","row":"53","timestamp":"2015-04-21T00:00:00.000Z","timestampWkt":"2015-04-21T08:16:26.000Z"}},{"identifier":"1050010007609300","owner":"7b216bd9-6523-4ca9-aa3b-1d8a5994f054","type":"DigitalGlobeAcquisition","properties":{"ordered":"false","sunElevation":"53.31799","targetAzimuth":"26.071915","sensorPlatformName":"GEOEYE01","browseURL":"https://browse.digitalglobe.com/imagefinder/showBrowseMetadata?catalogId=1050010007609300","sunAzimuth":"152.0683","footprintWkt":"POLYGON
+        ((30.23393617 9.987810756, 30.08618743 9.980789875, 30.08578263 10.0204189,
+        30.0853603 10.06040664, 30.0849285 10.10080941, 30.08445825 10.14158077, 30.0840163
+        10.18289487, 30.08353446 10.22463776, 30.08303545 10.26689993, 30.08252676
+        10.30971601, 30.08198628 10.35306359, 30.08141602 10.39697627, 30.08083503
+        10.44152401, 30.08021919 10.48668275, 30.07988633 10.51091272, 30.24037339
+        10.52755027, 30.24002987 10.50267385, 30.23940187 10.45660054, 30.23878715
+        10.41118741, 30.2382038 10.36643136, 30.23763724 10.32228041, 30.23709321
+        10.27871723, 30.23657065 10.23570579, 30.23606529 10.19322457, 30.23558639
+        10.15124535, 30.23512574 10.1097309, 30.23470218 10.06867659, 30.23429203
+        10.02802944, 30.23393617 9.987810756))","available":"true","cloudCover":"0.0","multiResolution":"1.8618515","vendorName":"DigitalGlobe","timestampWkt":"2016-12-03T00:00:00.000Z","offNadirAngle":"26.0","panResolution":"0.4654793","catalogID":"1050010007609300","scanDirection":"Reverse","imageBands":"Pan_MS1","timestamp":"2016-12-03T00:00:00.000Z"}},{"identifier":"10300100612D9600","owner":"7b216bd9-6523-4ca9-aa3b-1d8a5994f054","type":"DigitalGlobeAcquisition","properties":{"ordered":"false","sunElevation":"54.42765","targetAzimuth":"104.35048","sensorPlatformName":"WORLDVIEW02","browseURL":"https://browse.digitalglobe.com/imagefinder/showBrowseMetadata?catalogId=10300100612D9600","sunAzimuth":"155.8523","footprintWkt":"POLYGON
+        ((29.99704031 10.14420932, 30.1861274 10.13366329, 30.18623802 10.08643323,
+        30.18637473 10.03915706, 30.18649489 9.99607275, 29.99687985 10.00715141,
+        29.99694478 10.05018582, 29.99698481 10.09721829, 29.99704031 10.14420932))","available":"true","cloudCover":"0.0","multiResolution":"2.2236352","vendorName":"DigitalGlobe","timestampWkt":"2016-12-05T00:00:00.000Z","offNadirAngle":"25.0","panResolution":"0.5545321","catalogID":"10300100612D9600","scanDirection":"Forward","imageBands":"Pan_MS1_MS2","timestamp":"2016-12-05T00:00:00.000Z"}},{"identifier":"1030010061630300","owner":"7b216bd9-6523-4ca9-aa3b-1d8a5994f054","type":"DigitalGlobeAcquisition","properties":{"ordered":"false","sunElevation":"52.997","sensorPlatformName":"WORLDVIEW02","browseURL":"https://browse.digitalglobe.com/imagefinder/showBrowseMetadata?catalogId=1030010061630300","footprintWkt":"POLYGON((29.89775176
+        9.957638038, 30.05217924 9.961654062, 30.05217636 9.918212297, 30.05219069
+        9.874796955, 30.05219652 9.834744544, 29.89785443 9.830723796, 29.89781932
+        9.87082108, 29.89778185 9.914221123, 29.89775176 9.957638038))","available":"true","cloudCover":"0.0","multiResolution":"1.91631948","vendorName":"DigitalGlobe","timestampWkt":"2016-12-08T08:40:30.000Z","offNadirAngle":"11.725","panResolution":"0.47907987","catalogID":"1030010061630300","scanDirection":"Forward","imageBands":"Pan_MS1_MS2","timestamp":"2016-12-08T00:00:00.000Z"}},{"identifier":"103001005FC5B400","owner":"7b216bd9-6523-4ca9-aa3b-1d8a5994f054","type":"DigitalGlobeAcquisition","properties":{"ordered":"false","sunElevation":"62.77408","targetAzimuth":"184.50124","sensorPlatformName":"WORLDVIEW02","browseURL":"https://browse.digitalglobe.com/imagefinder/showBrowseMetadata?catalogId=103001005FC5B400","sunAzimuth":"142.0142","footprintWkt":"POLYGON
+        ((30.00496716 10.13444745, 30.17662956 10.13953712, 30.17675031 10.08338404,
+        30.17685628 10.02698018, 30.17697219 9.975449419, 30.00456591 9.970635231,
+        30.0046851 10.02198885, 30.00483595 10.07833964, 30.00496716 10.13444745))","available":"false","cloudCover":"2.0","multiResolution":"2.3241923","vendorName":"DigitalGlobe","timestampWkt":"2016-10-23T00:00:00.000Z","offNadirAngle":"28.0","panResolution":"0.57873285","catalogID":"103001005FC5B400","scanDirection":"Forward","imageBands":"Pan_MS1_MS2","timestamp":"2016-10-23T00:00:00.000Z"}},{"identifier":"LC81740532016290LGN00","owner":"7b216bd9-6523-4ca9-aa3b-1d8a5994f054","type":"LandsatAcquisition","properties":{"path":"174","panResolution":"15.0","browseURL":"https://s3-us-west-2.amazonaws.com/landsat-pds/L8/174/053/LC81740532016290LGN00/LC81740532016290LGN00_thumb_large.jpg","epsgCode":"4326","footprintWkt":"POLYGON
+        ((29.23087 9.05091, 29.23087 11.16546, 31.33862 11.16546, 31.33862 9.05091,
+        29.23087 9.05091))","cloudCover":"24.33","multiResolution":"30.0","row":"53","timestamp":"2016-10-16T00:00:00.000Z","timestampWkt":"2016-10-16T08:17:24.000Z"}},{"identifier":"1040010023218200","owner":"7b216bd9-6523-4ca9-aa3b-1d8a5994f054","type":"DigitalGlobeAcquisition","properties":{"ordered":"false","sunElevation":"65.44835","targetAzimuth":"274.1281","sensorPlatformName":"WORLDVIEW03","browseURL":"https://browse.digitalglobe.com/imagefinder/showBrowseMetadata?catalogId=1040010023218200","sunAzimuth":"142.6237","footprintWkt":"POLYGON
+        ((29.79312286 10.0226923, 29.93112539 10.02171506, 29.93106656 9.99188353,
+        29.93101565 9.962057199, 29.93097214 9.93224576, 29.93091548 9.902461045,
+        29.9308415 9.872666039, 29.93076883 9.842880853, 29.9306989 9.813115537, 29.93063545
+        9.783357128, 29.93057609 9.753614571, 29.93050449 9.723887977, 29.93043891
+        9.694169683, 29.93037872 9.664458465, 29.93030328 9.634763047, 29.93025165
+        9.605073243, 29.93018835 9.575400068, 29.9301314 9.545730015, 29.93005503
+        9.516065651, 29.92997626 9.486417406, 29.92990985 9.456776875, 29.92986028
+        9.427150504, 29.92980592 9.397543504, 29.9297426 9.367949109, 29.9296723 9.33835755,
+        29.92961386 9.308766074, 29.92956106 9.279188806, 29.92950589 9.249630858,
+        29.92944481 9.220087783, 29.9293844 9.190550319, 29.92932604 9.161012253,
+        29.92927536 9.131484901, 29.9292284 9.101973046, 29.92917143 9.072481016,
+        29.9291162 9.042996753, 29.92906513 9.013516697, 29.92903233 8.989428307,
+        29.79513137 8.990780016, 29.79507171 9.014727168, 29.79501629 9.04419995,
+        29.79495693 9.073677714, 29.79490112 9.103162352, 29.7948361 9.13266687, 29.79477739
+        9.162186538, 29.79472015 9.191717711, 29.79466915 9.221248242, 29.79462009
+        9.250784239, 29.79456771 9.280334417, 29.79451181 9.309903634, 29.79445177
+        9.339488718, 29.79439176 9.369074574, 29.79434074 9.398661781, 29.79428261
+        9.428261067, 29.79422586 9.45787938, 29.79416882 9.487513582, 29.79412588
+        9.517155186, 29.79408488 9.546812767, 29.79400614 9.576477239, 29.79397178
+        9.606142262, 29.79392104 9.635824304, 29.79386687 9.665513599, 29.7937957
+        9.695218455, 29.79374067 9.724930123, 29.79369369 9.75464975, 29.79363877
+        9.784385064, 29.7935784 9.814136977, 29.79351895 9.843895702, 29.79346536
+        9.873674473, 29.79341441 9.90346351, 29.79334338 9.933241068, 29.79326279
+        9.963046421, 29.79318897 9.99286675, 29.79312286 10.0226923))","available":"false","cloudCover":"11.0","multiResolution":"1.3586761","vendorName":"DigitalGlobe","timestampWkt":"2016-10-19T00:00:00.000Z","offNadirAngle":"19.0","panResolution":"0.33964288","catalogID":"1040010023218200","scanDirection":"Forward","imageBands":"Pan_MS1_MS2","timestamp":"2016-10-19T00:00:00.000Z"}}],"stats":{"totalRecords":353,"recordsReturned":353,"typeCounts":{"IKONOSAcquisition":2,"LandsatAcquisition":45,"DigitalGlobeAcquisition":306}}}'}
     headers:
       access-control-allow-origin: ['*']
       connection: [keep-alive]
-      content-length: ['325393']
+      content-length: ['335134']
       content-type: [application/json]
-      date: ['Wed, 16 Nov 2016 23:31:42 GMT']
+      date: ['Fri, 09 Dec 2016 23:44:59 GMT']
       server: [Apache-Coyote/1.1]
       transfer-encoding: [chunked]
       vary: [Accept-Encoding]

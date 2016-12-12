@@ -290,7 +290,20 @@ interactions:
         9.657777589, 29.93842954 9.685830135, 29.93842423 9.713885936, 29.93842043
         9.741940831, 29.9384176 9.769992451, 29.93841263 9.798045916, 29.93840654
         9.826098658, 29.93839444 9.85414808, 29.93838425 9.882187861, 29.93837225
-        9.910228648, 29.93835814 9.938268309, 29.93833899 9.966308237))","available":"false","cloudCover":"22.0","multiResolution":"1.241121531","vendorName":"DigitalGlobe","timestampWkt":"2016-03-21T00:00:00.000Z","offNadirAngle":"5.0","panResolution":"0.310262471","catalogID":"104001001ACCAE00","imageBands":"Pan_MS1_MS2","timestamp":"2016-03-21T00:00:00.000Z"}},{"identifier":"1040010023218200","owner":"7b216bd9-6523-4ca9-aa3b-1d8a5994f054","type":"DigitalGlobeAcquisition","properties":{"ordered":"false","sunElevation":"65.44835","targetAzimuth":"274.1281","sensorPlatformName":"WORLDVIEW03","browseURL":"https://browse.digitalglobe.com/imagefinder/showBrowseMetadata?catalogId=1040010023218200","sunAzimuth":"142.6237","footprintWkt":"POLYGON
+        9.910228648, 29.93835814 9.938268309, 29.93833899 9.966308237))","available":"false","cloudCover":"22.0","multiResolution":"1.241121531","vendorName":"DigitalGlobe","timestampWkt":"2016-03-21T00:00:00.000Z","offNadirAngle":"5.0","panResolution":"0.310262471","catalogID":"104001001ACCAE00","imageBands":"Pan_MS1_MS2","timestamp":"2016-03-21T00:00:00.000Z"}},{"identifier":"1040010025CA8900","owner":"7b216bd9-6523-4ca9-aa3b-1d8a5994f054","type":"DigitalGlobeAcquisition","properties":{"ordered":"false","sunElevation":"55.70901","targetAzimuth":"304.393","sensorPlatformName":"WORLDVIEW03","browseURL":"https://browse.digitalglobe.com/imagefinder/showBrowseMetadata?catalogId=1040010025CA8900","sunAzimuth":"153.5261","footprintWkt":"POLYGON
+        ((29.90387128 9.975168201, 30.04894339 9.959999948, 30.04893839 9.927931037,
+        30.04890347 9.895862796, 30.04879363 9.863832175, 30.04871694 9.831813545,
+        30.04871448 9.830243535, 29.90421173 9.845333655, 29.90420802 9.846755435,
+        29.90416338 9.878818347, 29.90411624 9.910916378, 29.90400172 9.943047133,
+        29.90387128 9.975168201))","available":"false","cloudCover":"0.0","multiResolution":"1.4618082","vendorName":"DigitalGlobe","timestampWkt":"2016-11-25T00:00:00.000Z","offNadirAngle":"24.0","panResolution":"0.3655029","catalogID":"1040010025CA8900","scanDirection":"Forward","imageBands":"Pan_MS1_MS2","timestamp":"2016-11-25T00:00:00.000Z"}},{"identifier":"104001002597ED00","owner":"7b216bd9-6523-4ca9-aa3b-1d8a5994f054","type":"DigitalGlobeAcquisition","properties":{"ordered":"false","sunElevation":"55.6386","targetAzimuth":"313.62277","sensorPlatformName":"WORLDVIEW03","browseURL":"https://browse.digitalglobe.com/imagefinder/showBrowseMetadata?catalogId=104001002597ED00","sunAzimuth":"153.4111","footprintWkt":"POLYGON
+        ((29.91937642 9.824474775, 29.77106817 9.844727288, 29.77090791 9.87880457,
+        29.77065853 9.913099838, 29.7704359 9.947587904, 29.7702883 9.98229353, 29.77028208
+        9.983808948, 29.92034532 9.960359868, 29.92033441 9.959091242, 29.92002055
+        9.925136296, 29.91980605 9.8913809, 29.91962307 9.857825736, 29.91937642 9.824474775))","available":"false","cloudCover":"0.0","multiResolution":"1.5352051","vendorName":"DigitalGlobe","timestampWkt":"2016-11-25T00:00:00.000Z","offNadirAngle":"28.0","panResolution":"0.38422966","catalogID":"104001002597ED00","scanDirection":"Reverse","imageBands":"Pan_MS1_MS2","timestamp":"2016-11-25T00:00:00.000Z"}},{"identifier":"104001002510BE00","owner":"7b216bd9-6523-4ca9-aa3b-1d8a5994f054","type":"DigitalGlobeAcquisition","properties":{"ordered":"false","sunElevation":"55.54839","targetAzimuth":"280.3244","sensorPlatformName":"WORLDVIEW03","browseURL":"https://browse.digitalglobe.com/imagefinder/showBrowseMetadata?catalogId=104001002510BE00","sunAzimuth":"153.6933","footprintWkt":"POLYGON
+        ((30.01730501 10.13830757, 30.16092466 10.13403147, 30.16081081 10.1035499,
+        30.16069273 10.0730734, 30.16062373 10.04263257, 30.16059817 10.02363716,
+        30.0174531 10.02805169, 30.01739246 10.04689073, 30.01734382 10.0773352, 30.01732185
+        10.10781932, 30.01730501 10.13830757))","available":"false","cloudCover":"0.0","multiResolution":"1.4153074","vendorName":"DigitalGlobe","timestampWkt":"2016-11-25T00:00:00.000Z","offNadirAngle":"22.0","panResolution":"0.35381383","catalogID":"104001002510BE00","scanDirection":"Forward","imageBands":"Pan_MS1_MS2","timestamp":"2016-11-25T00:00:00.000Z"}},{"identifier":"1040010023218200","owner":"7b216bd9-6523-4ca9-aa3b-1d8a5994f054","type":"DigitalGlobeAcquisition","properties":{"ordered":"false","sunElevation":"65.44835","targetAzimuth":"274.1281","sensorPlatformName":"WORLDVIEW03","browseURL":"https://browse.digitalglobe.com/imagefinder/showBrowseMetadata?catalogId=1040010023218200","sunAzimuth":"142.6237","footprintWkt":"POLYGON
         ((29.79312286 10.0226923, 29.93112539 10.02171506, 29.93106656 9.99188353,
         29.93101565 9.962057199, 29.93097214 9.93224576, 29.93091548 9.902461045,
         29.9308415 9.872666039, 29.93076883 9.842880853, 29.9306989 9.813115537, 29.93063545
@@ -314,15 +327,14 @@ interactions:
         9.695218455, 29.79374067 9.724930123, 29.79369369 9.75464975, 29.79363877
         9.784385064, 29.7935784 9.814136977, 29.79351895 9.843895702, 29.79346536
         9.873674473, 29.79341441 9.90346351, 29.79334338 9.933241068, 29.79326279
-        9.963046421, 29.79318897 9.99286675, 29.79312286 10.0226923))","available":"false","cloudCover":"11.0","multiResolution":"1.3586761","vendorName":"DigitalGlobe","timestampWkt":"2016-10-19T00:00:00.000Z","offNadirAngle":"19.0","panResolution":"0.33964288","catalogID":"1040010023218200","scanDirection":"Forward","imageBands":"Pan_MS1_MS2","timestamp":"2016-10-19T00:00:00.000Z"}}],"stats":{"totalRecords":65,"recordsReturned":65,"typeCounts":{"DigitalGlobeAcquisition":65}}}'}
+        9.963046421, 29.79318897 9.99286675, 29.79312286 10.0226923))","available":"false","cloudCover":"11.0","multiResolution":"1.3586761","vendorName":"DigitalGlobe","timestampWkt":"2016-10-19T00:00:00.000Z","offNadirAngle":"19.0","panResolution":"0.33964288","catalogID":"1040010023218200","scanDirection":"Forward","imageBands":"Pan_MS1_MS2","timestamp":"2016-10-19T00:00:00.000Z"}}],"stats":{"totalRecords":68,"recordsReturned":68,"typeCounts":{"DigitalGlobeAcquisition":68}}}'}
     headers:
       access-control-allow-origin: ['*']
       connection: [keep-alive]
-      content-length: ['64105']
+      content-length: ['67133']
       content-type: [application/json]
-      date: ['Wed, 16 Nov 2016 23:30:35 GMT']
+      date: ['Fri, 09 Dec 2016 23:44:29 GMT']
       server: [Apache-Coyote/1.1]
-      transfer-encoding: [chunked]
       vary: [Accept-Encoding]
       via: [kong/0.5.2]
     status: {code: 200, message: OK}

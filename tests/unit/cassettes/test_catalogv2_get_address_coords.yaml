@@ -37,12 +37,12 @@ interactions:
         \ ]\n      }\n   ],\n   \"status\" : \"OK\"\n}\n"}
     headers:
       access-control-allow-origin: ['*']
-      alt-svc: ['quic=":443"; ma=2592000; v="36,35,34"']
+      alt-svc: ['quic=":443"; ma=2592000; v="35,34"']
       cache-control: ['public, max-age=86400']
       content-length: ['1733']
       content-type: [application/json; charset=UTF-8]
-      date: ['Wed, 16 Nov 2016 23:30:20 GMT']
-      expires: ['Thu, 17 Nov 2016 23:30:20 GMT']
+      date: ['Fri, 09 Dec 2016 23:44:23 GMT']
+      expires: ['Sat, 10 Dec 2016 23:44:23 GMT']
       server: [mafe]
       vary: [Accept-Language]
       x-frame-options: [SAMEORIGIN]

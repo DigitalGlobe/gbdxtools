@@ -1,0 +1,24 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      User-Agent: [python-requests/2.9.1]
+    method: GET
+    uri: https://geobigdata.io/catalog/v1/record/nonexistent_asdfasdfasdfdfasffds?includeRelationships=false
+  response:
+    body: {string: !!python/unicode '{"status":"404 Not Found","message":"identifier
+        nonexistent_asdfasdfasdfdfasffds does not exist"}'}
+    headers:
+      access-control-allow-origin: ['*']
+      connection: [keep-alive]
+      content-length: ['97']
+      content-type: [application/json]
+      date: ['Fri, 09 Dec 2016 23:44:26 GMT']
+      server: [Apache-Coyote/1.1]
+      vary: [Accept-Encoding]
+      via: [kong/0.5.2]
+    status: {code: 404, message: Not Found}
+version: 1

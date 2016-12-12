@@ -20,7 +20,7 @@ interactions:
       connection: [keep-alive]
       content-length: ['651']
       content-type: [application/json]
-      date: ['Wed, 16 Nov 2016 23:30:20 GMT']
+      date: ['Fri, 09 Dec 2016 23:44:24 GMT']
       server: [Apache-Coyote/1.1]
       vary: [Accept-Encoding]
       via: [kong/0.5.2]
