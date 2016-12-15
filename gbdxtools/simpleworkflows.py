@@ -506,6 +506,32 @@ class Workflow(object):
 
         return self.id
 
+    @property
+    def task_ids(self):
+        '''
+        Get the task IDs of a running workflow
+
+        Args:
+            None
+
+        Returns:
+            List of task IDs
+        '''
+        if not self.id:
+            raise WorkflowError('Workflow is not running.  Cannot get task IDs.')
+
+        if self.batch_values:
+            raise NotImplementedError("Query Each Workflow Id within the Batch Workflow for task IDs.")
+
+        wf = self.__interface.workflow.get(self.id)
+
+        return [task['id'] for task in wf['tasks']]
+
+    @task_ids.setter
+    def task_ids(self, value):
+        raise NotImplementedError("Cannot set workflow task_ids, readonly.")
+
+
     def cancel(self):
         '''
         Cancel a running workflow.

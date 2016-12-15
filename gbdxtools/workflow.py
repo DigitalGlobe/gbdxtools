@@ -70,6 +70,21 @@ class Workflow(object):
 
         return r.json()['state']
 
+    def get(self, workflow_id):
+        """Get existing workflow state and task information.
+
+         Args:
+             workflow_id (str): Workflow id.
+
+         Returns:
+             Workflow object (dict).
+        """
+        self.logger.debug('Get workflow object: ' + workflow_id)
+        url = 'https://geobigdata.io/workflows/v1/workflows/' + workflow_id
+        r = self.gbdx_connection.get(url)
+
+        return r.json()
+
     def events(self, workflow_id):
         '''Get workflow events.
 
