@@ -1,3 +1,7 @@
+0.8.1
+-----
+* upgrade requests version
+
 0.8.0
 -----
 * Added get_tms_layers function to idaho module
