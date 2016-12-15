@@ -73,3 +73,44 @@ class WorkflowTests(unittest.TestCase):
 
         for workflow in workflows:
             self.assertTrue(workflow.get('state') in ["canceling", "canceled"])
+
+    @vcr.use_cassette('tests/unit/cassettes/test_workflow_get.yaml', filter_headers=['authorization'])
+    def test_workflow_get(self):
+        """
+        test gbdx.workflows.get(<workflow_id>)
+        """
+        wf = Workflow(self.gbdx)
+
+        output = wf.get('4488969848362445219')
+
+        self.assertTrue('id' in output.keys())
+        self.assertTrue('owner' in output.keys())
+        self.assertTrue('submitted_time' in output.keys())
+        self.assertTrue('state' in output.keys())
+        self.assertTrue('callback' in output.keys())
+        self.assertTrue('tasks' in output.keys())
+
+    @vcr.use_cassette('tests/unit/cassettes/test_task_get_stdout.yaml', filter_headers=['authorization'])
+    def test_task_get_stdout(self):
+        """
+        test gbdx.workflows.get_stdout(<workflow_id>,<task_id>)
+        """
+        wf = Workflow(self.gbdx)
+
+        output = wf.get_stdout('4488969848362445219','4488969848354891944')
+
+        self.assertTrue(len(output) > 0)
+
+    @vcr.use_cassette('tests/unit/cassettes/test_task_get_stderr.yaml', filter_headers=['authorization'])
+    def test_task_get_stderr(self):
+        """
+        test gbdx.workflows.get_stdout(<workflow_id>,<task_id>)
+        """
+        wf = Workflow(self.gbdx)
+
+        output = wf.get_stderr('4488969848362445219','4488969848354891944')
+
+        self.assertEquals('<empty>', output)
+
+
+        
