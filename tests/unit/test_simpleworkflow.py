@@ -439,3 +439,73 @@ class SimpleWorkflowTests(unittest.TestCase):
         wf_def = workflow.generate_workflow_description()
         # impersonation_allowed should not be in task
         self.assertFalse(hasattr(wf_def.get("tasks")[0], "impersonation_allowed"))
+
+    @vcr.use_cassette('tests/unit/cassettes/test_get_workflow_task_ids.yaml', record_mode='new_episodes', filter_headers=['authorization'])
+    def test_get_workflow_task_ids(self):
+
+        workflow = self.gbdx.Workflow([])
+        workflow.id = '4488969848362445219'
+        task_ids = workflow.task_ids
+
+        self.assertEquals( 1, len(task_ids))
+        self.assertEquals(task_ids[0], '4488969848354891944')
+
+    @vcr.use_cassette('tests/unit/cassettes/test_workflow_stdout.yaml', record_mode='new_episodes', filter_headers=['authorization'])
+    def test_workflow_stdout(self):
+
+        workflow = self.gbdx.Workflow([])
+        workflow.id = '4488969848362445219'
+        stdout = workflow.stdout
+
+        self.assertEquals(1, len(stdout))
+
+        self.assertTrue('id' in stdout[0].keys())
+        self.assertTrue('name' in stdout[0].keys())
+        self.assertTrue('taskType' in stdout[0].keys())
+        self.assertTrue('stdout' in stdout[0].keys())
+
+        self.assertEquals(stdout[0]['id'], '4488969848354891944')
+        self.assertEquals(stdout[0]['taskType'], 'test-success')
+        self.assertEquals(stdout[0]['name'], 'test-success_b74a49cc-1090-46fa-a032-ff95c561a365')
+
+        self.assertTrue( len(stdout[0]['stdout']) > 0 )
+
+    @vcr.use_cassette('tests/unit/cassettes/test_workflow_stderr.yaml', record_mode='new_episodes', filter_headers=['authorization'])
+    def test_workflow_stderr(self):
+
+        workflow = self.gbdx.Workflow([])
+        workflow.id = '4488969848362445219'
+        stderr = workflow.stderr
+
+        self.assertEquals(1, len(stderr))
+
+        self.assertTrue('id' in stderr[0].keys())
+        self.assertTrue('name' in stderr[0].keys())
+        self.assertTrue('taskType' in stderr[0].keys())
+        self.assertTrue('stderr' in stderr[0].keys())
+
+        self.assertEquals(stderr[0]['id'], '4488969848354891944')
+        self.assertEquals(stderr[0]['taskType'], 'test-success')
+        self.assertEquals(stderr[0]['name'], 'test-success_b74a49cc-1090-46fa-a032-ff95c561a365')
+
+        self.assertEquals( stderr[0]['stderr'], '<empty>' )
+
+    def test_workflow_stderr_with_unstarted_workflow(self):
+        workflow = self.gbdx.Workflow([])
+
+        with self.assertRaises(WorkflowError):
+            stderr = workflow.stderr
+
+    def test_workflow_stdout_with_unstarted_workflow(self):
+        workflow = self.gbdx.Workflow([])
+
+        with self.assertRaises(WorkflowError):
+            stdout = workflow.stdout
+
+    def test_workflow_task_ids_with_unstarted_workflow(self):
+        workflow = self.gbdx.Workflow([])
+
+        with self.assertRaises(WorkflowError):
+            task_ids = workflow.task_ids
+
+

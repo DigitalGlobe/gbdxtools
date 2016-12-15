@@ -1,0 +1,57 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      User-Agent: [python-requests/2.9.1]
+    method: GET
+    uri: https://geobigdata.io/workflows/v1/workflows/4488969848362445219
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA61S247jIAz9lYjXnbSQEhr6HX1bjSIKpINKIOLSqlv13xdIO+2suqt9GIkH+9g+
+        Nse+gMD8wYNN9fMClJliuNneRsdlsk3U+q0CggU2aHvq+QczRupHJJynnAd8cMrsQUIMGwsy833C
+        R6ZjwT8UuL4nwMbwvQ2FnKQR0vBzP3N/abv9UL5Kj1VzZTVZF6o5cTFP5ANzoQ9qpmsgIjVqatRu
+        Ed007Qa1CwoxWq1/QLiBMLNn+ba3gYL0ofaRc+l9jimRUYy7jhLa4W7V4o4iivHzzM9F/W6NGaac
+        1whSWGMysJrBVVMPA215SxBbkbYU23BXMnmcab1j/PCQKP2jJFw+LcDtOGmZ7BSWR2lCkTD3lUIK
+        cE2wi6afmEuDBenyWi5gtNHcN+QkE701+pzcgWkvc2trAlNGusy2HE1Y7nX0qXwoCmibZnsRSt3+
+        l+9k3eErVRingubr8MtX8pZdqpHtZ4XFflr+uZskx8hMWVB2hTyqFMoffc9S5BNIl5H8dQNhZjNJ
+        ScNlr8xgizQPpLCoGnJEOSVrSATa4U7QQmzH9J+cIOTAog7gWqa7r0P8/dpws2hIC1v0uLbv2rSP
+        u1GFf3RHG0wWeNVh8tTdnm6LEanYnX8dXx45aTBuG0TB9TdluSUlXQQAAA==
+    headers:
+      access-control-allow-origin: ['*']
+      connection: [keep-alive]
+      content-encoding: [gzip]
+      content-length: ['499']
+      content-type: [application/json]
+      date: ['Thu, 15 Dec 2016 20:25:06 GMT']
+      server: [nginx/1.8.0]
+      via: [kong/0.5.2]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      User-Agent: [python-requests/2.9.1]
+    method: GET
+    uri: https://geobigdata.io/workflows/v1/workflows/4488969848362445219/tasks/4488969848354891944/stdout
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA4tWT88pLS5JLUorVtdRUC/PL8pWj+WKVs8vLSkoLQEJpSelVMQXleaVZOam6mUV
+        5+eBBDPzQLIghQX5RSXFEHEgN5bLPb9EASyrUFxSlJmXbsWVkckFAKXJq6dmAAAA
+    headers:
+      access-control-allow-origin: ['*']
+      connection: [keep-alive]
+      content-encoding: [gzip]
+      content-length: ['105']
+      content-type: [text/html;charset=utf-8]
+      date: ['Thu, 15 Dec 2016 20:25:06 GMT']
+      server: [nginx/1.8.0]
+      via: [kong/0.5.2]
+    status: {code: 200, message: OK}
+version: 1
