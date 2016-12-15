@@ -203,6 +203,56 @@ Checking whether a workflow is complete (whether canceled, failed, or succeeded)
    True
 
 
+Workflow Stdout and Stderr
+-----------------------
+
+At any time after a workflow is launched, you can access the stderr and stdout of tasks all at once from the workflow object:
+
+.. code-block:: python
+
+   >>> workflow.stdout
+   [
+      {
+          "id": "4488895771403082552",
+          "taskType": "AOP_Strip_Processor",
+          "name": "Task1",
+          "stdout": "............"
+      }
+   ]
+
+Output is a list of tasks with some simple information and their stdout or stderr.
+
+.. code-block:: python
+
+   >>> workflow.stderr
+   [
+      {
+          "id": "4488895771403082552",
+          "taskType": "AOP_Strip_Processor",
+          "name": "Task1",
+          "stderr": "............"
+      }
+   ]
+
+If you know the task_id, you can also just get the stdout or stderr from a particular task:
+
+.. code-block:: python
+
+   >>> gbdx.workflow.get_stdout('<workflow_id>', '<task_id>')
+   <stdout string>
+
+
+Task Ids in a Running Workflow
+-----------------------
+
+After a workflow has been executed, you can get a list of all the task ids:
+
+.. code-block:: python
+   >> task_ids = workflow.task_ids
+   ['task_id1','task_id2', ...]
+
+
+
 Cancel a Running Workflow
 -----------------------
 
