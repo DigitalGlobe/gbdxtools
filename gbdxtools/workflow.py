@@ -82,8 +82,41 @@ class Workflow(object):
         self.logger.debug('Get workflow object: ' + workflow_id)
         url = 'https://geobigdata.io/workflows/v1/workflows/' + workflow_id
         r = self.gbdx_connection.get(url)
+        r.raise_for_status()
 
         return r.json()
+
+    def get_stdout(self, workflow_id, task_id):
+        """Get stdout for a particular task.
+
+         Args:
+             workflow_id (str): Workflow id.
+             task_id (str): Task id.
+
+         Returns:
+             Stdout of the task (string).
+        """
+        url = 'https://geobigdata.io/workflows/v1/workflows/' + workflow_id + '/tasks/' + task_id + '/stdout'
+        r = self.gbdx_connection.get(url)
+        r.raise_for_status()
+
+        return r.text
+
+    def get_stderr(self, workflow_id, task_id):
+        """Get stderr for a particular task.
+
+         Args:
+             workflow_id (str): Workflow id.
+             task_id (str): Task id.
+
+         Returns:
+             Stderr of the task (string).
+        """
+        url = 'https://geobigdata.io/workflows/v1/workflows/' + workflow_id + '/tasks/' + task_id + '/stderr'
+        r = self.gbdx_connection.get(url)
+        r.raise_for_status()
+
+        return r.text
 
     def events(self, workflow_id):
         '''Get workflow events.

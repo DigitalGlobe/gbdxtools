@@ -663,3 +663,92 @@ class Workflow(object):
     @timedout.setter
     def timedout(self, value):
         raise NotImplementedError("Cannot set workflow timedout, readonly.")
+
+    @property
+    def stdout(self):
+        '''
+        Get stdout from all the tasks of a workflow.
+
+        Args:
+            None
+
+        Returns:
+            List of tasks with their stdout, formatted like this:
+            [
+                {
+                    "id": "4488895771403082552",
+                    "taskType": "AOP_Strip_Processor",
+                    "name": "Task1",
+                    "stdout": "............"
+                }
+            ]
+        '''
+        if not self.id:
+            raise WorkflowError('Workflow is not running.  Cannot get stdout.')
+        if self.batch_values:
+            raise NotImplementedError("Query Each Workflow Id within the Batch Workflow for stdout.")
+
+        wf = self.__interface.workflow.get(self.id)
+
+        stdout_list = []
+        for task in wf['tasks']:
+            stdout_list.append(
+                {
+                    'id': task['id'],
+                    'taskType': task['taskType'],
+                    'name': task['name'],
+                    'stdout': self.__interface.workflow.get_stdout(self.id, task['id'])
+                }
+            )
+
+        return stdout_list
+
+    @stdout.setter
+    def stdout(self, value):
+        raise NotImplementedError("Cannot set workflow stdout, readonly.")
+
+    @property
+    def stderr(self):
+        '''
+        Get stderr from all the tasks of a workflow.
+
+        Args:
+            None
+
+        Returns:
+            List of tasks with their stderr, formatted like this:
+            [
+                {
+                    "id": "4488895771403082552",
+                    "taskType": "AOP_Strip_Processor",
+                    "name": "Task1",
+                    "stderr": "............"
+                }
+            ]
+        '''
+        if not self.id:
+            raise WorkflowError('Workflow is not running.  Cannot get stderr.')
+        if self.batch_values:
+            raise NotImplementedError("Query Each Workflow Id within the Batch Workflow for stderr.")
+
+        wf = self.__interface.workflow.get(self.id)
+
+        stderr_list = []
+        for task in wf['tasks']:
+            stderr_list.append(
+                {
+                    'id': task['id'],
+                    'taskType': task['taskType'],
+                    'name': task['name'],
+                    'stderr': self.__interface.workflow.get_stderr(self.id, task['id'])
+                }
+            )
+
+        return stderr_list
+
+    @stderr.setter
+    def stderr(self, value):
+        raise NotImplementedError("Cannot set workflow stderr, readonly.")
+
+
+
