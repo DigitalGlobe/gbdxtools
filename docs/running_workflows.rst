@@ -248,6 +248,7 @@ Task Ids in a Running Workflow
 After a workflow has been executed, you can get a list of all the task ids:
 
 .. code-block:: python
+
    >> task_ids = workflow.task_ids
    ['task_id1','task_id2', ...]
 
