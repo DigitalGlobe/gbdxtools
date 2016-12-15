@@ -1,3 +1,8 @@
+0.8.2
+-----
+* add workflow.stdout, workflow.stderr, workflow.task_ids
+* add gbdx.workflow.get_stdout(), gbdx.workflow.get_stderr(), gbdx.workflow.get()
+
 0.8.1
 -----
 * upgrade requests version
