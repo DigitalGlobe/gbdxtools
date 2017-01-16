@@ -105,7 +105,10 @@ class Ordering(object):
         # Auth is not required to hit the heartbeat
         r = requests.get(url) 
 
-        return r.json() == "ok"
+        try:
+            return r.json() == "ok"
+        except:
+            return False
 
 
     def location(self, image_catalog_ids, batch_size=100):
