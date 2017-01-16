@@ -5,7 +5,7 @@ Contact: kostas.stamatiou@digitalglobe.com
 """
 from builtins import zip
 from builtins import object
-
+import requests
 import json
 
 
@@ -92,6 +92,24 @@ class Ordering(object):
         r = self.gbdx_connection.get(url + order_id)
         r.raise_for_status()
         return r.json().get("acquisitions", {})
+
+    def heartbeat(self):
+        '''
+        Check the heartbeat of the ordering API
+
+        Args: None
+
+        Returns:  True or False
+        '''
+        url = 'https://geobigdata.io/orders/v2/heartbeat'
+        # Auth is not required to hit the heartbeat
+        r = requests.get(url) 
+
+        try:
+            return r.json() == "ok"
+        except:
+            return False
+
 
     def location(self, image_catalog_ids, batch_size=100):
         def _process_single_batch(url_, ids, results_dict):

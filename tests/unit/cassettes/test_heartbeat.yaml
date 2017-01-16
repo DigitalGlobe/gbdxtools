@@ -1,0 +1,25 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      User-Agent: [python-requests/2.9.1]
+    method: GET
+    uri: https://geobigdata.io/orders/v2/heartbeat
+  response:
+    body: {string: !!python/unicode '"ok"'}
+    headers:
+      access-control-allow-origin: ['*']
+      connection: [keep-alive]
+      content-length: ['4']
+      content-type: [application/json]
+      date: ['Mon, 16 Jan 2017 20:16:03 GMT']
+      via: [kong/0.5.2]
+      x-amz-cf-id: [3pvnFfu4FhFhxeBxT3R2AORnDbJIAaJMc4_8RIHKlwXcilTxPcW7XA==]
+      x-amzn-requestid: [9a970617-dc28-11e6-832c-951e099220b3]
+      x-amzn-trace-id: [Root=1-587d2a03-4bca509e646671dfb2524030]
+      x-cache: [Miss from cloudfront]
+    status: {code: 200, message: OK}
+version: 1
