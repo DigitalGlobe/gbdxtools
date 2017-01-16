@@ -1,3 +1,7 @@
+0.9.1
+-----
+* add gbdx.ordering.heartbeat() function
+
 0.9.0
 -----
 * add workflow.stdout, workflow.stderr, workflow.task_ids
