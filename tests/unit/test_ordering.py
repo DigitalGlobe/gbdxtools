@@ -9,6 +9,7 @@ from gbdxtools.ordering import Ordering
 from auth_mock import get_mock_gbdx_session
 import vcr
 import unittest
+from mock import Mock, patch
 
 """
 How to use the mock_gbdx_session and vcr to create unit tests:
@@ -79,4 +80,10 @@ class OrderingTests(unittest.TestCase):
         o = Ordering(self.gbdx)
         assert o.heartbeat() == True
 
-    
+    def test_heartbeat_failure(self):
+        # mock requests.get so that we get a result for which response.json() will throw an exception
+        with patch('gbdxtools.ordering.requests.get', return_value = False) as mock_within:
+            o = Ordering(self.gbdx)
+            assert o.heartbeat() == False
+
+
