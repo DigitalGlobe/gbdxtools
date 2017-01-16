@@ -73,3 +73,10 @@ class OrderingTests(unittest.TestCase):
         assert len(acq_list) == 2
         for entry in res['acquisitions']:
             assert entry['location'].startswith('s3')
+
+    @vcr.use_cassette('tests/unit/cassettes/test_heartbeat.yaml', filter_headers=['authorization'])
+    def test_heartbeat(self):
+        o = Ordering(self.gbdx)
+        assert o.heartbeat() == True
+
+    
