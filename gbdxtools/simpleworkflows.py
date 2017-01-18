@@ -247,7 +247,7 @@ class Task(object):
 
         '''
 
-        self.name = __task_type + '_' + str(uuid.uuid4())
+        self.name = __task_type + '_' + str(uuid.uuid4())[:8]
 
         self.__interface = __interface
         self.type = __task_type
@@ -378,7 +378,7 @@ class Task(object):
 class Workflow(object):
     def __init__(self, __interface, tasks, **kwargs):
         self.__interface = __interface
-        self.name = kwargs.get('name', str(uuid.uuid4()) )
+        self.name = kwargs.get('name', str(uuid.uuid4())[:8] )
         self.id = None
 
         self.definition = None
