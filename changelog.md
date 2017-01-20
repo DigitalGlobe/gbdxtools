@@ -1,3 +1,7 @@
+0.9.2
+-----
+* shorten task name UUIDs to 8 characters for readability
+
 0.9.1
 -----
 * add gbdx.ordering.heartbeat() function
