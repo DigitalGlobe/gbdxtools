@@ -1,3 +1,7 @@
+0.9.3
+-----
+* add workflow callback support:  wf = workflow([task], callback='callback_url')
+
 0.9.2
 -----
 * shorten task name UUIDs to 8 characters for readability
