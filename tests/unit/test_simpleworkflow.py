@@ -3,6 +3,7 @@ Unit tests for the Task class
 """
 
 from gbdxtools.simpleworkflows import Task, Workflow, InvalidInputPort, WorkflowError
+from gbdxtools.workflow import Workflow as WorkflowAPI
 from auth_mock import get_mock_gbdx_session
 from gbdxtools import Interface
 import vcr
@@ -256,6 +257,37 @@ class SimpleWorkflowTests(unittest.TestCase):
         # launch a workflow and verify it launches:
         w = self.gbdx.Workflow([aoptask])
         w.execute()
+
+    @vcr.use_cassette('tests/unit/cassettes/test_workflow_callback_is_set.yaml',record_mode='new_episodes',filter_headers=['authorization'])
+    def test_workflow_callback_is_set(self):
+        """
+        Verify we can set task timeouts, it appears in the json, and launching a workflow works
+        """
+        aoptask = self.gbdx.Task("AOP_Strip_Processor", data='testing')
+        callback_url = 'http://requestb.in/qg8wzqqg'
+
+        # launch a workflow and verify it launches:
+        w = self.gbdx.Workflow([aoptask], callback=callback_url)
+
+        assert w.generate_workflow_description()['callback'] == callback_url
+
+    @vcr.use_cassette('tests/unit/cassettes/test_workflow_callback_is_retrieved_in_workflow_status.yaml',record_mode='new_episodes',filter_headers=['authorization'])
+    def test_workflow_callback_is_retrieved_in_workflow_status(self):
+        """
+        Verify we can set task timeouts, it appears in the json, and launching a workflow works
+        """
+        aoptask = self.gbdx.Task("AOP_Strip_Processor", data='testing')
+        callback_url = 'http://requestb.in/qg8wzqqg'
+
+        # launch a workflow and verify it launches:
+        w = self.gbdx.Workflow([aoptask], callback=callback_url)
+
+        w.execute()
+
+        wf_api = WorkflowAPI(self.gbdx)
+        wf_body = wf_api.get(w.id)
+        assert wf_body['callback'] == callback_url
+
 
     @vcr.use_cassette('tests/unit/cassettes/test_multiplex_output_port_is_set.yaml',record_mode='new_episodes',filter_headers=['authorization'])
     def test_multiplex_output_port_is_set(self):
