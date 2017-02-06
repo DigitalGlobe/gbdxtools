@@ -380,6 +380,7 @@ class Workflow(object):
         self.__interface = __interface
         self.name = kwargs.get('name', str(uuid.uuid4())[:8] )
         self.id = None
+        self.callback = kwargs.get('callback', None )
 
         self.definition = None
 
@@ -475,6 +476,9 @@ class Workflow(object):
             task_def = task.generate_task_workflow_json(
                 output_multiplex_ports_to_exclude=output_multiplex_ports_to_exclude)
             self.definition['tasks'].append(task_def)
+
+        if self.callback:
+            self.definition['callback'] = self.callback
 
         return self.definition
 

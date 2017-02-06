@@ -155,6 +155,16 @@ Here is another example of a more complicated workflow.
     workflow.savedata(prot_lulc.outputs.data.value, location="some_folder_under_your_bucket_prefix")
     workflow.execute()
 
+Workflow Callbacks
+-----------------------
+The GBDX system can send a callback upon workflow completion.  Specify a callback url like this:
+
+.. code-block:: python
+
+    workflow = gbdx.Workflow([ aoptask, s3task ], callback="http://your/callback/url")
+    workflow.execute()
+    
+
 Workflow Status
 -----------------------
 
