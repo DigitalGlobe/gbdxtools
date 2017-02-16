@@ -1,3 +1,7 @@
+0.9.4
+-----
+* add "host" parameter to interface kwargs for dev purposes
+
 0.9.3
 -----
 * add workflow callback support:  wf = workflow([task], callback='callback_url')
