@@ -21,6 +21,9 @@ class Workflow(object):
         Returns:
             An instance of the Workflow class.
         """
+        self.base_url = '%s/workflows/v1' % interface.root_url
+        self.workflows_url = '%s/workflows' % self.base_url
+
         # store a reference to the GBDX Connection
         self.gbdx_connection = interface.gbdx_connection
 
@@ -41,9 +44,8 @@ class Workflow(object):
         """
 
         # hit workflow api
-        url = 'https://geobigdata.io/workflows/v1/workflows'
         try:
-            r = self.gbdx_connection.post(url, json=workflow)
+            r = self.gbdx_connection.post(self.workflows_url, json=workflow)
             try:
                 r.raise_for_status()
             except:
@@ -65,7 +67,9 @@ class Workflow(object):
              Workflow status (str).
         """
         self.logger.debug('Get status of workflow: ' + workflow_id)
-        url = 'https://geobigdata.io/workflows/v1/workflows/' + workflow_id
+        url = '%(wf_url)s/%(wf_id)s' % {
+            'wf_url': self.workflows_url, 'wf_id': workflow_id
+        }
         r = self.gbdx_connection.get(url)
 
         return r.json()['state']
@@ -80,7 +84,9 @@ class Workflow(object):
              Workflow object (dict).
         """
         self.logger.debug('Get workflow object: ' + workflow_id)
-        url = 'https://geobigdata.io/workflows/v1/workflows/' + workflow_id
+        url = '%(wf_url)s/%(wf_id)s' % {
+            'wf_url': self.workflows_url, 'wf_id': workflow_id
+        }
         r = self.gbdx_connection.get(url)
         r.raise_for_status()
 
@@ -96,7 +102,9 @@ class Workflow(object):
          Returns:
              Stdout of the task (string).
         """
-        url = 'https://geobigdata.io/workflows/v1/workflows/' + workflow_id + '/tasks/' + task_id + '/stdout'
+        url = '%(wf_url)s/%(wf_id)s/tasks/%(task_id)s/stdout' % {
+            'wf_url': self.workflows_url, 'wf_id': workflow_id, 'task_id': task_id
+        }
         r = self.gbdx_connection.get(url)
         r.raise_for_status()
 
@@ -112,7 +120,9 @@ class Workflow(object):
          Returns:
              Stderr of the task (string).
         """
-        url = 'https://geobigdata.io/workflows/v1/workflows/' + workflow_id + '/tasks/' + task_id + '/stderr'
+        url = '%(wf_url)s/%(wf_id)s/tasks/%(task_id)s/stderr' % {
+            'wf_url': self.workflows_url, 'wf_id': workflow_id, 'task_id': task_id
+        }
         r = self.gbdx_connection.get(url)
         r.raise_for_status()
 
@@ -128,7 +138,9 @@ class Workflow(object):
              List of workflow events.
         '''
         self.logger.debug('Get events of workflow: ' + workflow_id)
-        url = 'https://geobigdata.io/workflows/v1/workflows/' + workflow_id + '/events'
+        url = '%(wf_url)s/%(wf_id)s/events' % {
+            'wf_url': self.workflows_url, 'wf_id': workflow_id
+        }
         r = self.gbdx_connection.get(url)
 
         return r.json()['Events']
@@ -143,7 +155,9 @@ class Workflow(object):
                Nothing
         """
         self.logger.debug('Canceling workflow: ' + workflow_id)
-        url = 'https://geobigdata.io/workflows/v1/workflows/' + workflow_id + '/cancel'
+        url = '%(wf_url)s/%(wf_id)s/cancel' % {
+            'wf_url': self.workflows_url, 'wf_id': workflow_id
+        }
         r = self.gbdx_connection.post(url, data='')
         r.raise_for_status()
 
@@ -158,7 +172,9 @@ class Workflow(object):
         """
 
         # hit workflow api
-        url = 'https://geobigdata.io/workflows/v1/batch_workflows'
+        url = '%(base_url)s/batch_workflows' % {
+            'base_url': self.base_url
+        }
         try:
             r = self.gbdx_connection.post(url, json=batch_workflow)
             batch_workflow_id = r.json()['batch_workflow_id']
@@ -176,7 +192,9 @@ class Workflow(object):
              Batch Workflow status (str).
         """
         self.logger.debug('Get status of batch workflow: ' + batch_workflow_id)
-        url = 'https://geobigdata.io/workflows/v1/batch_workflows/' + batch_workflow_id
+        url = '%(base_url)s/batch_workflows/%(batch_id)s' % {
+            'base_url': self.base_url, 'batch_id': batch_workflow_id
+        }
         r = self.gbdx_connection.get(url)
 
         return r.json()
@@ -191,7 +209,9 @@ class Workflow(object):
              Batch Workflow status (str).
         """
         self.logger.debug('Cancel batch workflow: ' + batch_workflow_id)
-        url = 'https://geobigdata.io/workflows/v1/batch_workflows/{0}/cancel'.format(batch_workflow_id)
+        url = '%(base_url)s/batch_workflows/%(batch_id)s/cancel' % {
+            'base_url': self.base_url, 'batch_id': batch_workflow_id
+        }
         r = self.gbdx_connection.post(url)
 
         return r.json()

@@ -27,6 +27,9 @@ class Interface(object):
     gbdx_connection = None
 
     def __init__(self, **kwargs):
+        host = kwargs.get('host') if kwargs.get('host') else 'geobigdata.io'
+        self.root_url = 'https://%s' % host
+
         if (kwargs.get('username') and kwargs.get('password') and
                 kwargs.get('client_id') and kwargs.get('client_secret')):
             self.gbdx_connection = gbdx_auth.session_from_kwargs(**kwargs)
