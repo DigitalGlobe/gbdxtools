@@ -30,6 +30,7 @@ class Idaho(object):
             An instance of the Idaho interface class.
 
         '''
+        self.base_url = '%s/catalog/v1' % interface.root_url
         self.gbdx_connection = interface.gbdx_connection
         self.catalog = Catalog(interface)
         self.logger = interface.logger
@@ -47,7 +48,7 @@ class Idaho(object):
         self.logger.debug('Retrieving IDAHO metadata')
 
         # use the footprint to get the IDAHO id
-        url = 'https://geobigdata.io/catalog/v1/search'
+        url = '%s/search' % self.base_url
 
         body = {"filters": ["vendorDatasetIdentifier3 = '%s'" % catid],
                 "types": ["IDAHOImage"],

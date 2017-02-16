@@ -20,6 +20,8 @@ class S3(object):
             An instance of gbdxtools.S3.
 
         '''
+        self.base_url = '%s/s3creds/v1' % interface.root_url
+
         # store a ref to the GBDX connection
         self.gbdx_connection = interface.gbdx_connection
 
@@ -49,7 +51,7 @@ class S3(object):
             user bucket and user prefix (dict).
         '''
 
-        url = 'https://geobigdata.io/s3creds/v1/prefix?duration=36000'
+        url = '%s/prefix?duration=36000' % self.base_url
         r = self.gbdx_connection.get(url)
         r.raise_for_status()
         return r.json()

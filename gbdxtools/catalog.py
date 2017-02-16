@@ -22,6 +22,7 @@ class Catalog(object):
         Returns:
             An instance of the Catalog interface class.
         '''
+        self.base_url = '%s/catalog/v1' % interface.root_url
         self.gbdx_connection = interface.gbdx_connection
         self.logger = interface.logger
 
@@ -36,8 +37,9 @@ class Catalog(object):
         '''
 
         self.logger.debug('Retrieving strip footprint')
-        url = ('https://geobigdata.io/catalog/v1/record/' 
-               + catID + '?includeRelationships=false')
+        url = '%(base_url)s/record/%(catID)s?includeRelationships=false' % {
+            'base_url': self.base_url, 'catID': catID
+        }
 
         r = self.gbdx_connection.get(url)
         if r.status_code == 200:
@@ -64,7 +66,9 @@ class Catalog(object):
             incR = 'true'
         else:
             incR = 'false'
-        url = 'https://geobigdata.io/catalog/v1/record/' + catID + '?includeRelationships='+incR
+        url = '%(base_url)s/record/%(catID)s?includeRelationships=%(incR)s' % {
+            'base_url': self.base_url, 'catID': catID, 'incR': incR
+        }
         r = self.gbdx_connection.get(url)
         r.raise_for_status()
         return r.json()
@@ -83,9 +87,9 @@ class Catalog(object):
         '''
 
         self.logger.debug('Retrieving strip catalog metadata')
-        url = ('https://geobigdata.io/catalog/v1/record/'
-               + catID + '?includeRelationships=false')
-
+        url = '%(base_url)s/record/%(catID)s?includeRelationships=false' % {
+            'base_url': self.base_url, 'catID': catID
+        }
         r = self.gbdx_connection.get(url)
         if r.status_code == 200:
             return r.json()['properties']
@@ -172,7 +176,9 @@ class Catalog(object):
         # There are so far only two possibilities for data we can find in S3: Landsat8 and DG images.
         # We'll do a traverse from the item and use that to determine S3 locations.
 
-        url = 'https://geobigdata.io/catalog/v1/traverse'
+        url = '%(base_url)s/traverse' % {
+            'base_url': self.base_url
+        }
         headers = {'Content-Type':'application/json'}
         traverse_body = {
                 "rootRecordId": catalog_id,
@@ -288,10 +294,13 @@ class Catalog(object):
         if searchAreaWkt:
             # If we are searching over a polygon, break up the polygon into lots of small polygons of size 2-square degrees
             # and get the results.
-            results = catalog_search_aoi.search_materials_in_multiple_small_searches(postdata, self.gbdx_connection)
+            results = catalog_search_aoi.search_materials_in_multiple_small_searches(
+                        postdata, self.gbdx_connection, self.base_url)
         else:
             # If we are not searching over a polygon, just do the search directly.
-            url = 'https://geobigdata.io/catalog/v1/search?includeRelationships=false'
+            url = '%(base_url)s/search?includeRelationships=false' % {
+                'base_url': self.base_url
+            }
             headers = {'Content-Type':'application/json'}
             r = self.gbdx_connection.post(url, headers=headers, data=json.dumps(postdata))
             r.raise_for_status()

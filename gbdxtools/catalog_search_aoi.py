@@ -75,7 +75,7 @@ def polygon_from_bounds( bounds ):
     W, S, E, N = bounds
     return geometry.Polygon(  ( (W,N),(E,N),(E,S),(W,S),(W,N) )  )
 
-def search_materials_in_multiple_small_searches(search_request, gbdx_connection):
+def search_materials_in_multiple_small_searches(search_request, gbdx_connection, base_url):
     D = 1.4  # the size in degrees of the side of a square that we will search
 
     searchAreaWkt = search_request['searchAreaWkt']
@@ -112,7 +112,9 @@ def search_materials_in_multiple_small_searches(search_request, gbdx_connection)
 
                 search_request['searchAreaWkt'] = subsearchpoly.wkt
 
-                url = 'https://geobigdata.io/catalog/v1/search?includeRelationships=false'
+                url = '%(base_url)s/search?includeRelationships=false' % {
+                    'base_url': base_url
+                }
                 headers = {'Content-Type':'application/json'}
                 r = gbdx_connection.post(url, headers=headers, data=json.dumps(search_request))
                 r.raise_for_status()
