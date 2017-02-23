@@ -1,3 +1,7 @@
+0.9.5
+-----
+* update gbdx-auth to 0.2.2: allows new env var GBDX_ACCESS_TOKEN
+
 0.9.4
 -----
 * add "host" parameter to interface kwargs for dev purposes
