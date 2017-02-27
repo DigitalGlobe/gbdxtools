@@ -11,14 +11,15 @@ import json
 import os
 import logging
 
-from gbdx_auth import gbdx_auth
-
+from gbdxtools.auth import Interface as Auth
 from gbdxtools.s3 import S3
 from gbdxtools.ordering import Ordering
 from gbdxtools.workflow import Workflow
 from gbdxtools.catalog import Catalog
 from gbdxtools.vectors import Vectors
 from gbdxtools.idaho import Idaho
+from gbdxtools.ipe_image import IpeImage
+from gbdxtools.image import Image
 from gbdxtools.task_registry import TaskRegistry
 import gbdxtools.simpleworkflows
 
@@ -27,18 +28,7 @@ class Interface(object):
     gbdx_connection = None
 
     def __init__(self, **kwargs):
-        host = kwargs.get('host') if kwargs.get('host') else 'geobigdata.io'
-        self.root_url = 'https://%s' % host
-
-        if (kwargs.get('username') and kwargs.get('password') and
-                kwargs.get('client_id') and kwargs.get('client_secret')):
-            self.gbdx_connection = gbdx_auth.session_from_kwargs(**kwargs)
-        elif kwargs.get('gbdx_connection'):
-            # Pass in a custom gbdx connection object, for testing purposes
-            self.gbdx_connection = kwargs.get('gbdx_connection')
-        else:
-            # This will throw an exception if your .ini file is not set properly
-            self.gbdx_connection = gbdx_auth.get_session(kwargs.get('config_file'))
+        self.gbdx_connection = Auth.instance(**kwargs).gbdx_connection
 
         # create a logger
         # for now, just log to the console. We'll replace all the 'print' statements 
@@ -69,6 +59,9 @@ class Interface(object):
         self.idaho = Idaho(self)
 
         self.vectors = Vectors(self)
+
+        self.image = Image
+        self.ipeimage = IpeImage
 
         self.task_registry = TaskRegistry(self)
 
