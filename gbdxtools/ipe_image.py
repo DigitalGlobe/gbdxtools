@@ -271,17 +271,3 @@ class IpeImage(da.Array):
             plt.imshow(data,interpolation='nearest')   
         plt.show(block=False)
 
-
-if __name__ == '__main__':
-    img = IpeImage('58e9febc-0b04-4143-97fb-95436fcf3ed6', bbox=[-95.06904982030392, 29.7187207124839, -95.06123922765255, 29.723901202069023])
-    with img.open() as src:
-        assert isinstance(src, rasterio.DatasetReader)
-
-    rgb = img[[4,2,1], ...] # should not fetch
-    assert isinstance(rgb, da.Array)
-    print rgb.shape
-
-    data = img.read(bands=[4,2,1]) # should fetch
-    assert isinstance(data, np.ndarray)
-    assert len(data.shape) == 3
-    assert data.shape[0] == 3

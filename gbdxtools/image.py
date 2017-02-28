@@ -150,26 +150,3 @@ class Image(object):
         ms = self.ipe.Format(self.ipe.MultiplyConst(ms, constants=json.dumps([1000]*8), _intermediate=True), dataType="1", _intermediate=True)
         pan = self.ipe.Format(self.ipe.MultiplyConst(pan, constants=json.dumps([1000]), _intermediate=True), dataType="1", _intermediate=True)
         return self.ipe.LocallyProjectivePanSharpen(ms, pan).aoi(bbox=kwargs.get('bbox', None))
-        
-
-
-if __name__ == '__main__': 
-    from gbdxtools import Interface
-    import json
-    import rasterio
-    gbdx = Interface()
-
-    cat_id = '104001001838A000'
-    cat_id = '104001000D7A8600'
-    img = gbdx.image(cat_id, pansharpen=True)
-
-    #print(json.dumps(img.metadata, indent=4))
-    vrt = img.vrt
-    with rasterio.open(vrt) as src:
-        print(src.meta)
-  
-
-    #aoi = img.aoi([-95.06904982030392, 29.7187207124839, -95.06123922765255, 29.723901202069023])
-    #with aoi.open() as src:
-    #    assert isinstance(src, rasterio.DatasetReader)
-
