@@ -39,3 +39,4 @@ def test_init_host(monkeypatch):
     assert gbdx.task_registry._base_url == 'https://%s/workflows/v1/tasks' % test_host
     assert gbdx.workflow.base_url == 'https://%s/workflows/v1' % test_host
     assert gbdx.workflow.workflows_url == 'https://%s/workflows/v1/workflows' % test_host
+    gbdx = gbdxtools.Interface(host='geobigdata.io')
