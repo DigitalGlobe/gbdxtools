@@ -15,4 +15,5 @@ shapely
 ephem
 dask
 cloudpickle
+numpy
 rasterio==1.0a7

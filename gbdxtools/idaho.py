@@ -16,23 +16,20 @@ import os
 import requests
 
 from gbdxtools.catalog import Catalog
-
+from gbdxtools.auth import Interface
 
 class Idaho(object):
-
-    def __init__(self, interface):
+    
+    def __init__(self, **kwargs):
         ''' Construct the Idaho interface class.
 
-        Args:
-            connection (gbdx_session): A reference to the GBDX Connection.
-
-        Returns:
-            An instance of the Idaho interface class.
-
+            Returns:
+                An instance of the Idaho interface class.
         '''
+        interface = Interface.instance()(**kwargs)
         self.base_url = '%s/catalog/v1' % interface.root_url
         self.gbdx_connection = interface.gbdx_connection
-        self.catalog = Catalog(interface)
+        self.catalog = Catalog()
         self.logger = interface.logger
 
     def get_images_by_catid_and_aoi(self, catid, aoi_wkt):

@@ -76,7 +76,7 @@ class IpeImage(da.Array):
       Dask based access to ipe based images (Idaho).
     """
     def __init__(self, idaho_id, node="toa_reflectance", **kwargs):
-        self.interface = Interface.instance()
+        self.interface = Interface.instance()(**kwargs)
         self._idaho_id = idaho_id
         self._node_id = node
         self._level = 0

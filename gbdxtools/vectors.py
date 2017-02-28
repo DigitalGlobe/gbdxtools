@@ -10,18 +10,16 @@ import requests
 from pygeoif import geometry
 from geomet import wkt as wkt2geojson
 import json
+from gbdxtools.auth import Interface
 
 class Vectors(object):
-
-    def __init__(self, interface):
+    def __init__(self, **kwargs):
         ''' Construct the Vectors interface class
 
-        Args:
-            interface: A reference to the GBDX Interface.
-
-        Returns:
-            An instance of the Vectors interface class.
+            Returns:
+                An instance of the Vectors interface class.
         '''
+        interface = Interface.instance()(**kwargs)
         self.gbdx_connection = interface.gbdx_connection
         self.logger = interface.logger
         self.query_url = 'https://vector.geobigdata.io/insight-vector/api/vectors/query/items'

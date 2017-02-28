@@ -22,13 +22,13 @@ gbdx = Interface(gbdx_connection = mock_gbdx_session)
 
 
 def test_init():
-    tr = TaskRegistry(gbdx)
+    tr = TaskRegistry()
     assert isinstance(tr, TaskRegistry)
 
 
 @vcr.use_cassette('tests/unit/cassettes/test_list_tasks.yaml',filter_headers=['authorization'])
 def test_list_tasks():
-    tr = TaskRegistry(gbdx)
+    tr = TaskRegistry()
     task_list = tr.list()
     assert task_list is not None
     assert 'HelloGBDX' in task_list
@@ -36,7 +36,7 @@ def test_list_tasks():
 
 @vcr.use_cassette('tests/unit/cassettes/test_describe_tasks.yaml',filter_headers=['authorization'])
 def test_describe_tasks():
-    tr = TaskRegistry(gbdx)
+    tr = TaskRegistry()
     task_list = tr.list()
     assert len(task_list) > 0
     desc = tr.get_definition(task_list[0])
@@ -46,7 +46,7 @@ def test_describe_tasks():
 
 @vcr.use_cassette('tests/unit/cassettes/test_register_task.yaml',filter_headers=['authorization'])
 def _test_register_task(task_json=None, filename=None):
-    tr = TaskRegistry(gbdx)
+    tr = TaskRegistry()
 
     if task_json:
         rv = tr.register(task_json)
@@ -94,7 +94,7 @@ def test_register_task_from_file():
 
 
 def test_register_fails_when_both_json_and_file():
-    tr = TaskRegistry(gbdx)
+    tr = TaskRegistry()
 
     try:
         tr.register(task_json={'any': 'thing'}, json_filename="any")
@@ -106,7 +106,7 @@ def test_register_fails_when_both_json_and_file():
 
 
 def test_register_fails_when_both_json_and_file_none():
-    tr = TaskRegistry(gbdx)
+    tr = TaskRegistry()
 
     try:
         tr.register(task_json=None, json_filename=None)
@@ -119,7 +119,7 @@ def test_register_fails_when_both_json_and_file_none():
 
 @vcr.use_cassette('tests/unit/cassettes/test_delete_task.yaml',filter_headers=['authorization'])
 def test_delete_task():
-    tr = TaskRegistry(gbdx)
+    tr = TaskRegistry()
     tasks = tr.list()
     if not 'gbdxtools-test-task' in tasks:
         test_list_tasks()

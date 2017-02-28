@@ -18,12 +18,11 @@ import gdal
 from gbdxtools.ipe.vrt import get_cached_vrt, put_cached_vrt, vrt_cache_key, IDAHO_CACHE_DIR
 from gbdxtools.ipe.error import NotFound
 from gbdxtools.ipe.interface import Ipe
-from gbdxtools.auth import Interface
 from gbdxtools.ipe_image import IpeImage
 from gbdxtools.vectors import Vectors
 from gbdxtools.idaho import Idaho
 
-
+from gbdxtools.auth import Interface
 
 band_types = {
   'MS': 'WORLDVIEW_8_BAND',
@@ -38,9 +37,9 @@ class Image(object):
     """
 
     def __init__(self, cat_id, band_type="MS", node="toa_reflectance", **kwargs):
-        self.interface = Interface.instance()
-        self.vectors = Vectors(self.interface)
-        self.idaho = Idaho(self.interface)
+        self.interface = Interface.instance()(**kwargs)
+        self.vectors = Vectors()
+        self.idaho = Idaho()
         self.ipe = Ipe()
         self.cat_id = cat_id
         self._band_type = band_types[band_type]
