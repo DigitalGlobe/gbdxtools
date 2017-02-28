@@ -30,19 +30,6 @@ class Interface(object):
     def __init__(self, **kwargs):
         self.gbdx_connection = Auth.instance(**kwargs).gbdx_connection
 
-        # create a logger
-        # for now, just log to the console. We'll replace all the 'print' statements 
-        # with at least logger.info or logger.debug statements
-        # later, we can log to a service, file, or some other aggregator
-        self.logger = logging.getLogger('gbdxtools')
-        self.logger.setLevel(logging.ERROR)
-        console_handler = logging.StreamHandler()
-        console_handler.setLevel(logging.ERROR)
-        formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-        console_handler.setFormatter(formatter)
-        self.logger.addHandler(console_handler)
-        self.logger.info('Logger initialized')
-
         # create and store an instance of the GBDX s3 client
         self.s3 = S3(self)
 

@@ -10,3 +10,9 @@ geomet==0.1.1
 vcrpy
 ndg-httpsclient==0.4.2
 bumpversion
+traitlets
+shapely
+ephem
+dask
+cloudpickle
+rasterio==1.0a7
