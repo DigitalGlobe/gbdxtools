@@ -245,7 +245,8 @@ class IpeImage(da.Array):
                 plt.imshow(self[0,:,:], cmap="Greys_r")
             else:
                 data = self.read()
-                data = data[[4,2,1],...]
+                if data.shape[0] is not 3:
+                    data = data[[4,2,1],...]
                 data = data.astype(np.float32)
                 data = np.rollaxis(data, 0, 3)
                 lims = np.percentile(data,stretch,axis=(0,1))
