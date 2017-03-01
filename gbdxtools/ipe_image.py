@@ -123,7 +123,8 @@ class IpeImage(da.Array):
         try:
             vrt = get_cached_vrt(self._gid, self._graph_id, self._level)
         except NotFound:
-            template = generate_vrt_template(self.ipe_id, self.ipe_node_id, self._level)
+            nbands = 3 if self._node_id == 'pansharpened' else None
+            template = generate_vrt_template(self.ipe_id, self.ipe_node_id, self._level, num_bands=nbands)
             vrt = put_cached_vrt(self._gid, self._graph_id, self._level, template)
 
         return vrt

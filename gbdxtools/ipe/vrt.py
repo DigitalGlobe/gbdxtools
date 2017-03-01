@@ -41,9 +41,11 @@ def get_vrt(idaho_id, ipe_id, node, level=0):
         vrt = put_cached_vrt(ipe_id, node, level, template)
     return vrt
 
-def generate_vrt_template(ipe_id, node, level):
+def generate_vrt_template(ipe_id, node, level, num_bands=None):
     meta = get_ipe_metadata(ipe_id, node=node)
     image_md = meta['image']
+    if num_bands is None:
+        num_bands = image_md["numBands"]
     tfm = meta['georef']
     tile_size_x = image_md['tileXSize']
     tile_size_y = image_md['tileYSize']
