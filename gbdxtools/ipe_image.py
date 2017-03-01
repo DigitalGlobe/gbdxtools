@@ -2,7 +2,8 @@ from functools import partial, wraps
 from itertools import groupby
 from collections import defaultdict
 from contextlib import contextmanager
-from xml.etree import cElementTree as ET
+#from xml.etree import cElementTree as ET
+from lxml import etree as ET
 import os.path
 import uuid
 
@@ -33,7 +34,7 @@ import dask.array as da
 import dask.bag as db
 from dask.delayed import delayed
 import numpy as np
-
+from itertools import chain
 import threading
 threaded_get = partial(dask.threaded.get, num_workers=4)
 
@@ -77,7 +78,7 @@ class IpeImage(da.Array):
     """
     def __init__(self, idaho_id, node="toa_reflectance", **kwargs):
         self.interface = Interface.instance()(**kwargs)
-        self._idaho_id = idaho_id
+        self._gid = idaho_id
         self._node_id = node
         self._level = 0
         self._idaho_md = None
@@ -87,7 +88,7 @@ class IpeImage(da.Array):
         else:
             self._ipe_graphs = self._init_graphs()
         if kwargs.get('_intermediate', False):
-            return self 
+            return 
         self._bounds = self._parse_geoms(**kwargs)
         self._graph_id = str(uuid.uuid5(uuid.NAMESPACE_DNS, str(self.ipe.graph())))
         self._tile_size = kwargs.get('tile_size', 256)
@@ -99,7 +100,7 @@ class IpeImage(da.Array):
     @property
     def idaho_md(self):
         if self._idaho_md is None:
-            self._idaho_md = requests.get('http://idaho.timbr.io/{}.json'.format(self._idaho_id)).json()
+            self._idaho_md = requests.get('http://idaho.timbr.io/{}.json'.format(self._gid)).json()
         return self._idaho_md
 
     @property
@@ -120,10 +121,10 @@ class IpeImage(da.Array):
     def vrt(self):
         """ Generates a VRT for the full Idaho image from image metadata and caches locally """
         try:
-            vrt = get_cached_vrt(self._idaho_id, self._graph_id, self._level)
+            vrt = get_cached_vrt(self._gid, self._graph_id, self._level)
         except NotFound:
             template = generate_vrt_template(self.ipe_id, self.ipe_node_id, self._level)
-            vrt = put_cached_vrt(self._idaho_id, self._graph_id, self._level, template)
+            vrt = put_cached_vrt(self._gid, self._graph_id, self._level, template)
 
         return vrt
 
@@ -136,24 +137,7 @@ class IpeImage(da.Array):
 
     def aoi(self, **kwargs):
         """ Subsets the IpeImage by the given bounds """
-        return IpeImage(self._idaho_id, **kwargs)
-
-    @property
-    def metadata(self):
-        with self.open() as src:
-            meta = src.meta.copy()
-            meta.update({
-                'width': self.shape[-1],
-                'height': self.shape[1]
-            })
-            if self._bounds is not None:
-                (minx, miny, maxx, maxy) = self._bounds
-                affine = [c for c in rasterio.transform.from_bounds(minx, miny, maxx, maxy, int(self.shape[-1]), int(self.shape[1]))]
-                transform = [affine[2], affine[0], 0.0, affine[5], 0.0, affine[4]]
-                meta.update({'transform': Affine.from_gdal(*transform)})
-
-        return meta
-
+        return IpeImage(self._gid, **kwargs)
 
     @contextmanager
     def open(self, *args, **kwargs):
@@ -185,7 +169,6 @@ class IpeImage(da.Array):
         buf = da.concatenate(
             [da.concatenate([da.from_delayed(load_url(url, bands=bands), chunks, dtype) for u, url in enumerate(row)],
                         axis=1) for r, row in enumerate(urls)], axis=2)
-
         return buf
 
     def _collect_urls(self, xml, px_bounds=None):
@@ -246,7 +229,7 @@ class IpeImage(da.Array):
         gains_offsets = calc_toa_gain_offset(meta)
         radiance_scales, reflectance_scales, radiance_offsets = zip(*gains_offsets)
 
-        ortho = ipe.GridOrthorectify(ipe.IdahoRead(bucketName="idaho-images", imageId=self._idaho_id, objectStore="S3"))
+        ortho = ipe.GridOrthorectify(ipe.IdahoRead(bucketName="idaho-images", imageId=self._gid, objectStore="S3"))
         radiance = ipe.AddConst(ipe.MultiplyConst(ipe.Format(ortho, dataType="4"), constants=radiance_scales), constants=radiance_offsets)
         toa_reflectance = ipe.MultiplyConst(radiance, constants=reflectance_scales)
 
@@ -255,19 +238,21 @@ class IpeImage(da.Array):
     def plot(self, stretch=[2,98], w=20, h=10):
         f, ax1 = plt.subplots(1, figsize=(w,w))
         ax1.axis('off')
-        if self.metadata['count'] == 1:
-            plt.imshow(self[0,:,:], cmap="Greys_r")
-        else:
-            data = self.read()
-            data = data[[4,2,1],...]
-            data = data.astype(np.float32)
-            data = np.rollaxis(data, 0, 3)
-            lims = np.percentile(data,stretch,axis=(0,1))
-            for x in xrange(len(data[0,0,:])):
-                top = lims[:,x][1]
-                bottom = lims[:,x][0]
-                data[:,:,x] = (data[:,:,x]-bottom)/float(top-bottom)
-                data = np.clip(data,0,1)
-            plt.imshow(data,interpolation='nearest')   
-        plt.show(block=False)
+        with self.open() as src:
+            count = src.meta['count']
+            if count == 1:
+                plt.imshow(self[0,:,:], cmap="Greys_r")
+            else:
+                data = self.read()
+                data = data[[4,2,1],...]
+                data = data.astype(np.float32)
+                data = np.rollaxis(data, 0, 3)
+                lims = np.percentile(data,stretch,axis=(0,1))
+                for x in xrange(len(data[0,0,:])):
+                    top = lims[:,x][1]
+                    bottom = lims[:,x][0]
+                    data[:,:,x] = (data[:,:,x]-bottom)/float(top-bottom)
+                    data = np.clip(data,0,1)
+                plt.imshow(data,interpolation='nearest')   
+            plt.show(block=False)
 

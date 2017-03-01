@@ -78,3 +78,17 @@ def prettify(elem):
     rough_string = ET.tostring(elem, 'utf-8')
     reparsed = minidom.parseString(rough_string)
     return reparsed.toprettyxml(indent="\t")
+
+import time
+import functools
+
+def timeit(func):
+    @functools.wraps(func)
+    def newfunc(*args, **kwargs):
+        startTime = time.time()
+        res = func(*args, **kwargs)
+        elapsedTime = time.time() - startTime
+        print('function [{}] finished in {} seconds'.format(
+            func.__name__, int(elapsedTime)))
+        return res
+    return newfunc

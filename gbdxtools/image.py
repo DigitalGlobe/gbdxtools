@@ -9,28 +9,31 @@ from contextlib import contextmanager
 from collections import defaultdict
 import os
 import json
+import uuid
 
 from shapely.wkt import loads
 from shapely.geometry import box, shape
 import rasterio
 import gdal
+import requests
 
-from gbdxtools.ipe.vrt import get_cached_vrt, put_cached_vrt, vrt_cache_key, IDAHO_CACHE_DIR
-from gbdxtools.ipe.error import NotFound
-from gbdxtools.ipe.interface import Ipe
+from gbdxtools.ipe.util import calc_toa_gain_offset
 from gbdxtools.ipe_image import IpeImage
 from gbdxtools.vectors import Vectors
-from gbdxtools.idaho import Idaho
+from gbdxtools.ipe.interface import Ipe
+ipe = Ipe()
+
 
 from gbdxtools.auth import Interface
 
 band_types = {
   'MS': 'WORLDVIEW_8_BAND',
   'Panchromatic': 'PAN',
-  'Pan': 'PAN'
+  'Pan': 'PAN',
+  'pan': 'PAN'
 }
 
-class Image(object):
+class Image(IpeImage):
     """ 
       Strip Image Class 
       Collects metadata on all image parts, groupd pan and ms bands from idaho
@@ -39,71 +42,38 @@ class Image(object):
     def __init__(self, cat_id, band_type="MS", node="toa_reflectance", **kwargs):
         self.interface = Interface.instance()(**kwargs)
         self.vectors = Vectors()
-        self.idaho = Idaho()
-        self.ipe = Ipe()
-        self.cat_id = cat_id
-        self._band_type = band_types[band_type]
-        self._node = node
+        self._gid = cat_id
+        self._band_type = band_type
+        self._node_id = node
         self._pansharpen = kwargs.get('pansharpen', False)
         self._acomp = kwargs.get('acomp', False)
         if self._pansharpen:
-            self._node = 'pansharpened'
+            self._node_id = 'pansharpened'
         self._level = kwargs.get('level', 0)
-        self._fetch_metadata()
 
-    @contextmanager
-    def open(self, *args, **kwargs):
-        """ A rasterio based context manager for reading the full image VRT """
-        with rasterio.open(self.vrt, *args, **kwargs) as src:
-            yield src
+        self._ipe_id = None
+        self._ipe_graphs = self._init_graphs()
 
-    @property
-    def vrt(self):
-        try:
-            vrt = get_cached_vrt(self.cat_id, self._node, self._level)
-        except NotFound:
-            vrt = os.path.join(IDAHO_CACHE_DIR, vrt_cache_key(self.cat_id, self._node, self._level)) 
-            _tmp_vrt = gdal.BuildVRT('/vsimem/merged.vrt', self._collect_vrts(), separate=False)
-            gdal.Translate(vrt, _tmp_vrt, format='VRT')
-        return vrt 
+        self._bounds = self._parse_geoms(**kwargs)
+        self._graph_id = str(uuid.uuid5(uuid.NAMESPACE_DNS, str(self.ipe.graph())))
+        self._tile_size = kwargs.get('tile_size', 256)
 
-    def aoi(self, bbox, band_type='MS', **kwargs):
-        try:
-            band_type = band_types[band_type]
-        except:
-            print('band_type ({}) not supported'.format(band_type))
-            return None
-        _area = box(*bbox)
-        intersections = {}
-        for part in self.metadata['properties']['parts']:
-            for key, item in part.iteritems():
-                geom = box(*item['geometry'].bounds)
-                if geom.intersects(_area):
-                    intersections[key] = item
+        with open(self.vrt) as f:
+            self._vrt = f.read()
 
-        if not len(intersections.keys()):
-            print('Failed to find data within the given BBOX')
-            return None
+        self._cfg = self._config_dask(bounds=self._bounds)
+        super(IpeImage, self).__init__(**self._cfg)
 
-        pansharpen = kwargs.get('pansharpen', self._pansharpen)
-        if self._node == 'pansharpened' and pansharpen:
-            ms = IpeImage(intersections['WORLDVIEW_8_BAND']['properties']['idahoImageId'])
-            pan = IpeImage(intersections['PAN']['properties']['idahoImageId'])
-            return self._create_pansharpen(ms, pan, bbox=bbox, **kwargs)
-        elif band_type in intersections:
-            md = intersections[band_type]['properties']
-            return IpeImage(md['idahoImageId'], bbox=bbox, **kwargs)
-        else:
-            print('band_type ({}) did not find a match in this image'.format(band_type))
-            return None
 
     def _query_vectors(self, query, aoi=None):
         if aoi is None:
             aoi = "POLYGON((-180.0 90.0,180.0 90.0,180.0 -90.0,-180.0 -90.0,-180.0 90.0))"
         return self.vectors.query(aoi, query=query)
 
-    def _fetch_metadata(self):
-        query = 'item_type:DigitalGlobeAcquisition AND attributes.catalogID:{}'.format(self.cat_id)
+    @property
+    def metadata(self):
+        # TODO this logic should be exposed as a method in the idaho class
+        query = 'item_type:DigitalGlobeAcquisition AND attributes.catalogID:{}'.format(self._gid)
         props = self._query_vectors(query)
         if len(props) == 0:
             print('Could not find image metadata for the given catalog id')
@@ -111,7 +81,7 @@ class Image(object):
 
         geom = shape(props[0]['geometry'])
         attrs = props[0]['properties']['attributes']
-        query = 'item_type:IDAHOImage AND attributes.catalogID:{}'.format(self.cat_id)
+        query = 'item_type:IDAHOImage AND attributes.catalogID:{}'.format(self._gid)
         results = self._query_vectors(query)
         
         # group idaho images on identifiers
@@ -129,24 +99,48 @@ class Image(object):
                 part[attr['colorInterpretation']] = {'properties': attr, 'geometry': shape(p['geometry'])}
             attrs['parts'].append(part)
 
-        self.metadata = {'properties': attrs, 'geometry': geom}
+        return {'properties': attrs, 'geometry': geom}
 
+    def aoi(self, bbox, **kwargs):
+        return Image(self._gid, bbox=bbox, band_type=self._band_type, node=self._node_id, pansharpen=self._pansharpen, **kwargs)
 
-    def _collect_vrts(self):
-        vrts = []
-        for part in self.metadata['properties']['parts']:
-            if self._node == 'pansharpened':
-                ms = IpeImage(part['WORLDVIEW_8_BAND']['properties']['idahoImageId'])
-                pan = IpeImage(part['PAN']['properties']['idahoImageId'])
-                img = self._create_pansharpen(ms, pan)
-            else:
-                md = part[self._band_type]['properties']
-                img = IpeImage(md['idahoImageId'])
-            
-            vrts.append(img.vrt)
-        return vrts
+    def _init_graphs(self):
+        graph = {}
+        ids = []
+        if self._node_id == 'pansharpened' and self._pansharpen:
+            pan_graph = {}
+            ms_graph = {}
+            for part in self.metadata['properties']['parts']:
+                for k, p in part.iteritems():
+                    _id = p['properties']['idahoImageId']
+                    if k == 'PAN':
+                        pan_graph[_id] = ipe.GridOrthorectify(ipe.IdahoRead(bucketName="idaho-images", imageId=_id, objectStore="S3"))
+                    else: 
+                        ms_graph[_id] = ipe.GridOrthorectify(ipe.IdahoRead(bucketName="idaho-images", imageId=_id, objectStore="S3"))
 
-    def _create_pansharpen(self, ms, pan, **kwargs):
-        ms = self.ipe.Format(self.ipe.MultiplyConst(ms, constants=json.dumps([1000]*8), _intermediate=True), dataType="1", _intermediate=True)
-        pan = self.ipe.Format(self.ipe.MultiplyConst(pan, constants=json.dumps([1000]), _intermediate=True), dataType="1", _intermediate=True)
-        return self.ipe.LocallyProjectivePanSharpen(ms, pan).aoi(bbox=kwargs.get('bbox', None))
+            pan_mosaic = self._mosaic(pan_graph, suffix='-pan')
+            pan = ipe.Format(ipe.MultiplyConst(pan_mosaic['mosaic-pan'], constants=json.dumps([1000])), dataType="1")
+
+            ms_mosaic = self._mosaic(ms_graph, suffix='-ms')
+            ms = ipe.Format(ipe.MultiplyConst(ms_mosaic['mosaic-ms'], constants=json.dumps([1000]*8)), dataType="1")
+            graph['pansharpened'] = ipe.LocallyProjectivePanSharpen(ms, pan)
+            return graph
+        else: 
+            for part in self.metadata['properties']['parts']:
+                for k, p in part.iteritems():
+                    if k == band_types[self._band_type]:
+                        _id = p['properties']['idahoImageId']
+                        graph[_id] = ipe.GridOrthorectify(ipe.IdahoRead(bucketName="idaho-images", imageId=_id, objectStore="S3"))
+                       
+            return self._mosaic(graph)
+
+    def _mosaic(self, graph, suffix=''):
+        mosaic = ipe.GeospatialMosaic(*graph.values())
+        idaho_id = graph.keys()[0]
+        meta = requests.get('http://idaho.timbr.io/{}.json'.format(idaho_id)).json()
+        gains_offsets = calc_toa_gain_offset(meta['properties'])
+        radiance_scales, reflectance_scales, radiance_offsets = zip(*gains_offsets)
+        radiance = ipe.AddConst(ipe.MultiplyConst(ipe.Format(mosaic, dataType="4"), constants=radiance_scales), constants=radiance_offsets)
+        toa_reflectance = ipe.MultiplyConst(radiance, constants=reflectance_scales)
+        graph.update({"mosaic{}".format(suffix): mosaic, "radiance{}".format(suffix): radiance, "toa_reflectance{}".format(suffix): toa_reflectance})
+        return graph

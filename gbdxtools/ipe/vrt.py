@@ -8,7 +8,7 @@ from itertools import product
 import requests
 from shapely.wkt import loads
 from gbdxtools.ipe.graph import VIRTUAL_IPE_URL, get_ipe_metadata, create_ipe_graph
-from gbdxtools.ipe.util import mkdir_p, prettify
+from gbdxtools.ipe.util import mkdir_p, prettify, timeit
 from gbdxtools.ipe.error import NotFound
 
 # TODO: this need to be complete
@@ -40,7 +40,6 @@ def get_vrt(idaho_id, ipe_id, node, level=0):
         template = generate_vrt_template(idaho_id, ipe_id, node, level)
         vrt = put_cached_vrt(ipe_id, node, level, template)
     return vrt
-
 
 def generate_vrt_template(ipe_id, node, level):
     meta = get_ipe_metadata(ipe_id, node=node)
@@ -78,7 +77,8 @@ def generate_vrt_template(ipe_id, node, level):
 
             ET.SubElement(src, "SourceProperties", {"RasterXSize": str(tile_size_x), "RasterYSize": str(tile_size_y),
                                                     "BlockXSize": "256", "BlockYSize": "256", "DataType": DTLOOKUP.get(meta["image"]["dataType"], "Float32")})
-    return prettify(vrt)
+    #return prettify(vrt)
+    return ET.tostring(vrt, 'utf-8')
 
 
 def vrt_cache_key(idaho_id, node, level):

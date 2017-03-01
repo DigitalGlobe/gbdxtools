@@ -8,11 +8,10 @@ from shapely.geometry import Polygon, mapping
 with warnings.catch_warnings():
     warnings.simplefilter("ignore")
 
-from gbdxtools.ipe.util import calc_toa_gain_offset
+from gbdxtools.ipe.util import calc_toa_gain_offset, timeit
 from gbdxtools.ipe.error import NotFound
 
 VIRTUAL_IPE_URL = "http://virtualidaho-env.us-east-1.elasticbeanstalk.com/v1"
-#NAMESPACE_UUID = uuid.uuid1(clock_seq=0)
 NAMESPACE_UUID = uuid.NAMESPACE_DNS
 
 def register_ipe_graph(ipe_graph):
