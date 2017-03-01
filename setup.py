@@ -33,6 +33,7 @@ setup(name='gbdxtools',
                         'shapely',
                         'ephem',
                         'numpy',
+                        'matplotlib',
                         'dask',
                         'cloudpickle',
                         'rasterio==1.0a7'

@@ -16,4 +16,5 @@ ephem
 dask
 cloudpickle
 numpy
+matplotlib
 rasterio==1.0a7
