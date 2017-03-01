@@ -60,7 +60,7 @@ def generate_vrt_template(ipe_id, node, level, num_bands=None):
                                                                       tfm["scaleY"]]))
 
     paths = []
-    for i in xrange(image_md["numBands"]):
+    for i in xrange(num_bands):
         bidx = i+1
         band = ET.SubElement(vrt, "VRTRasterBand", {"dataType": NODE_DATA_TYPES.get(node, "Float32"), "band": str(bidx)})
         for x, y in product(xrange(image_md['numXTiles']), xrange(image_md['numYTiles'])):
