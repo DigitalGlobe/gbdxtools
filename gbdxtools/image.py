@@ -37,6 +37,7 @@ class Image(IpeImage):
     """ 
       Strip Image Class 
       Collects metadata on all image parts, groupd pan and ms bands from idaho
+      Inherits from IpeImage and represents a mosiac data set of the full catalog strip
     """
 
     def __init__(self, cat_id, band_type="MS", node="toa_reflectance", **kwargs):
@@ -52,14 +53,12 @@ class Image(IpeImage):
         self._level = kwargs.get('level', 0)
 
         self._ipe_id = None
+        self._ipe_metadata = None
         self._ipe_graphs = self._init_graphs()
 
         self._bounds = self._parse_geoms(**kwargs)
         self._graph_id = str(uuid.uuid5(uuid.NAMESPACE_DNS, str(self.ipe.graph())))
         self._tile_size = kwargs.get('tile_size', 256)
-
-        with open(self.vrt) as f:
-            self._vrt = f.read()
 
         self._cfg = self._config_dask(bounds=self._bounds)
         super(IpeImage, self).__init__(**self._cfg)
@@ -134,10 +133,9 @@ class Image(IpeImage):
                      ms_graph[_id] = ipe.GridOrthorectify(ipe.IdahoRead(bucketName="idaho-images", imageId=_id, objectStore="S3"))
 
          pan_mosaic = self._mosaic(pan_graph, suffix='-pan')
-         pan = ipe.Format(ipe.MultiplyConst(pan_mosaic['mosaic-pan'], constants=json.dumps([1000])), dataType="1")
-
+         pan = ipe.Format(ipe.MultiplyConst(pan_mosaic['toa_reflectance-pan'], constants=json.dumps([1000])), dataType="1")
          ms_mosaic = self._mosaic(ms_graph, suffix='-ms')
-         ms = ipe.Format(ipe.MultiplyConst(ms_mosaic['mosaic-ms'], constants=json.dumps([1000]*8)), dataType="1")
+         ms = ipe.Format(ipe.MultiplyConst(ms_mosaic['toa_reflectance-ms'], constants=json.dumps([1000]*8)), dataType="1")
          return {'pansharpened': ipe.LocallyProjectivePanSharpen(ms, pan)}
 
 

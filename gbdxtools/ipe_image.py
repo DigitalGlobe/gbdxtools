@@ -43,8 +43,8 @@ import pycurl
 _curl_pool = defaultdict(pycurl.Curl)
 
 from gbdxtools.ipe.vrt import get_cached_vrt, put_cached_vrt, generate_vrt_template
-from gbdxtools.ipe.util import calc_toa_gain_offset
-from gbdxtools.ipe.graph import register_ipe_graph
+from gbdxtools.ipe.util import calc_toa_gain_offset, timeit
+from gbdxtools.ipe.graph import VIRTUAL_IPE_URL, register_ipe_graph, get_ipe_metadata
 from gbdxtools.ipe.error import NotFound
 from gbdxtools.ipe.interface import Ipe
 from gbdxtools.auth import Interface
@@ -83,6 +83,7 @@ class IpeImage(da.Array):
         self._level = 0
         self._idaho_md = None
         self._ipe_id = None
+        self._ipe_metadata = None
         if '_ipe_graphs' in kwargs:
             self._ipe_graphs = kwargs['_ipe_graphs']
         else:
@@ -92,8 +93,6 @@ class IpeImage(da.Array):
         self._bounds = self._parse_geoms(**kwargs)
         self._graph_id = str(uuid.uuid5(uuid.NAMESPACE_DNS, str(self.ipe.graph())))
         self._tile_size = kwargs.get('tile_size', 256)
-        with open(self.vrt) as f:
-            self._vrt = f.read()
         self._cfg = self._config_dask(bounds=self._bounds)
         super(IpeImage, self).__init__(**self._cfg)
 
@@ -118,6 +117,12 @@ class IpeImage(da.Array):
         return self.ipe._nodes[0]._id
 
     @property
+    def ipe_metadata(self):
+        if self._ipe_metadata is None:
+            self._ipe_metadata = get_ipe_metadata(self.ipe_id, self.ipe_node_id)
+        return self._ipe_metadata
+
+    @property
     def vrt(self):
         """ Generates a VRT for the full Idaho image from image metadata and caches locally """
         try:
@@ -126,7 +131,6 @@ class IpeImage(da.Array):
             nbands = 3 if self._node_id == 'pansharpened' else None
             template = generate_vrt_template(self.ipe_id, self.ipe_node_id, self._level, num_bands=nbands)
             vrt = put_cached_vrt(self._gid, self._graph_id, self._level, template)
-
         return vrt
 
     def read(self, bands=None):
@@ -146,19 +150,16 @@ class IpeImage(da.Array):
         with rasterio.open(self.vrt, *args, **kwargs) as src:
             yield src
 
+    @timeit
     def _config_dask(self, bounds=None):
         """ Configures the image as a dask array with a calculated shape and chunk size """
-        with self.open() as src:
-            nbands = len(src.indexes)
-            px_bounds = None
-            if bounds is not None:
-                window = src.window(*bounds)
-                px_bounds = self._pixel_bounds(window, src.block_shapes)
-            urls = self._collect_urls(self._vrt, px_bounds=px_bounds)
-            cfg = {"shape": tuple([nbands] + [self._tile_size*len(urls[0]), self._tile_size*len(urls)]),
-                   "dtype": src.dtypes[0],
-                   "chunks": tuple([len(src.block_shapes)] + [self._tile_size, self._tile_size])}
-            self._meta = src.meta
+        # TODO fix dtype here, used to come from vrt 
+        meta = self.ipe_metadata
+        nbands = meta['image']['numBands']
+        urls = self._collect_urls(meta, bounds=bounds)
+        cfg = {"shape": tuple([nbands] + [self._tile_size*len(urls[0]), self._tile_size*len(urls)]),
+               "dtype": "float32",
+               "chunks": tuple([nbands] + [self._tile_size, self._tile_size])}
         img = self._build_array(urls, bands=nbands, chunks=cfg["chunks"], dtype=cfg["dtype"])
         cfg["name"] = img.name
         cfg["dask"] = img.dask
@@ -172,24 +173,32 @@ class IpeImage(da.Array):
                         axis=1) for r, row in enumerate(urls)], axis=2)
         return buf
 
-    def _collect_urls(self, xml, px_bounds=None):
+    def _ipe_tile(self, x, y):
+        return "{}/tile/{}/{}/{}/{}/{}.tif".format(VIRTUAL_IPE_URL, "idaho-virtual", self.ipe_id, self.ipe_node_id, x, y)
+        
+
+    @timeit
+    def _collect_urls(self, meta, bounds=None):
         """
           Finds all intersecting tiles from the source image and intersect a given bounds
           returns a nested list of urls as a grid that represents data chunks in the array
         """
-        root = ET.fromstring(xml)
-        if px_bounds is not None:
-            target = box(*px_bounds)
-            for band in root.findall("VRTRasterBand"):
-                for source in band.findall("ComplexSource"):
-                    rect = source.find("DstRect")
-                    xmin, ymin = int(rect.get("xOff")), int(rect.get("yOff"))
-                    xmax, ymax = xmin + int(rect.get("xSize")), ymin + int(rect.get("ySize"))
-                    if not box(xmin, ymin, xmax, ymax).intersects(target):
-                        band.remove(source)
+        size = self._tile_size
+        if bounds is not None:
+            tfm = meta['georef']
+            rev = ~Affine.from_gdal(*[tfm["translateX"], tfm["scaleX"], tfm["shearX"], tfm["translateY"], tfm["shearY"], tfm["scaleY"]])
+            ul = map(round, rev * (bounds[0], bounds[3]))
+            lr = map(round, rev * (bounds[2], bounds[1]))
+            offx = (lr[0] - ul[0]) / size
+            offy = (lr[1] - ul[1]) / size
+            # TODO need to make the minus one holdd for all aoi bounds, for now it matches expected n-urls
+            minx, miny, maxx, maxy = map(int, [(ul[0] / size) - 1, (ul[1] / size), (ul[0] / size) + offx, (ul[1] / size) + offy])
+        else:
+            
+            minx, miny, maxx, maxy = 0, 0, meta['image']['imageWidth'] / size, meta['image']['imageHeight'] / size
+    
+        urls = [self._ipe_tile(x,y) for y in xrange(miny, maxy + 1) for x in xrange(minx, maxx + 1)]
 
-        urls = list(set(item.text for item in root.iter("SourceFilename")
-                    if item.text.startswith("http://")))
         chunks = []
         for url in urls:
             head, _ = os.path.splitext(url)
@@ -204,12 +213,6 @@ class IpeImage(da.Array):
                 for key, it in groupby(sorted(chunks, key=lambda x: x[0]), lambda x: x[0])]
         return grid
 
-    def _pixel_bounds(self, window, block_shapes, preserve_blocksize=True):
-        """ Converts a source window in pixel offsets to pixel bounds for intersecting source tiles """
-        if preserve_blocksize:
-            window = rasterio.windows.round_window_to_full_blocks(window, block_shapes)
-        roi = window.flatten()
-        return [roi[0], roi[1], roi[0] + roi[2], roi[1] + roi[3]]
 
     def _parse_geoms(self, **kwargs):
         """ Finds supported geometry types, parses them and returns the bbox """
@@ -239,22 +242,20 @@ class IpeImage(da.Array):
     def plot(self, stretch=[2,98], w=20, h=10):
         f, ax1 = plt.subplots(1, figsize=(w,w))
         ax1.axis('off')
-        with self.open() as src:
-            count = src.meta['count']
-            if count == 1:
-                plt.imshow(self[0,:,:], cmap="Greys_r")
-            else:
-                data = self.read()
-                if data.shape[0] is not 3:
-                    data = data[[4,2,1],...]
-                data = data.astype(np.float32)
-                data = np.rollaxis(data, 0, 3)
-                lims = np.percentile(data,stretch,axis=(0,1))
-                for x in xrange(len(data[0,0,:])):
-                    top = lims[:,x][1]
-                    bottom = lims[:,x][0]
-                    data[:,:,x] = (data[:,:,x]-bottom)/float(top-bottom)
-                    data = np.clip(data,0,1)
-                plt.imshow(data,interpolation='nearest')   
-            plt.show(block=False)
+        nbands = self.ipe_metadata['image']['numBands']
+        if nbands == 1:
+            plt.imshow(self[0,:,:], cmap="Greys_r")
+        else:
+            data = self.read()
+            data = data[[4,2,1],...]
+            data = data.astype(np.float32)
+            data = np.rollaxis(data, 0, 3)
+            lims = np.percentile(data,stretch,axis=(0,1))
+            for x in xrange(len(data[0,0,:])):
+                top = lims[:,x][1]
+                bottom = lims[:,x][0]
+                data[:,:,x] = (data[:,:,x]-bottom)/float(top-bottom)
+                data = np.clip(data,0,1)
+            plt.imshow(data,interpolation='nearest')   
+        plt.show(block=False)
 
