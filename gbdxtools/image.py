@@ -99,8 +99,10 @@ class Image(IpeImage):
         return {'properties': attrs, 'geometry': geom}
 
 
-    def aoi(self, bbox, **kwargs):
-        return Image(self._gid, bbox=bbox, band_type=self._band_type, node=self._node_id, pansharpen=self._pansharpen, **kwargs)
+    def aoi(self, **kwargs):
+        if self._pansharpen and 'pansharpen' not in kwargs:
+            kwargs['pansharpen'] = True
+        return Image(self._gid, band_type=self._band_type, node=self._node_id, **kwargs)
 
 
     def _init_graphs(self):
@@ -119,22 +121,29 @@ class Image(IpeImage):
 
 
     def _pansharpen_graph(self):
-         pan_graph = {}
-         ms_graph = {}
-         for part in self.metadata['properties']['parts']:
-             for k, p in part.iteritems():
-                 _id = p['properties']['idahoImageId']
-                 if k == 'PAN':
-                     pan_graph[_id] = ipe.GridOrthorectify(ipe.IdahoRead(bucketName="idaho-images", imageId=_id, objectStore="S3"))
-                 else:
-                     ms_graph[_id] = ipe.GridOrthorectify(ipe.IdahoRead(bucketName="idaho-images", imageId=_id, objectStore="S3"))
+        pan_graph = {}
+        ms_graph = {}
+        for part in self.metadata['properties']['parts']:
+            for k, p in part.iteritems():
+                _id = p['properties']['idahoImageId']
+                if k == 'PAN':
+                    pan_graph[_id] =  ipe.GridOrthorectify(ipe.IdahoRead(bucketName="idaho-images", imageId=_id, objectStore="S3"))
+                else:
+                    ms_graph[_id] = ipe.GridOrthorectify(ipe.IdahoRead(bucketName="idaho-images", imageId=_id, objectStore="S3"))
 
-         pan_mosaic = self._mosaic(pan_graph, suffix='-pan')
-         pan = ipe.Format(ipe.MultiplyConst(pan_mosaic['toa_reflectance-pan'], constants=json.dumps([1000])), dataType="1")
-         ms_mosaic = self._mosaic(ms_graph, suffix='-ms')
-         ms = ipe.Format(ipe.MultiplyConst(ms_mosaic['toa_reflectance-ms'], constants=json.dumps([1000]*8)), dataType="1")
-         return {'pansharpened': ipe.LocallyProjectivePanSharpen(ms, pan)}
+        pan_mosaic = self._mosaic(pan_graph, suffix='-pan')
+        pan = ipe.Format(ipe.MultiplyConst(pan_mosaic['toa_reflectance-pan'], constants=json.dumps([1000])), dataType="1")
+        ms_mosaic = self._mosaic(ms_graph, suffix='-ms')
+        ms = ipe.Format(ipe.MultiplyConst(ms_mosaic['toa_reflectance-ms'], constants=json.dumps([1000]*8)), dataType="1")
+        return {'pansharpened': ipe.LocallyProjectivePanSharpen(ms, pan)}
 
+    def _toa(self, meta, _id, suffix=''):
+        gains_offsets = calc_toa_gain_offset(meta['properties'])
+        radiance_scales, reflectance_scales, radiance_offsets = zip(*gains_offsets)
+        ortho = ipe.GridOrthorectify(ipe.IdahoRead(bucketName="idaho-images", imageId=_id, objectStore="S3"))
+        radiance = ipe.AddConst(ipe.MultiplyConst(ipe.Format(ortho, dataType="4"), constants=radiance_scales), constants=radiance_offsets)
+        return ipe.MultiplyConst(radiance, constants=reflectance_scales)
+        
 
     def _mosaic(self, graph, suffix=''):
         mosaic = ipe.GeospatialMosaic(*graph.values())
@@ -143,6 +152,6 @@ class Image(IpeImage):
         gains_offsets = calc_toa_gain_offset(meta['properties'])
         radiance_scales, reflectance_scales, radiance_offsets = zip(*gains_offsets)
         radiance = ipe.AddConst(ipe.MultiplyConst(ipe.Format(mosaic, dataType="4"), constants=radiance_scales), constants=radiance_offsets)
-        toa_reflectance = ipe.MultiplyConst(radiance, constants=reflectance_scales)
-        graph.update({"mosaic{}".format(suffix): mosaic, "radiance{}".format(suffix): radiance, "toa_reflectance{}".format(suffix): toa_reflectance})
+        toa = ipe.MultiplyConst(radiance, constants=reflectance_scales)
+        graph.update({"mosaic{}".format(suffix): mosaic, "radiance{}".format(suffix): radiance, "toa_reflectance{}".format(suffix): toa})
         return graph

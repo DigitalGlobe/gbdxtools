@@ -1,8 +1,7 @@
-from functools import partial, wraps
+from functools import partial
 from itertools import groupby
 from collections import defaultdict
 from contextlib import contextmanager
-from xml.etree import cElementTree as ET
 import os.path
 import uuid
 
