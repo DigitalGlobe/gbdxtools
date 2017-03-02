@@ -43,7 +43,7 @@ class WorkflowTests(unittest.TestCase):
         pass
 
     def test_init(self):
-        wf = Workflow()
+        wf = Workflow(self.gbdx)
         self.assertTrue(isinstance(wf, Workflow))
         self.assertTrue(wf.s3 is not None)
         self.assertTrue(wf.gbdx_connection is not None)
@@ -54,7 +54,7 @@ class WorkflowTests(unittest.TestCase):
         tests all 3 endpoints for batch workflows, create, fetch, and cancel
         :return:
         """
-        wf = Workflow()
+        wf = Workflow(self.gbdx)
 
         with open(os.path.join(self.data_path, "batch_workflow.json")) as json_file:
             self.batch_workflow_json = json.loads(json_file.read())
@@ -79,7 +79,7 @@ class WorkflowTests(unittest.TestCase):
         """
         test gbdx.workflows.get(<workflow_id>)
         """
-        wf = Workflow()
+        wf = Workflow(self.gbdx)
 
         output = wf.get('4488969848362445219')
 
@@ -95,7 +95,7 @@ class WorkflowTests(unittest.TestCase):
         """
         test gbdx.workflows.get_stdout(<workflow_id>,<task_id>)
         """
-        wf = Workflow()
+        wf = Workflow(self.gbdx)
 
         output = wf.get_stdout('4488969848362445219','4488969848354891944')
 
@@ -106,7 +106,7 @@ class WorkflowTests(unittest.TestCase):
         """
         test gbdx.workflows.get_stdout(<workflow_id>,<task_id>)
         """
-        wf = Workflow()
+        wf = Workflow(self.gbdx)
 
         output = wf.get_stderr('4488969848362445219','4488969848354891944')
 

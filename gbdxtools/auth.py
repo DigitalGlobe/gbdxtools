@@ -15,12 +15,9 @@ class Interface(SingletonConfigurable):
         self.console_handler.setFormatter(self.formatter)
         self.logger.addHandler(self.console_handler)
         self.logger.info('Logger initialized')
-       
         
-    def __call__(self, **kwargs):
         if 'host' in kwargs:
             self.root_url = 'https://%s' % kwargs.get('host')
-
         try:  
             if (kwargs.get('username') and kwargs.get('password') and
                     kwargs.get('client_id') and kwargs.get('client_secret')):

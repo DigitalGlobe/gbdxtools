@@ -284,7 +284,7 @@ class SimpleWorkflowTests(unittest.TestCase):
 
         w.execute()
 
-        wf_api = WorkflowAPI()
+        wf_api = WorkflowAPI(self.gbdx)
         wf_body = wf_api.get(w.id)
         assert wf_body['callback'] == callback_url
 

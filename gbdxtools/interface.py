@@ -28,19 +28,30 @@ class Interface(object):
     gbdx_connection = None
 
     def __init__(self, **kwargs):
-        interface = Auth.instance()(**kwargs)
-        self.gbdx_connection = interface.gbdx_connection
-        self.root_url = interface.root_url
+        Auth(**kwargs)
+        self.gbdx_connection = Auth.instance().gbdx_connection
 
-        self.s3 = S3()
-        self.ordering = Ordering()
-        self.catalog = Catalog()
-        self.workflow = Workflow()
-        self.idaho = Idaho()
-        self.vectors = Vectors()
+        # create and store an instance of the GBDX s3 client
+        self.s3 = S3(self)
+
+        # create and store an instance of the GBDX Ordering Client
+        self.ordering = Ordering(self)
+
+        # create and store an instance of the GBDX Catalog Client
+        self.catalog = Catalog(self)
+
+        # create and store an instance of the GBDX Workflow Client
+        self.workflow = Workflow(self)
+
+        # create and store an instance of the Idaho Client
+        self.idaho = Idaho(self)
+
+        self.vectors = Vectors(self)
+
         self.image = Image
         self.ipeimage = IpeImage
-        self.task_registry = TaskRegistry()
+
+        self.task_registry = TaskRegistry(self)
 
     def Task(self, __task_name, **kwargs):
         return gbdxtools.simpleworkflows.Task(self, __task_name, **kwargs)

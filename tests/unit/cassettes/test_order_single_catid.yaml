@@ -8,7 +8,7 @@ interactions:
       Content-Length: ['20']
       User-Agent: [python-requests/2.9.1]
     method: POST
-    uri: https://geobigdata.io/orders/v2/order
+    uri: https://geobigdata.io/orders/v2/order/
   response:
     body: {string: !!python/unicode '{"order_id": "c5cd8157-3001-4a03-a716-4ef673748c7a",
         "acquisitions": [{"acquisition_id": "10400100120FEA00", "state": "delivered",
