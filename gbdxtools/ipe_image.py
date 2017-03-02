@@ -5,6 +5,7 @@ from contextlib import contextmanager
 from xml.etree import cElementTree as ET
 import os.path
 import uuid
+import math
 
 import signal
 signal.signal(signal.SIGPIPE, signal.SIG_IGN)
@@ -49,7 +50,6 @@ from gbdxtools.ipe.interface import Ipe
 from gbdxtools.auth import Interface
 ipe = Ipe()
 
-@delayed
 def load_url(url, bands=8):
     """ Loads a geotiff url inside a thread and returns as an ndarray """
     thread_id = threading.current_thread().ident
@@ -88,7 +88,7 @@ class IpeImage(da.Array):
         else:
             self._ipe_graphs = self._init_graphs()
         if kwargs.get('_intermediate', False):
-            return 
+            return
         self._bounds = self._parse_geoms(**kwargs)
         self._graph_id = str(uuid.uuid5(uuid.NAMESPACE_DNS, str(self.ipe.graph())))
         self._tile_size = kwargs.get('tile_size', 256)
@@ -152,29 +152,27 @@ class IpeImage(da.Array):
     @timeit
     def _config_dask(self, bounds=None):
         """ Configures the image as a dask array with a calculated shape and chunk size """
-        # TODO fix dtype here, used to come from vrt 
+        # TODO fix dtype here, used to come from vrt
         meta = self.ipe_metadata
         nbands = meta['image']['numBands']
-        urls = self._collect_urls(meta, bounds=bounds)
-        cfg = {"shape": tuple([nbands] + [self._tile_size*len(urls[0]), self._tile_size*len(urls)]),
+        urls, shape = self._collect_urls(meta, bounds=bounds)
+        cfg = {"shape": tuple([nbands] + list(shape)),
                "dtype": "float32",
                "chunks": tuple([nbands] + [self._tile_size, self._tile_size])}
-        img = self._build_array(urls, bands=nbands, chunks=cfg["chunks"], dtype=cfg["dtype"])
-        cfg["name"] = img.name
-        cfg["dask"] = img.dask
+        img = self._build_array(urls)
+        cfg["name"] = img["name"]
+        cfg["dask"] = img["dask"]
 
         return cfg
 
-    def _build_array(self, urls, bands=8, chunks=(1,256,256), dtype=np.float32):
+    def _build_array(self, urls):
         """ Creates the deferred dask array from a grid of URLs """
-        buf = da.concatenate(
-            [da.concatenate([da.from_delayed(load_url(url, bands=bands), chunks, dtype) for u, url in enumerate(row)],
-                        axis=1) for r, row in enumerate(urls)], axis=2)
-        return buf
+        name = "image-{}".format(str(uuid.uuid4()))
+        buf_dask = {(name, 0, x, y): (load_url, url) for (x, y), url in urls.iteritems()}
+        return {"name": name, "dask": buf_dask}
 
     def _ipe_tile(self, x, y):
         return "{}/tile/{}/{}/{}/{}/{}.tif".format(VIRTUAL_IPE_URL, "idaho-virtual", self.ipe_id, self.ipe_node_id, x, y)
-        
 
     @timeit
     def _collect_urls(self, meta, bounds=None):
@@ -193,24 +191,10 @@ class IpeImage(da.Array):
             # TODO need to make the minus one holdd for all aoi bounds, for now it matches expected n-urls
             minx, miny, maxx, maxy = map(int, [(ul[0] / size) - 1, (ul[1] / size), (ul[0] / size) + offx, (ul[1] / size) + offy])
         else:
-            
-            minx, miny, maxx, maxy = 0, 0, meta['image']['imageWidth'] / size, meta['image']['imageHeight'] / size
-    
-        urls = [self._ipe_tile(x,y) for y in xrange(miny, maxy + 1) for x in xrange(minx, maxx + 1)]
+            minx, miny, maxx, maxy = 0, 0, int(math.floor(meta['image']['imageWidth'] / float(size))), int(math.floor(meta['image']['imageHeight'] / float(size)))
 
-        chunks = []
-        for url in urls:
-            head, _ = os.path.splitext(url)
-            head, y = os.path.split(head)
-            head, x = os.path.split(head)
-            head, key = os.path.split(head)
-            y = int(y)
-            x = int(x)
-            chunks.append((x, y, url))
-
-        grid = [[rec[-1] for rec in sorted(it, key=lambda x: x[1])]
-                for key, it in groupby(sorted(chunks, key=lambda x: x[0]), lambda x: x[0])]
-        return grid
+        urls = {(y-miny, x-minx): self._ipe_tile(x, y) for y in xrange(miny, maxy + 1) for x in xrange(minx, maxx + 1)}
+        return urls, (size*(maxy-miny+1), size*(maxx-minx+1))
 
 
     def _parse_geoms(self, **kwargs):
@@ -255,6 +239,5 @@ class IpeImage(da.Array):
                 bottom = lims[:,x][0]
                 data[:,:,x] = (data[:,:,x]-bottom)/float(top-bottom)
                 data = np.clip(data,0,1)
-            plt.imshow(data,interpolation='nearest')   
+            plt.imshow(data,interpolation='nearest')
         plt.show(block=False)
-
