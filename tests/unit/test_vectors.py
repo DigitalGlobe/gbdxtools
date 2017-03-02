@@ -39,7 +39,7 @@ class TestVectors(unittest.TestCase):
         aoi = "POLYGON((17.75390625 25.418470119273117,24.08203125 25.418470119273117,24.08203125 19.409611549990895,17.75390625 19.409611549990895,17.75390625 25.418470119273117))"
         results = v.query(aoi, query="item_type:WV03")
 
-        assert len(results) == 100
+        assert len(results) == 310
 
     @vcr.use_cassette('tests/unit/cassettes/test_vectors_create_single.yaml', filter_headers=['authorization'])
     def test_vectors_create_single(self):
