@@ -15,7 +15,7 @@ from shapely.wkt import loads
 from shapely.geometry import box, shape
 import requests
 
-from gbdxtools.auth import Interface
+from gbdxtools.auth import Interface as Auth
 from gbdxtools.ipe.util import calc_toa_gain_offset
 from gbdxtools.ipe_image import IpeImage
 from gbdxtools.vectors import Vectors
@@ -38,8 +38,8 @@ class Image(IpeImage):
     """
 
     def __init__(self, cat_id, band_type="MS", node="toa_reflectance", **kwargs):
-        self.interface = Interface.instance()(**kwargs)
-        self.vectors = Vectors()
+        self.interface = Auth.instance()
+        self.vectors = Vectors(self.interface)
         self._gid = cat_id
         self._band_type = band_type
         self._node_id = node

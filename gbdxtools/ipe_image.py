@@ -45,7 +45,7 @@ from gbdxtools.ipe.util import calc_toa_gain_offset, timeit
 from gbdxtools.ipe.graph import VIRTUAL_IPE_URL, register_ipe_graph, get_ipe_metadata
 from gbdxtools.ipe.error import NotFound
 from gbdxtools.ipe.interface import Ipe
-from gbdxtools.auth import Interface
+from gbdxtools.auth import Interface as Auth
 ipe = Ipe()
 
 @delayed
@@ -75,7 +75,7 @@ class IpeImage(da.Array):
       Dask based access to ipe based images (Idaho).
     """
     def __init__(self, idaho_id, node="toa_reflectance", **kwargs):
-        self.interface = Interface.instance()(**kwargs)
+        self.interface = Auth.instance()
         self._gid = idaho_id
         self._node_id = node
         self._level = 0

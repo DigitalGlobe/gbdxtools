@@ -27,6 +27,5 @@ class Interface(SingletonConfigurable):
             elif self.gbdx_connection is None:
                 # This will throw an exception if your .ini file is not set properly
                 self.gbdx_connection = gbdx_auth.get_session(kwargs.get('config_file'))
-            return self
         except Exception as err: 
             print(err)
