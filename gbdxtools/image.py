@@ -13,18 +13,15 @@ import uuid
 
 from shapely.wkt import loads
 from shapely.geometry import box, shape
-import rasterio
-import gdal
 import requests
 
+from gbdxtools.auth import Interface
 from gbdxtools.ipe.util import calc_toa_gain_offset
 from gbdxtools.ipe_image import IpeImage
 from gbdxtools.vectors import Vectors
 from gbdxtools.ipe.interface import Ipe
 ipe = Ipe()
 
-
-from gbdxtools.auth import Interface
 
 band_types = {
   'MS': 'WORLDVIEW_8_BAND',

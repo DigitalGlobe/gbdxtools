@@ -2,8 +2,7 @@ from functools import partial, wraps
 from itertools import groupby
 from collections import defaultdict
 from contextlib import contextmanager
-#from xml.etree import cElementTree as ET
-from lxml import etree as ET
+from xml.etree import cElementTree as ET
 import os.path
 import uuid
 
