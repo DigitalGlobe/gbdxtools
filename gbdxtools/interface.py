@@ -29,7 +29,10 @@ class Interface(object):
 
     def __init__(self, **kwargs):
         Auth(**kwargs)
-        self.gbdx_connection = Auth.instance().gbdx_connection
+        interface = Auth.instance()
+        self.gbdx_connection = interface.gbdx_connection
+        self.root_url = interface.root_url
+        self.logger = interface.logger
 
         # create and store an instance of the GBDX s3 client
         self.s3 = S3(self)

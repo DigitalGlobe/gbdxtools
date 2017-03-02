@@ -11,7 +11,7 @@ from gbdxtools.auth import Interface
 
 class S3(object):
 
-    def __init__(self, **kwargs):
+    def __init__(self, interface):
         '''Instantiate the s3 interface
 
         Args:
@@ -21,7 +21,6 @@ class S3(object):
             An instance of gbdxtools.S3.
 
         '''
-        interface = Interface.instance()(**kwargs)
         self.base_url = '%s/s3creds/v1' % interface.root_url
 
         # store a ref to the GBDX connection

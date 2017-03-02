@@ -10,17 +10,17 @@ from builtins import object
 
 import json
 from gbdxtools.s3 import S3
-from gbdxtools.auth import Interface
 
 
 class Workflow(object):
-    def __init__(self, **kwargs):
+    def __init__(self, interface):
         """Construct the Workflow instance
+            Args:
+               interface (Interface): A reference to the GBDX interface.
     
             Returns:
                 An instance of the Workflow class.
         """
-        interface = Interface.instance()(**kwargs)
         self.base_url = '%s/workflows/v1' % interface.root_url
         self.workflows_url = '%s/workflows' % self.base_url
 
@@ -28,7 +28,7 @@ class Workflow(object):
         self.gbdx_connection = interface.gbdx_connection
 
         # store a ref to the s3 interface
-        self.s3 = S3()
+        self.s3 = interface.s3
 
         # the logger
         self.logger = interface.logger
