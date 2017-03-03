@@ -13,6 +13,7 @@ bumpversion
 traitlets
 shapely
 ephem
+toolz
 dask
 cloudpickle
 numpy
