@@ -37,6 +37,7 @@ setup(name='gbdxtools',
                         'toolz',
                         'dask',
                         'cloudpickle',
+                        'pycurl',
                         'rasterio==1.0a7'
                         ],
       setup_requires=['pytest-runner'],
