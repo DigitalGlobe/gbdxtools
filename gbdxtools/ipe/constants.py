@@ -1,30 +1,7 @@
 '''
 Constants for geoio
 '''
-from osgeo import gdalconst
 import numpy as np
-
-##### Numpy <-> Gdal Conversion Dictionaries ##################################
-# Numpy data type to the corresponding GDAL data type.
-DICT_NP_TO_GDAL = {np.dtype('uint8') : gdalconst.GDT_Byte,
-                   np.dtype('uint16') : gdalconst.GDT_UInt16,
-                   np.dtype('uint32') : gdalconst.GDT_UInt32,
-                   np.dtype('int16') : gdalconst.GDT_Int16,
-                   np.dtype('int32') : gdalconst.GDT_Int32,
-                   np.dtype('float32') : gdalconst.GDT_Float32,
-                   np.dtype('float64') : gdalconst.GDT_Float64
-}
-
-# GDAL data type to the corresponding Numpy data type.
-DICT_GDAL_TO_NP = {gdalconst.GDT_Byte : np.dtype('uint8'),
-                   gdalconst.GDT_UInt16 : np.dtype('uint16'),
-                   gdalconst.GDT_UInt32 : np.dtype('uint32'),
-                   gdalconst.GDT_Int16 : np.dtype('int16'),
-                   gdalconst.GDT_Int32 : np.dtype('int32'),
-                   gdalconst.GDT_Float32 : np.dtype('float32'),
-                   gdalconst.GDT_Float64 : np.dtype('float64')
-}
-###############################################################################
 
 
 ##### DigitalGlobe File Suffixes and Search Strings ###########################
