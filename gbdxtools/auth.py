@@ -2,7 +2,7 @@ from gbdx_auth import gbdx_auth
 from traitlets.config.configurable import SingletonConfigurable
 import logging
 
-class Interface(SingletonConfigurable):
+class Interface():
     gbdx_connection = None
     root_url = 'https://geobigdata.io'
 
@@ -15,7 +15,7 @@ class Interface(SingletonConfigurable):
         self.console_handler.setFormatter(self.formatter)
         self.logger.addHandler(self.console_handler)
         self.logger.info('Logger initialized')
-        
+
         if 'host' in kwargs:
             self.root_url = 'https://%s' % kwargs.get('host')
         try:  

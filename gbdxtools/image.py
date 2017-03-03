@@ -38,7 +38,7 @@ class Image(IpeImage):
     """
 
     def __init__(self, cat_id, band_type="MS", node="toa_reflectance", **kwargs):
-        self.interface = Auth.instance()
+        self.interface = Auth()
         self.vectors = Vectors(self.interface)
         self._gid = cat_id
         self._band_type = band_type

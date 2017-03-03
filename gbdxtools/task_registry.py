@@ -9,7 +9,7 @@ import json
 
 class TaskRegistry(object):
     def __init__(self, interface):
-        self._base_url = 'https://geobigdata.io/workflows/v1/tasks'
+        self._base_url = '%s/workflows/v1/tasks' % interface.root_url
 
         # store a reference to the GBDX Connection
         self.gbdx_connection = interface.gbdx_connection

@@ -28,8 +28,7 @@ class Interface(object):
     gbdx_connection = None
 
     def __init__(self, **kwargs):
-        Auth(**kwargs)
-        interface = Auth.instance()
+        interface = Auth(**kwargs)
         self.gbdx_connection = interface.gbdx_connection
         self.root_url = interface.root_url
         self.logger = interface.logger
