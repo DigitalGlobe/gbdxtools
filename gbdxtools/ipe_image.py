@@ -64,7 +64,6 @@ def load_url(url, bands=8):
           with memfile.open(driver="GTiff") as dataset:
               arr = dataset.read()
       except (TypeError, rasterio.RasterioIOError) as e:
-          print("Errored on {} with {}".format(url, e))
           arr = np.zeros([bands,256,256], dtype=np.float32)
           _curl.close()
           del _curl_pool[thread_id]
@@ -182,13 +181,12 @@ class IpeImage(da.Array):
         size = self._tile_size
         if bounds is not None:
             tfm = meta['georef']
-            rev = ~Affine.from_gdal(*[tfm["translateX"], tfm["scaleX"], tfm["shearX"], tfm["translateY"], tfm["shearY"], tfm["scaleY"]])
-            ul = map(round, rev * (bounds[0], bounds[3]))
-            lr = map(round, rev * (bounds[2], bounds[1]))
-            offx = (lr[0] - ul[0]) / size
-            offy = (lr[1] - ul[1]) / size
-            # TODO need to make the minus one holdd for all aoi bounds, for now it matches expected n-urls
-            minx, miny, maxx, maxy = map(int, [(ul[0] / size) - 1, (ul[1] / size), (ul[0] / size) + offx, (ul[1] / size) + offy])
+            xform = Affine.from_gdal(*[tfm["translateX"], tfm["scaleX"], tfm["shearX"], tfm["translateY"], tfm["shearY"], tfm["scaleY"]])
+            args = bounds + [xform]
+            roi = rasterio.windows.from_bounds(*args, boundless=True)
+            roi = rasterio.windows.round_window_to_full_blocks(roi, [(size,size) for i in range(meta['image']['numBands'])])
+            minx, miny = max(0, int(math.floor(roi.col_off / float(size))) - 1), max(0, math.ceil(roi.row_off / float(size)))
+            maxx, maxy = int(minx + (roi.num_cols / size)), int(miny + (roi.num_rows / size))
         else:
             minx, miny, maxx, maxy = 0, 0, int(math.floor(meta['image']['imageWidth'] / float(size))), int(math.floor(meta['image']['imageHeight'] / float(size)))
 

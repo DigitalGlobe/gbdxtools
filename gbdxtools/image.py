@@ -16,7 +16,7 @@ from shapely.geometry import box, shape
 import requests
 
 from gbdxtools.auth import Interface as Auth
-from gbdxtools.ipe.util import calc_toa_gain_offset
+from gbdxtools.ipe.util import calc_toa_gain_offset, timeit
 from gbdxtools.ipe_image import IpeImage
 from gbdxtools.vectors import Vectors
 from gbdxtools.ipe.interface import Ipe
@@ -36,6 +36,9 @@ class Image(IpeImage):
       Collects metadata on all image parts, groupd pan and ms bands from idaho
       Inherits from IpeImage and represents a mosiac data set of the full catalog strip
     """
+    _properties = None
+    _ipe_id = None
+    _ipe_metadata = None
 
     def __init__(self, cat_id, band_type="MS", node="toa_reflectance", **kwargs):
         self.interface = Auth()
@@ -48,11 +51,7 @@ class Image(IpeImage):
         if self._pansharpen:
             self._node_id = 'pansharpened'
         self._level = kwargs.get('level', 0)
-
-        self._ipe_id = None
-        self._ipe_metadata = None
         self._ipe_graphs = self._init_graphs()
-
         self._bounds = self._parse_geoms(**kwargs)
         self._graph_id = str(uuid.uuid5(uuid.NAMESPACE_DNS, str(self.ipe.graph())))
         self._tile_size = kwargs.get('tile_size', 256)
@@ -66,37 +65,34 @@ class Image(IpeImage):
             aoi = "POLYGON((-180.0 90.0,180.0 90.0,180.0 -90.0,-180.0 -90.0,-180.0 90.0))"
         return self.vectors.query(aoi, query=query)
 
-
     @property
+    def properties(self):
+        if self._properties is None:
+            query = 'item_type:DigitalGlobeAcquisition AND attributes.catalogID:{}'.format(self._gid)
+            self._properties = self._query_vectors(query)
+        return self._properties
+            
+    
+    @property
+    @timeit
     def metadata(self):
-        # TODO this logic should be exposed as a method in the idaho class
-        query = 'item_type:DigitalGlobeAcquisition AND attributes.catalogID:{}'.format(self._gid)
-        props = self._query_vectors(query)
-        if len(props) == 0:
-            print('Could not find image metadata for the given catalog id')
-            return
-
-        geom = shape(props[0]['geometry'])
-        attrs = props[0]['properties']['attributes']
+        meta = {}
         query = 'item_type:IDAHOImage AND attributes.catalogID:{}'.format(self._gid)
         results = self._query_vectors(query)
-        
-        # group idaho images on identifiers
         grouped = defaultdict(list)
         for idaho in results:
             vid = idaho['properties']['attributes']['vendorDatasetIdentifier']
             grouped[vid].append(idaho)
 
-        # stash parts on metatada
-        attrs['parts'] = []
+        meta['parts'] = []
         for key, parts in grouped.iteritems():
             part = {}
             for p in parts:
-                attr = p['properties']['attributes']
-                part[attr['colorInterpretation']] = {'properties': attr, 'geometry': shape(p['geometry'])}
-            attrs['parts'].append(part)
+                attrs = p['properties']['attributes']
+                part[attrs['colorInterpretation']] = {'properties': attrs, 'geometry': shape(p['geometry'])}
+            meta['parts'].append(part)
 
-        return {'properties': attrs, 'geometry': geom}
+        return meta
 
 
     def aoi(self, **kwargs):
@@ -105,13 +101,14 @@ class Image(IpeImage):
         return Image(self._gid, band_type=self._band_type, node=self._node_id, **kwargs)
 
 
+    @timeit
     def _init_graphs(self):
         graph = {}
         ids = []
         if self._node_id == 'pansharpened' and self._pansharpen:
             return self._pansharpen_graph()
         else: 
-            for part in self.metadata['properties']['parts']:
+            for part in self.metadata['parts']:
                 for k, p in part.iteritems():
                     if k == band_types[self._band_type]:
                         _id = p['properties']['idahoImageId']
@@ -123,7 +120,7 @@ class Image(IpeImage):
     def _pansharpen_graph(self):
         pan_graph = {}
         ms_graph = {}
-        for part in self.metadata['properties']['parts']:
+        for part in self.metadata['parts']:
             for k, p in part.iteritems():
                 _id = p['properties']['idahoImageId']
                 if k == 'PAN':
@@ -137,6 +134,7 @@ class Image(IpeImage):
         ms = ipe.Format(ipe.MultiplyConst(ms_mosaic['toa_reflectance-ms'], constants=json.dumps([1000]*8)), dataType="1")
         return {'pansharpened': ipe.LocallyProjectivePanSharpen(ms, pan)}
 
+
     def _toa(self, meta, _id, suffix=''):
         gains_offsets = calc_toa_gain_offset(meta['properties'])
         radiance_scales, reflectance_scales, radiance_offsets = zip(*gains_offsets)
@@ -145,6 +143,7 @@ class Image(IpeImage):
         return ipe.MultiplyConst(radiance, constants=reflectance_scales)
         
 
+    @timeit
     def _mosaic(self, graph, suffix=''):
         mosaic = ipe.GeospatialMosaic(*graph.values())
         idaho_id = graph.keys()[0]
