@@ -1,3 +1,4 @@
+from __future__ import print_function
 import xml.etree.cElementTree as ET
 from string import Template
 import os
@@ -79,7 +80,6 @@ def generate_vrt_template(ipe_id, node, level, num_bands=None):
 
             ET.SubElement(src, "SourceProperties", {"RasterXSize": str(tile_size_x), "RasterYSize": str(tile_size_y),
                                                     "BlockXSize": "256", "BlockYSize": "256", "DataType": DTLOOKUP.get(meta["image"]["dataType"], "Float32")})
-    #return prettify(vrt)
     return ET.tostring(vrt, 'utf-8')
 
 
@@ -110,5 +110,5 @@ def put_cached_vrt(idaho_id, node, level, template):
             f.write(Template(template).substitute(query=""))
         return cache_path
     except Exception as e:
-        print "VRT is not being cached", e
+        print("VRT could not be cached", e)
         pass
