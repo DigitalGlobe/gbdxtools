@@ -142,13 +142,17 @@ class IpeImage(da.Array):
         """ Subsets the IpeImage by the given bounds """
         return IpeImage(self._gid, **kwargs)
 
+    def clip_to_aoi(self):
+        if self._bounds is not None:
+            with self.open() as src:
+                return src.read(window=src.window(*self._bounds))
+
     @contextmanager
     def open(self, *args, **kwargs):
         """ A rasterio based context manager for reading the full image VRT """
         with rasterio.open(self.vrt, *args, **kwargs) as src:
             yield src
 
-    @timeit
     def _config_dask(self, bounds=None):
         """ Configures the image as a dask array with a calculated shape and chunk size """
         # TODO fix dtype here, used to come from vrt
@@ -173,7 +177,6 @@ class IpeImage(da.Array):
     def _ipe_tile(self, x, y):
         return "{}/tile/{}/{}/{}/{}/{}.tif".format(VIRTUAL_IPE_URL, "idaho-virtual", self.ipe_id, self.ipe_node_id, x, y)
 
-    @timeit
     def _collect_urls(self, meta, bounds=None):
         """
           Finds all intersecting tiles from the source image and intersect a given bounds
@@ -185,15 +188,21 @@ class IpeImage(da.Array):
             xform = Affine.from_gdal(*[tfm["translateX"], tfm["scaleX"], tfm["shearX"], tfm["translateY"], tfm["shearY"], tfm["scaleY"]])
             args = bounds + [xform]
             roi = rasterio.windows.from_bounds(*args, boundless=True)
-            roi = rasterio.windows.round_window_to_full_blocks(roi, [(size,size) for i in range(meta['image']['numBands'])])
-            minx, miny = max(0, int(math.floor(roi.col_off / float(size))) - 1), max(0, math.ceil(roi.row_off / float(size)))
-            maxx, maxy = int(minx + (roi.num_cols / size)), int(miny + (roi.num_rows / size))
+            #roi = rasterio.windows.round_window_to_full_blocks(roi, [(size,size) for i in range(meta['image']['numBands'])])
+            #minx, miny = max(0, int(math.floor(roi.col_off / float(size))) - 1), max(0, math.ceil(roi.row_off / float(size)))
+            #maxx, maxy = int(minx + (roi.num_cols / size)), int(miny + (roi.num_rows / size))
+            coff, roff, ncols, nrows = map(float, roi.flatten())
+            xtiles = math.ceil((ncols - size) / size)
+            ytiles = math.ceil((nrows - size) / size)
+            minx = int(math.floor( coff / size )) 
+            maxx = minx + xtiles
+            miny = math.ceil( roff / size ) 
+            maxy = miny + ytiles
         else:
             minx, miny, maxx, maxy = 0, 0, int(math.floor(meta['image']['imageWidth'] / float(size))), int(math.floor(meta['image']['imageHeight'] / float(size)))
 
         urls = {(y-miny, x-minx): self._ipe_tile(x, y) for y in xrange(miny, maxy + 1) for x in xrange(minx, maxx + 1)}
         return urls, (size*(maxy-miny+1), size*(maxx-minx+1))
-
 
     def _parse_geoms(self, **kwargs):
         """ Finds supported geometry types, parses them and returns the bbox """

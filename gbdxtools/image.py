@@ -74,7 +74,6 @@ class Image(IpeImage):
             
     
     @property
-    @timeit
     def metadata(self):
         meta = {}
         query = 'item_type:IDAHOImage AND attributes.catalogID:{}'.format(self._gid)
@@ -101,7 +100,6 @@ class Image(IpeImage):
         return Image(self._gid, band_type=self._band_type, node=self._node_id, **kwargs)
 
 
-    @timeit
     def _init_graphs(self):
         graph = {}
         ids = []
@@ -143,7 +141,6 @@ class Image(IpeImage):
         return ipe.MultiplyConst(radiance, constants=reflectance_scales)
         
 
-    @timeit
     def _mosaic(self, graph, suffix=''):
         mosaic = ipe.GeospatialMosaic(*graph.values())
         idaho_id = graph.keys()[0]
