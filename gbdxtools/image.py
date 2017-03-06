@@ -17,7 +17,7 @@ import requests
 
 from gbdxtools.auth import Interface as Auth
 from gbdxtools.ipe.util import calc_toa_gain_offset, timeit
-from gbdxtools.ipe_image import IpeImage
+from gbdxtools.ipe_image import IpeImage, DaskImage
 from gbdxtools.vectors import Vectors
 from gbdxtools.ipe.interface import Ipe
 ipe = Ipe()
@@ -52,12 +52,15 @@ class Image(IpeImage):
             self._node_id = 'pansharpened'
         self._level = kwargs.get('level', 0)
         self._ipe_graphs = self._init_graphs()
-        self._bounds = self._parse_geoms(**kwargs)
         self._graph_id = str(uuid.uuid5(uuid.NAMESPACE_DNS, str(self.ipe.graph())))
         self._tile_size = kwargs.get('tile_size', 256)
-
-        self._cfg = self._config_dask(bounds=self._bounds)
+        self._cfg = self._config_dask()
         super(IpeImage, self).__init__(**self._cfg)
+
+        _bounds = self._parse_geoms(**kwargs)
+        if _bounds is not None:
+            self._cfg = self._aoi_config(self, **kwargs)
+            super(IpeImage, self).__init__(**self._cfg)
 
 
     def _query_vectors(self, query, aoi=None):
@@ -97,7 +100,9 @@ class Image(IpeImage):
     def aoi(self, **kwargs):
         if self._pansharpen and 'pansharpen' not in kwargs:
             kwargs['pansharpen'] = True
-        return Image(self._gid, band_type=self._band_type, node=self._node_id, **kwargs)
+        img = Image(self._gid, band_type=self._band_type, node=self._node_id, **kwargs)
+        cfg = self._aoi_config(img, **kwargs)
+        return DaskImage(**cfg)
 
 
     def _init_graphs(self):
@@ -130,7 +135,7 @@ class Image(IpeImage):
         pan = ipe.Format(ipe.MultiplyConst(pan_mosaic['toa_reflectance-pan'], constants=json.dumps([1000])), dataType="1")
         ms_mosaic = self._mosaic(ms_graph, suffix='-ms')
         ms = ipe.Format(ipe.MultiplyConst(ms_mosaic['toa_reflectance-ms'], constants=json.dumps([1000]*8)), dataType="1")
-        return {'pansharpened': ipe.LocallyProjectivePanSharpen(ms, pan)}
+        return {'ms_mosaic': ms_mosaic, 'pan_mosiac': pan_mosaic, 'pansharpened': ipe.LocallyProjectivePanSharpen(ms, pan)}
 
 
     def _toa(self, meta, _id, suffix=''):

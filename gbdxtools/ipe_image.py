@@ -70,7 +70,39 @@ def load_url(url, bands=8):
           del _curl_pool[thread_id]
     return arr
 
-class IpeImage(da.Array):
+class DaskImage(da.Array):
+    def __init__(self, **kwargs):
+        super(DaskImage, self).__init__(**kwargs)
+
+    def read(self, bands=None):
+        """ Reads data from a dask array and returns the computed ndarray matching the given bands """
+        arr = self.compute(get=threaded_get)
+        if bands is not None:
+            arr = arr[bands, ...]
+        return arr
+
+    def plot(self, arr=None, stretch=[2,98], w=20, h=10):
+        f, ax1 = plt.subplots(1, figsize=(w,h))
+        ax1.axis('off')
+        if self.shape[0] == 1:
+            data = arr if arr is not None else self
+            plt.imshow(data[0,:,:], cmap="Greys_r")
+        else:
+            data = arr if arr is not None else self.read()
+            data = data[[4,2,1],...]
+            data = data.astype(np.float32)
+            data = np.rollaxis(data, 0, 3)
+            lims = np.percentile(data,stretch,axis=(0,1))
+            for x in xrange(len(data[0,0,:])):
+                top = lims[:,x][1]
+                bottom = lims[:,x][0]
+                data[:,:,x] = (data[:,:,x]-bottom)/float(top-bottom)
+                data = np.clip(data,0,1)
+            plt.imshow(data,interpolation='nearest')
+        plt.show(block=False)
+
+
+class IpeImage(DaskImage):
     """
       Dask based access to ipe based images (Idaho).
     """
@@ -88,11 +120,17 @@ class IpeImage(da.Array):
             self._ipe_graphs = self._init_graphs()
         if kwargs.get('_intermediate', False):
             return
-        self._bounds = self._parse_geoms(**kwargs)
         self._graph_id = str(uuid.uuid5(uuid.NAMESPACE_DNS, str(self.ipe.graph())))
         self._tile_size = kwargs.get('tile_size', 256)
-        self._cfg = self._config_dask(bounds=self._bounds)
+        
+        self._cfg = self._config_dask()
         super(IpeImage, self).__init__(**self._cfg)
+        
+        _bounds = self._parse_geoms(**kwargs)
+        if _bounds is not None:
+            self._cfg = self._aoi_config(self, **kwargs)
+            super(IpeImage, self).__init__(**self._cfg)
+
 
     @property
     def idaho_md(self):
@@ -131,21 +169,30 @@ class IpeImage(da.Array):
             vrt = put_cached_vrt(self._gid, self._graph_id, self._level, template)
         return vrt
 
-    def read(self, bands=None):
-        """ Reads data from a dacsk array and returns the computed ndarray matching the given bands """
-        arr = self.compute(get=threaded_get)
-        if bands is not None:
-            arr = arr[bands, ...]
-        return arr
-
     def aoi(self, **kwargs):
         """ Subsets the IpeImage by the given bounds """
-        return IpeImage(self._gid, **kwargs)
+        img = IpeImage(self._gid, **kwargs)
+        cfg = self._aoi_config(img, **kwargs)
+        return DaskImage(**cfg)
 
-    def clip_to_aoi(self):
-        if self._bounds is not None:
-            with self.open() as src:
-                return src.read(window=src.window(*self._bounds))
+    def _aoi_config(self, img, **kwargs):
+        bounds = self._parse_geoms(**kwargs)
+        if bounds is None:
+            print('AOI bounds not found. Must specify a bbox, wkt, or geojson geometry.')
+            return
+        else:
+            tfm = img.ipe_metadata['georef']
+            xform = Affine.from_gdal(*[tfm["translateX"], tfm["scaleX"], tfm["shearX"], tfm["translateY"], tfm["shearY"], tfm["scaleY"]])
+            args = bounds + [xform]
+            roi = rasterio.windows.from_bounds(*args, boundless=True)
+            aoi = self[:, roi.row_off : roi.row_off + roi.num_rows, roi.col_off : roi.col_off + roi.num_cols ]
+            return {
+                "shape": aoi.shape,
+                "dtype": aoi.dtype,
+                "chunks": aoi._chunks,
+                "name": aoi.name,
+                "dask": aoi.dask
+            }
 
     @contextmanager
     def open(self, *args, **kwargs):
@@ -153,16 +200,16 @@ class IpeImage(da.Array):
         with rasterio.open(self.vrt, *args, **kwargs) as src:
             yield src
 
-    def _config_dask(self, bounds=None):
+    def _config_dask(self):
         """ Configures the image as a dask array with a calculated shape and chunk size """
         dtype = "float32" if self._node_id is not 'pansharpened' else 'uint16'
         meta = self.ipe_metadata
         nbands = meta['image']['numBands']
-        urls, shape = self._collect_urls(meta, bounds=bounds)
+        urls, shape = self._collect_urls(meta)
+        img = self._build_array(urls)
         cfg = {"shape": tuple([nbands] + list(shape)),
                "dtype": dtype,
                "chunks": tuple([nbands] + [self._tile_size, self._tile_size])}
-        img = self._build_array(urls)
         cfg["name"] = img["name"]
         cfg["dask"] = img["dask"]
 
@@ -177,32 +224,13 @@ class IpeImage(da.Array):
     def _ipe_tile(self, x, y):
         return "{}/tile/{}/{}/{}/{}/{}.tif".format(VIRTUAL_IPE_URL, "idaho-virtual", self.ipe_id, self.ipe_node_id, x, y)
 
-    def _collect_urls(self, meta, bounds=None):
+    def _collect_urls(self, meta):
         """
           Finds all intersecting tiles from the source image and intersect a given bounds
           returns a nested list of urls as a grid that represents data chunks in the array
         """
         size = self._tile_size
-        if bounds is not None:
-            tfm = meta['georef']
-            xform = Affine.from_gdal(*[tfm["translateX"], tfm["scaleX"], tfm["shearX"], tfm["translateY"], tfm["shearY"], tfm["scaleY"]])
-            args = bounds + [xform]
-            roi = rasterio.windows.from_bounds(*args, boundless=True)
-
-            #roi = rasterio.windows.round_window_to_full_blocks(roi, [(size,size) for i in range(meta['image']['numBands'])])
-            #minx, miny = max(0, int(math.floor(roi.col_off / float(size))) - 1), max(0, math.ceil(roi.row_off / float(size)))
-            #maxx, maxy = int(minx + (roi.num_cols / size)), int(miny + (roi.num_rows / size))
-
-            coff, roff, ncols, nrows = map(float, roi.flatten())
-            xtiles = math.ceil((ncols - size) / size)
-            ytiles = math.ceil((nrows - size) / size)
-            minx = int(math.floor( coff / size )) 
-            maxx = minx + xtiles
-            miny = math.ceil( roff / size ) 
-            maxy = miny + ytiles
-        else:
-            minx, miny, maxx, maxy = 0, 0, int(math.floor(meta['image']['imageWidth'] / float(size))), int(math.floor(meta['image']['imageHeight'] / float(size)))
-
+        minx, miny, maxx, maxy = 0, 0, int(math.floor(meta['image']['imageWidth'] / float(size))), int(math.floor(meta['image']['imageHeight'] / float(size)))
         urls = {(y-miny, x-minx): self._ipe_tile(x, y) for y in xrange(miny, maxy + 1) for x in xrange(minx, maxx + 1)}
         return urls, (size*(maxy-miny+1), size*(maxx-minx+1))
 
@@ -230,24 +258,3 @@ class IpeImage(da.Array):
         toa_reflectance = ipe.MultiplyConst(radiance, constants=reflectance_scales)
 
         return {"ortho": ortho, "radiance": radiance, "toa_reflectance": toa_reflectance}
-
-    def plot(self, arr=None, stretch=[2,98], w=20, h=10):
-        f, ax1 = plt.subplots(1, figsize=(w,w))
-        ax1.axis('off')
-        nbands = self.ipe_metadata['image']['numBands']
-        if nbands == 1:
-            data = arr if arr is not None else self
-            plt.imshow(data[0,:,:], cmap="Greys_r")
-        else:
-            data = arr if arr is not None else self.read()
-            data = data[[4,2,1],...]
-            data = data.astype(np.float32)
-            data = np.rollaxis(data, 0, 3)
-            lims = np.percentile(data,stretch,axis=(0,1))
-            for x in xrange(len(data[0,0,:])):
-                top = lims[:,x][1]
-                bottom = lims[:,x][0]
-                data[:,:,x] = (data[:,:,x]-bottom)/float(top-bottom)
-                data = np.clip(data,0,1)
-            plt.imshow(data,interpolation='nearest')
-        plt.show(block=False)
