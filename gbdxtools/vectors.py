@@ -139,6 +139,25 @@ class Vectors(object):
     
         '''
 
+        return list(self.query_iteratively(searchAreaWkt, query, count, ttl))
+
+
+    def query_iteratively(self, searchAreaWkt, query, count=100, ttl='5m'):
+        '''
+        Perform a vector services query using the QUERY API
+        (https://gbdxdocs.digitalglobe.com/docs/vs-query-list-vector-items-returns-default-fields)
+
+        Args:
+            searchAreaWkt: WKT Polygon of area to search
+            query: Elastic Search query
+            count: Maximum number of results to return
+            ttl: Amount of time for each temporary vector page to exist
+
+        Returns:
+            generator of vector results
+    
+        '''
+
         search_area_polygon = geometry.from_wkt(searchAreaWkt)
         left, lower, right, upper = search_area_polygon.bounds
 
@@ -159,8 +178,6 @@ class Vectors(object):
         paging_id = page['pagingId']
         item_count = int(page['itemCount'])
 
-        vectors = []
-
         # get vectors from each page
         while paging_id and item_count > 0:
 
@@ -177,12 +194,11 @@ class Vectors(object):
           item_count = int(page['item_count'])
           data = page['data']
 
-          vectors.extend(data)
+          for vector in data:
+            yield vector
 
-        return vectors
 
 
-    
 
 
 
