@@ -33,7 +33,7 @@ class TestVectors(unittest.TestCase):
         c = Vectors(self.gbdx)
         self.assertTrue(isinstance(c, Vectors))
 
-    @vcr.use_cassette('tests/unit/cassettes/test_vectors_search.yaml', filter_headers=['authorization'])
+    @vcr.use_cassette('tests/unit/cassettes/test_vectors_search.yaml', filter_headers=['authorization'], match_on=['method', 'scheme', 'host', 'port', 'path'])
     def test_vectors_search(self):
         v = Vectors(self.gbdx)
         aoi = "POLYGON((17.75390625 25.418470119273117,24.08203125 25.418470119273117,24.08203125 19.409611549990895,17.75390625 19.409611549990895,17.75390625 25.418470119273117))"
