@@ -155,12 +155,12 @@ class IpeImage(da.Array):
 
     def _config_dask(self, bounds=None):
         """ Configures the image as a dask array with a calculated shape and chunk size """
-        # TODO fix dtype here, used to come from vrt
+        dtype = "float32" if self._node_id is not 'pansharpened' else 'uint16'
         meta = self.ipe_metadata
         nbands = meta['image']['numBands']
         urls, shape = self._collect_urls(meta, bounds=bounds)
         cfg = {"shape": tuple([nbands] + list(shape)),
-               "dtype": "float32",
+               "dtype": dtype,
                "chunks": tuple([nbands] + [self._tile_size, self._tile_size])}
         img = self._build_array(urls)
         cfg["name"] = img["name"]
@@ -188,9 +188,11 @@ class IpeImage(da.Array):
             xform = Affine.from_gdal(*[tfm["translateX"], tfm["scaleX"], tfm["shearX"], tfm["translateY"], tfm["shearY"], tfm["scaleY"]])
             args = bounds + [xform]
             roi = rasterio.windows.from_bounds(*args, boundless=True)
+
             #roi = rasterio.windows.round_window_to_full_blocks(roi, [(size,size) for i in range(meta['image']['numBands'])])
             #minx, miny = max(0, int(math.floor(roi.col_off / float(size))) - 1), max(0, math.ceil(roi.row_off / float(size)))
             #maxx, maxy = int(minx + (roi.num_cols / size)), int(miny + (roi.num_rows / size))
+
             coff, roff, ncols, nrows = map(float, roi.flatten())
             xtiles = math.ceil((ncols - size) / size)
             ytiles = math.ceil((nrows - size) / size)
@@ -229,14 +231,15 @@ class IpeImage(da.Array):
 
         return {"ortho": ortho, "radiance": radiance, "toa_reflectance": toa_reflectance}
 
-    def plot(self, stretch=[2,98], w=20, h=10):
+    def plot(self, arr=None, stretch=[2,98], w=20, h=10):
         f, ax1 = plt.subplots(1, figsize=(w,w))
         ax1.axis('off')
         nbands = self.ipe_metadata['image']['numBands']
         if nbands == 1:
-            plt.imshow(self[0,:,:], cmap="Greys_r")
+            data = arr if arr is not None else self
+            plt.imshow(data[0,:,:], cmap="Greys_r")
         else:
-            data = self.read()
+            data = arr if arr is not None else self.read()
             data = data[[4,2,1],...]
             data = data.astype(np.float32)
             data = np.rollaxis(data, 0, 3)
