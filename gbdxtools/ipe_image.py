@@ -253,7 +253,7 @@ class IpeImage(DaskImage):
         gains_offsets = calc_toa_gain_offset(meta)
         radiance_scales, reflectance_scales, radiance_offsets = zip(*gains_offsets)
 
-        ortho = ipe.GridOrthorectify(ipe.IdahoRead(bucketName="idaho-images", imageId=self._gid, objectStore="S3"))
+        ortho = ipe.Orthorectify(ipe.IdahoRead(bucketName="idaho-images", imageId=self._gid, objectStore="S3"))
         radiance = ipe.AddConst(ipe.MultiplyConst(ipe.Format(ortho, dataType="4"), constants=radiance_scales), constants=radiance_offsets)
         toa_reflectance = ipe.MultiplyConst(radiance, constants=reflectance_scales)
 

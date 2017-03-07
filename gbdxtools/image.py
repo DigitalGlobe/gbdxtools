@@ -56,7 +56,6 @@ class Image(IpeImage):
         self._tile_size = kwargs.get('tile_size', 256)
         self._cfg = self._config_dask()
         super(IpeImage, self).__init__(**self._cfg)
-
         _bounds = self._parse_geoms(**kwargs)
         if _bounds is not None:
             self._cfg = self._aoi_config(self, **kwargs)
@@ -141,7 +140,7 @@ class Image(IpeImage):
     def _toa(self, meta, _id, suffix=''):
         gains_offsets = calc_toa_gain_offset(meta['properties'])
         radiance_scales, reflectance_scales, radiance_offsets = zip(*gains_offsets)
-        ortho = ipe.GridOrthorectify(ipe.IdahoRead(bucketName="idaho-images", imageId=_id, objectStore="S3"))
+        ortho = ipe.Orthorectify(ipe.IdahoRead(bucketName="idaho-images", imageId=_id, objectStore="S3"))
         radiance = ipe.AddConst(ipe.MultiplyConst(ipe.Format(ortho, dataType="4"), constants=radiance_scales), constants=radiance_offsets)
         return ipe.MultiplyConst(radiance, constants=reflectance_scales)
         
