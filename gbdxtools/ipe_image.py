@@ -185,7 +185,11 @@ class IpeImage(DaskImage):
             xform = Affine.from_gdal(*[tfm["translateX"], tfm["scaleX"], tfm["shearX"], tfm["translateY"], tfm["shearY"], tfm["scaleY"]])
             args = bounds + [xform]
             roi = rasterio.windows.from_bounds(*args, boundless=True)
-            aoi = self[:, roi.row_off : roi.row_off + roi.num_rows, roi.col_off : roi.col_off + roi.num_cols ]
+            y_start = max(0, roi.row_off)
+            y_stop = min(self.shape[1], y_start + roi.num_rows)
+            x_start = max(0, roi.col_off)
+            x_stop = min(self.shape[2], x_start + roi.num_cols)
+            aoi = self[:, y_start:y_stop, y_start:x_stop]
             return {
                 "shape": aoi.shape,
                 "dtype": aoi.dtype,
