@@ -73,9 +73,11 @@ def load_url(url, bands=8):
 class DaskImage(da.Array):
     def __init__(self, **kwargs):
         super(DaskImage, self).__init__(**kwargs)
+        self.nchips = len([fn for fn in self.dask.values() if 'func_name' in dir(fn[0]) and fn[0].func_name == 'load_url'])
 
     def read(self, bands=None):
         """ Reads data from a dask array and returns the computed ndarray matching the given bands """
+        print('Fetching Image... {} tiles'.format(self.nchips))
         arr = self.compute(get=threaded_get)
         if bands is not None:
             arr = arr[bands, ...]
