@@ -7,6 +7,6 @@ def to_geotiff(image, path=None, proj=None):
     if proj is not None:
         meta["crs"] = {'init': proj}
     if path is None:
-        path = image._idaho_id + '.tif'
+        path = image._gid + '.tif'
     with rasterio.open(path, "w", **meta) as dst:
         dst.write(data)

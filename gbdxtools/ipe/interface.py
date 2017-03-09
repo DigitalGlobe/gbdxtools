@@ -55,7 +55,7 @@ class Op(object):
             del kwargs['_intermediate']
         out = self(*[arg.ipe for arg in args], **kwargs)
         key = self._id
-        ipe_img = gbdx.ipe_image.IpeImage(args[0]._idaho_id, key, _ipe_graphs={key: out})
+        ipe_img = gbdx.ipe_image.IpeImage(args[0]._gid, key, _ipe_graphs={key: out})
         return ipe_img
 
     def graph(self):
