@@ -172,16 +172,17 @@ class IpeImage(DaskImage):
 
     def aoi(self, **kwargs):
         """ Subsets the IpeImage by the given bounds """
-        img = IpeImage(self._gid, **kwargs)
-        cfg = self._aoi_config(img, **kwargs)
+        cfg = self._aoi_config(**kwargs)
         return DaskImage(**cfg)
 
-    def _aoi_config(self, img, **kwargs):
+    def _aoi_config(self, img=None, **kwargs):
         bounds = self._parse_geoms(**kwargs)
         if bounds is None:
             print('AOI bounds not found. Must specify a bbox, wkt, or geojson geometry.')
             return
         else:
+            if img is None:
+                img = self
             tfm = img.ipe_metadata['georef']
             xform = Affine.from_gdal(*[tfm["translateX"], tfm["scaleX"], tfm["shearX"], tfm["translateY"], tfm["shearY"], tfm["scaleY"]])
             args = bounds + [xform]
