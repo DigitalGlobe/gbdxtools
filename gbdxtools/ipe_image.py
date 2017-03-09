@@ -86,11 +86,10 @@ class DaskImage(da.Array):
     def plot(self, arr=None, stretch=[2,98], w=20, h=10):
         f, ax1 = plt.subplots(1, figsize=(w,h))
         ax1.axis('off')
+        data = arr if arr is not None else self.read()
         if self.shape[0] == 1:
-            data = arr if arr is not None else self
             plt.imshow(data[0,:,:], cmap="Greys_r")
         else:
-            data = arr if arr is not None else self.read()
             data = data[[4,2,1],...]
             data = data.astype(np.float32)
             data = np.rollaxis(data, 0, 3)
