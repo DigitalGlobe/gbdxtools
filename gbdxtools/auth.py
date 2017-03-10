@@ -1,5 +1,4 @@
 from gbdx_auth import gbdx_auth
-from traitlets.config.configurable import SingletonConfigurable
 import logging
 
 class Interface():

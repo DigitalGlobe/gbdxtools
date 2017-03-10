@@ -11,7 +11,6 @@ vcrpy
 mock
 ndg-httpsclient==0.4.2
 bumpversion
-traitlets
 shapely
 ephem
 toolz
