@@ -7,6 +7,8 @@ import os.path
 import uuid
 import math
 
+from pyproj import Proj
+
 import signal
 signal.signal(signal.SIGPIPE, signal.SIG_IGN)
 
@@ -107,14 +109,20 @@ class IpeImage(DaskImage):
     """
       Dask based access to ipe based images (Idaho).
     """
+    _idaho_md = None
+    _ipe_id = None
+    _ipe_metadata = None
+    _proj = "EPSG:4326"
+  
     def __init__(self, idaho_id, node="toa_reflectance", **kwargs):
         self.interface = Auth()
         self._gid = idaho_id
         self._node_id = node
         self._level = 0
-        self._idaho_md = None
-        self._ipe_id = None
-        self._ipe_metadata = None
+
+        if 'proj' in kwargs:
+            self._proj = kwargs['proj']
+
         if '_ipe_graphs' in kwargs:
             self._ipe_graphs = kwargs['_ipe_graphs']
         else:
@@ -185,7 +193,7 @@ class IpeImage(DaskImage):
                 img = self
             tfm = img.ipe_metadata['georef']
             xform = Affine.from_gdal(*[tfm["translateX"], tfm["scaleX"], tfm["shearX"], tfm["translateY"], tfm["shearY"], tfm["scaleY"]])
-            args = bounds + [xform]
+            args = list(bounds) + [xform]
             roi = rasterio.windows.from_bounds(*args, boundless=True)
             y_start = max(0, roi.row_off)
             y_stop = roi.row_off + roi.num_rows
@@ -245,21 +253,36 @@ class IpeImage(DaskImage):
         bbox = kwargs.get('bbox', None)
         wkt = kwargs.get('wkt', None)
         geojson = kwargs.get('geojson', None)
+        bounds = None
         if bbox is not None:
-            return bbox
+            bounds = bbox
         elif wkt is not None:
-            return loads(wkt).bounds
+            bounds = loads(wkt).bounds
         elif geojson is not None:
-            return shape(geojson).bounds
-        else:
+            bounds = shape(geojson).bounds
+        return self._project_bounds(bounds)
+
+    def _project_bounds(self, bounds):
+        if bounds is None:
             return None
+        if self._proj is None:
+            return bounds
+        else:
+            p = Proj(init=self._proj)
+            return sum((p(bounds[0], bounds[1]), p(bounds[2],bounds[3])), ())
 
     def _init_graphs(self):
         meta = self.idaho_md["properties"]
         gains_offsets = calc_toa_gain_offset(meta)
         radiance_scales, reflectance_scales, radiance_offsets = zip(*gains_offsets)
 
-        ortho = ipe.Orthorectify(ipe.IdahoRead(bucketName="idaho-images", imageId=self._gid, objectStore="S3"))
+        ortho_params = {}
+        if self._proj is not None:
+            ortho_params["Output Coordinate Reference System"] = self._proj
+            ortho_params["Sensor Model"] = None
+            ortho_params["Elevation Source"] = None #"SRTM90"
+            ortho_params["Output Pixel to World Transform"] = None #meta["warp"]["targetGeoTransform"]
+        ortho = ipe.Orthorectify(ipe.IdahoRead(bucketName="idaho-images", imageId=self._gid, objectStore="S3"), **ortho_params)
         radiance = ipe.AddConst(ipe.MultiplyConst(ipe.Format(ortho, dataType="4"), constants=radiance_scales), constants=radiance_offsets)
         toa_reflectance = ipe.MultiplyConst(radiance, constants=reflectance_scales)
 

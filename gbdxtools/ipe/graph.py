@@ -191,7 +191,7 @@ def generate_ipe_graph(idaho_id, meta, bucket="idaho-images", suffix="", pan_md=
         }])
     return rec
 
-def get_ipe_metadata(ipe_id, node='TOAReflectance'):
+def get_ipe_metadata(ipe_id, node='toa_reflectance'):
     meta = {}
     meta['image'] = requests.get(VIRTUAL_IPE_URL + "/metadata/idaho-virtual/{}/{}/image.json".format(ipe_id, node)).json()
     meta['georef'] = requests.get(VIRTUAL_IPE_URL + "/metadata/idaho-virtual/{}/{}/georeferencing.json".format(ipe_id, node)).json()

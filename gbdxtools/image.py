@@ -39,6 +39,7 @@ class Image(IpeImage):
     _properties = None
     _ipe_id = None
     _ipe_metadata = None
+    _proj = None
 
     def __init__(self, cat_id, band_type="MS", node="toa_reflectance", **kwargs):
         self.interface = Auth()
@@ -48,6 +49,8 @@ class Image(IpeImage):
         self._node_id = node
         self._pansharpen = kwargs.get('pansharpen', False)
         self._acomp = kwargs.get('acomp', False)
+        if 'proj' in kwargs:
+            self._proj = kwargs['proj']
         if self._pansharpen:
             self._node_id = 'pansharpened'
         self._level = kwargs.get('level', 0)
@@ -114,10 +117,18 @@ class Image(IpeImage):
                 for k, p in part.iteritems():
                     if k == band_types[self._band_type]:
                         _id = p['properties']['idahoImageId']
-                        graph[_id] = ipe.GridOrthorectify(ipe.IdahoRead(bucketName="idaho-images", imageId=_id, objectStore="S3"))
+                        graph[_id] = ipe.Orthorectify(ipe.IdahoRead(bucketName="idaho-images", imageId=_id, objectStore="S3"), **self._ortho_params())
                        
             return self._mosaic(graph)
 
+    def _ortho_params(self):
+        ortho_params = {}
+        if self._proj is not None:
+            ortho_params["Output Coordinate Reference System"] = self._proj
+            ortho_params["Sensor Model"] = None
+            ortho_params["Elevation Source"] = None
+            ortho_params["Output Pixel to World Transform"] = None
+        return ortho_params
 
     def _pansharpen_graph(self):
         pan_graph = {}
@@ -126,9 +137,9 @@ class Image(IpeImage):
             for k, p in part.iteritems():
                 _id = p['properties']['idahoImageId']
                 if k == 'PAN':
-                    pan_graph[_id] =  ipe.GridOrthorectify(ipe.IdahoRead(bucketName="idaho-images", imageId=_id, objectStore="S3"))
+                    pan_graph[_id] =  ipe.Orthorectify(ipe.IdahoRead(bucketName="idaho-images", imageId=_id, objectStore="S3"), **self._ortho_params())
                 else:
-                    ms_graph[_id] = ipe.GridOrthorectify(ipe.IdahoRead(bucketName="idaho-images", imageId=_id, objectStore="S3"))
+                    ms_graph[_id] = ipe.Orthorectify(ipe.IdahoRead(bucketName="idaho-images", imageId=_id, objectStore="S3"), **self._ortho_params())
 
         pan_mosaic = self._mosaic(pan_graph, suffix='-pan')
         pan = ipe.Format(ipe.MultiplyConst(pan_mosaic['toa_reflectance-pan'], constants=json.dumps([1000])), dataType="1")
