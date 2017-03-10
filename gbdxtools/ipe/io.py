@@ -1,12 +1,19 @@
 import rasterio
 
-def to_geotiff(image, path=None, proj=None):
-    data = image.read()
-    meta = image.metadata()
-    meta.update({'driver': 'GTiff'})
+def to_geotiff(arr, path='./output.tif', proj=None, dtype=None):
+    data = arr.read()
+    c,h,w = data.shape
+    meta = {
+        'width': w,
+        'height': h,
+        'count': c,
+        'dtype': data.dtype if dtype is None else dtype,
+        'driver': 'GTiff'
+    }
     if proj is not None:
         meta["crs"] = {'init': proj}
-    if path is None:
-        path = image._gid + '.tif'
     with rasterio.open(path, "w", **meta) as dst:
+        if dtype is not None:
+            data = data.astype(dtype)
         dst.write(data)
+    return path
