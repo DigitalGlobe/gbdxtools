@@ -29,7 +29,11 @@ import rasterio
 from rasterio.io import MemoryFile
 from affine import Affine
 
-from matplotlib import pyplot as plt
+try:
+  from matplotlib import pyplot as plt
+  has_pyplot = True
+except:
+  has_pyplot = False 
 
 import dask
 import dask.array as da
@@ -86,6 +90,9 @@ class DaskImage(da.Array):
         return arr
 
     def plot(self, arr=None, stretch=[2,98], w=20, h=10):
+        if not has_pyplot:
+            print('To plot images please install matplotlib')
+            return
         f, ax1 = plt.subplots(1, figsize=(w,h))
         ax1.axis('off')
         data = arr if arr is not None else self.read()
