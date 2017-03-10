@@ -21,3 +21,4 @@ numpy
 matplotlib
 pycurl
 rasterio==1.0a5
+pyproj
