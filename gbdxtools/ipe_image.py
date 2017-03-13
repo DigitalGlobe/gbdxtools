@@ -3,6 +3,7 @@ from functools import partial
 from itertools import groupby
 from collections import defaultdict
 from contextlib import contextmanager
+import os
 import os.path
 import uuid
 import math
@@ -41,8 +42,10 @@ import dask.bag as db
 from dask.delayed import delayed
 import numpy as np
 from itertools import chain
+
 import threading
-threaded_get = partial(dask.threaded.get, num_workers=4)
+num_workers = int(os.environ.get("GBDX_THREADS", 4))
+threaded_get = partial(dask.threaded.get, num_workers=num_workers)
 
 import requests
 import pycurl
@@ -77,9 +80,10 @@ def load_url(url, bands=8):
     return arr
 
 class DaskImage(da.Array):
-    def __init__(self, **kwargs):
+    def __init__(self, img, **kwargs):
+        self.image = img
         super(DaskImage, self).__init__(**kwargs)
-        self.nchips = len([fn for fn in self.dask.values() if 'func_name' in dir(fn[0]) and fn[0].func_name == 'load_url'])
+        self.nchips = (self.shape[-1] / 256) * (self.shape[1] / 256)
 
     def read(self, bands=None):
         """ Reads data from a dask array and returns the computed ndarray matching the given bands """
@@ -188,7 +192,7 @@ class IpeImage(DaskImage):
     def aoi(self, **kwargs):
         """ Subsets the IpeImage by the given bounds """
         cfg = self._aoi_config(**kwargs)
-        return DaskImage(**cfg)
+        return DaskImage(self, **cfg)
 
     def _aoi_config(self, img=None, **kwargs):
         bounds = self._parse_geoms(**kwargs)

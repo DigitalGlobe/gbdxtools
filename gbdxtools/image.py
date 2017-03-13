@@ -58,11 +58,11 @@ class Image(IpeImage):
         self._graph_id = str(uuid.uuid5(uuid.NAMESPACE_DNS, str(self.ipe.graph())))
         self._tile_size = kwargs.get('tile_size', 256)
         self._cfg = self._config_dask()
-        super(IpeImage, self).__init__(**self._cfg)
+        super(IpeImage, self).__init__(self, **self._cfg)
         _bounds = self._parse_geoms(**kwargs)
         if _bounds is not None:
             self._cfg = self._aoi_config(self, **kwargs)
-            super(IpeImage, self).__init__(**self._cfg)
+            super(IpeImage, self).__init__(self, **self._cfg)
 
 
     def _query_vectors(self, query, aoi=None):
@@ -104,7 +104,7 @@ class Image(IpeImage):
             kwargs['pansharpen'] = True
         img = Image(self._gid, band_type=self._band_type, node=self._node_id, **kwargs)
         cfg = self._aoi_config(img, **kwargs)
-        return DaskImage(**cfg)
+        return DaskImage(self, **cfg)
 
 
     def _init_graphs(self):
