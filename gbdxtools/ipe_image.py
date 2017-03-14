@@ -80,8 +80,7 @@ def load_url(url, bands=8):
     return arr
 
 class DaskImage(da.Array):
-    def __init__(self, img, **kwargs):
-        self.image = img
+    def __init__(self, **kwargs):
         super(DaskImage, self).__init__(**kwargs)
         self.nchips = (self.shape[-1] / 256) * (self.shape[1] / 256)
 
@@ -192,7 +191,7 @@ class IpeImage(DaskImage):
     def aoi(self, **kwargs):
         """ Subsets the IpeImage by the given bounds """
         cfg = self._aoi_config(**kwargs)
-        return DaskImage(self, **cfg)
+        return DaskImage(**cfg)
 
     def _aoi_config(self, img=None, **kwargs):
         bounds = self._parse_geoms(**kwargs)

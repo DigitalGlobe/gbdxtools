@@ -104,7 +104,7 @@ class Image(IpeImage):
             kwargs['pansharpen'] = True
         img = Image(self._gid, band_type=self._band_type, node=self._node_id, **kwargs)
         cfg = self._aoi_config(img, **kwargs)
-        return DaskImage(self, **cfg)
+        return DaskImage(**cfg)
 
 
     def _init_graphs(self):
