@@ -96,6 +96,10 @@ class DaskImage(da.Array):
         if not has_pyplot:
             print('To plot images please install matplotlib')
             return
+
+        if not self.shape[1] or not self.shape[-1]:
+            print('No data to plot, dimensions are invalid {}'.format(str(self.shape)))
+            return
         f, ax1 = plt.subplots(1, figsize=(w,h))
         ax1.axis('off')
         data = arr if arr is not None else self.read()
