@@ -82,11 +82,11 @@ def load_url(url, bands=8):
 class DaskImage(da.Array):
     def __init__(self, **kwargs):
         super(DaskImage, self).__init__(**kwargs)
-        self.nchips = (self.shape[-1] / 256) * (self.shape[1] / 256)
+        self.nchips = math.ceil((float(self.shape[-1]) / 256.0) * (float(self.shape[1]) / 256.0))
 
     def read(self, bands=None):
         """ Reads data from a dask array and returns the computed ndarray matching the given bands """
-        print('Fetching Image... {} tiles'.format(self.nchips))
+        print('Fetching Image... {} {}'.format(self.nchips, 'tiles' if self.nchips > 1 else 'tile'))
         arr = self.compute(get=threaded_get)
         if bands is not None:
             arr = arr[bands, ...]
@@ -151,8 +151,8 @@ class IpeImage(DaskImage):
         
         _bounds = self._parse_geoms(**kwargs)
         if _bounds is not None:
-            self._cfg = self._aoi_config(self, **kwargs)
-            super(IpeImage, self).__init__(**self._cfg)
+            _cfg = self._aoi_config(**kwargs)
+            super(IpeImage, self).__init__(**_cfg)
 
 
     @property
@@ -213,7 +213,7 @@ class IpeImage(DaskImage):
             y_stop = roi.row_off + roi.num_rows
             x_start = max(0, roi.col_off)
             x_stop = roi.col_off + roi.num_cols
-            aoi = self[:, y_start:y_stop, x_start:x_stop]
+            aoi = img[:, y_start:y_stop, x_start:x_stop]
             return {
                 "shape": aoi.shape,
                 "dtype": aoi.dtype,
@@ -279,7 +279,7 @@ class IpeImage(DaskImage):
     def _project_bounds(self, bounds):
         if bounds is None:
             return None
-        if self._proj is None:
+        if self._proj is not 'EPSG:4326':
             return bounds
         else:
             p = Proj(init=self._proj)
@@ -296,7 +296,8 @@ class IpeImage(DaskImage):
             ortho_params["Sensor Model"] = None
             ortho_params["Elevation Source"] = None #"SRTM90"
             ortho_params["Output Pixel to World Transform"] = None #meta["warp"]["targetGeoTransform"]
-        ortho = ipe.Orthorectify(ipe.IdahoRead(bucketName="idaho-images", imageId=self._gid, objectStore="S3"), **ortho_params)
+        #ortho = ipe.Orthorectify(ipe.IdahoRead(bucketName="idaho-images", imageId=self._gid, objectStore="S3"), **ortho_params)
+        ortho = ipe.Orthorectify(ipe.IdahoRead(bucketName="idaho-images", imageId=self._gid, objectStore="S3"))
         radiance = ipe.AddConst(ipe.MultiplyConst(ipe.Format(ortho, dataType="4"), constants=radiance_scales), constants=radiance_offsets)
         toa_reflectance = ipe.MultiplyConst(radiance, constants=reflectance_scales)
 
