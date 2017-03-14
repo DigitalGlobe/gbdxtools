@@ -14,7 +14,6 @@ class _Auth(object):
     root_url = 'https://geobigdata.io'
 
     def __init__(self, **kwargs):
-        print 'init'
         self.logger = logging.getLogger('gbdxtools')
         self.logger.setLevel(logging.ERROR)
         self.console_handler = logging.StreamHandler()
