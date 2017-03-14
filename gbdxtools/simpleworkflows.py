@@ -8,6 +8,9 @@ from builtins import object
 
 import json, uuid
 
+from gbdxtools.workflow import Workflow as WF
+from gbdxtools.task_registry import TaskRegistry
+
 class InvalidInputPort(AttributeError):
     pass
 
@@ -233,12 +236,11 @@ class Outputs(PortList):
 
 
 class Task(object):
-    def __init__(self, __interface, __task_type, **kwargs):
+    def __init__(self, __task_type, **kwargs):
         '''
         Construct an instance of GBDX Task
 
         Args:
-            __interface: gbdx __interface object
             __task_type: name of the task
             **kwargs: key=value pairs for inputs to set on the task
 
@@ -246,12 +248,11 @@ class Task(object):
             An instance of Task.
 
         '''
-
         self.name = __task_type + '_' + str(uuid.uuid4())[:8]
 
-        self.__interface = __interface
         self.type = __task_type
-        self.definition = self.__interface.task_registry.get_definition(__task_type)
+        task_registry = TaskRegistry()
+        self.definition = task_registry.get_definition(__task_type)
         self.domain = self.definition.get('containerDescriptors', [{'properties': {}}])[0]['properties'].get('domain', 'default')
         self._timeout = self.definition['properties'].get('timeout')
 
@@ -376,8 +377,8 @@ class Task(object):
 
 
 class Workflow(object):
-    def __init__(self, __interface, tasks, **kwargs):
-        self.__interface = __interface
+    def __init__(self, tasks, **kwargs):
+        self.workflow = WF()
         self.name = kwargs.get('name', str(uuid.uuid4())[:8] )
         self.id = None
         self.callback = kwargs.get('callback', None )
@@ -502,11 +503,11 @@ class Workflow(object):
 
         # hit batch workflow endpoint if batch values
         if self.batch_values:
-            self.id = self.__interface.workflow.launch_batch_workflow(self.definition)
+            self.id = self.workflow.launch_batch_workflow(self.definition)
 
         # use regular workflow endpoint if no batch values
         else:
-            self.id = self.__interface.workflow.launch(self.definition)
+            self.id = self.workflow.launch(self.definition)
 
         return self.id
 
@@ -527,7 +528,7 @@ class Workflow(object):
         if self.batch_values:
             raise NotImplementedError("Query Each Workflow Id within the Batch Workflow for task IDs.")
 
-        wf = self.__interface.workflow.get(self.id)
+        wf = self.workflow.get(self.id)
 
         return [task['id'] for task in wf['tasks']]
 
@@ -550,9 +551,9 @@ class Workflow(object):
             raise WorkflowError('Workflow is not running.  Cannot cancel.')
 
         if self.batch_values:
-            self.__interface.workflow.batch_workflow_cancel(self.id)
+            self.workflow.batch_workflow_cancel(self.id)
         else:
-            self.__interface.workflow.cancel(self.id)
+            self.workflow.cancel(self.id)
 
     @property
     def status(self):
@@ -560,9 +561,9 @@ class Workflow(object):
             raise WorkflowError('Workflow is not running.  Cannot check status.')
 
         if self.batch_values:
-            status = self.__interface.workflow.batch_workflow_status(self.id)
+            status = self.workflow.batch_workflow_status(self.id)
         else:
-            status = self.__interface.workflow.status(self.id)
+            status = self.workflow.status(self.id)
 
         return status
 
@@ -576,7 +577,7 @@ class Workflow(object):
             raise WorkflowError('Workflow is not running.  Cannot check status.')
         if self.batch_values:
             raise NotImplementedError("Query Each Workflow Id within the Batch Workflow for Events")
-        return self.__interface.workflow.events(self.id)
+        return self.workflow.events(self.id)
 
     @events.setter
     def events(self, value):
@@ -692,7 +693,7 @@ class Workflow(object):
         if self.batch_values:
             raise NotImplementedError("Query Each Workflow Id within the Batch Workflow for stdout.")
 
-        wf = self.__interface.workflow.get(self.id)
+        wf = self.workflow.get(self.id)
 
         stdout_list = []
         for task in wf['tasks']:
@@ -701,7 +702,7 @@ class Workflow(object):
                     'id': task['id'],
                     'taskType': task['taskType'],
                     'name': task['name'],
-                    'stdout': self.__interface.workflow.get_stdout(self.id, task['id'])
+                    'stdout': self.workflow.get_stdout(self.id, task['id'])
                 }
             )
 
@@ -735,7 +736,7 @@ class Workflow(object):
         if self.batch_values:
             raise NotImplementedError("Query Each Workflow Id within the Batch Workflow for stderr.")
 
-        wf = self.__interface.workflow.get(self.id)
+        wf = self.workflow.get(self.id)
 
         stderr_list = []
         for task in wf['tasks']:
@@ -744,7 +745,7 @@ class Workflow(object):
                     'id': task['id'],
                     'taskType': task['taskType'],
                     'name': task['name'],
-                    'stderr': self.__interface.workflow.get_stderr(self.id, task['id'])
+                    'stderr': self.workflow.get_stderr(self.id, task['id'])
                 }
             )
 
