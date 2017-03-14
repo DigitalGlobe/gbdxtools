@@ -31,12 +31,12 @@ class TestVectors(unittest.TestCase):
         cls.gbdx = Interface(gbdx_connection=mock_gbdx_session)
 
     def test_init(self):
-        c = Vectors(self.gbdx)
+        c = Vectors()
         self.assertTrue(isinstance(c, Vectors))
 
     @vcr.use_cassette('tests/unit/cassettes/test_vectors_search.yaml', filter_headers=['authorization'], match_on=['method', 'scheme', 'host', 'port', 'path'])
     def test_vectors_search(self):
-        v = Vectors(self.gbdx)
+        v = Vectors()
         aoi = "POLYGON((17.75390625 25.418470119273117,24.08203125 25.418470119273117,24.08203125 19.409611549990895,17.75390625 19.409611549990895,17.75390625 25.418470119273117))"
         results = v.query(aoi, query="item_type:WV03")
 
@@ -57,7 +57,7 @@ class TestVectors(unittest.TestCase):
 
     @vcr.use_cassette('tests/unit/cassettes/test_vectors_create_single.yaml', filter_headers=['authorization'])
     def test_vectors_create_single(self):
-        v = Vectors(self.gbdx)
+        v = Vectors()
         results = v.create({
             "type": "Feature",
                 "geometry": {
@@ -82,7 +82,7 @@ class TestVectors(unittest.TestCase):
 
     @vcr.use_cassette('tests/unit/cassettes/test_vectors_create_multiple.yaml', filter_headers=['authorization'])
     def test_vectors_create_multiple(self):
-        v = Vectors(self.gbdx)
+        v = Vectors()
         results = v.create([{
             "type": "Feature",
                 "geometry": {
@@ -124,7 +124,7 @@ class TestVectors(unittest.TestCase):
 
     @vcr.use_cassette('tests/unit/cassettes/test_vectors_create_from_wkt.yaml', filter_headers=['authorization'])
     def test_vectors_create_from_wkt(self):
-        v = Vectors(self.gbdx)
+        v = Vectors()
 
         aoi = "POLYGON((0 3,3 3,3 0,0 0,0 3))"
         result = v.create_from_wkt(

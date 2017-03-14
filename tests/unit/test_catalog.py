@@ -31,19 +31,19 @@ class TestCatalog(unittest.TestCase):
         cls.gbdx = Interface(gbdx_connection=mock_gbdx_session)
 
     def test_init(self):
-        c = Catalog(self.gbdx)
+        c = Catalog()
         self.assertTrue(isinstance(c, Catalog))
 
     @vcr.use_cassette('tests/unit/cassettes/test_catalog_get_address_coords.yaml', filter_headers=['authorization'])
     def test_catalog_get_address_coords(self):
-        c = Catalog(self.gbdx)
+        c = Catalog()
         lat, lng = c.get_address_coords('Boulder, CO')
         self.assertTrue(lat == 40.0149856)
         self.assertTrue(lng == -105.2705456)
 
     @vcr.use_cassette('tests/unit/cassettes/test_catalog_get_record.yaml', filter_headers=['authorization'])
     def test_catalog_get_record(self):
-        c = Catalog(self.gbdx)
+        c = Catalog()
         catid = '1040010019B4A600'
         record = c.get(catid)
 
@@ -54,7 +54,7 @@ class TestCatalog(unittest.TestCase):
 
     @vcr.use_cassette('tests/unit/cassettes/test_catalog_get_record_with_relationships.yaml', filter_headers=['authorization'])
     def test_catalog_get_record_with_relationships(self):
-        c = Catalog(self.gbdx)
+        c = Catalog()
         catid = '1040010019B4A600'
         record = c.get(catid, includeRelationships=True)
 
@@ -66,7 +66,7 @@ class TestCatalog(unittest.TestCase):
 
     @vcr.use_cassette('tests/unit/cassettes/test_catalog_search_point.yaml', filter_headers=['authorization'])
     def test_catalog_search_point(self):
-        c = Catalog(self.gbdx)
+        c = Catalog()
         lat = 40.0149856
         lng = -105.2705456
         results = c.search_point(lat, lng)
@@ -75,7 +75,7 @@ class TestCatalog(unittest.TestCase):
 
     @vcr.use_cassette('tests/unit/cassettes/test_catalog_search_address.yaml', filter_headers=['authorization'])
     def test_catalog_search_address(self):
-        c = Catalog(self.gbdx)
+        c = Catalog()
         results = c.search_address('Boulder, CO')
 
         self.assertEqual(len(results), 310)
@@ -84,27 +84,27 @@ class TestCatalog(unittest.TestCase):
 
     @vcr.use_cassette('tests/unit/cassettes/test_catalog_search_wkt_only.yaml',filter_headers=['authorization'])
     def test_catalog_search_wkt_only(self):
-        c = Catalog(self.gbdx)
+        c = Catalog()
         results = c.search(searchAreaWkt="POLYGON ((30.1 9.9, 30.1 10.1, 29.9 10.1, 29.9 9.9, 30.1 9.9))")
         assert len(results) == 395
 
     @vcr.use_cassette('tests/unit/cassettes/test_catalog_search_wkt_and_startDate.yaml',filter_headers=['authorization'])
     def test_catalog_search_wkt_and_startDate(self):
-        c = Catalog(self.gbdx)
+        c = Catalog()
         results = c.search(searchAreaWkt="POLYGON ((30.1 9.9, 30.1 10.1, 29.9 10.1, 29.9 9.9, 30.1 9.9))",
                            startDate='2012-01-01T00:00:00.000Z')
         assert len(results) == 317
 
     @vcr.use_cassette('tests/unit/cassettes/test_catalog_search_wkt_and_endDate.yaml',filter_headers=['authorization'])
     def test_catalog_search_wkt_and_endDate(self):
-        c = Catalog(self.gbdx)
+        c = Catalog()
         results = c.search(searchAreaWkt="POLYGON ((30.1 9.9, 30.1 10.1, 29.9 10.1, 29.9 9.9, 30.1 9.9))",
                            endDate='2012-01-01T00:00:00.000Z')
         assert len(results) == 78
 
     @vcr.use_cassette('tests/unit/cassettes/test_catalog_search_startDate_and_endDate_only_more_than_one_week_apart.yaml',filter_headers=['authorization'])
     def test_catalog_search_startDate_and_endDate_only_more_than_one_week_apart(self):
-        c = Catalog(self.gbdx)
+        c = Catalog()
 
         try:
             results = c.search(startDate='2004-01-01T00:00:00.000Z',
@@ -117,7 +117,7 @@ class TestCatalog(unittest.TestCase):
 
     @vcr.use_cassette('tests/unit/cassettes/test_catalog_search_startDate_and_endDate_only_less_than_one_week_apart.yaml',filter_headers=['authorization'])
     def test_catalog_search_startDate_and_endDate_only_less_than_one_week_apart(self):
-        c = Catalog(self.gbdx)
+        c = Catalog()
 
         results = c.search(startDate='2008-01-01T00:00:00.000Z',
                                endDate='2008-01-03T00:00:00.000Z')
@@ -127,7 +127,7 @@ class TestCatalog(unittest.TestCase):
 
     @vcr.use_cassette('tests/unit/cassettes/test_catalog_search_filters1.yaml',filter_headers=['authorization'])
     def test_catalog_search_filters1(self):
-        c = Catalog(self.gbdx)
+        c = Catalog()
 
         filters = [  
                         "(sensorPlatformName = 'WORLDVIEW01' OR sensorPlatformName ='QUICKBIRD02')",
@@ -147,7 +147,7 @@ class TestCatalog(unittest.TestCase):
 
     @vcr.use_cassette('tests/unit/cassettes/test_catalog_search_filters2.yaml',filter_headers=['authorization'])
     def test_catalog_search_filters2(self):
-        c = Catalog(self.gbdx)
+        c = Catalog()
 
         filters = [  
                     "sensorPlatformName = 'WORLDVIEW03'"
@@ -161,7 +161,7 @@ class TestCatalog(unittest.TestCase):
 
     @vcr.use_cassette('tests/unit/cassettes/test_catalog_search_types1.yaml',filter_headers=['authorization'])
     def test_catalog_search_types1(self):
-        c = Catalog(self.gbdx)
+        c = Catalog()
 
         types = [ "LandsatAcquisition" ]
 
@@ -176,7 +176,7 @@ class TestCatalog(unittest.TestCase):
         """
         Search an AOI the size of utah, broken into multiple smaller searches
         """
-        c = Catalog(self.gbdx)
+        c = Catalog()
 
         results = c.search(searchAreaWkt = "POLYGON((-113.88427734375 40.36642741921034,-110.28076171875 40.36642741921034,-110.28076171875 37.565262680889965,-113.88427734375 37.565262680889965,-113.88427734375 40.36642741921034))")
         
@@ -184,24 +184,24 @@ class TestCatalog(unittest.TestCase):
 
     @vcr.use_cassette('tests/unit/cassettes/test_catalog_get_data_location_DG.yaml',filter_headers=['authorization'])
     def test_catalog_get_data_location_DG(self):
-        c = Catalog(self.gbdx)
+        c = Catalog()
         s3path = c.get_data_location(catalog_id='1030010045539700')
         assert s3path == 's3://receiving-dgcs-tdgplatform-com/055158926010_01_003/055158926010_01'
 
     @vcr.use_cassette('tests/unit/cassettes/test_catalog_get_data_location_Landsat.yaml',filter_headers=['authorization'])
     def test_catalog_get_data_location_Landsat(self):
-        c = Catalog(self.gbdx)
+        c = Catalog()
         s3path = c.get_data_location(catalog_id='LC81740532014364LGN00')
         assert s3path == 's3://landsat-pds/L8/174/053/LC81740532014364LGN00'
 
     @vcr.use_cassette('tests/unit/cassettes/test_catalog_get_data_location_nonexistent_catid.yaml',filter_headers=['authorization'])
     def test_catalog_get_data_location_nonexistent_catid(self):
-        c = Catalog(self.gbdx)
+        c = Catalog()
         s3path = c.get_data_location(catalog_id='nonexistent_asdfasdfasdfdfasffds')
         assert s3path == None
 
     @vcr.use_cassette('tests/unit/cassettes/test_catalog_get_data_location_catid_with_no_data.yaml',filter_headers=['authorization'])
     def test_catalog_get_data_location_catid_with_no_data(self):
-        c = Catalog(self.gbdx)
+        c = Catalog()
         s3path = c.get_data_location(catalog_id='1010010011AD6E00')
         assert s3path == None

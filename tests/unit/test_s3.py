@@ -33,12 +33,12 @@ class S3Tests(unittest.TestCase):
         print("Created: {}".format(cls._temp_path))
 
     def test_bucket_init(self):
-        s = S3(self.gbdx)
+        s = S3()
         assert isinstance(s, S3)
 
     @vcr.use_cassette('tests/unit/cassettes/test_get_s3creds.yaml', filter_headers=['authorization'])
     def test_get_s3_creds(self):
-        s = S3(self.gbdx)
+        s = S3()
         assert s.info is not None
         assert "bucket" in s.info.keys()
         assert "prefix" in s.info.keys()
@@ -49,7 +49,7 @@ class S3Tests(unittest.TestCase):
     @vcr.use_cassette(cassette_name, filter_headers=['authorization'])
     def test_download(self):
         location = 'nikki/gbdxtools_test_s3'
-        s = S3(self.gbdx)
+        s = S3()
         s.download(location, local_dir=self._temp_path)
 
         assert os.path.isfile(os.path.join(self._temp_path, 'test_dir', 'model.json'))

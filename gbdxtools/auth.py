@@ -1,27 +1,20 @@
 from gbdx_auth import gbdx_auth
 import logging
 
-class OnlyOne(object):
-    class __OnlyOne:
-        def __init__(self):
-            self.val = None
-        def __str__(self):
-            return `self` + self.val
-    instance = None
-    def __new__(cls): # __new__ always a classmethod
-        if not OnlyOne.instance:
-            OnlyOne.instance = OnlyOne.__OnlyOne()
-        return OnlyOne.instance
-    def __getattr__(self, name):
-        return getattr(self.instance, name)
-    def __setattr__(self, name):
-        return setattr(self.instance, name)
+auth = None
 
-class Interface():
+def Auth(**kwargs):
+    global auth
+    if auth is None or len(kwargs) > 0:
+        auth = _Auth(**kwargs)
+    return auth
+        
+class _Auth(object):
     gbdx_connection = None
     root_url = 'https://geobigdata.io'
 
     def __init__(self, **kwargs):
+        print 'init'
         self.logger = logging.getLogger('gbdxtools')
         self.logger.setLevel(logging.ERROR)
         self.console_handler = logging.StreamHandler()
@@ -33,7 +26,7 @@ class Interface():
 
         if 'host' in kwargs:
             self.root_url = 'https://%s' % kwargs.get('host')
-        try:  
+        try:
             if (kwargs.get('username') and kwargs.get('password') and
                     kwargs.get('client_id') and kwargs.get('client_secret')):
                 self.gbdx_connection = gbdx_auth.session_from_kwargs(**kwargs)
@@ -42,5 +35,7 @@ class Interface():
             elif self.gbdx_connection is None:
                 # This will throw an exception if your .ini file is not set properly
                 self.gbdx_connection = gbdx_auth.get_session(kwargs.get('config_file'))
-        except Exception as err: 
+        except Exception as err:
             print(err)
+    
+    

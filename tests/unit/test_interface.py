@@ -27,7 +27,7 @@ def test_init_host(monkeypatch):
     def session(config_file):
         return None
 
-    monkeypatch.setattr(gbdxtools.interface.gbdx_auth, 'get_session', session)
+    monkeypatch.setattr(gbdxtools.auth.gbdx_auth, 'get_session', session)
 
     gbdx = gbdxtools.Interface(host=test_host)
     assert isinstance(gbdx, gbdxtools.Interface)
