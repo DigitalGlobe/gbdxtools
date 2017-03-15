@@ -284,7 +284,7 @@ class IpeImage(DaskImage):
     def _project_bounds(self, bounds):
         if bounds is None:
             return None
-        if self._proj is not 'EPSG:4326':
+        if self._proj is 'EPSG:4326':
             return bounds
         else:
             p = Proj(init=self._proj)
