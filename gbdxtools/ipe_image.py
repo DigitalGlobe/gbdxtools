@@ -243,14 +243,17 @@ class IpeImage(DaskImage):
 
         return cfg
 
+
     def _build_array(self, urls):
         """ Creates the deferred dask array from a grid of URLs """
         name = "image-{}".format(str(uuid.uuid4()))
         buf_dask = {(name, 0, x, y): (load_url, url) for (x, y), url in urls.iteritems()}
         return {"name": name, "dask": buf_dask}
 
+
     def _ipe_tile(self, x, y):
         return "{}/tile/{}/{}/{}/{}/{}.tif".format(VIRTUAL_IPE_URL, "idaho-virtual", self.ipe_id, self.ipe_node_id, x, y)
+
 
     def _collect_urls(self, meta):
         """
@@ -261,6 +264,7 @@ class IpeImage(DaskImage):
         minx, miny, maxx, maxy = 0, 0, int(math.floor(meta['image']['imageWidth'] / float(size))), int(math.floor(meta['image']['imageHeight'] / float(size)))
         urls = {(y-miny, x-minx): self._ipe_tile(x, y) for y in xrange(miny, maxy + 1) for x in xrange(minx, maxx + 1)}
         return urls, (size*(maxy-miny+1), size*(maxx-minx+1))
+
 
     def _parse_geoms(self, **kwargs):
         """ Finds supported geometry types, parses them and returns the bbox """
@@ -276,6 +280,7 @@ class IpeImage(DaskImage):
             bounds = shape(geojson).bounds
         return self._project_bounds(bounds)
 
+
     def _project_bounds(self, bounds):
         if bounds is None:
             return None
@@ -285,20 +290,22 @@ class IpeImage(DaskImage):
             p = Proj(init=self._proj)
             return sum((p(bounds[0], bounds[1]), p(bounds[2],bounds[3])), ())
 
+
     def _init_graphs(self):
         meta = self.idaho_md["properties"]
         gains_offsets = calc_toa_gain_offset(meta)
         radiance_scales, reflectance_scales, radiance_offsets = zip(*gains_offsets)
+        ortho = ipe.Orthorectify(ipe.IdahoRead(bucketName="idaho-images", imageId=self._gid, objectStore="S3"), **self._ortho_params)
+        radiance = ipe.AddConst(ipe.MultiplyConst(ipe.Format(ortho, dataType="4"), constants=radiance_scales), constants=radiance_offsets)
+        toa_reflectance = ipe.MultiplyConst(radiance, constants=reflectance_scales)
+        return {"ortho": ortho, "radiance": radiance, "toa_reflectance": toa_reflectance}
 
+
+    def _ortho_params(self):
         ortho_params = {}
         if self._proj is not None:
             ortho_params["Output Coordinate Reference System"] = self._proj
             ortho_params["Sensor Model"] = None
-            ortho_params["Elevation Source"] = None #"SRTM90"
-            ortho_params["Output Pixel to World Transform"] = None #meta["warp"]["targetGeoTransform"]
-        #ortho = ipe.Orthorectify(ipe.IdahoRead(bucketName="idaho-images", imageId=self._gid, objectStore="S3"), **ortho_params)
-        ortho = ipe.Orthorectify(ipe.IdahoRead(bucketName="idaho-images", imageId=self._gid, objectStore="S3"))
-        radiance = ipe.AddConst(ipe.MultiplyConst(ipe.Format(ortho, dataType="4"), constants=radiance_scales), constants=radiance_offsets)
-        toa_reflectance = ipe.MultiplyConst(radiance, constants=reflectance_scales)
-
-        return {"ortho": ortho, "radiance": radiance, "toa_reflectance": toa_reflectance}
+            ortho_params["Elevation Source"] = None
+            ortho_params["Output Pixel to World Transform"] = None
+        return ortho_params
