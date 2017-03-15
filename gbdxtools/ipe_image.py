@@ -213,7 +213,7 @@ class IpeImage(DaskImage):
             y_stop = roi.row_off + roi.num_rows
             x_start = max(0, roi.col_off)
             x_stop = roi.col_off + roi.num_cols
-            aoi = img[:, y_start:y_stop, x_start:x_stop]
+            aoi = self[:, y_start:y_stop, x_start:x_stop]
             return {
                 "shape": aoi.shape,
                 "dtype": aoi.dtype,
@@ -295,7 +295,7 @@ class IpeImage(DaskImage):
         meta = self.idaho_md["properties"]
         gains_offsets = calc_toa_gain_offset(meta)
         radiance_scales, reflectance_scales, radiance_offsets = zip(*gains_offsets)
-        ortho = ipe.Orthorectify(ipe.IdahoRead(bucketName="idaho-images", imageId=self._gid, objectStore="S3"), **self._ortho_params)
+        ortho = ipe.Orthorectify(ipe.IdahoRead(bucketName="idaho-images", imageId=self._gid, objectStore="S3"), **self._ortho_params())
         radiance = ipe.AddConst(ipe.MultiplyConst(ipe.Format(ortho, dataType="4"), constants=radiance_scales), constants=radiance_offsets)
         toa_reflectance = ipe.MultiplyConst(radiance, constants=reflectance_scales)
         return {"ortho": ortho, "radiance": radiance, "toa_reflectance": toa_reflectance}
