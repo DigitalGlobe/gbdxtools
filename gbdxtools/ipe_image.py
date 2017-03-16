@@ -283,11 +283,10 @@ class IpeImage(DaskImage):
     def _project_bounds(self, bounds):
         if bounds is None:
             return None
-        if self._proj == 'EPSG:4326':
-            return bounds
-        else:
+        if self._proj != 'EPSG:4326':
             p = Proj(init=self._proj)
-            return sum((p(bounds[0], bounds[1]), p(bounds[2],bounds[3])), ())
+            bounds = sum((p(bounds[0], bounds[1]), p(bounds[2],bounds[3])), ())
+        return bounds
 
 
     def _init_graphs(self):
