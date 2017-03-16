@@ -1,3 +1,7 @@
+0.10.0
+-----
+* refactored the way auth is handled in gbdxtools.interface into a singleton pattern to support direct importing of module classes. Classes can now auth themselves. 
+
 0.9.6
 -----
 * update gbdx.vectors.query() to be able to return more than 1000 results (uses paging service on the backend)

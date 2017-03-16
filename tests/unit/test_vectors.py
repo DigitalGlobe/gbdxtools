@@ -44,7 +44,7 @@ class TestVectors(unittest.TestCase):
 
     @vcr.use_cassette('tests/unit/cassettes/test_vectors_search.yaml', filter_headers=['authorization'], match_on=['method', 'scheme', 'host', 'port', 'path'])
     def test_vectors_search_iteratively(self):
-        v = Vectors(self.gbdx)
+        v = Vectors()
         aoi = "POLYGON((17.75390625 25.418470119273117,24.08203125 25.418470119273117,24.08203125 19.409611549990895,17.75390625 19.409611549990895,17.75390625 25.418470119273117))"
         g = v.query_iteratively(aoi, query="item_type:WV03")
 
