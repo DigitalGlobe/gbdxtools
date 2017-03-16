@@ -15,7 +15,7 @@ from shapely.wkt import loads
 from shapely.geometry import box, shape
 import requests
 
-from gbdxtools.auth import Interface as Auth
+from gbdxtools.auth import Auth
 from gbdxtools.ipe.util import calc_toa_gain_offset, timeit
 from gbdxtools.ipe_image import IpeImage, DaskImage
 from gbdxtools.vectors import Vectors

@@ -56,7 +56,7 @@ from gbdxtools.ipe.util import calc_toa_gain_offset, timeit
 from gbdxtools.ipe.graph import VIRTUAL_IPE_URL, register_ipe_graph, get_ipe_metadata
 from gbdxtools.ipe.error import NotFound
 from gbdxtools.ipe.interface import Ipe
-from gbdxtools.auth import Interface as Auth
+from gbdxtools.auth import Auth
 ipe = Ipe()
 
 def load_url(url, bands=8):
@@ -149,8 +149,8 @@ class IpeImage(DaskImage):
         self._cfg = self._config_dask()
         super(IpeImage, self).__init__(**self._cfg)
         
-        _bounds = self._parse_geoms(**kwargs)
-        if _bounds is not None:
+        bounds = self._parse_geoms(**kwargs)
+        if bounds is not None:
             _cfg = self._aoi_config(bounds)
             super(IpeImage, self).__init__(**_cfg)
 
@@ -168,7 +168,7 @@ class IpeImage(DaskImage):
     @property
     def ipe_id(self):
         if self._ipe_id is None:
-            self._ipe_id = register_ipe_graph(self.ipe.graph())
+            self._ipe_id = register_ipe_graph(self.interface.gbdx_connection, self.ipe.graph())
         return self._ipe_id
 
     @property
@@ -178,7 +178,7 @@ class IpeImage(DaskImage):
     @property
     def ipe_metadata(self):
         if self._ipe_metadata is None:
-            self._ipe_metadata = get_ipe_metadata(self.ipe_id, self.ipe_node_id)
+            self._ipe_metadata = get_ipe_metadata(self.interface.gbdx_connection, self.ipe_id, self.ipe_node_id)
         return self._ipe_metadata
 
     @property

@@ -8,17 +8,17 @@ from builtins import object
 import requests
 import json
 
+from gbdxtools.auth import Auth
+
 class Ordering(object):
 
-    def __init__(self, interface):
+    def __init__(self, **kwargs):
         '''Instantiate the GBDX Ordering Interface
- 
-           Args:
-               interface (Interface): A reference to the GBDX interface.
 
            Returns:
                An instance of the Ordering interface.
         '''
+        interface = Auth(**kwargs)
         self.base_url = '%s/orders/v2' % interface.root_url
         self.gbdx_connection = interface.gbdx_connection
         self.logger = interface.logger

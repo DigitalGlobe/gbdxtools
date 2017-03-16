@@ -11,7 +11,8 @@ import json
 import os
 import logging
 
-from gbdxtools.auth import Interface as Auth
+from gbdxtools.auth import Auth
+
 from gbdxtools.s3 import S3
 from gbdxtools.ordering import Ordering
 from gbdxtools.workflow import Workflow
@@ -25,7 +26,6 @@ import gbdxtools.simpleworkflows
 
 
 class Interface(object):
-    gbdx_connection = None
 
     def __init__(self, **kwargs):
         interface = Auth(**kwargs)
@@ -34,29 +34,29 @@ class Interface(object):
         self.logger = interface.logger
 
         # create and store an instance of the GBDX s3 client
-        self.s3 = S3(self)
+        self.s3 = S3()
 
         # create and store an instance of the GBDX Ordering Client
-        self.ordering = Ordering(self)
+        self.ordering = Ordering()
 
         # create and store an instance of the GBDX Catalog Client
-        self.catalog = Catalog(self)
+        self.catalog = Catalog()
 
         # create and store an instance of the GBDX Workflow Client
-        self.workflow = Workflow(self)
+        self.workflow = Workflow()
 
         # create and store an instance of the Idaho Client
-        self.idaho = Idaho(self)
+        self.idaho = Idaho()
 
-        self.vectors = Vectors(self)
+        self.vectors = Vectors()
 
         self.image = Image
         self.ipeimage = IpeImage
 
-        self.task_registry = TaskRegistry(self)
+        self.task_registry = TaskRegistry()
 
     def Task(self, __task_name, **kwargs):
-        return gbdxtools.simpleworkflows.Task(self, __task_name, **kwargs)
+        return gbdxtools.simpleworkflows.Task(__task_name, **kwargs)
 
     def Workflow(self, tasks, **kwargs):
-        return gbdxtools.simpleworkflows.Workflow(self, tasks, **kwargs)
+        return gbdxtools.simpleworkflows.Workflow(tasks, **kwargs)

@@ -6,10 +6,8 @@ import os.path
 import json
 from itertools import product
 
-import requests
-from shapely.wkt import loads
-from gbdxtools.ipe.graph import VIRTUAL_IPE_URL, get_ipe_metadata, create_ipe_graph
-from gbdxtools.ipe.util import mkdir_p, prettify, timeit
+from gbdxtools.ipe.graph import VIRTUAL_IPE_URL, get_ipe_metadata
+from gbdxtools.ipe.util import mkdir_p, prettify
 from gbdxtools.ipe.error import NotFound
 
 # TODO: this need to be complete
@@ -32,15 +30,6 @@ NODE_DATA_TYPES = {
 IDAHO_CACHE_DIR = os.environ.get("IDAHO_CACHE_DIR", "/tmp/idaho-cache")
 if not os.path.exists(IDAHO_CACHE_DIR):
     mkdir_p(IDAHO_CACHE_DIR)
-
-
-def get_vrt(idaho_id, ipe_id, node, level=0):
-    try:
-        vrt = get_cached_vrt(ipe_id, node, level)
-    except NotFound:
-        template = generate_vrt_template(idaho_id, ipe_id, node, level)
-        vrt = put_cached_vrt(ipe_id, node, level, template)
-    return vrt
 
 def generate_vrt_template(ipe_id, node, level, num_bands=None):
     meta = get_ipe_metadata(ipe_id, node=node)
@@ -81,7 +70,6 @@ def generate_vrt_template(ipe_id, node, level, num_bands=None):
             ET.SubElement(src, "SourceProperties", {"RasterXSize": str(tile_size_x), "RasterYSize": str(tile_size_y),
                                                     "BlockXSize": "256", "BlockYSize": "256", "DataType": DTLOOKUP.get(meta["image"]["dataType"], "Float32")})
     return ET.tostring(vrt, 'utf-8')
-
 
 def vrt_cache_key(idaho_id, node, level):
     return "{idaho_id}/{node}/{level}.vrt.xml".format(idaho_id=idaho_id, node=node, level=str(level))

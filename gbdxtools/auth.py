@@ -1,7 +1,15 @@
 from gbdx_auth import gbdx_auth
 import logging
 
-class Interface():
+auth = None
+
+def Auth(**kwargs):
+    global auth
+    if auth is None or len(kwargs) > 0:
+        auth = _Auth(**kwargs)
+    return auth
+        
+class _Auth(object):
     gbdx_connection = None
     root_url = 'https://geobigdata.io'
 
@@ -17,7 +25,7 @@ class Interface():
 
         if 'host' in kwargs:
             self.root_url = 'https://%s' % kwargs.get('host')
-        try:  
+        try:
             if (kwargs.get('username') and kwargs.get('password') and
                     kwargs.get('client_id') and kwargs.get('client_secret')):
                 self.gbdx_connection = gbdx_auth.session_from_kwargs(**kwargs)
@@ -26,5 +34,6 @@ class Interface():
             elif self.gbdx_connection is None:
                 # This will throw an exception if your .ini file is not set properly
                 self.gbdx_connection = gbdx_auth.get_session(kwargs.get('config_file'))
-        except Exception as err: 
+        except Exception as err:
             print(err)
+    

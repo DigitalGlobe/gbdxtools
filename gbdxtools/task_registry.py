@@ -5,17 +5,19 @@ Contact: dmitry.zviagintsev@digitalglobe.com
 """
 
 import json
-
+from gbdxtools.auth import Auth
+from gbdxtools.s3 import S3
 
 class TaskRegistry(object):
-    def __init__(self, interface):
+    def __init__(self, **kwargs):
+        interface = Auth(**kwargs)
         self._base_url = '%s/workflows/v1/tasks' % interface.root_url
 
         # store a reference to the GBDX Connection
         self.gbdx_connection = interface.gbdx_connection
 
         # store a ref to the s3 interface
-        self.s3 = interface.s3
+        self.s3 = S3()
 
         # the logger
         self.logger = interface.logger
