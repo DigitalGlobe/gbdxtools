@@ -151,7 +151,7 @@ class IpeImage(DaskImage):
         
         _bounds = self._parse_geoms(**kwargs)
         if _bounds is not None:
-            _cfg = self._aoi_config(**kwargs)
+            _cfg = self._aoi_config(bounds)
             super(IpeImage, self).__init__(**_cfg)
 
 
@@ -194,33 +194,32 @@ class IpeImage(DaskImage):
 
     def aoi(self, **kwargs):
         """ Subsets the IpeImage by the given bounds """
-        cfg = self._aoi_config(**kwargs)
-        return DaskImage(**cfg)
-
-    def _aoi_config(self, img=None, **kwargs):
         bounds = self._parse_geoms(**kwargs)
         if bounds is None:
             print('AOI bounds not found. Must specify a bbox, wkt, or geojson geometry.')
             return
-        else:
-            if img is None:
-                img = self
-            tfm = img.ipe_metadata['georef']
-            xform = Affine.from_gdal(*[tfm["translateX"], tfm["scaleX"], tfm["shearX"], tfm["translateY"], tfm["shearY"], tfm["scaleY"]])
-            args = list(bounds) + [xform]
-            roi = rasterio.windows.from_bounds(*args, boundless=True)
-            y_start = max(0, roi.row_off)
-            y_stop = roi.row_off + roi.num_rows
-            x_start = max(0, roi.col_off)
-            x_stop = roi.col_off + roi.num_cols
-            aoi = self[:, y_start:y_stop, x_start:x_stop]
-            return {
-                "shape": aoi.shape,
-                "dtype": aoi.dtype,
-                "chunks": aoi._chunks,
-                "name": aoi.name,
-                "dask": aoi.dask
-            }
+        cfg = self._aoi_config(bounds)
+        return DaskImage(**cfg)
+
+    def _aoi_config(self, bounds):
+        #if img is None:
+        #    img = self
+        tfm = self.ipe_metadata['georef']
+        xform = Affine.from_gdal(*[tfm["translateX"], tfm["scaleX"], tfm["shearX"], tfm["translateY"], tfm["shearY"], tfm["scaleY"]])
+        args = list(bounds) + [xform]
+        roi = rasterio.windows.from_bounds(*args, boundless=True)
+        y_start = max(0, roi.row_off)
+        y_stop = roi.row_off + roi.num_rows
+        x_start = max(0, roi.col_off)
+        x_stop = roi.col_off + roi.num_cols
+        aoi = self[:, y_start:y_stop, x_start:x_stop]
+        return {
+            "shape": aoi.shape,
+            "dtype": aoi.dtype,
+            "chunks": aoi._chunks,
+            "name": aoi.name,
+            "dask": aoi.dask
+        }
 
     @contextmanager
     def open(self, *args, **kwargs):
@@ -284,7 +283,7 @@ class IpeImage(DaskImage):
     def _project_bounds(self, bounds):
         if bounds is None:
             return None
-        if self._proj is 'EPSG:4326':
+        if self._proj == 'EPSG:4326':
             return bounds
         else:
             p = Proj(init=self._proj)

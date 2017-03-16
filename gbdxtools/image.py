@@ -39,7 +39,7 @@ class Image(IpeImage):
     _properties = None
     _ipe_id = None
     _ipe_metadata = None
-    _proj = None
+    _proj = 'EPSG:4326'
 
     def __init__(self, cat_id, band_type="MS", node="toa_reflectance", **kwargs):
         self.interface = Auth()
@@ -59,9 +59,9 @@ class Image(IpeImage):
         self._tile_size = kwargs.get('tile_size', 256)
         self._cfg = self._config_dask()
         super(IpeImage, self).__init__(**self._cfg)
-        _bounds = self._parse_geoms(**kwargs)
-        if _bounds is not None:
-            self._cfg = self._aoi_config(**kwargs)
+        bounds = self._parse_geoms(**kwargs)
+        if bounds is not None:
+            self._cfg = self._aoi_config(bounds)
             super(IpeImage, self).__init__(**self._cfg)
 
 
@@ -100,10 +100,17 @@ class Image(IpeImage):
 
 
     def aoi(self, **kwargs):
+        pansharp = False
         if self._pansharpen and 'pansharpen' not in kwargs:
-            kwargs['pansharpen'] = True
-        img = Image(self._gid, band_type=self._band_type, node=self._node_id, **kwargs)
-        cfg = self._aoi_config(img=img, **kwargs)
+            pansharp = True
+
+        bounds = self._parse_geoms(**kwargs)
+        if bounds is None:
+            print('AOI bounds not found. Must specify a bbox, wkt, or geojson geometry.')
+            return
+
+        #img = Image(self._gid, band_type=self._band_type, node=self._node_id, pansharpen=pansharp)
+        cfg = self._aoi_config(bounds)
         return DaskImage(**cfg)
 
 
