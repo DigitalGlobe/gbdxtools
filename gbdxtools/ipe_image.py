@@ -22,6 +22,11 @@ try:
 except ImportError:
     from StringIO import cStringIO as BytesIO
 
+try:
+    xrange
+except NameError:
+    xrange = range
+
 import requests
 
 from shapely.geometry import box, shape

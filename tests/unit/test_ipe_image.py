@@ -13,6 +13,18 @@ from os.path import join, isfile, dirname, realpath
 import tempfile
 import unittest
 
+try:
+    from urlparse import urlparse
+except:
+    from urllib.parse import urlparse
+
+def force(r1, r2):
+    return True
+
+my_vcr = vcr.VCR()
+my_vcr.register_matcher('force', force)
+my_vcr.match_on = ['force']
+
 # How to use the mock_gbdx_session and vcr to create unit tests:
 # 1. Add a new test that is dependent upon actually hitting GBDX APIs.
 # 2. Decorate the test with @vcr appropriately
@@ -33,7 +45,7 @@ class IpeImageTest(unittest.TestCase):
         cls._temp_path = tempfile.mkdtemp()
         print("Created: {}".format(cls._temp_path))
 
-    @vcr.use_cassette('tests/unit/cassettes/test_ipe_image_default.yaml', filter_headers=['authorization'])
+    @my_vcr.use_cassette('tests/unit/cassettes/test_ipe_image_default.yaml', filter_headers=['authorization'])
     def test_basic_ipe_image(self):
         idahoid = '1ec49348-8950-49ff-bd71-ea2e4d8754ac'
         img = self.gbdx.ipeimage(idahoid)
@@ -42,7 +54,7 @@ class IpeImageTest(unittest.TestCase):
         assert img.shape == (8, 10496, 14848)
         assert img._proj == 'EPSG:4326'
 
-    @vcr.use_cassette('tests/unit/cassettes/test_ipe_image_with_aoi.yaml', filter_headers=['authorization'])
+    @my_vcr.use_cassette('tests/unit/cassettes/test_ipe_image_with_aoi.yaml', filter_headers=['authorization'])
     def test_ipe_image_with_aoi(self):
         idahoid = '1ec49348-8950-49ff-bd71-ea2e4d8754ac'
         img = self.gbdx.ipeimage(idahoid, bbox=[-74.01626586914064,45.394592696926615,-73.91601562500001,45.43363548747066])
@@ -50,7 +62,7 @@ class IpeImageTest(unittest.TestCase):
         assert img.shape == (8, 3169, 8135)
         assert img._proj == 'EPSG:4326'
 
-    @vcr.use_cassette('tests/unit/cassettes/test_ipe_image_with_proj.yaml', filter_headers=['authorization'])
+    @my_vcr.use_cassette('tests/unit/cassettes/test_ipe_image_with_proj.yaml', filter_headers=['authorization'])
     def test_ipe_image_with_proj(self):
         idahoid = '1ec49348-8950-49ff-bd71-ea2e4d8754ac'
         img = self.gbdx.ipeimage(idahoid, bbox=[-74.01626586914064,45.394592696926615,-73.91601562500001,45.43363548747066], proj='EPSG:3857')

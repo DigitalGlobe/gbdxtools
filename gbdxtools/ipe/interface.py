@@ -5,6 +5,11 @@ from hashlib import sha256
 from itertools import chain
 import gbdxtools as gbdx
 
+try:
+  basestring
+except NameError:
+  basestring = str
+
 NAMESPACE_UUID = uuid.NAMESPACE_DNS
 
 class ContentHashedDict(dict):
@@ -15,7 +20,7 @@ class ContentHashedDict(dict):
 
     def __hash__(self):
         dup = {k:v for k,v in self.items() if k is not "id"}
-        return sha256(str(dup)).hexdigest()
+        return sha256(str(dup).encode('utf-8')).hexdigest()
 
     def populate_id(self):
         self.update({"id": self._id})

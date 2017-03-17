@@ -18,5 +18,5 @@ dask
 cloudpickle
 numpy
 pycurl
-rasterio==1.0a5
+rasterio==1.0a3
 pyproj

@@ -165,7 +165,7 @@ class Image(IpeImage):
 
     def _mosaic(self, graph, suffix=''):
         mosaic = ipe.GeospatialMosaic(*graph.values())
-        idaho_id = graph.keys()[0]
+        idaho_id = list(graph.keys())[0]
         meta = requests.get('http://idaho.timbr.io/{}.json'.format(idaho_id)).json()
         gains_offsets = calc_toa_gain_offset(meta['properties'])
         radiance_scales, reflectance_scales, radiance_offsets = zip(*gains_offsets)
