@@ -17,11 +17,10 @@ import requests
 
 from gbdxtools.auth import Auth
 from gbdxtools.ipe.util import calc_toa_gain_offset, timeit
-from gbdxtools.ipe_image import IpeImage, DaskImage
+from gbdxtools.images.ipe_image import IpeImage, DaskImage
 from gbdxtools.vectors import Vectors
 from gbdxtools.ipe.interface import Ipe
 ipe = Ipe()
-
 
 band_types = {
   'MS': 'WORLDVIEW_8_BAND',
@@ -30,16 +29,13 @@ band_types = {
   'pan': 'PAN'
 }
 
-class Image(IpeImage):
+class CatalogImage(IpeImage):
     """ 
-      Strip Image Class 
-      Collects metadata on all image parts, groupd pan and ms bands from idaho
+      Catalog Image Class 
+      Collects metadata on all image parts and groups pan and ms bands from idaho
       Inherits from IpeImage and represents a mosiac data set of the full catalog strip
     """
     _properties = None
-    _ipe_id = None
-    _ipe_metadata = None
-    _proj = 'EPSG:4326'
 
     def __init__(self, cat_id, band_type="MS", node="toa_reflectance", **kwargs):
         self.interface = Auth()
@@ -49,20 +45,15 @@ class Image(IpeImage):
         self._node_id = node
         self._pansharpen = kwargs.get('pansharpen', False)
         self._acomp = kwargs.get('acomp', False)
-        if 'proj' in kwargs:
-            self._proj = kwargs['proj']
         if self._pansharpen:
             self._node_id = 'pansharpened'
         self._level = kwargs.get('level', 0)
-        self._ipe_graphs = self._init_graphs()
-        self._graph_id = str(uuid.uuid5(uuid.NAMESPACE_DNS, str(self.ipe.graph())))
-        self._tile_size = kwargs.get('tile_size', 256)
-        self._cfg = self._config_dask()
-        super(IpeImage, self).__init__(**self._cfg)
-        bounds = self._parse_geoms(**kwargs)
-        if bounds is not None:
-            self._cfg = self._aoi_config(bounds)
-            super(IpeImage, self).__init__(**self._cfg)
+        if '_ipe_graphs' in kwargs:
+            self._ipe_graphs = kwargs['_ipe_graphs']
+        else:
+            self._ipe_graphs = self._init_graphs()
+
+        super(CatalogImage, self).__init__(self._ipe_graphs, cat_id, node=node, **kwargs)
 
 
     def _query_vectors(self, query, aoi=None):
@@ -109,7 +100,6 @@ class Image(IpeImage):
             print('AOI bounds not found. Must specify a bbox, wkt, or geojson geometry.')
             return
 
-        #img = Image(self._gid, band_type=self._band_type, node=self._node_id, pansharpen=pansharp)
         cfg = self._aoi_config(bounds)
         return DaskImage(**cfg)
 
@@ -153,15 +143,6 @@ class Image(IpeImage):
         ms_mosaic = self._mosaic(ms_graph, suffix='-ms')
         ms = ipe.Format(ipe.MultiplyConst(ms_mosaic['toa_reflectance-ms'], constants=json.dumps([1000]*8)), dataType="1")
         return {'ms_mosaic': ms_mosaic, 'pan_mosiac': pan_mosaic, 'pansharpened': ipe.LocallyProjectivePanSharpen(ms, pan)}
-
-
-    def _toa(self, meta, _id, suffix=''):
-        gains_offsets = calc_toa_gain_offset(meta['properties'])
-        radiance_scales, reflectance_scales, radiance_offsets = zip(*gains_offsets)
-        ortho = ipe.Orthorectify(ipe.IdahoRead(bucketName="idaho-images", imageId=_id, objectStore="S3"))
-        radiance = ipe.AddConst(ipe.MultiplyConst(ipe.Format(ortho, dataType="4"), constants=radiance_scales), constants=radiance_offsets)
-        return ipe.MultiplyConst(radiance, constants=reflectance_scales)
-        
 
     def _mosaic(self, graph, suffix=''):
         mosaic = ipe.GeospatialMosaic(*graph.values())

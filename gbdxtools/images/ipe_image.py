@@ -124,20 +124,17 @@ class DaskImage(da.Array):
         plt.show(block=False)
 
 
+
 class IpeImage(DaskImage):
-    """
-      Dask based access to ipe based images (Idaho).
-    """
-    _idaho_md = None
     _ipe_id = None
     _ipe_metadata = None
     _proj = "EPSG:4326"
-  
-    def __init__(self, idaho_id, node="toa_reflectance", **kwargs):
+
+    def __init__(self, ipe_graph, gid, node="toa_reflectance", **kwargs):
         self.interface = Auth()
-        self._gid = idaho_id
+        self._gid = gid
         self._node_id = node
-        self._level = 0
+        self._ipe_graphs = ipe_graph
 
         if 'proj' in kwargs:
             self._proj = kwargs['proj']
@@ -146,25 +143,21 @@ class IpeImage(DaskImage):
             self._ipe_graphs = kwargs['_ipe_graphs']
         else:
             self._ipe_graphs = self._init_graphs()
-        if kwargs.get('_intermediate', False):
-            return
-        self._graph_id = str(uuid.uuid5(uuid.NAMESPACE_DNS, str(self.ipe.graph())))
+
+        self._graph_id = None
         self._tile_size = kwargs.get('tile_size', 256)
-        
         self._cfg = self._config_dask()
         super(IpeImage, self).__init__(**self._cfg)
-        
         bounds = self._parse_geoms(**kwargs)
         if bounds is not None:
             _cfg = self._aoi_config(bounds)
             super(IpeImage, self).__init__(**_cfg)
 
-
     @property
-    def idaho_md(self):
-        if self._idaho_md is None:
-            self._idaho_md = requests.get('http://idaho.timbr.io/{}.json'.format(self._gid)).json()
-        return self._idaho_md
+    def graph_id(self):
+        if self._graph_id is None:
+            self._graph_id = str(uuid.uuid5(uuid.NAMESPACE_DNS, str(self.ipe.graph())))
+        return self._graph_id
 
     @property
     def ipe(self):
@@ -190,11 +183,11 @@ class IpeImage(DaskImage):
     def vrt(self):
         """ Generates a VRT for the full Idaho image from image metadata and caches locally """
         try:
-            vrt = get_cached_vrt(self._gid, self._graph_id, self._level)
+            vrt = get_cached_vrt(self._gid, self.graph_id, self._level)
         except NotFound:
             nbands = 3 if self._node_id == 'pansharpened' else None
             template = generate_vrt_template(self.ipe_id, self.ipe_node_id, self._level, num_bands=nbands)
-            vrt = put_cached_vrt(self._gid, self._graph_id, self._level, template)
+            vrt = put_cached_vrt(self._gid, self.graph_id, self._level, template)
         return vrt
 
     def aoi(self, **kwargs):
@@ -207,8 +200,6 @@ class IpeImage(DaskImage):
         return DaskImage(**cfg)
 
     def _aoi_config(self, bounds):
-        #if img is None:
-        #    img = self
         tfm = self.ipe_metadata['georef']
         xform = Affine.from_gdal(*[tfm["translateX"], tfm["scaleX"], tfm["shearX"], tfm["translateY"], tfm["shearY"], tfm["scaleY"]])
         args = list(bounds) + [xform]
@@ -269,7 +260,6 @@ class IpeImage(DaskImage):
         urls = {(y-miny, x-minx): self._ipe_tile(x, y) for y in xrange(miny, maxy + 1) for x in xrange(minx, maxx + 1)}
         return urls, (size*(maxy-miny+1), size*(maxx-minx+1))
 
-
     def _parse_geoms(self, **kwargs):
         """ Finds supported geometry types, parses them and returns the bbox """
         bbox = kwargs.get('bbox', None)
@@ -292,23 +282,3 @@ class IpeImage(DaskImage):
             p = Proj(init=self._proj)
             bounds = sum((p(bounds[0], bounds[1]), p(bounds[2],bounds[3])), ())
         return bounds
-
-
-    def _init_graphs(self):
-        meta = self.idaho_md["properties"]
-        gains_offsets = calc_toa_gain_offset(meta)
-        radiance_scales, reflectance_scales, radiance_offsets = zip(*gains_offsets)
-        ortho = ipe.Orthorectify(ipe.IdahoRead(bucketName="idaho-images", imageId=self._gid, objectStore="S3"), **self._ortho_params())
-        radiance = ipe.AddConst(ipe.MultiplyConst(ipe.Format(ortho, dataType="4"), constants=radiance_scales), constants=radiance_offsets)
-        toa_reflectance = ipe.MultiplyConst(radiance, constants=reflectance_scales)
-        return {"ortho": ortho, "radiance": radiance, "toa_reflectance": toa_reflectance}
-
-
-    def _ortho_params(self):
-        ortho_params = {}
-        if self._proj is not None:
-            ortho_params["Output Coordinate Reference System"] = self._proj
-            ortho_params["Sensor Model"] = None
-            ortho_params["Elevation Source"] = None
-            ortho_params["Output Pixel to World Transform"] = None
-        return ortho_params

@@ -19,8 +19,8 @@ from gbdxtools.workflow import Workflow
 from gbdxtools.catalog import Catalog
 from gbdxtools.vectors import Vectors
 from gbdxtools.idaho import Idaho
-from gbdxtools.ipe_image import IpeImage
-from gbdxtools.image import Image
+from gbdxtools import IdahoImage
+from gbdxtools import CatalogImage
 from gbdxtools.task_registry import TaskRegistry
 import gbdxtools.simpleworkflows
 
@@ -50,8 +50,8 @@ class Interface(object):
 
         self.vectors = Vectors()
 
-        self.image = Image
-        self.ipeimage = IpeImage
+        self.catalog_image = CatalogImage
+        self.idaho_image = IdahoImage
 
         self.task_registry = TaskRegistry()
 

@@ -37,7 +37,7 @@ class Op(object):
         return str(uuid.uuid5(NAMESPACE_UUID, json.dumps(self._nodes)))
 
     def __call__(self, *args, **kwargs):
-        if len(args) > 0 and all([isinstance(arg, gbdx.ipe_image.IpeImage) for arg in args]):
+        if len(args) > 0 and all([isinstance(arg, gbdx.images.idaho_image.IpeImage) for arg in args]):
             return self._ipe_image_call(*args, **kwargs)
         self._nodes = [ContentHashedDict({"operator": self._operator,
                                           "_ancestors": [arg._id for arg in args], 
@@ -59,7 +59,7 @@ class Op(object):
             del kwargs['_intermediate']
         out = self(*[arg.ipe for arg in args], **kwargs)
         key = self._id
-        ipe_img = gbdx.ipe_image.IpeImage(args[0]._gid, key, _ipe_graphs={key: out})
+        ipe_img = gbdx.images.idaho_image.IpeImage(args[0]._gid, key, _ipe_graphs={key: out})
         return ipe_img
 
     def graph(self):
