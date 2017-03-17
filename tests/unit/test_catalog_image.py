@@ -6,7 +6,7 @@ Unit tests for the gbdxtools.Idaho class
 '''
 
 from gbdxtools import Interface
-from gbdxtools.image import Image
+from gbdxtools import CatalogImage
 from auth_mock import get_mock_gbdx_session
 import vcr
 from os.path import join, isfile, dirname, realpath
@@ -41,14 +41,15 @@ class IpeImageTest(unittest.TestCase):
     def setUpClass(cls):
         mock_gbdx_session = get_mock_gbdx_session(token='dymmytoken')
         cls.gbdx = Interface(gbdx_connection=mock_gbdx_session)
+        #cls.gbdx = Interface()
         cls._temp_path = tempfile.mkdtemp()
         print("Created: {}".format(cls._temp_path))
 
     @my_vcr.use_cassette('tests/unit/cassettes/test_image_default.yaml', filter_headers=['authorization'])
     def test_basic_ipe_image(self):
         _id = '104001002838EC00'
-        img = Image(_id)
-        self.assertTrue(isinstance(img, Image))
+        img = self.gbdx.catalog_image(_id)
+        self.assertTrue(isinstance(img, CatalogImage))
         assert img._node_id == 'toa_reflectance'
         assert img.shape == (8, 78848, 11008)
         assert img._proj == 'EPSG:4326'
@@ -56,7 +57,7 @@ class IpeImageTest(unittest.TestCase):
     @my_vcr.use_cassette('tests/unit/cassettes/test_image_default.yaml', filter_headers=['authorization'])
     def test_ipe_image_with_aoi(self):
         _id = '104001002838EC00'
-        img = Image(_id, bbox=[-85.81455230712892,10.416235163695223,-85.77163696289064,10.457089934231618])
+        img = self.gbdx.catalog_image(_id, bbox=[-85.81455230712892,10.416235163695223,-85.77163696289064,10.457089934231618])
         assert img._node_id == 'toa_reflectance'
         assert img.shape == (8, 3013, 3190)
         assert img._proj == 'EPSG:4326'
@@ -64,7 +65,7 @@ class IpeImageTest(unittest.TestCase):
     @my_vcr.use_cassette('tests/unit/cassettes/test_image_proj.yaml', filter_headers=['authorization'])
     def test_ipe_image_with_proj(self):
         _id = '104001002838EC00'
-        img = Image(_id, bbox=[-85.81455230712892,10.416235163695223,-85.77163696289064,10.457089934231618], proj='EPSG:3857')
+        img = CatalogImage(_id, bbox=[-85.81455230712892,10.416235163695223,-85.77163696289064,10.457089934231618], proj='EPSG:3857')
         assert img._node_id == 'toa_reflectance'
         assert img.shape == (8, 3064, 3190)
         assert img._proj == 'EPSG:3857' 
