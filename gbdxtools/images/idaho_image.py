@@ -14,6 +14,8 @@ class IdahoImage(IpeImage):
     def __init__(self, idaho_id, node="toa_reflectance", **kwargs):
         self._gid = idaho_id
         self._level = 0
+        if 'proj' in kwargs:
+            self._proj = kwargs['proj']
         if '_ipe_graphs' in kwargs:
             self._ipe_graphs = kwargs['_ipe_graphs']
         else:

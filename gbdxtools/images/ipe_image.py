@@ -141,9 +141,9 @@ class IpeImage(DaskImage):
         self._tile_size = kwargs.get('tile_size', 256)
         self._cfg = self._config_dask()
         super(IpeImage, self).__init__(**self._cfg)
-        self.bounds = self._parse_geoms(**kwargs)
-        if self.bounds is not None: 
-            _cfg = self._aoi_config(self.bounds)
+        bounds = self._parse_geoms(**kwargs)
+        if bounds is not None: 
+            _cfg = self._aoi_config(bounds)
             super(IpeImage, self).__init__(**_cfg)
 
     @property
@@ -190,9 +190,7 @@ class IpeImage(DaskImage):
             print('AOI bounds not found. Must specify a bbox, wkt, or geojson geometry.')
             return
         cfg = self._aoi_config(bounds)
-        dimage = DaskImage(**cfg)
-        dimage.bounds = bounds
-        return dimage
+        return DaskImage(**cfg)
 
     def _aoi_config(self, bounds):
         tfm = self.ipe_metadata['georef']
@@ -240,10 +238,8 @@ class IpeImage(DaskImage):
         buf_dask = {(name, 0, x, y): (load_url, url) for (x, y), url in urls.items()}
         return {"name": name, "dask": buf_dask}
 
-
     def _ipe_tile(self, x, y):
         return "{}/tile/{}/{}/{}/{}/{}.tif".format(VIRTUAL_IPE_URL, "idaho-virtual", self.ipe_id, self.ipe_node_id, x, y)
-
 
     def _collect_urls(self, meta):
         """

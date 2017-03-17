@@ -48,6 +48,8 @@ class CatalogImage(IpeImage):
         if self._pansharpen:
             self._node_id = 'pansharpened'
         self._level = kwargs.get('level', 0)
+        if 'proj' in kwargs:
+            self._proj = kwargs['proj']
         if '_ipe_graphs' in kwargs:
             self._ipe_graphs = kwargs['_ipe_graphs']
         else:
@@ -101,9 +103,7 @@ class CatalogImage(IpeImage):
             return
 
         cfg = self._aoi_config(bounds)
-        dimage = DaskImage(**cfg)
-        dimage.bounds = bounds
-        return dimage
+        return DaskImage(**cfg)
 
 
     def _init_graphs(self):
