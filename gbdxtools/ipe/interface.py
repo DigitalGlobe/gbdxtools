@@ -15,7 +15,7 @@ class ContentHashedDict(dict):
         return _id
 
     def __hash__(self):
-        dup = {k:v for k,v in self.iteritems() if k is not "id"}
+        dup = {k:v for k,v in self.items() if k is not "id"}
         return sha256(str(dup)).hexdigest()
 
     def populate_id(self):
@@ -37,7 +37,7 @@ class Op(object):
             return self._ipe_image_call(*args, **kwargs)
         self._nodes = [ContentHashedDict({"operator": self._operator,
                                           "_ancestors": [arg._id for arg in args], 
-                                          "parameters": {k:json.dumps(v) if not isinstance(v, types.StringTypes) else v for k,v in kwargs.iteritems()}})]
+                                          "parameters": {k:json.dumps(v) if not isinstance(v, types.StringTypes) else v for k,v in kwargs.items()}})]
         for arg in args:
             self._nodes.extend(arg._nodes)
 
@@ -59,7 +59,7 @@ class Op(object):
         return ipe_img
 
     def graph(self):
-        _nodes = [{k:v for k,v in node.iteritems() if not k.startswith('_')} for node in self._nodes]
+        _nodes = [{k:v for k,v in node.items() if not k.startswith('_')} for node in self._nodes]
         return {
             "id": self._id,
             "edges": self._edges,

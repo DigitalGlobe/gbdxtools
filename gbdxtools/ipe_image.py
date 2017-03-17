@@ -246,7 +246,7 @@ class IpeImage(DaskImage):
     def _build_array(self, urls):
         """ Creates the deferred dask array from a grid of URLs """
         name = "image-{}".format(str(uuid.uuid4()))
-        buf_dask = {(name, 0, x, y): (load_url, url) for (x, y), url in urls.iteritems()}
+        buf_dask = {(name, 0, x, y): (load_url, url) for (x, y), url in urls.items()}
         return {"name": name, "dask": buf_dask}
 
 

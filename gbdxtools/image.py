@@ -89,7 +89,7 @@ class Image(IpeImage):
             grouped[vid].append(idaho)
 
         meta['parts'] = []
-        for key, parts in grouped.iteritems():
+        for key, parts in grouped.items():
             part = {}
             for p in parts:
                 attrs = p['properties']['attributes']
@@ -121,7 +121,7 @@ class Image(IpeImage):
             return self._pansharpen_graph()
         else: 
             for part in self.metadata['parts']:
-                for k, p in part.iteritems():
+                for k, p in part.items():
                     if k == band_types[self._band_type]:
                         _id = p['properties']['idahoImageId']
                         graph[_id] = ipe.Orthorectify(ipe.IdahoRead(bucketName="idaho-images", imageId=_id, objectStore="S3"), **self._ortho_params())
@@ -141,7 +141,7 @@ class Image(IpeImage):
         pan_graph = {}
         ms_graph = {}
         for part in self.metadata['parts']:
-            for k, p in part.iteritems():
+            for k, p in part.items():
                 _id = p['properties']['idahoImageId']
                 if k == 'PAN':
                     pan_graph[_id] =  ipe.Orthorectify(ipe.IdahoRead(bucketName="idaho-images", imageId=_id, objectStore="S3"), **self._ortho_params())
