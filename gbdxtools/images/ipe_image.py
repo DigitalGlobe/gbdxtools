@@ -135,22 +135,15 @@ class IpeImage(DaskImage):
         self._gid = gid
         self._node_id = node
         self._ipe_graphs = ipe_graph
-
         if 'proj' in kwargs:
             self._proj = kwargs['proj']
-
-        if '_ipe_graphs' in kwargs:
-            self._ipe_graphs = kwargs['_ipe_graphs']
-        else:
-            self._ipe_graphs = self._init_graphs()
-
         self._graph_id = None
         self._tile_size = kwargs.get('tile_size', 256)
         self._cfg = self._config_dask()
         super(IpeImage, self).__init__(**self._cfg)
-        bounds = self._parse_geoms(**kwargs)
-        if bounds is not None:
-            _cfg = self._aoi_config(bounds)
+        self.bounds = self._parse_geoms(**kwargs)
+        if self.bounds is not None: 
+            _cfg = self._aoi_config(self.bounds)
             super(IpeImage, self).__init__(**_cfg)
 
     @property
@@ -197,7 +190,9 @@ class IpeImage(DaskImage):
             print('AOI bounds not found. Must specify a bbox, wkt, or geojson geometry.')
             return
         cfg = self._aoi_config(bounds)
-        return DaskImage(**cfg)
+        dimage = DaskImage(**cfg)
+        dimage.bounds = bounds
+        return dimage
 
     def _aoi_config(self, bounds):
         tfm = self.ipe_metadata['georef']

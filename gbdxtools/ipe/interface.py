@@ -55,11 +55,9 @@ class Op(object):
         return self
 
     def _ipe_image_call(self, *args, **kwargs):
-        if '_intermediate' in kwargs:
-            del kwargs['_intermediate']
         out = self(*[arg.ipe for arg in args], **kwargs)
         key = self._id
-        ipe_img = gbdx.images.idaho_image.IpeImage(args[0]._gid, key, _ipe_graphs={key: out})
+        ipe_img = gbdx.images.ipe_image.IpeImage({key: out}, args[0]._gid, node=key)
         return ipe_img
 
     def graph(self):

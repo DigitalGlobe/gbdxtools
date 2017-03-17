@@ -101,7 +101,9 @@ class CatalogImage(IpeImage):
             return
 
         cfg = self._aoi_config(bounds)
-        return DaskImage(**cfg)
+        dimage = DaskImage(**cfg)
+        dimage.bounds = bounds
+        return dimage
 
 
     def _init_graphs(self):
