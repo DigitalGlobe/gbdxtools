@@ -1,6 +1,5 @@
 import uuid
 import json
-import types
 import copy
 from hashlib import sha256
 from itertools import chain
@@ -37,7 +36,7 @@ class Op(object):
             return self._ipe_image_call(*args, **kwargs)
         self._nodes = [ContentHashedDict({"operator": self._operator,
                                           "_ancestors": [arg._id for arg in args], 
-                                          "parameters": {k:json.dumps(v) if not isinstance(v, types.StringTypes) else v for k,v in kwargs.items()}})]
+                                          "parameters": {k:json.dumps(v) if not isinstance(v, basestring) else v for k,v in kwargs.items()}})]
         for arg in args:
             self._nodes.extend(arg._nodes)
 
