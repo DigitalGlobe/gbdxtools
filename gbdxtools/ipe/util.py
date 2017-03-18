@@ -14,6 +14,17 @@ with warnings.catch_warnings():
 
 import gbdxtools.ipe.constants as constants
 
+def ortho_params(proj):
+    ortho_params = {}
+    if proj is not None:
+        ortho_params["Output Coordinate Reference System"] = proj
+        ortho_params["Sensor Model"] = None
+        ortho_params["Elevation Source"] = None
+        ortho_params["Output Pixel to World Transform"] = None
+        ortho_params["Requested GSD"] = None
+        ortho_params["Resampling Kernel"] = "INTERP_BILINEAR"
+        ortho_params["Grid Size"] = "10"
+    return ortho_params
 
 # StackOverflow: http://stackoverflow.com/questions/600268/mkdir-p-functionality-in-python
 def mkdir_p(path):

@@ -16,7 +16,7 @@ from shapely.geometry import box, shape
 import requests
 
 from gbdxtools.auth import Auth
-from gbdxtools.ipe.util import calc_toa_gain_offset, timeit
+from gbdxtools.ipe.util import calc_toa_gain_offset, ortho_params
 from gbdxtools.images.ipe_image import IpeImage, DaskImage
 from gbdxtools.vectors import Vectors
 from gbdxtools.ipe.interface import Ipe
@@ -42,11 +42,12 @@ class CatalogImage(IpeImage):
         self.vectors = Vectors()
         self._gid = cat_id
         self._band_type = band_type
-        self._node_id = node
         self._pansharpen = kwargs.get('pansharpen', False)
         self._acomp = kwargs.get('acomp', False)
         if self._pansharpen:
             self._node_id = 'pansharpened'
+        else:
+            self._node_id = node
         self._level = kwargs.get('level', 0)
         if 'proj' in kwargs:
             self._proj = kwargs['proj']
@@ -55,7 +56,7 @@ class CatalogImage(IpeImage):
         else:
             self._ipe_graphs = self._init_graphs()
 
-        super(CatalogImage, self).__init__(self._ipe_graphs, cat_id, node=node, **kwargs)
+        super(CatalogImage, self).__init__(self._ipe_graphs, cat_id, node=self._node_id, **kwargs)
 
 
     def _query_vectors(self, query, aoi=None):
@@ -116,18 +117,9 @@ class CatalogImage(IpeImage):
                 for k, p in part.items():
                     if k == band_types[self._band_type]:
                         _id = p['properties']['idahoImageId']
-                        graph[_id] = ipe.Orthorectify(ipe.IdahoRead(bucketName="idaho-images", imageId=_id, objectStore="S3"), **self._ortho_params())
+                        graph[_id] = ipe.Orthorectify(ipe.IdahoRead(bucketName="idaho-images", imageId=_id, objectStore="S3"), **ortho_params(self._proj))
                        
             return self._mosaic(graph)
-
-    def _ortho_params(self):
-        ortho_params = {}
-        if self._proj is not None:
-            ortho_params["Output Coordinate Reference System"] = self._proj
-            ortho_params["Sensor Model"] = None
-            ortho_params["Elevation Source"] = None
-            ortho_params["Output Pixel to World Transform"] = None
-        return ortho_params
 
     def _pansharpen_graph(self):
         pan_graph = {}
@@ -136,9 +128,9 @@ class CatalogImage(IpeImage):
             for k, p in part.items():
                 _id = p['properties']['idahoImageId']
                 if k == 'PAN':
-                    pan_graph[_id] =  ipe.Orthorectify(ipe.IdahoRead(bucketName="idaho-images", imageId=_id, objectStore="S3"), **self._ortho_params())
+                    pan_graph[_id] =  ipe.Orthorectify(ipe.IdahoRead(bucketName="idaho-images", imageId=_id, objectStore="S3"), **ortho_params(self._proj))
                 else:
-                    ms_graph[_id] = ipe.Orthorectify(ipe.IdahoRead(bucketName="idaho-images", imageId=_id, objectStore="S3"), **self._ortho_params())
+                    ms_graph[_id] = ipe.Orthorectify(ipe.IdahoRead(bucketName="idaho-images", imageId=_id, objectStore="S3"), **ortho_params(self._proj))
 
         pan_mosaic = self._mosaic(pan_graph, suffix='-pan')
         pan = ipe.Format(ipe.MultiplyConst(pan_mosaic['toa_reflectance-pan'], constants=json.dumps([1000])), dataType="1")
