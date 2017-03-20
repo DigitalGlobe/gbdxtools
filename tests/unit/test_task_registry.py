@@ -105,7 +105,7 @@ def test_update_task_definition():
     # Note that this test requires the task to be registered all ready.
     # If updating the VCR yaml cassette, manually register the gbdxtools-test-task above,
     # Deleting it once the VCR cassette has been created.
-    tr = TaskRegistry(gbdx)
+    tr = TaskRegistry()
 
     updated_task = _task_json()
     output_ports = updated_task['outputPortDescriptors']
