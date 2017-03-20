@@ -1,3 +1,7 @@
+0.10.1
+-----
+* Added new task_registry.update() function to update tasks in place
+
 0.10.0
 -----
 * refactored the way auth is handled in gbdxtools.interface into a singleton pattern to support direct importing of module classes. Classes can now auth themselves. 
