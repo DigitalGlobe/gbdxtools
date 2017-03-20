@@ -11,17 +11,17 @@ import json
 import datetime
 from . import catalog_search_aoi
 
+from gbdxtools.auth import Auth
+
 class Catalog(object):
 
-    def __init__(self, interface):
+    def __init__(self, **kwargs):
         ''' Construct the Catalog interface class
-
-        Args:
-            interface: A reference to the GBDX Interface.
 
         Returns:
             An instance of the Catalog interface class.
         '''
+        interface = Auth(**kwargs)
         self.base_url = '%s/catalog/v1' % interface.root_url
         self.gbdx_connection = interface.gbdx_connection
         self.logger = interface.logger

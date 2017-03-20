@@ -7,19 +7,18 @@ import os
 from builtins import object
 
 from boto import s3 as botos3
+from gbdxtools.auth import Auth
 
 class S3(object):
 
-    def __init__(self, interface):
+    def __init__(self, **kwargs):
         '''Instantiate the s3 interface
-
-        Args:
-            interface (Interface): A reference to the Interface that owns this instance.
 
         Returns:
             An instance of gbdxtools.S3.
 
         '''
+        interface = Auth(**kwargs)
         self.base_url = '%s/s3creds/v1' % interface.root_url
 
         # store a ref to the GBDX connection
