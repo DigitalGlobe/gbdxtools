@@ -18,7 +18,7 @@ from auth_mock import get_mock_gbdx_session
 # 5. replace the real gbdx token with "dummytoken" again
 # 6. Edit the cassette to remove any possibly sensitive information (s3 creds for example)
 mock_gbdx_session = get_mock_gbdx_session(token="dummytoken")
-gbdx = Interface(gbdx_connection = mock_gbdx_session)
+gbdx = Interface(gbdx_connection=mock_gbdx_session)
 
 
 def test_init():
@@ -26,7 +26,7 @@ def test_init():
     assert isinstance(tr, TaskRegistry)
 
 
-@vcr.use_cassette('tests/unit/cassettes/test_list_tasks.yaml',filter_headers=['authorization'])
+@vcr.use_cassette('tests/unit/cassettes/test_list_tasks.yaml', filter_headers=['authorization'])
 def test_list_tasks():
     tr = TaskRegistry()
     task_list = tr.list()
@@ -34,17 +34,17 @@ def test_list_tasks():
     assert 'HelloGBDX' in task_list
 
 
-@vcr.use_cassette('tests/unit/cassettes/test_describe_tasks.yaml',filter_headers=['authorization'])
+@vcr.use_cassette('tests/unit/cassettes/test_describe_tasks.yaml', filter_headers=['authorization'])
 def test_describe_tasks():
     tr = TaskRegistry()
     task_list = tr.list()
     assert len(task_list) > 0
     desc = tr.get_definition(task_list[0])
     assert isinstance(desc, dict)
-    assert len(desc['description']) > 0   
+    assert len(desc['description']) > 0
 
 
-@vcr.use_cassette('tests/unit/cassettes/test_register_task.yaml',filter_headers=['authorization'])
+@vcr.use_cassette('tests/unit/cassettes/test_register_task.yaml', filter_headers=['authorization'])
 def _test_register_task(task_json=None, filename=None):
     tr = TaskRegistry()
 
@@ -56,8 +56,8 @@ def _test_register_task(task_json=None, filename=None):
     assert 'successfully registered' in rv.lower()
 
 
-def test_register_task_from_json():
-    task_json = {
+def _task_json():
+    return {
         "inputPortDescriptors": [
             {
                 "description": "A string input.",
@@ -81,16 +81,41 @@ def test_register_task_from_json():
             }
         ],
         "description": "Test task",
-        "name": "gbdxtools-test-task"
+        "name": "gbdxtools-test-task",
+        "version": "0.0.1"
     }
+
+
+def test_register_task_from_json():
+    task_json = _task_json()
 
     _test_register_task(task_json=task_json)
 
 
 def test_register_task_from_file():
-    filename = os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), "data/gbdxtools_test_task.json"))
+    filename = os.path.abspath(os.path.join(
+        os.path.dirname(os.path.realpath(__file__)), "data", "gbdxtools_test_task.json"
+    ))
 
     _test_register_task(filename=filename)
+
+
+@vcr.use_cassette('tests/unit/cassettes/test_update_task.yaml', filter_headers=['authorization'])
+def test_update_task_definition():
+    # Note that this test requires the task to be registered all ready.
+    # If updating the VCR yaml cassette, manually register the gbdxtools-test-task above,
+    # Deleting it once the VCR cassette has been created.
+    tr = TaskRegistry(gbdx)
+
+    updated_task = _task_json()
+    output_ports = updated_task['outputPortDescriptors']
+    updated_task['outputPortDescriptors'] = output_ports + [{"name": "output%s" % len(output_ports), "type": "string"}]
+
+    task_name = '%s:%s' % (updated_task['name'], updated_task['version'])
+
+    r = tr.update(task_name, updated_task)
+
+    assert r['outputPortDescriptors'] == updated_task['outputPortDescriptors']
 
 
 def test_register_fails_when_both_json_and_file():
