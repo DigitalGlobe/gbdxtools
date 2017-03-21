@@ -31,8 +31,8 @@ IDAHO_CACHE_DIR = os.environ.get("IDAHO_CACHE_DIR", "/tmp/idaho-cache")
 if not os.path.exists(IDAHO_CACHE_DIR):
     mkdir_p(IDAHO_CACHE_DIR)
 
-def generate_vrt_template(ipe_id, node, level, num_bands=None):
-    meta = get_ipe_metadata(ipe_id, node=node)
+def generate_vrt_template(conn, ipe_id, node, level, num_bands=None):
+    meta = get_ipe_metadata(conn, ipe_id, node=node)
     image_md = meta['image']
     if num_bands is None:
         num_bands = image_md["numBands"]

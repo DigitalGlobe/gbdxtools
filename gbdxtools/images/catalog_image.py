@@ -103,7 +103,7 @@ class CatalogImage(IpeImage):
             print('AOI bounds not found. Must specify a bbox, wkt, or geojson geometry.')
             return
 
-        cfg = self._aoi_config(bounds)
+        cfg = self._aoi_config(bounds, **kwargs)
         return DaskImage(**cfg)
 
 

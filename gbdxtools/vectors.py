@@ -24,7 +24,8 @@ class Vectors(object):
         interface = Auth(**kwargs)
         self.gbdx_connection = interface.gbdx_connection
         self.logger = interface.logger
-        self.query_url = 'https://vector.geobigdata.io/insight-vector/api/vectors/query/items'
+        self.query_url = 'https://vector.geobigdata.io/insight-vector/api/vectors/query/paging'
+        self.page_url = 'https://vector.geobigdata.io/insight-vector/api/vectors/paging'
         self.get_url = 'https://vector.geobigdata.io/insight-vector/api/vector/%s/'
         self.create_url = 'https://vector.geobigdata.io/insight-vector/api/vectors'
 
@@ -122,7 +123,7 @@ class Vectors(object):
         return r.json()
 
 
-    def query(self, searchAreaWkt, query, count=100):
+    def query(self, searchAreaWkt, query, count=100, ttl='5m'):
         '''
         Perform a vector services query using the QUERY API
         (https://gbdxdocs.digitalglobe.com/docs/vs-query-list-vector-items-returns-default-fields)
@@ -131,9 +132,29 @@ class Vectors(object):
             searchAreaWkt: WKT Polygon of area to search
             query: Elastic Search query
             count: Maximum number of results to return
+            ttl: Amount of time for each temporary vector page to exist
 
         Returns:
             List of vector results
+    
+        '''
+
+        return list(self.query_iteratively(searchAreaWkt, query, count, ttl))
+
+
+    def query_iteratively(self, searchAreaWkt, query, count=100, ttl='5m'):
+        '''
+        Perform a vector services query using the QUERY API
+        (https://gbdxdocs.digitalglobe.com/docs/vs-query-list-vector-items-returns-default-fields)
+
+        Args:
+            searchAreaWkt: WKT Polygon of area to search
+            query: Elastic Search query
+            count: Maximum number of results to return
+            ttl: Amount of time for each temporary vector page to exist
+
+        Returns:
+            generator of vector results
     
         '''
 
@@ -143,20 +164,41 @@ class Vectors(object):
         params = {
             "q": query,
             "count": count,
+            "ttl": ttl,
             "left": left,
             "right": right,
             "lower": lower,
             "upper": upper
         }
 
+        # initialize paging request
         r = self.gbdx_connection.get(self.query_url, params=params)
         r.raise_for_status()
-        return r.json()
+        page = r.json()
+        paging_id = page['pagingId']
+        item_count = int(page['itemCount'])
 
-        
+        # get vectors from each page
+        while paging_id and item_count > 0:
+
+          headers = {'Content-Type':'application/x-www-form-urlencoded'}
+          data = {
+              "pagingId": paging_id,
+              "ttl": ttl
+          }
+
+          r = self.gbdx_connection.post(self.page_url, headers=headers, data=data)
+          r.raise_for_status()
+          page = r.json()
+          paging_id = page['next_paging_id']
+          item_count = int(page['item_count'])
+          data = page['data']
+
+          for vector in data:
+            yield vector
 
 
-    
+
 
 
 

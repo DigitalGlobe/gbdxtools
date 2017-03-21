@@ -10,6 +10,7 @@ from gbdxtools.vectors import Vectors
 from auth_mock import get_mock_gbdx_session
 import vcr
 import unittest
+import types
 
 """
 How to use the mock_gbdx_session and vcr to create unit tests:
@@ -33,13 +34,26 @@ class TestVectors(unittest.TestCase):
         c = Vectors()
         self.assertTrue(isinstance(c, Vectors))
 
-    @vcr.use_cassette('tests/unit/cassettes/test_vectors_search.yaml', filter_headers=['authorization'])
+    @vcr.use_cassette('tests/unit/cassettes/test_vectors_search.yaml', filter_headers=['authorization'], match_on=['method', 'scheme', 'host', 'port', 'path'])
     def test_vectors_search(self):
         v = Vectors()
         aoi = "POLYGON((17.75390625 25.418470119273117,24.08203125 25.418470119273117,24.08203125 19.409611549990895,17.75390625 19.409611549990895,17.75390625 25.418470119273117))"
         results = v.query(aoi, query="item_type:WV03")
 
-        assert len(results) == 100
+        assert len(results) == 310
+
+    @vcr.use_cassette('tests/unit/cassettes/test_vectors_search.yaml', filter_headers=['authorization'], match_on=['method', 'scheme', 'host', 'port', 'path'])
+    def test_vectors_search_iteratively(self):
+        v = Vectors()
+        aoi = "POLYGON((17.75390625 25.418470119273117,24.08203125 25.418470119273117,24.08203125 19.409611549990895,17.75390625 19.409611549990895,17.75390625 25.418470119273117))"
+        g = v.query_iteratively(aoi, query="item_type:WV03")
+
+        count = 0
+        for vector in g:
+          count += 1
+
+        assert isinstance(g, types.GeneratorType)
+        assert count == 310
 
     @vcr.use_cassette('tests/unit/cassettes/test_vectors_create_single.yaml', filter_headers=['authorization'])
     def test_vectors_create_single(self):

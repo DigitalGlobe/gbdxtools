@@ -1,0 +1,36 @@
+interactions:
+- request:
+    body: !!python/unicode '{"containerDescriptors": [{"command": "", "type": "DOCKER",
+      "properties": {"image": "michaelconnor00/maptiks-alpine-base"}}], "description":
+      "Test task", "inputPortDescriptors": [{"type": "string", "description": "A string
+      input.", "name": "inputstring"}], "version": "0.0.1", "outputPortDescriptors":
+      [{"type": "string", "name": "output"}, {"type": "string", "name": "output1"}],
+      "name": "gbdxtools-test-task"}'
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      Content-Length: ['411']
+      Content-Type: [application/json]
+      User-Agent: [python-requests/2.12.1]
+    method: PUT
+    uri: https://geobigdata.io/workflows/v1/tasks/gbdxtools-test-task:0.0.1
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA42QP0/DMBDFv4rluQkuCxIbokwdWlVsiMFJjnCq/8l3QaDI3x3bSSVUBtjsu/d+
+        7/Rm2XvHGh3EHVAfMbCPJO/Fy5w31mo35I+UGyH5K0B57w6P+6dTmYToA0RGKIZZotVjVVjs3zWY
+        THY+KnVjdWA8U6NNyEFNpwlkSq+ZMKyZ6F0xPgOxYE3nQkcXJj76yL8Ou1xCHNGNRXvFeRDLSlRG
+        WxRO2+qpk9VYT/iASKtNtardFrGf+P/ZF/Jikmkj/lZtl+zrAuk4dQb7/HnThqCUjhayJU/ubpVK
+        P0BjN3yy94Yazq01tbX0DdGYM7fPAQAA
+    headers:
+      access-control-allow-origin: ['*']
+      connection: [keep-alive]
+      content-encoding: [gzip]
+      content-length: ['252']
+      content-type: [application/json]
+      date: ['Wed, 15 Mar 2017 20:57:10 GMT']
+      server: [nginx/1.8.0]
+      via: [kong/0.5.2]
+    status: {code: 200, message: OK}
+version: 1

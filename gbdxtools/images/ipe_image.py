@@ -119,7 +119,7 @@ class DaskImage(da.Array):
                 top = lims[:,x][1]
                 bottom = lims[:,x][0]
                 data[:,:,x] = (data[:,:,x]-bottom)/float(top-bottom)
-                data = np.clip(data,0,1)
+            data = np.clip(data,0,1)
             plt.imshow(data,interpolation='nearest')
         plt.show(block=False)
 
@@ -134,11 +134,14 @@ class IpeImage(DaskImage):
         self.interface = Auth()
         self._gid = gid
         self._node_id = node
+        self._dtype = kwargs.get("dtype", "float32")
+        if self._node_id == "pansharpened":
+            self._dtype = "uint16"
+        if "proj" in kwargs:
+            self._proj = kwargs["proj"]
         self._ipe_graphs = ipe_graph
-        if 'proj' in kwargs:
-            self._proj = kwargs['proj']
         self._graph_id = None
-        self._tile_size = kwargs.get('tile_size', 256)
+        self._tile_size = kwargs.get("tile_size", 256)
         self._cfg = self._config_dask()
         super(IpeImage, self).__init__(**self._cfg)
         bounds = self._parse_geoms(**kwargs)
@@ -179,7 +182,7 @@ class IpeImage(DaskImage):
             vrt = get_cached_vrt(self._gid, self.graph_id, self._level)
         except NotFound:
             nbands = 3 if self._node_id == 'pansharpened' else None
-            template = generate_vrt_template(self.ipe_id, self.ipe_node_id, self._level, num_bands=nbands)
+            template = generate_vrt_template(self.interface.gbdx_connection, self.ipe_id, self.ipe_node_id, self._level, num_bands=nbands)
             vrt = put_cached_vrt(self._gid, self.graph_id, self._level, template)
         return vrt
 
@@ -189,10 +192,10 @@ class IpeImage(DaskImage):
         if bounds is None:
             print('AOI bounds not found. Must specify a bbox, wkt, or geojson geometry.')
             return
-        cfg = self._aoi_config(bounds)
+        cfg = self._aoi_config(bounds, **kwargs)
         return DaskImage(**cfg)
 
-    def _aoi_config(self, bounds):
+    def _aoi_config(self, bounds, **kwargs):
         tfm = self.ipe_metadata['georef']
         xform = Affine.from_gdal(*[tfm["translateX"], tfm["scaleX"], tfm["shearX"], tfm["translateY"], tfm["shearY"], tfm["scaleY"]])
         args = list(bounds) + [xform]
@@ -204,7 +207,7 @@ class IpeImage(DaskImage):
         aoi = self[:, y_start:y_stop, x_start:x_stop]
         return {
             "shape": aoi.shape,
-            "dtype": aoi.dtype,
+            "dtype": kwargs.get("dtype", aoi.dtype),
             "chunks": aoi._chunks,
             "name": aoi.name,
             "dask": aoi.dask
@@ -218,13 +221,12 @@ class IpeImage(DaskImage):
 
     def _config_dask(self):
         """ Configures the image as a dask array with a calculated shape and chunk size """
-        dtype = "float32" if self._node_id is not 'pansharpened' else 'uint16'
         meta = self.ipe_metadata
         nbands = meta['image']['numBands']
         urls, shape = self._collect_urls(meta)
         img = self._build_array(urls)
         cfg = {"shape": tuple([nbands] + list(shape)),
-               "dtype": dtype,
+               "dtype": self._dtype,
                "chunks": tuple([nbands] + [self._tile_size, self._tile_size])}
         cfg["name"] = img["name"]
         cfg["dask"] = img["dask"]
