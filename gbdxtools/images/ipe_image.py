@@ -64,7 +64,7 @@ from gbdxtools.ipe.interface import Ipe
 from gbdxtools.auth import Auth
 ipe = Ipe()
 
-def load_url(url, bands=8):
+def load_url(url, size, bands=8):
     """ Loads a geotiff url inside a thread and returns as an ndarray """
     thread_id = threading.current_thread().ident
     _curl = _curl_pool[thread_id]
@@ -79,7 +79,8 @@ def load_url(url, bands=8):
           with memfile.open(driver="GTiff") as dataset:
               arr = dataset.read()
       except (TypeError, rasterio.RasterioIOError) as e:
-          arr = np.zeros([bands,256,256], dtype=np.float32)
+          print('ERROR', e, url)
+          arr = np.zeros([bands, size, size], dtype=np.float32)
           _curl.close()
           del _curl_pool[thread_id]
     return arr
@@ -87,11 +88,15 @@ def load_url(url, bands=8):
 class DaskImage(da.Array):
     def __init__(self, **kwargs):
         super(DaskImage, self).__init__(**kwargs)
-        self.nchips = math.ceil((float(self.shape[-1]) / 256.0) * (float(self.shape[1]) / 256.0))
 
-    def read(self, bands=None):
+    @property
+    def nchips(self, size=256.0):
+        _size = float(size)
+        return self.nchips = math.ceil((float(self.shape[-1]) / _size) * (float(self.shape[1]) / _size))
+
+    def read(self, bands=None, size=256.0):
         """ Reads data from a dask array and returns the computed ndarray matching the given bands """
-        print('Fetching Image... {} {}'.format(self.nchips, 'tiles' if self.nchips > 1 else 'tile'))
+        print('Fetching Image... {} {}'.format(self.nchips(size), 'tiles' if self.nchips(size) > 1 else 'tile'))
         arr = self.compute(get=threaded_get)
         if bands is not None:
             arr = arr[bands, ...]
@@ -135,6 +140,9 @@ class IpeImage(DaskImage):
         self._gid = gid
         self._node_id = node
         self._ipe_graphs = ipe_graph
+        self._dtype = kwargs.get("dtype", "float32")
+        if self._node_id == 'pansharpened':
+            self._dtype = 'uint16'
         if 'proj' in kwargs:
             self._proj = kwargs['proj']
         self._graph_id = None
@@ -189,10 +197,10 @@ class IpeImage(DaskImage):
         if bounds is None:
             print('AOI bounds not found. Must specify a bbox, wkt, or geojson geometry.')
             return
-        cfg = self._aoi_config(bounds)
+        cfg = self._aoi_config(bounds, **kwargs)
         return DaskImage(**cfg)
 
-    def _aoi_config(self, bounds):
+    def _aoi_config(self, bounds, **kwargs):
         tfm = self.ipe_metadata['georef']
         xform = Affine.from_gdal(*[tfm["translateX"], tfm["scaleX"], tfm["shearX"], tfm["translateY"], tfm["shearY"], tfm["scaleY"]])
         args = list(bounds) + [xform]
@@ -204,7 +212,7 @@ class IpeImage(DaskImage):
         aoi = self[:, y_start:y_stop, x_start:x_stop]
         return {
             "shape": aoi.shape,
-            "dtype": aoi.dtype,
+            "dtype": kwargs.get("dtype", aoi.dtype),
             "chunks": aoi._chunks,
             "name": aoi.name,
             "dask": aoi.dask
@@ -218,7 +226,7 @@ class IpeImage(DaskImage):
 
     def _config_dask(self):
         """ Configures the image as a dask array with a calculated shape and chunk size """
-        dtype = "float32" if self._node_id is not 'pansharpened' else 'uint16'
+        dtype = self._dtype#"float32" if self._node_id is not 'pansharpened' else 'uint16'
         meta = self.ipe_metadata
         nbands = meta['image']['numBands']
         urls, shape = self._collect_urls(meta)
@@ -235,7 +243,7 @@ class IpeImage(DaskImage):
     def _build_array(self, urls):
         """ Creates the deferred dask array from a grid of URLs """
         name = "image-{}".format(str(uuid.uuid4()))
-        buf_dask = {(name, 0, x, y): (load_url, url) for (x, y), url in urls.items()}
+        buf_dask = {(name, 0, x, y): (load_url, url, self._tile_size) for (x, y), url in urls.items()}
         return {"name": name, "dask": buf_dask}
 
     def _ipe_tile(self, x, y):

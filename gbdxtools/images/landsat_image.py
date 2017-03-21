@@ -16,7 +16,8 @@ class LandsatImage(IpeImage):
             self._ipe_graphs = self._init_graphs()
         if 'proj' in kwargs:
             self._proj = kwargs['proj']
-        super(LandsatImage, self).__init__(self._ipe_graphs, self._gid, node=node, dtype="uint16", tile_size="512", **kwargs)
+        super(LandsatImage, self).__init__(self._ipe_graphs, self._gid, node=node, tile_size=512, **kwargs)
+        self.dtype = 'uint16'
         self._proj = self.ipe_metadata['georef']['spatialReferenceSystemCode']
 
 
