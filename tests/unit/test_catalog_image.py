@@ -46,7 +46,7 @@ class IpeImageTest(unittest.TestCase):
         print("Created: {}".format(cls._temp_path))
 
     @my_vcr.use_cassette('tests/unit/cassettes/test_image_default.yaml', filter_headers=['authorization'])
-    def test_basic_ipe_image(self):
+    def test_basic_catalog_image(self):
         _id = '104001002838EC00'
         img = self.gbdx.catalog_image(_id)
         self.assertTrue(isinstance(img, CatalogImage))
@@ -55,7 +55,7 @@ class IpeImageTest(unittest.TestCase):
         assert img._proj == 'EPSG:4326'
 
     @my_vcr.use_cassette('tests/unit/cassettes/test_image_default.yaml', filter_headers=['authorization'])
-    def test_ipe_image_with_aoi(self):
+    def test_cat_image_with_aoi(self):
         _id = '104001002838EC00'
         img = self.gbdx.catalog_image(_id, bbox=[-85.81455230712892,10.416235163695223,-85.77163696289064,10.457089934231618])
         assert img._node_id == 'toa_reflectance'
@@ -63,7 +63,7 @@ class IpeImageTest(unittest.TestCase):
         assert img._proj == 'EPSG:4326'
 
     @my_vcr.use_cassette('tests/unit/cassettes/test_image_proj.yaml', filter_headers=['authorization'])
-    def test_ipe_image_with_proj(self):
+    def test_cat_image_with_proj(self):
         _id = '104001002838EC00'
         img = CatalogImage(_id, bbox=[-85.81455230712892,10.416235163695223,-85.77163696289064,10.457089934231618], proj='EPSG:3857')
         assert img._node_id == 'toa_reflectance'
