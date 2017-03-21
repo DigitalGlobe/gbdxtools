@@ -179,7 +179,7 @@ class IpeImage(DaskImage):
             vrt = get_cached_vrt(self._gid, self.graph_id, self._level)
         except NotFound:
             nbands = 3 if self._node_id == 'pansharpened' else None
-            template = generate_vrt_template(self.ipe_id, self.ipe_node_id, self._level, num_bands=nbands)
+            template = generate_vrt_template(self.interface.gbdx_connection, self.ipe_id, self.ipe_node_id, self._level, num_bands=nbands)
             vrt = put_cached_vrt(self._gid, self.graph_id, self._level, template)
         return vrt
 
