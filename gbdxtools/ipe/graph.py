@@ -1,7 +1,8 @@
 import json
 import requests
 
-VIRTUAL_IPE_URL = "http://virtualidaho-env.us-east-1.elasticbeanstalk.com/v1"
+VIRTUAL_IPE_URL = "http://idahoapitest.geobigdata.io/v1"
+#VIRTUAL_IPE_URL = "http://virtualidaho-env.us-east-1.elasticbeanstalk.com/v1"
 
 def register_ipe_graph(conn, ipe_graph):
     url = "{}/graph".format(VIRTUAL_IPE_URL)

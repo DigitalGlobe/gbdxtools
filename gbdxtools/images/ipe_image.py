@@ -89,20 +89,19 @@ class DaskImage(da.Array):
     def __init__(self, **kwargs):
         super(DaskImage, self).__init__(**kwargs)
 
-    @property
     def nchips(self, size=256.0):
         _size = float(size)
-        return self.nchips = math.ceil((float(self.shape[-1]) / _size) * (float(self.shape[1]) / _size))
+        return math.ceil((float(self.shape[-1]) / _size) * (float(self.shape[1]) / _size))
 
     def read(self, bands=None, size=256.0):
         """ Reads data from a dask array and returns the computed ndarray matching the given bands """
-        print('Fetching Image... {} {}'.format(self.nchips(size), 'tiles' if self.nchips(size) > 1 else 'tile'))
+        print('Fetching Image... {} {}'.format(self.nchips(size=size), 'tiles' if self.nchips(size=size) > 1 else 'tile'))
         arr = self.compute(get=threaded_get)
         if bands is not None:
             arr = arr[bands, ...]
         return arr
 
-    def plot(self, arr=None, stretch=[2,98], w=20, h=10):
+    def plot(self, arr=None, stretch=[2,98], w=20, h=10, size=256.0):
         if not has_pyplot:
             print('To plot images please install matplotlib')
             return
@@ -112,7 +111,7 @@ class DaskImage(da.Array):
             return
         f, ax1 = plt.subplots(1, figsize=(w,h))
         ax1.axis('off')
-        data = arr if arr is not None else self.read()
+        data = arr if arr is not None else self.read(size=size)
         if self.shape[0] == 1:
             plt.imshow(data[0,:,:], cmap="Greys_r")
         else:
