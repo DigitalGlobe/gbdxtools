@@ -119,7 +119,7 @@ class DaskImage(da.Array):
                 top = lims[:,x][1]
                 bottom = lims[:,x][0]
                 data[:,:,x] = (data[:,:,x]-bottom)/float(top-bottom)
-                data = np.clip(data,0,1)
+            data = np.clip(data,0,1)
             plt.imshow(data,interpolation='nearest')
         plt.show(block=False)
 
