@@ -1,26 +1,30 @@
 interactions:
 - request:
-    body: '{"direction": "both", "labels": ["_acquisition", "_imageFiles"], "rootRecordId":
-      "LC81740532014364LGN00", "maxdepth": 2}'
+    body: !!python/unicode '{"direction": "both", "labels": ["_acquisition", "_imageFiles"],
+      "rootRecordId": "LC81740532014364LGN00", "maxdepth": 2}'
     headers:
       Accept: ['*/*']
       Accept-Encoding: ['gzip, deflate']
       Connection: [keep-alive]
       Content-Length: ['120']
       Content-Type: [application/json]
-      User-Agent: [python-requests/2.9.1]
+      User-Agent: [python-requests/2.12.1]
     method: POST
-    uri: https://geobigdata.io/catalog/v1/traverse
+    uri: https://geobigdata.io/catalog/v2/traverse
   response:
-    body: {string: !!python/unicode '{"searchTag":null,"results":[{"identifier":"LC81740532014364LGN00","owner":null,"type":"LandsatAcquisition","properties":{"path":"174","panResolution":"15.0","browseURL":"https://s3-us-west-2.amazonaws.com/landsat-pds/L8/174/053/LC81740532014364LGN00/LC81740532014364LGN00_thumb_large.jpg","epsgCode":"4326","footprintWkt":"POLYGON
-        ((29.25006 9.05111, 29.25006 11.1657, 31.35772 11.1657, 31.35772 9.05111,
-        29.25006 9.05111))","cloudCover":"0.36","multiResolution":"30.0","row":"53","timestamp":"2014-12-30T00:00:00.000Z","timestampWkt":"2014-12-30T08:17:06.000Z"}}],"stats":{"totalRecords":1,"recordsReturned":1,"typeCounts":{"LandsatAcquisition":1}}}'}
+    body: {string: !!python/unicode '{"message":"''eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2RpZ2l0YWxnbG9iZS1wbGF0Zm9ybS5hdXRoMC5jb20vIiwic3ViIjoiYXV0aDB8Z2JkeHw4IiwiYXVkIjoidmhhTkVKeW1MNG0xVUNvNFRxWG11S3RrbjlKQ1lEa1QiLCJleHAiOjE0OTA2NDE4MzMsImlhdCI6MTQ5MDAzNzAzM30.YIFp319yWP2pN4DqW8rFxt5ZPk5l5O9bOWAcidjDD3w''
+        not a valid key=value pair (missing equal-sign) in Authorization header: ''Bearer
+        eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2RpZ2l0YWxnbG9iZS1wbGF0Zm9ybS5hdXRoMC5jb20vIiwic3ViIjoiYXV0aDB8Z2JkeHw4IiwiYXVkIjoidmhhTkVKeW1MNG0xVUNvNFRxWG11S3RrbjlKQ1lEa1QiLCJleHAiOjE0OTA2NDE4MzMsImlhdCI6MTQ5MDAzNzAzM30.YIFp319yWP2pN4DqW8rFxt5ZPk5l5O9bOWAcidjDD3w''."}'}
     headers:
+      access-control-allow-origin: ['*']
       connection: [keep-alive]
-      content-length: ['651']
+      content-length: ['652']
       content-type: [application/json]
-      date: ['Thu, 12 May 2016 18:03:07 GMT']
-      server: [Apache-Coyote/1.1]
+      date: ['Mon, 27 Mar 2017 17:03:15 GMT']
       via: [kong/0.5.2]
-    status: {code: 200, message: OK}
+      x-amz-cf-id: [zhyjy-2rGfDzfW6toJ-_rMf3SrDix17f5czXRX8PeciMTCI9Oz0U_g==]
+      x-amzn-errortype: [IncompleteSignatureException]
+      x-amzn-requestid: [44b9e571-130f-11e7-8ea7-7b766f2646ac]
+      x-cache: [Error from cloudfront]
+    status: {code: 403, message: Forbidden}
 version: 1

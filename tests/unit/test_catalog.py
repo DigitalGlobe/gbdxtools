@@ -48,21 +48,21 @@ class TestCatalog(unittest.TestCase):
         record = c.get(catid)
 
         self.assertEqual(record['identifier'], '1040010019B4A600')
-        self.assertEqual(record['type'], 'DigitalGlobeAcquisition')
+        assert 'DigitalGlobeAcquisition' in record['type']
 
         self.assertTrue('inEdges' not in list(record.keys()))
 
     @vcr.use_cassette('tests/unit/cassettes/test_catalog_get_record_with_relationships.yaml', filter_headers=['authorization'])
     def test_catalog_get_record_with_relationships(self):
+        """
+        includeRelationships doesn't do anything anymore.  This is now a test of backward compatibility.
+        """
         c = Catalog()
         catid = '1040010019B4A600'
         record = c.get(catid, includeRelationships=True)
 
         self.assertEqual(record['identifier'], '1040010019B4A600')
-        self.assertEqual(record['type'], 'DigitalGlobeAcquisition')
-
-        self.assertTrue('inEdges' in list(record.keys()))
-
+        assert 'DigitalGlobeAcquisition' in record['type']
 
     @vcr.use_cassette('tests/unit/cassettes/test_catalog_search_point.yaml', filter_headers=['authorization'])
     def test_catalog_search_point(self):
@@ -71,48 +71,42 @@ class TestCatalog(unittest.TestCase):
         lng = -105.2705456
         results = c.search_point(lat, lng)
 
-        self.assertEqual(len(results),310)
+        self.assertEqual(len(results),499)
 
     @vcr.use_cassette('tests/unit/cassettes/test_catalog_search_address.yaml', filter_headers=['authorization'])
     def test_catalog_search_address(self):
         c = Catalog()
         results = c.search_address('Boulder, CO')
 
-        self.assertEqual(len(results), 310)
-
+        self.assertEqual(len(results), 499)
 
 
     @vcr.use_cassette('tests/unit/cassettes/test_catalog_search_wkt_only.yaml',filter_headers=['authorization'])
     def test_catalog_search_wkt_only(self):
         c = Catalog()
         results = c.search(searchAreaWkt="POLYGON ((30.1 9.9, 30.1 10.1, 29.9 10.1, 29.9 9.9, 30.1 9.9))")
-        assert len(results) == 395
+        assert len(results) == 508
 
     @vcr.use_cassette('tests/unit/cassettes/test_catalog_search_wkt_and_startDate.yaml',filter_headers=['authorization'])
     def test_catalog_search_wkt_and_startDate(self):
         c = Catalog()
         results = c.search(searchAreaWkt="POLYGON ((30.1 9.9, 30.1 10.1, 29.9 10.1, 29.9 9.9, 30.1 9.9))",
                            startDate='2012-01-01T00:00:00.000Z')
-        assert len(results) == 317
+        assert len(results) == 416
 
     @vcr.use_cassette('tests/unit/cassettes/test_catalog_search_wkt_and_endDate.yaml',filter_headers=['authorization'])
     def test_catalog_search_wkt_and_endDate(self):
         c = Catalog()
         results = c.search(searchAreaWkt="POLYGON ((30.1 9.9, 30.1 10.1, 29.9 10.1, 29.9 9.9, 30.1 9.9))",
                            endDate='2012-01-01T00:00:00.000Z')
-        assert len(results) == 78
+        assert len(results) == 92
 
     @vcr.use_cassette('tests/unit/cassettes/test_catalog_search_startDate_and_endDate_only_more_than_one_week_apart.yaml',filter_headers=['authorization'])
     def test_catalog_search_startDate_and_endDate_only_more_than_one_week_apart(self):
         c = Catalog()
-
-        try:
-            results = c.search(startDate='2004-01-01T00:00:00.000Z',
+        results = c.search(startDate='2004-01-01T00:00:00.000Z',
                                endDate='2012-01-01T00:00:00.000Z')
-        except Exception as e:
-            pass
-        else:
-            raise Exception('failed test')
+        assert len(results) == 1000
 
 
     @vcr.use_cassette('tests/unit/cassettes/test_catalog_search_startDate_and_endDate_only_less_than_one_week_apart.yaml',filter_headers=['authorization'])
@@ -122,7 +116,7 @@ class TestCatalog(unittest.TestCase):
         results = c.search(startDate='2008-01-01T00:00:00.000Z',
                                endDate='2008-01-03T00:00:00.000Z')
 
-        assert len(results) == 759
+        assert len(results) == 643
 
 
     @vcr.use_cassette('tests/unit/cassettes/test_catalog_search_filters1.yaml',filter_headers=['authorization'])
@@ -169,7 +163,7 @@ class TestCatalog(unittest.TestCase):
                            searchAreaWkt="POLYGON ((30.1 9.9, 30.1 10.1, 29.9 10.1, 29.9 9.9, 30.1 9.9))")
 
         for result in results:
-            assert result['type'] == 'LandsatAcquisition'
+            assert 'LandsatAcquisition' in result['type']
 
     @vcr.use_cassette('tests/unit/cassettes/test_catalog_search_huge_aoi.yaml',filter_headers=['authorization'])
     def test_catalog_search_huge_aoi(self):

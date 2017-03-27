@@ -22,7 +22,7 @@ class Catalog(object):
             An instance of the Catalog interface class.
         '''
         interface = Auth(**kwargs)
-        self.base_url = '%s/catalog/v1' % interface.root_url
+        self.base_url = '%s/catalog/v2' % interface.root_url
         self.gbdx_connection = interface.gbdx_connection
         self.logger = interface.logger
 
@@ -276,10 +276,6 @@ class Catalog(object):
             diff = endDateTime - startDateTime
             if diff.days < 0:
                 raise Exception("startDate must come before endDate.")
-
-        if startDate and endDate and not searchAreaWkt:
-            if diff.days > 7:
-                raise Exception("startDate and endDate must be at most a week apart if no search polygon is specified.")
 
         postdata = {  
             "searchAreaWkt": searchAreaWkt,

@@ -1,32 +1,162 @@
 interactions:
 - request:
-    body: '{"startDate": "2008-01-01T00:00:00.000Z", "filters": ["(sensorPlatformName
+    body: !!python/unicode '{"startDate": "2008-01-01T00:00:00.000Z", "filters": ["(sensorPlatformName
       = ''WORLDVIEW01'' OR sensorPlatformName =''QUICKBIRD02'')", "cloudCover < 10",
       "offNadirAngle < 10"], "endDate": "2012-01-03T00:00:00.000Z", "types": ["Acquisition"],
-      "searchAreaWkt": "POLYGON ((30.1 9.9, 30.1 10.1, 29.9 10.1, 29.9 9.9, 30.1 9.9))"}'
+      "searchAreaWkt": "POLYGON((29.9 10.1, 30.1 10.1, 30.1 9.9, 29.9 9.9, 29.9 10.1))"}'
     headers:
       Accept: ['*/*']
       Accept-Encoding: ['gzip, deflate']
       Connection: [keep-alive]
       Content-Length: ['320']
       Content-Type: [application/json]
-      User-Agent: [python-requests/2.9.1]
+      User-Agent: [python-requests/2.12.1]
     method: POST
-    uri: https://geobigdata.io/catalog/v1/search?includeRelationships=false
+    uri: https://geobigdata.io/catalog/v2/search?includeRelationships=false
   response:
-    body: {string: !!python/unicode '{"searchTag":null,"results":[{"identifier":"101001000E823000","owner":"7b216bd9-6523-4ca9-aa3b-1d8a5994f054","type":"DigitalGlobeAcquisition","properties":{"sunElevation":"49.72966","targetAzimuth":"261.0096","sensorPlatformName":"QUICKBIRD02","browseURL":"https://browse.digitalglobe.com/imagefinder/showBrowseMetadata?catalogId=101001000E823000","sunAzimuth":"139.5513","footprintWkt":"POLYGON
-        ((30.000888 10.977624, 30.004488 10.977624, 30.0042 10.94868, 30.003912 10.885176,
-        30.00348 10.847448, 30.003192 10.582488, 30.003768 9.966312, 29.845224 9.966744,
-        29.844936 10.126152, 29.844216 10.36044, 29.84292 10.671336, 29.842488 10.840536,
-        29.842776 10.975608, 29.867832 10.97604, 29.976696 10.977192, 30.000888 10.977624))","cloudCover":"0.0","multiResolution":"2.580733061","vendorName":"DigitalGlobe","offNadirAngle":"8.0","panResolution":"0.646541238","catalogID":"101001000E823000","imageBands":"Pan_MS1","timestamp":"2011-11-23T00:00:00.000Z"}},{"identifier":"1010010007B89F00","owner":"7b216bd9-6523-4ca9-aa3b-1d8a5994f054","type":"DigitalGlobeAcquisition","properties":{"sunElevation":"61.76012","targetAzimuth":"263.53714","sensorPlatformName":"QUICKBIRD02","browseURL":"https://browse.digitalglobe.com/imagefinder/showBrowseMetadata?catalogId=1010010007B89F00","sunAzimuth":"132.9655","footprintWkt":"POLYGON
-        ((30.040344 9.994536, 30.061224 9.994536, 30.060504 9.816264, 29.906424 9.816264,
-        29.90628 9.993672, 30.040344 9.994536))","cloudCover":"5.0","multiResolution":"2.491807699","vendorName":"DigitalGlobe","offNadirAngle":"9.0","panResolution":"0.62322408","catalogID":"1010010007B89F00","imageBands":"Pan_MS1","timestamp":"2008-02-24T00:00:00.000Z"}}],"stats":{"totalRecords":2,"recordsReturned":2,"typeCounts":{"DigitalGlobeAcquisition":2}}}'}
+    body: {string: !!python/unicode '{"stats": {"recordsReturned": 4, "totalRecords":
+        4, "typeCounts": {"GBDXCatalogRecord": 4, "DigitalGlobeAcquisition": 4, "WV01":
+        1, "Acquisition": 4, "QB02": 3}}, "results": [{"identifier": "101001000E823000",
+        "type": ["GBDXCatalogRecord", "Acquisition", "DigitalGlobeAcquisition", "QB02"],
+        "properties": {"bearing": 179.999998471117, "offNadirAngle_min": 3.13494205474854,
+        "offNadirAngle_start": 8.71535491943359, "targetAzimuth_min": 228.226593017578,
+        "multiResolution_min": 2.56798148155212, "cloudCover": 0, "sunAzimuth_max":
+        139.551391601562, "targetAzimuth": 261.009613037109, "multiResolution": 2.58073306083679,
+        "catalogID": "101001000E823000", "panResolution_max": 0.654562771320343, "timestamp":
+        "2011-11-23T08:00:05.000Z", "sunAzimuth_min": 139.551391601562, "browseURL":
+        "https://geobigdata.io/thumbnails/v1/browse/101001000E823000.large.png", "targetAzimuth_max":
+        314.963989257812, "sunAzimuth": 139.551391601562, "sunElevation_min": 49.7296676635742,
+        "offNadirAngle": 5.04430866241455, "stereoPair": null, "platformName": "QUICKBIRD02",
+        "multiResolution_start": 2.61212921142578, "sunElevation": 49.7296676635742,
+        "vendor": "DigitalGlobe", "scanDirection": "Forward", "panResolution_end":
+        0.64328920841217, "panResolution_start": 0.654562771320343, "targetAzimuth_end":
+        314.963989257812, "panResolution_min": 0.643248200416565, "offNadirAngle_max":
+        8.71535491943359, "multiResolution_end": 2.56827521324158, "multiResolution_max":
+        2.61212921142578, "sunElevation_max": 49.7296676635742, "offNadirAngle_end":
+        3.24465227127075, "panResolution": 0.646541237831116, "footprintWkt": "MULTIPOLYGON(((29.84210507
+        10.97648728, 30.00518512 10.97847419, 30.00474236 10.91967206, 30.00431842
+        10.86098816, 30.00404783 10.8025132, 30.00397777 10.74423663, 30.00387187
+        10.68597409, 30.00384228 10.62783587, 30.00381262 10.56976897, 30.00384146
+        10.51177734, 30.00388282 10.45384126, 30.00393811 10.3959792, 30.00400593
+        10.33816966, 30.00404989 10.2803798, 30.00412926 10.22262369, 30.00419117
+        10.16485824, 30.00424862 10.10709734, 30.00431969 10.04934547, 30.00438224
+        9.991580222, 30.0044077 9.964635185, 29.84461433 9.96503136, 29.84457209 9.991919591,
+        29.84446222 10.04960649, 29.84432133 10.10727471, 29.84417367 10.1649448,
+        29.84400474 10.22261057, 29.84381708 10.2802586, 29.84362342 10.33793221,
+        29.84340499 10.39562201, 29.8431768 10.45335524, 29.84293875 10.51115384,
+        29.84269984 10.56900028, 29.84248768 10.62690558, 29.84229824 10.68489912,
+        29.84207861 10.74294953, 29.84194369 10.80111568, 29.84189814 10.85939597,
+        29.84199519 10.91788032, 29.84210507 10.97648728)))", "targetAzimuth_start":
+        228.226593017578, "imageBands": "PAN_MS1", "sensorPlatformName": "QUICKBIRD02"}},
+        {"identifier": "10100100078B6F00", "type": ["GBDXCatalogRecord", "Acquisition",
+        "DigitalGlobeAcquisition", "QB02"], "properties": {"bearing": 180.0, "offNadirAngle_min":
+        4.82015514373779, "offNadirAngle_start": 14.1519737243652, "targetAzimuth_min":
+        58.607234954834, "multiResolution_min": 2.5621702671051, "cloudCover": 0,
+        "sunAzimuth_max": 152.219699257298, "targetAzimuth": 133.643476787366, "multiResolution":
+        2.5621702671051, "catalogID": "10100100078B6F00", "panResolution_max": 0.64081084728241,
+        "timestamp": "2008-01-06T08:55:20.000Z", "sunAzimuth_min": 152.219699257298,
+        "browseURL": "https://geobigdata.io/thumbnails/v1/browse/10100100078B6F00.large.png",
+        "targetAzimuth_max": 186.950317382812, "sunAzimuth": 152.219699257298, "sunElevation_min":
+        53.2705072101794, "offNadirAngle": 8.06815430992528, "stereoPair": null, "platformName":
+        "QUICKBIRD02", "multiResolution_start": 2.5621702671051, "sunElevation": 53.2705072101794,
+        "vendor": "DigitalGlobe", "scanDirection": "Forward", "panResolution_end":
+        0.64081084728241, "panResolution_start": 0.64081084728241, "targetAzimuth_end":
+        58.607234954834, "panResolution_min": 0.64081084728241, "offNadirAngle_max":
+        14.1519737243652, "multiResolution_end": 2.5621702671051, "multiResolution_max":
+        2.5621702671051, "sunElevation_max": 53.2705072101794, "offNadirAngle_end":
+        8.65682792663574, "panResolution": 0.64081084728241, "footprintWkt": "MULTIPOLYGON(((29.7965922
+        11.01228062, 29.95436358 11.01362143, 29.95408011 10.95497402, 29.95385731
+        10.89667168, 29.95369854 10.83856882, 29.95356069 10.78099572, 29.95345402
+        10.72324914, 29.95339371 10.66579152, 29.95330451 10.60880305, 29.95328599
+        10.55162532, 29.95324363 10.49492555, 29.95326691 10.43823188, 29.95329181
+        10.38182645, 29.95332718 10.32558625, 29.95336345 10.26950768, 29.95338568
+        10.21357623, 29.95342288 10.15776402, 29.95348474 10.10207613, 29.9535302
+        10.04651663, 29.95357613 9.9910431, 29.95362416 9.935650676, 29.9536824 9.880348722,
+        29.95372058 9.825103201, 29.95374776 9.769927017, 29.95376 9.714812881, 29.95375652
+        9.659714743, 29.95374556 9.604616508, 29.95371503 9.549529543, 29.95364909
+        9.494435917, 29.95357401 9.439328515, 29.95346853 9.384192885, 29.95334493
+        9.329023248, 29.9531811 9.273811235, 29.95298046 9.218550264, 29.95273709
+        9.163177325, 29.95246176 9.107714762, 29.95215139 9.052209746, 29.95180489
+        8.996600539, 29.95171351 8.983532599, 29.79664831 8.983192318, 29.79680394
+        8.996286589, 29.797421 9.052008535, 29.79797655 9.107616098, 29.79848109 9.163176583,
+        29.79893228 9.218635973, 29.79931966 9.273979413, 29.79965289 9.329265524,
+        29.7999319 9.384503027, 29.80016599 9.439697343, 29.80035094 9.494856527,
+        29.80050416 9.549994192, 29.80060956 9.605116178, 29.80066479 9.660243735,
+        29.80069808 9.715361723, 29.80069257 9.770488392, 29.80065384 9.825668551,
+        29.80058455 9.880907456, 29.80047503 9.936195062, 29.80035369 9.991566603,
+        29.80021263 10.04701259, 29.80005258 10.10253691, 29.79986078 10.15817038,
+        29.79967544 10.21391486, 29.79947179 10.26980531, 29.79924167 10.32581979,
+        29.79899636 10.38198117, 29.79874334 10.43829735, 29.79848806 10.49479584,
+        29.79825146 10.55146812, 29.79800762 10.60832519, 29.79778039 10.66543752,
+        29.79752221 10.72266131, 29.79729747 10.78009844, 29.79712248 10.83806136,
+        29.79686804 10.89569266, 29.79670476 10.95382111, 29.7965922 11.01228062)))",
+        "targetAzimuth_start": 186.950317382812, "imageBands": "PAN_MS1", "sensorPlatformName":
+        "QUICKBIRD02"}}, {"identifier": "1010010007B89F00", "type": ["GBDXCatalogRecord",
+        "Acquisition", "DigitalGlobeAcquisition", "QB02"], "properties": {"bearing":
+        180.0, "offNadirAngle_min": 8.71347522735596, "offNadirAngle_start": 9.75139331817627,
+        "targetAzimuth_min": 258.065856933594, "multiResolution_min": 2.49180769920349,
+        "cloudCover": 5, "sunAzimuth_max": 132.965576171875, "targetAzimuth": 263.537139892578,
+        "multiResolution": 2.49180769920349, "catalogID": "1010010007B89F00", "panResolution_max":
+        0.623224079608917, "timestamp": "2008-02-24T08:51:04.000Z", "sunAzimuth_min":
+        132.965576171875, "browseURL": "https://geobigdata.io/thumbnails/v1/browse/1010010007B89F00.large.png",
+        "targetAzimuth_max": 268.478424072266, "sunAzimuth": 132.965576171875, "sunElevation_min":
+        61.760124206543, "offNadirAngle": 9.18463039398193, "stereoPair": null, "platformName":
+        "QUICKBIRD02", "multiResolution_start": 2.49180769920349, "sunElevation":
+        61.760124206543, "vendor": "DigitalGlobe", "scanDirection": "Forward", "panResolution_end":
+        0.623224079608917, "panResolution_start": 0.623224079608917, "targetAzimuth_end":
+        268.478424072266, "panResolution_min": 0.623224079608917, "offNadirAngle_max":
+        9.75139331817627, "multiResolution_end": 2.49180769920349, "multiResolution_max":
+        2.49180769920349, "sunElevation_max": 61.760124206543, "offNadirAngle_end":
+        8.71347522735596, "panResolution": 0.623224079608917, "footprintWkt": "MULTIPOLYGON(((29.90520554
+        9.994611841, 30.06188743 9.995609243, 30.06163617 9.939839743, 30.06143169
+        9.884162922, 30.06122932 9.828521799, 30.06118898 9.814537086, 29.90544596
+        9.814467597, 29.90542285 9.828383458, 29.90535837 9.883745414, 29.90526415
+        9.939134126, 29.90520554 9.994611841)))", "targetAzimuth_start": 258.065856933594,
+        "imageBands": "PAN_MS1", "sensorPlatformName": "QUICKBIRD02"}}, {"identifier":
+        "1020010011422700", "type": ["GBDXCatalogRecord", "Acquisition", "DigitalGlobeAcquisition",
+        "WV01"], "properties": {"bearing": 179.999999, "offNadirAngle_min": 8.55352878570557,
+        "offNadirAngle_start": 11.5061931610107, "targetAzimuth_min": 269.947021484375,
+        "multiResolution_min": 0.0, "cloudCover": 5, "sunAzimuth_max": 153.531829833984,
+        "targetAzimuth": 285.362091064453, "multiResolution": 0.0, "catalogID": "1020010011422700",
+        "panResolution_max": 0.513977766036987, "timestamp": "2010-11-14T08:48:27.000Z",
+        "sunAzimuth_min": 153.531829833984, "browseURL": "https://geobigdata.io/thumbnails/v1/browse/1020010011422700.large.png",
+        "targetAzimuth_max": 299.531127929688, "sunAzimuth": 153.531829833984, "sunElevation_min":
+        59.130558013916, "offNadirAngle": 9.77550888061523, "stereoPair": null, "platformName":
+        "WORLDVIEW01", "multiResolution_start": 0.0, "sunElevation": 59.130558013916,
+        "vendor": "DigitalGlobe", "scanDirection": "Forward", "panResolution_end":
+        0.506112635135651, "panResolution_start": 0.513977766036987, "targetAzimuth_end":
+        269.947021484375, "panResolution_min": 0.506112635135651, "offNadirAngle_max":
+        11.5061931610107, "multiResolution_end": 0.0, "multiResolution_max": 0.0,
+        "sunElevation_max": 59.130558013916, "offNadirAngle_end": 8.55352878570557,
+        "panResolution": 0.509146809577942, "footprintWkt": "MULTIPOLYGON(((29.94623388
+        10.02847796, 30.11235338 10.02521258, 30.11226748 9.979368755, 30.11218445
+        9.933560989, 30.11212492 9.887816261, 30.11206156 9.842142065, 30.11198695
+        9.796524902, 30.11190185 9.750961533, 30.11182491 9.705425957, 30.11174449
+        9.659924442, 30.11166624 9.614460851, 30.11159095 9.569026277, 30.11152229
+        9.523619948, 30.11145749 9.478242493, 30.11139554 9.432891178, 30.11133527
+        9.387571996, 30.1112831 9.342282457, 30.11123193 9.297013844, 30.11117228
+        9.251762128, 30.11111536 9.206526634, 30.11106405 9.161312134, 30.1110233
+        9.116116465, 30.11098285 9.070932621, 30.11094958 9.025759237, 30.1109271
+        8.980595575, 30.11091593 8.956529649, 29.94774684 8.956468386, 29.94771583
+        8.980603618, 29.94765171 9.025897769, 29.94760113 9.071202208, 29.94754097
+        9.116519059, 29.94748803 9.161847514, 29.94743862 9.207195886, 29.94738982
+        9.252566512, 29.94733932 9.297955013, 29.94727911 9.343360758, 29.9472206
+        9.388787198, 29.94715717 9.434246594, 29.94709564 9.479738231, 29.94703612
+        9.525256652, 29.94697647 9.570804759, 29.94692467 9.616380901, 29.94685713
+        9.661992068, 29.94679909 9.707638532, 29.94673327 9.753320218, 29.94666553
+        9.799033626, 29.94659098 9.844798113, 29.94649741 9.890622787, 29.94640226
+        9.936515646, 29.9463206 9.982476653, 29.94623388 10.02847796)))", "targetAzimuth_start":
+        299.531127929688, "imageBands": "PAN", "sensorPlatformName": "WORLDVIEW01"}}]}'}
     headers:
+      access-control-allow-origin: ['*']
       connection: [keep-alive]
-      content-length: ['1760']
+      content-length: ['10655']
       content-type: [application/json]
-      date: ['Thu, 12 May 2016 03:14:10 GMT']
-      server: [Apache-Coyote/1.1]
+      date: ['Mon, 27 Mar 2017 17:03:23 GMT']
       via: [kong/0.5.2]
+      x-amz-cf-id: [AoSV7_BUc0nGcjoh-TK5fPPpvbsXDmifMQVDNcNGnUBAOpeOcf3Oew==]
+      x-amzn-requestid: [48ebf63b-130f-11e7-8cba-ed353256c81b]
+      x-amzn-trace-id: [Root=1-58d945da-24b37cf163590c4992615588]
+      x-cache: [Miss from cloudfront]
     status: {code: 200, message: OK}
 version: 1
