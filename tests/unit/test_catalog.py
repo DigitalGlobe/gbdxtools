@@ -180,7 +180,7 @@ class TestCatalog(unittest.TestCase):
     def test_catalog_get_data_location_DG(self):
         c = Catalog()
         s3path = c.get_data_location(catalog_id='1030010045539700')
-        assert s3path == 's3://receiving-dgcs-tdgplatform-com/055158926010_01_003/055158926010_01'
+        assert s3path == 's3://receiving-dgcs-tdgplatform-com/055158926010_01_003'
 
     @vcr.use_cassette('tests/unit/cassettes/test_catalog_get_data_location_Landsat.yaml',filter_headers=['authorization'])
     def test_catalog_get_data_location_Landsat(self):

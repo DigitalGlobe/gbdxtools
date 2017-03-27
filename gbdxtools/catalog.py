@@ -12,6 +12,7 @@ import datetime
 from . import catalog_search_aoi
 
 from gbdxtools.auth import Auth
+from gbdxtools.ordering import Ordering
 
 class Catalog(object):
 
@@ -180,6 +181,15 @@ class Catalog(object):
             bucket = record['properties']['bucketName']
             prefix = record['properties']['bucketPrefix']
             return 's3://' + bucket + '/' + prefix
+
+        # Handle DG Acquisition
+        if 'DigitalGlobeAcquisition' in record['type']:
+            o = Ordering()
+            res = o.location([catalog_id])
+            return res['acquisitions'][0]['location']
+
+        return None
+
 
 
     def _get_data_location(self, catalog_id):

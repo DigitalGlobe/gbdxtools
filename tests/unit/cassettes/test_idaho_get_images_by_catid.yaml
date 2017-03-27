@@ -16,11 +16,11 @@ interactions:
       connection: [keep-alive]
       content-length: ['76']
       content-type: [application/json]
-      date: ['Mon, 27 Mar 2017 19:25:54 GMT']
+      date: ['Mon, 27 Mar 2017 19:53:35 GMT']
       via: [kong/0.5.2]
-      x-amz-cf-id: [q40ngqMK1JhxkpU_H16IhujaJ9ZflgGKZePbZ0aE6kVe7k5stDRP8Q==]
-      x-amzn-requestid: [3235a93d-1323-11e7-af44-39be51ff3916]
-      x-amzn-trace-id: [Root=1-58d96742-a43b0bff685eb5f4657e756c]
+      x-amz-cf-id: [puwHl4fLOj9G8oo_YnZlbapl_6aexoUIdnWiEOvYLHgvYQ2sI6PFvQ==]
+      x-amzn-requestid: [102016c0-1327-11e7-b913-0d880216e4be]
+      x-amzn-trace-id: [Root=1-58d96dbf-48bfd1cf2d93a7f31ff4f7df]
       x-cache: [Error from cloudfront]
     status: {code: 401, message: Unauthorized}
 version: 1

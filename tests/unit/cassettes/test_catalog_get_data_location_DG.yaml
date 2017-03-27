@@ -1,30 +1,81 @@
 interactions:
 - request:
-    body: !!python/unicode '{"direction": "both", "labels": ["_acquisition", "_imageFiles"],
-      "rootRecordId": "1030010045539700", "maxdepth": 2}'
+    body: null
     headers:
       Accept: ['*/*']
       Accept-Encoding: ['gzip, deflate']
       Connection: [keep-alive]
-      Content-Length: ['115']
-      Content-Type: [application/json]
       User-Agent: [python-requests/2.12.1]
-    method: POST
-    uri: https://geobigdata.io/catalog/v2/traverse
+    method: GET
+    uri: https://geobigdata.io/catalog/v2/record/1030010045539700
   response:
-    body: {string: !!python/unicode '{"message":"''eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2RpZ2l0YWxnbG9iZS1wbGF0Zm9ybS5hdXRoMC5jb20vIiwic3ViIjoiYXV0aDB8Z2JkeHw4IiwiYXVkIjoidmhhTkVKeW1MNG0xVUNvNFRxWG11S3RrbjlKQ1lEa1QiLCJleHAiOjE0OTA2NDE4MzMsImlhdCI6MTQ5MDAzNzAzM30.YIFp319yWP2pN4DqW8rFxt5ZPk5l5O9bOWAcidjDD3w''
-        not a valid key=value pair (missing equal-sign) in Authorization header: ''Bearer
-        eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2RpZ2l0YWxnbG9iZS1wbGF0Zm9ybS5hdXRoMC5jb20vIiwic3ViIjoiYXV0aDB8Z2JkeHw4IiwiYXVkIjoidmhhTkVKeW1MNG0xVUNvNFRxWG11S3RrbjlKQ1lEa1QiLCJleHAiOjE0OTA2NDE4MzMsImlhdCI6MTQ5MDAzNzAzM30.YIFp319yWP2pN4DqW8rFxt5ZPk5l5O9bOWAcidjDD3w''."}'}
+    body: {string: !!python/unicode '{"identifier": "1030010045539700", "type": ["GBDXCatalogRecord",
+        "Acquisition", "DigitalGlobeAcquisition", "WV02"], "properties": {"bearing":
+        179.999613383273, "offNadirAngle_min": 25.8197269439697, "offNadirAngle_start":
+        28.1940727233887, "targetAzimuth_min": 22.6815319061279, "multiResolution_min":
+        2.25006651878357, "cloudCover": 0, "sunAzimuth_max": 128.179214477539, "targetAzimuth":
+        25.5832939147949, "multiResolution": 2.29218578338623, "catalogID": "1030010045539700",
+        "panResolution_max": 0.585159063339233, "timestamp": "2015-07-31T10:07:17.000Z",
+        "sunAzimuth_min": 128.179214477539, "browseURL": "https://geobigdata.io/thumbnails/v1/browse/1030010045539700.large.png",
+        "targetAzimuth_max": 28.3677005767822, "sunAzimuth": 128.179214477539, "sunElevation_min":
+        69.1803588867188, "offNadirAngle": 26.9236545562744, "stereoPair": null, "platformName":
+        "WORLDVIEW02", "multiResolution_start": 2.34295344352722, "sunElevation":
+        69.1803588867188, "vendor": "DigitalGlobe", "scanDirection": "Forward", "panResolution_end":
+        0.561956107616425, "panResolution_start": 0.585159063339233, "targetAzimuth_end":
+        28.3677005767822, "panResolution_min": 0.561956107616425, "offNadirAngle_max":
+        28.1940727233887, "multiResolution_end": 2.25006651878357, "multiResolution_max":
+        2.34295344352722, "sunElevation_max": 69.1803588867188, "offNadirAngle_end":
+        25.8197269439697, "panResolution": 0.572445690631866, "footprintWkt": "MULTIPOLYGON(((12.54278657
+        33.03863, 12.75208121 33.062434, 12.75194262 33.00723861, 12.75178251 32.95227325,
+        12.75161554 32.89745584, 12.751449 32.84279255, 12.75125457 32.78823914, 12.75108539
+        32.73388785, 12.75078788 32.67950459, 12.75058149 32.62540668, 12.7503892
+        32.57147458, 12.75022484 32.51772566, 12.75006576 32.46416989, 12.74989618
+        32.41074745, 12.74972069 32.35744714, 12.74950801 32.30426336, 12.74930277
+        32.25119452, 12.74905015 32.19817534, 12.74866132 32.14512771, 12.74789053
+        32.09161114, 12.74800665 32.03958911, 12.74756346 31.98685332, 12.74743577
+        31.97217223, 12.54428451 31.94990982, 12.54419248 31.96448885, 12.54408649
+        32.01669874, 12.54383557 32.06878625, 12.54443562 32.12246719, 12.54476878
+        32.17582028, 12.54470153 32.22869099, 12.5445539 32.28154857, 12.54473283
+        32.33508463, 12.54456005 32.3881949, 12.54444896 32.44155148, 12.54431514
+        32.49502706, 12.54418661 32.54870797, 12.54404302 32.60250662, 12.54392428
+        32.65650067, 12.54384397 32.71070214, 12.54372519 32.76503176, 12.54355204
+        32.8194246, 12.54337713 32.87397962, 12.54319782 32.92868742, 12.54300523
+        32.98354432, 12.54278657 33.03863)))", "targetAzimuth_start": 22.6815319061279,
+        "imageBands": "PAN_MS1_MS2", "sensorPlatformName": "WORLDVIEW02"}}'}
     headers:
       access-control-allow-origin: ['*']
       connection: [keep-alive]
-      content-length: ['652']
+      content-length: ['2656']
       content-type: [application/json]
-      date: ['Mon, 27 Mar 2017 18:35:06 GMT']
+      date: ['Mon, 27 Mar 2017 19:47:11 GMT']
       via: [kong/0.5.2]
-      x-amz-cf-id: [y8DpIR097C0y2eRIcjTzJl_m0TQQR-TidIqIFQ0q7eh3ug1BIQmnoQ==]
-      x-amzn-errortype: [IncompleteSignatureException]
-      x-amzn-requestid: [19b95d8b-131c-11e7-a626-1b04bc7f7707]
-      x-cache: [Error from cloudfront]
-    status: {code: 403, message: Forbidden}
+      x-amz-cf-id: [21UnaYVIYhVBowkmBdKqMeaQfCImIs9YM5l5SHbUatQk1FkenZjBhQ==]
+      x-amzn-requestid: [2a6f4644-1326-11e7-98a2-6933e1c2c499]
+      x-amzn-trace-id: [Root=1-58d96c3d-39846cf9923b4098fcfe37b9]
+      x-cache: [Miss from cloudfront]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      User-Agent: [python-requests/2.12.1]
+    method: GET
+    uri: https://geobigdata.io/orders/v2/location?acquisitionIds=[%221030010045539700%22]
+  response:
+    body: {string: !!python/unicode '{"acquisitions": [{"acquisition_id": "1030010045539700",
+        "state": "delivered", "location": "s3://receiving-dgcs-tdgplatform-com/055158926010_01_003"}]}'}
+    headers:
+      access-control-allow-origin: ['*']
+      connection: [keep-alive]
+      content-length: ['151']
+      content-type: [application/json]
+      date: ['Mon, 27 Mar 2017 19:47:12 GMT']
+      via: [kong/0.5.2]
+      x-amz-cf-id: [miFcS5Xu7uqB5pqdikJAq0EmwKeVaYczZ2QQs1KpXRpxQ98o4pJSbg==]
+      x-amzn-requestid: [2b77dd06-1326-11e7-abb2-17f51c3ba71b]
+      x-amzn-trace-id: [Root=1-58d96c3f-e3be801cae5cab334576d884]
+      x-cache: [Miss from cloudfront]
+    status: {code: 200, message: OK}
 version: 1
