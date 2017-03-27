@@ -7,7 +7,7 @@ interactions:
       Connection: [keep-alive]
       User-Agent: [python-requests/2.12.1]
     method: GET
-    uri: https://geobigdata.io/catalog/v2/record/1040010019B4A600?includeRelationships=true
+    uri: https://geobigdata.io/catalog/v2/record/1040010019B4A600
   response:
     body: {string: !!python/unicode '{"identifier": "1040010019B4A600", "type": ["GBDXCatalogRecord",
         "Acquisition", "DigitalGlobeAcquisition", "WV03_VNIR"], "properties": {"bearing":
@@ -54,11 +54,11 @@ interactions:
       connection: [keep-alive]
       content-length: ['3236']
       content-type: [application/json]
-      date: ['Mon, 27 Mar 2017 18:35:10 GMT']
+      date: ['Mon, 27 Mar 2017 19:25:39 GMT']
       via: [kong/0.5.2]
-      x-amz-cf-id: [5rNVyCZ_Mga2J95WhZn7Oa3L9C_wDch3dnqbZdQext6_fatEBGa0RA==]
-      x-amzn-requestid: [1ba4da22-131c-11e7-ac74-0b08946fc421]
-      x-amzn-trace-id: [Root=1-58d95b5e-0232d8dd4d7d60e60b525180]
+      x-amz-cf-id: [1-5-Bw22H75ZfdxcJQ9WyZifcuJW7226-9Nxl42baeoB2LbS9N_gvw==]
+      x-amzn-requestid: [29097c19-1323-11e7-8da1-47064de4a6c1]
+      x-amzn-trace-id: [Root=1-58d96733-95f98938e1756b3b10d8879e]
       x-cache: [Miss from cloudfront]
     status: {code: 200, message: OK}
 version: 1
