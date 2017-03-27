@@ -28,7 +28,7 @@ class IdahoTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        mock_gbdx_session = get_mock_gbdx_session(token='dymmytoken')
+        mock_gbdx_session = get_mock_gbdx_session(token='dummytoken')
         cls.gbdx = Interface(gbdx_connection=mock_gbdx_session)
         cls._temp_path = tempfile.mkdtemp()
         print("Created: {}".format(cls._temp_path))
