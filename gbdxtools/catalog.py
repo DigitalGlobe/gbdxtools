@@ -62,12 +62,8 @@ class Catalog(object):
         Returns:
             record (dict): A dict object identical to the json representation of the catalog record
         '''
-        if includeRelationships:
-            incR = 'true'
-        else:
-            incR = 'false'
-        url = '%(base_url)s/record/%(catID)s?includeRelationships=%(incR)s' % {
-            'base_url': self.base_url, 'catID': catID, 'incR': incR
+        url = '%(base_url)s/record/%(catID)s' % {
+            'base_url': self.base_url, 'catID': catID
         }
         r = self.gbdx_connection.get(url)
         r.raise_for_status()
@@ -163,6 +159,30 @@ class Catalog(object):
         return self.search(searchAreaWkt=searchAreaWkt, filters=filters, startDate=startDate, endDate=endDate, types=types)
 
     def get_data_location(self, catalog_id):
+        """
+        Find and return the S3 data location given a catalog_id.
+
+        Args:
+            catalog_id: The catalog ID
+
+        Returns:
+            A string containing the s3 location of the data associated with a catalog ID.  Returns
+            None if the catalog ID is not found, or if there is no data yet associated with it.
+        """
+
+        try:
+            record = self.get(catalog_id)
+        except:
+            return None
+
+        # Handle Landsat8
+        if 'Landsat8' in record['type'] and 'LandsatAcquisition' in record['type']:
+            bucket = record['properties']['bucketName']
+            prefix = record['properties']['bucketPrefix']
+            return 's3://' + bucket + '/' + prefix
+
+
+    def _get_data_location(self, catalog_id):
         """
         Find and return the S3 data location given a catalog_id.
 

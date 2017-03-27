@@ -1,30 +1,26 @@
 interactions:
 - request:
-    body: !!python/unicode '{"direction": "both", "labels": ["_acquisition", "_imageFiles"],
-      "rootRecordId": "nonexistent_asdfasdfasdfdfasffds", "maxdepth": 2}'
+    body: null
     headers:
       Accept: ['*/*']
       Accept-Encoding: ['gzip, deflate']
       Connection: [keep-alive]
-      Content-Length: ['131']
-      Content-Type: [application/json]
       User-Agent: [python-requests/2.12.1]
-    method: POST
-    uri: https://geobigdata.io/catalog/v2/traverse
+    method: GET
+    uri: https://geobigdata.io/catalog/v2/record/nonexistent_asdfasdfasdfdfasffds?includeRelationships=false
   response:
-    body: {string: !!python/unicode '{"message":"''eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2RpZ2l0YWxnbG9iZS1wbGF0Zm9ybS5hdXRoMC5jb20vIiwic3ViIjoiYXV0aDB8Z2JkeHw4IiwiYXVkIjoidmhhTkVKeW1MNG0xVUNvNFRxWG11S3RrbjlKQ1lEa1QiLCJleHAiOjE0OTA2NDE4MzMsImlhdCI6MTQ5MDAzNzAzM30.YIFp319yWP2pN4DqW8rFxt5ZPk5l5O9bOWAcidjDD3w''
-        not a valid key=value pair (missing equal-sign) in Authorization header: ''Bearer
-        eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2RpZ2l0YWxnbG9iZS1wbGF0Zm9ybS5hdXRoMC5jb20vIiwic3ViIjoiYXV0aDB8Z2JkeHw4IiwiYXVkIjoidmhhTkVKeW1MNG0xVUNvNFRxWG11S3RrbjlKQ1lEa1QiLCJleHAiOjE0OTA2NDE4MzMsImlhdCI6MTQ5MDAzNzAzM30.YIFp319yWP2pN4DqW8rFxt5ZPk5l5O9bOWAcidjDD3w''."}'}
+    body: {string: !!python/unicode "\n{\n  \"status\": \"404 Not Found\",\n  \"message\"\
+        \ : \"Not Found: nonexistent_asdfasdfasdfdfasffds\"\n}\n"}
     headers:
       access-control-allow-origin: ['*']
       connection: [keep-alive]
-      content-length: ['652']
+      content-length: ['94']
       content-type: [application/json]
-      date: ['Mon, 27 Mar 2017 18:35:08 GMT']
+      date: ['Mon, 27 Mar 2017 19:16:01 GMT']
       via: [kong/0.5.2]
-      x-amz-cf-id: [Q8nWKO5OzF1zsE-6b9WC92hm1E5X1AVkb61VvYIQa5jZYi61RKJg3g==]
-      x-amzn-errortype: [IncompleteSignatureException]
-      x-amzn-requestid: [1ac85c83-131c-11e7-852e-c9c904d0d474]
+      x-amz-cf-id: [AqRn2c7tBKHE9ZP0H9QHgm1FoCC6_v3LTkO5mxkjs-93W2cUuDyIhQ==]
+      x-amzn-requestid: [d0e9ef68-1321-11e7-b54f-bfdc0e07b577]
+      x-amzn-trace-id: [Root=1-58d964f1-b69811ae4eb15732c86e9521]
       x-cache: [Error from cloudfront]
-    status: {code: 403, message: Forbidden}
+    status: {code: 404, message: Not Found}
 version: 1

@@ -1,30 +1,33 @@
 interactions:
 - request:
-    body: !!python/unicode '{"direction": "both", "labels": ["_acquisition", "_imageFiles"],
-      "rootRecordId": "LC81740532014364LGN00", "maxdepth": 2}'
+    body: null
     headers:
       Accept: ['*/*']
       Accept-Encoding: ['gzip, deflate']
       Connection: [keep-alive]
-      Content-Length: ['120']
-      Content-Type: [application/json]
       User-Agent: [python-requests/2.12.1]
-    method: POST
-    uri: https://geobigdata.io/catalog/v2/traverse
+    method: GET
+    uri: https://geobigdata.io/catalog/v2/record/LC81740532014364LGN00
   response:
-    body: {string: !!python/unicode '{"message":"''eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2RpZ2l0YWxnbG9iZS1wbGF0Zm9ybS5hdXRoMC5jb20vIiwic3ViIjoiYXV0aDB8Z2JkeHw4IiwiYXVkIjoidmhhTkVKeW1MNG0xVUNvNFRxWG11S3RrbjlKQ1lEa1QiLCJleHAiOjE0OTA2NDE4MzMsImlhdCI6MTQ5MDAzNzAzM30.YIFp319yWP2pN4DqW8rFxt5ZPk5l5O9bOWAcidjDD3w''
-        not a valid key=value pair (missing equal-sign) in Authorization header: ''Bearer
-        eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2RpZ2l0YWxnbG9iZS1wbGF0Zm9ybS5hdXRoMC5jb20vIiwic3ViIjoiYXV0aDB8Z2JkeHw4IiwiYXVkIjoidmhhTkVKeW1MNG0xVUNvNFRxWG11S3RrbjlKQ1lEa1QiLCJleHAiOjE0OTA2NDE4MzMsImlhdCI6MTQ5MDAzNzAzM30.YIFp319yWP2pN4DqW8rFxt5ZPk5l5O9bOWAcidjDD3w''."}'}
+    body: {string: !!python/unicode '{"identifier": "LC81740532014364LGN00", "type":
+        ["GBDXCatalogRecord", "Acquisition", "Landsat8", "LandsatAcquisition"], "properties":
+        {"vendor": "Landsat", "browseURL": "https://s3-us-west-2.amazonaws.com/landsat-pds/L8/174/053/LC81740532014364LGN00/LC81740532014364LGN00_thumb_large.jpg",
+        "timestamp": "2014-12-30T08:17:06.000Z", "bucketPrefix": "L8/174/053/LC81740532014364LGN00",
+        "footprintWkt": "MULTIPOLYGON(((29.25006 9.05111, 29.25006 11.1657, 31.35772
+        11.1657, 31.35772 9.05111, 29.25006 9.05111)))", "cloudCover": 0, "catalogID":
+        "LC81740532014364LGN00", "bucketName": "landsat-pds", "path": 174, "sensorPlatformName":
+        "LANDSAT08", "multiResolution": 30.0, "row": 53, "platformName": "LANDSAT08",
+        "panResolution": 15.0}}'}
     headers:
       access-control-allow-origin: ['*']
       connection: [keep-alive]
-      content-length: ['652']
+      content-length: ['729']
       content-type: [application/json]
-      date: ['Mon, 27 Mar 2017 18:35:07 GMT']
+      date: ['Mon, 27 Mar 2017 19:22:32 GMT']
       via: [kong/0.5.2]
-      x-amz-cf-id: [Xs9F0LxBUsXRQmtGBfhfBnOmzh_-GQKYnwhq4o_sp-8N3vigz4mdWA==]
-      x-amzn-errortype: [IncompleteSignatureException]
-      x-amzn-requestid: [1a1168ce-131c-11e7-bcd7-ffe9aaaa3105]
-      x-cache: [Error from cloudfront]
-    status: {code: 403, message: Forbidden}
+      x-amz-cf-id: [AMZKHtuXSNEhxKmac9SryPzTA49hwm7tudnOB0IyAJZgBHD9hVCNnw==]
+      x-amzn-requestid: [b9cc4fd0-1322-11e7-a155-2b8ab47f5ef9]
+      x-amzn-trace-id: [Root=1-58d96678-77772ba03f6d67b059b7a4b9]
+      x-cache: [Miss from cloudfront]
+    status: {code: 200, message: OK}
 version: 1
