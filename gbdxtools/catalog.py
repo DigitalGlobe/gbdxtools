@@ -9,7 +9,6 @@ from builtins import object
 import requests
 import json
 import datetime
-from . import catalog_search_aoi
 
 from gbdxtools.auth import Auth
 from gbdxtools.ordering import Ordering
