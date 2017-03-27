@@ -2,7 +2,7 @@ interactions:
 - request:
     body: !!python/unicode '{"startDate": null, "filters": ["sensorPlatformName =
       ''WORLDVIEW03''"], "endDate": null, "types": ["Acquisition"], "searchAreaWkt":
-      "POLYGON((29.9 10.1, 30.1 10.1, 30.1 9.9, 29.9 9.9, 29.9 10.1))"}'
+      "POLYGON ((30.1 9.9, 30.1 10.1, 29.9 10.1, 29.9 9.9, 30.1 9.9))"}'
     headers:
       Accept: ['*/*']
       Accept-Encoding: ['gzip, deflate']
@@ -11,7 +11,7 @@ interactions:
       Content-Type: [application/json]
       User-Agent: [python-requests/2.12.1]
     method: POST
-    uri: https://geobigdata.io/catalog/v2/search?includeRelationships=false
+    uri: https://geobigdata.io/catalog/v2/search
   response:
     body: {string: !!python/unicode '{"stats": {"recordsReturned": 0, "totalRecords":
         0, "typeCounts": {}}, "results": []}'}
@@ -20,11 +20,11 @@ interactions:
       connection: [keep-alive]
       content-length: ['85']
       content-type: [application/json]
-      date: ['Mon, 27 Mar 2017 17:03:23 GMT']
+      date: ['Mon, 27 Mar 2017 18:35:17 GMT']
       via: [kong/0.5.2]
-      x-amz-cf-id: [6rOxEf3GTxrNjLeoFxlbIaDIZlRFgHqn7_sckM3hBjsFSdNmkUt7YA==]
-      x-amzn-requestid: [49817fa5-130f-11e7-a3e7-cf6652d7354d]
-      x-amzn-trace-id: [Root=1-58d945db-f789f2f4157bbf745c95ef55]
+      x-amz-cf-id: [-Syzlk-AXqpTVsRlYQoQ1lpUUtTDh_hLEkETr-5fFwpgRJ6IXmUnPQ==]
+      x-amzn-requestid: [20121f83-131c-11e7-9422-397f59e9348c]
+      x-amzn-trace-id: [Root=1-58d95b65-90e58af2004682338a57eeed]
       x-cache: [Miss from cloudfront]
     status: {code: 200, message: OK}
 version: 1

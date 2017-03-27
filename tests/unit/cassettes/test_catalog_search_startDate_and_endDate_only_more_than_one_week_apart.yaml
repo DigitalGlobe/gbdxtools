@@ -10,7 +10,7 @@ interactions:
       Content-Type: [application/json]
       User-Agent: [python-requests/2.12.1]
     method: POST
-    uri: https://geobigdata.io/catalog/v2/search?includeRelationships=false
+    uri: https://geobigdata.io/catalog/v2/search
   response:
     body: {string: !!python/unicode '{"stats": {"recordsReturned": 1000, "totalRecords":
         1000, "typeCounts": {"GBDXCatalogRecord": 1000, "DigitalGlobeAcquisition":
@@ -29819,11 +29819,11 @@ interactions:
       connection: [keep-alive]
       content-length: ['2404633']
       content-type: [application/json]
-      date: ['Mon, 27 Mar 2017 18:17:37 GMT']
+      date: ['Mon, 27 Mar 2017 18:35:46 GMT']
       via: [kong/0.5.2]
-      x-amz-cf-id: [H2DF_UWfNMQi7ceecQIQ6emkPAH7CWJdc_DXXXZiJS_SAX-MYzlyHA==]
-      x-amzn-requestid: [a4acd674-1319-11e7-af06-0d1f316f88a9]
-      x-amzn-trace-id: [Root=1-58d9573b-cce4d0b9e54455bf4c26b1b8]
+      x-amz-cf-id: [ggXrcLxQ0yC4iYOpPqDgLduZnfCRxWZ4O7x_P4vdpJpDizyV_Uy2kA==]
+      x-amzn-requestid: [2e7968b1-131c-11e7-ab7d-dd936ae17db9]
+      x-amzn-trace-id: [Root=1-58d95b7d-15f6db86045f7490a5742e1b]
       x-cache: [Miss from cloudfront]
     status: {code: 200, message: OK}
 version: 1

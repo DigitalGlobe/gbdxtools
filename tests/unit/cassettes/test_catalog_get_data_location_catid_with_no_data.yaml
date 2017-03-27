@@ -20,11 +20,11 @@ interactions:
       connection: [keep-alive]
       content-length: ['652']
       content-type: [application/json]
-      date: ['Mon, 27 Mar 2017 17:03:16 GMT']
+      date: ['Mon, 27 Mar 2017 18:35:08 GMT']
       via: [kong/0.5.2]
-      x-amz-cf-id: [Ta50yjE0uXdGogFvZmRgknLxt2ltlLBaLtyDSKJ812BzjTCbgcQn8w==]
+      x-amz-cf-id: [Sx5vHZ-5nE1c0_NuIiLhAGRbRAcj1q7t5nJayn6XwjZSPk0ygakF1g==]
       x-amzn-errortype: [IncompleteSignatureException]
-      x-amzn-requestid: [44ee62be-130f-11e7-beb8-0bbee47a803e]
+      x-amzn-requestid: [1a71d86a-131c-11e7-af6f-738c20fa821a]
       x-cache: [Error from cloudfront]
     status: {code: 403, message: Forbidden}
 version: 1

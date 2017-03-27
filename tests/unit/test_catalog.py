@@ -174,7 +174,7 @@ class TestCatalog(unittest.TestCase):
 
         results = c.search(searchAreaWkt = "POLYGON((-113.88427734375 40.36642741921034,-110.28076171875 40.36642741921034,-110.28076171875 37.565262680889965,-113.88427734375 37.565262680889965,-113.88427734375 40.36642741921034))")
         
-        assert len(results) == 2736
+        assert len(results) == 1000 # we will max out the paging limit of the vector service
 
     @vcr.use_cassette('tests/unit/cassettes/test_catalog_get_data_location_DG.yaml',filter_headers=['authorization'])
     def test_catalog_get_data_location_DG(self):

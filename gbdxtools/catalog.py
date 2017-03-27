@@ -288,19 +288,15 @@ class Catalog(object):
             postdata['filters'] = filters
 
         if searchAreaWkt:
-            # If we are searching over a polygon, break up the polygon into lots of small polygons of size 2-square degrees
-            # and get the results.
-            results = catalog_search_aoi.search_materials_in_multiple_small_searches(
-                        postdata, self.gbdx_connection, self.base_url)
-        else:
-            # If we are not searching over a polygon, just do the search directly.
-            url = '%(base_url)s/search?includeRelationships=false' % {
-                'base_url': self.base_url
-            }
-            headers = {'Content-Type':'application/json'}
-            r = self.gbdx_connection.post(url, headers=headers, data=json.dumps(postdata))
-            r.raise_for_status()
-            results = r.json()['results']
+            postdata['searchAreaWkt'] = searchAreaWkt
+
+        url = '%(base_url)s/search' % {
+            'base_url': self.base_url
+        }
+        headers = {'Content-Type':'application/json'}
+        r = self.gbdx_connection.post(url, headers=headers, data=json.dumps(postdata))
+        r.raise_for_status()
+        results = r.json()['results']
         
         return results
 

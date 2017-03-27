@@ -54,11 +54,11 @@ interactions:
       connection: [keep-alive]
       content-length: ['3236']
       content-type: [application/json]
-      date: ['Mon, 27 Mar 2017 17:03:18 GMT']
+      date: ['Mon, 27 Mar 2017 18:35:10 GMT']
       via: [kong/0.5.2]
-      x-amz-cf-id: [Pc3hAS3pUOdrCyGCFIw-coOSjcC6J0RTmGNrfZg6_Opyqx7yGD51UQ==]
-      x-amzn-requestid: [4655ba44-130f-11e7-9912-2f01ae28c600]
-      x-amzn-trace-id: [Root=1-58d945d6-0618567764813347cda1ca2b]
+      x-amz-cf-id: [5rNVyCZ_Mga2J95WhZn7Oa3L9C_wDch3dnqbZdQext6_fatEBGa0RA==]
+      x-amzn-requestid: [1ba4da22-131c-11e7-ac74-0b08946fc421]
+      x-amzn-trace-id: [Root=1-58d95b5e-0232d8dd4d7d60e60b525180]
       x-cache: [Miss from cloudfront]
     status: {code: 200, message: OK}
 version: 1
