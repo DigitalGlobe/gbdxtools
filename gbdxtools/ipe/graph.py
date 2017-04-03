@@ -2,6 +2,7 @@ import json
 import requests
 
 VIRTUAL_IPE_URL = "https://idahoapitest.geobigdata.io/v1"
+#VIRTUAL_IPE_URL = "https://idahoapi.geobigdata.io/v1"
 
 def register_ipe_graph(conn, ipe_graph):
     url = "{}/graph".format(VIRTUAL_IPE_URL)
