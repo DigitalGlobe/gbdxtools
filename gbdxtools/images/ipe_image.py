@@ -58,7 +58,7 @@ _curl_pool = defaultdict(pycurl.Curl)
 
 from gbdxtools.ipe.vrt import get_cached_vrt, put_cached_vrt, generate_vrt_template
 from gbdxtools.ipe.util import calc_toa_gain_offset, timeit
-from gbdxtools.ipe.graph import VIRTUAL_IPE_URL, register_ipe_graph, get_ipe_metadata
+from gbdxtools.ipe.graph import VIRTUAL_IPE_URL, register_ipe_graph, get_ipe_metadata, get_ipe_graph
 from gbdxtools.ipe.error import NotFound
 from gbdxtools.ipe.interface import Ipe
 from gbdxtools.auth import Auth
@@ -140,7 +140,6 @@ class IpeImage(DaskImage):
         if "proj" in kwargs:
             self._proj = kwargs["proj"]
         self._ipe_graphs = ipe_graph
-        self._graph_id = None
         self._tile_size = kwargs.get("tile_size", 256)
         self._cfg = self._config_dask()
         super(IpeImage, self).__init__(**self._cfg)
@@ -150,19 +149,17 @@ class IpeImage(DaskImage):
             super(IpeImage, self).__init__(**_cfg)
 
     @property
-    def graph_id(self):
-        if self._graph_id is None:
-            self._graph_id = str(uuid.uuid5(uuid.NAMESPACE_DNS, str(self.ipe.graph())))
-        return self._graph_id
-
-    @property
     def ipe(self):
         return self._ipe_graphs[self._node_id]
 
     @property
     def ipe_id(self):
         if self._ipe_id is None:
-            self._ipe_id = register_ipe_graph(self.interface.gbdx_connection, self.ipe.graph())
+            graph = self.ipe.graph()
+            try:
+                self._ipe_id = get_ipe_graph(self.interface.gbdx_connection, graph['id'])
+            except NotFound:
+                self._ipe_id = register_ipe_graph(self.interface.gbdx_connection, graph)
         return self._ipe_id
 
     @property
@@ -179,11 +176,11 @@ class IpeImage(DaskImage):
     def vrt(self):
         """ Generates a VRT for the full Idaho image from image metadata and caches locally """
         try:
-            vrt = get_cached_vrt(self._gid, self.graph_id, self._level)
+            vrt = get_cached_vrt(self._gid, self.ipe_id, self._level)
         except NotFound:
             nbands = 3 if self._node_id == 'pansharpened' else None
             template = generate_vrt_template(self.interface.gbdx_connection, self.ipe_id, self.ipe_node_id, self._level, num_bands=nbands)
-            vrt = put_cached_vrt(self._gid, self.graph_id, self._level, template)
+            vrt = put_cached_vrt(self._gid, self.ipe_id, self._level, template)
         return vrt
 
     def aoi(self, **kwargs):
