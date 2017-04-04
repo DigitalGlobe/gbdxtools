@@ -64,7 +64,7 @@ from gbdxtools.ipe.interface import Ipe
 from gbdxtools.auth import Auth
 ipe = Ipe()
 
-def load_url(url, bands=8):
+def load_url(url, token, bands=8):
     """ Loads a geotiff url inside a thread and returns as an ndarray """
     thread_id = threading.current_thread().ident
     _curl = _curl_pool[thread_id]
@@ -72,13 +72,13 @@ def load_url(url, bands=8):
     _curl.setopt(_curl.URL, url)
     _curl.setopt(_curl.WRITEDATA, buf)
     _curl.setopt(pycurl.NOSIGNAL, 1)
+    _curl.setopt(pycurl.HTTPHEADER, ['Authorization: Bearer {}'.format(token)])
     _curl.perform()
     with MemoryFile(buf.getvalue()) as memfile:
       try:
-          with memfile.open(driver="GTiff", width=256, height=256, count=8, dtype=np.float32) as dataset:
+          with memfile.open(driver="GTiff") as dataset:
               arr = dataset.read()
       except (TypeError, rasterio.RasterioIOError) as e:
-          print('ERRR', e)
           arr = np.zeros([bands,256,256], dtype=np.float32)
           _curl.close()
           del _curl_pool[thread_id]
@@ -159,7 +159,6 @@ class IpeImage(DaskImage):
             try:
                 self._ipe_id = get_ipe_graph(self.interface.gbdx_connection, graph['id'])
             except NotFound:
-                print('register')
                 self._ipe_id = register_ipe_graph(self.interface.gbdx_connection, graph)
         return self._ipe_id
 
@@ -235,7 +234,8 @@ class IpeImage(DaskImage):
     def _build_array(self, urls):
         """ Creates the deferred dask array from a grid of URLs """
         name = "image-{}".format(str(uuid.uuid4()))
-        buf_dask = {(name, 0, x, y): (load_url, url) for (x, y), url in urls.items()}
+        token = self.interface.gbdx_connection.access_token
+        buf_dask = {(name, 0, x, y): (load_url, url, token) for (x, y), url in urls.items()}
         return {"name": name, "dask": buf_dask}
 
     def _ipe_tile(self, x, y):
