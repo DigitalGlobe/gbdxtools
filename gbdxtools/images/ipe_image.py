@@ -73,12 +73,12 @@ def load_url(url, bands=8):
     _curl.setopt(_curl.WRITEDATA, buf)
     _curl.setopt(pycurl.NOSIGNAL, 1)
     _curl.perform()
-
     with MemoryFile(buf.getvalue()) as memfile:
       try:
-          with memfile.open(driver="GTiff") as dataset:
+          with memfile.open(driver="GTiff", width=256, height=256, count=8, dtype=np.float32) as dataset:
               arr = dataset.read()
       except (TypeError, rasterio.RasterioIOError) as e:
+          print('ERRR', e)
           arr = np.zeros([bands,256,256], dtype=np.float32)
           _curl.close()
           del _curl_pool[thread_id]
@@ -159,6 +159,7 @@ class IpeImage(DaskImage):
             try:
                 self._ipe_id = get_ipe_graph(self.interface.gbdx_connection, graph['id'])
             except NotFound:
+                print('register')
                 self._ipe_id = register_ipe_graph(self.interface.gbdx_connection, graph)
         return self._ipe_id
 
