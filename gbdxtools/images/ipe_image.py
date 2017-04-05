@@ -72,7 +72,7 @@ def load_url(url, token, bands=8):
     _curl.setopt(_curl.URL, url)
     _curl.setopt(_curl.WRITEDATA, buf)
     _curl.setopt(pycurl.NOSIGNAL, 1)
-    _curl.setopt(pycurl.HTTPHEADER, ['Authorization: Bearer {}'.format(token)])
+    _curl.setopt(pycurl.HTTPHEADER, ['Authorization: {}'.format(token)])
     _curl.perform()
     with MemoryFile(buf.getvalue()) as memfile:
       try:
@@ -234,7 +234,10 @@ class IpeImage(DaskImage):
     def _build_array(self, urls):
         """ Creates the deferred dask array from a grid of URLs """
         name = "image-{}".format(str(uuid.uuid4()))
-        token = self.interface.gbdx_connection.access_token
+        try:
+            token = 'Bearer {}'.format(self.interface.gbdx_connection.access_token)
+        except:
+            token = self.interface.gbdx_connection.headers['Authorization']
         buf_dask = {(name, 0, x, y): (load_url, url, token) for (x, y), url in urls.items()}
         return {"name": name, "dask": buf_dask}
 
