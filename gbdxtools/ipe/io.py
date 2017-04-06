@@ -1,7 +1,7 @@
 import rasterio
 
-def to_geotiff(arr, path='./output.tif', proj=None, dtype=None):
-    data = arr.read()
+def to_geotiff(arr, path='./output.tif', proj=None, dtype=None, bands=None):
+    data = arr.read(bands=bands)
     c,h,w = data.shape
     meta = {
         'width': w,
