@@ -175,8 +175,13 @@ class Vectors(object):
         r = self.gbdx_connection.get(self.query_url, params=params)
         r.raise_for_status()
         page = r.json()
-        paging_id = page['pagingId']
-        item_count = int(page['itemCount'])
+        paging_id = page['next_paging_id']
+        item_count = int(page['item_count'])
+        
+        # chelm fix for vector service paging changes  
+        data = page['data']
+        for vector in data:
+            yield vector
 
         # get vectors from each page
         while paging_id and item_count > 0:
@@ -195,7 +200,7 @@ class Vectors(object):
           data = page['data']
 
           for vector in data:
-            yield vector
+              yield vector
 
 
 
