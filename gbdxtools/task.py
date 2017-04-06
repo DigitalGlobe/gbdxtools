@@ -43,8 +43,6 @@ class InputPorts(Mapping):
         True
         >>> "one" in inputs._vals
         True
-        >>> inputs["one"] == 1
-        True
         >>> inputs.get("one", 2) == 1
         True
         >>> inputs.get("two", 2) == 2
@@ -52,15 +50,11 @@ class InputPorts(Mapping):
         >>> "two" in inputs._ports
         True
         >>> "two" in inputs._vals
-        True
-        >>> inputs["two"] == 2
-        True
+        False
         """
         if key not in self._ports:
             self._ports[key] = self._port_template(key)
-        if key not in self._vals:
-            self._vals[key] = default
-        return self._vals[key]
+        return self._vals.get(key, default)
 
     def _port_template(self, name, description="No Description Provided",
                        datatype="string", **kwargs):
@@ -91,7 +85,9 @@ class TaskEnv(object):
     >>> env.inputs.get("catalog_id", "123456789")
     '123456789'
     >>> env.inputs["catalog_id"] == "123456789"
-    True
+    Traceback (most recent call last):
+    ...
+    KeyError: 'catalog_id'
     >>> env.outputs["status"] = "Success"
     >>> env.outputs["status"] == "Success"
     True
