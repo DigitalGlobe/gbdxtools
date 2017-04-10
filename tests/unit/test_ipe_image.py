@@ -12,6 +12,8 @@ import vcr
 from os.path import join, isfile, dirname, realpath
 import tempfile
 import unittest
+import rasterio
+import dask.array as da
 
 try:
     from urlparse import urlparse
@@ -40,8 +42,9 @@ class IpeImageTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        mock_gbdx_session = get_mock_gbdx_session(token='dymmytoken')
-        cls.gbdx = Interface(gbdx_connection=mock_gbdx_session)
+        #mock_gbdx_session = get_mock_gbdx_session(token='dymmytoken')
+        #cls.gbdx = Interface(gbdx_connection=mock_gbdx_session)
+        cls.gbdx = Interface()
         cls._temp_path = tempfile.mkdtemp()
         print("Created: {}".format(cls._temp_path))
 
@@ -70,4 +73,31 @@ class IpeImageTest(unittest.TestCase):
         assert img.shape == (8, 4514, 8135)
         assert img._proj == 'EPSG:3857' 
 
+    @my_vcr.use_cassette('tests/unit/cassettes/test_ipe_image_with_aoi.yaml', filter_headers=['authorization'])
+    def test_ipe_image_aoi(self):
+        idahoid = '1ec49348-8950-49ff-bd71-ea2e4d8754ac'
+        img = self.gbdx.idaho_image(idahoid)
+        aoi = img.aoi(bbox=[-74.01626586914064,45.394592696926615,-73.91601562500001,45.43363548747066])
+        assert aoi.shape == (8, 3169, 8135)
+        rgb = aoi[[4,2,1], ...]
+        assert isinstance(rgb, da.Array)
+
+    @my_vcr.use_cassette('tests/unit/cassettes/test_ipe_image_vrt.yaml', filter_headers=['authorization'])
+    def test_ipe_image_vrt(self):
+        idahoid = '1ec49348-8950-49ff-bd71-ea2e4d8754ac'
+        img = self.gbdx.idaho_image(idahoid, bbox=[-74.01626586914064,45.394592696926615,-73.91601562500001,45.43363548747066], proj='EPSG:3857')
+        assert img._node_id == 'toa_reflectance'
+        assert img.shape == (8, 4514, 8135)
+        assert img._proj == 'EPSG:3857'
+        assert img.vrt == '/tmp/idaho-cache/1ec49348-8950-49ff-bd71-ea2e4d8754ac/d4d4198b-623d-5a66-aada-a450d525f449/0.vrt.xml'
+
+    @my_vcr.use_cassette('tests/unit/cassettes/test_ipe_image_vrt.yaml', filter_headers=['authorization'])
+    def test_ipe_image_open(self):
+        idahoid = '1ec49348-8950-49ff-bd71-ea2e4d8754ac'
+        img = self.gbdx.idaho_image(idahoid, bbox=[-74.01626586914064,45.394592696926615,-73.91601562500001,45.43363548747066], proj='EPSG:3857')
+        assert img._node_id == 'toa_reflectance'
+        assert img.shape == (8, 4514, 8135)
+        assert img._proj == 'EPSG:3857'
+        with img.open() as src:
+            assert isinstance(src, rasterio.DatasetReader)
 
