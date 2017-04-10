@@ -69,14 +69,27 @@ class InputPorts(Mapping):
 
 
 class OutputPorts(MutableMapping, InputPorts):
+    def __init__(self, work_dir):
+        self.work_dir = work_dir
+        Super(OutputPorts).__init__()
+    
     def __setitem__(self, key, value):
-        if key in self._vals:
-            raise NotImplementedError("Overwriting a port value is not supported")
         self._vals[key] = value
         self._ports[key] = self._port_template(key)
+        self.save()
 
     def __delitem__(self, key):
-        raise NotImplementedError("Ports may not be deleted")
+        del self._vals[key]
+        del self._ports[key]
+        self.save()
+
+    def save(self):
+        try:
+            with open(os.path.join(self.work_dir, "output", "ports.json")) as f:
+                json.dumps(dict(self), f)
+        except:
+            pass
+
 
 
 class TaskEnv(object):
@@ -104,11 +117,7 @@ class TaskEnv(object):
         except:
             self.inputs = InputPorts()
 
-        try:
-            with open(os.path.join(WORK_DIR, "output", "ports.json")) as f:
-                self.outputs = OutputPorts(json.load(f))
-        except:
-            self.outputs = OutputPorts()
+        self.outputs = OutputPorts(WORK_DIR)
 
     def definition(self, task={}):
         assert self.is_valid(task), "Task is not valid.  Correct it before generating definition"
