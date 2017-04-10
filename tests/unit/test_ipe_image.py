@@ -89,7 +89,7 @@ class IpeImageTest(unittest.TestCase):
         assert img._node_id == 'toa_reflectance'
         assert img.shape == (8, 4514, 8135)
         assert img._proj == 'EPSG:3857'
-        assert img.vrt == '/tmp/idaho-cache/1ec49348-8950-49ff-bd71-ea2e4d8754ac/d4d4198b-623d-5a66-aada-a450d525f449/0.vrt.xml'
+        assert isinstance(img.vrt, str)
 
     @my_vcr.use_cassette('tests/unit/cassettes/test_ipe_image_vrt.yaml', filter_headers=['authorization'])
     def test_ipe_image_open(self):

@@ -34,7 +34,7 @@ my_vcr = vcr.VCR()
 my_vcr.register_matcher('force', force)
 my_vcr.match_on = ['force']
 
-class IpeImageTest(unittest.TestCase):
+class CatalogImageTest(unittest.TestCase):
 
     _temp_path = None
 
@@ -71,7 +71,7 @@ class IpeImageTest(unittest.TestCase):
         assert img.shape == (8, 3088, 3190)
         assert img._proj == 'EPSG:3857' 
 
-    @my_vcr.use_cassette('tests/unit/cassettes/test_image_default.yaml', filter_headers=['authorization'])
+    @my_vcr.use_cassette('tests/unit/cassettes/test_image_open.yaml', filter_headers=['authorization'])
     def test_cat_image_open(self):
         _id = '104001002838EC00'
         bbox = [-85.81455230712892,10.416235163695223,-85.77163696289064,10.457089934231618]
