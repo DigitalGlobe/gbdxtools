@@ -1,3 +1,7 @@
+0.10.2
+------
+* fix for breaking change in VectorService
+
 0.10.1
 -----
 * Added new task_registry.update() function to update tasks in place
