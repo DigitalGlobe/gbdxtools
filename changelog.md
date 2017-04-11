@@ -1,3 +1,6 @@
+0.11.0
+* Adds CatalogImage and IdahoImage classes 
+
 0.10.2
 ------
 * fix for breaking change in VectorService
