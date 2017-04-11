@@ -90,14 +90,3 @@ class IpeImageTest(unittest.TestCase):
         assert img.shape == (8, 4514, 8135)
         assert img._proj == 'EPSG:3857'
         assert isinstance(img.vrt, str)
-
-    @my_vcr.use_cassette('tests/unit/cassettes/test_ipe_image_vrt.yaml', filter_headers=['authorization'])
-    def test_ipe_image_open(self):
-        idahoid = '1ec49348-8950-49ff-bd71-ea2e4d8754ac'
-        img = self.gbdx.idaho_image(idahoid, bbox=[-74.01626586914064,45.394592696926615,-73.91601562500001,45.43363548747066], proj='EPSG:3857')
-        assert img._node_id == 'toa_reflectance'
-        assert img.shape == (8, 4514, 8135)
-        assert img._proj == 'EPSG:3857'
-        with img.open() as src:
-            assert isinstance(src, rasterio.DatasetReader)
-
