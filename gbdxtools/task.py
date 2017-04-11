@@ -70,7 +70,11 @@ class InputPorts(Mapping):
 
 class OutputPorts(MutableMapping, InputPorts):
     def __init__(self, work_dir):
-        self.work_dir = work_dir
+        self._ports_dir = os.path.join(work_dir, "output")
+        try:
+            os.makedirs(self._ports_dir)
+        except:
+            pass
         super(OutputPorts, self).__init__()
     
     def __setitem__(self, key, value):
@@ -85,8 +89,8 @@ class OutputPorts(MutableMapping, InputPorts):
 
     def save(self):
         try:
-            with open(os.path.join(self.work_dir, "output", "ports.json")) as f:
-                json.dumps(dict(self), f)
+            with open(os.path.join(self._ports_dir, 'ports.json'), 'w') as f:
+                json.dump(dict(self), f)
         except:
             pass
 
@@ -109,7 +113,7 @@ class TaskEnv(object):
     """
     def __init__(self, *args, **kwargs):
         super(TaskEnv, self).__init__(*args, **kwargs)
-        WORK_DIR = "/mnt/work"
+        WORK_DIR = "/Users/chelm/dev/timbr/notebooks2/work"
 
         try:
             with open(os.path.join(WORK_DIR, "input", "ports.json")) as f:
