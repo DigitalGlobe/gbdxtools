@@ -6,6 +6,11 @@ import os.path
 import json
 from itertools import product
 
+try:
+    xrange
+except NameError:
+    xrange = range
+
 from gbdxtools.ipe.graph import VIRTUAL_IPE_URL, get_ipe_metadata
 from gbdxtools.ipe.util import mkdir_p, prettify
 from gbdxtools.ipe.error import NotFound
