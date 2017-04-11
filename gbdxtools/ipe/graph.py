@@ -20,7 +20,6 @@ def register_ipe_graph(conn, ipe_graph):
 
 def get_ipe_metadata(conn, ipe_id, node='toa_reflectance'):
     meta = {}
-    print(VIRTUAL_IPE_URL + "/metadata/idaho-virtual/{}/{}/image.json".format(ipe_id, node))
     meta['image'] = conn.get(VIRTUAL_IPE_URL + "/metadata/idaho-virtual/{}/{}/image.json".format(ipe_id, node)).json()
     meta['georef'] = conn.get(VIRTUAL_IPE_URL + "/metadata/idaho-virtual/{}/{}/georeferencing.json".format(ipe_id, node)).json()
     return meta

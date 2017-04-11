@@ -181,7 +181,6 @@ class IpeImage(DaskImage):
             nbands = 3 if self._node_id == 'pansharpened' else None
             template = generate_vrt_template(self.interface.gbdx_connection, self.ipe_id, self.ipe_node_id, self._level, num_bands=nbands)
             vrt = put_cached_vrt(self._gid, self.ipe_id, self._level, template)
-        print('VRT', vrt)
         return vrt
 
     def aoi(self, **kwargs):
