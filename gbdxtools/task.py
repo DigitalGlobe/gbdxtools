@@ -71,7 +71,7 @@ class InputPorts(Mapping):
 class OutputPorts(MutableMapping, InputPorts):
     def __init__(self, work_dir):
         self.work_dir = work_dir
-        Super(OutputPorts).__init__()
+        super(OutputPorts, self).__init__()
     
     def __setitem__(self, key, value):
         self._vals[key] = value
