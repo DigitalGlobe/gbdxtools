@@ -100,7 +100,7 @@ def put_cached_vrt(idaho_id, node, level, template):
         if not os.path.exists(d):
             mkdir_p(d)
         with open(cache_path, "w") as f:
-            f.write(Template(template).substitute(query=""))
+            f.write(Template(template.decode('utf-8')).substitute(query=""))
         return cache_path
     except Exception as e:
         print("VRT could not be cached", e)
