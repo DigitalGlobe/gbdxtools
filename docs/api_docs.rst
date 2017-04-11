@@ -72,19 +72,3 @@ gbdxtools.vectors module
     :members:
     :undoc-members:
     :show-inheritance:
-
-gbdxtools.images.catalog_image module
---------------------------
-
-.. automodule:: gbdxtools.images.catalog_image
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-gbdxtools.images.idaho_image module
---------------------------
-
-.. automodule:: gbdxtools.images.idaho_image
-    :members:
-    :undoc-members:
-    :show-inheritance:
