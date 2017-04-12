@@ -70,26 +70,29 @@ class InputPorts(Mapping):
 
 class OutputPorts(InputPorts):
     def __init__(self, work_dir):
-        self._ports_dir = os.path.join(work_dir, "output")
-        try:
-            os.makedirs(self._ports_dir)
-        except:
-            pass
+        self._ports_dir = os.path.join(work_dir, "output") if work_dir != '' else ''
         super(OutputPorts, self).__init__()
+        key = 'task_output'
+        self._ports[key] = self._port_template(key, datatype="directory")
+        self._vals[key] = os.path.join(self._ports_dir, "output")
     
     def __setitem__(self, key, value):
-        self._vals[key] = value
-        self._ports[key] = self._port_template(key)
-        #self.save()
+        self._vals[key] = os.path.join(self._ports_dir, value)
+        self._ports[key] = self._port_template(key, datatype="directory")
+        self.save()
 
     def __delitem__(self, key):
         del self._vals[key]
         del self._ports[key]
-        #self.save()
+        self.save()
 
     def save(self):
         try:
-            with open(os.path.join(self._ports_dir, 'ports.json'), 'w') as f:
+            os.makedirs(self._ports_dir)
+        except:
+            pass
+        try:
+            with open(os.path.join(self._ports_dir, "ports.json"), "w") as f:
                 json.dump(dict(self), f)
         except:
             pass
