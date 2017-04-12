@@ -249,6 +249,7 @@ class Task(object):
 
         '''
         self.name = __task_type + '_' + str(uuid.uuid4())[:8]
+        self.name = self.name.replace(':','_')  # keep colon out of task name
 
         self.type = __task_type
         task_registry = TaskRegistry()
