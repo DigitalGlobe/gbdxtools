@@ -52,6 +52,20 @@ Troubleshooting
 
 These are various tips to follow if your installation fails.
 
+**Dependencies**
+
+As of gbdxtools version 0.11.3 libcurl and GDAL (>=2.1.0) are required. To install these packages use::
+
+  # Ubuntu users:
+  sudo add-apt-repository -y ppa:ubuntugis/ubuntugis-unstable
+  sudo apt update 
+  sudo apt-get install gdal-bin python-gdal python3-gdal libcurl4-openssl-dev
+
+  # Mac Users:
+  xcode-select --install
+  
+
+
 **pip**
 
 Make sure you have the latest pip version::
@@ -60,9 +74,9 @@ Make sure you have the latest pip version::
 
 **Ubuntu users**
 
-If you run into trouble with the installation of cryptography, make sure that the following dependencies are installed::
+If you run into trouble with the installation of `cryptography` or `pycurl`, make sure that the following dependencies are installed::
 
-   sudo apt-get install build-essential libssl-dev libffi-dev python-dev
+   sudo apt-get install build-essential libssl-dev libffi-dev python-dev libcurl4-openssl-dev
 
 **Mac OSX Users**
 
@@ -82,6 +96,10 @@ If you are running in a virtualenv and run into issues you may need upgrade pip 
 	nano -w ~.gbdx-config
 	# then, remove the [gbdx_token] section and json= part
     
+
+**GDAL**
+
+Versions of gbdxtools >= 0.11.3 require the GDAL library (>= 2.1.0) to be installed. 
 
 **conda**
 
