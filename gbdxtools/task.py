@@ -68,9 +68,9 @@ class InputPorts(Mapping):
         return len(self._ports)
 
 
-class OutputPorts(MutableMapping, InputPorts):
+class OutputPorts(InputPorts):
     def __init__(self, work_dir):
-        self._ports_dir = os.path.join(work_dir, "output", datatype="directory")
+        self._ports_dir = os.path.join(work_dir, "output")
         try:
             os.makedirs(self._ports_dir)
         except:
@@ -114,6 +114,8 @@ class TaskEnv(object):
     def __init__(self, *args, **kwargs):
         super(TaskEnv, self).__init__(*args, **kwargs)
         WORK_DIR = os.environ.get("GBDX_WORK_DIR", "/mnt/work")
+        if not os.path.exists(WORK_DIR):
+            WORK_DIR = ''
 
         try:
             with open(os.path.join(WORK_DIR, "input", "ports.json")) as f:
