@@ -113,7 +113,7 @@ class TaskEnv(object):
     """
     def __init__(self, *args, **kwargs):
         super(TaskEnv, self).__init__(*args, **kwargs)
-        WORK_DIR = "/Users/chelm/dev/timbr/notebooks2/work"
+        WORK_DIR = os.environ.get("GBDX_WORK_DIR", "/mnt/work")
 
         try:
             with open(os.path.join(WORK_DIR, "input", "ports.json")) as f:
