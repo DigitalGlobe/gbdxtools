@@ -1,4 +1,8 @@
-0.11.2
+0.11.1
+------
+* fix #99 and #100
+
+0.11.0
 ------
 * upgrade to catalog/v2 usage
 
