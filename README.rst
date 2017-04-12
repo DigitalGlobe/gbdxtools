@@ -62,9 +62,9 @@ As of gbdxtools version 0.11.3 libcurl and GDAL (>=2.1.0) are required. To insta
   sudo apt-get install gdal-bin python-gdal python3-gdal libcurl4-openssl-dev
 
   # Mac Users:
-  xcode-select --install
+  xcode-select --install # to install libcurl
+  brew install https://raw.githubusercontent.com/OSGeo/homebrew-osgeo4mac/master/Formula/gdal-20.rb
   
-
 
 **pip**
 
