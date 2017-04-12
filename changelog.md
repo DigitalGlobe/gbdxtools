@@ -1,3 +1,7 @@
+0.11.2
+------
+* upgrade to catalog/v2 usage
+
 0.10.2
 ------
 * fix for breaking change in VectorService
