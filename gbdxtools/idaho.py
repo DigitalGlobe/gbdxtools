@@ -28,7 +28,7 @@ class Idaho(object):
 
         '''
         interface = Auth(**kwargs)
-        self.base_url = '%s/catalog/v1' % interface.root_url
+        self.base_url = '%s/catalog/v2' % interface.root_url
         self.gbdx_connection = interface.gbdx_connection
         self.catalog = Catalog()
         self.logger = interface.logger
@@ -48,13 +48,14 @@ class Idaho(object):
         # use the footprint to get the IDAHO id
         url = '%s/search' % self.base_url
 
-        body = {"filters": ["vendorDatasetIdentifier3 = '%s'" % catid],
+        body = {"filters": ["catalogID = '%s'" % catid],
                 "types": ["IDAHOImage"],
                 "searchAreaWkt": aoi_wkt}
 
         headers = {'Content-Type': 'application/json'}
 
-        r = self.gbdx_connection.post(url, data=json.dumps(body), headers=headers)
+        r = self.gbdx_connection.post(url, data=json.dumps(body))
+
         r.raise_for_status()
         if r.status_code == 200:
             results = r.json()
@@ -77,6 +78,13 @@ class Idaho(object):
 
         # get the footprint of the catid's strip
         footprint = self.catalog.get_strip_footprint_wkt(catid)
+
+        # try to convert from multipolygon to polygon:
+        try:
+            footprint = geometry.from_wkt(footprint).geoms[0].wkt
+        except:
+            pass
+
         if not footprint:
             self.logger.debug('''Cannot get IDAHO metadata for strip %s,
                                  footprint not found''' % catid)
@@ -98,11 +106,11 @@ class Idaho(object):
         results = idaho_image_results['results']
 
         # filter only idaho images:
-        results = [r for r in results if r['type']=='IDAHOImage']
+        results = [r for r in results if 'IDAHOImage' in r['type']]
         self.logger.debug('Describing %s IDAHO images.' % len(results))
 
         # figure out which catids are represented in this set of images
-        catids = set([r['properties']['vendorDatasetIdentifier3'] for r in results])
+        catids = set([r['properties']['catalogID'] for r in results])
 
         description = {}
 
@@ -110,14 +118,14 @@ class Idaho(object):
             # images associated with a single catid
             description[catid] = {}
             description[catid]['parts'] = {}
-            images = [r for r in results if r['properties']['vendorDatasetIdentifier3'] == catid]
+            images = [r for r in results if r['properties']['catalogID'] == catid]
             for image in images:
                 description[catid]['sensorPlatformName'] = image['properties']['sensorPlatformName']
-                part = int(image['properties']['vendorDatasetIdentifier2'][-3:])
+                part = int(image['properties']['vendorDatasetIdentifier'].split(':')[1][-3:])
                 color = image['properties']['colorInterpretation']
-                bucket = image['properties']['imageBucketName']
+                bucket = image['properties']['tileBucketName']
                 id = image['identifier']
-                boundstr = image['properties']['imageBoundsWGS84']
+                boundstr = image['properties']['footprintWkt']
 
                 try:
                     description[catid]['parts'][part]
