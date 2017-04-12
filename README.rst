@@ -64,7 +64,14 @@ As of gbdxtools version 0.11.3 libcurl and GDAL (>=2.1.0) are required. To insta
   # Mac Users:
   xcode-select --install # to install libcurl
   brew install https://raw.githubusercontent.com/OSGeo/homebrew-osgeo4mac/master/Formula/gdal-20.rb
-  
+
+**Windows Users**
+
+On windows you can install shapely, gdal, rasterio, and pyproj from wheels. To install these dependencies download the binaries for your system (rasterio and GDAL) and run something like this from the downloads folder::
+
+  pip install -U pip
+  pip install GDAL-2.1.0-cp27-none-win32.whl
+  pip install rasterio-1.0a3-cp27-none-win32.whl
 
 **pip**
 
