@@ -80,12 +80,12 @@ class OutputPorts(InputPorts):
     def __setitem__(self, key, value):
         self._vals[key] = value
         self._ports[key] = self._port_template(key)
-        self.save()
+        #self.save()
 
     def __delitem__(self, key):
         del self._vals[key]
         del self._ports[key]
-        self.save()
+        #self.save()
 
     def save(self):
         try:
