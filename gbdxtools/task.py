@@ -70,7 +70,7 @@ class InputPorts(Mapping):
 
 class OutputPorts(MutableMapping, InputPorts):
     def __init__(self, work_dir):
-        self._ports_dir = os.path.join(work_dir, "output")
+        self._ports_dir = os.path.join(work_dir, "output", datatype="directory")
         try:
             os.makedirs(self._ports_dir)
         except:
