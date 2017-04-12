@@ -70,7 +70,7 @@ class InputPorts(Mapping):
 
 class OutputPorts(InputPorts):
     def __init__(self, work_dir):
-        self._ports_dir = os.path.join(work_dir, "output") if work_dir != '' else ''
+        self._ports_dir = os.path.join(work_dir, "output") if work_dir is not None else ''
         super(OutputPorts, self).__init__()
         key = 'task_output'
         self._ports[key] = self._port_template(key, datatype="directory")
@@ -118,7 +118,7 @@ class TaskEnv(object):
         super(TaskEnv, self).__init__(*args, **kwargs)
         WORK_DIR = os.environ.get("GBDX_WORK_DIR", "/mnt/work")
         if not os.path.exists(WORK_DIR):
-            WORK_DIR = ''
+            WORK_DIR = None
 
         try:
             with open(os.path.join(WORK_DIR, "input", "ports.json")) as f:
