@@ -1,0 +1,34 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      User-Agent: [python-requests/2.12.1]
+    method: GET
+    uri: https://geobigdata.io/workflows/v1/tasks/gdal-cli:0.0.1
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA51UwW7UQAz9FWvUY7osXJD2hiiVKg6tCjeE0GTiZE2TmTDjKRst++94Jsmy2RYE
+        3Dz2s/2e7WSvjLOsyaK/wmA89ex8UBv4tFc89CiWurp9+/7dvSpA9d716JkwIfaKOt1khPVkHlqy
+        L5pKt5dNWe0uWYeHTasZA6vD4bMkV1N9cjblvIEEgdp58NFasg1oX7LXfoBUBozrOm2rAN+Jt1Dq
+        sAVngbc4R6QhAllGX2uDK4AbBh3ZdZrJ6LYdgCSWKIB7RA/igpra9KwhiYPBRQg9GqqHAoTI1xg4
+        sQmgIQij9tirmHCEFTySRNknxr3zLBT6yKs0n2zdie/JLD1+i+Sxkhf7iIKdpztWStlnA/r4Symw
+        gxIBdzs0kbESrR9iGZhYXnCR2+ZJTpaILODCRZ79szkGyFbkT/DyQiNchzFpDk5Jx2iWaHWXaU/M
+        1KGAhbpat+Gv5F0Ll7wE0TbtaVqT6JUdyLIXDRP3XPS/O7pshU2q7qxB+JFkojZbmef95MNxxOH0
+        0CBFBHM9oiGg9mYrmDSl5UXNLItZxrJQSsglnJxu7aKtFhrH5kLyi4iQgTTDE7Vn13NczjN6b8bl
+        ata/2WEKqfxtytzDlLVerVcvE2pc/z9e85/43E73tCD0PJ/zH024i2VL5qQfdSgExfH61Xp9OCmS
+        f0GmJXX4CY6r/mXcBAAA
+    headers:
+      access-control-allow-origin: ['*']
+      connection: [keep-alive]
+      content-encoding: [gzip]
+      content-length: ['528']
+      content-type: [application/json]
+      date: ['Wed, 12 Apr 2017 22:28:31 GMT']
+      server: [nginx/1.8.0]
+      via: [kong/0.5.2]
+    status: {code: 200, message: OK}
+version: 1
