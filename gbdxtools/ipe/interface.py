@@ -20,9 +20,8 @@ class ContentHashedDict(dict):
         return _id
 
     def __hash__(self):
-        dup = {k:v for k,v in self.items() if k is not "id" and not k.startswith('_')}
-        out_str = "".join([e for e in sorted(str(dup)) if e != " "]).strip()
-        return sha256(out_str.encode('utf-8')).hexdigest()
+        dup = {k:v for k,v in self.items() if k is not "id"}
+        return sha256(str(dup).encode('utf-8')).hexdigest()
 
     def populate_id(self):
         self.update({"id": self._id})
@@ -36,8 +35,7 @@ class Op(object):
 
     @property
     def _id(self):
-        _nodes_str = "".join([e for e in sorted(json.dumps(self._nodes)) if e != " "]).strip()
-        return str(uuid.uuid5(NAMESPACE_UUID, _nodes_str))
+        return str(uuid.uuid5(NAMESPACE_UUID, json.dumps(self._nodes)))
 
     def __call__(self, *args, **kwargs):
         if len(args) > 0 and all([isinstance(arg, gbdx.images.idaho_image.IpeImage) for arg in args]):
