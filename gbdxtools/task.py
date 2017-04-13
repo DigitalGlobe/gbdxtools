@@ -75,6 +75,7 @@ class OutputPorts(InputPorts):
         key = 'task_output'
         self._ports[key] = self._port_template(key, datatype="directory")
         self._vals[key] = os.path.join(self._ports_dir, "output")
+        self.save()
     
     def __setitem__(self, key, value):
         self._vals[key] = os.path.join(self._ports_dir, 'output', value) # TODO make this not use this output dir, and use the pwd 
