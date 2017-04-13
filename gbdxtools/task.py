@@ -91,13 +91,11 @@ class OutputPorts(InputPorts):
         try:
             os.makedirs(self._ports_dir)
         except Exception as e:
-            print('Cant makedirs', e)
             pass
         try:
             with open(os.path.join(self._ports_dir, "ports.json"), "w") as f:
                 json.dump(dict(self), f)
         except Exception as e:
-            print('Cant write ports', e)
             pass
 
 
