@@ -77,7 +77,7 @@ class OutputPorts(InputPorts):
         self._vals[key] = os.path.join(self._ports_dir, "output")
     
     def __setitem__(self, key, value):
-        self._vals[key] = os.path.join(self._ports_dir, value)
+        self._vals[key] = os.path.join(self._ports_dir, 'output', value) # TODO make this not use this output dir, and use the pwd 
         self._ports[key] = self._port_template(key, datatype="directory")
         self.save()
 
@@ -89,12 +89,14 @@ class OutputPorts(InputPorts):
     def save(self):
         try:
             os.makedirs(self._ports_dir)
-        except:
+        except Exception as e:
+            print('Cant makedirs', e)
             pass
         try:
             with open(os.path.join(self._ports_dir, "ports.json"), "w") as f:
                 json.dump(dict(self), f)
-        except:
+        except Exception as e:
+            print('Cant write ports', e)
             pass
 
 
