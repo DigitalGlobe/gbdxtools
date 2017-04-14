@@ -87,7 +87,7 @@ def load_url(url, token, bands=8):
 class DaskImage(da.Array):
     def __init__(self, **kwargs):
         super(DaskImage, self).__init__(**kwargs)
-        self.nchips = math.ceil((float(self.shape[-1]) / 256.0) * (float(self.shape[1]) / 256.0))
+        self.nchips = math.ceil(float(self.shape[-1]) / 256.0) * math.ceil(float(self.shape[1]) / 256.0)
 
     def read(self, bands=None):
         """ Reads data from a dask array and returns the computed ndarray matching the given bands """
