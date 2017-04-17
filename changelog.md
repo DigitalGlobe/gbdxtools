@@ -1,3 +1,7 @@
+0.11.2
+------
+* upgrade gbdx-auth==0.2.4.  Allows env vars for gbdx authentication
+
 0.11.1
 ------
 * fix #99 and #100
