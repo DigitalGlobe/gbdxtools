@@ -37,4 +37,3 @@ class _Auth(object):
         except Exception as err:
             print(err)
     
-    

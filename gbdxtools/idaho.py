@@ -23,9 +23,8 @@ class Idaho(object):
     def __init__(self, **kwargs):
         ''' Construct the Idaho interface class.
 
-        Returns:
-            An instance of the Idaho interface class.
-
+            Returns:
+                An instance of the Idaho interface class.
         '''
         interface = Auth(**kwargs)
         self.base_url = '%s/catalog/v2' % interface.root_url
