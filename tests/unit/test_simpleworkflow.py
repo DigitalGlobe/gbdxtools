@@ -522,11 +522,12 @@ class SimpleWorkflowTests(unittest.TestCase):
 
         self.assertEquals( stderr[0]['stderr'], '<empty>' )
 
-    def test_workflow_stderr_with_unstarted_workflow(self):
-        workflow = self.gbdx.Workflow([])
-
-        with self.assertRaises(WorkflowError):
-            stderr = workflow.stderr
+    # Regression test for https://github.com/DigitalGlobe/gbdxtools/issues/100
+    @vcr.use_cassette('tests/unit/cassettes/test_task_version_chaining_bug.yaml', record_mode='new_episodes', filter_headers=['authorization'])    
+    def test_task_version_chaining_bug(self):
+        # The issue is a colon shows up in the task name.
+        task = self.gbdx.Task('gdal-cli:0.0.1', data='location', execution_strategy='runonce', command="cmd")
+        self.assertTrue(':' not in task.name)
 
     def test_workflow_stdout_with_unstarted_workflow(self):
         workflow = self.gbdx.Workflow([])
