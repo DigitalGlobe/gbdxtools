@@ -1,3 +1,7 @@
+0.11.3
+------
+* Adds CatalogImage and IdahoImage classes 
+
 0.11.2
 ------
 * upgrade to catalog/v2 usage

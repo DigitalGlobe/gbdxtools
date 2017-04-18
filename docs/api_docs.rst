@@ -72,4 +72,3 @@ gbdxtools.vectors module
     :members:
     :undoc-members:
     :show-inheritance:
-

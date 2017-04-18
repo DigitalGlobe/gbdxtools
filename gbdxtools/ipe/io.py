@@ -1,7 +1,14 @@
 import rasterio
+import numpy as np
 
+<<<<<<< HEAD
 def to_geotiff(arr, path='./output.tif', proj=None, dtype=None, bands=None):
     data = arr.read(bands=bands)
+=======
+def to_geotiff(arr, path='./output.tif', proj=None, dtype=None):
+    dtype = np.dtype(dtype)
+    data = arr.read()
+>>>>>>> idaho-image-classes
     c,h,w = data.shape
     meta = {
         'width': w,
@@ -14,6 +21,7 @@ def to_geotiff(arr, path='./output.tif', proj=None, dtype=None, bands=None):
         meta["crs"] = {'init': proj}
     with rasterio.open(path, "w", **meta) as dst:
         if dtype is not None:
+            data = (data - data.min()) * (float(np.iinfo(dtype).max) * data.max())
             data = data.astype(dtype)
         dst.write(data)
     return path
