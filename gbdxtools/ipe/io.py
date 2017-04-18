@@ -1,14 +1,9 @@
 import rasterio
 import numpy as np
 
-<<<<<<< HEAD
 def to_geotiff(arr, path='./output.tif', proj=None, dtype=None, bands=None):
-    data = arr.read(bands=bands)
-=======
-def to_geotiff(arr, path='./output.tif', proj=None, dtype=None):
     dtype = np.dtype(dtype)
-    data = arr.read()
->>>>>>> idaho-image-classes
+    data = arr.read(bands=bands)
     c,h,w = data.shape
     meta = {
         'width': w,
