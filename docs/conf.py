@@ -29,7 +29,7 @@ class Mock(MagicMock):
     def __getattr__(cls, name):
             return Mock()
 
-MOCK_MODULES = ['json','boto','requests', 'requests.exceptions', 'gbdx_auth', 'pycurl', 'numpy', 'rasterio']
+MOCK_MODULES = ['json','boto','requests', 'requests.exceptions', 'requests.packages.urllib3.exceptions', 'gbdx_auth', 'pycurl', 'numpy', 'rasterio']
 sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
 
 # If extensions (or modules to document with autodoc) are in another directory,
