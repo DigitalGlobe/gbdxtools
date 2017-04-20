@@ -243,11 +243,30 @@ class Vectors(object):
 class AggregationDef(object):
 
     def __init__(self, agg_type=None, value=None, children=None):
+        """Constructs an aggregation definition.  Possible 'agg_type' values include:
+         'geohash', 'date_hist', 'terms', 'avg', 'cardinality' , 'avg_geo_lat', 'avg_geo_lon'.
+         The 'value' parameter is specific to whichever aggregation type is specified.  For more,
+         detail, please see the VectorServices aggregation REST API documentation.
+
+        Args:
+            agg_type(str): the aggregation type to define
+            value(str): a value to supplement the type, often indicating how to divide up buckets
+            children(str or AggregationDef): any child aggregations to be run on each bucket
+
+        Returns:
+            the created AggregationDef
+        """
         self.agg_type = agg_type
         self.value = value
         self.children = children
 
     def __repr__(self):
+        """Creates a string representation of an aggregation definition suitable for use in VectorServices calls
+
+        Returns:
+            A string representation of an aggregation definition suitable for use in VectorServices calls
+
+        """
         base = '%s:%s' % (self.agg_type, self.value)
         if self.children:
             if isinstance(self.children, basestring):
