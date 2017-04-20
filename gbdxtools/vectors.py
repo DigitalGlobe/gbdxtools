@@ -13,6 +13,7 @@ import json
 
 from gbdxtools.auth import Auth
 
+
 class Vectors(object):
 
     def __init__(self, **kwargs):
@@ -28,6 +29,7 @@ class Vectors(object):
         self.page_url = 'https://vector.geobigdata.io/insight-vector/api/vectors/paging'
         self.get_url = 'https://vector.geobigdata.io/insight-vector/api/vector/%s/'
         self.create_url = 'https://vector.geobigdata.io/insight-vector/api/vectors'
+        self.aggregations_url = 'https://vector.geobigdata.io/insight-vector/api/aggregation'
 
     def create(self,vectors):
         """
@@ -105,7 +107,6 @@ class Vectors(object):
 
         return self.create(vector)[0]
 
-
     def get(self, ID, index='vector-web-s'):
         '''Retrieves a vector.  Not usually necessary because searching is the best way to find & get stuff.
 
@@ -121,7 +122,6 @@ class Vectors(object):
         r = self.gbdx_connection.get(url + ID)
         r.raise_for_status()
         return r.json()
-
 
     def query(self, searchAreaWkt, query, count=100, ttl='5m'):
         '''
@@ -140,7 +140,6 @@ class Vectors(object):
         '''
 
         return list(self.query_iteratively(searchAreaWkt, query, count, ttl))
-
 
     def query_iteratively(self, searchAreaWkt, query, count=100, ttl='5m'):
         '''
@@ -201,8 +200,66 @@ class Vectors(object):
           for vector in data:
             yield vector
 
+    def aggregate_query(self, searchAreaWkt, agg_def, query=None, start_date=None, end_date=None, count=10):
+        """Aggregates results of a query into buckets defined by the 'agg_def' parameter.  The aggregations are
+        represented by dicts containing a 'name' key and a 'terms' key holding a list of the aggregation buckets.
+        Each bucket element is a dict containing a 'term' key containing the term used for this bucket, a 'count' key
+        containing the count of items that match this bucket, and an 'aggregations' key containing any child
+        aggregations.
+
+        Args:
+            searchAreaWkt (str): wkt representation of the geometry
+            agg_def (str or AggregationDef): the aggregation definitions
+            query (str): a valid Elasticsearch query string to constrain the items going into the aggregation
+            start_date (str): either an ISO-8601 date string or a 'now' expression (e.g. "now-6d" or just "now")
+            end_date (str): either an ISO-8601 date string or a 'now' expression (e.g. "now-6d" or just "now")
+            count (int): the number of buckets to include in the aggregations (the top N will be returned)
+
+        Returns:
+            results (list): A (usually single-element) list of dict objects containing the aggregation results.
+        """
+
+        geojson = wkt2geojson.loads(searchAreaWkt)
+        aggs_str = str(agg_def) # could be string or AggregationDef
+
+        params = {
+            "count": count,
+            "aggs": aggs_str
+        }
+
+        if query:
+            params['query'] = query
+        if start_date:
+            params['start_date'] = start_date
+        if end_date:
+            params['end_date'] = end_date
+
+        r = self.gbdx_connection.post(self.aggregations_url, params=params, json=geojson)
+        r.raise_for_status()
+
+        return r.json()['aggregations']
 
 
+class AggregationDef(object):
 
+    def __init__(self, agg_type=None, value=None, children=None):
+        self.agg_type = agg_type
+        self.value = value
+        self.children = children
 
+    def __repr__(self):
+        base = '%s:%s' % (self.agg_type, self.value)
+        if self.children:
+            if isinstance(self.children, basestring):
+                return '%s;%s' % (base, self.children)
+            elif isinstance(self.children, AggregationDef):
+                return '%s;%s' % (base, self.children.__repr__())
+            else: # assume it's iterable
+                kids = []
+                for child in self.children:
+                    kids.append(child.__repr__())
+                kids_str = '(%s)' % ','.join(kids)
+                return '%s;%s' % (base, kids_str)
+        else:
+            return base
 

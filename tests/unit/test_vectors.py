@@ -6,7 +6,7 @@ Unit tests for the gbdxtools.Vectors class
 '''
 
 from gbdxtools import Interface
-from gbdxtools.vectors import Vectors
+from gbdxtools.vectors import Vectors, AggregationDef
 from auth_mock import get_mock_gbdx_session
 import vcr
 import unittest
@@ -138,7 +138,62 @@ class TestVectors(unittest.TestCase):
         )
         assert result == '/insight-vector/api/vector/vector-web-s/b1af66c3-2e41-4696-9924-6ab264336692'
 
+    @vcr.use_cassette('tests/unit/cassettes/test_vectors_aggregate_query_simple.yaml', filter_headers=['authorization'])
+    def test_vectors_aggregate_query_agg_string(self):
+        wkt = 'POLYGON((-76.65 40.10, -76.65 40.14, -76.55 40.14, -76.55 40.10, -76.65 40.10))'
+        aggs = 'terms:ingest_source'
+        v = Vectors()
+        result = v.aggregate_query(wkt, aggs)
+        assert len(result) == 1
+        assert 'name' in result[0]
+        assert result[0]['name'] == 'terms:ingest_source'
+        assert 'terms' in result[0]
+        assert len(result[0]['terms']) == 6
 
+    @vcr.use_cassette('tests/unit/cassettes/test_vectors_aggregate_query_simple.yaml', filter_headers=['authorization'])
+    def test_vectors_aggregate_query_agg_def(self):
+        wkt = 'POLYGON((-76.65 40.10, -76.65 40.14, -76.55 40.14, -76.55 40.10, -76.65 40.10))'
+        aggs = AggregationDef(agg_type='terms', value='ingest_source')
+        v = Vectors()
+        result = v.aggregate_query(wkt, aggs)
+        assert len(result) == 1
+        assert 'name' in result[0]
+        assert result[0]['name'] == 'terms:ingest_source'
+        assert 'terms' in result[0]
+        assert len(result[0]['terms']) == 6
+
+    @vcr.use_cassette('tests/unit/cassettes/test_vectors_aggregate_query_complex.yaml', filter_headers=['authorization'])
+    def test_vectors_aggregate_query_complex(self):
+        wkt = 'POLYGON((-76.65 40.10, -76.65 40.14, -76.55 40.14, -76.55 40.10, -76.65 40.10))'
+        child_agg = AggregationDef(agg_type='date_hist', value='M')
+        aggs = AggregationDef(agg_type='geohash', value='4', children=child_agg)
+        v = Vectors()
+        query = 'item_type:tweet'
+        start_date = 'now-6M'
+        end_date = 'now'
+        result = v.aggregate_query(wkt, aggs, query, start_date, end_date)
+        assert len(result) == 1
+        assert 'name' in result[0]
+        assert result[0]['name'] == 'geohash:4'
+        assert 'terms' in result[0]
+        terms = result[0]['terms']
+        assert len(terms) == 1
+        assert terms[0]['term'] == 'dr1s'
+        assert len(terms[0]['aggregations']) == 1
+        assert len(terms[0]['aggregations'][0]['terms']) == 4
+
+    def test_agg_def_repr_no_children(self):
+        agg_def = AggregationDef(agg_type='terms', value='ingest_source')
+        assert agg_def.__repr__() == 'terms:ingest_source'
+
+    def test_agg_def_repr_with_children(self):
+        grandkids = [
+            AggregationDef(agg_type='cardinality', value='ingest_source'),
+            AggregationDef(agg_type='terms', value='ingest_source')
+        ]
+        kid = AggregationDef(agg_type='date_hist', value='d', children=grandkids)
+        agg_def = AggregationDef(agg_type='geohash', value='4', children=kid)
+        assert agg_def.__repr__() == 'geohash:4;date_hist:d;(cardinality:ingest_source,terms:ingest_source)'
 
 
 
