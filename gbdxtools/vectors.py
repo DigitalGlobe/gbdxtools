@@ -9,6 +9,7 @@ from builtins import object
 import requests
 from pygeoif import geometry
 from geomet import wkt as wkt2geojson
+from collections import OrderedDict
 import json
 
 from gbdxtools.auth import Auth
@@ -237,7 +238,7 @@ class Vectors(object):
         r = self.gbdx_connection.post(self.aggregations_url, params=params, json=geojson)
         r.raise_for_status()
 
-        return r.json()['aggregations']
+        return r.json(object_pairs_hook=OrderedDict)['aggregations']
 
 
 class AggregationDef(object):
