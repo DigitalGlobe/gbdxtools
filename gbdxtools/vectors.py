@@ -245,7 +245,7 @@ class AggregationDef(object):
 
     def __init__(self, agg_type=None, value=None, children=None):
         """Constructs an aggregation definition.  Possible 'agg_type' values include:
-         'geohash', 'date_hist', 'terms', 'avg', 'cardinality' , 'avg_geo_lat', 'avg_geo_lon'.
+         'geohash', 'date_hist', 'terms', 'avg', 'sum', 'cardinality' , 'avg_geo_lat', 'avg_geo_lon'.
          The 'value' parameter is specific to whichever aggregation type is specified.  For more,
          detail, please see the VectorServices aggregation REST API documentation.
 
@@ -268,7 +268,11 @@ class AggregationDef(object):
             A string representation of an aggregation definition suitable for use in VectorServices calls
 
         """
-        base = '%s:%s' % (self.agg_type, self.value)
+        if self.value:
+            base = '%s:%s' % (self.agg_type, self.value)
+        else:
+            base = '%s' % self.agg_type
+
         if self.children:
             if isinstance(self.children, basestring):
                 return '%s;%s' % (base, self.children)
@@ -282,4 +286,56 @@ class AggregationDef(object):
                 return '%s;%s' % (base, kids_str)
         else:
             return base
+
+
+class GeohashAggDef(AggregationDef):
+
+    def __init__(self, hash_length='3'):
+        super(GeohashAggDef, self).__init__('geohash', hash_length)
+
+
+class DateHistogramAggDef(AggregationDef):
+
+    def __init__(self, bucket_period='M'):
+        super(DateHistogramAggDef, self).__init__('date_hist', bucket_period)
+
+
+class FieldBasedAggDef(AggregationDef):
+
+    def __init__(self, agg_type, field=None):
+
+        if not field:
+            raise Exception('The "field" property cannot be empty.')
+
+        super(FieldBasedAggDef, self).__init__(agg_type, field)
+
+
+class TermsAggDef(FieldBasedAggDef):
+
+    def __init__(self, field=None):
+        super(TermsAggDef, self).__init__('terms', field)
+
+
+class AvgAggDef(FieldBasedAggDef):
+
+    def __init__(self, field=None):
+        super(AvgAggDef, self).__init__('avg', field)
+
+
+class SumAggDef(FieldBasedAggDef):
+
+    def __init__(self, field=None):
+        super(SumAggDef, self).__init__('sum', field)
+
+
+class AvgGeoLatAggDef(AggregationDef):
+
+    def __init__(self):
+        super(AvgGeoLatAggDef, self).__init__('avg_geo_lat')
+
+
+class AvgGeoLonAggDef(AggregationDef):
+
+    def __init__(self):
+        super(AvgGeoLonAggDef, self).__init__('avg_geo_lon')
 

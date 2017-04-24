@@ -6,11 +6,14 @@ Unit tests for the gbdxtools.Vectors class
 '''
 
 from gbdxtools import Interface
-from gbdxtools.vectors import Vectors, AggregationDef
+from gbdxtools.vectors import Vectors, AggregationDef, GeohashAggDef, \
+                              DateHistogramAggDef, TermsAggDef, AvgAggDef, \
+                              SumAggDef, AvgGeoLatAggDef, AvgGeoLonAggDef
 from auth_mock import get_mock_gbdx_session
 import vcr
 import unittest
 import types
+import json
 
 """
 How to use the mock_gbdx_session and vcr to create unit tests:
@@ -195,7 +198,65 @@ class TestVectors(unittest.TestCase):
         agg_def = AggregationDef(agg_type='geohash', value='4', children=kid)
         assert agg_def.__repr__() == 'geohash:4;date_hist:d;(cardinality:ingest_source,terms:ingest_source)'
 
+    def test_geohash_agg_def_constructor(self):
+        agg_def = GeohashAggDef()
+        assert agg_def.agg_type == 'geohash'
+        assert agg_def.value == '3'
 
+        agg_def = GeohashAggDef('6')
+        assert agg_def.agg_type == 'geohash'
+        assert agg_def.value == '6'
+
+    def test_date_hist_agg_def_constructor(self):
+        agg_def = DateHistogramAggDef()
+        assert agg_def.agg_type == 'date_hist'
+        assert agg_def.value == 'M'
+
+        agg_def = DateHistogramAggDef('w')
+        assert agg_def.agg_type == 'date_hist'
+        assert agg_def.value == 'w'
+
+    def test_terms_agg_def_constructor(self):
+        agg_def = TermsAggDef('foo')
+        assert agg_def.agg_type == 'terms'
+        assert agg_def.value == 'foo'
+
+        with self.assertRaises(Exception) as context:
+            agg_def = TermsAggDef()
+
+        self.assertTrue('The "field" property cannot be empty.' in context.exception)
+
+    def test_avg_agg_def_constructor(self):
+        agg_def = AvgAggDef('foo')
+        assert agg_def.agg_type == 'avg'
+        assert agg_def.value == 'foo'
+
+        with self.assertRaises(Exception) as context:
+            agg_def = AvgAggDef()
+
+        self.assertTrue('The "field" property cannot be empty.' in context.exception)
+
+    def test_sum_agg_def_constructor(self):
+        agg_def = SumAggDef('foo')
+        assert agg_def.agg_type == 'sum'
+        assert agg_def.value == 'foo'
+
+        with self.assertRaises(Exception) as context:
+            agg_def = SumAggDef()
+
+        self.assertTrue('The "field" property cannot be empty.' in context.exception)
+
+    def test_avg_geo_lat_agg_def_constructor(self):
+        agg_def = AvgGeoLatAggDef()
+        assert agg_def.agg_type == 'avg_geo_lat'
+        assert not agg_def.value
+        assert str(agg_def) == 'avg_geo_lat'
+
+    def test_avg_geo_lon_agg_def_constructor(self):
+        agg_def = AvgGeoLonAggDef()
+        assert agg_def.agg_type == 'avg_geo_lon'
+        assert not agg_def.value
+        assert str(agg_def) == 'avg_geo_lon'
 
 
 
