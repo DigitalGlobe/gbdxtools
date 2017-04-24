@@ -5,6 +5,7 @@ Contact: nate.ricklin@digitalglobe.com
 """
 #from __future__ import absolute_import
 from builtins import object
+import six
 
 import requests
 from pygeoif import geometry
@@ -274,7 +275,7 @@ class AggregationDef(object):
             base = '%s' % self.agg_type
 
         if self.children:
-            if isinstance(self.children, basestring):
+            if isinstance(self.children, six.string_types):
                 return '%s;%s' % (base, self.children)
             elif isinstance(self.children, AggregationDef):
                 return '%s;%s' % (base, self.children.__repr__())

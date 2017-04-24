@@ -224,7 +224,7 @@ class TestVectors(unittest.TestCase):
         with self.assertRaises(Exception) as context:
             agg_def = TermsAggDef()
 
-        self.assertTrue('The "field" property cannot be empty.' in context.exception)
+        self.assertTrue('The "field" property cannot be empty.' in str(context.exception))
 
     def test_avg_agg_def_constructor(self):
         agg_def = AvgAggDef('foo')
@@ -234,7 +234,7 @@ class TestVectors(unittest.TestCase):
         with self.assertRaises(Exception) as context:
             agg_def = AvgAggDef()
 
-        self.assertTrue('The "field" property cannot be empty.' in context.exception)
+        self.assertTrue('The "field" property cannot be empty.' in str(context.exception))
 
     def test_sum_agg_def_constructor(self):
         agg_def = SumAggDef('foo')
@@ -244,7 +244,7 @@ class TestVectors(unittest.TestCase):
         with self.assertRaises(Exception) as context:
             agg_def = SumAggDef()
 
-        self.assertTrue('The "field" property cannot be empty.' in context.exception)
+        self.assertTrue('The "field" property cannot be empty.' in str(context.exception))
 
     def test_avg_geo_lat_agg_def_constructor(self):
         agg_def = AvgGeoLatAggDef()
