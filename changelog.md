@@ -1,3 +1,7 @@
+0.11.4
+------
+* Default vector service classes to use catalog indexes instead of the searching through all documents
+
 0.11.3
 ------
 * Adds CatalogImage and IdahoImage classes 
