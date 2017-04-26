@@ -25,6 +25,7 @@ class Vectors(object):
         self.gbdx_connection = interface.gbdx_connection
         self.logger = interface.logger
         self.query_url = 'https://vector.geobigdata.io/insight-vector/api/vectors/query/paging'
+        self.query_index_url = 'https://vector.geobigdata.io/insight-vector/api/index/query/%s/paging'
         self.page_url = 'https://vector.geobigdata.io/insight-vector/api/vectors/paging'
         self.get_url = 'https://vector.geobigdata.io/insight-vector/api/vector/%s/'
         self.create_url = 'https://vector.geobigdata.io/insight-vector/api/vectors'
@@ -123,7 +124,7 @@ class Vectors(object):
         return r.json()
 
 
-    def query(self, searchAreaWkt, query, count=100, ttl='5m'):
+    def query(self, searchAreaWkt, query, count=100, ttl='5m', index='vector-gbdx-alpha-catalog-v2*'):
         '''
         Perform a vector services query using the QUERY API
         (https://gbdxdocs.digitalglobe.com/docs/vs-query-list-vector-items-returns-default-fields)
@@ -139,10 +140,10 @@ class Vectors(object):
     
         '''
 
-        return list(self.query_iteratively(searchAreaWkt, query, count, ttl))
+        return list(self.query_iteratively(searchAreaWkt, query, count, ttl, index))
 
 
-    def query_iteratively(self, searchAreaWkt, query, count=100, ttl='5m'):
+    def query_iteratively(self, searchAreaWkt, query, count=100, ttl='5m', index='vector-gbdx-alpha-catalog-v2*'):
         '''
         Perform a vector services query using the QUERY API
         (https://gbdxdocs.digitalglobe.com/docs/vs-query-list-vector-items-returns-default-fields)
@@ -172,7 +173,8 @@ class Vectors(object):
         }
 
         # initialize paging request
-        r = self.gbdx_connection.get(self.query_url, params=params)
+        url = self.query_index_url % index if index else self.query_url
+        r = self.gbdx_connection.get(url, params=params)
         r.raise_for_status()
         page = r.json()
         paging_id = page['next_paging_id']
