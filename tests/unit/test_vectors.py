@@ -42,6 +42,14 @@ class TestVectors(unittest.TestCase):
 
         assert len(results) == 310
 
+    @vcr.use_cassette('tests/unit/cassettes/test_vectors_search_index.yaml', filter_headers=['authorization'], match_on=['method', 'scheme', 'host', 'port', 'path'])
+    def test_vectors_search_index(self):
+        v = Vectors()
+        aoi = "POLYGON((17.75390625 25.418470119273117,24.08203125 25.418470119273117,24.08203125 19.409611549990895,17.75390625 19.409611549990895,17.75390625 25.418470119273117))"
+        results = v.query(aoi, query="item_type:WV03", index="vector-dgcatalog-2016")
+
+        assert len(results) == 140
+
     @vcr.use_cassette('tests/unit/cassettes/test_vectors_search.yaml', filter_headers=['authorization'], match_on=['method', 'scheme', 'host', 'port', 'path'])
     def test_vectors_search_iteratively(self):
         v = Vectors()
