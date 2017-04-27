@@ -132,3 +132,27 @@ The resulting vector as stored and retrievable looks like this:
        }
     }
 
+
+Vector Aggregations
+-------------------
+
+The following snippet will aggregate the top 10 OSM item types in 3 character geohash buckets over Colorado:
+
+.. code-block:: python
+
+    query = 'ingest_source:OSM'
+
+    child_agg = TermsAggDef('item_type')
+    agg = GeohashAggDef(agg_type='geohash', value='3', children=child_agg)
+    result = gbdx.vectors.aggregate_query(colorado_aoi, agg, query)
+
+    # the result has a single-element list containing the top-level aggregation
+    for entry in result[0]['terms']:  # the 'terms' field contains our buckets
+        geohash_str = entry['term']  # the 'term' entry contains our geohash
+        child_aggs = entry['aggregations']  # the 'aggregations' field contains the child aggregations for the 'item_type' values
+
+        # since the child aggregations have the same structure, we can walk it the same way.
+        # let's create a dict of item_types and their counts
+        for child in child_aggs:
+            types = {bucket['term']:bucket['count'] for bucket in child['terms']}
+            # from here we could do other interesting things with our data
