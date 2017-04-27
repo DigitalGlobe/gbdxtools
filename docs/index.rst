@@ -26,4 +26,3 @@ For general information on the GBDX platform and API, see `here`_.
    catalog_search
    vector_service
    image_classes
-   api_docs
