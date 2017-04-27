@@ -1,3 +1,7 @@
+0.11.5
+------
+* Add in vector aggregation support (see examples/vectors_aggregation.py)
+
 0.11.4
 ------
 * Default vector service classes to use catalog indexes instead of the searching through all documents
