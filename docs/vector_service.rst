@@ -144,7 +144,7 @@ The following snippet will aggregate the top 10 OSM item types in 3 character ge
 
     child_agg = TermsAggDef('item_type')
     agg = GeohashAggDef(agg_type='geohash', value='3', children=child_agg)
-    result = gbdx.vectors.aggregate_query(colorado_aoi, agg, query)
+    result = gbdx.vectors.aggregate_query(colorado_aoi, agg, query, index='read-vector-osm-*')
 
     # the result has a single-element list containing the top-level aggregation
     for entry in result[0]['terms']:  # the 'terms' field contains our buckets

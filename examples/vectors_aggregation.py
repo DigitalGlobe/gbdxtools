@@ -3,15 +3,19 @@ from gbdxtools.vectors import TermsAggDef, GeohashAggDef
 
 gbdx = gbdxtools.Interface()
 
-# Let's find all the Worldview 3 vector footprints in colorado
+# Let's look in colorado
 colorado_aoi = "POLYGON((-108.89 40.87,-102.19 40.87,-102.19 37.03,-108.89 37.03,-108.89 40.87))"
 
-query = 'ingest_source:OSM'
+# Let's limit our search to the OSM indexes
+search_index = 'read-vector-osm-*'
+
+# Let's find things that match 'transportation' somewhere in a text field
+query = 'transportation'
 
 # let's get 5 geohash buckets with the top 5 item_type values in each
 child_agg = TermsAggDef('item_type')
 agg = GeohashAggDef('3', children=child_agg)
-result = gbdx.vectors.aggregate_query(colorado_aoi, agg, query, count=5)
+result = gbdx.vectors.aggregate_query(colorado_aoi, agg, query, index=search_index, count=5)
 
 # the result has a single-element list containing the top-level aggregation
 for entry in result[0]['terms']:  # the 'terms' field contains our buckets

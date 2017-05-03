@@ -149,12 +149,36 @@ class TestVectors(unittest.TestCase):
         )
         assert result == '/insight-vector/api/vector/vector-web-s/b1af66c3-2e41-4696-9924-6ab264336692'
 
+    @vcr.use_cassette('tests/unit/cassettes/test_vectors_aggregate_query_with_default_index.yaml', filter_headers=['authorization'])
+    def test_vectors_aggregate_query_with_default_index(self):
+        wkt = 'POLYGON((-76.65 40.10, -76.65 40.14, -76.55 40.14, -76.55 40.10, -76.65 40.10))'
+        aggs = 'terms:item_type'
+        v = Vectors()
+        result = v.aggregate_query(wkt, aggs)
+        assert len(result) == 1
+        assert 'name' in result[0]
+        assert result[0]['name'] == 'terms:item_type'
+        assert 'terms' in result[0]
+        assert len(result[0]['terms']) == 10
+
+    @vcr.use_cassette('tests/unit/cassettes/test_vectors_aggregate_query_with_defined_index.yaml', filter_headers=['authorization'])
+    def test_vectors_aggregate_query_with_defined_index(self):
+        wkt = 'POLYGON((-76.65 40.10, -76.65 40.14, -76.55 40.14, -76.55 40.10, -76.65 40.10))'
+        aggs = 'terms:item_type'
+        v = Vectors()
+        result = v.aggregate_query(wkt, aggs, index='read-vector-osm-*')
+        assert len(result) == 1
+        assert 'name' in result[0]
+        assert result[0]['name'] == 'terms:item_type'
+        assert 'terms' in result[0]
+        assert len(result[0]['terms']) == 10
+
     @vcr.use_cassette('tests/unit/cassettes/test_vectors_aggregate_query_simple.yaml', filter_headers=['authorization'])
     def test_vectors_aggregate_query_agg_string(self):
         wkt = 'POLYGON((-76.65 40.10, -76.65 40.14, -76.55 40.14, -76.55 40.10, -76.65 40.10))'
         aggs = 'terms:ingest_source'
         v = Vectors()
-        result = v.aggregate_query(wkt, aggs)
+        result = v.aggregate_query(wkt, aggs, index=None)
         assert len(result) == 1
         assert 'name' in result[0]
         assert result[0]['name'] == 'terms:ingest_source'
@@ -166,7 +190,7 @@ class TestVectors(unittest.TestCase):
         wkt = 'POLYGON((-76.65 40.10, -76.65 40.14, -76.55 40.14, -76.55 40.10, -76.65 40.10))'
         aggs = AggregationDef(agg_type='terms', value='ingest_source')
         v = Vectors()
-        result = v.aggregate_query(wkt, aggs)
+        result = v.aggregate_query(wkt, aggs, index=None)
         assert len(result) == 1
         assert 'name' in result[0]
         assert result[0]['name'] == 'terms:ingest_source'
@@ -182,7 +206,7 @@ class TestVectors(unittest.TestCase):
         query = 'item_type:tweet'
         start_date = 'now-6M'
         end_date = 'now'
-        result = v.aggregate_query(wkt, aggs, query, start_date, end_date)
+        result = v.aggregate_query(wkt, aggs, index=None, query=query, start_date=start_date, end_date=end_date)
         assert len(result) == 1
         assert 'name' in result[0]
         assert result[0]['name'] == 'geohash:4'
