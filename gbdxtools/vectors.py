@@ -220,10 +220,10 @@ class Vectors(object):
             searchAreaWkt (str): wkt representation of the geometry
             agg_def (str or AggregationDef): the aggregation definitions
             query (str): a valid Elasticsearch query string to constrain the items going into the aggregation
-            index (str): the index (or alias or wildcard index expression) to run aggregations against
             start_date (str): either an ISO-8601 date string or a 'now' expression (e.g. "now-6d" or just "now")
             end_date (str): either an ISO-8601 date string or a 'now' expression (e.g. "now-6d" or just "now")
             count (int): the number of buckets to include in the aggregations (the top N will be returned)
+            index (str): the index (or alias or wildcard index expression) to run aggregations against, set to None for the entire set of vector indexes
 
         Returns:
             results (list): A (usually single-element) list of dict objects containing the aggregation results.
