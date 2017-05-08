@@ -1,0 +1,33 @@
+interactions:
+- request:
+    body: '{"type": "Polygon", "coordinates": [[[-76.65, 40.1], [-76.65, 40.14], [-76.55,
+      40.14], [-76.55, 40.1], [-76.65, 40.1]]]}'
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      Content-Length: ['120']
+      Content-Type: [application/json]
+      User-Agent: [python-requests/2.12.1]
+    method: POST
+    uri: https://vector.geobigdata.io/insight-vector/api/index/aggregation/read-vector-osm-*?aggs=terms%3Aitem_type&count=10
+  response:
+    body: {string: '{"responseDate":"2017-05-03T17:57:52Z","geom":{"type":"Polygon","coordinates":[[[-76.65,40.1],[-76.65,40.14],[-76.55,40.14],[-76.55,40.1],[-76.65,40.1]]]},"query":null,"startDate":null,"endDate":null,"totalItems":475,"aggregations":[{"name":"terms:item_type","terms":[{"term":"Road","count":234,"aggregations":null},{"term":"Stream","count":39,"aggregations":null},{"term":"Tower","count":34,"aggregations":null},{"term":"Building","count":25,"aggregations":null},{"term":"Uncategorized","count":16,"aggregations":null},{"term":"Pedestrian","count":13,"aggregations":null},{"term":"Bank","count":8,"aggregations":null},{"term":"Fuel","count":8,"aggregations":null},{"term":"House","count":8,"aggregations":null},{"term":"Restaurant","count":8,"aggregations":null}]}]}'}
+    headers:
+      Access-Control-Allow-Credentials: ['true']
+      Access-Control-Allow-Headers: ['origin, content-type, accept, authorization']
+      Access-Control-Allow-Methods: ['GET, POST, PUT, DELETE, OPTIONS, HEAD']
+      Access-Control-Allow-Origin: ['*']
+      Connection: [keep-alive]
+      Content-Encoding: [UTF-8]
+      Content-Length: ['767']
+      Content-Type: [application/json;charset=UTF-8]
+      Date: ['Wed, 03 May 2017 17:57:52 GMT']
+      Server: [WebLogic 12.2.1.1, Weblogic 12.2.1.1]
+      Strict-Transport-Security: [max-age=604800 ; includeSubDomains]
+      X-Content-Type-Options: [nosniff]
+      X-Frame-Options: [SAMEORIGIN]
+      X-Permitted-Cross-Domain-Policies: [none]
+      X-XSS-Protection: [1; mode=block]
+    status: {code: 200, message: OK}
+version: 1
