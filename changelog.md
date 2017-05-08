@@ -1,3 +1,7 @@
+0.11.6
+------
+* Add optional index parameter to vector aggregations
+
 0.11.5
 ------
 * Add in vector aggregation support (see examples/vectors_aggregation.py)
