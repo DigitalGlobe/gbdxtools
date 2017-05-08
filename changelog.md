@@ -1,3 +1,7 @@
+0.11.7
+------
+* pin version of dask====0.13.0
+
 0.11.6
 ------
 * Add optional index parameter to vector aggregations
