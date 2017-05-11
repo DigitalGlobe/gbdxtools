@@ -7,10 +7,10 @@ python:
 env:
   global:
     - BOTO_CONFIG=/doesnotexist
+    - CPLUS_INCLUDE_PATH=/usr/include/gdal
+    - C_INCLUDE_PATH=/usr/include/gdal
 before_install: 
   - sudo apt-get install -y libgdal-dev libgdal1h gdal-bin
-  - export CPLUS_INCLUDE_PATH=/usr/include/gdal
-  - export C_INCLUDE_PATH=/usr/include/gdal
 # command to install dependencies
 install:
   - pip install -r requirements.txt coverage
