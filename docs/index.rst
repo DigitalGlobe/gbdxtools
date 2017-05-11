@@ -14,9 +14,9 @@ Installation is easy::
 
     pip install gbdxtools
 
-For general information on the GBDX platform and API, see `here`_.
+For general information on the GBDX platform and API visit http://gbdxdocs.digitalglobe.com.
+For a varied collection of gbdxtools examples see http://github.com/platformstories/notebooks.
 
-.. _`here`: http://gbdxdocs.digitalglobe.com/docs
 
 .. toctree::
    :maxdepth: 2
@@ -26,4 +26,3 @@ For general information on the GBDX platform and API, see `here`_.
    catalog_search
    vector_service
    image_classes
-   api_docs

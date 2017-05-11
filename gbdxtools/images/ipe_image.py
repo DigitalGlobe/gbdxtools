@@ -34,6 +34,7 @@ from shapely.wkt import loads
 import rasterio
 from rasterio.io import MemoryFile
 from affine import Affine
+import gdal
 
 try:
   from matplotlib import pyplot as plt
@@ -53,8 +54,6 @@ num_workers = int(os.environ.get("GBDX_THREADS", 4))
 threaded_get = partial(dask.threaded.get, num_workers=num_workers)
 
 import requests
-import pycurl
-_curl_pool = defaultdict(pycurl.Curl)
 
 from gbdxtools.ipe.vrt import get_cached_vrt, put_cached_vrt, generate_vrt_template
 from gbdxtools.ipe.util import calc_toa_gain_offset, timeit
@@ -66,22 +65,14 @@ ipe = Ipe()
 
 def load_url(url, token, bands=8):
     """ Loads a geotiff url inside a thread and returns as an ndarray """
-    thread_id = threading.current_thread().ident
-    _curl = _curl_pool[thread_id]
-    buf = BytesIO()
-    _curl.setopt(_curl.URL, url)
-    _curl.setopt(_curl.WRITEDATA, buf)
-    _curl.setopt(pycurl.NOSIGNAL, 1)
-    _curl.setopt(pycurl.HTTPHEADER, ['Authorization: {}'.format(token)])
-    _curl.perform()
-    with MemoryFile(buf.getvalue()) as memfile:
-      try:
-          with memfile.open(driver="GTiff") as dataset:
-              arr = dataset.read()
-      except (TypeError, rasterio.RasterioIOError) as e:
-          arr = np.zeros([bands,256,256], dtype=np.float32)
-          _curl.close()
-          del _curl_pool[thread_id]
+    try:
+        src = gdal.Open('/vsicurl/{}?token={}'.format(url, token))
+        arr = src.ReadAsArray()
+        if len(arr.shape) != 3:
+            arr = np.reshape(arr, (1,) + arr.shape)
+    except Exception as e:
+        print(e, url, '/vsicurl/{}?token={}'.format(url, token))
+        arr = np.zeros([bands,256,256], dtype=np.float32)
     return arr
 
 class DaskImage(da.Array):

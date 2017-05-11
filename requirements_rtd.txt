@@ -14,9 +14,8 @@ bumpversion
 shapely
 ephem
 toolz
-dask==0.13.0
+dask
 cloudpickle
 numpy
-gdal
 rasterio==1.0a3
 pyproj
