@@ -7,17 +7,17 @@ python:
 env:
   global:
     - BOTO_CONFIG=/doesnotexist
-    - CPLUS_INCLUDE_PATH=/usr/include/gdal
-    - C_INCLUDE_PATH=/usr/include/gdal
 before_install: 
-  #- sudo add-apt-repository -y ppa:ubuntugis/ubuntugis-unstable
-  #- sudo apt -qq update
-  - sudo apt-get install -y python-dev libgdal1h libgdal-dev gdal-bin python-gdal
-  - export CFLAGS=$(gdal-config --cflags)
-  - export
+  - sudo apt-get install -y libgdal1h libgdal-dev gdal-bin
 # command to install dependencies
 install:
   - pip install pygdal==1.10.0
+  #- export CPLUS_INCLUDE_PATH=/usr/include/gdal
+  #- export C_INCLUDE_PATH=/usr/include/gdal
+  #- sudo pip install --no-install GDAL
+  #- cd /tmp/pip_build_root/GDAL
+  #- sudo python setup.py build_ext --include-dirs=/usr/include/gdal
+  #- sudo pip install --no-download GDAL
   - pip install -r requirements.txt coverage
 # command to run tests
 script: coverage run unit_tests.py
