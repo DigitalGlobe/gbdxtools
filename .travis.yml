@@ -18,7 +18,7 @@ before_install:
 # command to install dependencies
 install:
   - pip install pygdal==1.10.0
-  - pip install -r requirements.txt coverage --no-install gdal
+  - pip install -r requirements.txt coverage
 # command to run tests
 script: coverage run unit_tests.py
 after_success:
