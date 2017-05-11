@@ -15,12 +15,13 @@ install:
   #- wget https://protobuf.googlecode.com/files/protobuf-2.4.1.tar.gz
   #- tar -xzvf protobuf-2.4.1.tar.gz
   #- pushd protobuf-2.4.1 && ./configure --prefix=/usr && make && sudo make install && popd
-  - export CPLUS_INCLUDE_PATH=/usr/include/gdal
-  - export C_INCLUDE_PATH=/usr/include/gdal
-  - sudo pip install --download GDAL
-  - cd /tmp/pip_build_root/GDAL
-  - sudo python setup.py build_ext --include-dirs=/usr/include/gdal
-  - sudo pip install --no-download GDAL
+  #- export CPLUS_INCLUDE_PATH=/usr/include/gdal
+  #- export C_INCLUDE_PATH=/usr/include/gdal
+  #- sudo pip install --download GDAL
+  #- cd /tmp/pip_build_root/GDAL
+  #- sudo python setup.py build_ext --include-dirs=/usr/include/gdal
+  #- sudo pip install --no-download GDAL
+  - CPLUS_INCLUDE_PATH=/usr/include/gdal C_INCLUDE_PATH=/usr/include/gdal pip install GDAL==`gdal-config --version`
   - pip install -r requirements.txt coverage
 # command to run tests
 script: coverage run unit_tests.py
