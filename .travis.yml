@@ -10,7 +10,11 @@ env:
     - CPLUS_INCLUDE_PATH=/usr/include/gdal
     - C_INCLUDE_PATH=/usr/include/gdal
 before_install: 
-  - sudo apt-get install -y libgdal-dev libgdal1h gdal-bin
+  - sudo add-apt-repository -y ppa:ubuntugis/ubuntugis-unstable
+  - sudo apt update
+  - sudo apt upgrade
+  - sudo apt-get install -y libgdal-dev gdal-bin python-gdal
+  - export CFLAGS=$(gdal-config --cflags)
 # command to install dependencies
 install:
   - pip install -r requirements.txt coverage
