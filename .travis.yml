@@ -8,7 +8,7 @@ env:
   global:
     - BOTO_CONFIG=/doesnotexist
 before_install: 
-  - sudo apt-get install -y libgdal1h gdal-bin
+  - sudo apt-get install -y libgdal1h gdal-bin python-gdal python3-gdal
 # command to install dependencies
 install:
   - pip install -r requirements.txt coverage
