@@ -37,7 +37,7 @@ MOCK_MODULES = ['json',
                 'requests.packages.urllib3',
                 'requests.packages.urllib3.exceptions',
                 'gbdx_auth',
-                'pycurl',
+                'gdal',
                 'numpy',
                 'rasterio']
 sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)

@@ -36,7 +36,7 @@ setup(name='gbdxtools',
                         'toolz',
                         'dask==0.13.0',
                         'cloudpickle',
-                        'pycurl',
+                        'gdal',
                         'rasterio>=1.0a3',
                         'pyproj'
                         ],
