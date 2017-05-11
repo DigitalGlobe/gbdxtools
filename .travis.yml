@@ -1,9 +1,9 @@
 language: python
 python:
   - "2.7"
-#  - "3.3"
-#  - "3.4"
-#  - "3.5"
+  - "3.3"
+  - "3.4"
+  - "3.5"
 env:
   global:
     - BOTO_CONFIG=/doesnotexist
@@ -11,9 +11,6 @@ before_install:
   - sudo apt-get install -y libgdal1h libgdal-dev gdal-bin
 # command to install dependencies
 install:
-  #- wget https://protobuf.googlecode.com/files/protobuf-2.4.1.tar.gz
-  #- tar -xzvf protobuf-2.4.1.tar.gz
-  #- pushd protobuf-2.4.1 && ./configure --prefix=/usr && make && sudo make install && popd
   - CPLUS_INCLUDE_PATH=/usr/include/gdal C_INCLUDE_PATH=/usr/include/gdal pip install GDAL==`gdal-config --version`
   - pip install -r requirements.txt coverage
 # command to run tests
