@@ -34,6 +34,7 @@ from shapely.wkt import loads
 import rasterio
 from rasterio.io import MemoryFile
 from affine import Affine
+import gdal
 
 try:
   from matplotlib import pyplot as plt
