@@ -230,10 +230,7 @@ class IpeImage(DaskImage):
     def _build_array(self, urls):
         """ Creates the deferred dask array from a grid of URLs """
         name = "image-{}".format(str(uuid.uuid4()))
-        try:
-            token = 'Bearer {}'.format(self.interface.gbdx_connection.access_token)
-        except:
-            token = self.interface.gbdx_connection.headers['Authorization']
+        token = self.interface.gbdx_connection.access_token
         buf_dask = {(name, 0, x, y): (load_url, url, token) for (x, y), url in urls.items()}
         return {"name": name, "dask": buf_dask}
 
