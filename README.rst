@@ -81,7 +81,7 @@ Make sure you have the latest pip version::
 
 **Ubuntu users**
 
-If you run into trouble with the installation of `cryptography` or `pycurl`, make sure that the following dependencies are installed::
+If you run into trouble with the installation of `cryptography`, make sure that the following dependencies are installed::
 
    sudo apt-get install build-essential libssl-dev libffi-dev python-dev libcurl4-openssl-dev
 
@@ -133,10 +133,6 @@ Activate the environment::
 Upgrade pip (if required)::
 
    pip install pip --upgrade
-
-Recent versions of gbdxtools require newish versions of pycurl. If you see pycurl version errors when you `pip install gbdxtools` try installing a new curl version in your conda environment:
-
-  conda install curl
 
 Install gbdxtools::
 
