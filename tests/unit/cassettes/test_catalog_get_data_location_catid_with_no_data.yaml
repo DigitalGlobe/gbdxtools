@@ -1,26 +1,30 @@
 interactions:
 - request:
-    body: '{"direction": "both", "labels": ["_acquisition", "_imageFiles"], "rootRecordId":
-      "1010010011AD6E00", "maxdepth": 2}'
+    body: !!python/unicode '{"direction": "both", "labels": ["_acquisition", "_imageFiles"],
+      "rootRecordId": "1010010011AD6E00", "maxdepth": 2}'
     headers:
       Accept: ['*/*']
       Accept-Encoding: ['gzip, deflate']
       Connection: [keep-alive]
       Content-Length: ['115']
       Content-Type: [application/json]
-      User-Agent: [python-requests/2.9.1]
+      User-Agent: [python-requests/2.12.1]
     method: POST
-    uri: https://geobigdata.io/catalog/v1/traverse
+    uri: https://geobigdata.io/catalog/v2/traverse
   response:
-    body: {string: !!python/unicode '{"searchTag":null,"results":[{"identifier":"1010010011AD6E00","owner":"7b216bd9-6523-4ca9-aa3b-1d8a5994f054","type":"DigitalGlobeAcquisition","properties":{"sunElevation":"53.88194","targetAzimuth":"315.08475","sensorPlatformName":"QUICKBIRD02","browseURL":"https://browse.digitalglobe.com/imagefinder/showBrowseMetadata?catalogId=1010010011AD6E00","sunAzimuth":"67.08003","footprintWkt":"POLYGON
-        ((29.875176 10.525608, 29.919096 10.515672, 29.975832 10.503, 30.084552 10.478952,
-        30.084408 10.398888, 30.083688 10.268136, 30.082824 10.108872, 30.082104 10.011384,
-        29.875176 10.060344, 29.87532 10.230984, 29.875176 10.525608))","cloudCover":"73.0","multiResolution":"3.357536793","vendorName":"DigitalGlobe","offNadirAngle":"34.0","panResolution":"0.839438498","catalogID":"1010010011AD6E00","imageBands":"Pan_MS1","timestamp":"2013-07-14T00:00:00.000Z"}}],"stats":{"totalRecords":1,"recordsReturned":1,"typeCounts":{"DigitalGlobeAcquisition":1}}}'}
+    body: {string: !!python/unicode '{"message":"''eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2RpZ2l0YWxnbG9iZS1wbGF0Zm9ybS5hdXRoMC5jb20vIiwic3ViIjoiYXV0aDB8Z2JkeHw4IiwiYXVkIjoidmhhTkVKeW1MNG0xVUNvNFRxWG11S3RrbjlKQ1lEa1QiLCJleHAiOjE0OTA2NDE4MzMsImlhdCI6MTQ5MDAzNzAzM30.YIFp319yWP2pN4DqW8rFxt5ZPk5l5O9bOWAcidjDD3w''
+        not a valid key=value pair (missing equal-sign) in Authorization header: ''Bearer
+        eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2RpZ2l0YWxnbG9iZS1wbGF0Zm9ybS5hdXRoMC5jb20vIiwic3ViIjoiYXV0aDB8Z2JkeHw4IiwiYXVkIjoidmhhTkVKeW1MNG0xVUNvNFRxWG11S3RrbjlKQ1lEa1QiLCJleHAiOjE0OTA2NDE4MzMsImlhdCI6MTQ5MDAzNzAzM30.YIFp319yWP2pN4DqW8rFxt5ZPk5l5O9bOWAcidjDD3w''."}'}
     headers:
+      access-control-allow-origin: ['*']
       connection: [keep-alive]
+      content-length: ['652']
       content-type: [application/json]
-      date: ['Thu, 12 May 2016 18:20:05 GMT']
-      server: [Apache-Coyote/1.1]
+      date: ['Mon, 27 Mar 2017 18:35:08 GMT']
       via: [kong/0.5.2]
-    status: {code: 200, message: OK}
+      x-amz-cf-id: [Sx5vHZ-5nE1c0_NuIiLhAGRbRAcj1q7t5nJayn6XwjZSPk0ygakF1g==]
+      x-amzn-errortype: [IncompleteSignatureException]
+      x-amzn-requestid: [1a71d86a-131c-11e7-af6f-738c20fa821a]
+      x-cache: [Error from cloudfront]
+    status: {code: 403, message: Forbidden}
 version: 1

@@ -7,6 +7,8 @@ class LandsatImage(IpeImage):
     """
       Dask based access to landsat image backed by IPE Graphs.
     """
+    _proj = None
+
     def __init__(self, _id, node="landsat", **kwargs):
         self._gid = _id
         self._spec = kwargs.get('spec', 'multispectral')
@@ -18,7 +20,8 @@ class LandsatImage(IpeImage):
             self._proj = kwargs['proj']
         super(LandsatImage, self).__init__(self._ipe_graphs, self._gid, node=node, tile_size=512, **kwargs)
         self.dtype = 'uint16'
-        self._proj = self.ipe_metadata['georef']['spatialReferenceSystemCode']
+        if self._proj is None:
+            self._proj = self.ipe_metadata['georef']['spatialReferenceSystemCode']
 
 
     def _init_graphs(self):

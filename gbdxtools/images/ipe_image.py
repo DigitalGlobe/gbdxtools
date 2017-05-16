@@ -58,13 +58,13 @@ _curl_pool = defaultdict(pycurl.Curl)
 
 from gbdxtools.ipe.vrt import get_cached_vrt, put_cached_vrt, generate_vrt_template
 from gbdxtools.ipe.util import calc_toa_gain_offset, timeit
-from gbdxtools.ipe.graph import VIRTUAL_IPE_URL, register_ipe_graph, get_ipe_metadata
+from gbdxtools.ipe.graph import VIRTUAL_IPE_URL, register_ipe_graph, get_ipe_metadata, get_ipe_graph
 from gbdxtools.ipe.error import NotFound
 from gbdxtools.ipe.interface import Ipe
 from gbdxtools.auth import Auth
 ipe = Ipe()
 
-def load_url(url, size, bands=8):
+def load_url(url, size, token, bands=8):
     """ Loads a geotiff url inside a thread and returns as an ndarray """
     thread_id = threading.current_thread().ident
     _curl = _curl_pool[thread_id]
@@ -72,14 +72,13 @@ def load_url(url, size, bands=8):
     _curl.setopt(_curl.URL, url)
     _curl.setopt(_curl.WRITEDATA, buf)
     _curl.setopt(pycurl.NOSIGNAL, 1)
+    _curl.setopt(pycurl.HTTPHEADER, ['Authorization: Bearer {}'.format(token)])
     _curl.perform()
-
     with MemoryFile(buf.getvalue()) as memfile:
       try:
           with memfile.open(driver="GTiff") as dataset:
               arr = dataset.read()
       except (TypeError, rasterio.RasterioIOError) as e:
-          print('ERROR', e, url)
           arr = np.zeros([bands, size, size], dtype=np.float32)
           _curl.close()
           del _curl_pool[thread_id]
@@ -91,7 +90,7 @@ class DaskImage(da.Array):
 
     def nchips(self, size=256.0):
         _size = float(size)
-        return math.ceil((float(self.shape[-1]) / _size) * (float(self.shape[1]) / _size))
+        return math.ceil((float(self.shape[-1]) / _size)) * math.ceil(float(self.shape[1]) / _size)
 
     def read(self, bands=None, size=256.0):
         """ Reads data from a dask array and returns the computed ndarray matching the given bands """
@@ -138,14 +137,13 @@ class IpeImage(DaskImage):
         self.interface = Auth()
         self._gid = gid
         self._node_id = node
-        self._ipe_graphs = ipe_graph
         self._dtype = kwargs.get("dtype", "float32")
-        if self._node_id == 'pansharpened':
-            self._dtype = 'uint16'
-        if 'proj' in kwargs:
-            self._proj = kwargs['proj']
-        self._graph_id = None
-        self._tile_size = kwargs.get('tile_size', 256)
+        if self._node_id == "pansharpened":
+            self._dtype = "uint16"
+        if "proj" in kwargs:
+            self._proj = kwargs["proj"]
+        self._ipe_graphs = ipe_graph
+        self._tile_size = kwargs.get("tile_size", 256)
         self._cfg = self._config_dask()
         super(IpeImage, self).__init__(**self._cfg)
         bounds = self._parse_geoms(**kwargs)
@@ -154,19 +152,17 @@ class IpeImage(DaskImage):
             super(IpeImage, self).__init__(**_cfg)
 
     @property
-    def graph_id(self):
-        if self._graph_id is None:
-            self._graph_id = str(uuid.uuid5(uuid.NAMESPACE_DNS, str(self.ipe.graph())))
-        return self._graph_id
-
-    @property
     def ipe(self):
         return self._ipe_graphs[self._node_id]
 
     @property
     def ipe_id(self):
         if self._ipe_id is None:
-            self._ipe_id = register_ipe_graph(self.interface.gbdx_connection, self.ipe.graph())
+            graph = self.ipe.graph()
+            try:
+                self._ipe_id = get_ipe_graph(self.interface.gbdx_connection, graph['id'])
+            except NotFound:
+                self._ipe_id = register_ipe_graph(self.interface.gbdx_connection, graph)
         return self._ipe_id
 
     @property
@@ -183,11 +179,11 @@ class IpeImage(DaskImage):
     def vrt(self):
         """ Generates a VRT for the full Idaho image from image metadata and caches locally """
         try:
-            vrt = get_cached_vrt(self._gid, self.graph_id, self._level)
+            vrt = get_cached_vrt(self._gid, self.ipe_id, self._level)
         except NotFound:
             nbands = 3 if self._node_id == 'pansharpened' else None
             template = generate_vrt_template(self.interface.gbdx_connection, self.ipe_id, self.ipe_node_id, self._level, num_bands=nbands)
-            vrt = put_cached_vrt(self._gid, self.graph_id, self._level, template)
+            vrt = put_cached_vrt(self._gid, self.ipe_id, self._level, template)
         return vrt
 
     def aoi(self, **kwargs):
@@ -204,10 +200,8 @@ class IpeImage(DaskImage):
         xform = Affine.from_gdal(*[tfm["translateX"], tfm["scaleX"], tfm["shearX"], tfm["translateY"], tfm["shearY"], tfm["scaleY"]])
         args = list(bounds) + [xform]
         roi = rasterio.windows.from_bounds(*args, boundless=True)
-        y_start = max(0, roi.row_off)
-        y_stop = roi.row_off + roi.num_rows
-        x_start = max(0, roi.col_off)
-        x_stop = roi.col_off + roi.num_cols
+        y_start, y_stop = max(0, roi.row_off), roi.row_off + roi.num_rows
+        x_start, x_stop = max(0, roi.col_off), roi.col_off + roi.num_cols
         aoi = self[:, y_start:y_stop, x_start:x_stop]
         return {
             "shape": aoi.shape,
@@ -225,13 +219,12 @@ class IpeImage(DaskImage):
 
     def _config_dask(self):
         """ Configures the image as a dask array with a calculated shape and chunk size """
-        dtype = self._dtype#"float32" if self._node_id is not 'pansharpened' else 'uint16'
         meta = self.ipe_metadata
         nbands = meta['image']['numBands']
         urls, shape = self._collect_urls(meta)
         img = self._build_array(urls)
         cfg = {"shape": tuple([nbands] + list(shape)),
-               "dtype": dtype,
+               "dtype": self._dtype,
                "chunks": tuple([nbands] + [self._tile_size, self._tile_size])}
         cfg["name"] = img["name"]
         cfg["dask"] = img["dask"]
@@ -242,7 +235,8 @@ class IpeImage(DaskImage):
     def _build_array(self, urls):
         """ Creates the deferred dask array from a grid of URLs """
         name = "image-{}".format(str(uuid.uuid4()))
-        buf_dask = {(name, 0, x, y): (load_url, url, self._tile_size) for (x, y), url in urls.items()}
+        token = self.interface.gbdx_connection.access_token
+        buf_dask = {(name, 0, x, y): (load_url, url, self._tile_size, token) for (x, y), url in urls.items()}
         return {"name": name, "dask": buf_dask}
 
     def _ipe_tile(self, x, y):

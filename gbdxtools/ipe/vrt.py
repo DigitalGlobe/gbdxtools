@@ -6,6 +6,11 @@ import os.path
 import json
 from itertools import product
 
+try:
+    xrange
+except NameError:
+    xrange = range
+
 from gbdxtools.ipe.graph import VIRTUAL_IPE_URL, get_ipe_metadata
 from gbdxtools.ipe.util import mkdir_p, prettify
 from gbdxtools.ipe.error import NotFound
@@ -95,7 +100,7 @@ def put_cached_vrt(idaho_id, node, level, template):
         if not os.path.exists(d):
             mkdir_p(d)
         with open(cache_path, "w") as f:
-            f.write(Template(template).substitute(query=""))
+            f.write(Template(template.decode('utf-8')).substitute(query=""))
         return cache_path
     except Exception as e:
         print("VRT could not be cached", e)

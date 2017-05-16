@@ -4,8 +4,10 @@ Getting started
 Getting access to GBDX
 -----------------------
 
-All operations on GBDX require credentials. 
-gbdxtools expects a config file to exist at ~/.gbdx-config with your GBDX credentials.  
+All operations on GBDX require credentials. You can sign up for a GBDX account at https://gbdx.geobigdata.io.
+Your GBDX credentials are found under your account profile.
+
+gbdxtools expects a config file to exist at ~/.gbdx-config with your credentials.
 (See formatting for this file here:  https://github.com/tdg-platform/gbdx-auth#ini-file.)
 
 Instantiating an Interface object automatically logs you in:
@@ -15,9 +17,7 @@ Instantiating an Interface object automatically logs you in:
    >>> from gbdxtools import Interface
    >>> gbdx = Interface()
 
-To get a GBDX username, password and API key, please email GBDX-Support@digitalglobe.com. 
-For future reference, remember that your credentials are listed in https://gbdx.geobigdata.io/profile.
-
+For questions or troubleshooting email GBDX-Support@digitalglobe.com.
 
 Getting your S3 information
 ---------------------------
@@ -35,13 +35,13 @@ Use the s3 member of the Interface:
    >>> item = 'testdata/test1.tif'
    >>> gbdx.s3.download(item)
 
-You can see the contents of your bucket/prefix using this link: http://s3browser-env.elasticbeanstalk.com/login.html.
+You can see the contents of your bucket/prefix using this link: http://s3browser.geobigdata.io/login.html.
 
 
 Ordering imagery
 ----------------
 
-This guide uses v2 of the GBDX ordering API. Ordering API v1 was deprecated on 02/25/2016. 
+This guide uses v2 of the GBDX ordering API. Ordering API v1 was deprecated on 02/25/2016.
 
 Use the ordering member of the Interface to order imagery and check the status of your order.
 

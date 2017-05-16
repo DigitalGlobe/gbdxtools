@@ -62,7 +62,10 @@ class CatalogImage(IpeImage):
     def _query_vectors(self, query, aoi=None):
         if aoi is None:
             aoi = "POLYGON((-180.0 90.0,180.0 90.0,180.0 -90.0,-180.0 -90.0,-180.0 90.0))"
-        return self.vectors.query(aoi, query=query)
+        try: 
+            return self.vectors.query(aoi, query=query)
+        except Exception as err:
+            raise Exception('Unable to query for image properties, the service may be currently down.', err)
 
     @property
     def properties(self):
@@ -103,7 +106,7 @@ class CatalogImage(IpeImage):
             print('AOI bounds not found. Must specify a bbox, wkt, or geojson geometry.')
             return
 
-        cfg = self._aoi_config(bounds)
+        cfg = self._aoi_config(bounds, **kwargs)
         return DaskImage(**cfg)
 
 

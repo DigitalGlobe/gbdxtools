@@ -4,6 +4,7 @@ import copy
 from hashlib import sha256
 from itertools import chain
 import gbdxtools as gbdx
+from collections import OrderedDict
 
 try:
   basestring

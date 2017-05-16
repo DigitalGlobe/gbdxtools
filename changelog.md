@@ -1,3 +1,39 @@
+0.11.7
+------
+* pin version of dask====0.13.0
+
+0.11.6
+------
+* Add optional index parameter to vector aggregations
+
+0.11.5
+------
+* Add in vector aggregation support (see examples/vectors_aggregation.py)
+
+0.11.4
+------
+* Default vector service classes to use catalog indexes instead of the searching through all documents
+
+0.11.3
+------
+* Adds CatalogImage and IdahoImage classes 
+
+0.11.2
+------
+* upgrade gbdx-auth==0.2.4.  Allows env vars for gbdx authentication
+
+0.11.1
+------
+* fix #99 and #100
+
+0.11.0
+------
+* upgrade to catalog/v2 usage
+
+0.10.2
+------
+* fix for breaking change in VectorService
+
 0.10.1
 -----
 * Added new task_registry.update() function to update tasks in place

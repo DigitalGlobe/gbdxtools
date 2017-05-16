@@ -12,6 +12,7 @@ import vcr
 from os.path import join, isfile, dirname, realpath
 import tempfile
 import unittest
+import rasterio
 
 try:
     from urlparse import urlparse
@@ -33,7 +34,7 @@ my_vcr = vcr.VCR()
 my_vcr.register_matcher('force', force)
 my_vcr.match_on = ['force']
 
-class IpeImageTest(unittest.TestCase):
+class CatalogImageTest(unittest.TestCase):
 
     _temp_path = None
 
@@ -51,7 +52,7 @@ class IpeImageTest(unittest.TestCase):
         img = self.gbdx.catalog_image(_id)
         self.assertTrue(isinstance(img, CatalogImage))
         assert img._node_id == 'toa_reflectance'
-        assert img.shape == (8, 78848, 11008)
+        assert img.shape == (8, 79360, 11008)
         assert img._proj == 'EPSG:4326'
 
     @my_vcr.use_cassette('tests/unit/cassettes/test_image_default.yaml', filter_headers=['authorization'])
@@ -59,7 +60,7 @@ class IpeImageTest(unittest.TestCase):
         _id = '104001002838EC00'
         img = self.gbdx.catalog_image(_id, bbox=[-85.81455230712892,10.416235163695223,-85.77163696289064,10.457089934231618])
         assert img._node_id == 'toa_reflectance'
-        assert img.shape == (8, 3013, 3190)
+        assert img.shape == (8, 3037, 3190)
         assert img._proj == 'EPSG:4326'
 
     @my_vcr.use_cassette('tests/unit/cassettes/test_image_proj.yaml', filter_headers=['authorization'])
@@ -67,6 +68,31 @@ class IpeImageTest(unittest.TestCase):
         _id = '104001002838EC00'
         img = CatalogImage(_id, bbox=[-85.81455230712892,10.416235163695223,-85.77163696289064,10.457089934231618], proj='EPSG:3857')
         assert img._node_id == 'toa_reflectance'
-        assert img.shape == (8, 3064, 3190)
+        assert img.shape == (8, 3088, 3190)
         assert img._proj == 'EPSG:3857' 
+
+    @my_vcr.use_cassette('tests/unit/cassettes/test_image_aoi.yaml', filter_headers=['authorization'])
+    def test_cat_image_aoi(self):
+        _id = '104001002838EC00'
+        img = CatalogImage(_id)
+        aoi = img.aoi(bbox=[-85.81455230712892,10.416235163695223,-85.77163696289064,10.457089934231618])
+        assert aoi.shape == (8, 3037, 3190)
+
+    @my_vcr.use_cassette('tests/unit/cassettes/test_image_pan_band.yaml', filter_headers=['authorization'])
+    def test_catalog_image_panchromatic(self):
+        _id = '104001002838EC00'
+        img = self.gbdx.catalog_image(_id, band_type='Pan')
+        self.assertTrue(isinstance(img, CatalogImage))
+        assert img._node_id == 'toa_reflectance'
+        assert img.shape == (1, 317952, 43264)
+        assert img._proj == 'EPSG:4326'
+
+    @my_vcr.use_cassette('tests/unit/cassettes/test_image_pansharpen.yaml', filter_headers=['authorization'])
+    def test_catalog_image_pansharpen(self):
+        _id = '104001002838EC00'
+        img = self.gbdx.catalog_image(_id, pansharpen=True)
+        self.assertTrue(isinstance(img, CatalogImage))
+        assert img._node_id == 'pansharpened'
+        assert img.shape == (8, 317952, 43264)
+        assert img._proj == 'EPSG:4326' 
 
