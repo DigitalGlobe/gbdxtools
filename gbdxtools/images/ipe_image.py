@@ -88,19 +88,20 @@ class DaskImage(da.Array):
     def __init__(self, **kwargs):
         super(DaskImage, self).__init__(**kwargs)
 
-    def nchips(self, size=256.0):
-        _size = float(size)
-        return math.ceil((float(self.shape[-1]) / _size)) * math.ceil(float(self.shape[1]) / _size)
+    def nchips(self):
+        size = float(self.chunks[1][0])
+        return math.ceil((float(self.shape[-1]) / size)) * math.ceil(float(self.shape[1]) / size)
 
-    def read(self, bands=None, size=256.0):
+    def read(self, bands=None):
         """ Reads data from a dask array and returns the computed ndarray matching the given bands """
-        print('Fetching Image... {} {}'.format(self.nchips(size=size), 'tiles' if self.nchips(size=size) > 1 else 'tile'))
+        size = float(self.chunks[1][0])
+        print('Fetching Image... {} {}'.format(self.nchips(), 'tiles' if self.nchips() > 1 else 'tile'))
         arr = self.compute(get=threaded_get)
         if bands is not None:
             arr = arr[bands, ...]
         return arr
 
-    def plot(self, arr=None, stretch=[2,98], w=20, h=10, size=256.0):
+    def plot(self, arr=None, stretch=[2,98], w=20, h=10, bands=[4,2,1]):
         if not has_pyplot:
             print('To plot images please install matplotlib')
             return
@@ -108,13 +109,14 @@ class DaskImage(da.Array):
         if not self.shape[1] or not self.shape[-1]:
             print('No data to plot, dimensions are invalid {}'.format(str(self.shape)))
             return
+
         f, ax1 = plt.subplots(1, figsize=(w,h))
         ax1.axis('off')
-        data = arr if arr is not None else self.read(size=size)
+        data = arr if arr is not None else self.read()
         if self.shape[0] == 1:
             plt.imshow(data[0,:,:], cmap="Greys_r")
         else:
-            data = data[[4,2,1],...]
+            data = data[bands,...]
             data = data.astype(np.float32)
             data = np.rollaxis(data, 0, 3)
             lims = np.percentile(data,stretch,axis=(0,1))
@@ -194,6 +196,7 @@ class IpeImage(DaskImage):
             return
         cfg = self._aoi_config(bounds, **kwargs)
         return DaskImage(**cfg)
+        
 
     def _aoi_config(self, bounds, **kwargs):
         tfm = self.ipe_metadata['georef']
