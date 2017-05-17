@@ -105,6 +105,23 @@ The IdahoImage class behaves in a similar manner as CatalogImage except it accep
     img = IdahoImage('cfa89bc1-6115-4db1-9f43-03f060b52286')
     print img.shape
 
-
 The methods of CatalogImage are also available in IdahoImage. However, the band_type and pansharpen parameters are not available.
 (IDAHO multispectral and panchromatic images are stored separately on the server.)
+
+
+Landsat Images
+-----------------------
+
+GBDX also indexes all Landsat8 images and are served up by AWS. The LandsatImage class behaves exactly like a CatalogImage except it accepts a Landsat ID instead of a Catalog ID:
+
+.. code-block:: python
+
+    from gbdxtools import LandsatImage
+
+    img = LandsatImage('LC80370302014268LGN00')
+    print img.shape
+    aoi = img.aoi(bbox=[-109.84, 43.19, -109.59, 43.34])
+    print aoi.shape
+    aoi.plot(bands=[3,2,1])
+
+
