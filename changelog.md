@@ -1,3 +1,7 @@
+0.11.8
+------
+* add LandsatImage class
+
 0.11.7
 ------
 * pin version of dask====0.13.0
