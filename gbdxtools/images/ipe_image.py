@@ -56,6 +56,9 @@ import threading
 num_workers = int(os.environ.get("GBDX_THREADS", 4))
 threaded_get = partial(dask.threaded.get, num_workers=num_workers)
 
+import pycurl
+_curl_pool = defaultdict(pycurl.Curl)
+
 import requests
 
 from gbdxtools.ipe.vrt import get_cached_vrt, put_cached_vrt, generate_vrt_template
@@ -66,7 +69,7 @@ from gbdxtools.ipe.interface import Ipe
 from gbdxtools.auth import Auth
 ipe = Ipe()
 
-def load_url(url, size, token, bands=8):
+def load_url(url, token, bands=8):
     """ Loads a geotiff url inside a thread and returns as an ndarray """
     thread_id = threading.current_thread().ident
     _curl = _curl_pool[thread_id]
