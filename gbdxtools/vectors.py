@@ -291,7 +291,7 @@ class Vectors(object):
                 mapboxgl.accessToken = "$mbkey";
                 window.map = new mapboxgl.Map({
                     container: '$map_id',
-                    style: 'mapbox://styles/mapbox/dark-v8',
+                    style: 'mapbox://styles/mapbox/satellite-v9',
                     center: [$lon, $lat],
                     zoom: $zoom
                 });
