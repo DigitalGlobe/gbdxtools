@@ -4,6 +4,7 @@ GBDX Vector Services Interface.
 Contact: nate.ricklin@digitalglobe.com
 """
 #from __future__ import absolute_import
+from string import Template
 from builtins import object
 import six
 
@@ -11,7 +12,10 @@ import requests
 from pygeoif import geometry
 from geomet import wkt as wkt2geojson
 from collections import OrderedDict
-import json
+import json, time
+
+from shapely.ops import cascaded_union
+from shapely.geometry import shape, box
 
 from gbdxtools.auth import Auth
 
@@ -250,6 +254,78 @@ class Vectors(object):
         r.raise_for_status()
 
         return r.json(object_pairs_hook=OrderedDict)['aggregations']
+
+
+    def map(self, query, style={}, zoom=10):
+        """
+          Renders a mapbox gl map from a vector service query
+        """
+        try:
+            from IPython.display import Javascript, HTML, display
+        except:
+            print("IPython is required to produce maps.")
+            return
+
+        wkt = box(-180,-90,180,90).wkt
+        features = self.query(wkt, query, index=None)
+    
+        union = cascaded_union([shape(f['geometry']) for f in features])
+        lon, lat = union.centroid.coords[0]
+    
+        geojson = {"type":"FeatureCollection", "features": features}
+    
+        map_id = "map_{}".format(str(int(time.time())))
+        display(HTML(Template('''
+           <div id="$map_id"/>
+           <style>body{margin:0;padding:0;}#$map_id{position:relative;top:0;bottom:0;width:100%;height:400px;}</style>
+        ''').substitute({"map_id": map_id})))
+    
+        js = Template("""
+            require.config({
+              paths: {
+                  mapboxgl: 'https://api.tiles.mapbox.com/mapbox-gl-js/v0.28.0/mapbox-gl',
+              }
+            });
+    
+            require(['mapboxgl'], function(mapboxgl){
+                window.map = new mapboxgl.Map({
+                    container: '$map_id',
+                    style: 'mapbox://styles/mapbox/dark-v8',
+                    center: [$lon, $lat],
+                    zoom: $zoom
+                });
+                var map = window.map;
+                var geojson = $geojson;
+                var style = Object.keys($style).length
+                    ? $style
+                    : {
+                        "line-color": '#5588de',
+                        "line-opacity": .5
+                    };
+                map.once('style.load', function(e) {
+                    function addLayer(mapid) {
+                        try {
+                            mapid.addSource('features',
+                            {
+                                type: "geojson",
+                                data: geojson
+                            });
+                            var layer =  {
+                                "id": "gbdx",
+                                "type": "line",
+                                "source": "features",
+                                "paint": style
+                            };
+                            mapid.addLayer(layer);
+                        } catch (err) {
+                            console.log(err);
+                        }
+                    }
+                    addLayer(map);
+                });
+            });
+        """).substitute({"map_id": map_id, "lat": lat, "lon": lon, "zoom": zoom, "geojson": json.dumps(geojson), "style": json.dumps(style)})
+        display(Javascript(js))
 
 
 class AggregationDef(object):
