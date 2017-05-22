@@ -12,7 +12,7 @@ import requests
 from pygeoif import geometry
 from geomet import wkt as wkt2geojson
 from collections import OrderedDict
-import json, time
+import json, time, os
 
 from shapely.ops import cascaded_union
 from shapely.geometry import shape, box
@@ -288,6 +288,7 @@ class Vectors(object):
             });
     
             require(['mapboxgl'], function(mapboxgl){
+                mapboxgl.accessToken = "$mbkey";
                 window.map = new mapboxgl.Map({
                     container: '$map_id',
                     style: 'mapbox://styles/mapbox/dark-v8',
@@ -324,7 +325,15 @@ class Vectors(object):
                     addLayer(map);
                 });
             });
-        """).substitute({"map_id": map_id, "lat": lat, "lon": lon, "zoom": zoom, "geojson": json.dumps(geojson), "style": json.dumps(style)})
+        """).substitute({
+            "map_id": map_id, 
+            "lat": lat, 
+            "lon": lon, 
+            "zoom": zoom, 
+            "geojson": json.dumps(geojson), 
+            "style": json.dumps(style),
+            "mbkey": os.environ.get('MAPBOX_API_KEY')
+        })
         display(Javascript(js))
 
 
