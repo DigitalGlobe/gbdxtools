@@ -256,7 +256,7 @@ class Vectors(object):
         return r.json(object_pairs_hook=OrderedDict)['aggregations']
 
 
-    def map(self, query, style={}, zoom=10):
+    def map(self, features=None, query=None, style={}, bbox=[-180,-90,180,90], zoom=10):
         """
           Renders a mapbox gl map from a vector service query
         """
@@ -266,12 +266,15 @@ class Vectors(object):
             print("IPython is required to produce maps.")
             return
 
-        wkt = box(-180,-90,180,90).wkt
-        features = self.query(wkt, query, index=None)
+        if features is None and query is not None:
+            wkt = box(*bbox).wkt
+            features = self.query(wkt, query, index=None)
+        elif features is None and query is None:
+            print('Must provide either a list of features or a query')
+            return
     
         union = cascaded_union([shape(f['geometry']) for f in features])
         lon, lat = union.centroid.coords[0]
-    
         geojson = {"type":"FeatureCollection", "features": features}
     
         map_id = "map_{}".format(str(int(time.time())))
