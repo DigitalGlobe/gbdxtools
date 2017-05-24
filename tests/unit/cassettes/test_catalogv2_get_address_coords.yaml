@@ -1,0 +1,51 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      User-Agent: [python-requests/2.9.1]
+    method: GET
+    uri: https://maps.googleapis.com/maps/api/geocode/json?&address=Boulder,%20CO
+  response:
+    body: {string: !!python/unicode "{\n   \"results\" : [\n      {\n         \"address_components\"\
+        \ : [\n            {\n               \"long_name\" : \"Boulder\",\n      \
+        \         \"short_name\" : \"Boulder\",\n               \"types\" : [ \"locality\"\
+        , \"political\" ]\n            },\n            {\n               \"long_name\"\
+        \ : \"Boulder County\",\n               \"short_name\" : \"Boulder County\"\
+        ,\n               \"types\" : [ \"administrative_area_level_2\", \"political\"\
+        \ ]\n            },\n            {\n               \"long_name\" : \"Colorado\"\
+        ,\n               \"short_name\" : \"CO\",\n               \"types\" : [ \"\
+        administrative_area_level_1\", \"political\" ]\n            },\n         \
+        \   {\n               \"long_name\" : \"United States\",\n               \"\
+        short_name\" : \"US\",\n               \"types\" : [ \"country\", \"political\"\
+        \ ]\n            }\n         ],\n         \"formatted_address\" : \"Boulder,\
+        \ CO, USA\",\n         \"geometry\" : {\n            \"bounds\" : {\n    \
+        \           \"northeast\" : {\n                  \"lat\" : 40.0945509,\n \
+        \                 \"lng\" : -105.178197\n               },\n             \
+        \  \"southwest\" : {\n                  \"lat\" : 39.9640689,\n          \
+        \        \"lng\" : -105.3017579\n               }\n            },\n      \
+        \      \"location\" : {\n               \"lat\" : 40.0149856,\n          \
+        \     \"lng\" : -105.2705456\n            },\n            \"location_type\"\
+        \ : \"APPROXIMATE\",\n            \"viewport\" : {\n               \"northeast\"\
+        \ : {\n                  \"lat\" : 40.0945509,\n                  \"lng\"\
+        \ : -105.178197\n               },\n               \"southwest\" : {\n   \
+        \               \"lat\" : 39.9640689,\n                  \"lng\" : -105.3017579\n\
+        \               }\n            }\n         },\n         \"place_id\" : \"\
+        ChIJ06-NJ06Na4cRWIAboHw7Ocg\",\n         \"types\" : [ \"locality\", \"political\"\
+        \ ]\n      }\n   ],\n   \"status\" : \"OK\"\n}\n"}
+    headers:
+      access-control-allow-origin: ['*']
+      alt-svc: ['quic=":443"; ma=2592000; v="35,34"']
+      cache-control: ['public, max-age=86400']
+      content-length: ['1733']
+      content-type: [application/json; charset=UTF-8]
+      date: ['Fri, 09 Dec 2016 23:44:23 GMT']
+      expires: ['Sat, 10 Dec 2016 23:44:23 GMT']
+      server: [mafe]
+      vary: [Accept-Language]
+      x-frame-options: [SAMEORIGIN]
+      x-xss-protection: [1; mode=block]
+    status: {code: 200, message: OK}
+version: 1
