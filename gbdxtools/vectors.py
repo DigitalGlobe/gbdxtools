@@ -17,6 +17,7 @@ from gbdxtools.auth import Auth
 
 
 class Vectors(object):
+    default_index = 'vector-gbdx-alpha-catalog-v2-*'
 
     def __init__(self, **kwargs):
         ''' Construct the Vectors interface class
@@ -33,6 +34,7 @@ class Vectors(object):
         self.get_url = 'https://vector.geobigdata.io/insight-vector/api/vector/%s/'
         self.create_url = 'https://vector.geobigdata.io/insight-vector/api/vectors'
         self.aggregations_url = 'https://vector.geobigdata.io/insight-vector/api/aggregation'
+        self.aggregations_by_index_url = 'https://vector.geobigdata.io/insight-vector/api/index/aggregation/%s'
 
     def create(self,vectors):
         """
@@ -128,7 +130,7 @@ class Vectors(object):
         return r.json()
 
 
-    def query(self, searchAreaWkt, query, count=100, ttl='5m', index='vector-gbdx-alpha-catalog-v2*'):
+    def query(self, searchAreaWkt, query, count=100, ttl='5m', index=default_index):
         '''
         Perform a vector services query using the QUERY API
         (https://gbdxdocs.digitalglobe.com/docs/vs-query-list-vector-items-returns-default-fields)
@@ -147,7 +149,7 @@ class Vectors(object):
         return list(self.query_iteratively(searchAreaWkt, query, count, ttl, index))
 
 
-    def query_iteratively(self, searchAreaWkt, query, count=100, ttl='5m', index='vector-gbdx-alpha-catalog-v2*'):
+    def query_iteratively(self, searchAreaWkt, query, count=100, ttl='5m', index=default_index):
         '''
         Perform a vector services query using the QUERY API
         (https://gbdxdocs.digitalglobe.com/docs/vs-query-list-vector-items-returns-default-fields)
@@ -207,7 +209,7 @@ class Vectors(object):
           for vector in data:
             yield vector
 
-    def aggregate_query(self, searchAreaWkt, agg_def, query=None, start_date=None, end_date=None, count=10):
+    def aggregate_query(self, searchAreaWkt, agg_def, query=None, start_date=None, end_date=None, count=10, index=default_index):
         """Aggregates results of a query into buckets defined by the 'agg_def' parameter.  The aggregations are
         represented by dicts containing a 'name' key and a 'terms' key holding a list of the aggregation buckets.
         Each bucket element is a dict containing a 'term' key containing the term used for this bucket, a 'count' key
@@ -221,6 +223,7 @@ class Vectors(object):
             start_date (str): either an ISO-8601 date string or a 'now' expression (e.g. "now-6d" or just "now")
             end_date (str): either an ISO-8601 date string or a 'now' expression (e.g. "now-6d" or just "now")
             count (int): the number of buckets to include in the aggregations (the top N will be returned)
+            index (str): the index (or alias or wildcard index expression) to run aggregations against, set to None for the entire set of vector indexes
 
         Returns:
             results (list): A (usually single-element) list of dict objects containing the aggregation results.
@@ -241,7 +244,9 @@ class Vectors(object):
         if end_date:
             params['end_date'] = end_date
 
-        r = self.gbdx_connection.post(self.aggregations_url, params=params, json=geojson)
+        url = self.aggregations_by_index_url % index if index else self.aggregations_url
+
+        r = self.gbdx_connection.post(url, params=params, json=geojson)
         r.raise_for_status()
 
         return r.json(object_pairs_hook=OrderedDict)['aggregations']

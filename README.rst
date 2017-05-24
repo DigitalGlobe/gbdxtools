@@ -134,6 +134,10 @@ Upgrade pip (if required)::
 
    pip install pip --upgrade
 
+Recent versions of gbdxtools require newish versions of pycurl. If you see pycurl version errors when you `pip install gbdxtools` try installing a new curl version in your conda environment:
+
+  conda install curl
+
 Install gbdxtools::
 
    pip install gbdxtools
