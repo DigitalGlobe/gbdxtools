@@ -32,3 +32,14 @@ Install rasterio:
 curl -outf rasterio-1.0a5-cp27-cp27m-win32.whl https://github.com/DigitalGlobe/gbdxtools-windows-binaries/raw/master/rasterio-1.0a5-cp27-cp27m-win32.whl
 pip install .\rasterio-1.0a5-cp27-cp27m-win32.whl
 ```
+
+Install matplotlib:
+```
+pip install matplotlib
+```
+
+Install gbdxtools
+--------------
+```
+pip install gbdxtools
+```
