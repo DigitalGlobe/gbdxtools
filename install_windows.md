@@ -33,6 +33,13 @@ curl -outf rasterio-1.0a5-cp27-cp27m-win32.whl https://github.com/DigitalGlobe/g
 pip install .\rasterio-1.0a5-cp27-cp27m-win32.whl
 ```
 
+Install pyproj:
+
+```
+curl -outf pyproj-1.9.5.1-cp27-cp27m-win32.whl https://github.com/DigitalGlobe/gbdxtools-windows-binaries/raw/master/pyproj-1.9.5.1-cp27-cp27m-win32.whl
+pip install .\pyproj-1.9.5.1-cp27-cp27m-win32.whl
+```
+
 Install matplotlib:
 ```
 pip install matplotlib
