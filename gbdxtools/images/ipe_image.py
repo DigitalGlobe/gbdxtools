@@ -10,8 +10,11 @@ import math
 
 from pyproj import Proj
 
-import signal
-signal.signal(signal.SIGPIPE, signal.SIG_IGN)
+try: 
+    import signal
+    signal.signal(signal.SIGPIPE, signal.SIG_IGN)
+except: 
+    pass
 
 import json
 import warnings
