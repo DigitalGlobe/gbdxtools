@@ -36,6 +36,10 @@ class InputPorts(Mapping):
     def __iter__(self):
         return iter(self._ports)
 
+    def __delitem__(self, key):
+        del self._vals[key]
+        del self._ports[key]
+
     def get(self, key, default=None):
         """
         >>> inputs = InputPorts({"one": 1})
