@@ -1,3 +1,7 @@
+0.11.9
+------
+* Fix signals exception handling for Windows OS.
+
 0.11.8
 ------
 * add LandsatImage class
