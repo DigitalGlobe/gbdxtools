@@ -22,8 +22,6 @@ class ContentHashedDict(dict):
     def __hash__(self):
         dup = {k:v for k,v in self.items() if k is not "id"}
         return sha256(str(dup).encode('utf-8')).hexdigest()
-        #out_str = "".join([e for e in sorted(str(dup)) if e != " "]).strip()
-        #return sha256(out_str.encode('utf-8')).hexdigest()
 
     def populate_id(self):
         self.update({"id": self._id})
@@ -38,9 +36,6 @@ class Op(object):
     @property
     def _id(self):
         return str(uuid.uuid5(NAMESPACE_UUID, json.dumps(self._nodes)))
-        #_nodes_str = "".join([e for e in sorted(json.dumps(self._nodes)) if e != " "]).strip()
-        #print('OP', str(uuid.uuid5(NAMESPACE_UUID, _nodes_str)))
-        #return str(uuid.uuid5(NAMESPACE_UUID, _nodes_str))
 
     def __call__(self, *args, **kwargs):
         if len(args) > 0 and all([isinstance(arg, gbdx.images.idaho_image.IpeImage) for arg in args]):
@@ -69,7 +64,6 @@ class Op(object):
     def graph(self):
         _nodes = [{k:v for k,v in node.items() if not k.startswith('_')} for node in self._nodes]
         return {
-            "id": self._id,
             "edges": self._edges,
             "nodes": _nodes
         }

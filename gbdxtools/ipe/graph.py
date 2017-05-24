@@ -16,7 +16,7 @@ def get_ipe_graph(conn, graph_id):
 def register_ipe_graph(conn, ipe_graph):
     url = "{}/graph".format(VIRTUAL_IPE_URL)
     res = conn.post(url, json.dumps(ipe_graph), headers={'Content-Type': 'application/json'})
-    return ipe_graph['id']
+    return res.content
 
 def get_ipe_metadata(conn, ipe_id, node='toa_reflectance'):
     meta = {}
