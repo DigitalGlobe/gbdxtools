@@ -282,6 +282,7 @@ class Vectors(object):
            <div id="$map_id"/>
            <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.37.0/mapbox-gl.css' rel='stylesheet' />
            <style>body{margin:0;padding:0;}#$map_id{position:relative;top:0;bottom:0;width:100%;height:400px;}</style>
+           <style>.mapboxgl-popup-content table tr{border: 1px solid #efefef;} .mapboxgl-popup-content table, td, tr{border: none;}</style>
         ''').substitute({"map_id": map_id})))
 
     
@@ -295,11 +296,12 @@ class Vectors(object):
             require(['mapboxgl'], function(mapboxgl){
                 mapboxgl.accessToken = "$mbkey";
 
-                function html( attrs ) {
+                function html( attrs, id ) {
                   var json = JSON.parse( attrs );
                   var html = '<table><tbody>';
-                  for ( var i=0; i < Object.keys(json); i++) {
-                    var key = Object.keys( i );
+                  html += '<tr><td>ID</td><td>' + id + '</td></tr>';
+                  for ( var i=0; i < Object.keys(json).length; i++) {
+                    var key = Object.keys( json )[ i ];
                     var val = json[ key ];
                     html += '<tr><td>' + key + '</td><td>' + val + '</td></tr>';
                   }
@@ -319,7 +321,8 @@ class Vectors(object):
                     ? $style
                     : {
                         "line-color": '#ff0000',
-                        "line-opacity": .5
+                        "line-opacity": .75,
+                        "line-width": 2
                     };
 
                 map.on("click", function(e){
@@ -327,7 +330,7 @@ class Vectors(object):
                   if ( features.length ) {
                     var popup = new mapboxgl.Popup({closeOnClick: false})
                       .setLngLat(e.lngLat)
-                      .setHTML(html(features[0].properties.attributes))
+                      .setHTML(html(features[0].properties.attributes, features[0].properties.id))
                       .addTo(map);
                   }
                 });
