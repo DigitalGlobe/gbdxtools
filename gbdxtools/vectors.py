@@ -280,18 +280,33 @@ class Vectors(object):
         map_id = "map_{}".format(str(int(time.time())))
         display(HTML(Template('''
            <div id="$map_id"/>
+           <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.37.0/mapbox-gl.css' rel='stylesheet' />
            <style>body{margin:0;padding:0;}#$map_id{position:relative;top:0;bottom:0;width:100%;height:400px;}</style>
         ''').substitute({"map_id": map_id})))
+
     
         js = Template("""
             require.config({
               paths: {
-                  mapboxgl: 'https://api.tiles.mapbox.com/mapbox-gl-js/v0.28.0/mapbox-gl',
+                  mapboxgl: 'https://api.tiles.mapbox.com/mapbox-gl-js/v0.37.0/mapbox-gl',
               }
             });
     
             require(['mapboxgl'], function(mapboxgl){
                 mapboxgl.accessToken = "$mbkey";
+
+                function html( attrs ) {
+                  var json = JSON.parse( attrs );
+                  var html = '<table><tbody>';
+                  for ( var i=0; i < Object.keys(json); i++) {
+                    var key = Object.keys( i );
+                    var val = json[ key ];
+                    html += '<tr><td>' + key + '</td><td>' + val + '</td></tr>';
+                  }
+                  html += '</tbody></table>';
+                  return html;
+                }
+
                 window.map = new mapboxgl.Map({
                     container: '$map_id',
                     style: 'mapbox://styles/mapbox/satellite-v9',
@@ -303,9 +318,20 @@ class Vectors(object):
                 var style = Object.keys($style).length
                     ? $style
                     : {
-                        "line-color": '#5588de',
+                        "line-color": '#ff0000',
                         "line-opacity": .5
                     };
+
+                map.on("click", function(e){
+                  var features = map.queryRenderedFeatures(e.point);
+                  if ( features.length ) {
+                    var popup = new mapboxgl.Popup({closeOnClick: false})
+                      .setLngLat(e.lngLat)
+                      .setHTML(html(features[0].properties.attributes))
+                      .addTo(map);
+                  }
+                });
+              
                 map.once('style.load', function(e) {
                     function addLayer(mapid) {
                         try {
