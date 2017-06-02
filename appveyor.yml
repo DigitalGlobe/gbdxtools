@@ -23,6 +23,14 @@ install:
   - "%PYTHON%\\python.exe -m pip install wheel"
   - "appveyor DownloadFile https://github.com/DigitalGlobe/gbdxtools-windows-binaries/raw/master/GDAL-2.1.3-cp27-cp27m-win32.whl"
   - "%PYTHON%\\python.exe -m pip install GDAL-2.1.3-cp27-cp27m-win32.whl"
+  - "appveyor DownloadFile https://github.com/DigitalGlobe/gbdxtools-windows-binaries/raw/master/Shapely-1.5.17-cp27-cp27m-win32.whl"
+  - "%PYTHON%\\python.exe -m pip install Shapely-1.5.17-cp27-cp27m-win32.whl"
+  - "appveyor DownloadFile https://github.com/DigitalGlobe/gbdxtools-windows-binaries/raw/master/rasterio-1.0a5-cp27-cp27m-win32.whl"
+  - "%PYTHON%\\python.exe -m pip install rasterio-1.0a5-cp27-cp27m-win32.whl"
+  - "appveyor DownloadFile https://github.com/DigitalGlobe/gbdxtools-windows-binaries/raw/master/pyproj-1.9.5.1-cp27-cp27m-win32.whl"
+  - "%PYTHON%\\python.exe -m pip install pyproj-1.9.5.1-cp27-cp27m-win32.whl"
+  - "%PYTHON%\\python.exe -m pip install matplotlib pytest"
+  - "%PYTHON%\\python.exe -m pip install -r requirements.txt"
 
 build: off
 
