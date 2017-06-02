@@ -22,7 +22,7 @@ install:
   # We need wheel installed to build wheels
   - "%PYTHON%\\python.exe -m pip install wheel"
   - "curl -outf https://github.com/DigitalGlobe/gbdxtools-windows-binaries/raw/master/GDAL-2.1.3-cp27-cp27m-win32.whl"
-  - %PYTHON%\\python.exe -m pip install GDAL-2.1.3-cp27-cp27m-win32.whl
+  - "%PYTHON%\\python.exe -m pip install GDAL-2.1.3-cp27-cp27m-win32.whl"
 
 build: off
 
