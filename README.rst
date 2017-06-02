@@ -24,7 +24,9 @@ In order to use gbdxtools, you need GBDX credentials. Email GBDX-Support@digital
 Documentation is hosted here: http://gbdxtools.readthedocs.org/en/latest/. 
 Example scripts can be found under the /examples directory of this repo.
 
-Currently, the following Python versions are supported: 2.7, 3.3, 3.4, 3.5
+Currently, the following Python versions are supported (on osx & linux/unix): 2.7, 3.3, 3.4, 3.5
+
+Windows support is provided for 32-bit python 2.7.
 
 See the license file for license rights and limitations (MIT).
 
