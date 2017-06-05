@@ -100,7 +100,7 @@ class Op(object):
         }
         if conn is not None:
             self._ipe_id = register_ipe_graph(conn, graph)
-            self._ipe_graph = get_ipe_graph(conn, self._ipe_id)
+            self._ipe_graph = graph # get_ipe_graph(conn, self._ipe_id)
             self._ipe_meta = get_ipe_metadata(conn, self._ipe_id, self._id)
             return self._ipe_graph
 
