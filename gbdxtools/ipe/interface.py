@@ -7,9 +7,24 @@ import gbdxtools as gbdx
 from collections import OrderedDict
 
 try:
-  basestring
+    basestring
 except NameError:
-  basestring = str
+    basestring = str
+
+from gbdxtools.ipe.graph import VIRTUAL_IPE_URL, register_ipe_graph, get_ipe_metadata, get_ipe_graph
+
+IPE_TO_DTYPE = {
+    "BINARY": "bool",
+    "BYTE": "byte",
+    "SHORT": "short",
+    "UNSIGNED_SHORT": "ushort",
+    "INTEGER": "int32",
+    "UNSIGNED_INTEGER": "uint32",
+    "LONG": "int64",
+    "UNSIGNED_LONG": "uint64",
+    "FLOAT": "float32",
+    "DOUBLE": "float64"
+}
 
 NAMESPACE_UUID = uuid.NAMESPACE_DNS
 
@@ -33,15 +48,19 @@ class Op(object):
         self._edges = []
         self._nodes = []
 
+        self._ipe_id = None
+        self._ipe_graph = None
+        self._ipe_meta = None
+
     @property
     def _id(self):
-        return str(uuid.uuid5(NAMESPACE_UUID, json.dumps(self._nodes)))
+        return self._nodes[0]._id
 
     def __call__(self, *args, **kwargs):
         if len(args) > 0 and all([isinstance(arg, gbdx.images.idaho_image.IpeImage) for arg in args]):
             return self._ipe_image_call(*args, **kwargs)
         self._nodes = [ContentHashedDict({"operator": self._operator,
-                                          "_ancestors": [arg._id for arg in args], 
+                                          "_ancestors": [arg._id for arg in args],
                                           "parameters": {k:json.dumps(v) if not isinstance(v, basestring) else v for k,v in kwargs.items()}})]
         for arg in args:
             self._nodes.extend(arg._nodes)
@@ -61,12 +80,73 @@ class Op(object):
         ipe_img = gbdx.images.ipe_image.IpeImage({key: out}, args[0]._gid, node=key)
         return ipe_img
 
-    def graph(self):
+    def graph(self, conn=None):
+        if(self._ipe_id is not None and
+           self._ipe_graph is not None):
+            return self._ipe_graph
+
         _nodes = [{k:v for k,v in node.items() if not k.startswith('_')} for node in self._nodes]
-        return {
+        graph =  {
             "edges": self._edges,
             "nodes": _nodes
         }
+        if conn is not None:
+            self._ipe_id = register_ipe_graph(conn, graph)
+            self._ipe_graph = get_ipe_graph(conn, self._ipe_id)
+            self._ipe_meta = get_ipe_metadata(conn, self._ipe_id, self._id)
+            return self._ipe_graph
+
+        return graph
+
+    @property
+    def metadata(self):
+        return self._ipe_meta
+
+    @property
+    def dask(self):
+        raise NotImplementedError
+
+    @property
+    def name(self):
+        return "image-{}".format(self._id)
+
+    @property
+    def chunks(self):
+        img_md = self.metadata["image"]
+        return (img_md["numBands"], img_md["tileYSize"], img_md["tileXSize"])
+
+    @property
+    def dtype(self):
+        try:
+            data_type = self.metadata["image"]["dataType"]
+            return IPE_TO_DTYPE[data_type]
+        except KeyError:
+            raise TypeError("Metadata indicates an unrecognized data type: {}".format(data_type))
+
+    @property
+    def shape(self):
+        img_md = self.metadata["image"]
+        return (img_md["numBands"],
+                img_md["imageHeight"] + img_md["imageHeight"] % img_md["tileYSize"],
+                img_md["imageWidth"] + img_md["imageWidth"] % img_md["tileXSize"])
+
+    def _config_dask(self):
+        """ Configures the image as a dask array with a calculated shape and chunk size """
+        meta = self.ipe_metadata
+        nbands = meta['image']['numBands']
+        urls, shape = self._collect_urls(meta)
+        img = self._build_array(urls)
+        cfg = {"shape": tuple([nbands] + list(shape)),
+               "dtype": self._dtype,
+               "chunks": tuple([nbands] + [self._tile_size, self._tile_size])}
+        cfg["name"] = img["name"]
+        cfg["dask"] = img["dask"]
+
+        return cfg
+
+    def _ipe_tile(self, x, y):
+        return "{}/tile/{}/{}/{}/{}/{}.tif".format(VIRTUAL_IPE_URL, "idaho-virtual", self._ipe_id, self.ipe_node_id, x, y)
+
 
 class Ipe(object):
     def __getattr__(self, name):
