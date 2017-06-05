@@ -28,6 +28,14 @@ IPE_TO_DTYPE = {
 
 NAMESPACE_UUID = uuid.NAMESPACE_DNS
 
+
+def load_url(*args, **kwargs):
+    """
+    Temporary Dummy Function
+    """
+    pass
+
+
 class ContentHashedDict(dict):
     @property
     def _id(self):
@@ -100,11 +108,12 @@ class Op(object):
 
     @property
     def metadata(self):
+        # TODO: lookup connection singleton / do something about populating this
         return self._ipe_meta
 
     @property
     def dask(self):
-        raise NotImplementedError
+        return {(self.name, 0, y, x): (load_url, url, self.chunks, "dummy_token") for (y, x), url in self._collect_urls().iteritems()}
 
     @property
     def name(self):
@@ -130,23 +139,15 @@ class Op(object):
                 img_md["imageHeight"] + img_md["imageHeight"] % img_md["tileYSize"],
                 img_md["imageWidth"] + img_md["imageWidth"] % img_md["tileXSize"])
 
-    def _config_dask(self):
-        """ Configures the image as a dask array with a calculated shape and chunk size """
-        meta = self.ipe_metadata
-        nbands = meta['image']['numBands']
-        urls, shape = self._collect_urls(meta)
-        img = self._build_array(urls)
-        cfg = {"shape": tuple([nbands] + list(shape)),
-               "dtype": self._dtype,
-               "chunks": tuple([nbands] + [self._tile_size, self._tile_size])}
-        cfg["name"] = img["name"]
-        cfg["dask"] = img["dask"]
-
-        return cfg
-
     def _ipe_tile(self, x, y):
-        return "{}/tile/{}/{}/{}/{}/{}.tif".format(VIRTUAL_IPE_URL, "idaho-virtual", self._ipe_id, self.ipe_node_id, x, y)
+        return "{}/tile/{}/{}/{}/{}/{}.tif".format(VIRTUAL_IPE_URL, "idaho-virtual", self._ipe_id, self._id, x, y)
 
+    def _collect_urls(self):
+        img_md = self.metadata["image"]
+        return {(y - img_md["minTileY"],
+                 x - img_md["minTileX"]): self._ipe_tile(x, y)
+                for y in xrange(img_md["minTileX"], img_md["maxTileX"] + 1)
+                for x in xrange(img_md["minTileY"], img_md["maxTileY"] + 1)}
 
 class Ipe(object):
     def __getattr__(self, name):
