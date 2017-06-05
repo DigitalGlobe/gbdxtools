@@ -9,7 +9,7 @@ def get_ipe_graph(conn, graph_id):
     url = "{}/graph/{}".format(VIRTUAL_IPE_URL, graph_id)
     req = conn.get(url)
     if req.status_code == 200:
-        return graph_id 
+        return req.json()
     else:
         raise NotFound("No IPE graph found matching id: {}".format(graph_id))
 
