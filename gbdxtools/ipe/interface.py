@@ -64,7 +64,6 @@ class Op(object):
     def graph(self):
         _nodes = [{k:v for k,v in node.items() if not k.startswith('_')} for node in self._nodes]
         return {
-            "id": self._id,
             "edges": self._edges,
             "nodes": _nodes
         }

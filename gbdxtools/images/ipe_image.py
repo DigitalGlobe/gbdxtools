@@ -164,10 +164,7 @@ class IpeImage(DaskImage):
     def ipe_id(self):
         if self._ipe_id is None:
             graph = self.ipe.graph()
-            try:
-                self._ipe_id = get_ipe_graph(self.interface.gbdx_connection, graph['id'])
-            except NotFound:
-                self._ipe_id = register_ipe_graph(self.interface.gbdx_connection, graph)
+            self._ipe_id = register_ipe_graph(self.interface.gbdx_connection, graph)
         return self._ipe_id
 
     @property
