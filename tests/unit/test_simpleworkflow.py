@@ -341,9 +341,6 @@ class SimpleWorkflowTests(unittest.TestCase):
 
         assert len(batch_workflow_id) > 0
 
-        # will fail if string is not base 10
-        assert type(int(batch_workflow_id)) == int
-
         # sub workflows should be still running
         assert workflow.running is True
 
@@ -420,9 +417,6 @@ class SimpleWorkflowTests(unittest.TestCase):
         batch_workflow_id = workflow.execute()
 
         assert len(batch_workflow_id) > 0
-
-        # will fail if string is not base 10
-        assert type(int(batch_workflow_id)) == int
 
         # sub workflows should be still running
         assert workflow.running is True
