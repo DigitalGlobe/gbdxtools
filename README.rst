@@ -56,6 +56,8 @@ Troubleshooting
 
 These are various tips to follow if your installation fails.
 
+Note for ```/catalog/v1``` deprecation: If you are on a version of gbdxtools earlier than 0.11.0, catalog queries will stop working on June 12, 2017 when the ```/catalog/v1``` api is turned off.  We realize it can be difficult to install the latest version of gbdxtools with libcurl & GDAL depdencies, so we recommend installing 0.11.2 until we make it easier to install the latest version:  ```pip install gbdxtools==0.11.2```. 
+
 **Dependencies**
 
 As of gbdxtools version 0.11.3 libcurl and GDAL (>=2.1.0) are required. To install these packages use::
