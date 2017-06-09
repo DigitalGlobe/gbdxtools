@@ -100,3 +100,60 @@ def timeit(func):
             func.__name__, elapsedTime))
         return res
     return newfunc
+
+
+import numpy as np
+from numpy.linalg import pinv
+
+class RatPolyTransform(object):
+    def __init__(self, A, B, offset, scale, px_offset, px_scale):
+        self._A = A
+        self._B = B
+        self._offscl = np.vstack([offset, scale])
+        self._offscl_rev = np.vstack([-offset/scale, 1.0/scale])
+        self._px_offscl_rev = np.vstack([px_offset, px_scale])
+        self._px_offscl = np.vstack([-px_offset/px_scale, 1.0/px_scale])
+
+        self._A_rev = np.dot(pinv(np.dot(np.transpose(A), A)), np.transpose(A))
+        # only using the numerator (more dynamic range for the fit?)
+        # self._B_rev = np.dot(pinv(np.dot(np.transpose(B), B)), np.transpose(B))
+
+    def fwd(self, lng, lat, z=0):
+        coord = np.asarray([lng, lat, z])
+        normed = np.sum(self._offscl * np.vstack([np.ones(coord.shape), coord]), axis=0)
+        X = self._rpc(normed)
+        result = np.dot(self._A, X) / np.dot(self._B, X)
+        return np.int32(np.sum(self._px_offscl_rev * np.vstack([np.ones(result.shape), result]), axis=0))
+
+
+    def rev(self, x, y, z=None):
+        coord = np.asarray([x, y])
+        normed = np.sum(self._px_offscl * np.vstack([np.ones(coord.shape), coord]), axis=0)
+        coord = np.dot(self._A_rev, normed)[[2,1,3]]
+        return np.sum(self._offscl_rev * np.vstack([np.ones(coord.shape), coord]), axis=0)
+
+    def _rpc(self, x):
+        L, P, H = x[0], x[1], x[2]
+        return np.asarray([1.0, L, P, H, L*P, L*H, P*H, L**2, P**2, H**2,
+                           L*P*H, L**3, L*(P**2), L*(H**2), (L**2)*P, P**3, P*(H**2),
+                           (L**2)*H, (P**2)*H, H**3])
+
+
+    @classmethod
+    def from_rpcs(cls, rpcs):
+        P = np.vstack([np.asarray(rpcs["lineNumCoefs"]),
+                       np.asarray(rpcs["sampleNumCoefs"])])
+        Q = np.vstack([np.asarray(rpcs["lineDenCoefs"]),
+                       np.asarray(rpcs["sampleDenCoefs"])])
+
+        scale = np.asarray([1.0/rpcs["lonScale"],
+                            1.0/rpcs["latScale"],
+                            1.0/rpcs["heightScale"]])
+        offset = np.asarray([-rpcs["lonOffset"],
+                             -rpcs["latOffset"],
+                             -rpcs["heightOffset"]])*scale
+
+        px_scale = np.asarray([rpcs["lineScale"], rpcs["sampleScale"]])
+        px_offset = np.asarray([rpcs["lineOffset"], rpcs["sampleOffset"]])
+
+        return cls(P, Q, offset, scale, px_offset, px_scale)
