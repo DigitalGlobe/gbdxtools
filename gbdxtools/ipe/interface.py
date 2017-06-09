@@ -12,6 +12,8 @@ except NameError:
     basestring = str
 
 from gbdxtools.ipe.graph import VIRTUAL_IPE_URL, register_ipe_graph, get_ipe_metadata, get_ipe_graph
+from gbdxtools.images.meta import DaskMeta
+
 
 IPE_TO_DTYPE = {
     "BINARY": "bool",
@@ -50,7 +52,7 @@ class ContentHashedDict(dict):
         self.update({"id": self._id})
 
 
-class Op(object):
+class Op(DaskMeta):
     def __init__(self, name):
         self._operator = name
         self._edges = []
