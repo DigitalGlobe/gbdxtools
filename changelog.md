@@ -1,3 +1,7 @@
+0.11.10
+-------
+* Minor patch to use new serverside IPE ids
+
 0.11.9
 ------
 * Fix signals exception handling for Windows OS.
