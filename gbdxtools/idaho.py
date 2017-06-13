@@ -214,7 +214,7 @@ class Idaho(object):
                 f.write(r.content)
                 return True
         else:
-            print('Cannot download chip')
+            print('Cannot download chip: %s' % r.json()['error_description'])
             return False
 
     def get_tms_layers(self,
