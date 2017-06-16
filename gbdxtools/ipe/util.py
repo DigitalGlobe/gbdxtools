@@ -2,6 +2,8 @@ import warnings
 import os
 import errno
 import datetime
+from functools import wraps
+from collections import Sequence
 
 import numpy as np
 
@@ -109,6 +111,10 @@ class RatPolyTransform(object):
     def __init__(self, A, B, offset, scale, px_offset, px_scale):
         self._A = A
         self._B = B
+        self._offset = offset
+        self._scale = scale
+        self._px_offset = px_offset
+        self._px_scale = px_scale
         self._offscl = np.vstack([offset, scale])
         self._offscl_rev = np.vstack([-offset/scale, 1.0/scale])
         self._px_offscl_rev = np.vstack([px_offset, px_scale])
@@ -129,7 +135,7 @@ class RatPolyTransform(object):
     def rev(self, x, y, z=None):
         coord = np.asarray([x, y])
         normed = np.sum(self._px_offscl * np.vstack([np.ones(coord.shape), coord]), axis=0)
-        coord = np.dot(self._A_rev, normed)[[2,1,3]]
+        coord = np.dot(self._A_rev, normed)[[2,1,3]] # likely unstable
         return np.sum(self._offscl_rev * np.vstack([np.ones(coord.shape), coord]), axis=0)
 
     def _rpc(self, x):
@@ -137,6 +143,19 @@ class RatPolyTransform(object):
         return np.asarray([1.0, L, P, H, L*P, L*H, P*H, L**2, P**2, H**2,
                            L*P*H, L**3, L*(P**2), L*(H**2), (L**2)*P, P**3, P*(H**2),
                            (L**2)*H, (P**2)*H, H**3])
+
+    def __add__(self, other):
+        if isinstance(other, Sequence) and len(other) == 2:
+            shift = np.asarray(other)
+            return RatPolyTransform(self._A, self._B, self._offset, self._scale, self._px_offset + shift, self._px_scale)
+        else:
+            raise NotImplemented
+
+    def __sub__(self, other):
+        try:
+            return self.__add__(-other)
+        except:
+            return self.__add__([-e for e in other])
 
 
     @classmethod
@@ -157,3 +176,12 @@ class RatPolyTransform(object):
         px_offset = np.asarray([rpcs["lineOffset"], rpcs["sampleOffset"]])
 
         return cls(P, Q, offset, scale, px_offset, px_scale)
+
+
+def shift_func(offset):
+    def decorator(wrapped):
+        @wraps(wrapped)
+        def fn(*args):
+            return wrapped(*[arg + offset for arg,offset in zip(args, offset)])
+        return fn
+    return decorator
