@@ -15,11 +15,9 @@ class IpeImage(DaskImage, Container):
         assert isinstance(op, DaskMeta)
         self = super(IpeImage, cls).create(op)
         self._ipe_op = op
-        return self
-
-    def __init__(self, op):
         self.__geo_transform__ = RatPolyTransform.from_rpcs(self.ipe.metadata["rpcs"])
         self.__geo_interface__ = mapping(wkt.loads(self.ipe.metadata["image"]["imageBoundsWGS84"]))
+        return self
 
     @property
     def __daskmeta__(self):
