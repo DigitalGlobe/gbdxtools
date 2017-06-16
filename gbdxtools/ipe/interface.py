@@ -142,16 +142,17 @@ class Op(DaskMeta):
         if conn is not None:
             self._ipe_id = register_ipe_graph(conn, graph)
             self._ipe_graph = graph # get_ipe_graph(conn, self._ipe_id)
-            # self._ipe_meta = get_ipe_metadata(conn, self._ipe_id, self._id)
+            self._ipe_meta = get_ipe_metadata(conn, self._ipe_id, self._id)
             return self._ipe_graph
 
         return graph
 
     @property
     def metadata(self):
+        assert self.graph() is not None
         if self._ipe_meta is not None:
             return self._ipe_meta
-        elif self._interface is not None:
+        if self._interface is not None:
             self._ipe_meta = get_ipe_metadata(self._interface.gbdx_connection, self._ipe_id, self._id)
         return self._ipe_meta
 
