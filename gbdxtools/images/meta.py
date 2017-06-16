@@ -1,5 +1,6 @@
 import abc
 import types
+from functools import wraps
 
 from six import add_metaclass
 import dask.array as da
