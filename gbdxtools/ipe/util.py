@@ -90,10 +90,9 @@ def prettify(elem):
     return reparsed.toprettyxml(indent="\t")
 
 import time
-import functools
 
 def timeit(func):
-    @functools.wraps(func)
+    @wraps(func)
     def newfunc(*args, **kwargs):
         startTime = time.time()
         res = func(*args, **kwargs)
