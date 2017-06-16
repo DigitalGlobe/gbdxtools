@@ -17,7 +17,8 @@ import requests
 
 from gbdxtools.auth import Auth
 from gbdxtools.ipe.util import calc_toa_gain_offset, ortho_params
-from gbdxtools.images.ipe_image import IpeImage, DaskImage
+from gbdxtools.images.ipe_image import IpeImage
+from gbdxtools.images.meta import DaskImage
 from gbdxtools.vectors import Vectors
 from gbdxtools.ipe.interface import Ipe
 ipe = Ipe()
@@ -30,8 +31,8 @@ band_types = {
 }
 
 class CatalogImage(IpeImage):
-    """ 
-      Catalog Image Class 
+    """
+      Catalog Image Class
       Collects metadata on all image parts and groups pan and ms bands from idaho
       Inherits from IpeImage and represents a mosiac data set of the full catalog strip
     """
@@ -62,7 +63,7 @@ class CatalogImage(IpeImage):
     def _query_vectors(self, query, aoi=None):
         if aoi is None:
             aoi = "POLYGON((-180.0 90.0,180.0 90.0,180.0 -90.0,-180.0 -90.0,-180.0 90.0))"
-        try: 
+        try:
             return self.vectors.query(aoi, query=query)
         except:
             raise Exception('Unable to query for image properties, the service may be currently down.')
@@ -73,8 +74,8 @@ class CatalogImage(IpeImage):
             query = 'item_type:DigitalGlobeAcquisition AND attributes.catalogID:{}'.format(self._gid)
             self._properties = self._query_vectors(query)
         return self._properties
-            
-    
+
+
     @property
     def metadata(self):
         meta = {}
@@ -115,13 +116,13 @@ class CatalogImage(IpeImage):
         ids = []
         if self._node_id == 'pansharpened' and self._pansharpen:
             return self._pansharpen_graph()
-        else: 
+        else:
             for part in self.metadata['parts']:
                 for k, p in part.items():
                     if k == band_types[self._band_type]:
                         _id = p['properties']['idahoImageId']
                         graph[_id] = ipe.Orthorectify(ipe.IdahoRead(bucketName="idaho-images", imageId=_id, objectStore="S3"), **ortho_params(self._proj))
-                       
+
             return self._mosaic(graph)
 
     def _pansharpen_graph(self):
