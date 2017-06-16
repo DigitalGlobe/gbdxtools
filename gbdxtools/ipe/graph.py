@@ -1,7 +1,7 @@
 import json
 import requests
 
-VIRTUAL_IPE_URL = "https://idahoapi.geobigdata.io/v1"
+VIRTUAL_IPE_URL = "https://idahoapitest.geobigdata.io/v1"
 
 from gbdxtools.ipe.error import NotFound
 
@@ -18,7 +18,7 @@ def register_ipe_graph(conn, ipe_graph):
     res = conn.post(url, json.dumps(ipe_graph), headers={'Content-Type': 'application/json'})
     return res.content
 
-def get_ipe_metadata(conn, ipe_id, node='toa_reflectance'):
+def get_ipe_metadata(conn, ipe_id, node):
     meta = {}
     meta['image'] = conn.get(VIRTUAL_IPE_URL + "/metadata/idaho-virtual/{}/{}/image.json".format(ipe_id, node)).json()
     meta['rpcs'] = conn.get(VIRTUAL_IPE_URL + "/metadata/idaho-virtual/{}/{}/rpcs.json".format(ipe_id, node)).json()
