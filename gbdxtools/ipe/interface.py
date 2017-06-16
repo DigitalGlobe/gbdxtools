@@ -1,18 +1,37 @@
 import uuid
 import json
-import copy
 from hashlib import sha256
 from itertools import chain
-import gbdxtools as gbdx
-from collections import OrderedDict
+from collections import OrderedDict, defaultdict
+import threading
+
+import warnings
+warnings.filterwarnings('ignore')
+
+try:
+    from io import BytesIO
+except ImportError:
+    from cStringIO import StringIO as BytesIO
 
 try:
     basestring
 except NameError:
     basestring = str
 
+try:
+    xrange
+except NameError:
+    xrange = range
+
+import pycurl
+_curl_pool = defaultdict(pycurl.Curl)
+
+from rasterio.io import MemoryFile
+
+import gbdxtools as gbdx
 from gbdxtools.ipe.graph import VIRTUAL_IPE_URL, register_ipe_graph, get_ipe_metadata, get_ipe_graph
 from gbdxtools.images.meta import DaskMeta
+from gbdxtools.auth import Auth
 
 
 IPE_TO_DTYPE = {
@@ -31,11 +50,25 @@ IPE_TO_DTYPE = {
 NAMESPACE_UUID = uuid.NAMESPACE_DNS
 
 
-def load_url(*args, **kwargs):
-    """
-    Temporary Dummy Function
-    """
-    pass
+def load_url(url, token, shape=(8, 256, 256)):
+    """ Loads a geotiff url inside a thread and returns as an ndarray """
+    thread_id = threading.current_thread().ident
+    _curl = _curl_pool[thread_id]
+    buf = BytesIO()
+    _curl.setopt(_curl.URL, url)
+    _curl.setopt(_curl.WRITEDATA, buf)
+    _curl.setopt(pycurl.NOSIGNAL, 1)
+    _curl.setopt(pycurl.HTTPHEADER, ['Authorization: Bearer {}'.format(token)])
+    _curl.perform()
+    with MemoryFile(buf.getvalue()) as memfile:
+      try:
+          with memfile.open(driver="GTiff") as dataset:
+              arr = dataset.read()
+      except (TypeError, rasterio.RasterioIOError) as e:
+          arr = np.zeros(shape, dtype=np.float32)
+          _curl.close()
+          del _curl_pool[thread_id]
+    return arr
 
 
 class ContentHashedDict(dict):
@@ -53,7 +86,7 @@ class ContentHashedDict(dict):
 
 
 class Op(DaskMeta):
-    def __init__(self, name):
+    def __init__(self, name, interface=None):
         self._operator = name
         self._edges = []
         self._nodes = []
@@ -61,6 +94,8 @@ class Op(DaskMeta):
         self._ipe_id = None
         self._ipe_graph = None
         self._ipe_meta = None
+
+        self._interface = interface
 
     @property
     def _id(self):
@@ -100,22 +135,30 @@ class Op(DaskMeta):
             "edges": self._edges,
             "nodes": _nodes
         }
+
+        if self._interface is not None and conn is None:
+            conn = self._interface.gbdx_connection
+
         if conn is not None:
             self._ipe_id = register_ipe_graph(conn, graph)
             self._ipe_graph = graph # get_ipe_graph(conn, self._ipe_id)
-            self._ipe_meta = get_ipe_metadata(conn, self._ipe_id, self._id)
+            # self._ipe_meta = get_ipe_metadata(conn, self._ipe_id, self._id)
             return self._ipe_graph
 
         return graph
 
     @property
     def metadata(self):
-        # TODO: lookup connection singleton / do something about populating this
+        if self._ipe_meta is not None:
+            return self._ipe_meta
+        elif self._interface is not None:
+            self._ipe_meta = get_ipe_metadata(self._interface.gbdx_connection, self._ipe_id, self._id)
         return self._ipe_meta
 
     @property
     def dask(self):
-        return {(self.name, 0, y, x): (load_url, url, self.chunks, "dummy_token") for (y, x), url in self._collect_urls().iteritems()}
+        token = self._interface.gbdx_connection.access_token
+        return {(self.name, 0, y, x): (load_url, url, token, self.chunks) for (y, x), url in self._collect_urls().iteritems()}
 
     @property
     def name(self):
@@ -146,11 +189,13 @@ class Op(DaskMeta):
 
     def _collect_urls(self):
         img_md = self.metadata["image"]
-        return {(y - img_md["minTileY"],
-                 x - img_md["minTileX"]): self._ipe_tile(x, y)
-                for y in xrange(img_md["minTileX"], img_md["maxTileX"] + 1)
-                for x in xrange(img_md["minTileY"], img_md["maxTileY"] + 1)}
+        return {(y, x): self._ipe_tile(x + img_md["tileXOffset"], y + img_md["tileYOffset"])
+                for y in xrange(img_md["numXTiles"])
+                for x in xrange(img_md["numYTiles"])}
 
 class Ipe(object):
+    def __init__(self):
+        self.interface = Auth()
+
     def __getattr__(self, name):
-        return Op(name=name)
+        return Op(name=name, interface=self.interface)
