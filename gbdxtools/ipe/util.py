@@ -14,6 +14,8 @@ import ephem
 with warnings.catch_warnings():
     warnings.simplefilter("ignore")
 
+from shapely import wkt
+
 import gbdxtools.ipe.constants as constants
 
 def ortho_params(proj):
@@ -34,6 +36,45 @@ def mkdir_p(path):
             pass
         else:
             raise
+
+
+def calc_toa_gain_offset_new(meta):
+    """
+    Compute (gain, offset) tuples for each band of the specified image metadata
+    """
+    # Set satellite index to look up cal factors
+    sat_index = meta["sensorAlias"]
+    footprint = wkt.loads(meta["imageBoundsWGS84"])
+
+    # Set scale for at sensor radiance
+    # Eq is:
+    # L = GAIN * DN * (ACF/EBW) + Offset
+    # ACF abscal factor from meta data
+    # EBW effectiveBandwidth from meta data
+    # Gain provided by abscal from const
+    # Offset provided by abscal from const
+    acf = np.asarray(meta['absoluteCalibrationFactors']) # Should be nbands length
+    ebw = np.asarray(meta['effectiveBandwidths'])  # Should be nbands length
+    gain = np.asarray(constants.DG_ABSCAL_GAIN[sat_index])
+    scale = (acf/ebw)*(gain)
+    offset = np.asarray(constants.DG_ABSCAL_OFFSET[sat_index])
+
+    e_sun = np.asarray(constants.DG_ESUN[sat_index])
+    sun = ephem.Sun()
+    img_obs = ephem.Observer()
+    img_obs.lon, img_obs.lat = footprint.centroid
+    img_obs.elevation = 0 # TODO: lookup from footprint.centroid or average or something
+    img_obs.date = meta["acquisitionDate"]
+    sun.compute(img_obs)
+    d_es = sun.earth_distance
+
+    ## Pull sun elevation from the image metadata
+    theta_s = 90-meta["sunElevation"]
+    scale2 = (d_es ** 2 * np.pi) / (e_sun * np.cos(np.deg2rad(theta_s)))
+
+    # Return scaled data
+    # Radiance = Scale * Image + offset, Reflectance = Radiance * Scale2
+    return zip(scale, scale2, offset)
 
 
 def calc_toa_gain_offset(meta):
