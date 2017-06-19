@@ -6,6 +6,8 @@ from shapely import wkt, ops
 from shapely.geometry import box, shape, mapping
 from shapely.geometry.base import BaseGeometry
 
+import pyproj
+
 from gbdxtools.images.meta import DaskMeta, DaskImage
 from gbdxtools.ipe.util import RatPolyTransform, shift_func
 
@@ -20,12 +22,39 @@ class IpeImage(DaskImage, Container):
         return self
 
     @property
+    def proj(self):
+        pass
+
+    @property
     def __daskmeta__(self):
         return self.ipe
 
     @property
     def ipe(self):
         return self._ipe_op
+
+    def aoi(self, **kwargs):
+        """ Subsets the IpeImage by the given bounds """
+        g = self._parse_geoms(**kwargs)
+        assert (g is not None) and (g in self), 'AOI bounds not found. Must specify a bbox, wkt, or geojson geometry that is within the image'
+        return self[g]
+
+    def _parse_geoms(self, **kwargs):
+        """ Finds supported geometry types, parses them and returns the bbox """
+        bbox = kwargs.get('bbox', None)
+        wkt = kwargs.get('wkt', None)
+        geojson = kwargs.get('geojson', None)
+        proj = kwargs.get('proj', "epsg:4326")
+        tfm = partial(pyproj.transform, pyproj.Proj(init=proj), pyproj.Proj(init=self.proj))
+        if bbox is not None:
+            g =  box(*bbox)
+        elif wkt is not None:
+            g = wkt.loads(wkt)
+        elif geojson is not None:
+            g = shape(geojson)
+        else:
+            return None
+        return ops.transform(tfm, g)
 
     def __getitem__(self, geometry):
         if isinstance(geometry, BaseGeometry) or getattr(geometry, "__geo_interface__", None) is not None:
