@@ -102,7 +102,7 @@ class Op(DaskMeta):
         return self._nodes[0]._id
 
     def __call__(self, *args, **kwargs):
-        if len(args) > 0 and all([isinstance(arg, gbdx.images.idaho_image.IpeImage) for arg in args]):
+        if len(args) > 0 and all([isinstance(arg, gbdx.images.ipe_image.IpeImage) for arg in args]):
             return self._ipe_image_call(*args, **kwargs)
         self._nodes = [ContentHashedDict({"operator": self._operator,
                                           "_ancestors": [arg._id for arg in args],
@@ -121,8 +121,7 @@ class Op(DaskMeta):
 
     def _ipe_image_call(self, *args, **kwargs):
         out = self(*[arg.ipe for arg in args], **kwargs)
-        key = self._id
-        ipe_img = gbdx.images.ipe_image.IpeImage({key: out}, args[0]._gid, node=key)
+        ipe_img = gbdx.images.ipe_image.IpeImage(out)
         return ipe_img
 
     def graph(self, conn=None):
