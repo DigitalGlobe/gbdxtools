@@ -148,7 +148,8 @@ import numpy as np
 from numpy.linalg import pinv
 
 class RatPolyTransform(object):
-    def __init__(self, A, B, offset, scale, px_offset, px_scale):
+    def __init__(self, A, B, offset, scale, px_offset, px_scale, proj=None):
+        self.proj = proj
         self._A = A
         self._B = B
         self._offset = offset
@@ -215,7 +216,7 @@ class RatPolyTransform(object):
         px_scale = np.asarray([rpcs["lineScale"], rpcs["sampleScale"]])
         px_offset = np.asarray([rpcs["lineOffset"], rpcs["sampleOffset"]])
 
-        return cls(P, Q, offset, scale, px_offset, px_scale)
+        return cls(P, Q, offset, scale, px_offset, px_scale, rpcs["spatialReferenceSystem"])
 
 
 def shift_func(offset):
