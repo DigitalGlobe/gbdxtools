@@ -41,7 +41,4 @@ class IpeImage(DaskImage, Container):
             return super(IpeImage, self).__getitem__(geometry)
 
     def __contains__(self, geometry):
-        if isinstance(geometry, BaseGeometry):
-            return shape(self).contains(geometry)
-        else:
-            return shape(self).contains(shape(geometry))
+        return shape(self).contains(shape(geometry))
