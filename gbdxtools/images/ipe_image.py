@@ -23,7 +23,7 @@ class IpeImage(DaskImage, Container):
 
     @property
     def proj(self):
-        pass
+        return self.__geo_transform__.proj
 
     @property
     def __daskmeta__(self):
@@ -45,7 +45,6 @@ class IpeImage(DaskImage, Container):
         wkt = kwargs.get('wkt', None)
         geojson = kwargs.get('geojson', None)
         proj = kwargs.get('proj', "epsg:4326")
-        tfm = partial(pyproj.transform, pyproj.Proj(init=proj), pyproj.Proj(init=self.proj))
         if bbox is not None:
             g =  box(*bbox)
         elif wkt is not None:
@@ -54,7 +53,11 @@ class IpeImage(DaskImage, Container):
             g = shape(geojson)
         else:
             return None
-        return ops.transform(tfm, g)
+        if self.proj is None:
+            return g
+        else:
+            tfm = partial(pyproj.transform, pyproj.Proj(init=proj), pyproj.Proj(init=self.proj))
+            return ops.transform(tfm, g)
 
     def __getitem__(self, geometry):
         if isinstance(geometry, BaseGeometry) or getattr(geometry, "__geo_interface__", None) is not None:
