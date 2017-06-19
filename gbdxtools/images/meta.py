@@ -34,7 +34,7 @@ class DaskMeta(object):
     def infect(self, target):
         assert isinstance(target, da.Array), "DaskMeta can only be attached to Dask Arrays"
         assert len(target.shape) in [2, 3], "target must be a dask array with 2 or 3 dimensions"
-        target.__daskmeta__ = self
+        target.__dict__["__daskmeta__"] = property(lambda s: self, DaskImage.__set_daskmeta__)
         return target
 
 
@@ -48,6 +48,10 @@ class DaskImage(da.Array):
     def __daskmeta__(self):
         """ Should return a DaskMeta """
         pass
+
+    @__daskmeta__.setter
+    def __set_daskmeta__(self, obj):
+        self.__dict__["__daskmeta__"] = property(lambda s: obj, self.__set_daskmeta__)
 
     @classmethod
     def __subclasshook__(cls, C):
