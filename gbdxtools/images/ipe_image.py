@@ -36,14 +36,14 @@ from rasterio.io import MemoryFile
 from affine import Affine
 try:
     import gdal
-except: 
+except:
     from osgeo import gdal
 
 try:
-  from matplotlib import pyplot as plt
-  has_pyplot = True
+    from matplotlib import pyplot as plt
+    has_pyplot = True
 except:
-  has_pyplot = False 
+    has_pyplot = False
 
 import dask
 import dask.array as da
@@ -53,7 +53,7 @@ import numpy as np
 from itertools import chain
 
 import threading
-num_workers = int(os.environ.get("GBDX_THREADS", 4))
+num_workers = int(os.environ.get("GBDX_THREADS", 8))
 threaded_get = partial(dask.threaded.get, num_workers=num_workers)
 
 import pycurl
@@ -73,20 +73,21 @@ def load_url(url, size, token, bands=8):
     """ Loads a geotiff url inside a thread and returns as an ndarray """
     thread_id = threading.current_thread().ident
     _curl = _curl_pool[thread_id]
-    buf = BytesIO()
+    print("url = {}, size = {}, token = {}".format(url, size, token))
+    _curl.setopt(_curl.VERBOSE, True)
     _curl.setopt(_curl.URL, url)
-    _curl.setopt(_curl.WRITEDATA, buf)
     _curl.setopt(pycurl.NOSIGNAL, 1)
     _curl.setopt(pycurl.HTTPHEADER, ['Authorization: Bearer {}'.format(token)])
-    _curl.perform()
-    with MemoryFile(buf.getvalue()) as memfile:
-      try:
-          with memfile.open(driver="GTiff") as dataset:
-              arr = dataset.read()
-      except (TypeError, rasterio.RasterioIOError) as e:
-          arr = np.zeros([bands, size, size], dtype=np.float32)
-          _curl.close()
-          del _curl_pool[thread_id]
+    with MemoryFile() as memfile:
+        _curl.setopt(_curl.WRITEDATA, memfile)
+        _curl.perform()
+        try:
+            with memfile.open(driver="GTiff") as dataset:
+                arr = dataset.read()
+        except (TypeError, rasterio.RasterioIOError) as e:
+            arr = np.zeros([bands, size, size], dtype=np.float32)
+            _curl.close()
+            del _curl_pool[thread_id]
     return arr
 
 #@def load_url(url, token, bands=8):
@@ -166,7 +167,7 @@ class IpeImage(DaskImage):
         self._cfg = self._config_dask()
         super(IpeImage, self).__init__(**self._cfg)
         bounds = self._parse_geoms(**kwargs)
-        if bounds is not None: 
+        if bounds is not None:
             _cfg = self._aoi_config(bounds)
             super(IpeImage, self).__init__(**_cfg)
 
@@ -210,7 +211,7 @@ class IpeImage(DaskImage):
             return
         cfg = self._aoi_config(bounds, **kwargs)
         return DaskImage(**cfg)
-        
+
 
     def _aoi_config(self, bounds, **kwargs):
         tfm = self.ipe_metadata['georef']
