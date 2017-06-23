@@ -73,7 +73,6 @@ def load_url(url, size, token, bands=8):
     """ Loads a geotiff url inside a thread and returns as an ndarray """
     thread_id = threading.current_thread().ident
     _curl = _curl_pool[thread_id]
-    print("url = {}, size = {}, token = {}".format(url, size, token))
     _curl.setopt(_curl.VERBOSE, True)
     _curl.setopt(_curl.URL, url)
     _curl.setopt(pycurl.NOSIGNAL, 1)
