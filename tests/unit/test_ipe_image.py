@@ -7,6 +7,8 @@ Unit tests for the gbdxtools.Idaho class
 
 from gbdxtools import Interface
 from gbdxtools import IdahoImage
+from gbdxtools.ipe.graph import get_ipe_metadata
+from gbdxtools.ipe.error import BadRequest
 from auth_mock import get_mock_gbdx_session
 import vcr
 from os.path import join, isfile, dirname, realpath
@@ -90,3 +92,11 @@ class IpeImageTest(unittest.TestCase):
         assert img.shape == (8, 4514, 8135)
         assert img._proj == 'EPSG:3857'
         assert isinstance(img.vrt, str)
+
+    @my_vcr.use_cassette('tests/unit/cassettes/test_ipe_metadata.yaml', filter_headers=['authorization'])
+    def test_ipe_metadata_error(self):
+        ipe_id = 'no_id'
+        try:
+            meta = get_ipe_metadata(self.gbdx.gbdx_connection, ipe_id)
+        except BadRequest as err:
+            pass
