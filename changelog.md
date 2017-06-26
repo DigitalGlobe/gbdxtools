@@ -1,3 +1,7 @@
+0.11.13
+-------
+* dtype fix for the to_geotiff method
+
 0.11.12
 -------
 * Handle ipe image metadata errors
