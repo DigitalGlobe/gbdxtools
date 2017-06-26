@@ -21,7 +21,7 @@ def register_ipe_graph(conn, ipe_graph):
 def fetch_metadata(conn, url):
     res = conn.get(url)
     res_json = res.json()
-    if res.status_code != 200 or (res_json.has_key('error') or res_json.has_key('message')):
+    if res.status_code != 200 or ('error' in res_json or 'message' in res_json):
         raise BadRequest("Problem fetching image metadata: {}".format(res_json.get('error', res_json['message'])))
     else:
         return res_json
