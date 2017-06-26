@@ -1,3 +1,7 @@
+0.11.11
+-------
+* more verbose error when idaho cannot download chip
+
 0.11.10
 -------
 * Minor patch to use new serverside IPE ids
