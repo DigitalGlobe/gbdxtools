@@ -1,3 +1,7 @@
+0.11.12
+-------
+* Handle ipe image metadata errors
+
 0.11.11
 -------
 * more verbose error when idaho cannot download chip
