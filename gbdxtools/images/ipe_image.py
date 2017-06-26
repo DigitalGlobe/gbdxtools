@@ -10,8 +10,11 @@ import math
 
 from pyproj import Proj
 
-import signal
-signal.signal(signal.SIGPIPE, signal.SIG_IGN)
+try: 
+    import signal
+    signal.signal(signal.SIGPIPE, signal.SIG_IGN)
+except: 
+    pass
 
 import json
 import warnings
@@ -64,7 +67,7 @@ import requests
 from gbdxtools.ipe.vrt import get_cached_vrt, put_cached_vrt, generate_vrt_template
 from gbdxtools.ipe.util import calc_toa_gain_offset, timeit
 from gbdxtools.ipe.graph import VIRTUAL_IPE_URL, register_ipe_graph, get_ipe_metadata, get_ipe_graph
-from gbdxtools.ipe.error import NotFound
+from gbdxtools.ipe.error import NotFound, BadRequest
 from gbdxtools.ipe.interface import Ipe
 from gbdxtools.auth import Auth
 ipe = Ipe()
@@ -188,7 +191,10 @@ class IpeImage(DaskImage):
     @property
     def ipe_metadata(self):
         if self._ipe_metadata is None:
-            self._ipe_metadata = get_ipe_metadata(self.interface.gbdx_connection, self.ipe_id, self.ipe_node_id)
+            try: 
+                self._ipe_metadata = get_ipe_metadata(self.interface.gbdx_connection, self.ipe_id, self.ipe_node_id)
+            except BadRequest:
+                raise 
         return self._ipe_metadata
 
     @property

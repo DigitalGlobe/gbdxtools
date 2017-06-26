@@ -51,27 +51,9 @@ interactions:
         "id": "1ec49348-8950-49ff-bd71-ea2e4d8754ac"}'}
     headers:
       content-type: [application/json]
-      date: ['Mon, 10 Apr 2017 16:03:09 GMT']
+      date: ['Wed, 07 Jun 2017 20:20:52 GMT']
       server: [TwistedWeb/16.4.1]
     status: {code: 200, message: OK}
-- request:
-    body: null
-    headers:
-      Accept: ['*/*']
-      Accept-Encoding: ['gzip, deflate']
-      Connection: [keep-alive]
-      User-Agent: [python-requests/2.13.0]
-    method: GET
-    uri: https://idahoapi.geobigdata.io/v1/graph/d4d4198b-623d-5a66-aada-a450d525f449
-  response:
-    body: {string: !!python/unicode '{"error": "graph id d4d4198b-623d-5a66-aada-a450d525f449
-        does not exist"}'}
-    headers:
-      connection: [keep-alive]
-      content-length: ['73']
-      content-type: [application/json]
-      date: ['Mon, 10 Apr 2017 16:03:10 GMT']
-    status: {code: 404, message: Not Found}
 - request:
     body: !!python/unicode '{"nodes": [{"operator": "MultiplyConst", "id": "a9a095f3-9f1d-544d-a517-bb1960a0ff42",
       "parameters": {"constants": "[0.002958531417393051, 0.002594406290161713, 0.002841672837273421,
@@ -96,23 +78,28 @@ interactions:
       "c733b763-ab2c-5880-ac1c-f1b2c2e2a7b8", "id": "66dc99c5-46ad-5e88-a683-f39c9bb3a712",
       "source": "a3cc3633-a312-5df8-b306-e058b750e78b"}, {"index": 1, "destination":
       "a3cc3633-a312-5df8-b306-e058b750e78b", "id": "316913f7-ea85-53f2-8cce-c69e9ed38be4",
-      "source": "1278f144-46fa-56be-8751-e7439abf31a4"}], "id": "d4d4198b-623d-5a66-aada-a450d525f449"}'
+      "source": "1278f144-46fa-56be-8751-e7439abf31a4"}]}'
     headers:
       Accept: ['*/*']
       Accept-Encoding: ['gzip, deflate']
       Connection: [keep-alive]
-      Content-Length: ['2148']
+      Content-Length: ['2102']
       Content-Type: [application/json]
       User-Agent: [python-requests/2.13.0]
     method: POST
     uri: https://idahoapi.geobigdata.io/v1/graph
   response:
-    body: {string: !!python/unicode d4d4198b-623d-5a66-aada-a450d525f449}
+    body: {string: !!python/unicode 9f2766925fe588460e423e19aa06a12e70bd3411088a071249e6c2bae5e7d9f0}
     headers:
+      access-control-allow-headers: ['x-requested-with, X-Auth-Token, Content-Type,
+          Authorization']
+      access-control-allow-methods: ['GET, OPTIONS, HEAD, PUT, POST, DELETE']
+      access-control-allow-origin: ['*']
+      access-control-max-age: ['3600']
       connection: [keep-alive]
-      content-length: ['36']
+      content-length: ['64']
       content-type: [text/plain]
-      date: ['Mon, 10 Apr 2017 16:03:10 GMT']
+      date: ['Wed, 07 Jun 2017 20:20:52 GMT']
     status: {code: 200, message: OK}
 - request:
     body: null
@@ -122,18 +109,24 @@ interactions:
       Connection: [keep-alive]
       User-Agent: [python-requests/2.13.0]
     method: GET
-    uri: https://idahoapi.geobigdata.io/v1/metadata/idaho-virtual/d4d4198b-623d-5a66-aada-a450d525f449/a9a095f3-9f1d-544d-a517-bb1960a0ff42/image.json
+    uri: https://idahoapi.geobigdata.io/v1/metadata/idaho-virtual/9f2766925fe588460e423e19aa06a12e70bd3411088a071249e6c2bae5e7d9f0/a9a095f3-9f1d-544d-a517-bb1960a0ff42/image.json
   response:
-    body: {string: !!python/unicode '{"imageId":"1ec49348-8950-49ff-bd71-ea2e4d8754ac","version":"1.0","profileName":"dg_1b","tileBucketName":"idaho-virtual","tilePartition":"0000","nativeTileFileFormat":"TIF","tileXOffset":0,"tileYOffset":-1,"numXTiles":58,"numYTiles":59,"tileXSize":256,"tileYSize":256,"numBands":8,"dataType":"FLOAT","imageHeight":14670,"imageWidth":14632,"sensorPlatformName":"WV03","sensorName":"8-band
+    body: {string: !!python/unicode '{"imageId":"1ec49348-8950-49ff-bd71-ea2e4d8754ac","version":"1.0","profileName":"dg_1b","tilePartition":"0000","tileXOffset":0,"tileYOffset":0,"numXTiles":58,"numYTiles":59,"tileXSize":256,"tileYSize":256,"numBands":8,"dataType":"FLOAT","imageHeight":14670,"imageWidth":14632,"sensorPlatformName":"WV03","sensorName":"8-band
         (Coastal, Blue, Green, Yellow, Red, Red-edge, NIR1, NIR2) Multispectral","vendorName":"DigitalGlobe,
         Inc.","vendorDatasetIdentifier":"LV1B:055927792010_01_P006:1040010023142D00:A01001022FD0EC00","acquisitionDate":"2016-10-11T16:13:23.770Z","colorInterpretation":"WORLDVIEW_8_BAND","imageBoundsWGS84":"POLYGON
-        ((-74.0192839 45.51934028, -73.83890812 45.51937376, -73.83912668 45.39250174,
-        -74.0190588 45.39276835, -74.0192839 45.51934028))","groundSampleDistanceMeters":1.372,"sunAzimuth":171.0,"sunElevation":37.0,"satAzimuth":178.9,"satElevation":68.4,"cloudCover":0.0,"offNadirAngle":19.4,"pniirs":3.5}'}
+        ((-74.0192592502286 45.51948602338497, -73.8389215226937 45.51948602338497,
+        -73.8389215226937 45.39265861684942, -74.0192592502286 45.39265861684942,
+        -74.0192592502286 45.51948602338497))","groundSampleDistanceMeters":1.372,"minX":2,"minY":-13,"maxX":14633,"maxY":14656,"minTileX":0,"minTileY":-1,"maxTileX":57,"maxTileY":57,"sunAzimuth":171.0,"sunElevation":37.0,"satAzimuth":178.9,"satElevation":68.4,"cloudCover":0.0,"offNadirAngle":19.4,"pniirs":3.5}'}
     headers:
+      access-control-allow-headers: ['x-requested-with, X-Auth-Token, Content-Type,
+          Authorization']
+      access-control-allow-methods: ['GET, OPTIONS, HEAD, PUT, POST, DELETE']
+      access-control-allow-origin: ['*']
+      access-control-max-age: ['3600']
       connection: [keep-alive]
-      content-length: ['992']
+      content-length: ['1088']
       content-type: [application/json]
-      date: ['Mon, 10 Apr 2017 16:03:12 GMT']
+      date: ['Wed, 07 Jun 2017 20:20:52 GMT']
     status: {code: 200, message: OK}
 - request:
     body: null
@@ -143,14 +136,19 @@ interactions:
       Connection: [keep-alive]
       User-Agent: [python-requests/2.13.0]
     method: GET
-    uri: https://idahoapi.geobigdata.io/v1/metadata/idaho-virtual/d4d4198b-623d-5a66-aada-a450d525f449/a9a095f3-9f1d-544d-a517-bb1960a0ff42/georeferencing.json
+    uri: https://idahoapi.geobigdata.io/v1/metadata/idaho-virtual/9f2766925fe588460e423e19aa06a12e70bd3411088a071249e6c2bae5e7d9f0/a9a095f3-9f1d-544d-a517-bb1960a0ff42/georeferencing.json
   response:
     body: {string: !!python/unicode '{"spatialReferenceSystemCode":"EPSG:3857","scaleX":1.372,"scaleY":-1.372,"translateX":-8239788.992630752,"translateY":5703660.232416099,"shearX":0.0,"shearY":0.0}'}
     headers:
+      access-control-allow-headers: ['x-requested-with, X-Auth-Token, Content-Type,
+          Authorization']
+      access-control-allow-methods: ['GET, OPTIONS, HEAD, PUT, POST, DELETE']
+      access-control-allow-origin: ['*']
+      access-control-max-age: ['3600']
       connection: [keep-alive]
       content-length: ['162']
       content-type: [application/json]
-      date: ['Mon, 10 Apr 2017 16:03:12 GMT']
+      date: ['Wed, 07 Jun 2017 20:20:53 GMT']
     status: {code: 200, message: OK}
 - request:
     body: null
@@ -160,18 +158,24 @@ interactions:
       Connection: [keep-alive]
       User-Agent: [python-requests/2.13.0]
     method: GET
-    uri: https://idahoapi.geobigdata.io/v1/metadata/idaho-virtual/d4d4198b-623d-5a66-aada-a450d525f449/a9a095f3-9f1d-544d-a517-bb1960a0ff42/image.json
+    uri: https://idahoapi.geobigdata.io/v1/metadata/idaho-virtual/9f2766925fe588460e423e19aa06a12e70bd3411088a071249e6c2bae5e7d9f0/a9a095f3-9f1d-544d-a517-bb1960a0ff42/image.json
   response:
-    body: {string: !!python/unicode '{"imageId":"1ec49348-8950-49ff-bd71-ea2e4d8754ac","version":"1.0","profileName":"dg_1b","tileBucketName":"idaho-virtual","tilePartition":"0000","nativeTileFileFormat":"TIF","tileXOffset":0,"tileYOffset":-1,"numXTiles":58,"numYTiles":59,"tileXSize":256,"tileYSize":256,"numBands":8,"dataType":"FLOAT","imageHeight":14670,"imageWidth":14632,"sensorPlatformName":"WV03","sensorName":"8-band
+    body: {string: !!python/unicode '{"imageId":"1ec49348-8950-49ff-bd71-ea2e4d8754ac","version":"1.0","profileName":"dg_1b","tilePartition":"0000","tileXOffset":0,"tileYOffset":0,"numXTiles":58,"numYTiles":59,"tileXSize":256,"tileYSize":256,"numBands":8,"dataType":"FLOAT","imageHeight":14670,"imageWidth":14632,"sensorPlatformName":"WV03","sensorName":"8-band
         (Coastal, Blue, Green, Yellow, Red, Red-edge, NIR1, NIR2) Multispectral","vendorName":"DigitalGlobe,
         Inc.","vendorDatasetIdentifier":"LV1B:055927792010_01_P006:1040010023142D00:A01001022FD0EC00","acquisitionDate":"2016-10-11T16:13:23.770Z","colorInterpretation":"WORLDVIEW_8_BAND","imageBoundsWGS84":"POLYGON
-        ((-74.0192839 45.51934028, -73.83890812 45.51937376, -73.83912668 45.39250174,
-        -74.0190588 45.39276835, -74.0192839 45.51934028))","groundSampleDistanceMeters":1.372,"sunAzimuth":171.0,"sunElevation":37.0,"satAzimuth":178.9,"satElevation":68.4,"cloudCover":0.0,"offNadirAngle":19.4,"pniirs":3.5}'}
+        ((-74.0192592502286 45.51948602338497, -73.8389215226937 45.51948602338497,
+        -73.8389215226937 45.39265861684942, -74.0192592502286 45.39265861684942,
+        -74.0192592502286 45.51948602338497))","groundSampleDistanceMeters":1.372,"minX":2,"minY":-13,"maxX":14633,"maxY":14656,"minTileX":0,"minTileY":-1,"maxTileX":57,"maxTileY":57,"sunAzimuth":171.0,"sunElevation":37.0,"satAzimuth":178.9,"satElevation":68.4,"cloudCover":0.0,"offNadirAngle":19.4,"pniirs":3.5}'}
     headers:
+      access-control-allow-headers: ['x-requested-with, X-Auth-Token, Content-Type,
+          Authorization']
+      access-control-allow-methods: ['GET, OPTIONS, HEAD, PUT, POST, DELETE']
+      access-control-allow-origin: ['*']
+      access-control-max-age: ['3600']
       connection: [keep-alive]
-      content-length: ['992']
+      content-length: ['1088']
       content-type: [application/json]
-      date: ['Mon, 10 Apr 2017 16:03:13 GMT']
+      date: ['Wed, 07 Jun 2017 20:20:53 GMT']
     status: {code: 200, message: OK}
 - request:
     body: null
@@ -181,13 +185,18 @@ interactions:
       Connection: [keep-alive]
       User-Agent: [python-requests/2.13.0]
     method: GET
-    uri: https://idahoapi.geobigdata.io/v1/metadata/idaho-virtual/d4d4198b-623d-5a66-aada-a450d525f449/a9a095f3-9f1d-544d-a517-bb1960a0ff42/georeferencing.json
+    uri: https://idahoapi.geobigdata.io/v1/metadata/idaho-virtual/9f2766925fe588460e423e19aa06a12e70bd3411088a071249e6c2bae5e7d9f0/a9a095f3-9f1d-544d-a517-bb1960a0ff42/georeferencing.json
   response:
     body: {string: !!python/unicode '{"spatialReferenceSystemCode":"EPSG:3857","scaleX":1.372,"scaleY":-1.372,"translateX":-8239788.992630752,"translateY":5703660.232416099,"shearX":0.0,"shearY":0.0}'}
     headers:
+      access-control-allow-headers: ['x-requested-with, X-Auth-Token, Content-Type,
+          Authorization']
+      access-control-allow-methods: ['GET, OPTIONS, HEAD, PUT, POST, DELETE']
+      access-control-allow-origin: ['*']
+      access-control-max-age: ['3600']
       connection: [keep-alive]
       content-length: ['162']
       content-type: [application/json]
-      date: ['Mon, 10 Apr 2017 16:03:14 GMT']
+      date: ['Wed, 07 Jun 2017 20:20:53 GMT']
     status: {code: 200, message: OK}
 version: 1

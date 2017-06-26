@@ -3,7 +3,7 @@ import requests
 
 VIRTUAL_IPE_URL = "https://idahoapi.geobigdata.io/v1"
 
-from gbdxtools.ipe.error import NotFound
+from gbdxtools.ipe.error import NotFound, BadRequest
 
 def get_ipe_graph(conn, graph_id):
     url = "{}/graph/{}".format(VIRTUAL_IPE_URL, graph_id)
@@ -17,9 +17,20 @@ def register_ipe_graph(conn, ipe_graph):
     url = "{}/graph".format(VIRTUAL_IPE_URL)
     res = conn.post(url, json.dumps(ipe_graph), headers={'Content-Type': 'application/json'})
     return res.content
+<<<<<<< HEAD
+=======
+
+def fetch_metadata(conn, url):
+    res = conn.get(url)
+    res_json = res.json()
+    if res.status_code != 200 or ('error' in res_json or 'message' in res_json):
+        raise BadRequest("Problem fetching image metadata: {}".format(res_json.get('error', res_json['message'])))
+    else:
+        return res_json
+>>>>>>> master
 
 def get_ipe_metadata(conn, ipe_id, node='toa_reflectance'):
     meta = {}
-    meta['image'] = conn.get(VIRTUAL_IPE_URL + "/metadata/idaho-virtual/{}/{}/image.json".format(ipe_id, node)).json()
-    meta['georef'] = conn.get(VIRTUAL_IPE_URL + "/metadata/idaho-virtual/{}/{}/georeferencing.json".format(ipe_id, node)).json()
+    meta['image'] = fetch_metadata(conn, VIRTUAL_IPE_URL + "/metadata/idaho-virtual/{}/{}/image.json".format(ipe_id, node)) 
+    meta['georef'] = fetch_metadata(conn, VIRTUAL_IPE_URL + "/metadata/idaho-virtual/{}/{}/georeferencing.json".format(ipe_id, node))
     return meta

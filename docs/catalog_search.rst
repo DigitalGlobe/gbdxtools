@@ -134,46 +134,6 @@ If you have a catalog ID and simply want to get the record out of the catalog:
     >>>                    u'vendorName': u'DigitalGlobe'},
     >>> u'type': u'DigitalGlobeAcquisition'}
 
-You can also include relationship information to find associated data and products:
-
-.. code-block:: pycon
-
-	record = gbdx.catalog.get('1050410011360700', includeRelationships=True)
-	record
-	>>> {   u'identifier': u'1050410011360700',
-    >>> u'inEdges': {   u'_acquisition': [   {   u'fromObjectId': u'98c00c48-0015-4673-8a17-62e69e9899a0',
-    >>>                                          u'identifier': u'281e842d-6706-4e80-8f4c-00d217eb25c2',
-    >>>                                          u'label': u'_acquisition',
-    >>>                                          u'toObjectId': u'1050410011360700'},
-    >>>                                      {   u'fromObjectId': u'cb7b8668-0883-487d-b862-89d02b8674af',
-    >>>                                          u'identifier': u'fe7635e1-02b9-4350-8dd3-1b98ec12450f',
-    >>>                                          u'label': u'_acquisition',
-    >>>                                          u'toObjectId': u'1050410011360700'},
-    >>>                                      {   u'fromObjectId': u'10284854-5024-42d8-8c6c-fb1720592ba3',
-    >>>                                          u'identifier': u'cf9bf35e-fd2a-4827-8fa6-03de08f796cd',
-    >>>                                          u'label': u'_acquisition',
-    >>>                                          u'toObjectId': u'1050410011360700'},
-    >>>                                      {   u'fromObjectId': u'713baa24-c30c-4358-a487-6c561da866eb',
-    >>>                                          u'identifier': u'3096ee31-152e-4e30-af42-6728ff03e342',
-    >>>                                          u'label': u'_acquisition',
-    >>>                                          u'toObjectId': u'1050410011360700'}]},
-    >>> u'owner': u'7b216bd9-6523-4ca9-aa3b-1d8a5994f054',
-    >>> u'properties': {   u'available': u'true',
-    >>>                    u'browseURL': u'https://browse.digitalglobe.com/imagefinder/showBrowseMetadata?catalogId=1050410011360700',
-    >>>                    u'catalogID': u'1050410011360700',
-    >>>                    u'cloudCover': u'3.0',
-    >>>                    u'footprintWkt': u'POLYGON ((103.20588 27.19044, 103.214232 27.189864, 103.230936 27.189432, 103.26852 27.188136, 103.300632 27.186984, 103.33116 27.185976, 103.388616 27.18324, 103.388904 27.170712, 103.388184 27.16236, 103.388616 27.15516, 103.389912 27.143208, 103.390488 27.123624, 103.390344 27.112824, 103.38876 27.104184, 103.389192 27.09684, 103.390632 27.079704, 103.390488 27.071208, 103.389912 27.062712, 103.390632 27.039672, 103.390344 27.035352, 103.387176 27.01764, 103.38516 27.00684, 103.383144 27.006696, 103.339656 27.008568, 103.323528 27.00972, 103.321656 27.00972, 103.304664 27.011448, 103.297176 27.01188, 103.279176 27.013464, 103.263192 27.014184, 103.232088 27.017064, 103.214664 27.018072, 103.197672 27.019512, 103.198392 27.028296, 103.198824 27.037224, 103.198248 27.042696, 103.19796 27.05652, 103.197528 27.062424, 103.199976 27.079272, 103.199112 27.087336, 103.200408 27.097704, 103.200696 27.112104, 103.1994 27.120888, 103.20012 27.131544, 103.202136 27.146952, 103.20516 27.160632, 103.205448 27.168984, 103.205016 27.18036, 103.205448 27.187128, 103.20588 27.19044))',
-    >>>                    u'imageBands': u'Pan_MS1',
-    >>>                    u'multiResolution': u'1.92278111',
-    >>>                    u'offNadirAngle': u'23.0',
-    >>>                    u'panResolution': u'0.480095029',
-    >>>                    u'sensorPlatformName': u'GEOEYE01',
-    >>>                    u'sunAzimuth': u'131.3206',
-    >>>                    u'sunElevation': u'69.3045',
-    >>>                    u'targetAzimuth': u'102.357414',
-    >>>                    u'timestamp': u'2014-08-20T00:00:00.000Z',
-    >>>                    u'vendorName': u'DigitalGlobe'},
-    >>> u'type': u'DigitalGlobeAcquisition'}
 
 Find Data Location given a Catalog ID
 -----------------------
