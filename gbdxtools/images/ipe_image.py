@@ -7,6 +7,7 @@ import os
 import os.path
 import uuid
 import math
+import time
 
 from pyproj import Proj
 
@@ -67,7 +68,7 @@ import requests
 from gbdxtools.ipe.vrt import get_cached_vrt, put_cached_vrt, generate_vrt_template
 from gbdxtools.ipe.util import calc_toa_gain_offset, timeit
 from gbdxtools.ipe.graph import VIRTUAL_IPE_URL, register_ipe_graph, get_ipe_metadata, get_ipe_graph
-from gbdxtools.ipe.error import NotFound, BadRequest
+from gbdxtools.ipe.error import NotFound, BadRequest, MaxTries
 from gbdxtools.ipe.interface import Ipe
 from gbdxtools.auth import Auth
 ipe = Ipe()
@@ -154,6 +155,7 @@ class IpeImage(DaskImage):
     _ipe_id = None
     _ipe_metadata = None
     _proj = "EPSG:4326"
+    _retries = 0
 
     def __init__(self, ipe_graph, gid, node="toa_reflectance", **kwargs):
         self.interface = Auth()
@@ -191,11 +193,21 @@ class IpeImage(DaskImage):
     @property
     def ipe_metadata(self):
         if self._ipe_metadata is None:
-            try: 
-                self._ipe_metadata = get_ipe_metadata(self.interface.gbdx_connection, self.ipe_id, self.ipe_node_id)
-            except BadRequest:
-                raise 
+            self._ipe_metadata = self._fetch_metadata() 
         return self._ipe_metadata
+
+
+    def _fetch_metadata(self):
+        if self._retries >= 3:
+            raise MaxTries('Exceeded max number of requests for metadata.')
+        try: 
+            meta = get_ipe_metadata(self.interface.gbdx_connection, self.ipe_id, self.ipe_node_id)
+            return meta
+        except BadRequest as err:
+            self._retries += 1
+            time.sleep(1)
+            self._fetch_metadata()
+            
 
     @property
     def vrt(self):
