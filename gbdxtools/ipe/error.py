@@ -12,3 +12,6 @@ class Unauthorized(Exception):
 
 class Forbidden(Exception):
     pass
+
+class MaxTries(Exception):
+    pass
