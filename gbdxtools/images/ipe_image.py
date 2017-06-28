@@ -44,7 +44,7 @@ class IpeImage(DaskImage, Container):
         bbox = kwargs.get('bbox', None)
         wkt = kwargs.get('wkt', None)
         geojson = kwargs.get('geojson', None)
-        proj = kwargs.get('proj', "epsg:4326")
+        proj = kwargs.get('proj', "EPSG:4326")
         if bbox is not None:
             g =  box(*bbox)
         elif wkt is not None:
