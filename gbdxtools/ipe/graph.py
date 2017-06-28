@@ -17,8 +17,6 @@ def register_ipe_graph(conn, ipe_graph):
     url = "{}/graph".format(VIRTUAL_IPE_URL)
     res = conn.post(url, json.dumps(ipe_graph), headers={'Content-Type': 'application/json'})
     return res.content
-<<<<<<< HEAD
-=======
 
 def fetch_metadata(conn, url):
     res = conn.get(url)
@@ -27,7 +25,6 @@ def fetch_metadata(conn, url):
         raise BadRequest("Problem fetching image metadata: {}".format(res_json.get('error', res_json['message'])))
     else:
         return res_json
->>>>>>> master
 
 def get_ipe_metadata(conn, ipe_id, node='toa_reflectance'):
     meta = {}
