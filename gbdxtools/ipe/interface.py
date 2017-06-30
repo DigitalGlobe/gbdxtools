@@ -1,4 +1,5 @@
 import uuid
+import operator
 import json
 import copy
 from hashlib import sha256
@@ -11,7 +12,7 @@ try:
 except NameError:
   basestring = str
 
-NAMESPACE_UUID = uuid.NAMESPACE_DNS
+NAMESPACE_UUID = uuid.UUID('12345678123456781234567812345678')
 
 class ContentHashedDict(dict):
     @property
@@ -20,7 +21,8 @@ class ContentHashedDict(dict):
         return _id
 
     def __hash__(self):
-        dup = {k:v for k,v in self.items() if k is not "id"}
+        dup = self['parameters'] if 'parameters' in self else self
+        sort = sorted(dup.items(), key=operator.itemgetter(0))
         return sha256(str(dup).encode('utf-8')).hexdigest()
 
     def populate_id(self):
@@ -64,8 +66,8 @@ class Op(object):
     def graph(self):
         _nodes = [{k:v for k,v in node.items() if not k.startswith('_')} for node in self._nodes]
         return {
-            "edges": self._edges,
-            "nodes": _nodes
+            "edges": sorted(self._edges, key=lambda x: x['id']),
+            "nodes": sorted(_nodes, key=lambda x: x['id'])
         }
 
 class Ipe(object):
