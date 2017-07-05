@@ -36,6 +36,7 @@ class CatalogImage(IpeImage):
       Inherits from IpeImage and represents a mosiac data set of the full catalog strip
     """
     _properties = None
+    _metadata = None
 
     def __init__(self, cat_id, band_type="MS", node="toa_reflectance", **kwargs):
         self.interface = Auth()
@@ -74,26 +75,27 @@ class CatalogImage(IpeImage):
             self._properties = self._query_vectors(query)
         return self._properties
             
-    
     @property
     def metadata(self):
-        meta = {}
-        query = 'item_type:IDAHOImage AND attributes.catalogID:{}'.format(self._gid)
-        results = self._query_vectors(query)
-        grouped = defaultdict(list)
-        for idaho in results:
-            vid = idaho['properties']['attributes']['vendorDatasetIdentifier']
-            grouped[vid].append(idaho)
-
-        meta['parts'] = []
-        for key, parts in grouped.items():
-            part = {}
-            for p in parts:
-                attrs = p['properties']['attributes']
-                part[attrs['colorInterpretation']] = {'properties': attrs, 'geometry': shape(p['geometry'])}
-            meta['parts'].append(part)
-
-        return meta
+        if self._metadata is None:
+            meta = {}
+            query = 'item_type:IDAHOImage AND attributes.catalogID:{}'.format(self._gid)
+            results = self._query_vectors(query)
+            grouped = defaultdict(list)
+            # vector services returns inconsistent orders, sort here to ensure order
+            for idaho in sorted(results, key=lambda x: x['properties']['id']):
+                vid = idaho['properties']['attributes']['vendorDatasetIdentifier']
+                grouped[vid].append(idaho)
+    
+            meta['parts'] = []
+            for key, parts in grouped.items():
+                part = {}
+                for p in parts:
+                    attrs = p['properties']['attributes']
+                    part[attrs['colorInterpretation']] = {'properties': attrs, 'geometry': p['geometry']}
+                meta['parts'].append(part)
+            self._metadata = meta
+        return self._metadata
 
 
     def aoi(self, **kwargs):
@@ -108,7 +110,6 @@ class CatalogImage(IpeImage):
 
         cfg = self._aoi_config(bounds, **kwargs)
         return DaskImage(**cfg)
-
 
     def _init_graphs(self):
         graph = {}
@@ -131,7 +132,7 @@ class CatalogImage(IpeImage):
             for k, p in part.items():
                 _id = p['properties']['idahoImageId']
                 if k == 'PAN':
-                    pan_graph[_id] =  ipe.Orthorectify(ipe.IdahoRead(bucketName="idaho-images", imageId=_id, objectStore="S3"), **ortho_params(self._proj))
+                    pan_graph[_id] = ipe.Orthorectify(ipe.IdahoRead(bucketName="idaho-images", imageId=_id, objectStore="S3"), **ortho_params(self._proj))
                 else:
                     ms_graph[_id] = ipe.Orthorectify(ipe.IdahoRead(bucketName="idaho-images", imageId=_id, objectStore="S3"), **ortho_params(self._proj))
 
@@ -151,3 +152,13 @@ class CatalogImage(IpeImage):
         toa = ipe.MultiplyConst(radiance, constants=reflectance_scales)
         graph.update({"mosaic{}".format(suffix): mosaic, "radiance{}".format(suffix): radiance, "toa_reflectance{}".format(suffix): toa})
         return graph
+
+if __name__ == '__main__':
+    n = 10
+    from concurrent.futures import ThreadPoolExecutor
+
+    with ThreadPoolExecutor(max_workers=16) as pool:
+        def initializer(cat_id):
+            return (cat_id, CatalogImage(cat_id, node='mosaic'))
+        base_images = [img.ipe_id for cat_id, img in pool.map(initializer, ['104001001BA7C400']*n)]
+        print(base_images)

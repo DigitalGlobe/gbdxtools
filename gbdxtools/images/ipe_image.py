@@ -66,7 +66,7 @@ _curl_pool = defaultdict(pycurl.Curl)
 import requests
 
 from gbdxtools.ipe.vrt import get_cached_vrt, put_cached_vrt, generate_vrt_template
-from gbdxtools.ipe.util import calc_toa_gain_offset, timeit
+from gbdxtools.ipe.util import calc_toa_gain_offset 
 from gbdxtools.ipe.graph import VIRTUAL_IPE_URL, register_ipe_graph, get_ipe_metadata, get_ipe_graph
 from gbdxtools.ipe.error import NotFound, BadRequest, MaxTries
 from gbdxtools.ipe.interface import Ipe
@@ -251,7 +251,7 @@ class IpeImage(DaskImage):
         """ A rasterio based context manager for reading the full image VRT """
         with rasterio.open(self.vrt, *args, **kwargs) as src:
             yield src
-
+    
     def _config_dask(self):
         """ Configures the image as a dask array with a calculated shape and chunk size """
         meta = self.ipe_metadata
@@ -274,8 +274,8 @@ class IpeImage(DaskImage):
         buf_dask = {(name, 0, x, y): (load_url, url, self._tile_size, token) for (x, y), url in urls.items()}
         return {"name": name, "dask": buf_dask}
 
-    def _ipe_tile(self, x, y):
-        return "{}/tile/{}/{}/{}/{}/{}.tif".format(VIRTUAL_IPE_URL, "idaho-virtual", self.ipe_id, self.ipe_node_id, x, y)
+    def _ipe_tile(self, x, y, ipe_id, node_id):
+        return "{}/tile/{}/{}/{}/{}/{}.tif".format(VIRTUAL_IPE_URL, "idaho-virtual", ipe_id, node_id, x, y)
 
     def _collect_urls(self, meta):
         """
@@ -283,8 +283,10 @@ class IpeImage(DaskImage):
           returns a nested list of urls as a grid that represents data chunks in the array
         """
         size = self._tile_size
+        _ipe_id = self.ipe_id 
+        _node_id = self.ipe_node_id 
         minx, miny, maxx, maxy = 0, 0, int(math.floor(meta['image']['imageWidth'] / float(size))), int(math.floor(meta['image']['imageHeight'] / float(size)))
-        urls = {(y-miny, x-minx): self._ipe_tile(x, y) for y in xrange(miny, maxy + 1) for x in xrange(minx, maxx + 1)}
+        urls = {(y-miny, x-minx): self._ipe_tile(x, y, _ipe_id, _node_id) for y in xrange(miny, maxy + 1) for x in xrange(minx, maxx + 1)}
         return urls, (size*(maxy-miny+1), size*(maxx-minx+1))
 
     def _parse_geoms(self, **kwargs):
