@@ -15,7 +15,7 @@ def get_ipe_graph(conn, graph_id):
 
 def register_ipe_graph(conn, ipe_graph):
     url = "{}/graph".format(VIRTUAL_IPE_URL)
-    res = conn.post(url, json.dumps(ipe_graph), headers={'Content-Type': 'application/json'})
+    res = conn.post(url, json.dumps(ipe_graph, sort_keys=True), headers={'Content-Type': 'application/json'})
     return res.content
 
 def fetch_metadata(conn, url):
