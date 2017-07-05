@@ -56,19 +56,19 @@ def load_url(url, token, shape=(8, 256, 256)):
     _curl = _curl_pool[thread_id]
     buf = BytesIO()
     _curl.setopt(_curl.URL, url)
-    _curl.setopt(_curl.WRITEDATA, buf)
     _curl.setopt(pycurl.NOSIGNAL, 1)
     _curl.setopt(pycurl.HTTPHEADER, ['Authorization: Bearer {}'.format(token)])
-    _curl.perform()
-    with MemoryFile(buf.getvalue()) as memfile:
-      try:
-          with memfile.open(driver="GTiff") as dataset:
-              arr = dataset.read()
-      except (TypeError, rasterio.RasterioIOError) as e:
-          arr = np.zeros(shape, dtype=np.float32)
-          _curl.close()
-          del _curl_pool[thread_id]
-    return arr
+    with MemoryFile() as memfile:
+        _curl.setopt(_curl.WRITEDATA, memfile)
+        _curl.perform()
+        try:
+            with memfile.open(driver="GTiff") as dataset:
+                arr = dataset.read()
+        except (TypeError, rasterio.RasterioIOError) as e:
+            arr = np.zeros(shape, dtype=np.float32)
+            _curl.close()
+            del _curl_pool[thread_id]
+        return arr
 
 
 class ContentHashedDict(OrderedDict):
