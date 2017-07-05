@@ -11,7 +11,7 @@ class IdahoImage(IpeImage):
     """
     def __new__(cls, idaho_id, **kwargs):
         options = {
-            "proj": kwargs.get("proj", "EPSG:4376"),
+            "proj": kwargs.get("proj", "EPSG:4326"),
             "product": kwargs.get("product", "toa_reflectance")
         }
 
@@ -33,7 +33,7 @@ class IdahoImage(IpeImage):
     @staticmethod
     def _build_standard_products(idaho_id, proj):
         dn_op = ipe.IdahoRead(bucketName="idaho-images", imageId=idaho_id, objectStore="S3")
-        ortho_op = ipe.Orthorectify(dn_op) #, **ortho_params(proj))
+        ortho_op = ipe.Orthorectify(dn_op,  **ortho_params(proj))
 
         # TODO: Switch to direct metadata access (ie remove this block)
         idaho_md = requests.get('http://idaho.timbr.io/{}.json'.format(idaho_id)).json()
