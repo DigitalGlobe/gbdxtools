@@ -70,6 +70,7 @@ class IpeImage(DaskImage, Container):
             image = self[:, bounds[1]:bounds[3], bounds[0]:bounds[2]] # a dask array that implements daskmeta interface (via op)
             image.__geo_interface__ = mapping(g)
             image.__geo_transform__ = self.__geo_transform__ - (bounds[0], bounds[1])
+            image._ipe_op = self._ipe_op
             image.__class__ = self.__class__
             return image
         else:
