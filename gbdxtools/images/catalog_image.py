@@ -31,7 +31,7 @@ band_types = {
 }
 
 
-class CatalogImage(DaskImage):
+class CatalogImage(IpeImage):
     def __new__(cls, cat_id, **kwargs):
         options = {
             "band_type": kwargs.get("band_type", "MS"),
@@ -39,70 +39,52 @@ class CatalogImage(DaskImage):
             "proj": kwargs.get("proj", "epsg:4326")
         }
 
+        standard_products = cls._build_standard_products(cat_id, options["band_type"], options["proj"])
+        print(standard_products.keys())
+        try:
+            self = super(CatalogImage, cls).__new__(cls, standard_products[options["product"]])
+        except KeyError as e:
+            print(e)
+            print("Specified product not implemented: {}".format(options["product"]))
+            raise
+        self.cat_id = cat_id
+        self._products = standard_products
+        return self
+
+    def get_product(self, product):
+        return self.__class__(self.idaho_id, proj=self.proj, product=product)
+
     @staticmethod
-    def _find_parts(cat_id, band_type):
+    def _find_parts(cat_id, band_type, _vectors=Vectors()):
         aoi = wkt.dumps(box(-180, -90, 180, 90))
-        query = "item_type:IDAHOImage AND attributes.catalogID:{} AND "
-
-
+        query = "item_type:IDAHOImage AND attributes.catalogID:{} AND attributes.colorInterpretation:{}".format(cat_id, band_types[band_type])
+        return _vectors.query(aoi, query=query)
 
 
     @classmethod
     def _build_standard_products(cls, cat_id, band_type, proj):
-        parts = cls.fetch_parts(cat_id)
-        for part in self.metadata['parts']:
-            for k, p in part.items():
-                if k == band_types[band_type]:
-                    _id = p['properties']['idahoImageId']
-                    dn_op = ipe.IdahoRead(bucketName="idaho-images", imageId=_id, objectStore="S3")
-                    ortho_op = ipe.Orthorectify(dn_op) # , **ortho_params(proj))
+        selected = defaultdict(list)
+        for p in cls._find_parts(cat_id, band_type):
+            _id = p['properties']['attributes']['idahoImageId']
+            dn_op = ipe.IdahoRead(bucketName="idaho-images", imageId=_id, objectStore="S3")
+            ortho_op = ipe.Orthorectify(dn_op, **ortho_params(proj))
+            # TODO: Switch to direct metadata access (ie remove this block)
+            idaho_md = requests.get('http://idaho.timbr.io/{}.json'.format(_id)).json()
+            meta = idaho_md["properties"]
+            gains_offsets = calc_toa_gain_offset(meta)
+            radiance_scales, reflectance_scales, radiance_offsets = zip(*gains_offsets)
+            # ---
 
-                    # TODO: Switch to direct metadata access (ie remove this block)
-                    idaho_md = requests.get('http://idaho.timbr.io/{}.json'.format(_id)).json()
-                    meta = idaho_md["properties"]
-                    gains_offsets = calc_toa_gain_offset(meta)
-                    radiance_scales, reflectance_scales, radiance_offsets = zip(*gains_offsets)
-                    # ---
+            toa_reflectance_op = ipe.MultiplyConst(
+                ipe.AddConst(
+                    ipe.MultiplyConst(
+                        ipe.Format(ortho_op, dataType="4"),
+                        constants=radiance_scales),
+                    constants=radiance_offsets),
+                constants=reflectance_scales)
 
-                    toa_reflectance_op = ipe.MultiplyConst(
-                        ipe.AddConst(
-                            ipe.MultiplyConst(
-                                ipe.Format(ortho_op, dataType="4"),
-                                constants=radiance_scales),
-                            constants=radiance_offsets),
-                        constants=reflectance_scales)
-
-                    selected["dn"].append(dn_op)
-                    selected["ortho"].append(ortho_op)
-                    selected["toa_reflectance"].append(toa_reflectance_op)
+            selected["dn"].append(dn_op)
+            selected["ortho"].append(ortho_op)
+            selected["toa_reflectance"].append(toa_reflectance_op)
 
         return {key:ipe.GeospatialMosaic(*ops) for key, ops in selected.iteritems()}
-
-    @staticmethod
-    def _query_vectors(query, aoi=None):
-        if aoi is None:
-            aoi = wkt.dumps(box(-180, -90, 180, 90))
-        try:
-            return Vectors().query(aoi, query=query)
-        except:
-            raise Exception('Unable to query for image properties, the service may be currently down.')
-
-    @staticmethod
-    def fetch_parts(cat_id):
-        meta = {}
-        query = 'item_type:IDAHOImage AND attributes.catalogID:{}'.format(cat_id)
-        results = CatalogImage._query_vectors(query)
-        grouped = defaultdict(list)
-        for idaho in results:
-            vid = idaho['properties']['attributes']['vendorDatasetIdentifier']
-            grouped[vid].append(idaho)
-
-        meta['parts'] = []
-        for key, parts in grouped.items():
-            part = {}
-            for p in parts:
-                attrs = p['properties']['attributes']
-                part[attrs['colorInterpretation']] = {'properties': attrs, 'geometry': shape(p['geometry'])}
-            meta['parts'].append(part)
-
-        return meta
