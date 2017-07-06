@@ -14,7 +14,7 @@ import uuid
 from shapely import wkt
 from shapely.geometry import box, shape, mapping
 
-from gbdxtools import _session
+from gbdxtools import _session, IdahoImage
 from gbdxtools.auth import Auth
 from gbdxtools.ipe.util import calc_toa_gain_offset, ortho_params
 from gbdxtools.images.ipe_image import IpeImage
@@ -59,6 +59,9 @@ class CatalogImage(IpeImage):
             raise
         self.cat_id = cat_id
         self._products = standard_products
+        self.parts = [IdahoImage(rec['properties']['attributes']['idahoImageId'],
+                                 product=options["product"], proj=options["proj"])
+                      for rec in cls._find_parts(cat_id, options["band_type"])]
         return self
 
     def get_product(self, product):
