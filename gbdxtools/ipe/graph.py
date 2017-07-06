@@ -27,14 +27,6 @@ def register_ipe_graph(conn, ipe_graph):
     return res.content
 
 
-def fetch_metadata(conn, url):
-    res = resolve_if_future(conn.get(url))
-    res_json = res.json()
-    if res.status_code != 200 or ('error' in res_json or 'message' in res_json):
-        raise BadRequest("Problem fetching image metadata: {}".format(res.content))
-    else:
-        return res_json
-
 def get_ipe_metadata(conn, ipe_id, node='toa_reflectance'):
     image_response = conn.get(VIRTUAL_IPE_URL + "/metadata/idaho-virtual/{}/{}/image.json".format(ipe_id, node))
     georef_response = conn.get(VIRTUAL_IPE_URL + "/metadata/idaho-virtual/{}/{}/georeferencing.json".format(ipe_id, node))
@@ -46,7 +38,7 @@ def get_ipe_metadata(conn, ipe_id, node='toa_reflectance'):
 
     meta = {"image": image_response.json(), "rpcs": rpcs_response.json() }
     if image_response.status_code != 200 or ('error' in meta["image"] or 'message' in meta["image"]):
-        raise BadRequest("Problem fetching image metadata: {}".format(res.content))
+        raise BadRequest("Problem fetching image metadata: {}".format(image_response.content))
 
     try:
         meta["georef"] = georef_response.json()
