@@ -9,7 +9,7 @@ from shapely.geometry.base import BaseGeometry
 import pyproj
 
 from gbdxtools.images.meta import DaskMeta, DaskImage
-from gbdxtools.ipe.util import RatPolyTransform, AffineTransform, shift_func
+from gbdxtools.ipe.util import RatPolyTransform, AffineTransform
 
 
 class IpeImage(DaskImage, Container):
