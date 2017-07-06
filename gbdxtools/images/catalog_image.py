@@ -13,8 +13,8 @@ import uuid
 
 from shapely import wkt
 from shapely.geometry import box, shape, mapping
-import requests
 
+from gbdxtools import _session, IdahoImage
 from gbdxtools.auth import Auth
 from gbdxtools.ipe.util import calc_toa_gain_offset, ortho_params
 from gbdxtools.images.ipe_image import IpeImage
@@ -36,10 +36,20 @@ class CatalogImage(IpeImage):
         options = {
             "band_type": kwargs.get("band_type", "MS"),
             "product": kwargs.get("product", "toa_reflectance"),
-            "proj": kwargs.get("proj", "epsg:4326")
+            "proj": kwargs.get("proj", "EPSG:4326"),
+            "pansharpen": kwargs.get("pansharpen", False)
         }
 
+        if options["pansharpen"]:
+            options["band_type"] = "MS"
+            options["product"] = "pansharpened"
+
         standard_products = cls._build_standard_products(cat_id, options["band_type"], options["proj"])
+        pan_products = cls._build_standard_products(cat_id, "pan", options["proj"])
+        pan = ipe.Format(ipe.MultiplyConst(pan_products['toa_reflectance'], constants=json.dumps([1000])), dataType="1")
+        ms = ipe.Format(ipe.MultiplyConst(standard_products['toa_reflectance'], constants=json.dumps([1000]*8)), dataType="1")
+        standard_products["pansharpened"] = ipe.LocallyProjectivePanSharpen(ms, pan)
+
         print(standard_products.keys())
         try:
             self = super(CatalogImage, cls).__new__(cls, standard_products[options["product"]])
@@ -49,6 +59,9 @@ class CatalogImage(IpeImage):
             raise
         self.cat_id = cat_id
         self._products = standard_products
+        self.parts = [IdahoImage(rec['properties']['attributes']['idahoImageId'],
+                                 product=options["product"], proj=options["proj"])
+                      for rec in cls._find_parts(cat_id, options["band_type"])]
         return self
 
     def get_product(self, product):
@@ -63,28 +76,25 @@ class CatalogImage(IpeImage):
 
     @classmethod
     def _build_standard_products(cls, cat_id, band_type, proj):
-        selected = defaultdict(list)
-        for p in cls._find_parts(cat_id, band_type):
-            _id = p['properties']['attributes']['idahoImageId']
-            dn_op = ipe.IdahoRead(bucketName="idaho-images", imageId=_id, objectStore="S3")
-            ortho_op = ipe.Orthorectify(dn_op, **ortho_params(proj))
-            # TODO: Switch to direct metadata access (ie remove this block)
-            idaho_md = requests.get('http://idaho.timbr.io/{}.json'.format(_id)).json()
-            meta = idaho_md["properties"]
-            gains_offsets = calc_toa_gain_offset(meta)
-            radiance_scales, reflectance_scales, radiance_offsets = zip(*gains_offsets)
-            # ---
+        # TODO: Switch to direct metadata access (ie remove this block)
+        _parts = cls._find_parts(cat_id, band_type)
+        _id = _parts[0]['properties']['attributes']['idahoImageId']
+        idaho_md = _session.get('http://idaho.timbr.io/{}.json'.format(_id)).result().json()
+        meta = idaho_md["properties"]
+        gains_offsets = calc_toa_gain_offset(meta)
+        radiance_scales, reflectance_scales, radiance_offsets = zip(*gains_offsets)
+        # ---
 
-            toa_reflectance_op = ipe.MultiplyConst(
-                ipe.AddConst(
-                    ipe.MultiplyConst(
-                        ipe.Format(ortho_op, dataType="4"),
-                        constants=radiance_scales),
-                    constants=radiance_offsets),
-                constants=reflectance_scales)
+        dn_ops = [ipe.IdahoRead(bucketName="idaho-images", imageId=p['properties']['attributes']['idahoImageId'],
+                                objectStore="S3") for p in cls._find_parts(cat_id, band_type)]
+        ortho_op = ipe.GeospatialMosaic(*dn_ops, **{"Dest SRS Code": proj})
 
-            selected["dn"].append(dn_op)
-            selected["ortho"].append(ortho_op)
-            selected["toa_reflectance"].append(toa_reflectance_op)
+        toa_reflectance_op = ipe.MultiplyConst(
+            ipe.AddConst(
+                ipe.MultiplyConst(
+                    ipe.Format(ortho_op, dataType="4"),
+                    constants=radiance_scales),
+                constants=radiance_offsets),
+            constants=reflectance_scales)
 
-        return {key:ipe.GeospatialMosaic(*ops) for key, ops in selected.iteritems()}
+        return {"ortho": ortho_op, "toa_reflectance": toa_reflectance_op}
