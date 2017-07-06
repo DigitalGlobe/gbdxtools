@@ -36,15 +36,17 @@ class IpeImage(DaskImage, Container):
     def aoi(self, **kwargs):
         """ Subsets the IpeImage by the given bounds """
         g = self._parse_geoms(**kwargs)
-        assert (g is not None) and (g in self), 'AOI bounds not found. Must specify a bbox, wkt, or geojson geometry that is within the image'
-        return self[g]
+        if g is None:
+            return self
+        else:
+            return self[g]
 
     def _parse_geoms(self, **kwargs):
         """ Finds supported geometry types, parses them and returns the bbox """
         bbox = kwargs.get('bbox', None)
         wkt = kwargs.get('wkt', None)
         geojson = kwargs.get('geojson', None)
-        proj = kwargs.get('proj', "EPSG:4326")
+        proj = self.ipe.metadata['georef'].get("spatialReferenceSystemCode", "EPSG:4326")
         if bbox is not None:
             g =  box(*bbox)
         elif wkt is not None:
@@ -56,6 +58,7 @@ class IpeImage(DaskImage, Container):
         if self.proj is None:
             return g
         else:
+            print('proj', proj, self.proj)
             tfm = partial(pyproj.transform, pyproj.Proj(init=proj), pyproj.Proj(init=self.proj))
             return ops.transform(tfm, g)
 

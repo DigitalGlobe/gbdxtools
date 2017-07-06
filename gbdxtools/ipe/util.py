@@ -165,7 +165,7 @@ class RatPolyTransform(object):
         # only using the numerator (more dynamic range for the fit?)
         # self._B_rev = np.dot(pinv(np.dot(np.transpose(B), B)), np.transpose(B))
 
-    def fwd(self, lng, lat, z=0):
+    def fwd(self, lng, lat, z=74.0):
         coord = np.asarray([lng, lat, z])
         normed = np.sum(self._offscl * np.vstack([np.ones(coord.shape), coord]), axis=0)
         X = self._rpc(normed)
