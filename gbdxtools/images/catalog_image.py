@@ -36,10 +36,20 @@ class CatalogImage(IpeImage):
         options = {
             "band_type": kwargs.get("band_type", "MS"),
             "product": kwargs.get("product", "toa_reflectance"),
-            "proj": kwargs.get("proj", "EPSG:4326")
+            "proj": kwargs.get("proj", "EPSG:4326"),
+            "pansharpen": kwargs.get("pansharpen", False)
         }
 
+        if options["pansharpen"]:
+            options["band_type"] = "MS"
+            options["product"] = "pansharpened"
+
         standard_products = cls._build_standard_products(cat_id, options["band_type"], options["proj"])
+        pan_products = cls._build_standard_products(cat_id, "pan", options["proj"])
+        pan = ipe.Format(ipe.MultiplyConst(pan_products['toa_reflectance'], constants=json.dumps([1000])), dataType="1")
+        ms = ipe.Format(ipe.MultiplyConst(standard_products['toa_reflectance'], constants=json.dumps([1000]*8)), dataType="1")
+        standard_products["pansharpened"] = ipe.LocallyProjectivePanSharpen(ms, pan)
+
         print(standard_products.keys())
         try:
             self = super(CatalogImage, cls).__new__(cls, standard_products[options["product"]])
