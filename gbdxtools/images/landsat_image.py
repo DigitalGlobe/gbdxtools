@@ -15,7 +15,7 @@ class LandsatImage(IpeImage):
 
         standard_products = cls._build_standard_products(_id, options["spec"])
         try:
-            self = super(IdahoImage, cls).__new__(cls, standard_products[options["product"]])
+            self = super(LandsatImage, cls).__new__(cls, standard_products[options["product"]])
         except KeyError as e:
             print(e)
             print("Specified product not implemented: {}".format(options["product"]))
