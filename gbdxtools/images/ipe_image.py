@@ -46,6 +46,10 @@ class IpeImage(DaskImage, Container):
         return self._ipe_op
 
     @property
+    def ipe_id(self):
+        return self.ipe._ipe_id
+
+    @property
     def ntiles(self):
         size = float(self.ipe.metadata['image']['tileXSize'])
         return math.ceil((float(self.shape[-1]) / size)) * math.ceil(float(self.shape[1]) / size)

@@ -42,9 +42,9 @@ class IpeImageTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        #mock_gbdx_session = get_mock_gbdx_session(token='dymmytoken')
-        #cls.gbdx = Interface(gbdx_connection=mock_gbdx_session)
-        cls.gbdx = Interface()
+        mock_gbdx_session = get_mock_gbdx_session(token='dymmytoken')
+        cls.gbdx = Interface(gbdx_connection=mock_gbdx_session)
+        #cls.gbdx = Interface()
         cls._temp_path = tempfile.mkdtemp()
         print("Created: {}".format(cls._temp_path))
 
@@ -53,24 +53,21 @@ class IpeImageTest(unittest.TestCase):
         idahoid = '1ec49348-8950-49ff-bd71-ea2e4d8754ac'
         img = self.gbdx.idaho_image(idahoid)
         self.assertTrue(isinstance(img, IdahoImage))
-        #assert img._node_id == 'toa_reflectance'
-        assert img.shape == (8, 10496, 14848)
+        assert img.shape == (8, 10342, 14660)
         assert img.proj == 'EPSG:4326'
 
     @my_vcr.use_cassette('tests/unit/cassettes/test_ipe_image_with_aoi.yaml', filter_headers=['authorization'])
     def test_ipe_image_with_aoi(self):
         idahoid = '1ec49348-8950-49ff-bd71-ea2e4d8754ac'
         img = self.gbdx.idaho_image(idahoid, bbox=[-74.01626586914064,45.394592696926615,-73.91601562500001,45.43363548747066])
-        #assert img._node_id == 'toa_reflectance'
-        assert img.shape == (8, 3169, 8135)
+        assert img.shape == (8, 3168, 8134)
         assert img.proj == 'EPSG:4326'
 
     @my_vcr.use_cassette('tests/unit/cassettes/test_ipe_image_with_proj.yaml', filter_headers=['authorization'])
     def test_ipe_image_with_proj(self):
         idahoid = '1ec49348-8950-49ff-bd71-ea2e4d8754ac'
         img = self.gbdx.idaho_image(idahoid, bbox=[-74.01626586914064,45.394592696926615,-73.91601562500001,45.43363548747066], proj='EPSG:3857')
-        #assert img._node_id == 'toa_reflectance'
-        assert img.shape == (8, 4514, 8135)
+        assert img.shape == (8, 4513, 8134)
         assert img.proj == 'EPSG:3857' 
 
     @my_vcr.use_cassette('tests/unit/cassettes/test_ipe_image_with_aoi.yaml', filter_headers=['authorization'])
@@ -78,15 +75,6 @@ class IpeImageTest(unittest.TestCase):
         idahoid = '1ec49348-8950-49ff-bd71-ea2e4d8754ac'
         img = self.gbdx.idaho_image(idahoid)
         aoi = img.aoi(bbox=[-74.01626586914064,45.394592696926615,-73.91601562500001,45.43363548747066])
-        assert aoi.shape == (8, 3169, 8135)
+        assert aoi.shape == (8, 3168, 8134)
         rgb = aoi[[4,2,1], ...]
         assert isinstance(rgb, da.Array)
-
-    @my_vcr.use_cassette('tests/unit/cassettes/test_ipe_image_vrt.yaml', filter_headers=['authorization'])
-    def test_ipe_image_vrt(self):
-        idahoid = '1ec49348-8950-49ff-bd71-ea2e4d8754ac'
-        img = self.gbdx.idaho_image(idahoid, bbox=[-74.01626586914064,45.394592696926615,-73.91601562500001,45.43363548747066], proj='EPSG:3857')
-        #assert img._node_id == 'toa_reflectance'
-        assert img.shape == (8, 4514, 8135)
-        assert img.proj == 'EPSG:3857'
-        assert isinstance(img.vrt, str)

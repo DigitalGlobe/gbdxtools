@@ -51,7 +51,7 @@ interactions:
         "id": "1ec49348-8950-49ff-bd71-ea2e4d8754ac"}'}
     headers:
       content-type: [application/json]
-      date: ['Thu, 06 Jul 2017 17:06:16 GMT']
+      date: ['Fri, 07 Jul 2017 16:04:29 GMT']
       server: [TwistedWeb/16.4.1]
     status: {code: 200, message: OK}
 - request:
@@ -90,7 +90,7 @@ interactions:
     method: POST
     uri: https://idahoapi.geobigdata.io/v1/graph
   response:
-    body: {string: !!python/unicode b5d6564f48e9408cddc3407087d48d2d643914f23e390407818570c28be0c45c}
+    body: {string: !!python/unicode dfd975d81b713a7eeb3047e115f1616fd68736af55a34fc55f65fdd4366e5549}
     headers:
       access-control-allow-headers: ['x-requested-with, X-Auth-Token, Content-Type,
           Authorization']
@@ -100,7 +100,7 @@ interactions:
       connection: [keep-alive]
       content-length: ['64']
       content-type: [text/plain]
-      date: ['Thu, 06 Jul 2017 17:06:17 GMT']
+      date: ['Fri, 07 Jul 2017 16:04:30 GMT']
     status: {code: 200, message: OK}
 - request:
     body: null
@@ -110,7 +110,7 @@ interactions:
       Connection: [keep-alive]
       User-Agent: [python-requests/2.13.0]
     method: GET
-    uri: https://idahoapi.geobigdata.io/v1/metadata/idaho-virtual/b5d6564f48e9408cddc3407087d48d2d643914f23e390407818570c28be0c45c/d7b7e3db-6ca0-5e5e-81f3-4190d033b9eb/image.json
+    uri: https://idahoapi.geobigdata.io/v1/metadata/idaho-virtual/dfd975d81b713a7eeb3047e115f1616fd68736af55a34fc55f65fdd4366e5549/d7b7e3db-6ca0-5e5e-81f3-4190d033b9eb/image.json
   response:
     body: {string: !!python/unicode '{"imageId":"1ec49348-8950-49ff-bd71-ea2e4d8754ac","version":"1.0","profileName":"dg_1b","tilePartition":"0000","tileXOffset":0,"tileYOffset":0,"numXTiles":58,"numYTiles":59,"tileXSize":256,"tileYSize":256,"numBands":8,"dataType":"FLOAT","imageHeight":14670,"imageWidth":14632,"sensorPlatformName":"WV03","sensorName":"8-band
         (Coastal, Blue, Green, Yellow, Red, Red-edge, NIR1, NIR2) Multispectral","vendorName":"DigitalGlobe,
@@ -127,7 +127,7 @@ interactions:
       connection: [keep-alive]
       content-length: ['1088']
       content-type: [application/json]
-      date: ['Thu, 06 Jul 2017 17:06:17 GMT']
+      date: ['Fri, 07 Jul 2017 16:04:30 GMT']
     status: {code: 200, message: OK}
 - request:
     body: null
@@ -137,7 +137,7 @@ interactions:
       Connection: [keep-alive]
       User-Agent: [python-requests/2.13.0]
     method: GET
-    uri: https://idahoapi.geobigdata.io/v1/metadata/idaho-virtual/b5d6564f48e9408cddc3407087d48d2d643914f23e390407818570c28be0c45c/d7b7e3db-6ca0-5e5e-81f3-4190d033b9eb/georeferencing.json
+    uri: https://idahoapi.geobigdata.io/v1/metadata/idaho-virtual/dfd975d81b713a7eeb3047e115f1616fd68736af55a34fc55f65fdd4366e5549/d7b7e3db-6ca0-5e5e-81f3-4190d033b9eb/georeferencing.json
   response:
     body: {string: !!python/unicode '{"spatialReferenceSystemCode":"EPSG:3857","scaleX":1.372,"scaleY":-1.372,"translateX":-8239788.992630752,"translateY":5703660.232416099,"shearX":0.0,"shearY":0.0}'}
     headers:
@@ -149,7 +149,7 @@ interactions:
       connection: [keep-alive]
       content-length: ['162']
       content-type: [application/json]
-      date: ['Thu, 06 Jul 2017 17:06:18 GMT']
+      date: ['Fri, 07 Jul 2017 16:04:31 GMT']
     status: {code: 200, message: OK}
 - request:
     body: null
@@ -159,7 +159,7 @@ interactions:
       Connection: [keep-alive]
       User-Agent: [python-requests/2.13.0]
     method: GET
-    uri: https://idahoapi.geobigdata.io/v1/metadata/idaho-virtual/b5d6564f48e9408cddc3407087d48d2d643914f23e390407818570c28be0c45c/d7b7e3db-6ca0-5e5e-81f3-4190d033b9eb/rpcs.json
+    uri: https://idahoapi.geobigdata.io/v1/metadata/idaho-virtual/dfd975d81b713a7eeb3047e115f1616fd68736af55a34fc55f65fdd4366e5549/d7b7e3db-6ca0-5e5e-81f3-4190d033b9eb/rpcs.json
   response:
     body: {string: !!python/unicode '{"spatialReferenceSystem":"EPSG:4326","upperLeftCorner":{"x":-74.0192839,"y":45.51934028},"upperRightCorner":{"x":-73.83890812,"y":45.51937376},"lowerRightCorner":{"x":-73.83912668,"y":45.39250174},"lowerLeftCorner":{"x":-74.0190588,"y":45.39276835},"gsd":1.2324829320876753E-5,"postScaleFactorX":1.0,"postScaleFactorY":1.0,"lineOffset":4960.0,"sampleOffset":5325.0,"latOffset":45.4559,"lonOffset":-73.9292,"heightOffset":74.0,"lineScale":4961.0,"sampleScale":5325.0,"latScale":0.0656,"lonScale":0.0903,"heightScale":500.0,"lineNumCoefs":[-6.264289E-4,-0.00331274,-1.032516,-0.02792593,-5.658825E-4,-1.545959E-5,-3.322127E-6,-3.453907E-4,4.52076E-4,1.715536E-6,-9.778179E-8,-2.665711E-7,1.066227E-6,-1.025611E-7,-2.356947E-5,-1.128293E-4,-3.112471E-5,-6.527058E-7,-5.192224E-6,-8.372485E-7],"lineDenCoefs":[1.0,-5.878758E-4,-1.718753E-4,-2.08662E-5,-1.432635E-6,4.740456E-8,-7.34269E-6,2.22742E-5,-6.584344E-5,2.995913E-5,-1.067398E-7,-2.622412E-8,-2.073882E-6,-3.507768E-8,-1.649266E-7,-3.265655E-5,-5.679004E-8,0.0,-2.514363E-6,0.0],"sampleNumCoefs":[-0.001215714,1.002505,1.163159E-4,-5.497399E-4,-7.106491E-4,4.403911E-4,-2.108358E-4,6.564136E-4,1.445884E-5,-5.90437E-6,-3.493949E-7,-5.511943E-6,-6.836421E-6,-2.189112E-6,2.062717E-5,-2.416284E-5,-1.373796E-7,9.608614E-7,-1.966204E-6,0.0],"sampleDenCoefs":[1.0,5.610289E-4,7.12494E-4,-4.421477E-4,-1.390862E-5,-5.473036E-7,5.743327E-7,1.164875E-6,3.606521E-6,-2.491765E-6,-3.005073E-8,0.0,1.09839E-7,0.0,-7.706471E-8,-5.394707E-7,0.0,0.0,-3.005369E-8,0.0]}'}
     headers:
@@ -171,6 +171,6 @@ interactions:
       connection: [keep-alive]
       content-length: ['1511']
       content-type: [application/json]
-      date: ['Thu, 06 Jul 2017 17:06:19 GMT']
+      date: ['Fri, 07 Jul 2017 16:04:31 GMT']
     status: {code: 200, message: OK}
 version: 1
