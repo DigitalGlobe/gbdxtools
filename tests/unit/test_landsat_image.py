@@ -53,6 +53,5 @@ class IpeImageTest(unittest.TestCase):
         _id = 'LC80370302014268LGN00'
         img = self.gbdx.landsat_image(_id, bbox=[-109.84, 43.19, -109.59, 43.34])
         self.assertTrue(isinstance(img, LandsatImage))
-        assert img._node_id == 'landsat'
-        assert img.shape == (8, 567, 669)
-        assert img._proj == 'EPSG:32612'
+        assert img.shape == (8, 566, 685)
+        assert img.proj == 'EPSG:32612'
