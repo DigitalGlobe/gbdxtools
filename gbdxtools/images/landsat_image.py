@@ -9,7 +9,7 @@ class LandsatImage(IpeImage):
     """
     def __new__(cls, _id, **kwargs):
         options = {
-            "product": kwargs.get("product", "landsat")
+            "product": kwargs.get("product", "landsat"),
             "spec": kwargs.get("spec", "multispectral")
         }
 
