@@ -9,7 +9,7 @@ from shapely.geometry.base import BaseGeometry
 import pyproj
 
 from gbdxtools.images.meta import DaskMeta, DaskImage
-from gbdxtools.ipe.util import RatPolyTransform, shift_func
+from gbdxtools.ipe.util import RatPolyTransform, AffineTransform
 
 
 class IpeImage(DaskImage, Container):
@@ -17,7 +17,10 @@ class IpeImage(DaskImage, Container):
         assert isinstance(op, DaskMeta)
         self = super(IpeImage, cls).create(op)
         self._ipe_op = op
-        self.__geo_transform__ = RatPolyTransform.from_rpcs(self.ipe.metadata["rpcs"])
+        if self.ipe.metadata["georef"] is None:
+            self.__geo_transform__ = RatPolyTransform.from_rpcs(self.ipe.metadata["rpcs"])
+        else:
+            self.__geo_transform__ = AffineTransform.from_georef(self.ipe.metadata["georef"])
         self.__geo_interface__ = mapping(wkt.loads(self.ipe.metadata["image"]["imageBoundsWGS84"]))
         return self
 
@@ -66,7 +69,7 @@ class IpeImage(DaskImage, Container):
         if isinstance(geometry, BaseGeometry) or getattr(geometry, "__geo_interface__", None) is not None:
             g = shape(geometry) # convert to proper geometry for the __geo_interface__ case
             assert g in self, "Image does not contain specified geometry"
-            bounds = ops.transform(self.__geo_transform__.fwd, g).bounds
+            bounds = ops.transform(self.__geo_transform__.rev, g).bounds
             image = self[:, bounds[1]:bounds[3], bounds[0]:bounds[2]] # a dask array that implements daskmeta interface (via op)
             image.__geo_interface__ = mapping(g)
             image.__geo_transform__ = self.__geo_transform__ - (bounds[0], bounds[1])

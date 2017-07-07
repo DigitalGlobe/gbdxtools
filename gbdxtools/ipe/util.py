@@ -15,6 +15,7 @@ with warnings.catch_warnings():
     warnings.simplefilter("ignore")
 
 from shapely import wkt
+from affine import Affine
 
 import gbdxtools.ipe.constants as constants
 
@@ -165,7 +166,7 @@ class RatPolyTransform(object):
         # only using the numerator (more dynamic range for the fit?)
         # self._B_rev = np.dot(pinv(np.dot(np.transpose(B), B)), np.transpose(B))
 
-    def fwd(self, lng, lat, z=74.0):
+    def rev(self, lng, lat, z=0):
         coord = np.asarray([lng, lat, z])
         normed = np.sum(self._offscl * np.vstack([np.ones(coord.shape), coord]), axis=0)
         X = self._rpc(normed)
@@ -173,7 +174,7 @@ class RatPolyTransform(object):
         return np.int32(np.sum(self._px_offscl_rev * np.vstack([np.ones(result.shape), result]), axis=0))
 
 
-    def rev(self, x, y, z=None):
+    def fwd(self, x, y, z=None):
         coord = np.asarray([x, y])
         normed = np.sum(self._px_offscl * np.vstack([np.ones(coord.shape), coord]), axis=0)
         coord = np.dot(self._A_rev, normed)[[2,1,3]] # likely unstable
@@ -217,6 +218,43 @@ class RatPolyTransform(object):
         px_offset = np.asarray([rpcs["lineOffset"], rpcs["sampleOffset"]])
 
         return cls(P, Q, offset, scale, px_offset, px_scale, rpcs["spatialReferenceSystem"])
+
+    @classmethod
+    def from_affine(cls, affine):
+        pass
+
+
+class AffineTransform(object):
+    def __init__(self, affine, proj=None):
+        self._affine = affine
+        self.proj = proj
+
+    def rev(self, lng, lat, z=0):
+        return np.asarray(~self._affine * (lng, lat)).astype(np.int32)
+
+    def fwd(self, x, y, z=0):
+        return self._affine * (x, y)
+
+    def __add__(self, other):
+        if isinstance(other, Sequence) and len(other) == 2:
+            shift = np.asarray(other)
+            return AffineTransform(self._affine * Affine.translation(shift[0], shift[1]), proj=self.proj)
+        else:
+            raise NotImplemented
+
+    def __sub__(self, other):
+        try:
+            return self.__add__(-other)
+        except:
+            return self.__add__([-e for e in other])
+
+
+    @classmethod
+    def from_georef(cls, georef):
+        tfm = Affine.from_gdal(georef["translateX"], georef["scaleX"], georef["shearX"],
+                               georef["translateY"], georef["shearY"], georef["scaleY"])
+        return cls(tfm, proj=georef["spatialReferenceSystemCode"])
+
 
 
 def shift_func(offset):
