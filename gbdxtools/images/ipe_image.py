@@ -18,6 +18,12 @@ import threading
 num_workers = int(os.environ.get("GBDX_THREADS", 4))
 threaded_get = partial(dask.threaded.get, num_workers=num_workers)
 
+try:
+    from matplotlib import pyplot as plt
+    has_pyplot = True
+except:
+    has_pyplot = False
+
 
 class IpeImage(DaskImage, Container):
     _default_proj = "EPSG:4326"
@@ -61,6 +67,29 @@ class IpeImage(DaskImage, Container):
             return self
         else:
             return self[g]
+  
+    def plot(self, stretch=[2,98], w=10, h=10, bands=[4,2,1]):
+        assert has_pyplot, "To plot images please install matplotlib"
+        assert self.shape[1] and self.shape[-1], "No data to plot, dimensions are invalid {}".format(str(self.shape))
+
+        f, ax1 = plt.subplots(1, figsize=(w,h))
+        ax1.axis('off')
+        if self.shape[0] == 1:
+            plt.imshow(data[0,:,:], cmap="Greys_r")
+        else:
+            data = self.read()
+            data = data[bands,...]
+            data = data.astype(np.float32)
+            data = np.rollaxis(data, 0, 3)
+            lims = np.percentile(data, stretch, axis=(0,1))
+            for x in xrange(len(data[0,0,:])):
+                top = lims[:,x][1]
+                bottom = lims[:,x][0]
+                data[:,:,x] = (data[:,:,x]-bottom)/float(top-bottom)
+            data = np.clip(data,0,1)
+            plt.imshow(data,interpolation='nearest')
+        
+        plt.show(block=False) 
 
     def read(self, bands=None):
         """ Reads data from a dask array and returns the computed ndarray matching the given bands """
