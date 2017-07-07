@@ -184,12 +184,14 @@ class Op(DaskMeta):
                 img_md["imageHeight"] + img_md["imageHeight"] % img_md["tileYSize"],
                 img_md["imageWidth"] + img_md["imageWidth"] % img_md["tileXSize"])
 
-    def _ipe_tile(self, x, y):
-        return "{}/tile/{}/{}/{}/{}/{}.tif".format(VIRTUAL_IPE_URL, "idaho-virtual", self._ipe_id, self._id, x, y)
+    def _ipe_tile(self, x, y, ipe_id, _id):
+        return "{}/tile/{}/{}/{}/{}/{}.tif".format(VIRTUAL_IPE_URL, "idaho-virtual", ipe_id, _id, x, y)
 
     def _collect_urls(self):
         img_md = self.metadata["image"]
-        return {(y, x): self._ipe_tile(x + img_md["tileXOffset"], y + img_md["tileYOffset"])
+        ipe_id = self._ipe_id
+        _id = self._id
+        return {(y, x): self._ipe_tile(x + img_md["tileXOffset"], y + img_md["tileYOffset"], ipe_id, _id)
                 for y in xrange(img_md["numXTiles"])
                 for x in xrange(img_md["numYTiles"])}
 

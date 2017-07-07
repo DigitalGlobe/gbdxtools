@@ -50,7 +50,6 @@ class CatalogImage(IpeImage):
         ms = ipe.Format(ipe.MultiplyConst(standard_products['toa_reflectance'], constants=json.dumps([1000]*8)), dataType="1")
         standard_products["pansharpened"] = ipe.LocallyProjectivePanSharpen(ms, pan)
 
-        print(standard_products.keys())
         try:
             self = super(CatalogImage, cls).__new__(cls, standard_products[options["product"]])
         except KeyError as e:

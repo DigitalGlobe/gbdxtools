@@ -1,6 +1,8 @@
 from __future__ import print_function
 from functools import partial
 from collections import Container
+import os
+import math
 
 from shapely import wkt, ops
 from shapely.geometry import box, shape, mapping
@@ -11,8 +13,15 @@ import pyproj
 from gbdxtools.images.meta import DaskMeta, DaskImage
 from gbdxtools.ipe.util import RatPolyTransform, AffineTransform
 
+import dask
+import threading
+num_workers = int(os.environ.get("GBDX_THREADS", 4))
+threaded_get = partial(dask.threaded.get, num_workers=num_workers)
+
 
 class IpeImage(DaskImage, Container):
+    _default_proj = "EPSG:4326"
+
     def __new__(cls, op):
         assert isinstance(op, DaskMeta)
         self = super(IpeImage, cls).create(op)
@@ -21,7 +30,7 @@ class IpeImage(DaskImage, Container):
             self.__geo_transform__ = RatPolyTransform.from_rpcs(self.ipe.metadata["rpcs"])
         else:
             self.__geo_transform__ = AffineTransform.from_georef(self.ipe.metadata["georef"])
-        self.__geo_interface__ = mapping(wkt.loads(self.ipe.metadata["image"]["imageBoundsWGS84"]))
+        self.__geo_interface__ = mapping(self._reproject(wkt.loads(self.ipe.metadata["image"]["imageBoundsWGS84"])))
         return self
 
     @property
@@ -36,18 +45,37 @@ class IpeImage(DaskImage, Container):
     def ipe(self):
         return self._ipe_op
 
+    @property
+    def ipe_id(self):
+        return self.ipe._ipe_id
+
+    @property
+    def ntiles(self):
+        size = float(self.ipe.metadata['image']['tileXSize'])
+        return math.ceil((float(self.shape[-1]) / size)) * math.ceil(float(self.shape[1]) / size)
+
     def aoi(self, **kwargs):
         """ Subsets the IpeImage by the given bounds """
         g = self._parse_geoms(**kwargs)
-        assert (g is not None) and (g in self), 'AOI bounds not found. Must specify a bbox, wkt, or geojson geometry that is within the image'
-        return self[g]
+        if g is None:
+            return self
+        else:
+            return self[g]
+
+    def read(self, bands=None):
+        """ Reads data from a dask array and returns the computed ndarray matching the given bands """
+        print('Fetching Image... {} {}'.format(self.ntiles, 'tiles' if self.ntiles > 1 else 'tile'))
+        arr = self
+        if bands is not None:
+            arr = self[bands, ...]
+        return arr.compute(get=threaded_get)
+
 
     def _parse_geoms(self, **kwargs):
         """ Finds supported geometry types, parses them and returns the bbox """
         bbox = kwargs.get('bbox', None)
         wkt = kwargs.get('wkt', None)
         geojson = kwargs.get('geojson', None)
-        proj = kwargs.get('proj', "EPSG:4326")
         if bbox is not None:
             g =  box(*bbox)
         elif wkt is not None:
@@ -59,8 +87,15 @@ class IpeImage(DaskImage, Container):
         if self.proj is None:
             return g
         else:
-            tfm = partial(pyproj.transform, pyproj.Proj(init=proj), pyproj.Proj(init=self.proj))
-            return ops.transform(tfm, g)
+            return self._reproject(g)          
+
+    def _reproject(self, geometry, from_proj=None, to_proj=None):
+        if from_proj is None:
+            from_proj = self._default_proj
+        if to_proj is None:
+            to_proj = self.proj
+        tfm = partial(pyproj.transform, pyproj.Proj(init=from_proj), pyproj.Proj(init=to_proj))
+        return ops.transform(tfm, geometry)
 
     def __getitem__(self, geometry):
         if isinstance(geometry, BaseGeometry) or getattr(geometry, "__geo_interface__", None) is not None:
@@ -77,4 +112,4 @@ class IpeImage(DaskImage, Container):
             return super(IpeImage, self).__getitem__(geometry)
 
     def __contains__(self, geometry):
-        return shape(self).contains(shape(geometry))
+        return shape(self).contains(geometry)

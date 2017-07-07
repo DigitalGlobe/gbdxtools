@@ -16,7 +16,6 @@ class IdahoImage(IpeImage):
         }
 
         standard_products = cls._build_standard_products(idaho_id, options["proj"])
-        print(standard_products.keys())
         try:
             self = super(IdahoImage, cls).__new__(cls, standard_products[options["product"]])
         except KeyError as e:
@@ -25,7 +24,7 @@ class IdahoImage(IpeImage):
             raise
         self.idaho_id = idaho_id
         self._products = standard_products
-        return self
+        return self.aoi(**kwargs)
 
     def get_product(self, product):
         return self.__class__(self.idaho_id, proj=self.proj, product=product)
