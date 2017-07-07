@@ -20,3 +20,4 @@ numpy
 pycurl
 rasterio>=1.0a3
 pyproj
+requests_futures
