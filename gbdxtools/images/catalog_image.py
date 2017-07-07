@@ -32,6 +32,8 @@ band_types = {
 
 
 class CatalogImage(IpeImage):
+    _parts = None
+
     def __new__(cls, cat_id, **kwargs):
         options = {
             "band_type": kwargs.get("band_type", "MS"),
@@ -58,10 +60,16 @@ class CatalogImage(IpeImage):
             raise
         self.cat_id = cat_id
         self._products = standard_products
-        self.parts = [IdahoImage(rec['properties']['attributes']['idahoImageId'],
-                                 product=options["product"], proj=options["proj"])
-                      for rec in cls._find_parts(cat_id, options["band_type"])]
-        return self
+        self.options = options
+        return self.aoi(**kwargs)
+        
+    @property
+    def parts(self): 
+      if self._parts is None:
+          self._parts = [IdahoImage(rec['properties']['attributes']['idahoImageId'],
+                            product=self.options["product"], proj=self.options["proj"])
+                                for rec in self._find_parts(self.cat_id, self.options["band_type"])]
+      return self._parts
 
     def get_product(self, product):
         return self.__class__(self.idaho_id, proj=self.proj, product=product)
@@ -70,7 +78,7 @@ class CatalogImage(IpeImage):
     def _find_parts(cat_id, band_type, _vectors=Vectors()):
         aoi = wkt.dumps(box(-180, -90, 180, 90))
         query = "item_type:IDAHOImage AND attributes.catalogID:{} AND attributes.colorInterpretation:{}".format(cat_id, band_types[band_type])
-        return _vectors.query(aoi, query=query)
+        return sorted(_vectors.query(aoi, query=query), key=lambda x: x['properties']['id'])
 
 
     @classmethod
@@ -85,7 +93,7 @@ class CatalogImage(IpeImage):
         # ---
 
         dn_ops = [ipe.IdahoRead(bucketName="idaho-images", imageId=p['properties']['attributes']['idahoImageId'],
-                                objectStore="S3") for p in cls._find_parts(cat_id, band_type)]
+                                objectStore="S3") for p in _parts]
         ortho_op = ipe.GeospatialMosaic(*dn_ops, **{"Dest SRS Code": proj})
 
         toa_reflectance_op = ipe.MultiplyConst(

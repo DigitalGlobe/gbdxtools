@@ -21,7 +21,7 @@ threaded_get = partial(dask.threaded.get, num_workers=num_workers)
 
 class IpeImage(DaskImage, Container):
     _default_proj = "EPSG:4326"
-
+    
     def __new__(cls, op):
         assert isinstance(op, DaskMeta)
         self = super(IpeImage, cls).create(op)

@@ -7,29 +7,30 @@ class LandsatImage(IpeImage):
     """
       Dask based access to landsat image backed by IPE Graphs.
     """
-    _proj = None
-    _user_proj = None
+    def __new__(cls, _id, **kwargs):
+        options = {
+            "product": kwargs.get("product", "landsat")
+            "spec": kwargs.get("spec", "multispectral")
+        }
 
-    def __init__(self, _id, **kwargs):
-        self._gid = _id
-        self._spec = kwargs.get('spec', 'multispectral')
-        if '_ipe_graphs' in kwargs:
-            self._ipe_graphs = kwargs['_ipe_graphs']
-        else:
-            self._ipe_graphs = self._init_graphs()
-        if 'proj' in kwargs:
-            self._user_proj = kwargs['proj']
-        super(LandsatImage, self).__init__(self._ipe_graphs, self._gid, node="landsat", tile_size=512, **kwargs)
-        self.dtype = 'uint16'
+        standard_products = cls._build_standard_products(_id, options["spec"])
+        try:
+            self = super(IdahoImage, cls).__new__(cls, standard_products[options["product"]])
+        except KeyError as e:
+            print(e)
+            print("Specified product not implemented: {}".format(options["product"]))
+            raise
+        self._id = _id
+        self._products = standard_products
+        self.dtype = "uint16"
+        return self.aoi(**kwargs)
 
-
-    def _init_graphs(self):
-        landsat = ipe.LandsatRead(landsatId=self._gid, productSpec=self._spec)
-        return {"landsat": landsat}
-
-    @property
-    def _proj(self):
-        if self._user_proj is None: 
-            return self.ipe_metadata['georef']['spatialReferenceSystemCode']
-        else:
-            return self._user_proj
+    def get_product(self, product):
+        return self.__class__(self._id, proj=self.proj, product=product)
+    
+    @staticmethod
+    def _build_standard_products(_id, spec):
+        landsat = ipe.LandsatRead(landsatId=_id, productSpec=spec)
+        return {
+            "landsat": landsat
+        }
