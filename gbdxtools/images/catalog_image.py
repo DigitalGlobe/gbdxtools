@@ -16,7 +16,7 @@ from shapely.geometry import box, shape, mapping
 
 from gbdxtools import _session, IdahoImage
 from gbdxtools.auth import Auth
-from gbdxtools.ipe.util import calc_toa_gain_offset, ortho_params
+from gbdxtools.ipe.util import calc_toa_gain_offset
 from gbdxtools.images.ipe_image import IpeImage
 from gbdxtools.images.meta import DaskImage
 from gbdxtools.vectors import Vectors
