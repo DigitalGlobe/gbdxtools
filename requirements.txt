@@ -13,6 +13,8 @@ ndg-httpsclient
 bumpversion
 shapely
 ephem
+toolz
+cloudpickle
 dask
 numpy
 pycurl
