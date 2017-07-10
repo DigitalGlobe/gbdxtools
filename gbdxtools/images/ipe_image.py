@@ -8,6 +8,8 @@ from shapely import wkt, ops
 from shapely.geometry import box, shape, mapping
 from shapely.geometry.base import BaseGeometry
 
+import numpy as np
+
 import pyproj
 
 from gbdxtools.images.meta import DaskMeta, DaskImage
