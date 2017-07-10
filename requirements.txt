@@ -13,11 +13,10 @@ ndg-httpsclient
 bumpversion
 shapely
 ephem
-toolz
 dask
-cloudpickle
 numpy
 pycurl
 rasterio>=1.0a3
 pyproj
 requests_futures
+configparser
