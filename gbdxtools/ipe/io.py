@@ -1,8 +1,9 @@
 import rasterio
 import numpy as np
 
-def to_geotiff(arr, path='./output.tif', proj=None, dtype=None, bands=None):
-    dtype = np.dtype(dtype)
+def to_geotiff(arr, path='./output.tif', proj=None, dtype=None, bands=None, **kwargs):
+    if dtype is not None:
+        dtype = np.dtype(dtype)
     data = arr.read(bands=bands)
     c,h,w = data.shape
     meta = {
@@ -10,7 +11,8 @@ def to_geotiff(arr, path='./output.tif', proj=None, dtype=None, bands=None):
         'height': h,
         'count': c,
         'dtype': data.dtype if dtype is None else dtype,
-        'driver': 'GTiff'
+        'driver': 'GTiff',
+        'transform': kwargs.get('transform', arr.affine)
     }
     if proj is not None:
         meta["crs"] = {'init': proj}
