@@ -42,7 +42,7 @@ def get_ipe_metadata(conn, ipe_id, node='toa_reflectance'):
     #except:
     #    meta["georef"] = None
     
-
+    print('METADATA URL', VIRTUAL_IPE_URL + "/metadata/{}/{}/metadata.json".format(ipe_id, node))
     md_response = conn.get(VIRTUAL_IPE_URL + "/metadata/{}/{}/metadata.json".format(ipe_id, node)).result()
     md_json = md_response.json()
 
