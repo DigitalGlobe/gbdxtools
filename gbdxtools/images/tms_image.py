@@ -1,12 +1,15 @@
 import os
 import uuid
 import threading
-import mercantile
-from collections import defaultdict
+from collections import defaultdict, Container
+from itertools import chain
 
 import numpy as np
 import rasterio
 from rasterio.transform import from_bounds as transform_from_bounds
+
+import mercantile
+from shapely.geometry import mapping, shape, box
 
 from gbdxtools.images.meta import DaskImage, DaskMeta
 from gbdxtools.ipe.util import AffineTransform
@@ -44,18 +47,21 @@ class TmsMeta(DaskMeta):
         self._name = "image-{}".format(str(uuid.uuid4()))
         self._url_template = url + "?access_token={token}"
 
+        _first_tile = mercantile.Tile(z=self.zoom_level, x=0, y=0)
+        _last_tile = mercantile.tile(180, -85.05, self.zoom_level)
+        g = box(*mercantile.bounds(_first_tile)).union(box(*mercantile.bounds(_last_tile)))
+        self._full_bounds = g.bounds
+
         # TODO: populate rest of fields automatically
         self._tile_size = 256
         self._nbands = 3
         self._dtype = "uint8"
-
-        self.bounds = None
+        self._bounds = None
 
     @property
     def bounds(self):
         if self._bounds is None:
-            # TODO: return web mercator complete bounds
-            pass
+            return self._full_bounds
         return self._bounds
 
     @bounds.setter
@@ -74,7 +80,7 @@ class TmsMeta(DaskMeta):
         if self._bounds is None:
             return {self._name: (raise_aoi_required, )}
         else:
-            return {(self._name, 0, x, y): (load_url, url) for (x, y), url in self._collecturls}
+            return {(self._name, 0, x, y): (load_url, url) for (x, y), url in self._collect_urls}
 
     @property
     def dtype(self):
@@ -96,7 +102,7 @@ class TmsMeta(DaskMeta):
 
     @property
     def __geo_transform__(self):
-        tfm = transform_from_bounds(*(self.bounds + self.shape[2:0:-1]))
+        tfm = transform_from_bounds(*tuple(e for e in chain(self.bounds, self.shape[2:0:-1])))
         return AffineTransform(tfm, "EPSG:3857")
 
     def _collect_urls(self, bounds):
@@ -116,7 +122,6 @@ class TmsMeta(DaskMeta):
         miny = min(ytiles)
         maxy = max(ytiles)
         return minx, miny, maxx, maxy
-
 
 
 class TmsImage(DaskImage, Container):
