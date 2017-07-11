@@ -75,7 +75,7 @@ class TmsMeta(DaskMeta):
         if self._bounds is None:
             return {self._name: (raise_aoi_required, )}
         else:
-            return {(self._name, 0, x, y): (load_url, url) for (x, y), url in urls.items()}
+            return {(self._name, 0, x, y): (load_url, url) for (x, y), url in self._collecturls}
 
     @property
     def dtype(self):
