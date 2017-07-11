@@ -37,5 +37,5 @@ class _Auth(object):
                 self.gbdx_connection = gbdx_auth.get_session(kwargs.get('config_file'))
         except Exception as err:
             print(err)
-
+        print('GBDX CONN', self.gbdx_connection)
         self.gbdx_futures_session = FuturesSession(session=self.gbdx_connection, max_workers=64)  
