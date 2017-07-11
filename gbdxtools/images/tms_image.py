@@ -11,7 +11,7 @@ from rasterio.transform import from_bounds as transform_from_bounds
 import mercantile
 from shapely.geometry import mapping, shape, box
 
-from gbdxtools.images.meta import DaskImage, DaskMeta
+from gbdxtools.images.meta import DaskImage, DaskMeta, GeoImage
 from gbdxtools.ipe.util import AffineTransform
 
 try:
@@ -124,7 +124,7 @@ class TmsMeta(DaskMeta):
         return minx, miny, maxx, maxy
 
 
-class TmsImage(DaskImage, Container):
+class TmsImage(DaskImage, GeoImage):
     def __new__(cls, access_token=os.environ.get("DG_MAPS_API_TOKEN"),
                  url="https://api.mapbox.com/v4/digitalglobe.nal0g75k/{z}/{x}/{y}.png",
                  zoom=22, **kwargs):
