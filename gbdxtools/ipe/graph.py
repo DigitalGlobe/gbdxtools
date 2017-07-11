@@ -23,7 +23,7 @@ def get_ipe_graph(conn, graph_id):
 
 def register_ipe_graph(conn, ipe_graph):
     url = "{}/graph".format(VIRTUAL_IPE_URL)
-    res = conn.post(url, json.dumps(ipe_graph, sort_keys=True), headers={'Content-Type': 'application/json'}).result()
+    res = conn.post(url, json.dumps(ipe_graph, sort_keys=True), headers={'Content-Type': 'application/json'})#.result()
     #res = resolve_if_future(conn.post(url, json.dumps(ipe_graph, sort_keys=True), headers={'Content-Type': 'application/json'}))
     return res.content
 
@@ -44,7 +44,7 @@ def get_ipe_metadata(conn, ipe_id, node='toa_reflectance'):
     #    meta["georef"] = None
     
 
-    md_response = conn.get(VIRTUAL_IPE_URL + "/metadata/{}/{}/metadata.json".format(ipe_id, node)).result()
+    md_response = conn.get(VIRTUAL_IPE_URL + "/metadata/{}/{}/metadata.json".format(ipe_id, node))#.result()
     md_json = md_response.json()
 
     if md_response.status_code != 200 or ('error' in md_json or 'message' in md_json):

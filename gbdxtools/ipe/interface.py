@@ -139,7 +139,7 @@ class Op(DaskMeta):
         }
 
         if self._interface is not None and conn is None:
-            conn = self._interface.gbdx_futures_session
+            conn = self._interface.gbdx_connection #gbdx_futures_session
 
         if conn is not None:
             self._ipe_id = register_ipe_graph(conn, graph)
@@ -151,7 +151,7 @@ class Op(DaskMeta):
 
     @property
     def metadata(self):
-        #assert self.graph() is not None
+        assert self.graph() is not None
         if self._ipe_meta is not None:
             return self._ipe_meta
         if self._interface is not None:
