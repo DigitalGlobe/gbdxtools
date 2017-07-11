@@ -151,7 +151,7 @@ class Op(DaskMeta):
 
     @property
     def metadata(self):
-        assert self.graph() is not None
+        #assert self.graph() is not None
         if self._ipe_meta is not None:
             return self._ipe_meta
         if self._interface is not None:
