@@ -45,7 +45,6 @@ def get_ipe_metadata(conn, ipe_id, node='toa_reflectance'):
 
     md_response = conn.get(VIRTUAL_IPE_URL + "/metadata/{}/{}/metadata.json".format(ipe_id, node)).result()
     md_json = md_response.json()
-    print(md_json.keys())
 
     if md_response.status_code != 200 or ('error' in md_json or 'message' in md_json):
         raise BadRequest("Problem fetching image metadata: {}".format(md_response.content))
