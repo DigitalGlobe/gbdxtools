@@ -51,7 +51,7 @@ interactions:
         "id": "1ec49348-8950-49ff-bd71-ea2e4d8754ac"}'}
     headers:
       content-type: [application/json]
-      date: ['Tue, 11 Jul 2017 17:15:07 GMT']
+      date: ['Tue, 11 Jul 2017 19:36:52 GMT']
       server: [TwistedWeb/16.4.1]
     status: {code: 200, message: OK}
 - request:
@@ -100,7 +100,7 @@ interactions:
       connection: [keep-alive]
       content-length: ['64']
       content-type: [text/plain]
-      date: ['Tue, 11 Jul 2017 17:15:09 GMT']
+      date: ['Tue, 11 Jul 2017 19:36:54 GMT']
     status: {code: 200, message: OK}
 - request:
     body: null
@@ -126,6 +126,6 @@ interactions:
       access-control-max-age: ['3600']
       connection: [keep-alive]
       content-type: [application/json]
-      date: ['Tue, 11 Jul 2017 17:15:09 GMT']
+      date: ['Tue, 11 Jul 2017 19:36:54 GMT']
     status: {code: 200, message: OK}
 version: 1
