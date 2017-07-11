@@ -23,8 +23,7 @@ def get_ipe_graph(conn, graph_id):
 
 def register_ipe_graph(conn, ipe_graph):
     url = "{}/graph".format(VIRTUAL_IPE_URL)
-    res = resolve_if_future(conn.post(url, json.dumps(ipe_graph, sort_keys=True))) #headers={'Content-Type': 'application/json'}))
-    print('REGISTER', res.content)
+    res = resolve_if_future(conn.post(url, json.dumps(ipe_graph, sort_keys=True), headers={'Content-Type': 'application/json'}))
     return res.content
 
 
