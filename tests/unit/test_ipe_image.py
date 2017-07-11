@@ -45,7 +45,7 @@ class IpeImageTest(unittest.TestCase):
     def setUpClass(cls):
         mock_gbdx_session = get_mock_gbdx_session(token='dymmytoken')
         cls.gbdx = Interface(gbdx_connection=mock_gbdx_session)
-        #cls.gbdx = Interface()
+        # cls.gbdx = Interface()
         cls._temp_path = tempfile.mkdtemp()
         print("Created: {}".format(cls._temp_path))
 
@@ -69,7 +69,7 @@ class IpeImageTest(unittest.TestCase):
         idahoid = '1ec49348-8950-49ff-bd71-ea2e4d8754ac'
         img = self.gbdx.idaho_image(idahoid, bbox=[-74.01626586914064,45.394592696926615,-73.91601562500001,45.43363548747066], proj='EPSG:3857')
         assert img.shape == (8, 4513, 8134)
-        assert img.proj == 'EPSG:3857' 
+        assert img.proj == 'EPSG:3857'
 
     @my_vcr.use_cassette('tests/unit/cassettes/test_ipe_image_with_aoi.yaml', filter_headers=['authorization'])
     def test_ipe_image_aoi(self):

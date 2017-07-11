@@ -9,55 +9,22 @@ interactions:
       Accept-Encoding: ['gzip, deflate']
       Connection: [keep-alive]
       Content-Length: ['318']
-      User-Agent: [python-requests/2.12.1]
+      User-Agent: [python-requests/2.14.2]
     method: POST
     uri: https://geobigdata.io/catalog/v2/search
   response:
-    body: {string: !!python/unicode '{"stats": {"recordsReturned": 2, "totalRecords":
-        2, "typeCounts": {"IDAHOImage": 2, "GBDXCatalogRecord": 2, "WV03_VNIR": 2,
-        "DigitalGlobeProduct": 2}}, "results": [{"identifier": "f715c76b-7483-42ca-b146-cd88064f27cf",
-        "type": ["GBDXCatalogRecord", "IDAHOImage", "DigitalGlobeProduct", "WV03_VNIR"],
-        "properties": {"satAzimuth": 222.5, "sunAzimuth": 154.5, "epsgCode": "4326",
-        "cloudCover": 0, "numYTiles": 161, "numXTiles": 167, "imageWidth": 42500,
-        "tileXOffset": 0, "tileYSize": 256, "idahoImageId": "f715c76b-7483-42ca-b146-cd88064f27cf",
-        "catalogID": "10400100203F1300", "vendorDatasetIdentifier": "LV1B:055640773010_01_P003:10400100203F1300:A01001020110C700",
-        "version": "1.0", "numBands": 1, "offNadirAngle": 19.9, "platformName": "WORLDVIEW03_VNIR",
-        "vendorName": "DigitalGlobe", "imageHeight": 40964, "sunElevation": 63.1,
-        "vendor": "DigitalGlobe", "acquisitionDate": "2016-08-12T18:18:31.263Z", "dataType":
-        "UNSIGNED_SHORT", "timestamp": "2017-02-13T23:51:36.000Z", "tileYOffset":
-        0, "bucketName": "idaho-images", "tileXSize": 256, "colorInterpretation":
-        "PAN", "profileName": "dg_1b", "tilePartition": "0000", "groundSampleDistanceMeters":
-        0.345, "sensorName": "Panchromatic", "tileBucketName": "idaho-images", "footprintWkt":
-        "MULTIPOLYGON(((-105.09570775 39.82377789, -104.92568869 39.83393949, -104.9258464
-        39.7067496, -105.09576254 39.696591, -105.09570775 39.82377789)))", "nativeTileFileFormat":
-        "PNG", "pniirs": 5.5, "satElevation": 67.9, "sensorPlatformName": "WORLDVIEW03_VNIR"}},
-        {"identifier": "cea67467-f90f-4eb8-85f0-62b875f51dea", "type": ["GBDXCatalogRecord",
-        "IDAHOImage", "DigitalGlobeProduct", "WV03_VNIR"], "properties": {"satAzimuth":
-        222.5, "sunAzimuth": 154.5, "epsgCode": "4326", "cloudCover": 0, "numYTiles":
-        41, "numXTiles": 42, "imageWidth": 10651, "tileXOffset": 0, "tileYSize": 256,
-        "idahoImageId": "cea67467-f90f-4eb8-85f0-62b875f51dea", "catalogID": "10400100203F1300",
-        "vendorDatasetIdentifier": "LV1B:055640773010_01_P003:10400100203F1300:A01001020110C700",
-        "version": "1.0", "numBands": 8, "offNadirAngle": 19.9, "platformName": "WORLDVIEW03_VNIR",
-        "vendorName": "DigitalGlobe", "imageHeight": 10241, "sunElevation": 63.1,
-        "vendor": "DigitalGlobe", "acquisitionDate": "2016-08-12T18:18:31.264Z", "dataType":
-        "UNSIGNED_SHORT", "timestamp": "2017-02-14T14:22:53.000Z", "tileYOffset":
-        0, "bucketName": "idaho-images", "tileXSize": 256, "colorInterpretation":
-        "WORLDVIEW_8_BAND", "profileName": "dg_1b", "tilePartition": "0000", "groundSampleDistanceMeters":
-        1.379, "sensorName": "8-band (Coastal, Blue, Green, Yellow, Red, Red-edge,
-        NIR1, NIR2) Multispectral", "tileBucketName": "idaho-images", "footprintWkt":
-        "MULTIPOLYGON(((-105.09591364 39.82376149, -104.92549201 39.83394599, -104.92564966
-        39.70676557, -105.09596923 39.69658308, -105.09591364 39.82376149)))", "nativeTileFileFormat":
-        "TIF", "pniirs": 3.5, "satElevation": 67.9, "sensorPlatformName": "WORLDVIEW03_VNIR"}}]}'}
+    body: {string: !!python/unicode "\n{\n  \"status\": \"401 Unauthorized\",\n  \"message\"
+        : \"Authentication Failed.\"\n}\n"}
     headers:
       access-control-allow-origin: ['*']
       connection: [keep-alive]
-      content-length: ['2919']
+      content-length: ['76']
       content-type: [application/json]
-      date: ['Mon, 27 Mar 2017 20:30:38 GMT']
+      date: ['Thu, 06 Jul 2017 22:26:12 GMT']
       via: [kong/0.5.2]
-      x-amz-cf-id: [P_wv3dwUxnufmy8htdRiWrg8YGiwgHqGtqfZvz7f-835eXs7weijdw==]
-      x-amzn-requestid: [3d513465-132c-11e7-b2fe-3b33e708deaa]
-      x-amzn-trace-id: [Root=1-58d9766e-f6a475fd0ba7f1814a24935e]
-      x-cache: [Miss from cloudfront]
-    status: {code: 200, message: OK}
+      x-amz-cf-id: [xETXewfIJIIOnufOV10N0yLkuD4OAD7RgVuOYXq7eRuwMP3Zic0DZg==]
+      x-amzn-requestid: [1d9c2f78-629a-11e7-9c07-f3d6ecfdff6d]
+      x-amzn-trace-id: [sampled=0;root=1-595eb903-162ac2e55418cd6f5c96792d]
+      x-cache: [Error from cloudfront]
+    status: {code: 401, message: Unauthorized}
 version: 1
