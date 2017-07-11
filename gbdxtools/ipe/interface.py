@@ -139,7 +139,7 @@ class Op(DaskMeta):
         }
 
         if self._interface is not None and conn is None:
-            conn = self._interface.gbdx_futures_session
+            conn = self._interface.gbdx_connection #gbdx_futures_session
 
         if conn is not None:
             self._ipe_id = register_ipe_graph(conn, graph)
@@ -161,7 +161,7 @@ class Op(DaskMeta):
     @property
     def dask(self):
         token = self._interface.gbdx_connection.access_token
-        return {(self.name, 0, y, x): (load_url, url, token, self.chunks) for (y, x), url in self._collect_urls().iteritems()}
+        return {(self.name, 0, y, x): (load_url, url, token, self.chunks) for (y, x), url in self._collect_urls().items()}
 
     @property
     def name(self):
