@@ -57,12 +57,12 @@ class IpeImageTest(unittest.TestCase):
         assert img.shape == (8, 10342, 14660)
         assert img.proj == 'EPSG:4326'
 
-    @my_vcr.use_cassette('tests/unit/cassettes/test_ipe_image_init_with_aoi.yaml', filter_headers=['authorization'])
-    def test_ipe_image_with_aoi(self):
-        idahoid = '1ec49348-8950-49ff-bd71-ea2e4d8754ac'
-        img = self.gbdx.idaho_image(idahoid, bbox=[-74.01626586914064,45.394592696926615,-73.91601562500001,45.43363548747066])
-        assert img.shape == (8, 3168, 8134)
-        assert img.proj == 'EPSG:4326'
+    #@my_vcr.use_cassette('tests/unit/cassettes/test_ipe_image_init_with_aoi.yaml', filter_headers=['authorization'])
+    #def test_ipe_image_with_aoi(self):
+    #    idahoid = '1ec49348-8950-49ff-bd71-ea2e4d8754ac'
+    #    img = self.gbdx.idaho_image(idahoid, bbox=[-74.01626586914064,45.394592696926615,-73.91601562500001,45.43363548747066])
+    #    assert img.shape == (8, 3168, 8134)
+    #    assert img.proj == 'EPSG:4326'
 
     @my_vcr.use_cassette('tests/unit/cassettes/test_ipe_image_with_proj.yaml', filter_headers=['authorization'])
     def test_ipe_image_with_proj(self):
