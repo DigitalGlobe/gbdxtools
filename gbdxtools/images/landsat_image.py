@@ -23,10 +23,14 @@ class LandsatImage(IpeImage):
         self._id = _id
         self._products = standard_products
         return self.aoi(**kwargs)
+    
+    @property
+    def rgb(self):
+        return self[[3,2,1], ...]
 
     def get_product(self, product):
         return self.__class__(self._id, proj=self.proj, product=product)
-    
+
     @staticmethod
     def _build_standard_products(_id, spec):
         landsat = ipe.LandsatRead(landsatId=_id, productSpec=spec)
