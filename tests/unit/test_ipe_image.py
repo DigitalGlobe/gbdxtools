@@ -90,13 +90,13 @@ class IpeImageTest(unittest.TestCase):
         assert rgb.shape == (3, 172, 239)
         assert isinstance(rgb, np.ndarray)
 
-    @my_vcr.use_cassette('tests/unit/cassettes/test_ipe_image_geotiff.yaml', filter_headers=['authorization'])
-    def test_ipe_image_geotiff(self):
-        idahoid = '179269b9-fdb3-49d8-bb62-d15de54ad15d'
-        img = self.gbdx.idaho_image(idahoid, bbox=[-110.85299491882326,32.167148499672855,-110.84870338439943,32.170236308395644])
-        tif = img.geotiff(path='/tmp/tmp.tif', dtype='uint16')
-        with rasterio.open(tif) as src:
-            assert [round(x, 3) for x in list(src.bounds)] == [-110.853, 32.167, -110.849, 32.17]
-            assert src.meta['width'] == 239
-            assert src.meta['height'] == 172
-            assert src.meta['dtype'] == 'uint16'
+    #@my_vcr.use_cassette('tests/unit/cassettes/test_ipe_image_geotiff.yaml', filter_headers=['authorization'])
+    #def test_ipe_image_geotiff(self):
+    #    idahoid = '179269b9-fdb3-49d8-bb62-d15de54ad15d'
+    #    img = self.gbdx.idaho_image(idahoid, bbox=[-110.85299491882326,32.167148499672855,-110.84870338439943,32.170236308395644])
+    #    tif = img.geotiff(path='/tmp/tmp.tif', dtype='uint16')
+    #    with rasterio.open(tif) as src:
+    #        assert [round(x, 3) for x in list(src.bounds)] == [-110.853, 32.167, -110.849, 32.17]
+    #        assert src.meta['width'] == 239
+    #        assert src.meta['height'] == 172
+    #        assert src.meta['dtype'] == 'uint16'
