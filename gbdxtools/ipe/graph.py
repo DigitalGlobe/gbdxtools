@@ -36,13 +36,13 @@ def get_ipe_metadata(conn, ipe_id, node='toa_reflectance'):
     #image_response = resolve_if_future(image_response)
     #georef_response = resolve_if_future(georef_response)
     #rpcs_response = resolve_if_future(rpcs_response)
-    
+
     #meta = {"image": image_response.json(), "rpcs": rpcs_response.json() }
     #try:
     #    meta["georef"] = georef_response.json()
     #except:
     #    meta["georef"] = None
-    
+
     print('METADATA URL', VIRTUAL_IPE_URL + "/metadata/{}/{}/metadata.json".format(ipe_id, node))
     md_response = conn.get(VIRTUAL_IPE_URL + "/metadata/{}/{}/metadata.json".format(ipe_id, node)).result()
     md_json = md_response.json()

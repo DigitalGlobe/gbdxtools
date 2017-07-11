@@ -1,10 +1,23 @@
+from __future__ import print_function
 import abc
 import types
-from functools import wraps
-
+import os
+from functools import wraps, partial
+from collections import Container
+import threading
 from six import add_metaclass
+
+from shapely import wkt, ops
+from shapely.geometry import box, shape, mapping
+from shapely.geometry.base import BaseGeometry
+
+import pyproj
 import dask.array as da
+import numpy as np
+
 import dask
+num_workers = int(os.environ.get("GBDX_THREADS", 4))
+threaded_get = partial(dask.threaded.get, num_workers=num_workers)
 
 add_metaclass(abc.ABCMeta)
 class DaskMeta(object):
@@ -88,3 +101,91 @@ class DaskImage(da.Array):
             obj = da.Array(dm.dask, dm.name, dm.chunks, dm.dtype, dm.shape)
             obj.__class__ = cls
             return obj
+
+    def read(self, bands=None):
+        """ Reads data from a dask array and returns the computed ndarray matching the given bands """
+        arr = self
+        if bands is not None:
+            arr = self[bands, ...]
+        return arr.compute(get=threaded_get)
+
+
+@add_metaclass(abc.ABCMeta)
+class GeoImage(Container):
+    @abc.abstractmethod
+    def __geo_interface__(self):
+        pass
+
+    @abc.abstractmethod
+    def __geo_transform__(self):
+        pass
+
+    @classmethod
+    def __subclasshook__(cls, C):
+        # Must be a numpy-like, with __geo_transform__, and __geo_interface__
+        if (issubclass(C, DaskImage) or issubclass(C, np.ndarray) and
+            any("__geo_transform__" in B.__dict__ for B in C.__mro__) and
+            any("__geo_interface__" in B.__dict__ for B in C.__mro__)):
+            return True
+        raise  NotImplemented
+
+    @property
+    def affine(self):
+        # TODO add check for Ratpoly or whatevs
+        return self.__geo_transform__._affine
+
+    @property
+    def proj(self):
+        return self.__geo_transform__.proj
+
+    def aoi(self, **kwargs):
+        """ Subsets the IpeImage by the given bounds """
+        g = self._parse_geoms(**kwargs)
+        if g is None:
+            return self
+        else:
+            return self[g]
+
+    def geotiff(self, **kwargs):
+        if 'proj' not in kwargs:
+            kwargs['proj'] = self.proj
+        return to_geotiff(self, **kwargs)
+
+    def _parse_geoms(self, **kwargs):
+        """ Finds supported geometry types, parses them and returns the bbox """
+        bbox = kwargs.get('bbox', None)
+        wkt = kwargs.get('wkt', None)
+        geojson = kwargs.get('geojson', None)
+        if bbox is not None:
+            g =  box(*bbox)
+        elif wkt is not None:
+            g = wkt.loads(wkt)
+        elif geojson is not None:
+            g = shape(geojson)
+        else:
+            return None
+        if self.proj is None:
+            return g
+        else:
+            return self._reproject(g)
+
+    def _reproject(self, geometry, from_proj=None, to_proj=None):
+        if from_proj is None:
+            from_proj = self._default_proj
+        if to_proj is None:
+            to_proj = self.proj
+        tfm = partial(pyproj.transform, pyproj.Proj(init=from_proj), pyproj.Proj(init=to_proj))
+        return ops.transform(tfm, geometry)
+
+    def __getitem__(self, geometry):
+        g = shape(geometry) # convert to proper geometry for the __geo_interface__ case
+        assert g in self, "Image does not contain specified geometry"
+        bounds = ops.transform(self.__geo_transform__.rev, g).bounds
+        image = self[:, bounds[1]:bounds[3], bounds[0]:bounds[2]] # a dask array that implements daskmeta interface (via op)
+        image.__geo_interface__ = mapping(g)
+        image.__geo_transform__ = self.__geo_transform__ + (bounds[0], bounds[1])
+        image.__class__ = self.__class__
+        return image
+
+    def __contains__(self, geometry):
+        return shape(self).contains(geometry)
