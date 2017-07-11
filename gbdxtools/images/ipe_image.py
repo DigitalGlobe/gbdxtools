@@ -8,10 +8,14 @@ from shapely import wkt, ops
 from shapely.geometry import box, shape, mapping
 from shapely.geometry.base import BaseGeometry
 
+
+import numpy as np
 import pyproj
 
 from gbdxtools.images.meta import DaskMeta, DaskImage
 from gbdxtools.ipe.util import RatPolyTransform, AffineTransform
+from gbdxtools.ipe.io import to_geotiff
+
 
 import dask
 import threading
@@ -40,6 +44,11 @@ class IpeImage(DaskImage, Container):
         return self
 
     @property
+    def affine(self):
+        # TODO add check for Ratpoly or whatevs
+        return self.__geo_transform__._affine 
+        
+    @property
     def proj(self):
         return self.__geo_transform__.proj
 
@@ -60,6 +69,7 @@ class IpeImage(DaskImage, Container):
         size = float(self.ipe.metadata['image']['tileXSize'])
         return math.ceil((float(self.shape[-1]) / size)) * math.ceil(float(self.shape[1]) / size)
 
+
     def aoi(self, **kwargs):
         """ Subsets the IpeImage by the given bounds """
         g = self._parse_geoms(**kwargs)
@@ -67,6 +77,11 @@ class IpeImage(DaskImage, Container):
             return self
         else:
             return self[g]
+
+    def geotiff(self, **kwargs):
+        if 'proj' not in kwargs:
+            kwargs['proj'] = self.proj
+        return to_geotiff(self, **kwargs)
   
     def plot(self, stretch=[2,98], w=10, h=10, bands=[4,2,1]):
         assert has_pyplot, "To plot images please install matplotlib"
@@ -90,6 +105,7 @@ class IpeImage(DaskImage, Container):
             plt.imshow(data,interpolation='nearest')
         
         plt.show(block=False) 
+        return f, ax1
 
     def read(self, bands=None):
         """ Reads data from a dask array and returns the computed ndarray matching the given bands """
@@ -133,7 +149,7 @@ class IpeImage(DaskImage, Container):
             bounds = ops.transform(self.__geo_transform__.rev, g).bounds
             image = self[:, bounds[1]:bounds[3], bounds[0]:bounds[2]] # a dask array that implements daskmeta interface (via op)
             image.__geo_interface__ = mapping(g)
-            image.__geo_transform__ = self.__geo_transform__ - (bounds[0], bounds[1])
+            image.__geo_transform__ = self.__geo_transform__ + (bounds[0], bounds[1])
             image._ipe_op = self._ipe_op
             image.__class__ = self.__class__
             return image

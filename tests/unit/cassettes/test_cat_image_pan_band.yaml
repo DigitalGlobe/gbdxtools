@@ -1,0 +1,375 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      Cookie: [AWSELB=07A771471E264EA5ADF82F0AA634B8F4B8E2289A69DDED4A9ED6A74633BE086CA3E87E55FEE005A975BF868AFC143A6206D01CF2CB5482661CF3412F7280ED02972FB0AE56CD5320994AFBB4A89308217A547484EF;
+          JSESSIONID=191397113A9B11DA70058596885F824F.node01]
+      User-Agent: [python-requests/2.13.0]
+    method: GET
+    uri: https://vector.geobigdata.io/insight-vector/api/index/query/vector-gbdx-alpha-catalog-v2-*/paging?count=100&upper=90.0&lower=-90.0&right=180.0&q=item_type%3AIDAHOImage+AND+attributes.catalogID%3A104001002838EC00+AND+attributes.colorInterpretation%3APAN&ttl=5m&left=-180.0
+  response:
+    body: {string: !!python/unicode '{ "data" : [{"type":"Feature","geometry":{"type":"MultiPolygon","coordinates":[[[[-85.82893982,10.81867523],[-85.68555111,10.83719585],[-85.68449176,10.70817731],[-85.82907649,10.68849767],[-85.82893982,10.81867523]]]]},"properties":{"ingest_source":"GBDX_INGEST_ALPHA","access":{"groups":["_ALL_"],"users":["_ALL_"]},"item_date":"2017-02-07T16:45:05.931Z","original_crs":"EPSG:4326","item_type":["GBDXCatalogRecord","IDAHOImage","DigitalGlobeProduct","WV03_VNIR"],"format":null,"ingest_date":"2017-06-15T07:07:27.499Z","source":null,"name":null,"attributes":{"profileName":"dg_1b","tilePartition":"0000","acquisitionDate":"2017-02-07T16:45:05.931Z","bucketName":"idaho-images","numBands_int":1,"sunAzimuth_dbl":145.0,"nativeTileFileFormat":"PNG","colorInterpretation":"PAN","cloudCover_int":0,"idahoImageId":"484c6ce3-8f8d-456d-b41d-feba27c810ba","satAzimuth_dbl":221.4,"satElevation_dbl":60.7,"pniirs_dbl":5.4,"numYTiles_int":38,"tileXOffset_int":0,"epsgCode":"4326","vendor":"DigitalGlobe","sunElevation_dbl":58.6,"platformName":"WORLDVIEW03_VNIR","imageHeight_int":38404,"numXTiles_int":42,"sensorPlatformName":"WORLDVIEW03_VNIR","sensorName":"Panchromatic","dataType":"UNSIGNED_SHORT","imageWidth_int":42500,"tileXSize_int":1024,"tileYSize_int":1024,"offNadirAngle_dbl":26.5,"tileBucketName":"idaho-images","vendorName":"DigitalGlobe","version":"1.0","tileYOffset_int":0,"catalogID":"104001002838EC00","vendorDatasetIdentifier":"LV1B:056165420010_01_P003:104001002838EC00:A01001025E729400","groundSampleDistanceMeters_dbl":0.375},"ingest_attributes":{"_rest_user":"acquisitionsvc","_rest_url":"https://vector.geobigdata.io/insight-vector/api/vectors/gbdx-alpha-catalog-v2-%257Bitem_date%253Ayyyy%257D"},"id":"484c6ce3-8f8d-456d-b41d-feba27c810ba","text":""}},{"type":"Feature","geometry":{"type":"MultiPolygon","coordinates":[[[[-85.82929725,10.40608254],[-85.68484979,10.42529084],[-85.68402426,10.29600435],[-85.82949371,10.27590123],[-85.82929725,10.40608254]]]]},"properties":{"ingest_source":"GBDX_INGEST_ALPHA","access":{"groups":["_ALL_"],"users":["_ALL_"]},"item_date":"2017-02-07T16:45:12.018Z","original_crs":"EPSG:4326","item_type":["GBDXCatalogRecord","IDAHOImage","DigitalGlobeProduct","WV03_VNIR"],"format":null,"ingest_date":"2017-06-17T14:01:13.625Z","source":null,"name":null,"attributes":{"profileName":"dg_1b","tilePartition":"0000","acquisitionDate":"2017-02-07T16:45:12.018Z","bucketName":"idaho-images","numBands_int":1,"sunAzimuth_dbl":144.6,"nativeTileFileFormat":"PNG","colorInterpretation":"PAN","cloudCover_int":0,"idahoImageId":"579a8eaf-7982-4d02-b4b9-397f905cb475","satAzimuth_dbl":223.1,"satElevation_dbl":60.4,"pniirs_dbl":5.4,"numYTiles_int":38,"tileXOffset_int":0,"epsgCode":"4326","vendor":"DigitalGlobe","sunElevation_dbl":59.0,"platformName":"WORLDVIEW03_VNIR","imageHeight_int":38408,"numXTiles_int":42,"sensorPlatformName":"WORLDVIEW03_VNIR","sensorName":"Panchromatic","dataType":"UNSIGNED_SHORT","imageWidth_int":42500,"tileXSize_int":1024,"tileYSize_int":1024,"offNadirAngle_dbl":26.7,"tileBucketName":"idaho-images","vendorName":"DigitalGlobe","version":"1.0","tileYOffset_int":0,"catalogID":"104001002838EC00","vendorDatasetIdentifier":"LV1B:056165420010_01_P007:104001002838EC00:A01001025E726A00","groundSampleDistanceMeters_dbl":0.376},"ingest_attributes":{"_rest_user":"acquisitionsvc","_rest_url":"https://vector.geobigdata.io/insight-vector/api/vectors/gbdx-alpha-catalog-v2-%257Bitem_date%253Ayyyy%257D"},"id":"579a8eaf-7982-4d02-b4b9-397f905cb475","text":""}},{"type":"Feature","geometry":{"type":"MultiPolygon","coordinates":[[[[-85.82958424,10.0969036],[-85.68499042,10.11590445],[-85.6836112,9.98719598],[-85.82972943,9.96686083],[-85.82958424,10.0969036]]]]},"properties":{"ingest_source":"GBDX_INGEST_ALPHA","access":{"groups":["_ALL_"],"users":["_ALL_"]},"item_date":"2017-02-07T16:45:16.583Z","original_crs":"EPSG:4326","item_type":["GBDXCatalogRecord","IDAHOImage","DigitalGlobeProduct","WV03_VNIR"],"format":null,"ingest_date":"2017-06-15T21:12:10.737Z","source":null,"name":null,"attributes":{"profileName":"dg_1b","tilePartition":"0000","acquisitionDate":"2017-02-07T16:45:16.583Z","bucketName":"idaho-images","numBands_int":1,"sunAzimuth_dbl":144.4,"nativeTileFileFormat":"PNG","colorInterpretation":"PAN","cloudCover_int":0,"idahoImageId":"0f6aaf6a-7e8a-49f8-8b09-d209dd95f310","satAzimuth_dbl":224.3,"satElevation_dbl":60.3,"pniirs_dbl":5.4,"numYTiles_int":38,"tileXOffset_int":0,"epsgCode":"4326","vendor":"DigitalGlobe","sunElevation_dbl":59.3,"platformName":"WORLDVIEW03_VNIR","imageHeight_int":38412,"numXTiles_int":42,"sensorPlatformName":"WORLDVIEW03_VNIR","sensorName":"Panchromatic","dataType":"UNSIGNED_SHORT","imageWidth_int":42500,"tileXSize_int":1024,"tileYSize_int":1024,"offNadirAngle_dbl":26.8,"tileBucketName":"idaho-images","vendorName":"DigitalGlobe","version":"1.0","tileYOffset_int":0,"catalogID":"104001002838EC00","vendorDatasetIdentifier":"LV1B:056165420010_01_P010:104001002838EC00:A01001025E725E00","groundSampleDistanceMeters_dbl":0.377},"ingest_attributes":{"_rest_user":"acquisitionsvc","_rest_url":"https://vector.geobigdata.io/insight-vector/api/vectors/gbdx-alpha-catalog-v2-%257Bitem_date%253Ayyyy%257D"},"id":"0f6aaf6a-7e8a-49f8-8b09-d209dd95f310","text":""}},{"type":"Feature","geometry":{"type":"MultiPolygon","coordinates":[[[[-85.82950162,10.19991869],[-85.68506436,10.21888305],[-85.6849708,10.08889286],[-85.82960616,10.0698825],[-85.82950162,10.19991869]]]]},"properties":{"ingest_source":"GBDX_INGEST_ALPHA","access":{"groups":["_ALL_"],"users":["_ALL_"]},"item_date":"2017-02-07T16:45:15.061Z","original_crs":"EPSG:4326","item_type":["GBDXCatalogRecord","IDAHOImage","DigitalGlobeProduct","WV03_VNIR"],"format":null,"ingest_date":"2017-06-16T09:25:01.499Z","source":null,"name":null,"attributes":{"profileName":"dg_1b","tilePartition":"0000","acquisitionDate":"2017-02-07T16:45:15.061Z","bucketName":"idaho-images","numBands_int":1,"sunAzimuth_dbl":144.5,"nativeTileFileFormat":"PNG","colorInterpretation":"PAN","cloudCover_int":0,"idahoImageId":"8a137140-6e20-41ad-bb56-7bdfe96573b9","satAzimuth_dbl":223.9,"satElevation_dbl":60.3,"pniirs_dbl":5.4,"numYTiles_int":38,"tileXOffset_int":0,"epsgCode":"4326","vendor":"DigitalGlobe","sunElevation_dbl":59.2,"platformName":"WORLDVIEW03_VNIR","imageHeight_int":38412,"numXTiles_int":42,"sensorPlatformName":"WORLDVIEW03_VNIR","sensorName":"Panchromatic","dataType":"UNSIGNED_SHORT","imageWidth_int":42500,"tileXSize_int":1024,"tileYSize_int":1024,"offNadirAngle_dbl":26.8,"tileBucketName":"idaho-images","vendorName":"DigitalGlobe","version":"1.0","tileYOffset_int":0,"catalogID":"104001002838EC00","vendorDatasetIdentifier":"LV1B:056165420010_01_P009:104001002838EC00:A01001025E726E00","groundSampleDistanceMeters_dbl":0.377},"ingest_attributes":{"_rest_user":"acquisitionsvc","_rest_url":"https://vector.geobigdata.io/insight-vector/api/vectors/gbdx-alpha-catalog-v2-%257Bitem_date%253Ayyyy%257D"},"id":"8a137140-6e20-41ad-bb56-7bdfe96573b9","text":""}},{"type":"Feature","geometry":{"type":"MultiPolygon","coordinates":[[[[-85.82903065,10.71550932],[-85.68450078,10.73516027],[-85.68435884,10.60510569],[-85.82914615,10.58533202],[-85.82903065,10.71550932]]]]},"properties":{"ingest_source":"GBDX_INGEST_ALPHA","access":{"groups":["_ALL_"],"users":["_ALL_"]},"item_date":"2017-02-07T16:45:07.453Z","original_crs":"EPSG:4326","item_type":["GBDXCatalogRecord","IDAHOImage","DigitalGlobeProduct","WV03_VNIR"],"format":null,"ingest_date":"2017-06-15T18:33:03.653Z","source":null,"name":null,"attributes":{"profileName":"dg_1b","tilePartition":"0000","acquisitionDate":"2017-02-07T16:45:07.453Z","bucketName":"idaho-images","numBands_int":1,"sunAzimuth_dbl":144.9,"nativeTileFileFormat":"PNG","colorInterpretation":"PAN","cloudCover_int":0,"idahoImageId":"c5aa6848-fe61-4105-bdb3-8339db05d5b2","satAzimuth_dbl":221.8,"satElevation_dbl":60.6,"pniirs_dbl":5.4,"numYTiles_int":38,"tileXOffset_int":0,"epsgCode":"4326","vendor":"DigitalGlobe","sunElevation_dbl":58.7,"platformName":"WORLDVIEW03_VNIR","imageHeight_int":38408,"numXTiles_int":42,"sensorPlatformName":"WORLDVIEW03_VNIR","sensorName":"Panchromatic","dataType":"UNSIGNED_SHORT","imageWidth_int":42500,"tileXSize_int":1024,"tileYSize_int":1024,"offNadirAngle_dbl":26.5,"tileBucketName":"idaho-images","vendorName":"DigitalGlobe","version":"1.0","tileYOffset_int":0,"catalogID":"104001002838EC00","vendorDatasetIdentifier":"LV1B:056165420010_01_P004:104001002838EC00:A01001025E727600","groundSampleDistanceMeters_dbl":0.375},"ingest_attributes":{"_rest_user":"acquisitionsvc","_rest_url":"https://vector.geobigdata.io/insight-vector/api/vectors/gbdx-alpha-catalog-v2-%257Bitem_date%253Ayyyy%257D"},"id":"c5aa6848-fe61-4105-bdb3-8339db05d5b2","text":""}},{"type":"Feature","geometry":{"type":"MultiPolygon","coordinates":[[[[-85.82920685,10.50922673],[-85.68486905,10.52843829],[-85.68440723,10.39873698],[-85.82978934,10.37856435],[-85.82920685,10.50922673]]]]},"properties":{"ingest_source":"GBDX_INGEST_ALPHA","access":{"groups":["_ALL_"],"users":["_ALL_"]},"item_date":"2017-02-07T16:45:10.496Z","original_crs":"EPSG:4326","item_type":["GBDXCatalogRecord","IDAHOImage","DigitalGlobeProduct","WV03_VNIR"],"format":null,"ingest_date":"2017-06-15T16:14:27.873Z","source":null,"name":null,"attributes":{"profileName":"dg_1b","tilePartition":"0000","acquisitionDate":"2017-02-07T16:45:10.496Z","bucketName":"idaho-images","numBands_int":1,"sunAzimuth_dbl":144.7,"nativeTileFileFormat":"PNG","colorInterpretation":"PAN","cloudCover_int":0,"idahoImageId":"511d78f1-c0b1-4d64-b52b-631bd884edbf","satAzimuth_dbl":222.7,"satElevation_dbl":60.5,"pniirs_dbl":5.4,"numYTiles_int":38,"tileXOffset_int":0,"epsgCode":"4326","vendor":"DigitalGlobe","sunElevation_dbl":58.9,"platformName":"WORLDVIEW03_VNIR","imageHeight_int":38412,"numXTiles_int":42,"sensorPlatformName":"WORLDVIEW03_VNIR","sensorName":"Panchromatic","dataType":"UNSIGNED_SHORT","imageWidth_int":42500,"tileXSize_int":1024,"tileYSize_int":1024,"offNadirAngle_dbl":26.6,"tileBucketName":"idaho-images","vendorName":"DigitalGlobe","version":"1.0","tileYOffset_int":0,"catalogID":"104001002838EC00","vendorDatasetIdentifier":"LV1B:056165420010_01_P006:104001002838EC00:A01001025E728300","groundSampleDistanceMeters_dbl":0.376},"ingest_attributes":{"_rest_user":"acquisitionsvc","_rest_url":"https://vector.geobigdata.io/insight-vector/api/vectors/gbdx-alpha-catalog-v2-%257Bitem_date%253Ayyyy%257D"},"id":"511d78f1-c0b1-4d64-b52b-631bd884edbf","text":""}},{"type":"Feature","geometry":{"type":"MultiPolygon","coordinates":[[[[-85.82959724,10.30277905],[-85.68413321,10.32291966],[-85.68507931,10.19186139],[-85.82950676,10.17293912],[-85.82959724,10.30277905]]]]},"properties":{"ingest_source":"GBDX_INGEST_ALPHA","access":{"groups":["_ALL_"],"users":["_ALL_"]},"item_date":"2017-02-07T16:45:13.539Z","original_crs":"EPSG:4326","item_type":["GBDXCatalogRecord","IDAHOImage","DigitalGlobeProduct","WV03_VNIR"],"format":null,"ingest_date":"2017-06-15T15:52:13.995Z","source":null,"name":null,"attributes":{"profileName":"dg_1b","tilePartition":"0000","acquisitionDate":"2017-02-07T16:45:13.539Z","bucketName":"idaho-images","numBands_int":1,"sunAzimuth_dbl":144.5,"nativeTileFileFormat":"PNG","colorInterpretation":"PAN","cloudCover_int":0,"idahoImageId":"84211807-fa6c-421e-baac-483cc9556793","satAzimuth_dbl":223.5,"satElevation_dbl":60.4,"pniirs_dbl":5.4,"numYTiles_int":38,"tileXOffset_int":0,"epsgCode":"4326","vendor":"DigitalGlobe","sunElevation_dbl":59.1,"platformName":"WORLDVIEW03_VNIR","imageHeight_int":38408,"numXTiles_int":42,"sensorPlatformName":"WORLDVIEW03_VNIR","sensorName":"Panchromatic","dataType":"UNSIGNED_SHORT","imageWidth_int":42500,"tileXSize_int":1024,"tileYSize_int":1024,"offNadirAngle_dbl":26.7,"tileBucketName":"idaho-images","vendorName":"DigitalGlobe","version":"1.0","tileYOffset_int":0,"catalogID":"104001002838EC00","vendorDatasetIdentifier":"LV1B:056165420010_01_P008:104001002838EC00:A01001025E728600","groundSampleDistanceMeters_dbl":0.377},"ingest_attributes":{"_rest_user":"acquisitionsvc","_rest_url":"https://vector.geobigdata.io/insight-vector/api/vectors/gbdx-alpha-catalog-v2-%257Bitem_date%253Ayyyy%257D"},"id":"84211807-fa6c-421e-baac-483cc9556793","text":""}},{"type":"Feature","geometry":{"type":"MultiPolygon","coordinates":[[[[-85.82968978,9.99384388],[-85.68388581,10.01390799],[-85.68361025,9.98611366],[-85.82973089,9.96577763],[-85.82968978,9.99384388]]]]},"properties":{"ingest_source":"GBDX_INGEST_ALPHA","access":{"groups":["_ALL_"],"users":["_ALL_"]},"item_date":"2017-02-07T16:45:18.105Z","original_crs":"EPSG:4326","item_type":["GBDXCatalogRecord","IDAHOImage","DigitalGlobeProduct","WV03_VNIR"],"format":null,"ingest_date":"2017-06-18T08:31:43.513Z","source":null,"name":null,"attributes":{"profileName":"dg_1b","tilePartition":"0000","acquisitionDate":"2017-02-07T16:45:18.105Z","bucketName":"idaho-images","numBands_int":1,"sunAzimuth_dbl":144.3,"nativeTileFileFormat":"PNG","colorInterpretation":"PAN","cloudCover_int":0,"idahoImageId":"6d3ee386-5c57-4c36-9b31-f781443c4570","satAzimuth_dbl":224.5,"satElevation_dbl":60.2,"pniirs_dbl":5.4,"numYTiles_int":9,"tileXOffset_int":0,"epsgCode":"4326","vendor":"DigitalGlobe","sunElevation_dbl":59.3,"platformName":"WORLDVIEW03_VNIR","imageHeight_int":8292,"numXTiles_int":42,"sensorPlatformName":"WORLDVIEW03_VNIR","sensorName":"Panchromatic","dataType":"UNSIGNED_SHORT","imageWidth_int":42500,"tileXSize_int":1024,"tileYSize_int":1024,"offNadirAngle_dbl":26.9,"tileBucketName":"idaho-images","vendorName":"DigitalGlobe","version":"1.0","tileYOffset_int":0,"catalogID":"104001002838EC00","vendorDatasetIdentifier":"LV1B:056165420010_01_P011:104001002838EC00:A01001025E722D00","groundSampleDistanceMeters_dbl":0.377},"ingest_attributes":{"_rest_user":"acquisitionsvc","_rest_url":"https://vector.geobigdata.io/insight-vector/api/vectors/gbdx-alpha-catalog-v2-%257Bitem_date%253Ayyyy%257D"},"id":"6d3ee386-5c57-4c36-9b31-f781443c4570","text":""}},{"type":"Feature","geometry":{"type":"MultiPolygon","coordinates":[[[[-85.82910068,10.92161661],[-85.68481464,10.9412538],[-85.68487727,10.81090511],[-85.82896529,10.79164841],[-85.82910068,10.92161661]]]]},"properties":{"ingest_source":"GBDX_INGEST_ALPHA","access":{"groups":["_ALL_"],"users":["_ALL_"]},"item_date":"2017-02-07T16:45:04.409Z","original_crs":"EPSG:4326","item_type":["GBDXCatalogRecord","IDAHOImage","DigitalGlobeProduct","WV03_VNIR"],"format":null,"ingest_date":"2017-06-17T01:57:48.922Z","source":null,"name":null,"attributes":{"profileName":"dg_1b","tilePartition":"0000","acquisitionDate":"2017-02-07T16:45:04.409Z","bucketName":"idaho-images","numBands_int":1,"sunAzimuth_dbl":145.1,"nativeTileFileFormat":"PNG","colorInterpretation":"PAN","cloudCover_int":0,"idahoImageId":"745b3511-a9e1-4822-b723-be2c8486d1a5","satAzimuth_dbl":221.0,"satElevation_dbl":60.7,"pniirs_dbl":5.4,"numYTiles_int":38,"tileXOffset_int":0,"epsgCode":"4326","vendor":"DigitalGlobe","sunElevation_dbl":58.6,"platformName":"WORLDVIEW03_VNIR","imageHeight_int":38408,"numXTiles_int":42,"sensorPlatformName":"WORLDVIEW03_VNIR","sensorName":"Panchromatic","dataType":"UNSIGNED_SHORT","imageWidth_int":42500,"tileXSize_int":1024,"tileYSize_int":1024,"offNadirAngle_dbl":26.4,"tileBucketName":"idaho-images","vendorName":"DigitalGlobe","version":"1.0","tileYOffset_int":0,"catalogID":"104001002838EC00","vendorDatasetIdentifier":"LV1B:056165420010_01_P002:104001002838EC00:A01001025E723D00","groundSampleDistanceMeters_dbl":0.375},"ingest_attributes":{"_rest_user":"acquisitionsvc","_rest_url":"https://vector.geobigdata.io/insight-vector/api/vectors/gbdx-alpha-catalog-v2-%257Bitem_date%253Ayyyy%257D"},"id":"745b3511-a9e1-4822-b723-be2c8486d1a5","text":""}},{"type":"Feature","geometry":{"type":"MultiPolygon","coordinates":[[[[-85.82871643,11.01469624],[-85.6847798,11.03402185],[-85.68484657,10.91415767],[-85.82979631,10.89376305],[-85.82871643,11.01469624]]]]},"properties":{"ingest_source":"GBDX_INGEST_ALPHA","access":{"groups":["_ALL_"],"users":["_ALL_"]},"item_date":"2017-02-07T16:45:03.042Z","original_crs":"EPSG:4326","item_type":["GBDXCatalogRecord","IDAHOImage","DigitalGlobeProduct","WV03_VNIR"],"format":null,"ingest_date":"2017-06-18T21:37:11.289Z","source":null,"name":null,"attributes":{"profileName":"dg_1b","tilePartition":"0000","acquisitionDate":"2017-02-07T16:45:03.042Z","bucketName":"idaho-images","numBands_int":1,"sunAzimuth_dbl":145.2,"nativeTileFileFormat":"PNG","colorInterpretation":"PAN","cloudCover_int":0,"idahoImageId":"296cd243-7cda-4e9b-8d94-d2905faeb946","satAzimuth_dbl":220.6,"satElevation_dbl":60.8,"pniirs_dbl":5.4,"numYTiles_int":35,"tileXOffset_int":0,"epsgCode":"4326","vendor":"DigitalGlobe","sunElevation_dbl":58.5,"platformName":"WORLDVIEW03_VNIR","imageHeight_int":35324,"numXTiles_int":42,"sensorPlatformName":"WORLDVIEW03_VNIR","sensorName":"Panchromatic","dataType":"UNSIGNED_SHORT","imageWidth_int":42500,"tileXSize_int":1024,"tileYSize_int":1024,"offNadirAngle_dbl":26.4,"tileBucketName":"idaho-images","vendorName":"DigitalGlobe","version":"1.0","tileYOffset_int":0,"catalogID":"104001002838EC00","vendorDatasetIdentifier":"LV1B:056165420010_01_P001:104001002838EC00:A01001025E723900","groundSampleDistanceMeters_dbl":0.374},"ingest_attributes":{"_rest_user":"acquisitionsvc","_rest_url":"https://vector.geobigdata.io/insight-vector/api/vectors/gbdx-alpha-catalog-v2-%257Bitem_date%253Ayyyy%257D"},"id":"296cd243-7cda-4e9b-8d94-d2905faeb946","text":""}}],"next_paging_id":"DnF1ZXJ5VGhlbkZldGNoHwAAAAAajTeaFlNxNUYwQk9YUUN1TDdZQXpzWjVBQncAAAAAGlRsWRZRLW9vTHZaM1FveXJjRXB0bWd1b1hnAAAAABpjkxEWZjlXdWEyNUVUZ0NZUUJ4ZFd3NzdSQQAAAAAaAMLsFm4tTzhIUElJVEpheG1NZXdsc1NJX3cAAAAAGgDC6BZuLU84SFBJSVRKYXhtTWV3bHNTSV93AAAAABrIMQkWbFd5NnhMdldUakNMVmYtR2FUYWJBZwAAAAAayDEHFmxXeTZ4THZXVGpDTFZmLUdhVGFiQWcAAAAAGlf_ARZPck9HY2laMVR6eVJrWk5IS3RrbTRRAAAAABp69v0WbUJpbmNaNjFUMnVYVDdqRkpMMXRVQQAAAAAajTebFlNxNUYwQk9YUUN1TDdZQXpzWjVBQncAAAAAGos3sRZhV3JmSGhiNVJ4YUtTWTJPR0g4OUpnAAAAABpX_wUWT3JPR2NpWjFUenlSa1pOSEt0a200UQAAAAAZqaKQFlA4MWNtZk9pVGp1STZsV0UyRGdhd3cAAAAAGgDC6RZuLU84SFBJSVRKYXhtTWV3bHNTSV93AAAAABozBREWWnREamNITXZUUzIxcWM3NnNzSDJkQQAAAAAakGNlFlVxV2dQcmpaVHVpRVN2SkVNam9XMHcAAAAAGp1EjRZFWVlSTTFMSFJPLWtPbTRISGp0ZnNnAAAAABnB6MMWQUx5eDhWSzJUbDJNZ1hGdmNoNnl3UQAAAAAaNV_HFndaZEdJSGI5Um5tM20zc2loLWd1WGcAAAAAGcHowhZBTHl4OFZLMlRsMk1nWEZ2Y2g2eXdRAAAAABo1kbYWNWxsdkFWU0NUNmliOEVpT1R1RndLdwAAAAAaDTrDFmE1Vy13M1ZVUlBpUFhOaHRXMEFnVXcAAAAAGlf_AhZPck9HY2laMVR6eVJrWk5IS3RrbTRRAAAAABnB6MQWQUx5eDhWSzJUbDJNZ1hGdmNoNnl3UQAAAAAaNV_IFndaZEdJSGI5Um5tM20zc2loLWd1WGcAAAAAGjMFDxZadERqY0hNdlRTMjFxYzc2c3NIMmRBAAAAABoNOsIWYTVXLXczVlVSUGlQWE5odFcwQWdVdwAAAAAaevb-Fm1CaW5jWjYxVDJ1WFQ3akZKTDF0VUEAAAAAGo03nBZTcTVGMEJPWFFDdUw3WUF6c1o1QUJ3AAAAABodyw8WRU1nUkJVS1ZSdGljZUdTOXRFbTh2dwAAAAAaizezFmFXcmZIaGI1UnhhS1NZMk9HSDg5Smc=","item_count":"10","total_count":"10"}'}
+    headers:
+      access-control-allow-credentials: ['true']
+      access-control-allow-headers: ['origin, content-type, accept, authorization']
+      access-control-allow-methods: ['GET, POST, PUT, DELETE, OPTIONS, HEAD']
+      access-control-allow-origin: ['*']
+      connection: [keep-alive]
+      content-encoding: [UTF-8]
+      content-length: ['18879']
+      content-type: [application/json;charset=UTF-8]
+      date: ['Tue, 11 Jul 2017 02:49:53 GMT']
+      server: [Apache, Weblogic 12.2.1.1]
+      strict-transport-security: [max-age=604800 ; includeSubDomains]
+      x-content-type-options: [nosniff]
+      x-frame-options: [SAMEORIGIN]
+      x-permitted-cross-domain-policies: [none]
+      x-xss-protection: [1; mode=block]
+    status: {code: 200, message: OK}
+- request:
+    body: !!python/unicode pagingId=DnF1ZXJ5VGhlbkZldGNoHwAAAAAajTeaFlNxNUYwQk9YUUN1TDdZQXpzWjVBQncAAAAAGlRsWRZRLW9vTHZaM1FveXJjRXB0bWd1b1hnAAAAABpjkxEWZjlXdWEyNUVUZ0NZUUJ4ZFd3NzdSQQAAAAAaAMLsFm4tTzhIUElJVEpheG1NZXdsc1NJX3cAAAAAGgDC6BZuLU84SFBJSVRKYXhtTWV3bHNTSV93AAAAABrIMQkWbFd5NnhMdldUakNMVmYtR2FUYWJBZwAAAAAayDEHFmxXeTZ4THZXVGpDTFZmLUdhVGFiQWcAAAAAGlf_ARZPck9HY2laMVR6eVJrWk5IS3RrbTRRAAAAABp69v0WbUJpbmNaNjFUMnVYVDdqRkpMMXRVQQAAAAAajTebFlNxNUYwQk9YUUN1TDdZQXpzWjVBQncAAAAAGos3sRZhV3JmSGhiNVJ4YUtTWTJPR0g4OUpnAAAAABpX_wUWT3JPR2NpWjFUenlSa1pOSEt0a200UQAAAAAZqaKQFlA4MWNtZk9pVGp1STZsV0UyRGdhd3cAAAAAGgDC6RZuLU84SFBJSVRKYXhtTWV3bHNTSV93AAAAABozBREWWnREamNITXZUUzIxcWM3NnNzSDJkQQAAAAAakGNlFlVxV2dQcmpaVHVpRVN2SkVNam9XMHcAAAAAGp1EjRZFWVlSTTFMSFJPLWtPbTRISGp0ZnNnAAAAABnB6MMWQUx5eDhWSzJUbDJNZ1hGdmNoNnl3UQAAAAAaNV_HFndaZEdJSGI5Um5tM20zc2loLWd1WGcAAAAAGcHowhZBTHl4OFZLMlRsMk1nWEZ2Y2g2eXdRAAAAABo1kbYWNWxsdkFWU0NUNmliOEVpT1R1RndLdwAAAAAaDTrDFmE1Vy13M1ZVUlBpUFhOaHRXMEFnVXcAAAAAGlf_AhZPck9HY2laMVR6eVJrWk5IS3RrbTRRAAAAABnB6MQWQUx5eDhWSzJUbDJNZ1hGdmNoNnl3UQAAAAAaNV_IFndaZEdJSGI5Um5tM20zc2loLWd1WGcAAAAAGjMFDxZadERqY0hNdlRTMjFxYzc2c3NIMmRBAAAAABoNOsIWYTVXLXczVlVSUGlQWE5odFcwQWdVdwAAAAAaevb-Fm1CaW5jWjYxVDJ1WFQ3akZKTDF0VUEAAAAAGo03nBZTcTVGMEJPWFFDdUw3WUF6c1o1QUJ3AAAAABodyw8WRU1nUkJVS1ZSdGljZUdTOXRFbTh2dwAAAAAaizezFmFXcmZIaGI1UnhhS1NZMk9HSDg5Smc%3D&ttl=5m
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      Content-Length: ['1322']
+      Content-Type: [application/x-www-form-urlencoded]
+      Cookie: [AWSELB=07A771471E264EA5ADF82F0AA634B8F4B8E2289A69DDED4A9ED6A74633BE086CA3E87E55FEE005A975BF868AFC143A6206D01CF2CB5482661CF3412F7280ED02972FB0AE56CD5320994AFBB4A89308217A547484EF;
+          JSESSIONID=191397113A9B11DA70058596885F824F.node01]
+      User-Agent: [python-requests/2.13.0]
+    method: POST
+    uri: https://vector.geobigdata.io/insight-vector/api/vectors/paging
+  response:
+    body: {string: !!python/unicode '{ "data" : [],"next_paging_id":"DnF1ZXJ5VGhlbkZldGNoHwAAAAAajTeaFlNxNUYwQk9YUUN1TDdZQXpzWjVBQncAAAAAGlRsWRZRLW9vTHZaM1FveXJjRXB0bWd1b1hnAAAAABpjkxEWZjlXdWEyNUVUZ0NZUUJ4ZFd3NzdSQQAAAAAaAMLsFm4tTzhIUElJVEpheG1NZXdsc1NJX3cAAAAAGgDC6BZuLU84SFBJSVRKYXhtTWV3bHNTSV93AAAAABrIMQkWbFd5NnhMdldUakNMVmYtR2FUYWJBZwAAAAAayDEHFmxXeTZ4THZXVGpDTFZmLUdhVGFiQWcAAAAAGlf_ARZPck9HY2laMVR6eVJrWk5IS3RrbTRRAAAAABp69v0WbUJpbmNaNjFUMnVYVDdqRkpMMXRVQQAAAAAajTebFlNxNUYwQk9YUUN1TDdZQXpzWjVBQncAAAAAGos3sRZhV3JmSGhiNVJ4YUtTWTJPR0g4OUpnAAAAABpX_wUWT3JPR2NpWjFUenlSa1pOSEt0a200UQAAAAAZqaKQFlA4MWNtZk9pVGp1STZsV0UyRGdhd3cAAAAAGgDC6RZuLU84SFBJSVRKYXhtTWV3bHNTSV93AAAAABozBREWWnREamNITXZUUzIxcWM3NnNzSDJkQQAAAAAakGNlFlVxV2dQcmpaVHVpRVN2SkVNam9XMHcAAAAAGp1EjRZFWVlSTTFMSFJPLWtPbTRISGp0ZnNnAAAAABnB6MMWQUx5eDhWSzJUbDJNZ1hGdmNoNnl3UQAAAAAaNV_HFndaZEdJSGI5Um5tM20zc2loLWd1WGcAAAAAGcHowhZBTHl4OFZLMlRsMk1nWEZ2Y2g2eXdRAAAAABo1kbYWNWxsdkFWU0NUNmliOEVpT1R1RndLdwAAAAAaDTrDFmE1Vy13M1ZVUlBpUFhOaHRXMEFnVXcAAAAAGlf_AhZPck9HY2laMVR6eVJrWk5IS3RrbTRRAAAAABnB6MQWQUx5eDhWSzJUbDJNZ1hGdmNoNnl3UQAAAAAaNV_IFndaZEdJSGI5Um5tM20zc2loLWd1WGcAAAAAGjMFDxZadERqY0hNdlRTMjFxYzc2c3NIMmRBAAAAABoNOsIWYTVXLXczVlVSUGlQWE5odFcwQWdVdwAAAAAaevb-Fm1CaW5jWjYxVDJ1WFQ3akZKTDF0VUEAAAAAGo03nBZTcTVGMEJPWFFDdUw3WUF6c1o1QUJ3AAAAABodyw8WRU1nUkJVS1ZSdGljZUdTOXRFbTh2dwAAAAAaizezFmFXcmZIaGI1UnhhS1NZMk9HSDg5Smc=","item_count":"0","total_count":"10"}'}
+    headers:
+      access-control-allow-credentials: ['true']
+      access-control-allow-headers: ['origin, content-type, accept, authorization']
+      access-control-allow-methods: ['GET, POST, PUT, DELETE, OPTIONS, HEAD']
+      access-control-allow-origin: ['*']
+      connection: [keep-alive]
+      content-encoding: [UTF-8]
+      content-length: ['1374']
+      content-type: [application/json;charset=UTF-8]
+      date: ['Tue, 11 Jul 2017 02:49:53 GMT']
+      server: [Apache, Weblogic 12.2.1.1]
+      strict-transport-security: [max-age=604800 ; includeSubDomains]
+      x-content-type-options: [nosniff]
+      x-frame-options: [SAMEORIGIN]
+      x-permitted-cross-domain-policies: [none]
+      x-xss-protection: [1; mode=block]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      User-Agent: [python-requests/2.13.0]
+    method: GET
+    uri: http://idaho.timbr.io/0f6aaf6a-7e8a-49f8-8b09-d209dd95f310.json
+  response:
+    body: {string: !!python/unicode '{"geometry": {"type": "Polygon", "coordinates":
+        [[[-85.82972943, 9.96686083], [-85.82972943, 10.11590445], [-85.68499042,
+        10.11590445], [-85.68499042, 9.96686083], [-85.82972943, 9.96686083]]]}, "properties":
+        {"bandid": "P", "latlonhae": [10.0969036, -85.82958424, 8.0], "mean_sun_el":
+        59.3, "center": {"type": "Point", "coordinates": [-85.757359925, 10.041382639999998]},
+        "catid": "104001002838EC00", "cloud_cover": 0.0, "tdilevel": [48.0], "img_datetime_obj_utc":
+        {"$date": 1486485916583}, "warp": {"yStep": 100, "xStep": 100, "numXCells":
+        432, "yStart": 0, "targetGeoTransform": {"translateX": -85.82972943, "translateY":
+        10.11590445, "scaleX": 3.386633129716134e-06, "scaleY": -3.386633129716134e-06,
+        "shearY": 0.0, "shearX": 0.0, "spatialReferenceSystemCode": "EPSG:4326"},
+        "xStart": 0, "numYCells": 441}, "rrds": {"reducedResolutionDataset": [{"targetImage":
+        "565c413e-e0e2-4aab-be36-a7945c345d8e", "sourceImage": "0f6aaf6a-7e8a-49f8-8b09-d209dd95f310",
+        "inverseScaleFactor": 2.0}, {"targetImage": "5582ddf2-97ce-457d-b317-0a87cf92621a",
+        "sourceImage": "565c413e-e0e2-4aab-be36-a7945c345d8e", "inverseScaleFactor":
+        2.0}, {"targetImage": "8fac20b3-ae93-4b2b-919f-598130b037fd", "sourceImage":
+        "5582ddf2-97ce-457d-b317-0a87cf92621a", "inverseScaleFactor": 2.0}, {"targetImage":
+        "d651f510-c278-4771-a3d5-e33a83366f7f", "sourceImage": "8fac20b3-ae93-4b2b-919f-598130b037fd",
+        "inverseScaleFactor": 2.0}, {"targetImage": "0ab5eae1-5424-41c2-ab91-38c4b9393dc6",
+        "sourceImage": "d651f510-c278-4771-a3d5-e33a83366f7f", "inverseScaleFactor":
+        2.0}]}, "effbandwidth": [0.2896], "abscalfactor": [0.0527336], "bbox": [-85.82972943,
+        9.96686083, -85.68499042, 10.11590445], "band_centers": [649.36], "satid":
+        "WV03", "band_names": ["P"], "off_nadir": 26.8, "image": {"satAzimuth": 224.3,
+        "sunAzimuth": 144.4, "cloudCover": 0.0, "imageId": "0f6aaf6a-7e8a-49f8-8b09-d209dd95f310",
+        "nativeTileFileFormat": "PNG", "numXTiles": 42, "imageWidth": 42500, "tileYSize":
+        1024, "sensorName": "Panchromatic", "vendorDatasetIdentifier": "LV1B:056165420010_01_P010:104001002838EC00:A01001025E725E00",
+        "version": "1.0", "numBands": 1, "imageHeight": 38412, "offNadirAngle": 26.8,
+        "vendorName": "DigitalGlobe, Inc.", "imageBoundsWGS84": "POLYGON ((-85.82958424
+        10.0969036, -85.68499042 10.11590445, -85.6836112 9.98719598, -85.82972943
+        9.96686083, -85.82958424 10.0969036))", "sunElevation": 59.3, "acquisitionDate":
+        "2017-02-07T16:45:16.583Z", "dataType": "UNSIGNED_SHORT", "tileYOffset": 0,
+        "tileXSize": 1024, "colorInterpretation": "PAN", "profileName": "dg_1b", "tilePartition":
+        "0000", "groundSampleDistanceMeters": 0.377, "tileBucketName": "idaho-images",
+        "tileXOffset": 0, "pniirs": 5.4, "satElevation": 60.3, "sensorPlatformName":
+        "WV03", "numYTiles": 38}, "product_level": "LV1B"}, "_acquisitionDate": {"$date":
+        1486485916583}, "_id": {"$oid": "58fe52e69db347af059f6076"}, "type": "Feature",
+        "id": "0f6aaf6a-7e8a-49f8-8b09-d209dd95f310"}'}
+    headers:
+      content-type: [application/json]
+      date: ['Tue, 11 Jul 2017 02:49:53 GMT']
+      server: [TwistedWeb/16.4.1]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      Cookie: [AWSELB=07A771471E264EA5ADF82F0AA634B8F4B8E2289A69DDED4A9ED6A74633BE086CA3E87E55FEE005A975BF868AFC143A6206D01CF2CB5482661CF3412F7280ED02972FB0AE56CD5320994AFBB4A89308217A547484EF;
+          JSESSIONID=191397113A9B11DA70058596885F824F.node01]
+      User-Agent: [python-requests/2.13.0]
+    method: GET
+    uri: https://vector.geobigdata.io/insight-vector/api/index/query/vector-gbdx-alpha-catalog-v2-*/paging?count=100&upper=90.0&lower=-90.0&right=180.0&q=item_type%3AIDAHOImage+AND+attributes.catalogID%3A104001002838EC00+AND+attributes.colorInterpretation%3APAN&ttl=5m&left=-180.0
+  response:
+    body: {string: !!python/unicode '{ "data" : [{"type":"Feature","geometry":{"type":"MultiPolygon","coordinates":[[[[-85.82929725,10.40608254],[-85.68484979,10.42529084],[-85.68402426,10.29600435],[-85.82949371,10.27590123],[-85.82929725,10.40608254]]]]},"properties":{"ingest_source":"GBDX_INGEST_ALPHA","access":{"groups":["_ALL_"],"users":["_ALL_"]},"item_date":"2017-02-07T16:45:12.018Z","original_crs":"EPSG:4326","item_type":["GBDXCatalogRecord","IDAHOImage","DigitalGlobeProduct","WV03_VNIR"],"format":null,"ingest_date":"2017-06-17T14:01:13.625Z","source":null,"name":null,"attributes":{"profileName":"dg_1b","tilePartition":"0000","acquisitionDate":"2017-02-07T16:45:12.018Z","bucketName":"idaho-images","numBands_int":1,"sunAzimuth_dbl":144.6,"nativeTileFileFormat":"PNG","colorInterpretation":"PAN","cloudCover_int":0,"idahoImageId":"579a8eaf-7982-4d02-b4b9-397f905cb475","satAzimuth_dbl":223.1,"satElevation_dbl":60.4,"pniirs_dbl":5.4,"numYTiles_int":38,"tileXOffset_int":0,"epsgCode":"4326","vendor":"DigitalGlobe","sunElevation_dbl":59.0,"platformName":"WORLDVIEW03_VNIR","imageHeight_int":38408,"numXTiles_int":42,"sensorPlatformName":"WORLDVIEW03_VNIR","sensorName":"Panchromatic","dataType":"UNSIGNED_SHORT","imageWidth_int":42500,"tileXSize_int":1024,"tileYSize_int":1024,"offNadirAngle_dbl":26.7,"tileBucketName":"idaho-images","vendorName":"DigitalGlobe","version":"1.0","tileYOffset_int":0,"catalogID":"104001002838EC00","vendorDatasetIdentifier":"LV1B:056165420010_01_P007:104001002838EC00:A01001025E726A00","groundSampleDistanceMeters_dbl":0.376},"ingest_attributes":{"_rest_user":"acquisitionsvc","_rest_url":"https://vector.geobigdata.io/insight-vector/api/vectors/gbdx-alpha-catalog-v2-%257Bitem_date%253Ayyyy%257D"},"id":"579a8eaf-7982-4d02-b4b9-397f905cb475","text":""}},{"type":"Feature","geometry":{"type":"MultiPolygon","coordinates":[[[[-85.82893982,10.81867523],[-85.68555111,10.83719585],[-85.68449176,10.70817731],[-85.82907649,10.68849767],[-85.82893982,10.81867523]]]]},"properties":{"ingest_source":"GBDX_INGEST_ALPHA","access":{"groups":["_ALL_"],"users":["_ALL_"]},"item_date":"2017-02-07T16:45:05.931Z","original_crs":"EPSG:4326","item_type":["GBDXCatalogRecord","IDAHOImage","DigitalGlobeProduct","WV03_VNIR"],"format":null,"ingest_date":"2017-06-15T07:07:27.499Z","source":null,"name":null,"attributes":{"profileName":"dg_1b","tilePartition":"0000","acquisitionDate":"2017-02-07T16:45:05.931Z","bucketName":"idaho-images","numBands_int":1,"sunAzimuth_dbl":145.0,"nativeTileFileFormat":"PNG","colorInterpretation":"PAN","cloudCover_int":0,"idahoImageId":"484c6ce3-8f8d-456d-b41d-feba27c810ba","satAzimuth_dbl":221.4,"satElevation_dbl":60.7,"pniirs_dbl":5.4,"numYTiles_int":38,"tileXOffset_int":0,"epsgCode":"4326","vendor":"DigitalGlobe","sunElevation_dbl":58.6,"platformName":"WORLDVIEW03_VNIR","imageHeight_int":38404,"numXTiles_int":42,"sensorPlatformName":"WORLDVIEW03_VNIR","sensorName":"Panchromatic","dataType":"UNSIGNED_SHORT","imageWidth_int":42500,"tileXSize_int":1024,"tileYSize_int":1024,"offNadirAngle_dbl":26.5,"tileBucketName":"idaho-images","vendorName":"DigitalGlobe","version":"1.0","tileYOffset_int":0,"catalogID":"104001002838EC00","vendorDatasetIdentifier":"LV1B:056165420010_01_P003:104001002838EC00:A01001025E729400","groundSampleDistanceMeters_dbl":0.375},"ingest_attributes":{"_rest_user":"acquisitionsvc","_rest_url":"https://vector.geobigdata.io/insight-vector/api/vectors/gbdx-alpha-catalog-v2-%257Bitem_date%253Ayyyy%257D"},"id":"484c6ce3-8f8d-456d-b41d-feba27c810ba","text":""}},{"type":"Feature","geometry":{"type":"MultiPolygon","coordinates":[[[[-85.82958424,10.0969036],[-85.68499042,10.11590445],[-85.6836112,9.98719598],[-85.82972943,9.96686083],[-85.82958424,10.0969036]]]]},"properties":{"ingest_source":"GBDX_INGEST_ALPHA","access":{"groups":["_ALL_"],"users":["_ALL_"]},"item_date":"2017-02-07T16:45:16.583Z","original_crs":"EPSG:4326","item_type":["GBDXCatalogRecord","IDAHOImage","DigitalGlobeProduct","WV03_VNIR"],"format":null,"ingest_date":"2017-06-15T21:12:10.737Z","source":null,"name":null,"attributes":{"profileName":"dg_1b","tilePartition":"0000","acquisitionDate":"2017-02-07T16:45:16.583Z","bucketName":"idaho-images","numBands_int":1,"sunAzimuth_dbl":144.4,"nativeTileFileFormat":"PNG","colorInterpretation":"PAN","cloudCover_int":0,"idahoImageId":"0f6aaf6a-7e8a-49f8-8b09-d209dd95f310","satAzimuth_dbl":224.3,"satElevation_dbl":60.3,"pniirs_dbl":5.4,"numYTiles_int":38,"tileXOffset_int":0,"epsgCode":"4326","vendor":"DigitalGlobe","sunElevation_dbl":59.3,"platformName":"WORLDVIEW03_VNIR","imageHeight_int":38412,"numXTiles_int":42,"sensorPlatformName":"WORLDVIEW03_VNIR","sensorName":"Panchromatic","dataType":"UNSIGNED_SHORT","imageWidth_int":42500,"tileXSize_int":1024,"tileYSize_int":1024,"offNadirAngle_dbl":26.8,"tileBucketName":"idaho-images","vendorName":"DigitalGlobe","version":"1.0","tileYOffset_int":0,"catalogID":"104001002838EC00","vendorDatasetIdentifier":"LV1B:056165420010_01_P010:104001002838EC00:A01001025E725E00","groundSampleDistanceMeters_dbl":0.377},"ingest_attributes":{"_rest_user":"acquisitionsvc","_rest_url":"https://vector.geobigdata.io/insight-vector/api/vectors/gbdx-alpha-catalog-v2-%257Bitem_date%253Ayyyy%257D"},"id":"0f6aaf6a-7e8a-49f8-8b09-d209dd95f310","text":""}},{"type":"Feature","geometry":{"type":"MultiPolygon","coordinates":[[[[-85.82950162,10.19991869],[-85.68506436,10.21888305],[-85.6849708,10.08889286],[-85.82960616,10.0698825],[-85.82950162,10.19991869]]]]},"properties":{"ingest_source":"GBDX_INGEST_ALPHA","access":{"groups":["_ALL_"],"users":["_ALL_"]},"item_date":"2017-02-07T16:45:15.061Z","original_crs":"EPSG:4326","item_type":["GBDXCatalogRecord","IDAHOImage","DigitalGlobeProduct","WV03_VNIR"],"format":null,"ingest_date":"2017-06-16T09:25:01.499Z","source":null,"name":null,"attributes":{"profileName":"dg_1b","tilePartition":"0000","acquisitionDate":"2017-02-07T16:45:15.061Z","bucketName":"idaho-images","numBands_int":1,"sunAzimuth_dbl":144.5,"nativeTileFileFormat":"PNG","colorInterpretation":"PAN","cloudCover_int":0,"idahoImageId":"8a137140-6e20-41ad-bb56-7bdfe96573b9","satAzimuth_dbl":223.9,"satElevation_dbl":60.3,"pniirs_dbl":5.4,"numYTiles_int":38,"tileXOffset_int":0,"epsgCode":"4326","vendor":"DigitalGlobe","sunElevation_dbl":59.2,"platformName":"WORLDVIEW03_VNIR","imageHeight_int":38412,"numXTiles_int":42,"sensorPlatformName":"WORLDVIEW03_VNIR","sensorName":"Panchromatic","dataType":"UNSIGNED_SHORT","imageWidth_int":42500,"tileXSize_int":1024,"tileYSize_int":1024,"offNadirAngle_dbl":26.8,"tileBucketName":"idaho-images","vendorName":"DigitalGlobe","version":"1.0","tileYOffset_int":0,"catalogID":"104001002838EC00","vendorDatasetIdentifier":"LV1B:056165420010_01_P009:104001002838EC00:A01001025E726E00","groundSampleDistanceMeters_dbl":0.377},"ingest_attributes":{"_rest_user":"acquisitionsvc","_rest_url":"https://vector.geobigdata.io/insight-vector/api/vectors/gbdx-alpha-catalog-v2-%257Bitem_date%253Ayyyy%257D"},"id":"8a137140-6e20-41ad-bb56-7bdfe96573b9","text":""}},{"type":"Feature","geometry":{"type":"MultiPolygon","coordinates":[[[[-85.82959724,10.30277905],[-85.68413321,10.32291966],[-85.68507931,10.19186139],[-85.82950676,10.17293912],[-85.82959724,10.30277905]]]]},"properties":{"ingest_source":"GBDX_INGEST_ALPHA","access":{"groups":["_ALL_"],"users":["_ALL_"]},"item_date":"2017-02-07T16:45:13.539Z","original_crs":"EPSG:4326","item_type":["GBDXCatalogRecord","IDAHOImage","DigitalGlobeProduct","WV03_VNIR"],"format":null,"ingest_date":"2017-06-15T15:52:13.995Z","source":null,"name":null,"attributes":{"profileName":"dg_1b","tilePartition":"0000","acquisitionDate":"2017-02-07T16:45:13.539Z","bucketName":"idaho-images","numBands_int":1,"sunAzimuth_dbl":144.5,"nativeTileFileFormat":"PNG","colorInterpretation":"PAN","cloudCover_int":0,"idahoImageId":"84211807-fa6c-421e-baac-483cc9556793","satAzimuth_dbl":223.5,"satElevation_dbl":60.4,"pniirs_dbl":5.4,"numYTiles_int":38,"tileXOffset_int":0,"epsgCode":"4326","vendor":"DigitalGlobe","sunElevation_dbl":59.1,"platformName":"WORLDVIEW03_VNIR","imageHeight_int":38408,"numXTiles_int":42,"sensorPlatformName":"WORLDVIEW03_VNIR","sensorName":"Panchromatic","dataType":"UNSIGNED_SHORT","imageWidth_int":42500,"tileXSize_int":1024,"tileYSize_int":1024,"offNadirAngle_dbl":26.7,"tileBucketName":"idaho-images","vendorName":"DigitalGlobe","version":"1.0","tileYOffset_int":0,"catalogID":"104001002838EC00","vendorDatasetIdentifier":"LV1B:056165420010_01_P008:104001002838EC00:A01001025E728600","groundSampleDistanceMeters_dbl":0.377},"ingest_attributes":{"_rest_user":"acquisitionsvc","_rest_url":"https://vector.geobigdata.io/insight-vector/api/vectors/gbdx-alpha-catalog-v2-%257Bitem_date%253Ayyyy%257D"},"id":"84211807-fa6c-421e-baac-483cc9556793","text":""}},{"type":"Feature","geometry":{"type":"MultiPolygon","coordinates":[[[[-85.82903065,10.71550932],[-85.68450078,10.73516027],[-85.68435884,10.60510569],[-85.82914615,10.58533202],[-85.82903065,10.71550932]]]]},"properties":{"ingest_source":"GBDX_INGEST_ALPHA","access":{"groups":["_ALL_"],"users":["_ALL_"]},"item_date":"2017-02-07T16:45:07.453Z","original_crs":"EPSG:4326","item_type":["GBDXCatalogRecord","IDAHOImage","DigitalGlobeProduct","WV03_VNIR"],"format":null,"ingest_date":"2017-06-15T18:33:03.653Z","source":null,"name":null,"attributes":{"profileName":"dg_1b","tilePartition":"0000","acquisitionDate":"2017-02-07T16:45:07.453Z","bucketName":"idaho-images","numBands_int":1,"sunAzimuth_dbl":144.9,"nativeTileFileFormat":"PNG","colorInterpretation":"PAN","cloudCover_int":0,"idahoImageId":"c5aa6848-fe61-4105-bdb3-8339db05d5b2","satAzimuth_dbl":221.8,"satElevation_dbl":60.6,"pniirs_dbl":5.4,"numYTiles_int":38,"tileXOffset_int":0,"epsgCode":"4326","vendor":"DigitalGlobe","sunElevation_dbl":58.7,"platformName":"WORLDVIEW03_VNIR","imageHeight_int":38408,"numXTiles_int":42,"sensorPlatformName":"WORLDVIEW03_VNIR","sensorName":"Panchromatic","dataType":"UNSIGNED_SHORT","imageWidth_int":42500,"tileXSize_int":1024,"tileYSize_int":1024,"offNadirAngle_dbl":26.5,"tileBucketName":"idaho-images","vendorName":"DigitalGlobe","version":"1.0","tileYOffset_int":0,"catalogID":"104001002838EC00","vendorDatasetIdentifier":"LV1B:056165420010_01_P004:104001002838EC00:A01001025E727600","groundSampleDistanceMeters_dbl":0.375},"ingest_attributes":{"_rest_user":"acquisitionsvc","_rest_url":"https://vector.geobigdata.io/insight-vector/api/vectors/gbdx-alpha-catalog-v2-%257Bitem_date%253Ayyyy%257D"},"id":"c5aa6848-fe61-4105-bdb3-8339db05d5b2","text":""}},{"type":"Feature","geometry":{"type":"MultiPolygon","coordinates":[[[[-85.82920685,10.50922673],[-85.68486905,10.52843829],[-85.68440723,10.39873698],[-85.82978934,10.37856435],[-85.82920685,10.50922673]]]]},"properties":{"ingest_source":"GBDX_INGEST_ALPHA","access":{"groups":["_ALL_"],"users":["_ALL_"]},"item_date":"2017-02-07T16:45:10.496Z","original_crs":"EPSG:4326","item_type":["GBDXCatalogRecord","IDAHOImage","DigitalGlobeProduct","WV03_VNIR"],"format":null,"ingest_date":"2017-06-15T16:14:27.873Z","source":null,"name":null,"attributes":{"profileName":"dg_1b","tilePartition":"0000","acquisitionDate":"2017-02-07T16:45:10.496Z","bucketName":"idaho-images","numBands_int":1,"sunAzimuth_dbl":144.7,"nativeTileFileFormat":"PNG","colorInterpretation":"PAN","cloudCover_int":0,"idahoImageId":"511d78f1-c0b1-4d64-b52b-631bd884edbf","satAzimuth_dbl":222.7,"satElevation_dbl":60.5,"pniirs_dbl":5.4,"numYTiles_int":38,"tileXOffset_int":0,"epsgCode":"4326","vendor":"DigitalGlobe","sunElevation_dbl":58.9,"platformName":"WORLDVIEW03_VNIR","imageHeight_int":38412,"numXTiles_int":42,"sensorPlatformName":"WORLDVIEW03_VNIR","sensorName":"Panchromatic","dataType":"UNSIGNED_SHORT","imageWidth_int":42500,"tileXSize_int":1024,"tileYSize_int":1024,"offNadirAngle_dbl":26.6,"tileBucketName":"idaho-images","vendorName":"DigitalGlobe","version":"1.0","tileYOffset_int":0,"catalogID":"104001002838EC00","vendorDatasetIdentifier":"LV1B:056165420010_01_P006:104001002838EC00:A01001025E728300","groundSampleDistanceMeters_dbl":0.376},"ingest_attributes":{"_rest_user":"acquisitionsvc","_rest_url":"https://vector.geobigdata.io/insight-vector/api/vectors/gbdx-alpha-catalog-v2-%257Bitem_date%253Ayyyy%257D"},"id":"511d78f1-c0b1-4d64-b52b-631bd884edbf","text":""}},{"type":"Feature","geometry":{"type":"MultiPolygon","coordinates":[[[[-85.82968978,9.99384388],[-85.68388581,10.01390799],[-85.68361025,9.98611366],[-85.82973089,9.96577763],[-85.82968978,9.99384388]]]]},"properties":{"ingest_source":"GBDX_INGEST_ALPHA","access":{"groups":["_ALL_"],"users":["_ALL_"]},"item_date":"2017-02-07T16:45:18.105Z","original_crs":"EPSG:4326","item_type":["GBDXCatalogRecord","IDAHOImage","DigitalGlobeProduct","WV03_VNIR"],"format":null,"ingest_date":"2017-06-18T08:31:43.513Z","source":null,"name":null,"attributes":{"profileName":"dg_1b","tilePartition":"0000","acquisitionDate":"2017-02-07T16:45:18.105Z","bucketName":"idaho-images","numBands_int":1,"sunAzimuth_dbl":144.3,"nativeTileFileFormat":"PNG","colorInterpretation":"PAN","cloudCover_int":0,"idahoImageId":"6d3ee386-5c57-4c36-9b31-f781443c4570","satAzimuth_dbl":224.5,"satElevation_dbl":60.2,"pniirs_dbl":5.4,"numYTiles_int":9,"tileXOffset_int":0,"epsgCode":"4326","vendor":"DigitalGlobe","sunElevation_dbl":59.3,"platformName":"WORLDVIEW03_VNIR","imageHeight_int":8292,"numXTiles_int":42,"sensorPlatformName":"WORLDVIEW03_VNIR","sensorName":"Panchromatic","dataType":"UNSIGNED_SHORT","imageWidth_int":42500,"tileXSize_int":1024,"tileYSize_int":1024,"offNadirAngle_dbl":26.9,"tileBucketName":"idaho-images","vendorName":"DigitalGlobe","version":"1.0","tileYOffset_int":0,"catalogID":"104001002838EC00","vendorDatasetIdentifier":"LV1B:056165420010_01_P011:104001002838EC00:A01001025E722D00","groundSampleDistanceMeters_dbl":0.377},"ingest_attributes":{"_rest_user":"acquisitionsvc","_rest_url":"https://vector.geobigdata.io/insight-vector/api/vectors/gbdx-alpha-catalog-v2-%257Bitem_date%253Ayyyy%257D"},"id":"6d3ee386-5c57-4c36-9b31-f781443c4570","text":""}},{"type":"Feature","geometry":{"type":"MultiPolygon","coordinates":[[[[-85.82871643,11.01469624],[-85.6847798,11.03402185],[-85.68484657,10.91415767],[-85.82979631,10.89376305],[-85.82871643,11.01469624]]]]},"properties":{"ingest_source":"GBDX_INGEST_ALPHA","access":{"groups":["_ALL_"],"users":["_ALL_"]},"item_date":"2017-02-07T16:45:03.042Z","original_crs":"EPSG:4326","item_type":["GBDXCatalogRecord","IDAHOImage","DigitalGlobeProduct","WV03_VNIR"],"format":null,"ingest_date":"2017-06-18T21:37:11.289Z","source":null,"name":null,"attributes":{"profileName":"dg_1b","tilePartition":"0000","acquisitionDate":"2017-02-07T16:45:03.042Z","bucketName":"idaho-images","numBands_int":1,"sunAzimuth_dbl":145.2,"nativeTileFileFormat":"PNG","colorInterpretation":"PAN","cloudCover_int":0,"idahoImageId":"296cd243-7cda-4e9b-8d94-d2905faeb946","satAzimuth_dbl":220.6,"satElevation_dbl":60.8,"pniirs_dbl":5.4,"numYTiles_int":35,"tileXOffset_int":0,"epsgCode":"4326","vendor":"DigitalGlobe","sunElevation_dbl":58.5,"platformName":"WORLDVIEW03_VNIR","imageHeight_int":35324,"numXTiles_int":42,"sensorPlatformName":"WORLDVIEW03_VNIR","sensorName":"Panchromatic","dataType":"UNSIGNED_SHORT","imageWidth_int":42500,"tileXSize_int":1024,"tileYSize_int":1024,"offNadirAngle_dbl":26.4,"tileBucketName":"idaho-images","vendorName":"DigitalGlobe","version":"1.0","tileYOffset_int":0,"catalogID":"104001002838EC00","vendorDatasetIdentifier":"LV1B:056165420010_01_P001:104001002838EC00:A01001025E723900","groundSampleDistanceMeters_dbl":0.374},"ingest_attributes":{"_rest_user":"acquisitionsvc","_rest_url":"https://vector.geobigdata.io/insight-vector/api/vectors/gbdx-alpha-catalog-v2-%257Bitem_date%253Ayyyy%257D"},"id":"296cd243-7cda-4e9b-8d94-d2905faeb946","text":""}},{"type":"Feature","geometry":{"type":"MultiPolygon","coordinates":[[[[-85.82910068,10.92161661],[-85.68481464,10.9412538],[-85.68487727,10.81090511],[-85.82896529,10.79164841],[-85.82910068,10.92161661]]]]},"properties":{"ingest_source":"GBDX_INGEST_ALPHA","access":{"groups":["_ALL_"],"users":["_ALL_"]},"item_date":"2017-02-07T16:45:04.409Z","original_crs":"EPSG:4326","item_type":["GBDXCatalogRecord","IDAHOImage","DigitalGlobeProduct","WV03_VNIR"],"format":null,"ingest_date":"2017-06-17T01:57:48.922Z","source":null,"name":null,"attributes":{"profileName":"dg_1b","tilePartition":"0000","acquisitionDate":"2017-02-07T16:45:04.409Z","bucketName":"idaho-images","numBands_int":1,"sunAzimuth_dbl":145.1,"nativeTileFileFormat":"PNG","colorInterpretation":"PAN","cloudCover_int":0,"idahoImageId":"745b3511-a9e1-4822-b723-be2c8486d1a5","satAzimuth_dbl":221.0,"satElevation_dbl":60.7,"pniirs_dbl":5.4,"numYTiles_int":38,"tileXOffset_int":0,"epsgCode":"4326","vendor":"DigitalGlobe","sunElevation_dbl":58.6,"platformName":"WORLDVIEW03_VNIR","imageHeight_int":38408,"numXTiles_int":42,"sensorPlatformName":"WORLDVIEW03_VNIR","sensorName":"Panchromatic","dataType":"UNSIGNED_SHORT","imageWidth_int":42500,"tileXSize_int":1024,"tileYSize_int":1024,"offNadirAngle_dbl":26.4,"tileBucketName":"idaho-images","vendorName":"DigitalGlobe","version":"1.0","tileYOffset_int":0,"catalogID":"104001002838EC00","vendorDatasetIdentifier":"LV1B:056165420010_01_P002:104001002838EC00:A01001025E723D00","groundSampleDistanceMeters_dbl":0.375},"ingest_attributes":{"_rest_user":"acquisitionsvc","_rest_url":"https://vector.geobigdata.io/insight-vector/api/vectors/gbdx-alpha-catalog-v2-%257Bitem_date%253Ayyyy%257D"},"id":"745b3511-a9e1-4822-b723-be2c8486d1a5","text":""}}],"next_paging_id":"DnF1ZXJ5VGhlbkZldGNoHwAAAAAayDJ1FmxXeTZ4THZXVGpDTFZmLUdhVGFiQWcAAAAAGlRtnhZRLW9vTHZaM1FveXJjRXB0bWd1b1hnAAAAABqLOJIWYVdyZkhoYjVSeGFLU1kyT0dIODlKZwAAAAAaeH7sFmtadHYtVDRSUVdDQzVGVmtkS2Y1NmcAAAAAGo04rxZTcTVGMEJPWFFDdUw3WUF6c1o1QUJ3AAAAABrIMnoWbFd5NnhMdldUakNMVmYtR2FUYWJBZwAAAAAaHcxBFkVNZ1JCVUtWUnRpY2VHUzl0RW04dncAAAAAGnh--xZrWnR2LVQ0UlFXQ0M1RlZrZEtmNTZnAAAAABp69-kWbUJpbmNaNjFUMnVYVDdqRkpMMXRVQQAAAAAajTi6FlNxNUYwQk9YUUN1TDdZQXpzWjVBQncAAAAAGos4lBZhV3JmSGhiNVJ4YUtTWTJPR0g4OUpnAAAAABpYABQWT3JPR2NpWjFUenlSa1pOSEt0a200UQAAAAAanUXMFkVZWVJNMUxIUk8ta09tNEhIanRmc2cAAAAAGlRtoBZRLW9vTHZaM1FveXJjRXB0bWd1b1hnAAAAABozBjgWWnREamNITXZUUzIxcWM3NnNzSDJkQQAAAAAaeH72FmtadHYtVDRSUVdDQzVGVmtkS2Y1NmcAAAAAGhrS4RZzNmRUV0o0elNPaXhhUUZ1Z3BPTkd3AAAAABrIMncWbFd5NnhMdldUakNMVmYtR2FUYWJBZwAAAAAajTiwFlNxNUYwQk9YUUN1TDdZQXpzWjVBQncAAAAAGjWS8xY1bGx2QVZTQ1Q2aWI4RWlPVHVGd0t3AAAAABpUbaMWUS1vb0x2WjNRb3lyY0VwdG1ndW9YZwAAAAAaDTvPFmE1Vy13M1ZVUlBpUFhOaHRXMEFnVXcAAAAAGjWSxRY1bGx2QVZTQ1Q2aWI4RWlPVHVGd0t3AAAAABpRYQQWN0lsOGtMc0RTUWl1ZlpEQVZjMDYtZwAAAAAaVG2hFlEtb29MdlozUW95cmNFcHRtZ3VvWGcAAAAAGamjZBZQODFjbWZPaVRqdUk2bFdFMkRnYXd3AAAAABoNO8UWYTVXLXczVlVSUGlQWE5odFcwQWdVdwAAAAAaevfsFm1CaW5jWjYxVDJ1WFQ3akZKTDF0VUEAAAAAGp1FzRZFWVlSTTFMSFJPLWtPbTRISGp0ZnNnAAAAABodzEIWRU1nUkJVS1ZSdGljZUdTOXRFbTh2dwAAAAAaiziTFmFXcmZIaGI1UnhhS1NZMk9HSDg5Smc=","item_count":"10","total_count":"10"}'}
+    headers:
+      access-control-allow-credentials: ['true']
+      access-control-allow-headers: ['origin, content-type, accept, authorization']
+      access-control-allow-methods: ['GET, POST, PUT, DELETE, OPTIONS, HEAD']
+      access-control-allow-origin: ['*']
+      connection: [keep-alive]
+      content-encoding: [UTF-8]
+      content-length: ['18879']
+      content-type: [application/json;charset=UTF-8]
+      date: ['Tue, 11 Jul 2017 02:49:54 GMT']
+      server: [Apache, Weblogic 12.2.1.1]
+      strict-transport-security: [max-age=604800 ; includeSubDomains]
+      x-content-type-options: [nosniff]
+      x-frame-options: [SAMEORIGIN]
+      x-permitted-cross-domain-policies: [none]
+      x-xss-protection: [1; mode=block]
+    status: {code: 200, message: OK}
+- request:
+    body: !!python/unicode pagingId=DnF1ZXJ5VGhlbkZldGNoHwAAAAAayDJ1FmxXeTZ4THZXVGpDTFZmLUdhVGFiQWcAAAAAGlRtnhZRLW9vTHZaM1FveXJjRXB0bWd1b1hnAAAAABqLOJIWYVdyZkhoYjVSeGFLU1kyT0dIODlKZwAAAAAaeH7sFmtadHYtVDRSUVdDQzVGVmtkS2Y1NmcAAAAAGo04rxZTcTVGMEJPWFFDdUw3WUF6c1o1QUJ3AAAAABrIMnoWbFd5NnhMdldUakNMVmYtR2FUYWJBZwAAAAAaHcxBFkVNZ1JCVUtWUnRpY2VHUzl0RW04dncAAAAAGnh--xZrWnR2LVQ0UlFXQ0M1RlZrZEtmNTZnAAAAABp69-kWbUJpbmNaNjFUMnVYVDdqRkpMMXRVQQAAAAAajTi6FlNxNUYwQk9YUUN1TDdZQXpzWjVBQncAAAAAGos4lBZhV3JmSGhiNVJ4YUtTWTJPR0g4OUpnAAAAABpYABQWT3JPR2NpWjFUenlSa1pOSEt0a200UQAAAAAanUXMFkVZWVJNMUxIUk8ta09tNEhIanRmc2cAAAAAGlRtoBZRLW9vTHZaM1FveXJjRXB0bWd1b1hnAAAAABozBjgWWnREamNITXZUUzIxcWM3NnNzSDJkQQAAAAAaeH72FmtadHYtVDRSUVdDQzVGVmtkS2Y1NmcAAAAAGhrS4RZzNmRUV0o0elNPaXhhUUZ1Z3BPTkd3AAAAABrIMncWbFd5NnhMdldUakNMVmYtR2FUYWJBZwAAAAAajTiwFlNxNUYwQk9YUUN1TDdZQXpzWjVBQncAAAAAGjWS8xY1bGx2QVZTQ1Q2aWI4RWlPVHVGd0t3AAAAABpUbaMWUS1vb0x2WjNRb3lyY0VwdG1ndW9YZwAAAAAaDTvPFmE1Vy13M1ZVUlBpUFhOaHRXMEFnVXcAAAAAGjWSxRY1bGx2QVZTQ1Q2aWI4RWlPVHVGd0t3AAAAABpRYQQWN0lsOGtMc0RTUWl1ZlpEQVZjMDYtZwAAAAAaVG2hFlEtb29MdlozUW95cmNFcHRtZ3VvWGcAAAAAGamjZBZQODFjbWZPaVRqdUk2bFdFMkRnYXd3AAAAABoNO8UWYTVXLXczVlVSUGlQWE5odFcwQWdVdwAAAAAaevfsFm1CaW5jWjYxVDJ1WFQ3akZKTDF0VUEAAAAAGp1FzRZFWVlSTTFMSFJPLWtPbTRISGp0ZnNnAAAAABodzEIWRU1nUkJVS1ZSdGljZUdTOXRFbTh2dwAAAAAaiziTFmFXcmZIaGI1UnhhS1NZMk9HSDg5Smc%3D&ttl=5m
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      Content-Length: ['1322']
+      Content-Type: [application/x-www-form-urlencoded]
+      Cookie: [AWSELB=07A771471E264EA5ADF82F0AA634B8F4B8E2289A69DDED4A9ED6A74633BE086CA3E87E55FEE005A975BF868AFC143A6206D01CF2CB5482661CF3412F7280ED02972FB0AE56CD5320994AFBB4A89308217A547484EF;
+          JSESSIONID=191397113A9B11DA70058596885F824F.node01]
+      User-Agent: [python-requests/2.13.0]
+    method: POST
+    uri: https://vector.geobigdata.io/insight-vector/api/vectors/paging
+  response:
+    body: {string: !!python/unicode '{ "data" : [],"next_paging_id":"DnF1ZXJ5VGhlbkZldGNoHwAAAAAayDJ1FmxXeTZ4THZXVGpDTFZmLUdhVGFiQWcAAAAAGlRtnhZRLW9vTHZaM1FveXJjRXB0bWd1b1hnAAAAABqLOJIWYVdyZkhoYjVSeGFLU1kyT0dIODlKZwAAAAAaeH7sFmtadHYtVDRSUVdDQzVGVmtkS2Y1NmcAAAAAGo04rxZTcTVGMEJPWFFDdUw3WUF6c1o1QUJ3AAAAABrIMnoWbFd5NnhMdldUakNMVmYtR2FUYWJBZwAAAAAaHcxBFkVNZ1JCVUtWUnRpY2VHUzl0RW04dncAAAAAGnh--xZrWnR2LVQ0UlFXQ0M1RlZrZEtmNTZnAAAAABp69-kWbUJpbmNaNjFUMnVYVDdqRkpMMXRVQQAAAAAajTi6FlNxNUYwQk9YUUN1TDdZQXpzWjVBQncAAAAAGos4lBZhV3JmSGhiNVJ4YUtTWTJPR0g4OUpnAAAAABpYABQWT3JPR2NpWjFUenlSa1pOSEt0a200UQAAAAAanUXMFkVZWVJNMUxIUk8ta09tNEhIanRmc2cAAAAAGlRtoBZRLW9vTHZaM1FveXJjRXB0bWd1b1hnAAAAABozBjgWWnREamNITXZUUzIxcWM3NnNzSDJkQQAAAAAaeH72FmtadHYtVDRSUVdDQzVGVmtkS2Y1NmcAAAAAGhrS4RZzNmRUV0o0elNPaXhhUUZ1Z3BPTkd3AAAAABrIMncWbFd5NnhMdldUakNMVmYtR2FUYWJBZwAAAAAajTiwFlNxNUYwQk9YUUN1TDdZQXpzWjVBQncAAAAAGjWS8xY1bGx2QVZTQ1Q2aWI4RWlPVHVGd0t3AAAAABpUbaMWUS1vb0x2WjNRb3lyY0VwdG1ndW9YZwAAAAAaDTvPFmE1Vy13M1ZVUlBpUFhOaHRXMEFnVXcAAAAAGjWSxRY1bGx2QVZTQ1Q2aWI4RWlPVHVGd0t3AAAAABpRYQQWN0lsOGtMc0RTUWl1ZlpEQVZjMDYtZwAAAAAaVG2hFlEtb29MdlozUW95cmNFcHRtZ3VvWGcAAAAAGamjZBZQODFjbWZPaVRqdUk2bFdFMkRnYXd3AAAAABoNO8UWYTVXLXczVlVSUGlQWE5odFcwQWdVdwAAAAAaevfsFm1CaW5jWjYxVDJ1WFQ3akZKTDF0VUEAAAAAGp1FzRZFWVlSTTFMSFJPLWtPbTRISGp0ZnNnAAAAABodzEIWRU1nUkJVS1ZSdGljZUdTOXRFbTh2dwAAAAAaiziTFmFXcmZIaGI1UnhhS1NZMk9HSDg5Smc=","item_count":"0","total_count":"10"}'}
+    headers:
+      access-control-allow-credentials: ['true']
+      access-control-allow-headers: ['origin, content-type, accept, authorization']
+      access-control-allow-methods: ['GET, POST, PUT, DELETE, OPTIONS, HEAD']
+      access-control-allow-origin: ['*']
+      connection: [keep-alive]
+      content-encoding: [UTF-8]
+      content-length: ['1374']
+      content-type: [application/json;charset=UTF-8]
+      date: ['Tue, 11 Jul 2017 02:49:54 GMT']
+      server: [Apache, Weblogic 12.2.1.1]
+      strict-transport-security: [max-age=604800 ; includeSubDomains]
+      x-content-type-options: [nosniff]
+      x-frame-options: [SAMEORIGIN]
+      x-permitted-cross-domain-policies: [none]
+      x-xss-protection: [1; mode=block]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      User-Agent: [python-requests/2.13.0]
+    method: GET
+    uri: http://idaho.timbr.io/0f6aaf6a-7e8a-49f8-8b09-d209dd95f310.json
+  response:
+    body: {string: !!python/unicode '{"geometry": {"type": "Polygon", "coordinates":
+        [[[-85.82972943, 9.96686083], [-85.82972943, 10.11590445], [-85.68499042,
+        10.11590445], [-85.68499042, 9.96686083], [-85.82972943, 9.96686083]]]}, "properties":
+        {"bandid": "P", "latlonhae": [10.0969036, -85.82958424, 8.0], "mean_sun_el":
+        59.3, "center": {"type": "Point", "coordinates": [-85.757359925, 10.041382639999998]},
+        "catid": "104001002838EC00", "cloud_cover": 0.0, "tdilevel": [48.0], "img_datetime_obj_utc":
+        {"$date": 1486485916583}, "warp": {"yStep": 100, "xStep": 100, "numXCells":
+        432, "yStart": 0, "targetGeoTransform": {"translateX": -85.82972943, "translateY":
+        10.11590445, "scaleX": 3.386633129716134e-06, "scaleY": -3.386633129716134e-06,
+        "shearY": 0.0, "shearX": 0.0, "spatialReferenceSystemCode": "EPSG:4326"},
+        "xStart": 0, "numYCells": 441}, "rrds": {"reducedResolutionDataset": [{"targetImage":
+        "565c413e-e0e2-4aab-be36-a7945c345d8e", "sourceImage": "0f6aaf6a-7e8a-49f8-8b09-d209dd95f310",
+        "inverseScaleFactor": 2.0}, {"targetImage": "5582ddf2-97ce-457d-b317-0a87cf92621a",
+        "sourceImage": "565c413e-e0e2-4aab-be36-a7945c345d8e", "inverseScaleFactor":
+        2.0}, {"targetImage": "8fac20b3-ae93-4b2b-919f-598130b037fd", "sourceImage":
+        "5582ddf2-97ce-457d-b317-0a87cf92621a", "inverseScaleFactor": 2.0}, {"targetImage":
+        "d651f510-c278-4771-a3d5-e33a83366f7f", "sourceImage": "8fac20b3-ae93-4b2b-919f-598130b037fd",
+        "inverseScaleFactor": 2.0}, {"targetImage": "0ab5eae1-5424-41c2-ab91-38c4b9393dc6",
+        "sourceImage": "d651f510-c278-4771-a3d5-e33a83366f7f", "inverseScaleFactor":
+        2.0}]}, "effbandwidth": [0.2896], "abscalfactor": [0.0527336], "bbox": [-85.82972943,
+        9.96686083, -85.68499042, 10.11590445], "band_centers": [649.36], "satid":
+        "WV03", "band_names": ["P"], "off_nadir": 26.8, "image": {"satAzimuth": 224.3,
+        "sunAzimuth": 144.4, "cloudCover": 0.0, "imageId": "0f6aaf6a-7e8a-49f8-8b09-d209dd95f310",
+        "nativeTileFileFormat": "PNG", "numXTiles": 42, "imageWidth": 42500, "tileYSize":
+        1024, "sensorName": "Panchromatic", "vendorDatasetIdentifier": "LV1B:056165420010_01_P010:104001002838EC00:A01001025E725E00",
+        "version": "1.0", "numBands": 1, "imageHeight": 38412, "offNadirAngle": 26.8,
+        "vendorName": "DigitalGlobe, Inc.", "imageBoundsWGS84": "POLYGON ((-85.82958424
+        10.0969036, -85.68499042 10.11590445, -85.6836112 9.98719598, -85.82972943
+        9.96686083, -85.82958424 10.0969036))", "sunElevation": 59.3, "acquisitionDate":
+        "2017-02-07T16:45:16.583Z", "dataType": "UNSIGNED_SHORT", "tileYOffset": 0,
+        "tileXSize": 1024, "colorInterpretation": "PAN", "profileName": "dg_1b", "tilePartition":
+        "0000", "groundSampleDistanceMeters": 0.377, "tileBucketName": "idaho-images",
+        "tileXOffset": 0, "pniirs": 5.4, "satElevation": 60.3, "sensorPlatformName":
+        "WV03", "numYTiles": 38}, "product_level": "LV1B"}, "_acquisitionDate": {"$date":
+        1486485916583}, "_id": {"$oid": "58fe52e69db347af059f6076"}, "type": "Feature",
+        "id": "0f6aaf6a-7e8a-49f8-8b09-d209dd95f310"}'}
+    headers:
+      content-type: [application/json]
+      date: ['Tue, 11 Jul 2017 02:49:54 GMT']
+      server: [TwistedWeb/16.4.1]
+    status: {code: 200, message: OK}
+- request:
+    body: !!python/unicode '{"edges": [{"destination": "7a5a0abf-a5d6-5730-b4f2-916eca502054",
+      "id": "558741e4-8074-513c-9454-a7b49621dcae", "index": 1, "source": "102f03f9-8250-558f-838b-2d628944b9af"},
+      {"destination": "102f03f9-8250-558f-838b-2d628944b9af", "id": "5267886f-e92e-52ca-847d-587c64072e06",
+      "index": 1, "source": "d6fd2fcf-e4c6-50a3-87a1-5a3a02764029"}, {"destination":
+      "d6fd2fcf-e4c6-50a3-87a1-5a3a02764029", "id": "5a0936fe-24ea-536f-8661-d0a2074ef5d5",
+      "index": 1, "source": "430f1b52-5203-5a2d-8eec-5f8a58454fef"}, {"destination":
+      "430f1b52-5203-5a2d-8eec-5f8a58454fef", "id": "5dc99038-6e29-573a-8bc9-cf0c96170b18",
+      "index": 1, "source": "2c4be0c5-ae0e-5a20-bf0e-06403aa9a6a1"}, {"destination":
+      "2c4be0c5-ae0e-5a20-bf0e-06403aa9a6a1", "id": "7525ec10-a0e0-59f2-b714-6786873ff2ca",
+      "index": 1, "source": "62088764-6eb6-59c8-9560-19527a5c01b0"}, {"destination":
+      "2c4be0c5-ae0e-5a20-bf0e-06403aa9a6a1", "id": "7d7c967a-682a-5cdf-a0a0-1a00e4eadd1e",
+      "index": 2, "source": "d1f5aaff-0727-552b-8f3d-5984c4380590"}, {"destination":
+      "2c4be0c5-ae0e-5a20-bf0e-06403aa9a6a1", "id": "ba2a46bd-4926-5f73-8f7a-4569f27c4dd0",
+      "index": 3, "source": "07b6a957-23b9-56bc-9922-877f52250921"}, {"destination":
+      "2c4be0c5-ae0e-5a20-bf0e-06403aa9a6a1", "id": "46a5554b-00db-5c31-9469-03d2b2126d8c",
+      "index": 4, "source": "17ff5db4-ea1d-5250-ba2a-72670eff5ffd"}, {"destination":
+      "2c4be0c5-ae0e-5a20-bf0e-06403aa9a6a1", "id": "ae23a43b-a5fe-5568-acbc-ff962ae1635b",
+      "index": 5, "source": "0a94d632-ecfd-5a41-b8b6-d5a557f5801a"}, {"destination":
+      "2c4be0c5-ae0e-5a20-bf0e-06403aa9a6a1", "id": "e819fe6a-0524-5129-b714-0f158fbbfc3d",
+      "index": 6, "source": "cbadad09-e2e0-541d-92ef-6e645e2ecf4e"}, {"destination":
+      "2c4be0c5-ae0e-5a20-bf0e-06403aa9a6a1", "id": "fef12ca9-034d-5e14-8466-54771bd6b6f5",
+      "index": 7, "source": "95be98c4-803e-5adf-8a2f-47053ccf0e6a"}, {"destination":
+      "2c4be0c5-ae0e-5a20-bf0e-06403aa9a6a1", "id": "f9c69725-43f9-50cb-bf1c-4fff1c6de7e4",
+      "index": 8, "source": "86aae4b5-6fb4-5305-8037-183d049df981"}, {"destination":
+      "2c4be0c5-ae0e-5a20-bf0e-06403aa9a6a1", "id": "cbb6edce-23fc-578e-bc66-3a114bbfd78f",
+      "index": 9, "source": "b6cd9afc-1088-581c-9670-178987ade086"}, {"destination":
+      "2c4be0c5-ae0e-5a20-bf0e-06403aa9a6a1", "id": "037b12be-61e7-5761-a787-c0a1742fa255",
+      "index": 10, "source": "159d8394-8718-50cb-8198-f0570403af3e"}], "nodes": [{"id":
+      "7a5a0abf-a5d6-5730-b4f2-916eca502054", "operator": "MultiplyConst", "parameters":
+      {"constants": "[0.0022575551805495498]"}}, {"id": "102f03f9-8250-558f-838b-2d628944b9af",
+      "operator": "AddConst", "parameters": {"constants": "[-1.7]"}}, {"id": "d6fd2fcf-e4c6-50a3-87a1-5a3a02764029",
+      "operator": "MultiplyConst", "parameters": {"constants": "[0.16807014088397787]"}},
+      {"id": "430f1b52-5203-5a2d-8eec-5f8a58454fef", "operator": "Format", "parameters":
+      {"dataType": "4"}}, {"id": "2c4be0c5-ae0e-5a20-bf0e-06403aa9a6a1", "operator":
+      "GeospatialMosaic", "parameters": {"Dest SRS Code": "EPSG:4326"}}, {"id": "62088764-6eb6-59c8-9560-19527a5c01b0",
+      "operator": "IdahoRead", "parameters": {"bucketName": "idaho-images", "imageId":
+      "0f6aaf6a-7e8a-49f8-8b09-d209dd95f310", "objectStore": "S3"}}, {"id": "d1f5aaff-0727-552b-8f3d-5984c4380590",
+      "operator": "IdahoRead", "parameters": {"bucketName": "idaho-images", "imageId":
+      "296cd243-7cda-4e9b-8d94-d2905faeb946", "objectStore": "S3"}}, {"id": "07b6a957-23b9-56bc-9922-877f52250921",
+      "operator": "IdahoRead", "parameters": {"bucketName": "idaho-images", "imageId":
+      "484c6ce3-8f8d-456d-b41d-feba27c810ba", "objectStore": "S3"}}, {"id": "17ff5db4-ea1d-5250-ba2a-72670eff5ffd",
+      "operator": "IdahoRead", "parameters": {"bucketName": "idaho-images", "imageId":
+      "511d78f1-c0b1-4d64-b52b-631bd884edbf", "objectStore": "S3"}}, {"id": "0a94d632-ecfd-5a41-b8b6-d5a557f5801a",
+      "operator": "IdahoRead", "parameters": {"bucketName": "idaho-images", "imageId":
+      "579a8eaf-7982-4d02-b4b9-397f905cb475", "objectStore": "S3"}}, {"id": "cbadad09-e2e0-541d-92ef-6e645e2ecf4e",
+      "operator": "IdahoRead", "parameters": {"bucketName": "idaho-images", "imageId":
+      "6d3ee386-5c57-4c36-9b31-f781443c4570", "objectStore": "S3"}}, {"id": "95be98c4-803e-5adf-8a2f-47053ccf0e6a",
+      "operator": "IdahoRead", "parameters": {"bucketName": "idaho-images", "imageId":
+      "745b3511-a9e1-4822-b723-be2c8486d1a5", "objectStore": "S3"}}, {"id": "86aae4b5-6fb4-5305-8037-183d049df981",
+      "operator": "IdahoRead", "parameters": {"bucketName": "idaho-images", "imageId":
+      "84211807-fa6c-421e-baac-483cc9556793", "objectStore": "S3"}}, {"id": "b6cd9afc-1088-581c-9670-178987ade086",
+      "operator": "IdahoRead", "parameters": {"bucketName": "idaho-images", "imageId":
+      "8a137140-6e20-41ad-bb56-7bdfe96573b9", "objectStore": "S3"}}, {"id": "159d8394-8718-50cb-8198-f0570403af3e",
+      "operator": "IdahoRead", "parameters": {"bucketName": "idaho-images", "imageId":
+      "c5aa6848-fe61-4105-bdb3-8339db05d5b2", "objectStore": "S3"}}]}'
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      Content-Length: ['4847']
+      Content-Type: [application/json]
+      User-Agent: [python-requests/2.13.0]
+    method: POST
+    uri: https://idahoapi.geobigdata.io/v1/graph
+  response:
+    body: {string: !!python/unicode d1dd3935b1869b7059234c9afe4da880f3d1d73dc2f5be23387ef0a4e5640fe4}
+    headers:
+      access-control-allow-headers: ['x-requested-with, X-Auth-Token, Content-Type,
+          Authorization']
+      access-control-allow-methods: ['GET, OPTIONS, HEAD, PUT, POST, DELETE']
+      access-control-allow-origin: ['*']
+      access-control-max-age: ['3600']
+      connection: [keep-alive]
+      content-length: ['64']
+      content-type: [text/plain]
+      date: ['Tue, 11 Jul 2017 02:49:55 GMT']
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      User-Agent: [python-requests/2.13.0]
+    method: GET
+    uri: https://idahoapi.geobigdata.io/v1/metadata/idaho-virtual/d1dd3935b1869b7059234c9afe4da880f3d1d73dc2f5be23387ef0a4e5640fe4/7a5a0abf-a5d6-5730-b4f2-916eca502054/image.json
+  response:
+    body: {string: !!python/unicode '{"imageId":"0f6aaf6a-7e8a-49f8-8b09-d209dd95f310","version":"1.0","profileName":"dg_1b","tilePartition":"0000","tileXOffset":0,"tileYOffset":0,"numXTiles":170,"numYTiles":1243,"tileXSize":256,"tileYSize":256,"numBands":1,"dataType":"FLOAT","imageHeight":317960,"imageWidth":43512,"sensorPlatformName":"WV03","sensorName":"Panchromatic","vendorName":"DigitalGlobe,
+        Inc.","vendorDatasetIdentifier":"LV1B:056165420010_01_P010:104001002838EC00:A01001025E725E00","acquisitionDate":"2017-02-07T16:45:16.583Z","colorInterpretation":"PAN","imageBoundsWGS84":"POLYGON
+        ((-85.82979631 11.03402185, -85.68360974873518 11.03402185, -85.68360974873518
+        9.965776790711462, -85.82979631 9.965776790711462, -85.82979631 11.03402185))","groundSampleDistanceMeters":0.377,"minX":0,"minY":0,"maxX":43511,"maxY":317959,"minTileX":0,"minTileY":0,"maxTileX":169,"maxTileY":1242,"sunAzimuth":144.4,"sunElevation":59.3,"satAzimuth":224.3,"satElevation":60.3,"cloudCover":0.0,"offNadirAngle":26.8,"pniirs":5.4}'}
+    headers:
+      access-control-allow-headers: ['x-requested-with, X-Auth-Token, Content-Type,
+          Authorization']
+      access-control-allow-methods: ['GET, OPTIONS, HEAD, PUT, POST, DELETE']
+      access-control-allow-origin: ['*']
+      access-control-max-age: ['3600']
+      connection: [keep-alive]
+      content-length: ['983']
+      content-type: [application/json]
+      date: ['Tue, 11 Jul 2017 02:49:57 GMT']
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      User-Agent: [python-requests/2.13.0]
+    method: GET
+    uri: https://idahoapi.geobigdata.io/v1/metadata/idaho-virtual/d1dd3935b1869b7059234c9afe4da880f3d1d73dc2f5be23387ef0a4e5640fe4/7a5a0abf-a5d6-5730-b4f2-916eca502054/georeferencing.json
+  response:
+    body: {string: !!python/unicode '{"spatialReferenceSystemCode":"EPSG:4326","scaleX":3.359683794466403E-6,"scaleY":-3.359683794466403E-6,"translateX":-85.82979631,"translateY":11.03402185,"shearX":0.0,"shearY":0.0}'}
+    headers:
+      access-control-allow-headers: ['x-requested-with, X-Auth-Token, Content-Type,
+          Authorization']
+      access-control-allow-methods: ['GET, OPTIONS, HEAD, PUT, POST, DELETE']
+      access-control-allow-origin: ['*']
+      access-control-max-age: ['3600']
+      connection: [keep-alive]
+      content-length: ['180']
+      content-type: [application/json]
+      date: ['Tue, 11 Jul 2017 02:49:59 GMT']
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      User-Agent: [python-requests/2.13.0]
+    method: GET
+    uri: https://idahoapi.geobigdata.io/v1/metadata/idaho-virtual/d1dd3935b1869b7059234c9afe4da880f3d1d73dc2f5be23387ef0a4e5640fe4/7a5a0abf-a5d6-5730-b4f2-916eca502054/rpcs.json
+  response:
+    body: {string: !!python/unicode '{"spatialReferenceSystem":"EPSG:4326","upperLeftCorner":{"x":-85.82958424,"y":10.0969036},"upperRightCorner":{"x":-85.68499042,"y":10.11590445},"lowerRightCorner":{"x":-85.6836112,"y":9.98719598},"lowerLeftCorner":{"x":-85.82972943,"y":9.96686083},"gsd":3.386633129716134E-6,"postScaleFactorX":1.0,"postScaleFactorY":1.0,"lineOffset":19205.0,"sampleOffset":21249.0,"latOffset":10.0412,"lonOffset":-85.7574,"heightOffset":220.0,"lineScale":19206.0,"sampleScale":21250.0,"latScale":0.077,"lonScale":0.0749,"heightScale":501.0,"lineNumCoefs":[7.349162E-4,0.1604375,-1.184912,-0.02453921,-8.691045E-5,4.366244E-6,-6.335279E-5,1.46145E-4,-3.052356E-4,6.181367E-7,-1.119265E-6,-2.853775E-6,-2.152556E-5,-3.766718E-6,2.212322E-5,9.013712E-5,2.769856E-5,5.469549E-7,2.828603E-6,5.752207E-7],"lineDenCoefs":[1.0,-2.446012E-4,5.461321E-4,-5.751175E-5,-3.354968E-5,-1.9798E-7,5.412017E-6,-1.459392E-5,7.797672E-5,-2.329336E-5,1.868481E-6,2.697995E-7,4.436038E-5,2.758123E-8,-5.935921E-6,-1.110495E-4,-1.534338E-7,-1.231053E-7,-7.00948E-6,0.0],"sampleNumCoefs":[0.004888492,1.026257,-5.580045E-5,0.02499662,5.729461E-4,3.035744E-4,-1.518368E-4,-0.005062962,3.157461E-4,4.060568E-6,4.132045E-7,1.594681E-5,-4.379603E-8,2.284483E-7,1.443681E-5,-1.628046E-5,-1.308134E-7,-3.048507E-6,-1.335703E-6,0.0],"sampleDenCoefs":[1.0,1.716124E-4,-5.826156E-4,-4.338506E-4,-1.291269E-5,1.835628E-6,-2.262055E-6,4.536613E-6,1.645329E-6,0.0,-3.934008E-8,1.876553E-8,-4.000717E-7,0.0,2.612328E-7,6.623141E-7,0.0,-1.87952E-8,5.060107E-8,0.0]}'}
+    headers:
+      access-control-allow-headers: ['x-requested-with, X-Auth-Token, Content-Type,
+          Authorization']
+      access-control-allow-methods: ['GET, OPTIONS, HEAD, PUT, POST, DELETE']
+      access-control-allow-origin: ['*']
+      access-control-max-age: ['3600']
+      connection: [keep-alive]
+      content-length: ['1512']
+      content-type: [application/json]
+      date: ['Tue, 11 Jul 2017 02:50:02 GMT']
+    status: {code: 200, message: OK}
+version: 1

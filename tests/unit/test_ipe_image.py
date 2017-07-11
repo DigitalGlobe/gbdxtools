@@ -14,6 +14,7 @@ import tempfile
 import unittest
 import rasterio
 import dask.array as da
+import numpy as np
 
 try:
     from urlparse import urlparse
@@ -56,7 +57,7 @@ class IpeImageTest(unittest.TestCase):
         assert img.shape == (8, 10342, 14660)
         assert img.proj == 'EPSG:4326'
 
-    @my_vcr.use_cassette('tests/unit/cassettes/test_ipe_image_with_aoi.yaml', filter_headers=['authorization'])
+    @my_vcr.use_cassette('tests/unit/cassettes/test_ipe_image_init_with_aoi.yaml', filter_headers=['authorization'])
     def test_ipe_image_with_aoi(self):
         idahoid = '1ec49348-8950-49ff-bd71-ea2e4d8754ac'
         img = self.gbdx.idaho_image(idahoid, bbox=[-74.01626586914064,45.394592696926615,-73.91601562500001,45.43363548747066])
@@ -78,3 +79,24 @@ class IpeImageTest(unittest.TestCase):
         assert aoi.shape == (8, 3168, 8134)
         rgb = aoi[[4,2,1], ...]
         assert isinstance(rgb, da.Array)
+
+    @my_vcr.use_cassette('tests/unit/cassettes/test_ipe_image_read.yaml', filter_headers=['authorization'])
+    def test_ipe_image_read(self):
+        idahoid = '179269b9-fdb3-49d8-bb62-d15de54ad15d'
+        img = self.gbdx.idaho_image(idahoid)
+        aoi = img.aoi(bbox=[-110.85299491882326,32.167148499672855,-110.84870338439943,32.170236308395644])
+        assert aoi.shape == (8, 172, 239)
+        rgb = aoi.read(bands=[4,2,1])
+        assert rgb.shape == (3, 172, 239)
+        assert isinstance(rgb, np.ndarray)
+
+    @my_vcr.use_cassette('tests/unit/cassettes/test_ipe_image_geotiff.yaml', filter_headers=['authorization'])
+    def test_ipe_image_geotiff(self):
+        idahoid = '179269b9-fdb3-49d8-bb62-d15de54ad15d'
+        img = self.gbdx.idaho_image(idahoid, bbox=[-110.85299491882326,32.167148499672855,-110.84870338439943,32.170236308395644])
+        tif = img.geotiff(path='/tmp/tmp.tif', dtype='uint16')
+        with rasterio.open(tif) as src:
+            assert [round(x, 3) for x in list(src.bounds)] == [-110.853, 32.167, -110.849, 32.17]
+            assert src.meta['width'] == 239
+            assert src.meta['height'] == 172
+            assert src.meta['dtype'] == 'uint16'

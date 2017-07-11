@@ -22,7 +22,6 @@ class LandsatImage(IpeImage):
             raise
         self._id = _id
         self._products = standard_products
-        self.dtype = "uint16"
         return self.aoi(**kwargs)
 
     def get_product(self, product):
