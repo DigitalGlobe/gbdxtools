@@ -14,7 +14,9 @@ import uuid
 from shapely import wkt
 from shapely.geometry import box, shape, mapping
 
-from gbdxtools import _session, IdahoImage
+import requests
+
+from gbdxtools import IdahoImage
 from gbdxtools.auth import Auth
 from gbdxtools.ipe.util import calc_toa_gain_offset
 from gbdxtools.images.ipe_image import IpeImage
@@ -75,10 +77,11 @@ class CatalogImage(IpeImage):
         return self.__class__(self.idaho_id, proj=self.proj, product=product)
 
     @staticmethod
-    def _find_parts(cat_id, band_type, _vectors=Vectors()):
+    def _find_parts(cat_id, band_type):
+        vectors = Vectors()
         aoi = wkt.dumps(box(-180, -90, 180, 90))
         query = "item_type:IDAHOImage AND attributes.catalogID:{} AND attributes.colorInterpretation:{}".format(cat_id, band_types[band_type])
-        return sorted(_vectors.query(aoi, query=query), key=lambda x: x['properties']['id'])
+        return sorted(vectors.query(aoi, query=query), key=lambda x: x['properties']['id'])
 
 
     @classmethod
@@ -86,7 +89,7 @@ class CatalogImage(IpeImage):
         # TODO: Switch to direct metadata access (ie remove this block)
         _parts = cls._find_parts(cat_id, band_type)
         _id = _parts[0]['properties']['attributes']['idahoImageId']
-        idaho_md = _session.get('http://idaho.timbr.io/{}.json'.format(_id)).result().json()
+        idaho_md = requests.get('http://idaho.timbr.io/{}.json'.format(_id)).json()
         meta = idaho_md["properties"]
         gains_offsets = calc_toa_gain_offset(meta)
         radiance_scales, reflectance_scales, radiance_offsets = zip(*gains_offsets)

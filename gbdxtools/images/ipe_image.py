@@ -45,6 +45,7 @@ class IpeImage(DaskImage, Container):
 
     @property
     def affine(self):
+        # TODO add check for Ratpoly or whatevs
         return self.__geo_transform__._affine 
         
     @property
@@ -104,6 +105,7 @@ class IpeImage(DaskImage, Container):
             plt.imshow(data,interpolation='nearest')
         
         plt.show(block=False) 
+        return f, ax1
 
     def read(self, bands=None):
         """ Reads data from a dask array and returns the computed ndarray matching the given bands """

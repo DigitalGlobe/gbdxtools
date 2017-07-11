@@ -1,3 +1,4 @@
+from requests_futures.sessions import FuturesSession
 from gbdx_auth import gbdx_auth
 import logging
 
@@ -36,4 +37,5 @@ class _Auth(object):
                 self.gbdx_connection = gbdx_auth.get_session(kwargs.get('config_file'))
         except Exception as err:
             print(err)
-    
+
+        self.gbdx_futures_session = FuturesSession(session=self.gbdx_connection, max_workers=64)  

@@ -26,6 +26,9 @@ except NameError:
 import pycurl
 _curl_pool = defaultdict(pycurl.Curl)
 
+import numpy as np
+
+import rasterio
 from rasterio.io import MemoryFile
 
 import gbdxtools as gbdx
@@ -136,7 +139,7 @@ class Op(DaskMeta):
         }
 
         if self._interface is not None and conn is None:
-            conn = self._interface.gbdx_connection
+            conn = self._interface.gbdx_futures_session
 
         if conn is not None:
             self._ipe_id = register_ipe_graph(conn, graph)
@@ -152,7 +155,7 @@ class Op(DaskMeta):
         if self._ipe_meta is not None:
             return self._ipe_meta
         if self._interface is not None:
-            self._ipe_meta = get_ipe_metadata(self._interface.gbdx_connection, self._ipe_id, self._id)
+            self._ipe_meta = get_ipe_metadata(self._interface.gbdx_futures_session, self._ipe_id, self._id)
         return self._ipe_meta
 
     @property
@@ -196,8 +199,8 @@ class Op(DaskMeta):
                 for x in xrange(max(img_md['minTileX'], 0), img_md["maxTileX"])}
 
 class Ipe(object):
-    def __init__(self):
-        self.interface = Auth()
+    #def __init__(self):
+    #    self.interface = Auth()
 
     def __getattr__(self, name):
-        return Op(name=name, interface=self.interface)
+        return Op(name=name, interface=Auth())

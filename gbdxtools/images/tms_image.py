@@ -9,7 +9,6 @@ import rasterio
 from rasterio.transform import from_bounds as transform_from_bounds
 
 from gbdxtools.images.meta import DaskImage, DaskMeta
-from gbdxtools import _session
 from gbdxtools.ipe.util import AffineTransform
 
 try:
