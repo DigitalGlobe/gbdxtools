@@ -7,11 +7,15 @@ from itertools import chain
 import numpy as np
 import rasterio
 from rasterio.transform import from_bounds as transform_from_bounds
+from rasterio.io import MemoryFile
 
 import mercantile
 from shapely.geometry import mapping, shape, box
 from shapely.geometry.base import BaseGeometry
 from shapely import ops
+
+import pycurl
+_curl_pool = defaultdict(pycurl.Curl)
 
 from gbdxtools.images.meta import DaskImage, DaskMeta, GeoImage
 from gbdxtools.images.ipe_image import IpeImage
@@ -22,15 +26,24 @@ try:
 except ImportError:
     from StringIO import cStringIO as BytesIO
 
-import gdal
 
-def load_url(url, bands=3):
-    try:
-        src = gdal.Open('/vsicurl/{}'.format(url))
-        arr = src.ReadAsArray()
-    except:
-        arr = np.zeros([bands,256,256], dtype=np.float32)
-    return arr
+def load_url(url, shape=(3, 256, 256)):
+    """ Loads a geotiff url inside a thread and returns as an ndarray """
+    thread_id = threading.current_thread().ident
+    _curl = _curl_pool[thread_id]
+    _curl.setopt(_curl.URL, url)
+    _curl.setopt(pycurl.NOSIGNAL, 1)
+    with MemoryFile() as memfile:
+        _curl.setopt(_curl.WRITEDATA, memfile)
+        _curl.perform()
+        try:
+            with memfile.open(driver="PNG") as dataset:
+                arr = dataset.read()
+        except (TypeError, rasterio.RasterioIOError) as e:
+            arr = np.zeros(shape, dtype=np.float32)
+            _curl.close()
+            del _curl_pool[thread_id]
+        return arr
 
 
 class EphemeralImage(Exception):
@@ -60,6 +73,7 @@ class TmsMeta(DaskMeta):
         self._nbands = 3
         self._dtype = "uint8"
         self._bounds = bounds
+        self._chunks = tuple([self._nbands] + [self._tile_size, self._tile_size])
 
     @property
     def bounds(self):
@@ -83,9 +97,9 @@ class TmsMeta(DaskMeta):
         if self._bounds is None:
             return {self._name: (raise_aoi_required, )}
         else:
-            urls, shape = self._collect_urls()
+            urls, shape = self._collect_urls(self.bounds)
             self._shape = shape
-            return {(self._name, 0, y, x): (load_url, url) for (y, x), url in urls.items()}
+            return {(self._name, 0, y, x): (load_url, url, self._chunks) for (y, x), url in urls.items()}
 
     @property
     def dtype(self):
@@ -103,15 +117,15 @@ class TmsMeta(DaskMeta):
 
     @property
     def chunks(self):
-        return tuple([self._nbands] + [self._tile_size, self._tile_size])
+        return self._chunks
 
     @property
     def __geo_transform__(self):
         tfm = transform_from_bounds(*tuple(e for e in chain(self.bounds, self.shape[2:0:-1])))
         return AffineTransform(tfm, "EPSG:3857")
 
-    def _collect_urls(self):
-        minx, miny, maxx, maxy = self._tile_coords(self.bounds)
+    def _collect_urls(self, bounds):
+        minx, miny, maxx, maxy = self._tile_coords(bounds)
         urls = {(y-miny, x-minx): self._url_template.format(z=self.zoom_level, x=x, y=y, token=self._token)
                                                 for y in xrange(miny, maxy + 1) for x in xrange(minx, maxx + 1)}
 
@@ -137,6 +151,7 @@ class TmsImage(DaskImage, GeoImage):
                  zoom=22, **kwargs):
         _tms_meta = TmsMeta(access_token=access_token, url=url, zoom=zoom, bounds=kwargs.get("bounds"))
         self = super(TmsImage, cls).create(_tms_meta)
+        self._base_args = {"access_token": access_token, "url": url, "zoom": zoom}
         self._tms_meta = _tms_meta
         self.__geo_interface__ = mapping(box(*_tms_meta.bounds))
         self.__geo_transform__ = _tms_meta.__geo_transform__
@@ -152,6 +167,9 @@ class TmsImage(DaskImage, GeoImage):
     def plot(self, **kwargs):
         super(TmsImage, self).plot(tfm=self.rgb, **kwargs)
 
+    def aoi(self, **kwargs):
+        g = self._parse_geoms(**kwargs)
+        return self.__class__(bounds=list(g.bounds), **self._base_args)
 
     def __getitem__(self, geometry):
         if isinstance(geometry, BaseGeometry) or getattr(geometry, "__geo_interface__", None) is not None:
@@ -160,7 +178,7 @@ class TmsImage(DaskImage, GeoImage):
             return image
         else:
             image = super(TmsImage, self).__getitem__(geometry)
-            if all([isinstance(e, slice), e in geometry]) and len(geometry) == len(self.shape):
+            if all([isinstance(e, slice) for e in geometry]) and len(geometry) == len(self.shape):
                 # xmin, ymin, xmax, ymax
                 g = ops.transform(self.__geo_transform__.fwd,
                                   box(geometry[2].start, geometry[1].start, geometry[2].stop, geometry[1].stop))
