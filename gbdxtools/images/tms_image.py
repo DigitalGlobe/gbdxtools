@@ -160,7 +160,7 @@ class TmsImage(DaskImage, GeoImage):
             return image
         else:
             image = super(TmsImage, self).__getitem__(geometry)
-            if all([isisntance(e, slice), e in geometry]) and len(geometry) == len(self.shape):
+            if all([isinstance(e, slice), e in geometry]) and len(geometry) == len(self.shape):
                 # xmin, ymin, xmax, ymax
                 g = ops.transform(self.__geo_transform__.fwd,
                                   box(geometry[2].start, geometry[1].start, geometry[2].stop, geometry[1].stop))
