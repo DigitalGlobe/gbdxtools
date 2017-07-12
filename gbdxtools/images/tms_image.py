@@ -128,6 +128,8 @@ class TmsMeta(DaskMeta):
 
 
 class TmsImage(DaskImage, GeoImage):
+    _default_proj = "EPSG:3857"
+
     def __new__(cls, access_token=os.environ.get("DG_MAPS_API_TOKEN"),
                  url="https://api.mapbox.com/v4/digitalglobe.nal0g75k/{z}/{x}/{y}.png",
                  zoom=22, **kwargs):
