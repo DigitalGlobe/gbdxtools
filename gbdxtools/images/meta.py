@@ -19,6 +19,13 @@ import dask
 num_workers = int(os.environ.get("GBDX_THREADS", 4))
 threaded_get = partial(dask.threaded.get, num_workers=num_workers)
 
+try:
+    from matplotlib import pyplot as plt
+    has_pyplot = True
+except:
+    has_pyplot = False
+
+
 add_metaclass(abc.ABCMeta)
 class DaskMeta(object):
     """
@@ -108,6 +115,15 @@ class DaskImage(da.Array):
         if bands is not None:
             arr = self[bands, ...]
         return arr.compute(get=threaded_get)
+
+    def plot(self, tfm={lambda x: x}, **kwargs):
+        assert has_pyplot, "To plot images please install matplotlib"
+        assert self.shape[1] and self.shape[-1], "No data to plot, dimensions are invalid {}".format(str(self.shape))
+
+        f, ax1 = plt.subplots(1, figsize=(kwargs.get("w", 10), kwargs.get("h", 10)))
+        ax1.axis('off')
+        plt.imshow(tfm(**kwargs), interpolation='nearest', cmap=kwargs.get("cmap", None))
+        plt.show(block=False)
 
 
 @add_metaclass(abc.ABCMeta)
