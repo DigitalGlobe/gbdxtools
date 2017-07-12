@@ -11,6 +11,7 @@ from rasterio.transform import from_bounds as transform_from_bounds
 import mercantile
 from shapely.geometry import mapping, shape, box
 from shapely.geometry.base import BaseGeometry
+from shapely import ops
 
 from gbdxtools.images.meta import DaskImage, DaskMeta, GeoImage
 from gbdxtools.images.ipe_image import IpeImage
@@ -159,8 +160,17 @@ class TmsImage(DaskImage, GeoImage):
             return image
         else:
             image = super(TmsImage, self).__getitem__(geometry)
-            image.__geo_interface__ = self.__geo_interface__
-            image.__geo_transform__ = self.__geo_transform__
+            if all([isisntance(e, slice), e in geometry]) and len(geometry) == len(self.shape):
+                # xmin, ymin, xmax, ymax
+                g = ops.transform(self.__geo_transform__.fwd,
+                                  box(geometry[2].start, geometry[1].start, geometry[2].stop, geometry[1].stop))
+
+                image.__geo_interface__ = mapping(g)
+                bounds = g.bounds
+                image.__geo_transform__ = self.__geo_transform__ + (bounds[0], bounds[1])
+            else:
+                image.__geo_interface__ = self.__geo_interface__
+                image.__geo_transform__ = self.__geo_transform__
             image._tms_meta = self._tms_meta
             image.__class__ = self.__class__
             return image
