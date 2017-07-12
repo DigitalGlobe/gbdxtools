@@ -49,7 +49,7 @@ class IpeImage(DaskImage, GeoImage):
 
     @property
     def _rgb_bands(self):
-        return [4,2,1]    
+        return [4,2,1]
 
     @property
     def _ndvi_bands(self):
@@ -74,7 +74,7 @@ class IpeImage(DaskImage, GeoImage):
             super(IpeImage, self).plot(tfm=self._single_band, cmap="Greys_r", **kwargs)
         else:
             super(IpeImage, self).plot(tfm=getattr(self, spec), **kwargs)
-    
+
     def _single_band(self, **kwargs):
         return self[0,:,:].read()
 
@@ -85,10 +85,19 @@ class IpeImage(DaskImage, GeoImage):
             return image
         else:
             image = super(IpeImage, self).__getitem__(geometry)
-            image.__geo_interface__ = self.__geo_interface__
-            image.__geo_transform__ = self.__geo_transform__
+            if all([isisntance(e, slice), e in geometry]) and len(geometry) == len(self.shape):
+                # xmin, ymin, xmax, ymax
+                g = ops.transform(self.__geo_transform__.fwd,
+                                  box(geometry[2].start, geometry[1].start, geometry[2].stop, geometry[1].stop))
+
+                image.__geo_interface__ = mapping(g)
+                bounds = g.bounds
+                image.__geo_transform__ = self.__geo_transform__ + (bounds[0], bounds[1])
+            else:
+                image.__geo_interface__ = self.__geo_interface__
+                image.__geo_transform__ = self.__geo_transform__
             image._ipe_op = self._ipe_op
-            image.__class__ = self.__class__ 
+            image.__class__ = self.__class__
             return image
 
     def read(self, bands=None):
