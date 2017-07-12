@@ -10,6 +10,7 @@ from rasterio.transform import from_bounds as transform_from_bounds
 
 import mercantile
 from shapely.geometry import mapping, shape, box
+from shapely.geometry.base import BaseGeometry
 
 from gbdxtools.images.meta import DaskImage, DaskMeta, GeoImage
 from gbdxtools.images.ipe_image import IpeImage
@@ -140,12 +141,26 @@ class TmsImage(DaskImage, GeoImage):
         self.__geo_transform__ = _tms_meta.__geo_transform__
         return self
 
+    @property
+    def __daskmeta__(self):
+        return self._tms_meta
+
     def rgb(self, **kwargs):
         return np.rollaxis(self.read(), 0, 3)
 
     def plot(self, **kwargs):
         super(TmsImage, self).plot(tfm=self.rgb, **kwargs)
 
-    @property
-    def __daskmeta__(self):
-        self._tms_meta
+
+    def __getitem__(self, geometry):
+        if isinstance(geometry, BaseGeometry) or getattr(geometry, "__geo_interface__", None) is not None:
+            image = GeoImage.__getitem__(self, geometry)
+            image._tms_meta = self._tms_meta
+            return image
+        else:
+            image = super(TmsImage, self).__getitem__(geometry)
+            image.__geo_interface__ = self.__geo_interface__
+            image.__geo_transform__ = self.__geo_transform__
+            image._tms_meta = self._tms_meta
+            image.__class__ = self.__class__
+            return image
