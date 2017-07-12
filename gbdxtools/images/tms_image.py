@@ -11,7 +11,8 @@ from rasterio.transform import from_bounds as transform_from_bounds
 import mercantile
 from shapely.geometry import mapping, shape, box
 
-from gbdxtools.images.meta import DaskImage, DaskMeta
+from gbdxtools.images.meta import DaskImage, DaskMeta, GeoImage
+from gbdxtools.images.ipe_image import IpeImage
 from gbdxtools.ipe.util import AffineTransform
 
 try:
@@ -56,7 +57,7 @@ class TmsMeta(DaskMeta):
         self._tile_size = 256
         self._nbands = 3
         self._dtype = "uint8"
-        self._bounds = None
+        self._bounds = bounds
 
     @property
     def bounds(self):
@@ -80,7 +81,9 @@ class TmsMeta(DaskMeta):
         if self._bounds is None:
             return {self._name: (raise_aoi_required, )}
         else:
-            return {(self._name, 0, x, y): (load_url, url) for (x, y), url in self._collect_urls}
+            urls, shape = self._collect_urls()
+            self._shape = shape
+            return {(self._name, 0, y, x): (load_url, url) for (y, x), url in urls.items()}
 
     @property
     def dtype(self):
@@ -105,12 +108,12 @@ class TmsMeta(DaskMeta):
         tfm = transform_from_bounds(*tuple(e for e in chain(self.bounds, self.shape[2:0:-1])))
         return AffineTransform(tfm, "EPSG:3857")
 
-    def _collect_urls(self, bounds):
-        minx, miny, maxx, maxy = self._tile_coords(bounds)
+    def _collect_urls(self):
+        minx, miny, maxx, maxy = self._tile_coords(self.bounds)
         urls = {(y-miny, x-minx): self._url_template.format(z=self.zoom_level, x=x, y=y, token=self._token)
                                                 for y in xrange(miny, maxy + 1) for x in xrange(minx, maxx + 1)}
 
-        return urls, (self._tile_size*(maxy-miny+1), self._tile_size*(maxx-minx+1))
+        return urls, (3, self._tile_size*(maxy-miny+1), self._tile_size*(maxx-minx+1))
 
     def _tile_coords(self, bounds):
         """ Convert tile coords mins/maxs to lng/lat bounds """
@@ -124,7 +127,7 @@ class TmsMeta(DaskMeta):
         return minx, miny, maxx, maxy
 
 
-class TmsImage(DaskImage, Container):
+class TmsImage(DaskImage, GeoImage):
     def __new__(cls, access_token=os.environ.get("DG_MAPS_API_TOKEN"),
                  url="https://api.mapbox.com/v4/digitalglobe.nal0g75k/{z}/{x}/{y}.png",
                  zoom=22, **kwargs):

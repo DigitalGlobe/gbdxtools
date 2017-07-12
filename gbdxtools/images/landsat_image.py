@@ -26,7 +26,7 @@ class LandsatImage(IpeImage):
     
     @property
     def rgb(self):
-        return self[[3,2,1], ...]
+        return [3,2,1]
 
     def get_product(self, product):
         return self.__class__(self._id, proj=self.proj, product=product)

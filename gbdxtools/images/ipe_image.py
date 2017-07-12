@@ -60,7 +60,11 @@ class IpeImage(DaskImage, GeoImage):
         size = float(self.ipe.metadata['image']['tileXSize'])
         return math.ceil((float(self.shape[-1]) / size)) * math.ceil(float(self.shape[1]) / size)
 
-    def plot(self, stretch=[2,98], w=10, h=10, bands=[4,2,1]):
+    @property
+    def rgb(self):
+        return [4,2,1]
+
+    def plot(self, stretch=[2,98], w=10, h=10, bands=None):
         assert has_pyplot, "To plot images please install matplotlib"
         assert self.shape[1] and self.shape[-1], "No data to plot, dimensions are invalid {}".format(str(self.shape))
 
@@ -69,6 +73,8 @@ class IpeImage(DaskImage, GeoImage):
         if self.shape[0] == 1:
             plt.imshow(data[0,:,:], cmap="Greys_r")
         else:
+            if bands is None:
+                bands = self.rgb
             data = self.read()
             data = data[bands,...]
             data = data.astype(np.float32)
