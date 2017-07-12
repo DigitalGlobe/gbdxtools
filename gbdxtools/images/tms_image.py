@@ -140,6 +140,12 @@ class TmsImage(DaskImage, GeoImage):
         self.__geo_transform__ = _tms_meta.__geo_transform__
         return self
 
+    def rgb(self, **kwargs):
+        return np.rollaxis(self.read(), 0, 3)
+
+    def plot(self, **kwargs):
+        super(TmsImage, self).plot(tfm=self.rgb, **kwargs)
+
     @property
     def __daskmeta__(self):
         self._tms_meta
