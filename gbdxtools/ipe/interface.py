@@ -107,7 +107,6 @@ class Op(DaskMeta):
     def __call__(self, *args, **kwargs):
         if len(args) > 0 and all([isinstance(arg, gbdx.images.ipe_image.IpeImage) for arg in args]):
             return self._ipe_image_call(*args, **kwargs)
-
         self._nodes = [ContentHashedDict({"operator": self._operator,
                                           "_ancestors": [arg._id for arg in args],
                                           "parameters": OrderedDict({k:json.dumps(v, sort_keys=True) if not isinstance(v, basestring) else v for k,v in sorted(kwargs.items(), key=lambda x: x[0])})})]
