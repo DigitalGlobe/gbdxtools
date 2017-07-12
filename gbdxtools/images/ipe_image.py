@@ -82,7 +82,6 @@ class IpeImage(DaskImage, GeoImage):
             plt.imshow(data,interpolation='nearest')
 
         plt.show(block=False)
-        return f, ax1
 
     def __getitem__(self, geometry):
         if isinstance(geometry, BaseGeometry) or getattr(geometry, "__geo_interface__", None) is not None:
