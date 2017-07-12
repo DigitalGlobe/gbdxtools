@@ -70,10 +70,13 @@ class IpeImage(DaskImage, GeoImage):
         return (data[0,:,:] - data[1,:,:]) / (data[0,:,:] + data[1,:,:])
 
     def plot(self, spec="rgb", **kwargs):
-        if self.shape[0] == 1:
-            super(IpeImage, self).plot(w=w, h=h, cmap="Greys_r", tfm=lambda x: x[0,:,:])
+        if self.shape[0] == 1 or ("bands" in kwargs and len(kwargs["bands"]) == 1):
+            super(IpeImage, self).plot(tfm=self._single_band, cmap="Greys_r", **kwargs)
         else:
             super(IpeImage, self).plot(tfm=getattr(self, spec), **kwargs)
+    
+    def _single_band(self, **kwargs):
+        return self[0,:,:].read()
 
     def __getitem__(self, geometry):
         if isinstance(geometry, BaseGeometry) or getattr(geometry, "__geo_interface__", None) is not None:
