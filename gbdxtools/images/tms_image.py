@@ -169,7 +169,7 @@ class TmsImage(DaskImage, GeoImage):
         if g is not None:
             return self[g]
         else:
-            return g
+            return self
 
     @property
     def __daskmeta__(self):
