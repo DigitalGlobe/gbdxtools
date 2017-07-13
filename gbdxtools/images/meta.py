@@ -205,7 +205,5 @@ class GeoImage(Container):
 
     def __contains__(self, g):
         geometry = ops.transform(self.__geo_transform__.rev, g)
-        print(geometry)
         img_bounds = box(0, 0, *self.shape[2:0:-1])
-        print(img_bounds)
         return img_bounds.contains(geometry)
