@@ -73,7 +73,6 @@ class TmsMeta(DaskMeta):
         self._nbands = 3
         self._dtype = "uint8"
         self.bounds = self._expand_bounds(bounds)
-        print("INIT", bounds, self.bounds)
         self._chunks = tuple([self._nbands] + [self._tile_size, self._tile_size])
 
     @property
