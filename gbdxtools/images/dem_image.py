@@ -15,9 +15,7 @@ class DemImage(IpeImage):
 
         standard_products = cls._build_standard_products(idaho_id, options["proj"])
         try:
-            print('yo')
             self = super(DemImage, cls).__new__(cls, standard_products.get("dem"))
-            print('done')
         except KeyError as e:
             print(e)
             print("Specified product not implemented: {}".format(options["product"]))
