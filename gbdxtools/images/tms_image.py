@@ -72,7 +72,8 @@ class TmsMeta(DaskMeta):
         self._tile_size = 256
         self._nbands = 3
         self._dtype = "uint8"
-        self._bounds = bounds
+        self.bounds = self._expand_bounds(bounds)
+        print("INIT", bounds, self.bounds)
         self._chunks = tuple([self._nbands] + [self._tile_size, self._tile_size])
 
     @property
@@ -82,7 +83,7 @@ class TmsMeta(DaskMeta):
         return self._bounds
 
     @bounds.setter
-    def __set_bounds__(self, obj):
+    def bounds(self, obj):
         # TODO: set bounds via shapely or bbox, validation
         self._bounds = obj
         if obj is not None:
@@ -98,7 +99,6 @@ class TmsMeta(DaskMeta):
             return {self._name: (raise_aoi_required, )}
         else:
             urls, shape = self._collect_urls(self.bounds)
-            self._shape = shape
             return {(self._name, 0, y, x): (load_url, url, self._chunks) for (y, x), url in urls.items()}
 
     @property
@@ -131,9 +131,19 @@ class TmsMeta(DaskMeta):
 
         return urls, (3, self._tile_size*(maxy-miny+1), self._tile_size*(maxx-minx+1))
 
+    def _expand_bounds(self, bounds):
+        if bounds is None:
+            return bounds
+        min_tile_x, min_tile_y, max_tile_x, max_tile_y = self._tile_coords(bounds)
+
+        ul = box(*mercantile.bounds(mercantile.Tile(z=self.zoom_level, x=min_tile_x, y=max_tile_y)))
+        lr = box(*mercantile.bounds(mercantile.Tile(z=self.zoom_level, x=max_tile_x, y=min_tile_y)))
+
+        return ul.union(lr).bounds
+
     def _tile_coords(self, bounds):
         """ Convert tile coords mins/maxs to lng/lat bounds """
-        params = bounds + [[self.zoom_level]]
+        params = list(bounds) + [[self.zoom_level]]
         tile_coords = [(tile.x, tile.y) for tile in mercantile.tiles(*params)]
         xtiles, ytiles = zip(*tile_coords)
         minx = min(xtiles)
@@ -169,7 +179,7 @@ class TmsImage(DaskImage, GeoImage):
 
     def aoi(self, **kwargs):
         g = self._parse_geoms(**kwargs)
-        return self.__class__(bounds=list(g.bounds), **self._base_args)
+        return self.__class__(bounds=list(g.bounds), **self._base_args)[g]
 
     def __getitem__(self, geometry):
         if isinstance(geometry, BaseGeometry) or getattr(geometry, "__geo_interface__", None) is not None:
