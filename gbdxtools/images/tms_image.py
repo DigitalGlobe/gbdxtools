@@ -165,7 +165,11 @@ class TmsImage(DaskImage, GeoImage):
         self._tms_meta = _tms_meta
         self.__geo_interface__ = mapping(box(*_tms_meta.bounds))
         self.__geo_transform__ = _tms_meta.__geo_transform__
-        return self
+        g = self._parse_geoms(**kwargs)
+        if g is not None:
+            return self[g]
+        else:
+            return g
 
     @property
     def __daskmeta__(self):
