@@ -204,4 +204,5 @@ class GeoImage(Container):
         return image
 
     def __contains__(self, geometry):
-        return shape(self).contains(geometry)
+        g = ops.transform(self.__geo_transform__.rev, geometry)
+        return shape(self).contains(g)
