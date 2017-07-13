@@ -194,14 +194,15 @@ class GeoImage(Container):
         return ops.transform(tfm, geometry)
 
     def __getitem__(self, geometry):
-        g = ops.transform(self.__geo_transform__.rev, shape(geometry))
+        g = shape(geometry)
         assert g in self, "Image does not contain specified geometry"
-        bounds = g.bounds
+        bounds = ops.transform(self.__geo_transform__.rev, g)
         image = self[:, bounds[1]:bounds[3], bounds[0]:bounds[2]] # a dask array that implements daskmeta interface (via op)
         image.__geo_interface__ = mapping(g)
         image.__geo_transform__ = self.__geo_transform__ + (bounds[0], bounds[1])
         image.__class__ = self.__class__
         return image
 
-    def __contains__(self, geometry):
+    def __contains__(self, g):
+        geometry = ops.transform(self.__geo_transform__.rev, g)
         return box(0, 0, *self.shape[2:0:-1]).contains(geometry)
