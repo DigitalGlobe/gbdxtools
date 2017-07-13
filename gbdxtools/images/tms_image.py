@@ -26,6 +26,11 @@ try:
 except ImportError:
     from StringIO import cStringIO as BytesIO
 
+try:
+    xrange
+except NameError:
+    xrange = range
+
 
 def load_url(url, shape=(3, 256, 256)):
     """ Loads a geotiff url inside a thread and returns as an ndarray """
