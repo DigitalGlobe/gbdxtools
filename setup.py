@@ -16,7 +16,7 @@ with open("requirements.txt") as f:
 # long_description=readme,
 
 setup(name='gbdxtools',
-      version='0.11.8',
+      version='0.12.0',
       description='Additional s3 functionality.',
       classifiers=[],
       keywords='',
