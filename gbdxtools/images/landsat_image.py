@@ -3,7 +3,6 @@ from gbdxtools.images.ipe_image import IpeImage
 from gbdxtools.ipe.interface import Ipe
 ipe = Ipe()
 
-import numpy as np
 
 class LandsatImage(IpeImage):
     """
