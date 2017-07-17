@@ -1,7 +1,7 @@
 import os
 import uuid
 import threading
-from collections import defaultdict, Container
+from collections import defaultdict
 from itertools import chain
 
 import numpy as np
@@ -10,21 +10,15 @@ from rasterio.transform import from_bounds as transform_from_bounds
 from rasterio.io import MemoryFile
 
 import mercantile
-from shapely.geometry import mapping, shape, box
+from shapely.geometry import mapping, box
 from shapely.geometry.base import BaseGeometry
 from shapely import ops
 
 import pycurl
-_curl_pool = defaultdict(pycurl.Curl)
-
 from gbdxtools.images.meta import DaskImage, DaskMeta, GeoImage
-from gbdxtools.images.ipe_image import IpeImage
 from gbdxtools.ipe.util import AffineTransform
 
-try:
-    from io import BytesIO
-except ImportError:
-    from StringIO import cStringIO as BytesIO
+_curl_pool = defaultdict(pycurl.Curl)
 
 try:
     xrange
@@ -44,7 +38,7 @@ def load_url(url, shape=(3, 256, 256)):
         try:
             with memfile.open(driver="PNG") as dataset:
                 arr = dataset.read()
-        except (TypeError, rasterio.RasterioIOError) as e:
+        except (TypeError, rasterio.RasterioIOError):
             arr = np.zeros(shape, dtype=np.float32)
             _curl.close()
             del _curl_pool[thread_id]
@@ -131,7 +125,7 @@ class TmsMeta(DaskMeta):
     def _collect_urls(self, bounds):
         minx, miny, maxx, maxy = self._tile_coords(bounds)
         urls = {(y-miny, x-minx): self._url_template.format(z=self.zoom_level, x=x, y=y, token=self._token)
-                                                for y in xrange(miny, maxy + 1) for x in xrange(minx, maxx + 1)}
+                for y in xrange(miny, maxy + 1) for x in xrange(minx, maxx + 1)}
 
         return urls, (3, self._tile_size*(maxy-miny+1), self._tile_size*(maxx-minx+1))
 
@@ -161,8 +155,8 @@ class TmsImage(DaskImage, GeoImage):
     _default_proj = "EPSG:3857"
 
     def __new__(cls, access_token=os.environ.get("DG_MAPS_API_TOKEN"),
-                 url="https://api.mapbox.com/v4/digitalglobe.nal0g75k/{z}/{x}/{y}.png",
-                 zoom=22, **kwargs):
+                url="https://api.mapbox.com/v4/digitalglobe.nal0g75k/{z}/{x}/{y}.png",
+                zoom=22, **kwargs):
         _tms_meta = TmsMeta(access_token=access_token, url=url, zoom=zoom, bounds=kwargs.get("bounds"))
         self = super(TmsImage, cls).create(_tms_meta)
         self._base_args = {"access_token": access_token, "url": url, "zoom": zoom}
