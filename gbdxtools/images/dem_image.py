@@ -3,6 +3,15 @@ from gbdxtools.images.ipe_image import IpeImage
 from gbdxtools.ipe.interface import Ipe
 ipe = Ipe()
 
+def reproject_params(proj):
+    _params = {}
+    if proj is not None:
+        _params["Source SRS Code"] = "EPSG:4326"
+        _params["Source pixel-to-world transform"] = None
+        _params["Dest SRS Code"] = proj
+        _params["Dest pixel-to-world transform"] = None
+    return _params
+
 class DemImage(IpeImage):
     """
       Dask based access to IDAHO images via IPE.
@@ -30,6 +39,8 @@ class DemImage(IpeImage):
     @staticmethod
     def _build_standard_products(idaho_id, proj):
         dem = ipe.IdahoRead(bucketName="idaho-dems", imageId=idaho_id, objectStore="S3")
+        if proj is not "EPSG:4326":
+            dem = ipe.Reproject(dem, **reproject_params(proj))
         return {
           "dem": dem
         }

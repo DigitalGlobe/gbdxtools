@@ -27,6 +27,8 @@ try:
 except:
     has_pyplot = False
 
+from gbdxtools.ipe.io import to_geotiff
+
 
 add_metaclass(abc.ABCMeta)
 class DaskMeta(object):
