@@ -19,6 +19,8 @@ import dask
 num_workers = int(os.environ.get("GBDX_THREADS", 4))
 threaded_get = partial(dask.threaded.get, num_workers=num_workers)
 
+from gbdxtools.ipe.io import to_geotiff
+
 try:
     from matplotlib import pyplot as plt
     has_pyplot = True
