@@ -5,6 +5,7 @@ from gbdxtools.ipe.util import calc_toa_gain_offset, ortho_params
 from gbdxtools.ipe.interface import Ipe
 ipe = Ipe()
 
+
 class IdahoImage(IpeImage):
     """
       Dask based access to IDAHO images via IPE.
@@ -32,7 +33,7 @@ class IdahoImage(IpeImage):
     @staticmethod
     def _build_standard_products(idaho_id, proj):
         dn_op = ipe.IdahoRead(bucketName="idaho-images", imageId=idaho_id, objectStore="S3")
-        ortho_op = ipe.Orthorectify(dn_op,  **ortho_params(proj))
+        ortho_op = ipe.Orthorectify(dn_op, **ortho_params(proj))
 
         # TODO: Switch to direct metadata access (ie remove this block)
         idaho_md = requests.get('http://idaho.timbr.io/{}.json'.format(idaho_id)).json()
