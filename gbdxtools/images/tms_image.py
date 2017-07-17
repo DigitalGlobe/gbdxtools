@@ -124,10 +124,10 @@ class TmsMeta(DaskMeta):
 
     def _collect_urls(self, bounds):
         minx, miny, maxx, maxy = self._tile_coords(bounds)
-        urls = {(y-miny, x-minx): self._url_template.format(z=self.zoom_level, x=x, y=y, token=self._token)
+        urls = {(y - miny, x - minx): self._url_template.format(z=self.zoom_level, x=x, y=y, token=self._token)
                 for y in xrange(miny, maxy + 1) for x in xrange(minx, maxx + 1)}
 
-        return urls, (3, self._tile_size*(maxy-miny+1), self._tile_size*(maxx-minx+1))
+        return urls, (3, self._tile_size * (maxy - miny + 1), self._tile_size * (maxx - minx + 1))
 
     def _expand_bounds(self, bounds):
         if bounds is None:
