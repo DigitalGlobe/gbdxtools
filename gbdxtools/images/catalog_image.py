@@ -4,32 +4,25 @@ GBDX Catalog Image Interface.
 Contact: chris.helm@digitalglobe.com
 """
 from __future__ import print_function
-import xml.etree.cElementTree as ET
-from contextlib import contextmanager
-from collections import defaultdict
-import os
 import json
-import uuid
 
 from shapely import wkt
-from shapely.geometry import box, shape, mapping
+from shapely.geometry import box
 
 import requests
 
 from gbdxtools import IdahoImage
-from gbdxtools.auth import Auth
 from gbdxtools.ipe.util import calc_toa_gain_offset
 from gbdxtools.images.ipe_image import IpeImage
-from gbdxtools.images.meta import DaskImage
 from gbdxtools.vectors import Vectors
 from gbdxtools.ipe.interface import Ipe
 ipe = Ipe()
 
 band_types = {
-  'MS': 'WORLDVIEW_8_BAND',
-  'Panchromatic': 'PAN',
-  'Pan': 'PAN',
-  'pan': 'PAN'
+    'MS': 'WORLDVIEW_8_BAND',
+    'Panchromatic': 'PAN',
+    'Pan': 'PAN',
+    'pan': 'PAN'
 }
 
 
@@ -51,7 +44,8 @@ class CatalogImage(IpeImage):
         standard_products = cls._build_standard_products(cat_id, options["band_type"], options["proj"])
         pan_products = cls._build_standard_products(cat_id, "pan", options["proj"])
         pan = ipe.Format(ipe.MultiplyConst(pan_products['toa_reflectance'], constants=json.dumps([1000])), dataType="1")
-        ms = ipe.Format(ipe.MultiplyConst(standard_products['toa_reflectance'], constants=json.dumps([1000]*8)), dataType="1")
+        ms = ipe.Format(ipe.MultiplyConst(standard_products['toa_reflectance'],
+                                          constants=json.dumps([1000]*8)), dataType="1")
         standard_products["pansharpened"] = ipe.LocallyProjectivePanSharpen(ms, pan)
 
         try:
@@ -64,14 +58,14 @@ class CatalogImage(IpeImage):
         self._products = standard_products
         self.options = options
         return self.aoi(**kwargs)
-        
+
     @property
-    def parts(self): 
-      if self._parts is None:
-          self._parts = [IdahoImage(rec['properties']['attributes']['idahoImageId'],
-                            product=self.options["product"], proj=self.options["proj"])
-                                for rec in self._find_parts(self.cat_id, self.options["band_type"])]
-      return self._parts
+    def parts(self):
+        if self._parts is None:
+            self._parts = [IdahoImage(rec['properties']['attributes']['idahoImageId'],
+                                      product=self.options["product"], proj=self.options["proj"])
+                           for rec in self._find_parts(self.cat_id, self.options["band_type"])]
+        return self._parts
 
     def get_product(self, product):
         return self.__class__(self.idaho_id, proj=self.proj, product=product)
@@ -80,9 +74,9 @@ class CatalogImage(IpeImage):
     def _find_parts(cat_id, band_type):
         vectors = Vectors()
         aoi = wkt.dumps(box(-180, -90, 180, 90))
-        query = "item_type:IDAHOImage AND attributes.catalogID:{} AND attributes.colorInterpretation:{}".format(cat_id, band_types[band_type])
+        query = "item_type:IDAHOImage AND attributes.catalogID:{} " \
+                "AND attributes.colorInterpretation:{}".format(cat_id, band_types[band_type])
         return sorted(vectors.query(aoi, query=query), key=lambda x: x['properties']['id'])
-
 
     @classmethod
     def _build_standard_products(cls, cat_id, band_type, proj):
