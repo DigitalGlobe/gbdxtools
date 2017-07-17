@@ -1,19 +1,14 @@
 from __future__ import print_function
-from functools import partial
-from collections import Container
-import os
 import math
 
 from shapely import wkt, ops
-from shapely.geometry import box, shape, mapping
+from shapely.geometry import box, mapping
 from shapely.geometry.base import BaseGeometry
 
 import numpy as np
-import pyproj
 
 from gbdxtools.images.meta import DaskMeta, DaskImage, GeoImage
 from gbdxtools.ipe.util import RatPolyTransform, AffineTransform
-from gbdxtools.ipe.io import to_geotiff
 
 
 class IpeImage(DaskImage, GeoImage):
@@ -49,21 +44,21 @@ class IpeImage(DaskImage, GeoImage):
 
     @property
     def _rgb_bands(self):
-        return [4,2,1]
+        return [4, 2, 1]
 
     @property
     def _ndvi_bands(self):
-        return [7,4]
+        return [7, 4]
 
     def rgb(self, **kwargs):
         data = self[kwargs.get("bands", self._rgb_bands),...].read()
         data = np.rollaxis(data.astype(np.float32), 0, 3)
-        lims = np.percentile(data, kwargs.get("stretch", [2,98]), axis=(0,1))
+        lims = np.percentile(data, kwargs.get("stretch", [2, 98]), axis=(0, 1))
         for x in xrange(len(data[0,0,:])):
             top = lims[:,x][1]
             bottom = lims[:,x][0]
-            data[:,:,x] = (data[:,:,x]-bottom)/float(top-bottom)
-        return np.clip(data,0,1)
+            data[:,:,x] = (data[:,:,x] - bottom) / float(top - bottom)
+        return np.clip(data, 0, 1)
 
     def ndvi(self, **kwargs):
         data = self[self._ndvi_bands,...].read().astype(np.float32)
