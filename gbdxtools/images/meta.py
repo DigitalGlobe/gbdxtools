@@ -4,20 +4,15 @@ import types
 import os
 from functools import wraps, partial
 from collections import Container
-import threading
 from six import add_metaclass
 
-from shapely import wkt, ops
+from shapely import ops
 from shapely.geometry import box, shape, mapping
-from shapely.geometry.base import BaseGeometry
 
 import pyproj
+import dask
 import dask.array as da
 import numpy as np
-
-import dask
-num_workers = int(os.environ.get("GBDX_THREADS", 4))
-threaded_get = partial(dask.threaded.get, num_workers=num_workers)
 
 from gbdxtools.ipe.io import to_geotiff
 
@@ -27,10 +22,11 @@ try:
 except:
     has_pyplot = False
 
-from gbdxtools.ipe.io import to_geotiff
+num_workers = int(os.environ.get("GBDX_THREADS", 4))
+threaded_get = partial(dask.threaded.get, num_workers=num_workers)
 
 
-add_metaclass(abc.ABCMeta)
+@add_metaclass(abc.ABCMeta)
 class DaskMeta(object):
     """
     A DaskMeta is an interface for the required attributes for initializing a dask Array
@@ -81,8 +77,8 @@ class DaskImage(da.Array):
     def __subclasshook__(cls, C):
         if cls is DaskImage:
             try:
-                if(issubclass(C, da.Array)
-                   and any("__daskmeta__" in B.__dict__ for B in C.__mro__)):
+                if(issubclass(C, da.Array) and
+                   any("__daskmeta__" in B.__dict__ for B in C.__mro__)):
                     return True
             except AttributeError:
                 pass
@@ -90,8 +86,8 @@ class DaskImage(da.Array):
 
     def __getattribute__(self, name):
         fn = object.__getattribute__(self, name)
-        if(isinstance(fn, types.MethodType)
-           and any(name in C.__dict__ for C in self.__class__.__mro__)):
+        if(isinstance(fn, types.MethodType) and
+           any(name in C.__dict__ for C in self.__class__.__mro__)):
             @wraps(fn)
             def wrapped(*args, **kwargs):
                 result = fn(*args, **kwargs)
@@ -143,11 +139,11 @@ class GeoImage(Container):
     @classmethod
     def __subclasshook__(cls, C):
         # Must be a numpy-like, with __geo_transform__, and __geo_interface__
-        if (issubclass(C, DaskImage) or issubclass(C, np.ndarray) and
-            any("__geo_transform__" in B.__dict__ for B in C.__mro__) and
-            any("__geo_interface__" in B.__dict__ for B in C.__mro__)):
+        if(issubclass(C, DaskImage) or issubclass(C, np.ndarray) and
+           any("__geo_transform__" in B.__dict__ for B in C.__mro__) and
+           any("__geo_interface__" in B.__dict__ for B in C.__mro__)):
             return True
-        raise  NotImplemented
+        raise NotImplemented
 
     @property
     def affine(self):
@@ -177,7 +173,7 @@ class GeoImage(Container):
         wkt = kwargs.get('wkt', None)
         geojson = kwargs.get('geojson', None)
         if bbox is not None:
-            g =  box(*bbox)
+            g = box(*bbox)
         elif wkt is not None:
             g = wkt.loads(wkt)
         elif geojson is not None:
@@ -201,7 +197,8 @@ class GeoImage(Container):
         g = shape(geometry)
         assert g in self, "Image does not contain specified geometry"
         bounds = ops.transform(self.__geo_transform__.rev, g).bounds
-        image = self[:, bounds[1]:bounds[3], bounds[0]:bounds[2]] # a dask array that implements daskmeta interface (via op)
+        # NOTE: image is a dask array that implements daskmeta interface (via op)
+        image = self[:, bounds[1]:bounds[3], bounds[0]:bounds[2]]
         image.__geo_interface__ = mapping(g)
         image.__geo_transform__ = self.__geo_transform__ + (bounds[0], bounds[1])
         image.__class__ = self.__class__
