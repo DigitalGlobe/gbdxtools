@@ -15,7 +15,7 @@ shapely
 ephem
 toolz
 cloudpickle
-dask
+dask>=0.14.2
 numpy
 pycurl
 rasterio>=1.0a3
