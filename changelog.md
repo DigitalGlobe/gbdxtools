@@ -1,19 +1,3 @@
-0.11.12
--------
-* Handle ipe image metadata errors
-
-0.11.11
--------
-* more verbose error when idaho cannot download chip
-
-0.11.10
--------
-* Minor patch to use new serverside IPE ids
-
-0.11.9
-------
-* Fix signals exception handling for Windows OS.
-
 0.11.8
 ------
 * add LandsatImage class

@@ -15,8 +15,6 @@ gbdxtools: Python tools for using GBDX
 .. image:: https://codecov.io/gh/DigitalGlobe/gbdxtools/branch/master/graph/badge.svg
     :target: https://codecov.io/gh/DigitalGlobe/gbdxtools
 
-.. image:: https://ci.appveyor.com/api/projects/status/yi2gjeo0qaaikkhd/branch/master?svg=true
-    :target: https://ci.appveyor.com/project/nricklin/gbdxtools/branch/master
 
 
 gbdxtools is a package for ordering imagery and launching workflows on DigitalGlobe's GBDX platform.
@@ -26,9 +24,7 @@ In order to use gbdxtools, you need GBDX credentials. Email GBDX-Support@digital
 Documentation is hosted here: http://gbdxtools.readthedocs.org/en/latest/. 
 Example scripts can be found under the /examples directory of this repo.
 
-Currently, the following Python versions are supported (on osx & linux/unix): 2.7, 3.3, 3.4, 3.5
-
-Windows support is provided for 32-bit python 2.7.
+Currently, the following Python versions are supported: 2.7, 3.3, 3.4, 3.5
 
 See the license file for license rights and limitations (MIT).
 
@@ -55,8 +51,6 @@ Troubleshooting
 ~~~~~~~~~~~~~~~
 
 These are various tips to follow if your installation fails.
-
-Note for ```/catalog/v1``` deprecation: If you are on a version of gbdxtools earlier than 0.11.0, catalog queries will stop working on June 12, 2017 when the ```/catalog/v1``` api is turned off.  We realize it can be difficult to install the latest version of gbdxtools with libcurl & GDAL depdencies, so we recommend installing 0.11.2 until we make it easier to install the latest version:  ```pip install gbdxtools==0.11.2```. 
 
 **Dependencies**
 

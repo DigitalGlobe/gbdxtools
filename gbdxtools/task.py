@@ -8,7 +8,7 @@ class InputPorts(Mapping):
         self._ports = {}
         self._vals = {}
 
-        for key, value in initial_data.iteritems():
+        for key, value in initial_data.items():
             self._ports[key] = self._port_template(key, required=True)
             self._vals[key] = value
 

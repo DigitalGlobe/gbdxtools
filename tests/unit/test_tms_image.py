@@ -6,7 +6,7 @@ Unit tests for the gbdxtools.Idaho class
 '''
 
 from gbdxtools import Interface
-from gbdxtools import LandsatImage
+from gbdxtools import TmsImage
 from auth_mock import get_mock_gbdx_session
 import vcr
 from os.path import join, isfile, dirname, realpath
@@ -48,10 +48,21 @@ class IpeImageTest(unittest.TestCase):
         cls._temp_path = tempfile.mkdtemp()
         print("Created: {}".format(cls._temp_path))
 
-    @my_vcr.use_cassette('tests/unit/cassettes/test_landsat_image.yaml', filter_headers=['authorization'])
-    def test_landsat_image(self):
-        _id = 'LC80370302014268LGN00'
-        img = self.gbdx.landsat_image(_id, bbox=[-109.84, 43.19, -109.59, 43.34])
-        self.assertTrue(isinstance(img, LandsatImage))
-        assert img.shape == (8, 566, 685)
-        assert img.proj == 'EPSG:32612'
+    #@my_vcr.use_cassette('tests/unit/cassettes/test_tms_image.yaml', filter_headers=['authorization'])
+    def test_tms_image(self):
+        img = self.gbdx.tms_image(zoom=18) 
+        self.assertTrue(isinstance(img, TmsImage))
+        assert img.shape == (3, 67106304, 67108864)
+
+    #@my_vcr.use_cassette('tests/unit/cassettes/test_tms_image_init_aoi.yaml', filter_headers=['authorization'])
+    #def test_tms_image_init_aoi(self):
+    #    img = self.gbdx.tms_image(zoom=18, bbox=[-105.00444889068605, 39.75299710099606, -104.9962091445923, 39.75431683540881])
+    #    self.assertTrue(isinstance(img, TmsImage))
+    #    assert img.shape == (3, 480, 1755)
+
+    #@my_vcr.use_cassette('tests/unit/cassettes/test_tms_image_aoi.yaml', filter_headers=['authorization'])
+    def test_tms_image_aoi(self):
+        img = self.gbdx.tms_image(zoom=18)
+        aoi = img.aoi(bbox=[-105.00444889068605, 39.75299710099606, -104.9962091445923, 39.75431683540881])
+        self.assertTrue(isinstance(aoi, TmsImage))
+        assert aoi.shape == (3, 480, 1755)

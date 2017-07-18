@@ -5,36 +5,53 @@ from gbdxtools.ipe.util import calc_toa_gain_offset, ortho_params
 from gbdxtools.ipe.interface import Ipe
 ipe = Ipe()
 
+
 class IdahoImage(IpeImage):
     """
-      Dask based access to ipe based images (Idaho).
+      Dask based access to IDAHO images via IPE.
     """
-    _idaho_md = None
-  
-    def __init__(self, idaho_id, node="toa_reflectance", **kwargs):
-        self._gid = idaho_id
-        self._level = 0
-        if 'proj' in kwargs:
-            self._proj = kwargs['proj']
-        if '_ipe_graphs' in kwargs:
-            self._ipe_graphs = kwargs['_ipe_graphs']
-        else:
-            self._ipe_graphs = self._init_graphs()
+    def __new__(cls, idaho_id, **kwargs):
+        options = {
+            "proj": kwargs.get("proj", "EPSG:4326"),
+            "product": kwargs.get("product", "toa_reflectance")
+        }
 
-        super(IdahoImage, self).__init__(self._ipe_graphs, idaho_id, node=node, **kwargs)
+        standard_products = cls._build_standard_products(idaho_id, options["proj"])
+        try:
+            self = super(IdahoImage, cls).__new__(cls, standard_products.get(options["product"], "toa_reflectance"))
+        except KeyError as e:
+            print(e)
+            print("Specified product not implemented: {}".format(options["product"]))
+            raise
+        self.idaho_id = idaho_id
+        self._products = standard_products
+        return self.aoi(**kwargs)
 
+    def get_product(self, product):
+        return self.__class__(self.idaho_id, proj=self.proj, product=product)
 
-    @property
-    def idaho_md(self):
-        if self._idaho_md is None:
-            self._idaho_md = requests.get('http://idaho.timbr.io/{}.json'.format(self._gid)).json()
-        return self._idaho_md
+    @staticmethod
+    def _build_standard_products(idaho_id, proj):
+        dn_op = ipe.IdahoRead(bucketName="idaho-images", imageId=idaho_id, objectStore="S3")
+        ortho_op = ipe.Orthorectify(dn_op, **ortho_params(proj))
 
-    def _init_graphs(self):
-        meta = self.idaho_md["properties"]
+        # TODO: Switch to direct metadata access (ie remove this block)
+        idaho_md = requests.get('http://idaho.timbr.io/{}.json'.format(idaho_id)).json()
+        meta = idaho_md["properties"]
         gains_offsets = calc_toa_gain_offset(meta)
         radiance_scales, reflectance_scales, radiance_offsets = zip(*gains_offsets)
-        ortho = ipe.Orthorectify(ipe.IdahoRead(bucketName="idaho-images", imageId=self._gid, objectStore="S3"), **ortho_params(self._proj))
-        radiance = ipe.AddConst(ipe.MultiplyConst(ipe.Format(ortho, dataType="4"), constants=radiance_scales), constants=radiance_offsets)
-        toa_reflectance = ipe.MultiplyConst(radiance, constants=reflectance_scales)
-        return {"ortho": ortho, "radiance": radiance, "toa_reflectance": toa_reflectance}
+        # ---
+
+        toa_reflectance_op = ipe.MultiplyConst(
+            ipe.AddConst(
+                ipe.MultiplyConst(
+                    ipe.Format(ortho_op, dataType="4"),
+                    constants=radiance_scales),
+                constants=radiance_offsets),
+            constants=reflectance_scales)
+
+        return {
+            "dn": dn_op,
+            "ortho": ortho_op,
+            "toa_reflectance": toa_reflectance_op
+        }
