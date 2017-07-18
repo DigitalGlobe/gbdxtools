@@ -2,22 +2,25 @@ import warnings
 import os
 import errno
 import datetime
+import time
 from functools import wraps
 from collections import Sequence
 
 import numpy as np
+from numpy.linalg import pinv
 
 import xml.etree.cElementTree as ET
 from xml.dom import minidom
-from shapely.geometry import Polygon
 import ephem
-with warnings.catch_warnings():
-    warnings.simplefilter("ignore")
 
 from shapely import wkt
 from affine import Affine
 
 import gbdxtools.ipe.constants as constants
+
+with warnings.catch_warnings():
+    warnings.simplefilter("ignore")
+
 
 def ortho_params(proj):
     ortho_params = {}
@@ -27,6 +30,7 @@ def ortho_params(proj):
         ortho_params["Elevation Source"] = None
         ortho_params["Output Pixel to World Transform"] = None
     return ortho_params
+
 
 # StackOverflow: http://stackoverflow.com/questions/600268/mkdir-p-functionality-in-python
 def mkdir_p(path):
@@ -93,8 +97,8 @@ def calc_toa_gain_offset(meta):
     # EBW effectiveBandwidth from meta data
     # Gain provided by abscal from const
     # Offset provided by abscal from const
-    acf = np.asarray(meta['abscalfactor']) # Should be nbands length
-    ebw = np.asarray(meta['effbandwidth'])  # Should be nbands length
+    acf = np.asarray(meta['abscalfactor'])  # Should be nbands length
+    ebw = np.asarray(meta['effbandwidth'])   # Should be nbands length
     gain = np.asarray(constants.DG_ABSCAL_GAIN[sat_index])
     scale = (acf/ebw)*(gain)
     offset = np.asarray(constants.DG_ABSCAL_OFFSET[sat_index])
@@ -122,6 +126,7 @@ def calc_toa_gain_offset(meta):
     # Radiance = Scale * Image + offset, Reflectance = Radiance * Scale2
     return zip(scale, scale2, offset)
 
+
 # http://stackoverflow.com/questions/17402323/use-xml-etree-elementtree-to-write-out-nicely-formatted-xml-files
 def prettify(elem):
     """
@@ -131,7 +136,6 @@ def prettify(elem):
     reparsed = minidom.parseString(rough_string)
     return reparsed.toprettyxml(indent="\t")
 
-import time
 
 def timeit(func):
     @wraps(func)
@@ -144,9 +148,6 @@ def timeit(func):
         return res
     return newfunc
 
-
-import numpy as np
-from numpy.linalg import pinv
 
 class RatPolyTransform(object):
     def __init__(self, A, B, offset, scale, px_offset, px_scale, proj=None):
@@ -173,7 +174,6 @@ class RatPolyTransform(object):
         result = np.dot(self._A, X) / np.dot(self._B, X)
         return np.int32(np.sum(self._px_offscl_rev * np.vstack([np.ones(result.shape), result]), axis=0))
 
-
     def fwd(self, x, y, z=None):
         coord = np.asarray([x, y])
         normed = np.sum(self._px_offscl * np.vstack([np.ones(coord.shape), coord]), axis=0)
@@ -189,7 +189,8 @@ class RatPolyTransform(object):
     def __add__(self, other):
         if isinstance(other, Sequence) and len(other) == 2:
             shift = np.asarray(other)
-            return RatPolyTransform(self._A, self._B, self._offset, self._scale, self._px_offset + shift, self._px_scale)
+            return RatPolyTransform(self._A, self._B, self._offset, self._scale,
+                                    self._px_offset + shift, self._px_scale)
         else:
             raise NotImplemented
 
@@ -198,7 +199,6 @@ class RatPolyTransform(object):
             return self.__add__(-other)
         except:
             return self.__add__([-e for e in other])
-
 
     @classmethod
     def from_rpcs(cls, rpcs):
@@ -248,13 +248,11 @@ class AffineTransform(object):
         except:
             return self.__add__([-e for e in other])
 
-
     @classmethod
     def from_georef(cls, georef):
         tfm = Affine.from_gdal(georef["translateX"], georef["scaleX"], georef["shearX"],
                                georef["translateY"], georef["shearY"], georef["scaleY"])
         return cls(tfm, proj=georef["spatialReferenceSystemCode"])
-
 
 
 def shift_func(offset):
