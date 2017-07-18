@@ -8,6 +8,7 @@ from six import add_metaclass
 
 from shapely import ops
 from shapely.geometry import box, shape, mapping
+from shapely import wkt
 
 import pyproj
 import dask
