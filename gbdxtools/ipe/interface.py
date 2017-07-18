@@ -5,8 +5,21 @@ from itertools import chain
 from collections import OrderedDict, defaultdict
 import threading
 
+import rasterio
+from rasterio.io import MemoryFile
+import pycurl
+import numpy as np
+
+
+import gbdxtools as gbdx
+from gbdxtools.ipe.graph import VIRTUAL_IPE_URL, register_ipe_graph, get_ipe_metadata
+from gbdxtools.images.meta import DaskMeta
+from gbdxtools.auth import Auth
+
 import warnings
 warnings.filterwarnings('ignore')
+
+_curl_pool = defaultdict(pycurl.Curl)
 
 try:
     basestring
@@ -17,20 +30,6 @@ try:
     xrange
 except NameError:
     xrange = range
-
-import pycurl
-_curl_pool = defaultdict(pycurl.Curl)
-
-import numpy as np
-
-import rasterio
-from rasterio.io import MemoryFile
-
-import gbdxtools as gbdx
-from gbdxtools.ipe.graph import VIRTUAL_IPE_URL, register_ipe_graph, get_ipe_metadata, get_ipe_graph
-from gbdxtools.images.meta import DaskMeta
-from gbdxtools.auth import Auth
-
 
 IPE_TO_DTYPE = {
     "BINARY": "bool",
@@ -61,7 +60,7 @@ def load_url(url, token, shape=(8, 256, 256)):
         try:
             with memfile.open(driver="GTiff") as dataset:
                 arr = dataset.read()
-        except (TypeError, rasterio.RasterioIOError) as e:
+        except (TypeError, rasterio.RasterioIOError):
             arr = np.zeros(shape, dtype=np.float32)
             _curl.close()
             del _curl_pool[thread_id]
@@ -101,13 +100,19 @@ class Op(DaskMeta):
     def __call__(self, *args, **kwargs):
         if len(args) > 0 and all([isinstance(arg, gbdx.images.ipe_image.IpeImage) for arg in args]):
             return self._ipe_image_call(*args, **kwargs)
-        self._nodes = [ContentHashedDict({"operator": self._operator,
-                                          "_ancestors": [arg._id for arg in args],
-                                          "parameters": OrderedDict({k:json.dumps(v, sort_keys=True) if not isinstance(v, basestring) else v for k,v in sorted(kwargs.items(), key=lambda x: x[0])})})]
+        self._nodes = [ContentHashedDict({
+            "operator": self._operator,
+            "_ancestors": [arg._id for arg in args],
+            "parameters": OrderedDict({
+                k:json.dumps(v, sort_keys=True) if not isinstance(v, basestring) else v
+                for k,v in sorted(kwargs.items(), key=lambda x: x[0])})
+        })]
         for arg in args:
             self._nodes.extend(arg._nodes)
 
-        self._edges = [ContentHashedDict({"index": idx + 1, "source": arg._nodes[0]._id, "destination": self._nodes[0]._id}) for idx, arg in enumerate(args)]
+        self._edges = [ContentHashedDict({"index": idx + 1, "source": arg._nodes[0]._id,
+                                          "destination": self._nodes[0]._id})
+                       for idx, arg in enumerate(args)]
         for arg in args:
             self._edges.extend(arg._edges)
 
@@ -126,7 +131,7 @@ class Op(DaskMeta):
             return self._ipe_graph
 
         _nodes = [{k:v for k,v in node.items() if not k.startswith('_')} for node in self._nodes]
-        graph =  {
+        graph = {
             "edges": self._edges,
             "nodes": _nodes
         }
@@ -154,7 +159,8 @@ class Op(DaskMeta):
     @property
     def dask(self):
         token = self._interface.gbdx_connection.access_token
-        return {(self.name, 0, y, x): (load_url, url, token, self.chunks) for (y, x), url in self._collect_urls().items()}
+        return {(self.name, 0, y, x): (load_url, url, token, self.chunks)
+                for (y, x), url in self._collect_urls().items()}
 
     @property
     def name(self):
@@ -191,9 +197,7 @@ class Op(DaskMeta):
                 for y in xrange(max(img_md['minTileY'], 0), img_md["maxTileY"])
                 for x in xrange(max(img_md['minTileX'], 0), img_md["maxTileX"])}
 
-class Ipe(object):
-    #def __init__(self):
-    #    self.interface = Auth()
 
+class Ipe(object):
     def __getattr__(self, name):
         return Op(name=name, interface=Auth())
