@@ -1,9 +1,10 @@
 import json
-from concurrent.futures import Future, wait
+from concurrent.futures import Future
+
+from gbdxtools.ipe.error import NotFound, BadRequest
 
 VIRTUAL_IPE_URL = "https://idahoapi.geobigdata.io/v1"
 
-from gbdxtools.ipe.error import NotFound, BadRequest
 
 def resolve_if_future(future):
     if isinstance(future, Future):
@@ -23,12 +24,12 @@ def get_ipe_graph(conn, graph_id):
 
 def register_ipe_graph(conn, ipe_graph):
     url = "{}/graph".format(VIRTUAL_IPE_URL)
-    res = resolve_if_future(conn.post(url, json.dumps(ipe_graph, sort_keys=True), headers={'Content-Type': 'application/json'}))
+    res = resolve_if_future(conn.post(url, json.dumps(ipe_graph, sort_keys=True),
+                                      headers={'Content-Type': 'application/json'}))
     if res.status_code == 200:
         return res.content
     else:
         raise BadRequest("Problem registering graph: {}".format(res.content))
-    
 
 
 def get_ipe_metadata(conn, ipe_id, node='toa_reflectance'):
