@@ -170,12 +170,12 @@ class GeoImage(Container):
     def _parse_geoms(self, **kwargs):
         """ Finds supported geometry types, parses them and returns the bbox """
         bbox = kwargs.get('bbox', None)
-        wkt = kwargs.get('wkt', None)
+        wkt_geom = kwargs.get('wkt', None)
         geojson = kwargs.get('geojson', None)
         if bbox is not None:
             g = box(*bbox)
         elif wkt is not None:
-            g = wkt.loads(wkt)
+            g = wkt.loads(wkt_geom)
         elif geojson is not None:
             g = shape(geojson)
         else:
