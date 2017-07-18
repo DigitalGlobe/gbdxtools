@@ -9,11 +9,6 @@ import warnings
 warnings.filterwarnings('ignore')
 
 try:
-    from io import BytesIO
-except ImportError:
-    from cStringIO import StringIO as BytesIO
-
-try:
     basestring
 except NameError:
     basestring = str
@@ -57,7 +52,6 @@ def load_url(url, token, shape=(8, 256, 256)):
     """ Loads a geotiff url inside a thread and returns as an ndarray """
     thread_id = threading.current_thread().ident
     _curl = _curl_pool[thread_id]
-    buf = BytesIO()
     _curl.setopt(_curl.URL, url)
     _curl.setopt(pycurl.NOSIGNAL, 1)
     _curl.setopt(pycurl.HTTPHEADER, ['Authorization: Bearer {}'.format(token)])
@@ -142,7 +136,7 @@ class Op(DaskMeta):
 
         if conn is not None:
             self._ipe_id = register_ipe_graph(conn, graph)
-            self._ipe_graph = graph 
+            self._ipe_graph = graph
             self._ipe_meta = get_ipe_metadata(conn, self._ipe_id, self._id)
             return self._ipe_graph
 
