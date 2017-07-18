@@ -184,7 +184,12 @@ class TmsImage(DaskImage, GeoImage):
         return self.__class__(bounds=list(g.bounds), **self._base_args)[g]
 
     def __getitem__(self, geometry):
+
         if isinstance(geometry, BaseGeometry) or getattr(geometry, "__geo_interface__", None) is not None:
+            if self._tms_meta._bounds is None:
+                return self.aoi(geojson=mapping(geometry))
+            print("indexing by geometry")
+            print(geometry)
             image = GeoImage.__getitem__(self, geometry)
             image._tms_meta = self._tms_meta
             return image
