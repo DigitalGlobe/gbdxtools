@@ -194,9 +194,13 @@ class TmsImage(DaskImage, GeoImage):
         else:
             image = super(TmsImage, self).__getitem__(geometry)
             if all([isinstance(e, slice) for e in geometry]) and len(geometry) == len(self.shape):
-                # xmin, ymin, xmax, ymax
-                g = ops.transform(self.__geo_transform__.fwd,
-                                  box(geometry[2].start, geometry[1].start, geometry[2].stop, geometry[1].stop))
+                xmin, ymin, xmax, ymax = geometry[2].start, geometry[1].start, geometry[2].stop, geometry[1].stop
+                xmin = 0 if xmin is None else xmin
+                ymin = 0 if ymin is None else ymin
+                xmax = self.shape[2] if xmax is None else xmax
+                ymax = self.shape[1] if ymax is None else ymax
+
+                g = ops.transform(self.__geo_transform__.fwd, box(xmin, ymin, xmax, ymax))
 
                 image.__geo_interface__ = mapping(g)
                 bounds = g.bounds
