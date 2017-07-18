@@ -174,7 +174,7 @@ class GeoImage(Container):
         geojson = kwargs.get('geojson', None)
         if bbox is not None:
             g = box(*bbox)
-        elif wkt is not None:
+        elif wkt_geom is not None:
             g = wkt.loads(wkt_geom)
         elif geojson is not None:
             g = shape(geojson)
