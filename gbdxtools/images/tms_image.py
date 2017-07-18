@@ -39,7 +39,7 @@ def load_url(url, shape=(3, 256, 256)):
             with memfile.open(driver="PNG") as dataset:
                 arr = dataset.read()
         except (TypeError, rasterio.RasterioIOError):
-            arr = np.zeros(shape, dtype=np.float32)
+            arr = np.zeros(shape, dtype=np.uint8)
             _curl.close()
             del _curl_pool[thread_id]
         return arr
