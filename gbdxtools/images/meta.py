@@ -92,7 +92,7 @@ class DaskImage(da.Array):
             @wraps(fn)
             def wrapped(*args, **kwargs):
                 result = fn(*args, **kwargs)
-                if isinstance(result, da.Array):
+                if isinstance(result, da.Array) and len(result.shape) in [2,3]:
                     self.__daskmeta__.infect(result)
                 return result
             return wrapped
