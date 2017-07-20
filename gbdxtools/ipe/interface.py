@@ -161,7 +161,9 @@ class Op(DaskMeta):
         token = self._interface.gbdx_connection.access_token
         _chunks = self.chunks
         _name = self.name
-        return {(_name, 0, y, x): (load_url, url, token, _chunks) for (y, x), url in self._collect_urls().items()}
+        img_md = self.metadata["image"]
+        return {(_name, 0, y - img_md['minTileY'], x - img_md['minTileX']): (load_url, url, token, _chunks)
+                for (y, x), url in self._collect_urls().items()}
 
     @property
     def name(self):
@@ -184,8 +186,8 @@ class Op(DaskMeta):
     def shape(self):
         img_md = self.metadata["image"]
         return (img_md["numBands"],
-                img_md["imageHeight"] + img_md["imageHeight"] % img_md["tileYSize"],
-                img_md["imageWidth"] + img_md["imageWidth"] % img_md["tileXSize"])
+                (img_md["maxTileY"] - img_md["minTileY"] + 1)*img_md["tileYSize"],
+                (img_md["maxTileX"] - img_md["minTileX"] + 1)*img_md["tileXSize"])
 
     def _ipe_tile(self, x, y, ipe_id, _id):
         return "{}/tile/{}/{}/{}/{}/{}.tif".format(VIRTUAL_IPE_URL, "idaho-virtual", ipe_id, _id, x, y)
@@ -194,9 +196,9 @@ class Op(DaskMeta):
         img_md = self.metadata["image"]
         ipe_id = self._ipe_id
         _id = self._id
-        return {(y, x): self._ipe_tile(x + img_md["tileXOffset"], y + img_md["tileYOffset"], ipe_id, _id)
-                for y in xrange(max(img_md['minTileY'], 0), img_md["maxTileY"])
-                for x in xrange(max(img_md['minTileX'], 0), img_md["maxTileX"])}
+        return {(y, x): self._ipe_tile(x, y, ipe_id, _id)
+                for y in xrange(img_md['minTileY'], img_md["maxTileY"]+1)
+                for x in xrange(img_md['minTileX'], img_md["maxTileX"]+1)}
 
 
 class Ipe(object):

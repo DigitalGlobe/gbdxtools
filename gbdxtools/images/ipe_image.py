@@ -19,9 +19,12 @@ class IpeImage(DaskImage, GeoImage):
         self = super(IpeImage, cls).create(op)
         self._ipe_op = op
         if self.ipe.metadata["georef"] is None:
-            self.__geo_transform__ = RatPolyTransform.from_rpcs(self.ipe.metadata["rpcs"])
+            tfm = RatPolyTransform.from_rpcs(self.ipe.metadata["rpcs"])
         else:
-            self.__geo_transform__ = AffineTransform.from_georef(self.ipe.metadata["georef"])
+            tfm = AffineTransform.from_georef(self.ipe.metadata["georef"])
+        img_md = self.ipe.metadata["image"]
+        self.__geo_transform__ = tfm - (img_md["minTileX"]*img_md["tileXSize"],
+                                        img_md["minTileX"]*img_md["tileXSize"])
         self.__geo_interface__ = mapping(self._reproject(wkt.loads(self.ipe.metadata["image"]["imageBoundsWGS84"])))
         return self
 
