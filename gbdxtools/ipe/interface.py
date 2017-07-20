@@ -33,6 +33,7 @@ from rasterio.io import MemoryFile
 
 import gbdxtools as gbdx
 from gbdxtools.ipe.graph import VIRTUAL_IPE_URL, register_ipe_graph, get_ipe_metadata, get_ipe_graph
+from gbdxtools.ipe.util import timeit
 from gbdxtools.images.meta import DaskMeta
 from gbdxtools.auth import Auth
 
@@ -149,6 +150,7 @@ class Op(DaskMeta):
         return graph
 
     @property
+    @timeit
     def metadata(self):
         assert self.graph() is not None
         if self._ipe_meta is not None:
@@ -158,9 +160,14 @@ class Op(DaskMeta):
         return self._ipe_meta
 
     @property
+    @timeit
     def dask(self):
         token = self._interface.gbdx_connection.access_token
-        return {(self.name, 0, y, x): (load_url, url, token, self.chunks) for (y, x), url in self._collect_urls().items()}
+        urls = self._collect_urls().items()
+        _chunks = self.chunks
+        _name = self.name
+        return {(_name, 0, y, x): (load_url, url, token, _chunks) for (y, x), url in  urls}
+
 
     @property
     def name(self):
@@ -189,6 +196,7 @@ class Op(DaskMeta):
     def _ipe_tile(self, x, y, ipe_id, _id):
         return "{}/tile/{}/{}/{}/{}/{}.tif".format(VIRTUAL_IPE_URL, "idaho-virtual", ipe_id, _id, x, y)
 
+    @timeit
     def _collect_urls(self):
         img_md = self.metadata["image"]
         ipe_id = self._ipe_id
