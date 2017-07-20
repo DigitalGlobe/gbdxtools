@@ -3,6 +3,14 @@ from gbdxtools.images.ipe_image import IpeImage
 from gbdxtools.ipe.interface import Ipe
 ipe = Ipe()
 
+def reproject_params(proj):
+    _params = {}
+    if proj is not None:
+        _params["Source SRS Code"] = "EPSG:4326"
+        _params["Source pixel-to-world transform"] = None
+        _params["Dest SRS Code"] = proj
+        _params["Dest pixel-to-world transform"] = None
+    return _params
 
 class LandsatImage(IpeImage):
     """
@@ -14,7 +22,7 @@ class LandsatImage(IpeImage):
             "spec": kwargs.get("spec", "multispectral")
         }
 
-        standard_products = cls._build_standard_products(_id, options["spec"])
+        standard_products = cls._build_standard_products(_id, options["spec"], kwargs.get("proj", None))
         try:
             self = super(LandsatImage, cls).__new__(cls, standard_products[options["product"]])
         except KeyError as e:
@@ -38,8 +46,10 @@ class LandsatImage(IpeImage):
         return self.__class__(self._id, proj=self.proj, product=product)
 
     @staticmethod
-    def _build_standard_products(_id, spec):
+    def _build_standard_products(_id, spec, proj):
         landsat = ipe.LandsatRead(landsatId=_id, productSpec=spec)
+        if proj is not None:
+            landsat = ipe.Reproject(landsat, **reproject_params(proj))
         return {
             "landsat": landsat
         }
