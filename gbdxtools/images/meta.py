@@ -129,6 +129,8 @@ class DaskImage(da.Array):
 
 @add_metaclass(abc.ABCMeta)
 class GeoImage(Container):
+    _default_proj = "EPSG:4326"
+
     @abc.abstractmethod
     def __geo_interface__(self):
         pass
@@ -190,7 +192,7 @@ class GeoImage(Container):
         if from_proj is None:
             from_proj = self._default_proj
         if to_proj is None:
-            to_proj = self.proj
+            to_proj = self.proj if self.proj is not None else "EPSG:4326"
         tfm = partial(pyproj.transform, pyproj.Proj(init=from_proj), pyproj.Proj(init=to_proj))
         return ops.transform(tfm, geometry)
 
