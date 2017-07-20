@@ -159,7 +159,8 @@ class Op(DaskMeta):
     @property
     def dask(self):
         token = self._interface.gbdx_connection.access_token
-        return {(self.name, 0, y, x): (load_url, url, token, self.chunks)
+        img_md = self.metadata["image"]
+        return {(self.name, 0, y - img_md['minTileY'], x - img_md['minTileX']): (load_url, url, token, self.chunks)
                 for (y, x), url in self._collect_urls().items()}
 
     @property
@@ -183,8 +184,8 @@ class Op(DaskMeta):
     def shape(self):
         img_md = self.metadata["image"]
         return (img_md["numBands"],
-                img_md["imageHeight"] + img_md["imageHeight"] % img_md["tileYSize"],
-                img_md["imageWidth"] + img_md["imageWidth"] % img_md["tileXSize"])
+                (img_md["maxTileY"] - img_md["minTileY"] + 1)*img_md["tileYSize"],
+                (img_md["maxTileX"] - img_md["minTileX"] + 1)*img_md["tileXSize"])
 
     def _ipe_tile(self, x, y, ipe_id, _id):
         return "{}/tile/{}/{}/{}/{}/{}.tif".format(VIRTUAL_IPE_URL, "idaho-virtual", ipe_id, _id, x, y)

@@ -23,7 +23,7 @@ try:
 except:
     has_pyplot = False
 
-num_workers = int(os.environ.get("GBDX_THREADS", 16))
+num_workers = int(os.environ.get("GBDX_THREADS", 8))
 threaded_get = partial(dask.threaded.get, num_workers=num_workers)
 
 
