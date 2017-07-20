@@ -193,9 +193,9 @@ class Op(DaskMeta):
         img_md = self.metadata["image"]
         ipe_id = self._ipe_id
         _id = self._id
-        return {(y, x): self._ipe_tile(x + img_md["tileXOffset"], y + img_md["tileYOffset"], ipe_id, _id)
-                for y in xrange(max(img_md['minTileY'], 0), img_md["maxTileY"])
-                for x in xrange(max(img_md['minTileX'], 0), img_md["maxTileX"])}
+        return {(y, x): self._ipe_tile(x, y, ipe_id, _id)
+                for y in xrange(img_md['minTileY'], img_md["maxTileY"]+1)
+                for x in xrange(img_md['minTileX'], img_md["maxTileX"]+1)}
 
 
 class Ipe(object):
