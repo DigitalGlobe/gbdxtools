@@ -5,6 +5,7 @@ import datetime
 import time
 from functools import wraps
 from collections import Sequence
+from itertools import izip
 
 import numpy as np
 from numpy.linalg import pinv
@@ -175,6 +176,10 @@ class RatPolyTransform(object):
         return np.int32(np.sum(self._px_offscl_rev * np.vstack([np.ones(result.shape), result]), axis=0))
 
     def fwd(self, x, y, z=None):
+        if isinstance(x, (Sequence, np.ndarray)):
+            if z is None:
+                z = [None]*len(x)
+            return  np.transpose(np.asarray([self.fwd(x_i, y_i, z_i) for x_i, y_i, z_i in izip(x, y, z)]))
         coord = np.asarray([x, y])
         normed = np.sum(self._px_offscl * np.vstack([np.ones(coord.shape), coord]), axis=0)
         coord = np.dot(self._A_rev, normed)[[2,1,3]] # likely unstable
