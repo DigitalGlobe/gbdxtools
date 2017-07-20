@@ -159,8 +159,9 @@ class Op(DaskMeta):
     @property
     def dask(self):
         token = self._interface.gbdx_connection.access_token
-        return {(self.name, 0, y, x): (load_url, url, token, self.chunks)
-                for (y, x), url in self._collect_urls().items()}
+        _chunks = self.chunks
+        _name = self.name
+        return {(_name, 0, y, x): (load_url, url, token, _chunks) for (y, x), url in self._collect_urls().items()}
 
     @property
     def name(self):
