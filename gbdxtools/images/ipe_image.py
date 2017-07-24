@@ -23,6 +23,7 @@ class IpeImage(DaskImage, GeoImage):
         else:
             tfm = AffineTransform.from_georef(self.ipe.metadata["georef"])
         img_md = self.ipe.metadata["image"]
+        print(img_md)
         self.__geo_transform__ = tfm
         self.__geo_interface__ = mapping(self._reproject(wkt.loads(self.ipe.metadata["image"]["imageBoundsWGS84"])))
         xshift = img_md["minTileX"]*img_md["tileXSize"]
@@ -97,10 +98,8 @@ class IpeImage(DaskImage, GeoImage):
                 ymax = self.shape[1] if ymax is None else ymax
 
                 g = ops.transform(self.__geo_transform__.fwd, box(xmin, ymin, xmax, ymax))
-
                 image.__geo_interface__ = mapping(g)
-                bounds = g.bounds
-                image.__geo_transform__ = self.__geo_transform__ + (bounds[0], bounds[1])
+                image.__geo_transform__ = self.__geo_transform__ + (xmin, ymin)
             else:
                 image.__geo_interface__ = self.__geo_interface__
                 image.__geo_transform__ = self.__geo_transform__
