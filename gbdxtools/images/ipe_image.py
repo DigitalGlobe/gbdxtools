@@ -48,6 +48,10 @@ class IpeImage(DaskImage, GeoImage):
         return self.ipe._ipe_id
 
     @property
+    def ipe_metadata(self):
+        return self.ipe.metadata
+
+    @property
     def ntiles(self):
         size = float(self.ipe.metadata['image']['tileXSize'])
         return math.ceil((float(self.shape[-1]) / size)) * math.ceil(float(self.shape[1]) / size)
