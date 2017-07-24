@@ -3,10 +3,12 @@ import os
 import errno
 import datetime
 import time
-import six
 from functools import wraps
 from collections import Sequence
-from itertools import izip
+try:
+    from itertools import izip
+except ImportError:  #python3.x
+    izip = zip
 
 import numpy as np
 from numpy.linalg import pinv
