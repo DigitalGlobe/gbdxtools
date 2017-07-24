@@ -3,6 +3,7 @@ import os
 import errno
 import datetime
 import time
+import six
 from functools import wraps
 from collections import Sequence
 from itertools import izip
