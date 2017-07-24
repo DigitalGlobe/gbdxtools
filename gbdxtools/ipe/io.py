@@ -7,13 +7,17 @@ def to_geotiff(arr, path='./output.tif', proj=None, dtype=None, bands=None, **kw
         dtype = np.dtype(dtype)
     data = arr.read(bands=bands)
     c,h,w = data.shape
+    try: 
+        tfm = kwargs['transform'] if 'transform' in kwargs else arr.affine
+    except:
+        tfm = None
     meta = {
         'width': w,
         'height': h,
         'count': c,
         'dtype': data.dtype if dtype is None else dtype,
         'driver': 'GTiff',
-        'transform': kwargs.get('transform', arr.affine)
+        'transform': tfm
     }
     if proj is not None:
         meta["crs"] = {'init': proj}
