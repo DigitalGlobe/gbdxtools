@@ -25,7 +25,6 @@ band_types = {
     'pan': 'PAN'
 }
 
-
 class WVImage(IpeImage):
     _parts = None
 
@@ -102,3 +101,13 @@ class WVImage(IpeImage):
             constants=reflectance_scales)
 
         return {"ortho": ortho_op, "toa_reflectance": toa_reflectance_op}
+
+
+class WV03_VNIR(WVImage):
+    def __new__(cls, cat_id, **kwargs):
+        return super(WV03_VNIR).__new__(cat_id, **kwargs)
+
+
+class WV02(WVImage):
+    def __new__(cls, cat_id, **kwargs):
+        return super(WV02).__new__(cat_id, **kwargs)      
