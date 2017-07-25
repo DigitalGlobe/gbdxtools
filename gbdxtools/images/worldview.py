@@ -49,7 +49,7 @@ class WVImage(IpeImage):
         standard_products["pansharpened"] = ipe.LocallyProjectivePanSharpen(ms, pan)
 
         try:
-            self = super(CatalogImage, cls).__new__(cls, standard_products[options["product"]])
+            self = super(WVImage, cls).__new__(cls, standard_products[options["product"]])
         except KeyError as e:
             print(e)
             print("Specified product not implemented: {}".format(options["product"]))

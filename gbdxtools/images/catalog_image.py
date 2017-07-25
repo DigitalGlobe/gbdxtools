@@ -7,6 +7,7 @@ from __future__ import print_function
 from gbdxtools import IdahoImage, WVImage, LandsatImage
 from gbdxtools.images.ipe_image import IpeImage
 from gbdxtools.vectors import Vectors
+from gbdxtools.ipe.error import UnsupportedImageType
 
 from shapely import wkt
 from shapely.geometry import box
@@ -30,10 +31,14 @@ class CatalogImage(IpeImage):
     def _image_class(cls, types):
         if 'IDAHOImage' in types:
             return IdahoImage
-        if 'WV02' in types or 'WV03_VNIR' in types:
+        if any(t in ['WV02', 'WV03_VNIR', 'WV01'] for t in types):
             return WVImage
         elif 'Landsat8' in types:
             return LandsatImage
         else: 
-            raise 'Unsupported image type: {}'.format(str(types))
-  
+            raise UnsupportedImageType('Unsupported image type: {}'.format(str(types)))
+
+        # ADD SUPPORT FOR:
+          # wv01
+          # wv03_swir
+          # ikonos
