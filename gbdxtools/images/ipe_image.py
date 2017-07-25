@@ -174,11 +174,19 @@ class IpeImage(DaskImage):
     @property
     def ipe_metadata(self):
         if self._ipe_metadata is None:
-            try: 
-                self._ipe_metadata = get_ipe_metadata(self.interface.gbdx_connection, self.ipe_id, self.ipe_node_id)
-            except BadRequest:
-                raise 
+            self._ipe_metadata = self._fetch_metadata() 
         return self._ipe_metadata
+
+    def _fetch_metadata(self):
+        try: 
+            meta = get_ipe_metadata(self.interface.gbdx_connection, self.ipe_id, self.ipe_node_id)
+            return meta
+        except BadRequest as err:
+            self._retries += 1
+            if self._retries >= 3:
+                raise MaxTries('Exceeded max number of requests for metadata.')
+            time.sleep(1)
+            self._fetch_metadata()
 
     @property
     def vrt(self):
