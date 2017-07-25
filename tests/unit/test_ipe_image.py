@@ -54,7 +54,7 @@ class IpeImageTest(unittest.TestCase):
         idahoid = '1ec49348-8950-49ff-bd71-ea2e4d8754ac'
         img = self.gbdx.idaho_image(idahoid)
         self.assertTrue(isinstance(img, IdahoImage))
-        assert img.shape == (8, 10342, 14660)
+        assert img.shape == (8, 10290, 14625)
         assert img.proj == 'EPSG:4326'
 
     @my_vcr.use_cassette('tests/unit/cassettes/test_ipe_image_init_with_aoi2.yaml', filter_headers=['authorization'])

@@ -51,7 +51,7 @@ class CatalogImageTest(unittest.TestCase):
         _id = '104001002838EC00'
         img = self.gbdx.catalog_image(_id)
         self.assertTrue(isinstance(img, CatalogImage))
-        assert img.shape == (8, 79414, 11028)
+        assert img.shape == (8, 79386, 10889)
         assert img.proj == 'EPSG:4326'
 
     @my_vcr.use_cassette('tests/unit/cassettes/test_cat_image_default_aoi.yaml', filter_headers=['authorization'])
@@ -80,7 +80,7 @@ class CatalogImageTest(unittest.TestCase):
         _id = '104001002838EC00'
         img = self.gbdx.catalog_image(_id, band_type='Pan')
         self.assertTrue(isinstance(img, CatalogImage))
-        assert img.shape == (1, 317968, 43760)
+        assert img.shape == (1, 317959, 43511)
         assert img.proj == 'EPSG:4326'
 
     @my_vcr.use_cassette('tests/unit/cassettes/test_cat_image_pansharpen.yaml', filter_headers=['authorization'])
@@ -88,6 +88,6 @@ class CatalogImageTest(unittest.TestCase):
         _id = '104001002838EC00'
         img = self.gbdx.catalog_image(_id, pansharpen=True)
         self.assertTrue(isinstance(img, CatalogImage))
-        assert img.shape == (8, 317968, 43760)
+        assert img.shape == (8, 317959, 43511)
         assert img.proj == 'EPSG:4326' 
 

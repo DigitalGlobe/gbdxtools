@@ -47,6 +47,10 @@ class IpeImage(DaskImage, GeoImage):
         return self.ipe._ipe_id
 
     @property
+    def ipe_metadata(self):
+        return self.ipe.metadata
+
+    @property
     def ntiles(self):
         size = float(self.ipe.metadata['image']['tileXSize'])
         return math.ceil((float(self.shape[-1]) / size)) * math.ceil(float(self.shape[1]) / size)
@@ -97,10 +101,8 @@ class IpeImage(DaskImage, GeoImage):
                 ymax = self.shape[1] if ymax is None else ymax
 
                 g = ops.transform(self.__geo_transform__.fwd, box(xmin, ymin, xmax, ymax))
-
                 image.__geo_interface__ = mapping(g)
-                bounds = g.bounds
-                image.__geo_transform__ = self.__geo_transform__ + (bounds[0], bounds[1])
+                image.__geo_transform__ = self.__geo_transform__ + (xmin, ymin)
             else:
                 image.__geo_interface__ = self.__geo_interface__
                 image.__geo_transform__ = self.__geo_transform__
