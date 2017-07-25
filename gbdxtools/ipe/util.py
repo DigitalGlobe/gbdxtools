@@ -9,6 +9,7 @@ from itertools import izip
 
 import numpy as np
 from numpy.linalg import pinv
+from skimage.transform._geometric import GeometricTransform
 
 import xml.etree.cElementTree as ET
 from xml.dom import minidom
@@ -150,7 +151,7 @@ def timeit(func):
     return newfunc
 
 
-class RatPolyTransform(object):
+class RatPolyTransform(GeometricTransform):
     def __init__(self, A, B, offset, scale, px_offset, px_scale, proj=None):
         self.proj = proj
         self._A = A
@@ -184,6 +185,15 @@ class RatPolyTransform(object):
         normed = np.sum(self._px_offscl * np.vstack([np.ones(coord.shape), coord]), axis=0)
         coord = np.dot(self._A_rev, normed)[[2,1,3]] # likely unstable
         return np.sum(self._offscl_rev * np.vstack([np.ones(coord.shape), coord]), axis=0)
+
+    def __call__(self, coords):
+        pass
+
+    def inverse(self, coords):
+        pass
+
+    def residuals(self, src, dst):
+        pass
 
     def _rpc(self, x):
         L, P, H = x[0], x[1], x[2]
@@ -229,7 +239,7 @@ class RatPolyTransform(object):
         pass
 
 
-class AffineTransform(object):
+class AffineTransform(GeometricTransform):
     def __init__(self, affine, proj=None):
         self._affine = affine
         self.proj = proj
@@ -239,6 +249,15 @@ class AffineTransform(object):
 
     def fwd(self, x, y, z=0):
         return self._affine * (x, y)
+
+    def __call__(self, coords):
+        pass
+
+    def inverse(self, coords):
+        pass
+
+    def residuals(self, src, dst):
+        pass
 
     def __add__(self, other):
         if isinstance(other, Sequence) and len(other) == 2:
@@ -267,3 +286,4 @@ def shift_func(offset):
             return wrapped(*[arg + offset for arg,offset in zip(args, offset)])
         return fn
     return decorator
+
