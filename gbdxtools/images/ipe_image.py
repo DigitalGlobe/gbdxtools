@@ -23,10 +23,10 @@ class IpeImage(DaskImage, GeoImage):
         else:
             tfm = AffineTransform.from_georef(self.ipe.metadata["georef"])
         img_md = self.ipe.metadata["image"]
-        self.__geo_transform__ = tfm
-        self.__geo_interface__ = mapping(self._reproject(wkt.loads(self.ipe.metadata["image"]["imageBoundsWGS84"])))
         xshift = img_md["minTileX"]*img_md["tileXSize"]
         yshift = img_md["minTileY"]*img_md["tileYSize"]
+        self.__geo_transform__ = tfm + (xshift, yshift)
+        self.__geo_interface__ = mapping(self._reproject(wkt.loads(self.ipe.metadata["image"]["imageBoundsWGS84"])))
         minx = img_md["minX"] - xshift
         maxx = img_md["maxX"] - xshift
         miny = img_md["minY"] - yshift
