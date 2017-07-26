@@ -1,16 +1,8 @@
 from __future__ import print_function
 from gbdxtools.images.ipe_image import IpeImage
 from gbdxtools.ipe.interface import Ipe
+from gbdxtools.ipe.util import reproject_params
 ipe = Ipe()
-
-def reproject_params(proj):
-    _params = {}
-    if proj is not None:
-        _params["Source SRS Code"] = "EPSG:4326"
-        _params["Source pixel-to-world transform"] = None
-        _params["Dest SRS Code"] = proj
-        _params["Dest pixel-to-world transform"] = None
-    return _params
 
 class IkonosImage(IpeImage):
     """
@@ -40,12 +32,9 @@ class IkonosImage(IpeImage):
 
     @staticmethod
     def _build_standard_products(bucket, prefix, spec, proj):
-        print("{}/{}/{}_0000000".format(bucket, prefix, prefix), spec)
-        ikonos = ipe.IkonosRead(path="ikonos-product/po_1298279/po_1298279_0000000:multispectral")
-        #ikonos = ipe.IkonosRead(path="{}/{}/{}_0000000:{}".format(bucket, prefix, prefix, spec))
-        #if proj is not None:
-        #    ikonos = ipe.Reproject(ikonos, **reproject_params(proj))
-        #print(ikonos.graph())
+        ikonos = ipe.IkonosRead(path="{}/{}/{}_0000000:{}".format(bucket, prefix, prefix, spec))
+        if proj is not None:
+            ikonos = ipe.Reproject(ikonos, **reproject_params(proj))
         return {
             "ikonos": ikonos
         }

@@ -135,7 +135,7 @@ class Op(DaskMeta):
             "edges": self._edges,
             "nodes": _nodes
         }
-        print(graph)
+
         if self._interface is not None and conn is None:
             conn = self._interface.gbdx_futures_session
 

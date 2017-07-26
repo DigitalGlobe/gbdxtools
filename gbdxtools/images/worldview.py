@@ -105,9 +105,9 @@ class WVImage(IpeImage):
 
 class WV03_VNIR(WVImage):
     def __new__(cls, cat_id, **kwargs):
-        return super(WV03_VNIR).__new__(cat_id, **kwargs)
+        return super(WV03_VNIR, cls).__new__(cls, cat_id, **kwargs)
 
 
 class WV02(WVImage):
     def __new__(cls, cat_id, **kwargs):
-        return super(WV02).__new__(cat_id, **kwargs)      
+        return super(WV02, cls).__new__(cls, cat_id, **kwargs)      

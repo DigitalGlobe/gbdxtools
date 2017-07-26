@@ -25,23 +25,26 @@ class CatalogImage(object):
         if len(result) == 0:
             raise 'Could not find a catalog entry for the given id: {}'.format(cat_id)
         else:
-            return cls._image_class(result[0]['properties']['item_type'])(cat_id, **kwargs)
+            return cls._image_class(cat_id, result[0], **kwargs)
 
     @classmethod
-    def _image_class(cls, types):
+    def _image_class(cls, cat_id, rec, **kwargs):
+        types = rec['properties']['item_type']
         if 'IDAHOImage' in types:
-            return IdahoImage
-        elif 'WV02':
-            return WV02
-        elif 'WV03_VNIR':
-            return WV03_VNIR
+            return IdahoImage(cat_id, **kwargs)
+        elif 'WV02' in types:
+            return WV02(cat_id, **kwargs)
+        elif 'WV03_VNIR' in types:
+            return WV03_VNIR(cat_id, **kwargs)
         elif 'Landsat8' in types:
-            return LandsatImage
+            return LandsatImage(cat_id, **kwargs)
         elif 'IKONOS' in types:
-            return IkonosImage
+            return IkonosImage(rec['properties']['attributes']['prefix'], bucket=rec['properties']['attributes']['bucket_name'], **kwargs)
         else: 
             raise UnsupportedImageType('Unsupported image type: {}'.format(str(types)))
 
         # ADD SUPPORT FOR:
           # wv01
           # wv03_swir
+          # QB02
+          # GE01
