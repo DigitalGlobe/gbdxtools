@@ -31,8 +31,8 @@ def ortho_params(proj):
     if proj is not None:
         ortho_params["Output Coordinate Reference System"] = proj
         ortho_params["Sensor Model"] = None
-        ortho_params["Elevation Source"] = None
-        ortho_params["Output Pixel to World Transform"] = None
+        ortho_params["Elevation Source"] = ''
+        ortho_params["Output Pixel to World Transform"] = ''
     return ortho_params
 
 
