@@ -3,7 +3,7 @@ gbdx = gbdxtools.Interface()
 
 # Let's find all the Worldview 3 vector footprints in colorado
 colorado_aoi = "POLYGON((-108.89 40.87,-102.19 40.87,-102.19 37.03,-108.89 37.03,-108.89 40.87))"
-results = gbdx.vectors.query(colorado_aoi, query="item_type:WV03")
+results = gbdx.vectors.query(colorado_aoi, query="item_type:WV03_VNIR")
 
 geojson = {
 	'type': 'FeatureCollection',
