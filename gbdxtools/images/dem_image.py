@@ -23,9 +23,10 @@ class DemImage(IpeImage):
             print(e)
             print("Specified product not implemented: {}".format(options["product"]))
             raise
+        self = self.aoi(**kwargs)
         self.idaho_id = idaho_id
         self._products = standard_products
-        return self.aoi(**kwargs)
+        return self
 
     def get_product(self, product):
         return self.__class__(self.idaho_id, proj=self.proj, product=product)

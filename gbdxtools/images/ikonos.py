@@ -21,11 +21,12 @@ class IkonosImage(IpeImage):
             print(e)
             print("Specified product not implemented: {}".format(options["product"]))
             raise
+        self = self.aoi(**kwargs)
         self._bucket = _bucket
         self._prefix = _prefix
         self._spec = options["spec"]
         self._products = standard_products
-        return self.aoi(**kwargs)
+        return self
 
     def get_product(self, product):
         return self.__class__(self._bucket, self._prefix, proj=self.proj, product=product)

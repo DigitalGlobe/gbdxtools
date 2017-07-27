@@ -53,10 +53,11 @@ class WVImage(IpeImage):
             print(e)
             print("Specified product not implemented: {}".format(options["product"]))
             raise
+        self = self.aoi(**kwargs)
         self.cat_id = cat_id
         self._products = standard_products
         self.options = options
-        return self.aoi(**kwargs)
+        return self
 
     @property
     def parts(self):
