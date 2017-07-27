@@ -190,7 +190,18 @@ class RatPolyTransform(GeometricTransform):
         return np.sum(self._offscl_rev * np.vstack([np.ones(coord.shape), coord]), axis=0)
 
     def __call__(self, coords):
-        pass
+        assert isinstance(coords, np.ndarray)
+        try:
+            d0, d1 = coords.shape
+            assert d1 ==2
+        except ValueError, AssertionError:
+            raise NotImplementedError("input coords must be [N x 2] dimension numpy array")
+        if d1 != 2:
+            raise NotImplementedError("input coords must be [N x 2] dimension numpy array")
+
+        xarr, yarr = np.hsplit(coords, 2)
+        res = self.fwd(xarr, yarr)
+        return res
 
     def inverse(self, coords):
         pass
@@ -245,22 +256,33 @@ class RatPolyTransform(GeometricTransform):
 class AffineTransform(GeometricTransform):
     def __init__(self, affine, proj=None):
         self._affine = affine
+        self._iaffine = None
         self.proj = proj
 
     def rev(self, lng, lat, z=0):
-        return np.asarray(~self._affine * (lng, lat)).astype(np.int32)
+        if self._iaffine is None:
+            self._iaffine = ~self._affine
+        return np.asarray(self._iaffine * (lng, lat)).astype(np.int32)
 
     def fwd(self, x, y, z=0):
         return self._affine * (x, y)
 
     def __call__(self, coords):
-        pass
+        assert isinstance(coords, np.ndarray) and len(coords.shape) == 2 and coords.shape[1] == 2
+        _coords = np.copy(coords)
+        self._affine.itransform(_coords)
+        return _coords
 
     def inverse(self, coords):
-        pass
+        assert isinstance(coords, np.ndarray) and len(coords.shape) == 2 and coords.shape[1] == 2
+        if self._iaffine is None:
+            self._iaffine = ~self._affine
+        _coords = np.copy(coords)
+        self._iaffine.itransform(_coords)
+        return _coords
 
     def residuals(self, src, dst):
-        pass
+        return super(AffineTransform, self).residuals(src, dst)
 
     def __add__(self, other):
         if isinstance(other, Sequence) and len(other) == 2:
