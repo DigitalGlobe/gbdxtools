@@ -1,19 +1,10 @@
 from __future__ import print_function
 from gbdxtools.images.ipe_image import IpeImage
+from gbdxtools.ipe.util import reproject_params
 from gbdxtools.ipe.interface import Ipe
 ipe = Ipe()
 
 from shapely.geometry import box
-
-def reproject_params(proj):
-    _params = {}
-    if proj is not None:
-        _params["Source SRS Code"] = "EPSG:4326"
-        _params["Source pixel-to-world transform"] = None
-        _params["Dest SRS Code"] = proj
-        _params["Dest pixel-to-world transform"] = None
-    return _params
-
 
 class DemImage(IpeImage):
     """
@@ -32,9 +23,10 @@ class DemImage(IpeImage):
             print(e)
             print("Specified product not implemented: {}".format(options["product"]))
             raise
+        self = self.aoi(**kwargs)
         self.idaho_id = idaho_id
         self._products = standard_products
-        return self.aoi(**kwargs)
+        return self
 
     def get_product(self, product):
         return self.__class__(self.idaho_id, proj=self.proj, product=product)

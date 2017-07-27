@@ -26,14 +26,22 @@ import gbdxtools.ipe.constants as constants
 with warnings.catch_warnings():
     warnings.simplefilter("ignore")
 
+def reproject_params(proj):
+    _params = {}
+    if proj is not None:
+        _params["Source SRS Code"] = "EPSG:4326"
+        _params["Source pixel-to-world transform"] = None
+        _params["Dest SRS Code"] = proj
+        _params["Dest pixel-to-world transform"] = None
+    return _params
 
 def ortho_params(proj):
     ortho_params = {}
     if proj is not None:
         ortho_params["Output Coordinate Reference System"] = proj
         ortho_params["Sensor Model"] = None
-        ortho_params["Elevation Source"] = None
-        ortho_params["Output Pixel to World Transform"] = None
+        ortho_params["Elevation Source"] = ''
+        ortho_params["Output Pixel to World Transform"] = ''
     return ortho_params
 
 

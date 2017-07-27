@@ -20,3 +20,6 @@ class Forbidden(Exception):
 
 class MaxTries(Exception):
     pass
+
+class UnsupportedImageType(Exception):
+    pass

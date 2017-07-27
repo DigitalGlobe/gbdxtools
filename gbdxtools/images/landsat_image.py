@@ -29,10 +29,11 @@ class LandsatImage(IpeImage):
             print(e)
             print("Specified product not implemented: {}".format(options["product"]))
             raise
+        self = self.aoi(**kwargs)
         self._id = _id
         self._spec = options["spec"]
         self._products = standard_products
-        return self.aoi(**kwargs)
+        return self
 
     @property
     def _rgb_bands(self):
