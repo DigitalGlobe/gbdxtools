@@ -6,12 +6,13 @@ Unit tests for the gbdxtools.Idaho class
 '''
 
 from gbdxtools import Interface
-from gbdxtools import TmsImage
+from gbdxtools import DemImage
 from auth_mock import get_mock_gbdx_session
 import vcr
 from os.path import join, isfile, dirname, realpath
 import tempfile
 import unittest
+import rasterio
 import dask.array as da
 
 try:
@@ -35,7 +36,7 @@ my_vcr.match_on = ['force']
 # 6. Edit the cassette to remove any possibly sensitive information (s3 creds for example)
 
 
-class TmsImageTest(unittest.TestCase):
+class IpeImageTest(unittest.TestCase):
 
     _temp_path = None
 
@@ -47,21 +48,19 @@ class TmsImageTest(unittest.TestCase):
         cls._temp_path = tempfile.mkdtemp()
         print("Created: {}".format(cls._temp_path))
 
-    def test_tms_image(self):
-        img = self.gbdx.tms_image(zoom=18, bounds=[-105.00444889068605, 39.75299710099606, -104.9962091445923, 39.75431683540881])
-        self.assertTrue(isinstance(img, TmsImage))
-        assert img.shape == (3, 768, 2048)
+    @my_vcr.use_cassette('tests/unit/cassettes/test_dem_image.yaml', filter_headers=['authorization'])
+    def test_dem_image(self):
+        bbox = [-109.72, 43.19, -109.49, 43.34]
+        img = self.gbdx.dem_image(bbox=bbox)
+        self.assertTrue(isinstance(img, DemImage))
+        assert img.shape == (1, 554, 851)
+        assert img.proj == 'EPSG:4326'
+
+    @my_vcr.use_cassette('tests/unit/cassettes/test_dem_image_proj.yaml', filter_headers=['authorization'])
+    def test_dem_image_proj(self):
+        bbox = [-109.72, 43.19, -109.49, 43.34]
+        img = self.gbdx.dem_image(bbox=bbox, proj="EPSG:3857")
+        self.assertTrue(isinstance(img, DemImage))
         assert img.proj == 'EPSG:3857'
 
-    def test_tms_image_global(self):
-        img = self.gbdx.tms_image(zoom=18)
-        self.assertTrue(isinstance(img, TmsImage))
-        assert img.shape == (3, 67106304, 67108864)
-        assert img.proj == 'EPSG:3857'
-
-    def test_tms_image_aoi(self):
-        img = self.gbdx.tms_image(zoom=18)
-        aoi = img.aoi(bbox=[-105.00444889068605, 39.75299710099606, -104.9962091445923, 39.75431683540881])
-        self.assertTrue(isinstance(aoi, TmsImage))
-        assert aoi.shape == (3, 480, 1755)
-        assert aoi.proj == 'EPSG:3857'
+    
