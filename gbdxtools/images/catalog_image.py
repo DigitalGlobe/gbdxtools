@@ -42,9 +42,3 @@ class CatalogImage(object):
             return IkonosImage(rec['properties']['attributes']['prefix'], bucket=rec['properties']['attributes']['bucket_name'], **kwargs)
         else: 
             raise UnsupportedImageType('Unsupported image type: {}'.format(str(types)))
-
-        # ADD SUPPORT FOR:
-          # wv01
-          # wv03_swir
-          # QB02
-          # GE01
