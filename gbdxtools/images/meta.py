@@ -154,6 +154,10 @@ class GeoImage(Container):
         return self.__geo_transform__._affine
 
     @property
+    def bounds(self):
+        return shape(self).bounds
+
+    @property
     def proj(self):
         return self.__geo_transform__.proj
 

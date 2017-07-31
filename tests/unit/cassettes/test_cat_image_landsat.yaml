@@ -1,0 +1,116 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      Cookie: [AWSELB=07A771471E264EA5ADF82F0AA634B8F4B8E2289A6924AFE10CAAFB8ABD8F44A1FC67142EB81D597253E32B541E48A2319719CB4A1C5482661CF3412F7280ED02972FB0AE56CD5320994AFBB4A89308217A547484EF;
+          JSESSIONID=C0494BB61FF04945C8DA29A6B7AC7FF3.node01]
+      User-Agent: [python-requests/2.13.0]
+    method: GET
+    uri: https://vector.geobigdata.io/insight-vector/api/index/query/vector-gbdx-alpha-catalog-v2-*/paging?count=1&upper=90.0&lower=-90.0&right=180.0&q=item_type%3AGBDXCatalogRecord+AND+id%3ALC80380302013160LGN00&ttl=5m&left=-180.0
+  response:
+    body: {string: !!python/unicode '{ "data" : [{"type":"Feature","geometry":{"type":"MultiPolygon","coordinates":[[[[-112.47753,42.16063],[-112.47753,44.18066],[-109.64058,44.18066],[-109.64058,42.16063],[-112.47753,42.16063]]]]},"properties":{"ingest_source":"GBDX_INGEST_ALPHA","access":{"groups":["_ALL_"],"users":["_ALL_"]},"item_date":"2013-06-09T18:09:25.351Z","original_crs":"EPSG:4326","item_type":["GBDXCatalogRecord","Acquisition","Landsat8","LandsatAcquisition"],"format":null,"ingest_date":"2017-05-08T19:19:41.695Z","source":null,"name":null,"attributes":{"row_int":30,"bucketName":"landsat-pds","catalogID":"LC80380302013160LGN00","sensorPlatformName":"LANDSAT08","browseURL":"https://s3-us-west-2.amazonaws.com/landsat-pds/L8/038/030/LC80380302013160LGN00/LC80380302013160LGN00_thumb_large.jpg","panResolution_dbl":15.0,"vendor":"Landsat","bucketPrefix":"L8/038/030/LC80380302013160LGN00","platformName":"LANDSAT08","cloudCover_int":0,"path_int":38,"multiResolution_dbl":30.0},"ingest_attributes":{"_rest_user":"acquisitionsvc","_rest_url":"https://vector.geobigdata.io/insight-vector/api/vectors/gbdx-alpha-catalog-v2-%257Bitem_date%253Ayyyy%257D"},"id":"LC80380302013160LGN00","text":""}}],"next_paging_id":"DnF1ZXJ5VGhlbkZldGNoHwAAAAAd1zLKFlNxNUYwQk9YUUN1TDdZQXpzWjVBQncAAAAAHXwkXBZRLW9vTHZaM1FveXJjRXB0bWd1b1hnAAAAAB2tiYcWYVdyZkhoYjVSeGFLU1kyT0dIODlKZwAAAAAdox9bFmtadHYtVDRSUVdDQzVGVmtkS2Y1NmcAAAAAHdcyyxZTcTVGMEJPWFFDdUw3WUF6c1o1QUJ3AAAAAB4PLtcWbFd5NnhMdldUakNMVmYtR2FUYWJBZwAAAAAdE_LSFkVNZ1JCVUtWUnRpY2VHUzl0RW04dncAAAAAHYqbXRZPck9HY2laMVR6eVJrWk5IS3RrbTRRAAAAAB2HHiAWbUJpbmNaNjFUMnVYVDdqRkpMMXRVQQAAAAAdscS5FlVxV2dQcmpaVHVpRVN2SkVNam9XMHcAAAAAHa2JiBZhV3JmSGhiNVJ4YUtTWTJPR0g4OUpnAAAAAB2Km14WT3JPR2NpWjFUenlSa1pOSEt0a200UQAAAAAcn03jFlA4MWNtZk9pVGp1STZsV0UyRGdhd3cAAAAAHTC1OhZuLU84SFBJSVRKYXhtTWV3bHNTSV93AAAAAB2xxLoWVXFXZ1ByalpUdWlFU3ZKRU1qb1cwdwAAAAAdscS7FlVxV2dQcmpaVHVpRVN2SkVNam9XMHcAAAAAHbQwhhZFWVlSTTFMSFJPLWtPbTRISGp0ZnNnAAAAABy98gwWQUx5eDhWSzJUbDJNZ1hGdmNoNnl3UQAAAAAdNUfAFndaZEdJSGI5Um5tM20zc2loLWd1WGcAAAAAHL3yDRZBTHl4OFZLMlRsMk1nWEZ2Y2g2eXdRAAAAAB1FULgWNWxsdkFWU0NUNmliOEVpT1R1RndLdwAAAAAdiptfFk9yT0djaVoxVHp5UmtaTkhLdGttNFEAAAAAHUVQtxY1bGx2QVZTQ1Q2aWI4RWlPVHVGd0t3AAAAAB1VhNgWN0lsOGtMc0RTUWl1ZlpEQVZjMDYtZwAAAAAdfCRdFlEtb29MdlozUW95cmNFcHRtZ3VvWGcAAAAAHTZB3xZadERqY0hNdlRTMjFxYzc2c3NIMmRBAAAAAB0I2bwWYTVXLXczVlVSUGlQWE5odFcwQWdVdwAAAAAdMLU7Fm4tTzhIUElJVEpheG1NZXdsc1NJX3cAAAAAHbQwhxZFWVlSTTFMSFJPLWtPbTRISGp0ZnNnAAAAAB0T8tMWRU1nUkJVS1ZSdGljZUdTOXRFbTh2dwAAAAAdIS8FFnM2ZFRXSjR6U09peGFRRnVncE9OR3c=","item_count":"1","total_count":"1"}'}
+    headers:
+      access-control-allow-credentials: ['true']
+      access-control-allow-headers: ['origin, content-type, accept, authorization']
+      access-control-allow-methods: ['GET, POST, PUT, DELETE, OPTIONS, HEAD']
+      access-control-allow-origin: ['*']
+      connection: [keep-alive]
+      content-encoding: [UTF-8]
+      content-length: ['2531']
+      content-type: [application/json;charset=UTF-8]
+      date: ['Thu, 27 Jul 2017 21:40:36 GMT']
+      server: [Apache, Weblogic 12.2.1.1]
+      strict-transport-security: [max-age=604800 ; includeSubDomains]
+      x-content-type-options: [nosniff]
+      x-frame-options: [SAMEORIGIN]
+      x-permitted-cross-domain-policies: [none]
+      x-xss-protection: [1; mode=block]
+    status: {code: 200, message: OK}
+- request:
+    body: !!python/unicode pagingId=DnF1ZXJ5VGhlbkZldGNoHwAAAAAd1zLKFlNxNUYwQk9YUUN1TDdZQXpzWjVBQncAAAAAHXwkXBZRLW9vTHZaM1FveXJjRXB0bWd1b1hnAAAAAB2tiYcWYVdyZkhoYjVSeGFLU1kyT0dIODlKZwAAAAAdox9bFmtadHYtVDRSUVdDQzVGVmtkS2Y1NmcAAAAAHdcyyxZTcTVGMEJPWFFDdUw3WUF6c1o1QUJ3AAAAAB4PLtcWbFd5NnhMdldUakNMVmYtR2FUYWJBZwAAAAAdE_LSFkVNZ1JCVUtWUnRpY2VHUzl0RW04dncAAAAAHYqbXRZPck9HY2laMVR6eVJrWk5IS3RrbTRRAAAAAB2HHiAWbUJpbmNaNjFUMnVYVDdqRkpMMXRVQQAAAAAdscS5FlVxV2dQcmpaVHVpRVN2SkVNam9XMHcAAAAAHa2JiBZhV3JmSGhiNVJ4YUtTWTJPR0g4OUpnAAAAAB2Km14WT3JPR2NpWjFUenlSa1pOSEt0a200UQAAAAAcn03jFlA4MWNtZk9pVGp1STZsV0UyRGdhd3cAAAAAHTC1OhZuLU84SFBJSVRKYXhtTWV3bHNTSV93AAAAAB2xxLoWVXFXZ1ByalpUdWlFU3ZKRU1qb1cwdwAAAAAdscS7FlVxV2dQcmpaVHVpRVN2SkVNam9XMHcAAAAAHbQwhhZFWVlSTTFMSFJPLWtPbTRISGp0ZnNnAAAAABy98gwWQUx5eDhWSzJUbDJNZ1hGdmNoNnl3UQAAAAAdNUfAFndaZEdJSGI5Um5tM20zc2loLWd1WGcAAAAAHL3yDRZBTHl4OFZLMlRsMk1nWEZ2Y2g2eXdRAAAAAB1FULgWNWxsdkFWU0NUNmliOEVpT1R1RndLdwAAAAAdiptfFk9yT0djaVoxVHp5UmtaTkhLdGttNFEAAAAAHUVQtxY1bGx2QVZTQ1Q2aWI4RWlPVHVGd0t3AAAAAB1VhNgWN0lsOGtMc0RTUWl1ZlpEQVZjMDYtZwAAAAAdfCRdFlEtb29MdlozUW95cmNFcHRtZ3VvWGcAAAAAHTZB3xZadERqY0hNdlRTMjFxYzc2c3NIMmRBAAAAAB0I2bwWYTVXLXczVlVSUGlQWE5odFcwQWdVdwAAAAAdMLU7Fm4tTzhIUElJVEpheG1NZXdsc1NJX3cAAAAAHbQwhxZFWVlSTTFMSFJPLWtPbTRISGp0ZnNnAAAAAB0T8tMWRU1nUkJVS1ZSdGljZUdTOXRFbTh2dwAAAAAdIS8FFnM2ZFRXSjR6U09peGFRRnVncE9OR3c%3D&ttl=5m
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      Content-Length: ['1322']
+      Content-Type: [application/x-www-form-urlencoded]
+      Cookie: [AWSELB=07A771471E264EA5ADF82F0AA634B8F4B8E2289A6924AFE10CAAFB8ABD8F44A1FC67142EB81D597253E32B541E48A2319719CB4A1C5482661CF3412F7280ED02972FB0AE56CD5320994AFBB4A89308217A547484EF;
+          JSESSIONID=C0494BB61FF04945C8DA29A6B7AC7FF3.node01]
+      User-Agent: [python-requests/2.13.0]
+    method: POST
+    uri: https://vector.geobigdata.io/insight-vector/api/vectors/paging
+  response:
+    body: {string: !!python/unicode '{ "data" : [],"next_paging_id":"DnF1ZXJ5VGhlbkZldGNoHwAAAAAd1zLKFlNxNUYwQk9YUUN1TDdZQXpzWjVBQncAAAAAHXwkXBZRLW9vTHZaM1FveXJjRXB0bWd1b1hnAAAAAB2tiYcWYVdyZkhoYjVSeGFLU1kyT0dIODlKZwAAAAAdox9bFmtadHYtVDRSUVdDQzVGVmtkS2Y1NmcAAAAAHdcyyxZTcTVGMEJPWFFDdUw3WUF6c1o1QUJ3AAAAAB4PLtcWbFd5NnhMdldUakNMVmYtR2FUYWJBZwAAAAAdE_LSFkVNZ1JCVUtWUnRpY2VHUzl0RW04dncAAAAAHYqbXRZPck9HY2laMVR6eVJrWk5IS3RrbTRRAAAAAB2HHiAWbUJpbmNaNjFUMnVYVDdqRkpMMXRVQQAAAAAdscS5FlVxV2dQcmpaVHVpRVN2SkVNam9XMHcAAAAAHa2JiBZhV3JmSGhiNVJ4YUtTWTJPR0g4OUpnAAAAAB2Km14WT3JPR2NpWjFUenlSa1pOSEt0a200UQAAAAAcn03jFlA4MWNtZk9pVGp1STZsV0UyRGdhd3cAAAAAHTC1OhZuLU84SFBJSVRKYXhtTWV3bHNTSV93AAAAAB2xxLoWVXFXZ1ByalpUdWlFU3ZKRU1qb1cwdwAAAAAdscS7FlVxV2dQcmpaVHVpRVN2SkVNam9XMHcAAAAAHbQwhhZFWVlSTTFMSFJPLWtPbTRISGp0ZnNnAAAAABy98gwWQUx5eDhWSzJUbDJNZ1hGdmNoNnl3UQAAAAAdNUfAFndaZEdJSGI5Um5tM20zc2loLWd1WGcAAAAAHL3yDRZBTHl4OFZLMlRsMk1nWEZ2Y2g2eXdRAAAAAB1FULgWNWxsdkFWU0NUNmliOEVpT1R1RndLdwAAAAAdiptfFk9yT0djaVoxVHp5UmtaTkhLdGttNFEAAAAAHUVQtxY1bGx2QVZTQ1Q2aWI4RWlPVHVGd0t3AAAAAB1VhNgWN0lsOGtMc0RTUWl1ZlpEQVZjMDYtZwAAAAAdfCRdFlEtb29MdlozUW95cmNFcHRtZ3VvWGcAAAAAHTZB3xZadERqY0hNdlRTMjFxYzc2c3NIMmRBAAAAAB0I2bwWYTVXLXczVlVSUGlQWE5odFcwQWdVdwAAAAAdMLU7Fm4tTzhIUElJVEpheG1NZXdsc1NJX3cAAAAAHbQwhxZFWVlSTTFMSFJPLWtPbTRISGp0ZnNnAAAAAB0T8tMWRU1nUkJVS1ZSdGljZUdTOXRFbTh2dwAAAAAdIS8FFnM2ZFRXSjR6U09peGFRRnVncE9OR3c=","item_count":"0","total_count":"1"}'}
+    headers:
+      access-control-allow-credentials: ['true']
+      access-control-allow-headers: ['origin, content-type, accept, authorization']
+      access-control-allow-methods: ['GET, POST, PUT, DELETE, OPTIONS, HEAD']
+      access-control-allow-origin: ['*']
+      connection: [keep-alive]
+      content-encoding: [UTF-8]
+      content-length: ['1373']
+      content-type: [application/json;charset=UTF-8]
+      date: ['Thu, 27 Jul 2017 21:40:36 GMT']
+      server: [Apache, Weblogic 12.2.1.1]
+      strict-transport-security: [max-age=604800 ; includeSubDomains]
+      x-content-type-options: [nosniff]
+      x-frame-options: [SAMEORIGIN]
+      x-permitted-cross-domain-policies: [none]
+      x-xss-protection: [1; mode=block]
+    status: {code: 200, message: OK}
+- request:
+    body: !!python/unicode '{"edges": [], "nodes": [{"id": "54cbcc0d-c872-58c0-bed3-09d18b7a7f95",
+      "operator": "LandsatRead", "parameters": {"landsatId": "LC80380302013160LGN00",
+      "productSpec": "multispectral"}}]}'
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      Content-Length: ['185']
+      Content-Type: [application/json]
+      User-Agent: [python-requests/2.13.0]
+    method: POST
+    uri: https://idahoapi.geobigdata.io/v1/graph
+  response:
+    body: {string: !!python/unicode 4ea598fa89d2955c9186dcafc0ad8337547c6b0edc9e02acbd94396ce89b934b}
+    headers:
+      access-control-allow-headers: ['x-requested-with, X-Auth-Token, Content-Type,
+          Authorization']
+      access-control-allow-methods: ['GET, OPTIONS, HEAD, PUT, POST, DELETE']
+      access-control-allow-origin: ['*']
+      access-control-max-age: ['3600']
+      connection: [keep-alive]
+      content-length: ['64']
+      content-type: [text/plain]
+      date: ['Thu, 27 Jul 2017 21:40:37 GMT']
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      User-Agent: [python-requests/2.13.0]
+    method: GET
+    uri: https://idahoapi.geobigdata.io/v1/metadata/4ea598fa89d2955c9186dcafc0ad8337547c6b0edc9e02acbd94396ce89b934b/54cbcc0d-c872-58c0-bed3-09d18b7a7f95/metadata.json
+  response:
+    body: {string: !!python/unicode '{"imageMetadata":{"imageId":"LC80380302013160LGN00","version":"1.0","tilePartition":"0000","tileXOffset":0,"tileYOffset":0,"numXTiles":31,"numYTiles":30,"tileXSize":256,"tileYSize":256,"numBands":8,"dataType":"UNSIGNED_SHORT","imageHeight":7481,"imageWidth":7681,"sensorPlatformName":"LANDSAT8","sensorName":"Operational
+        Land Imager","vendorName":"NASA/USGS","vendorDatasetIdentifier":"Path=38:Row=30","acquisitionDate":"2013-06-09T18:09:25.351Z","colorInterpretation":"LANDSAT_8_30M","imageBoundsWGS84":"POLYGON
+        ((-112.47752985513819 44.18065964691234, -109.59463558795882 44.181570383531195,
+        -109.64022151298292 42.16120798827132, -112.4296050212112 42.16035900061368,
+        -112.47752985513819 44.18065964691234))","groundSampleDistanceMeters":30.0,"minX":0,"minY":0,"maxX":7680,"maxY":7480,"minTileX":0,"minTileY":0,"maxTileX":30,"maxTileY":29,"sunAzimuth":136.6577385,"sunElevation":64.79784228,"cloudCover":0.95},"imageGeoreferencing":{"spatialReferenceSystemCode":"EPSG:32612","scaleX":30.0,"scaleY":-30.0,"translateX":381900.0,"translateY":4893000.0,"shearX":0.0,"shearY":0.0},"rpcSensorModel":null,"histogram":null,"sensorMetadata":null,"imageAssociations":null,"rrdMetadata":null}'}
+    headers:
+      access-control-allow-headers: ['x-requested-with, X-Auth-Token, Content-Type,
+          Authorization']
+      access-control-allow-methods: ['GET, OPTIONS, HEAD, PUT, POST, DELETE']
+      access-control-allow-origin: ['*']
+      access-control-max-age: ['3600']
+      connection: [keep-alive]
+      content-length: ['1184']
+      content-type: [application/json]
+      date: ['Thu, 27 Jul 2017 21:40:51 GMT']
+    status: {code: 200, message: OK}
+version: 1
