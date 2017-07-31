@@ -1,7 +1,7 @@
 from __future__ import print_function
 from gbdxtools.images.ipe_image import IpeImage
 from gbdxtools.ipe.interface import Ipe
-from gbdxtools.ipe.util import reproject_params
+from gbdxtools.ipe.util import ortho_params
 ipe = Ipe()
 
 class IkonosImage(IpeImage):
@@ -22,8 +22,8 @@ class IkonosImage(IpeImage):
             print("Specified product not implemented: {}".format(options["product"]))
             raise
         self = self.aoi(**kwargs)
-        self._bucket = _bucket
-        self._prefix = _prefix
+        self._bucket = bucket
+        self._prefix = prefix
         self._spec = options["spec"]
         self._products = standard_products
         return self
@@ -34,8 +34,7 @@ class IkonosImage(IpeImage):
     @staticmethod
     def _build_standard_products(bucket, prefix, spec, proj):
         ikonos = ipe.IkonosRead(path="{}/{}/{}_0000000:{}".format(bucket, prefix, prefix, spec))
-        if proj is not None:
-            ikonos = ipe.Reproject(ikonos, **reproject_params(proj))
+        ikonos = ipe.Orthorectify(ikonos, **ortho_params(proj))
         return {
             "ikonos": ikonos
         }
