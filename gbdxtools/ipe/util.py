@@ -181,11 +181,14 @@ class RatPolyTransform(GeometricTransform):
         # self._B_rev = np.dot(pinv(np.dot(np.transpose(B), B)), np.transpose(B))
 
     def rev(self, lng, lat, z=0):
-        coord = np.asarray([lng, lat, z])
-        normed = np.sum(self._offscl * np.vstack([np.ones(coord.shape), coord]), axis=0)
+        #coord = np.asarray([lng, lat, z])
+        coord = np.dstack(lng, lat, z)
+        offset, scale = np.vsplit(self._offscl, 2)
+        normed = coord * scale + offset
         X = self._rpc(normed)
-        result = np.dot(self._A, X) / np.dot(self._B, X)
-        return np.int32(np.sum(self._px_offscl_rev * np.vstack([np.ones(result.shape), result]), axis=0))
+        result = np.rollaxis(np.inner(self._A, X) / np.inner(self._B, X), 0, 3)
+        rev_offset, rev_scale = np.vsplit(self._px_offscl_rev, 2)
+        return np.rollaxis(result * rev_scale + rev_offset, 2)
 
     def fwd(self, x, y, z=None):
         if isinstance(x, (Sequence, np.ndarray)):
@@ -218,8 +221,8 @@ class RatPolyTransform(GeometricTransform):
         pass
 
     def _rpc(self, x):
-        L, P, H = x[0], x[1], x[2]
-        return np.asarray([1.0, L, P, H, L*P, L*H, P*H, L**2, P**2, H**2,
+        L, P, H = np.dsplit(x, 3)
+        return np.dstack([np.ones((x.shape[0], x.shape[1]), dtype=np.float32), L, P, H, L*P, L*H, P*H, L**2, P**2, H**2,
                            L*P*H, L**3, L*(P**2), L*(H**2), (L**2)*P, P**3, P*(H**2),
                            (L**2)*H, (P**2)*H, H**3])
 
