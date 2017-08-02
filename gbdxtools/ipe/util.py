@@ -181,8 +181,13 @@ class RatPolyTransform(GeometricTransform):
         # self._B_rev = np.dot(pinv(np.dot(np.transpose(B), B)), np.transpose(B))
 
     def rev(self, lng, lat, z=0):
-        #coord = np.asarray([lng, lat, z])
-        coord = np.dstack(lng, lat, z)
+        if all(isinstance(var, (int, float)) for var in [lng, lat]):
+            lng, lat = (np.array([lng]), np.array([lat]))
+        if not all(isinstance(var, np.ndarray) for var in [lng, lat]):
+            raise ValueError("lng, lat inputs must be of type int, float or numpy.ndarray")
+        if not isinstance(z, np.ndarray):
+            z = np.zeros_like(lng) + z
+        coord = np.dstack([lng, lat, z])
         offset, scale = np.vsplit(self._offscl, 2)
         normed = coord * scale + offset
         X = self._rpc(normed)
