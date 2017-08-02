@@ -184,7 +184,7 @@ class RatPolyTransform(object):
         normed = np.sum(self._offscl * np.vstack([np.ones(coord.shape), coord]), axis=0)
         X = self._rpc(normed)
         result = np.dot(self._A, X) / np.dot(self._B, X)
-        return np.int32(np.sum(self._px_offscl_rev * np.vstack([np.ones(result.shape), result]), axis=0))
+        return np.int32(np.sum(self._px_offscl_rev * np.vstack([np.ones(result.shape), result]), axis=0))[::-1]
 
     def fwd(self, x, y, z=None):
         if isinstance(x, (Sequence, np.ndarray)):
