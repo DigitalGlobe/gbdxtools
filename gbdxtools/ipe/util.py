@@ -193,7 +193,7 @@ class RatPolyTransform(GeometricTransform):
         X = self._rpc(normed)
         result = np.rollaxis(np.inner(self._A, X) / np.inner(self._B, X), 0, 3)
         rev_offset, rev_scale = np.vsplit(self._px_offscl_rev, 2)
-        return np.rollaxis(result * rev_scale + rev_offset, 2).squeeze().astype(_type)
+        return np.flipud(np.rollaxis(result * rev_scale + rev_offset, 2).squeeze().astype(_type))
 
     def fwd(self, x, y, z=None):
         if isinstance(x, (Sequence, np.ndarray)):
