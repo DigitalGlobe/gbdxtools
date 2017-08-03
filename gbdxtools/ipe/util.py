@@ -180,7 +180,7 @@ class RatPolyTransform(GeometricTransform):
         # only using the numerator (more dynamic range for the fit?)
         # self._B_rev = np.dot(pinv(np.dot(np.transpose(B), B)), np.transpose(B))
 
-    def rev(self, lng, lat, z=0):
+    def rev(self, lng, lat, z=0, _type=np.int32):
         if all(isinstance(var, (int, float, tuple)) for var in [lng, lat]):
             lng, lat = (np.array([lng]), np.array([lat]))
         if not all(isinstance(var, np.ndarray) for var in [lng, lat]):
@@ -193,7 +193,7 @@ class RatPolyTransform(GeometricTransform):
         X = self._rpc(normed)
         result = np.rollaxis(np.inner(self._A, X) / np.inner(self._B, X), 0, 3)
         rev_offset, rev_scale = np.vsplit(self._px_offscl_rev, 2)
-        return np.rollaxis(result * rev_scale + rev_offset, 2).squeeze().astype(np.int32)
+        return np.rollaxis(result * rev_scale + rev_offset, 2).squeeze().astype(_type)
 
     def fwd(self, x, y, z=None):
         if isinstance(x, (Sequence, np.ndarray)):
