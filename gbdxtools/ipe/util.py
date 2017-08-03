@@ -181,10 +181,10 @@ class RatPolyTransform(GeometricTransform):
         # self._B_rev = np.dot(pinv(np.dot(np.transpose(B), B)), np.transpose(B))
 
     def rev(self, lng, lat, z=0):
-        if all(isinstance(var, (int, float)) for var in [lng, lat]):
+        if all(isinstance(var, (int, float, tuple)) for var in [lng, lat]):
             lng, lat = (np.array([lng]), np.array([lat]))
         if not all(isinstance(var, np.ndarray) for var in [lng, lat]):
-            raise ValueError("lng, lat inputs must be of type int, float or numpy.ndarray")
+            raise ValueError("lng, lat inputs must be of type int, float, tuple or numpy.ndarray")
         if not isinstance(z, np.ndarray):
             z = np.zeros_like(lng) + z
         coord = np.dstack([lng, lat, z])
@@ -193,7 +193,7 @@ class RatPolyTransform(GeometricTransform):
         X = self._rpc(normed)
         result = np.rollaxis(np.inner(self._A, X) / np.inner(self._B, X), 0, 3)
         rev_offset, rev_scale = np.vsplit(self._px_offscl_rev, 2)
-        return np.rollaxis(result * rev_scale + rev_offset, 2)
+        return np.rollaxis(result * rev_scale + rev_offset, 2).squeeze().astype(np.int32)
 
     def fwd(self, x, y, z=None):
         if isinstance(x, (Sequence, np.ndarray)):
