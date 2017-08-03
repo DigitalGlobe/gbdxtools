@@ -1,23 +1,22 @@
 from __future__ import print_function
 from functools import partial
-from itertools import groupby
 from collections import defaultdict
 from contextlib import contextmanager
-import os
 import os.path
 import uuid
 import math
 
 from pyproj import Proj
 
-try: 
+try:
     import signal
+
     signal.signal(signal.SIGPIPE, signal.SIG_IGN)
-except: 
+except:
     pass
 
-import json
 import warnings
+
 warnings.filterwarnings('ignore')
 
 try:
@@ -30,42 +29,40 @@ try:
 except NameError:
     xrange = range
 
-import requests
-
-from shapely.geometry import box, shape
+from shapely.geometry import shape
 from shapely.wkt import loads
 import rasterio
 from rasterio.io import MemoryFile
 from affine import Affine
 
 try:
-  from matplotlib import pyplot as plt
-  has_pyplot = True
+    from matplotlib import pyplot as plt
+
+    has_pyplot = True
 except:
-  has_pyplot = False 
+    has_pyplot = False
 
 import dask
 import dask.array as da
-import dask.bag as db
-from dask.delayed import delayed
 import numpy as np
-from itertools import chain
 
 import threading
+
 num_workers = int(os.environ.get("GBDX_THREADS", 4))
 threaded_get = partial(dask.threaded.get, num_workers=num_workers)
 
-import requests
 import pycurl
+
 _curl_pool = defaultdict(pycurl.Curl)
 
 from gbdxtools.ipe.vrt import get_cached_vrt, put_cached_vrt, generate_vrt_template
-from gbdxtools.ipe.util import calc_toa_gain_offset, timeit
 from gbdxtools.ipe.graph import VIRTUAL_IPE_URL, register_ipe_graph, get_ipe_metadata, get_ipe_graph
 from gbdxtools.ipe.error import NotFound, BadRequest
 from gbdxtools.ipe.interface import Ipe
 from gbdxtools.auth import Auth
+
 ipe = Ipe()
+
 
 def load_url(url, size, token, bands=8):
     """ Loads a geotiff url inside a thread and returns as an ndarray """
@@ -78,14 +75,15 @@ def load_url(url, size, token, bands=8):
     _curl.setopt(pycurl.HTTPHEADER, ['Authorization: Bearer {}'.format(token)])
     _curl.perform()
     with MemoryFile(buf.getvalue()) as memfile:
-      try:
-          with memfile.open(driver="GTiff") as dataset:
-              arr = dataset.read()
-      except (TypeError, rasterio.RasterioIOError) as e:
-          arr = np.zeros([bands, size, size], dtype=np.float32)
-          _curl.close()
-          del _curl_pool[thread_id]
+        try:
+            with memfile.open(driver="GTiff") as dataset:
+                arr = dataset.read()
+        except (TypeError, rasterio.RasterioIOError):
+            arr = np.zeros([bands, size, size], dtype=np.float32)
+            _curl.close()
+            del _curl_pool[thread_id]
     return arr
+
 
 class DaskImage(da.Array):
     def __init__(self, **kwargs):
@@ -97,14 +95,13 @@ class DaskImage(da.Array):
 
     def read(self, bands=None):
         """ Reads data from a dask array and returns the computed ndarray matching the given bands """
-        size = float(self.chunks[1][0])
         print('Fetching Image... {} {}'.format(self.nchips(), 'tiles' if self.nchips() > 1 else 'tile'))
         arr = self.compute(get=threaded_get)
         if bands is not None:
             arr = arr[bands, ...]
         return arr
 
-    def plot(self, arr=None, stretch=[2,98], w=20, h=10, bands=[4,2,1]):
+    def plot(self, arr=None, stretch=[2, 98], w=20, h=10, bands=[4, 2, 1]):
         if not has_pyplot:
             print('To plot images please install matplotlib')
             return
@@ -113,24 +110,23 @@ class DaskImage(da.Array):
             print('No data to plot, dimensions are invalid {}'.format(str(self.shape)))
             return
 
-        f, ax1 = plt.subplots(1, figsize=(w,h))
+        f, ax1 = plt.subplots(1, figsize=(w, h))
         ax1.axis('off')
         data = arr if arr is not None else self.read()
         if self.shape[0] == 1:
-            plt.imshow(data[0,:,:], cmap="Greys_r")
+            plt.imshow(data[0, :, :], cmap="Greys_r")
         else:
-            data = data[bands,...]
+            data = data[bands, ...]
             data = data.astype(np.float32)
             data = np.rollaxis(data, 0, 3)
-            lims = np.percentile(data,stretch,axis=(0,1))
-            for x in xrange(len(data[0,0,:])):
-                top = lims[:,x][1]
-                bottom = lims[:,x][0]
-                data[:,:,x] = (data[:,:,x]-bottom)/float(top-bottom)
-            data = np.clip(data,0,1)
-            plt.imshow(data,interpolation='nearest')
+            lims = np.percentile(data, stretch, axis=(0, 1))
+            for x in xrange(len(data[0, 0, :])):
+                top = lims[:, x][1]
+                bottom = lims[:, x][0]
+                data[:, :, x] = (data[:, :, x] - bottom) / float(top - bottom)
+            data = np.clip(data, 0, 1)
+            plt.imshow(data, interpolation='nearest')
         plt.show(block=False)
-
 
 
 class IpeImage(DaskImage):
@@ -152,7 +148,7 @@ class IpeImage(DaskImage):
         self._cfg = self._config_dask()
         super(IpeImage, self).__init__(**self._cfg)
         bounds = self._parse_geoms(**kwargs)
-        if bounds is not None: 
+        if bounds is not None:
             _cfg = self._aoi_config(bounds)
             super(IpeImage, self).__init__(**_cfg)
 
@@ -174,10 +170,10 @@ class IpeImage(DaskImage):
     @property
     def ipe_metadata(self):
         if self._ipe_metadata is None:
-            try: 
+            try:
                 self._ipe_metadata = get_ipe_metadata(self.interface.gbdx_connection, self.ipe_id, self.ipe_node_id)
             except BadRequest:
-                raise 
+                raise
         return self._ipe_metadata
 
     @property
@@ -187,7 +183,8 @@ class IpeImage(DaskImage):
             vrt = get_cached_vrt(self._gid, self.ipe_id, self._level)
         except NotFound:
             nbands = 3 if self._node_id == 'pansharpened' else None
-            template = generate_vrt_template(self.interface.gbdx_connection, self.ipe_id, self.ipe_node_id, self._level, num_bands=nbands)
+            template = generate_vrt_template(self.interface.gbdx_connection, self.ipe_id, self.ipe_node_id, self._level,
+                                             num_bands=nbands)
             vrt = put_cached_vrt(self._gid, self.ipe_id, self._level, template)
         return vrt
 
@@ -199,11 +196,11 @@ class IpeImage(DaskImage):
             return
         cfg = self._aoi_config(bounds, **kwargs)
         return DaskImage(**cfg)
-        
 
     def _aoi_config(self, bounds, **kwargs):
         tfm = self.ipe_metadata['georef']
-        xform = Affine.from_gdal(*[tfm["translateX"], tfm["scaleX"], tfm["shearX"], tfm["translateY"], tfm["shearY"], tfm["scaleY"]])
+        xform = Affine.from_gdal(
+            *[tfm["translateX"], tfm["scaleX"], tfm["shearX"], tfm["translateY"], tfm["shearY"], tfm["scaleY"]])
         args = list(bounds) + [xform]
         roi = rasterio.windows.from_bounds(*args, boundless=True)
         y_start, y_stop = max(0, roi.row_off), roi.row_off + roi.num_rows
@@ -231,12 +228,11 @@ class IpeImage(DaskImage):
         img = self._build_array(urls)
         cfg = {"shape": tuple([nbands] + list(shape)),
                "dtype": self._dtype,
-               "chunks": tuple([nbands] + [self._tile_size, self._tile_size])}
-        cfg["name"] = img["name"]
-        cfg["dask"] = img["dask"]
+               "chunks": tuple([nbands] + [self._tile_size, self._tile_size]),
+               "name": img["name"],
+               "dask": img["dask"]}
 
         return cfg
-
 
     def _build_array(self, urls):
         """ Creates the deferred dask array from a grid of URLs """
@@ -246,7 +242,8 @@ class IpeImage(DaskImage):
         return {"name": name, "dask": buf_dask}
 
     def _ipe_tile(self, x, y):
-        return "{}/tile/{}/{}/{}/{}/{}.tif".format(VIRTUAL_IPE_URL, "idaho-virtual", self.ipe_id, self.ipe_node_id, x, y)
+        return "{}/tile/{}/{}/{}/{}/{}.tif".format(VIRTUAL_IPE_URL, "idaho-virtual", self.ipe_id, self.ipe_node_id, x,
+                                                   y)
 
     def _collect_urls(self, meta):
         """
@@ -254,9 +251,11 @@ class IpeImage(DaskImage):
           returns a nested list of urls as a grid that represents data chunks in the array
         """
         size = self._tile_size
-        minx, miny, maxx, maxy = 0, 0, int(math.floor(meta['image']['imageWidth'] / float(size))), int(math.floor(meta['image']['imageHeight'] / float(size)))
-        urls = {(y-miny, x-minx): self._ipe_tile(x, y) for y in xrange(miny, maxy + 1) for x in xrange(minx, maxx + 1)}
-        return urls, (size*(maxy-miny+1), size*(maxx-minx+1))
+        minx, miny, maxx, maxy = 0, 0, int(math.floor(meta['image']['imageWidth'] / float(size))), int(
+            math.floor(meta['image']['imageHeight'] / float(size)))
+        urls = {(y - miny, x - minx): self._ipe_tile(x, y) for y in xrange(miny, maxy + 1) for x in
+                xrange(minx, maxx + 1)}
+        return urls, (size * (maxy - miny + 1), size * (maxx - minx + 1))
 
     def _parse_geoms(self, **kwargs):
         """ Finds supported geometry types, parses them and returns the bbox """
@@ -272,11 +271,10 @@ class IpeImage(DaskImage):
             bounds = shape(geojson).bounds
         return self._project_bounds(bounds)
 
-
     def _project_bounds(self, bounds):
         if bounds is None:
             return None
         if self._proj != 'EPSG:4326':
             p = Proj(init=self._proj)
-            bounds = sum((p(bounds[0], bounds[1]), p(bounds[2],bounds[3])), ())
+            bounds = sum((p(bounds[0], bounds[1]), p(bounds[2], bounds[3])), ())
         return bounds

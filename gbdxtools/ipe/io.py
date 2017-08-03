@@ -1,11 +1,12 @@
 import rasterio
 import numpy as np
 
+
 def to_geotiff(arr, path='./output.tif', proj=None, dtype=None):
     if dtype is not None:
         dtype = np.dtype(dtype)
     data = arr.read()
-    c,h,w = data.shape
+    c, h, w = data.shape
     meta = {
         'width': w,
         'height': h,

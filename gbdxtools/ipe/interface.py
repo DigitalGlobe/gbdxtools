@@ -1,17 +1,16 @@
 import uuid
 import json
-import copy
 from hashlib import sha256
 from itertools import chain
 import gbdxtools as gbdx
-from collections import OrderedDict
 
 try:
-  basestring
+    basestring
 except NameError:
-  basestring = str
+    basestring = str
 
 NAMESPACE_UUID = uuid.NAMESPACE_DNS
+
 
 class ContentHashedDict(dict):
     @property
@@ -20,7 +19,7 @@ class ContentHashedDict(dict):
         return _id
 
     def __hash__(self):
-        dup = {k:v for k,v in self.items() if k is not "id"}
+        dup = {k: v for k, v in self.items() if k is not "id"}
         return sha256(str(dup).encode('utf-8')).hexdigest()
 
     def populate_id(self):
@@ -41,13 +40,15 @@ class Op(object):
         if len(args) > 0 and all([isinstance(arg, gbdx.images.idaho_image.IpeImage) for arg in args]):
             return self._ipe_image_call(*args, **kwargs)
         self._nodes = [ContentHashedDict({"operator": self._operator,
-                                          "_ancestors": [arg._id for arg in args], 
-                                          "parameters": {k:json.dumps(v) if not isinstance(v, basestring) else v for k,v in kwargs.items()}})]
+                                          "_ancestors": [arg._id for arg in args],
+                                          "parameters": {k: json.dumps(v) if not isinstance(v, basestring) else v for
+                                                         k, v in kwargs.items()}})]
         for arg in args:
             self._nodes.extend(arg._nodes)
 
-
-        self._edges = [ContentHashedDict({"index": idx + 1, "source": arg._nodes[0]._id, "destination": self._nodes[0]._id}) for idx, arg in enumerate(args)]
+        self._edges = [
+            ContentHashedDict({"index": idx + 1, "source": arg._nodes[0]._id, "destination": self._nodes[0]._id}) for
+            idx, arg in enumerate(args)]
         for arg in args:
             self._edges.extend(arg._edges)
 
@@ -62,11 +63,12 @@ class Op(object):
         return ipe_img
 
     def graph(self):
-        _nodes = [{k:v for k,v in node.items() if not k.startswith('_')} for node in self._nodes]
+        _nodes = [{k: v for k, v in node.items() if not k.startswith('_')} for node in self._nodes]
         return {
             "edges": self._edges,
             "nodes": _nodes
         }
+
 
 class Ipe(object):
     def __getattr__(self, name):
