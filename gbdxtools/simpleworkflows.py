@@ -381,7 +381,7 @@ class Workflow(object):
     def __init__(self, tasks, **kwargs):
         self.workflow = WF()
         self.name = kwargs.get('name', str(uuid.uuid4())[:8] )
-        self.id = None
+        self.id = kwargs.get('id', None)
         self.callback = kwargs.get('callback', None )
 
         self.definition = None
