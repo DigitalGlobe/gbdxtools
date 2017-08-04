@@ -202,7 +202,7 @@ class RatPolyTransform(GeometricTransform):
             return  np.transpose(np.asarray([self.fwd(x_i, y_i, z_i) for x_i, y_i, z_i in izip(x, y, z)]))
         coord = np.asarray([x, y])
         normed = np.sum(self._px_offscl * np.vstack([np.ones(coord.shape), coord]), axis=0)
-        coord = np.dot(self._A_rev, normed)[[2,1,3]] # likely unstable
+        coord = np.dot(self._A_rev, normed)[[1,2,3]] # likely unstable
         return np.sum(self._offscl_rev * np.vstack([np.ones(coord.shape), coord]), axis=0)
 
     def __call__(self, coords):
