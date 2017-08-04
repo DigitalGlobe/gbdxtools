@@ -337,10 +337,11 @@ class Idaho(object):
 
             __location__ = os.path.realpath(
                 os.path.join(os.getcwd(), os.path.dirname(__file__)))
-            with open(os.path.join(__location__, 'leafletmap_template.html'), 'r') as htmlfile:
-                try:
+            try:
+                with open(os.path.join(__location__, 'leafletmap_template.html'), 'r') as htmlfile:
                     data = htmlfile.read().decode("utf8")
-                except AttributeError:
+            except AttributeError:
+                with open(os.path.join(__location__, 'leafletmap_template.html'), 'r') as htmlfile:
                     data = htmlfile.read()
 
             data = data.replace('FUNCTIONSTRING', functionstring)
