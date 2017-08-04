@@ -120,7 +120,7 @@ class Idaho(object):
                 part = int(image['properties']['vendorDatasetIdentifier'].split(':')[1][-3:])
                 color = image['properties']['colorInterpretation']
                 bucket = image['properties']['tileBucketName']
-                id = image['identifier']
+                identifier = image['identifier']
                 boundstr = image['properties']['footprintWkt']
 
                 try:
@@ -129,7 +129,7 @@ class Idaho(object):
                     description[catid]['parts'][part] = {}
 
                 description[catid]['parts'][part][color] = {}
-                description[catid]['parts'][part][color]['id'] = id
+                description[catid]['parts'][part][color]['id'] = identifier
                 description[catid]['parts'][part][color]['bucket'] = bucket
                 description[catid]['parts'][part][color]['boundstr'] = boundstr
 
@@ -200,7 +200,7 @@ class Idaho(object):
         # specify location information
         location_str = '&upperLeft={}&lowerRight={}'.format(t2s2((W, N)), t2s2((E, S)))
 
-        service_url = 'http://idaho.geobigdata.io/v1/chip/bbox/idaho-images/'
+        service_url = 'https://idaho.geobigdata.io/v1/chip/bbox/idaho-images/'
         url = service_url + band_str + location_str
         url += '&format=' + chip_format + '&token=' + self.gbdx_connection.access_token
         r = requests.get(url)
