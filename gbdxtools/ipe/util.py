@@ -5,8 +5,6 @@ import datetime
 
 import numpy as np
 
-import xml.etree.cElementTree as ET
-from xml.dom import minidom
 import ephem
 import gbdxtools.ipe.constants as constants
 
@@ -15,13 +13,13 @@ with warnings.catch_warnings():
 
 
 def ortho_params(proj):
-    ortho_params = {}
+    params = {}
     if proj is not None:
-        ortho_params["Output Coordinate Reference System"] = proj
-        ortho_params["Sensor Model"] = None
-        ortho_params["Elevation Source"] = ""
-        ortho_params["Output Pixel to World Transform"] = ""
-    return ortho_params
+        params["Output Coordinate Reference System"] = proj
+        params["Sensor Model"] = None
+        params["Elevation Source"] = ""
+        params["Output Pixel to World Transform"] = ""
+    return params
 
 
 # StackOverflow: http://stackoverflow.com/questions/600268/mkdir-p-functionality-in-python
@@ -40,8 +38,7 @@ def calc_toa_gain_offset(meta):
     Compute (gain, offset) tuples for each band of the specified image metadata
     """
     # Set satellite index to look up cal factors
-    sat_index = meta['satid'].upper() + "_" + \
-                meta['bandid'].upper()
+    sat_index = meta['satid'].upper() + "_" + meta['bandid'].upper()
 
     # Set scale for at sensor radiance
     # Eq is:
@@ -53,11 +50,10 @@ def calc_toa_gain_offset(meta):
     acf = np.asarray(meta['abscalfactor'])  # Should be nbands length
     ebw = np.asarray(meta['effbandwidth'])  # Should be nbands length
     gain = np.asarray(constants.DG_ABSCAL_GAIN[sat_index])
-    scale = (acf / ebw) * (gain)
+    scale = (acf / ebw) * gain
     offset = np.asarray(constants.DG_ABSCAL_OFFSET[sat_index])
 
-    e_sun_index = meta['satid'].upper() + "_" + \
-                  meta['bandid'].upper()
+    e_sun_index = meta['satid'].upper() + "_" + meta['bandid'].upper()
     e_sun = np.asarray(constants.DG_ESUN[e_sun_index])
     sun = ephem.Sun()
     img_obs = ephem.Observer()
@@ -69,7 +65,7 @@ def calc_toa_gain_offset(meta):
     sun.compute(img_obs)
     d_es = sun.earth_distance
 
-    ## Pull sun elevation from the image metadata
+    # Pull sun elevation from the image metadata
     # theta_s can be zenith or elevation - the calc below will us either
     # a cos or s in respectively
     # theta_s = float(self.meta_dg.IMD.IMAGE.MEANSUNEL)
@@ -79,30 +75,3 @@ def calc_toa_gain_offset(meta):
     # Return scaled data
     # Radiance = Scale * Image + offset, Reflectance = Radiance * Scale2
     return zip(scale, scale2, offset)
-
-
-# http://stackoverflow.com/questions/17402323/use-xml-etree-elementtree-to-write-out-nicely-formatted-xml-files
-def prettify(elem):
-    """
-    Return a pretty-printed XML string for the Element.
-    """
-    rough_string = ET.tostring(elem, 'utf-8')
-    reparsed = minidom.parseString(rough_string)
-    return reparsed.toprettyxml(indent="\t")
-
-
-import time
-import functools
-
-
-def timeit(func):
-    @functools.wraps(func)
-    def newfunc(*args, **kwargs):
-        startTime = time.time()
-        res = func(*args, **kwargs)
-        elapsedTime = time.time() - startTime
-        print('function [{}] finished in {} seconds'.format(
-            func.__name__, elapsedTime))
-        return res
-
-    return newfunc

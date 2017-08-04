@@ -56,7 +56,7 @@ import pycurl
 _curl_pool = defaultdict(pycurl.Curl)
 
 from gbdxtools.ipe.vrt import get_cached_vrt, put_cached_vrt, generate_vrt_template
-from gbdxtools.ipe.graph import VIRTUAL_IPE_URL, register_ipe_graph, get_ipe_metadata, get_ipe_graph
+from gbdxtools.ipe.graph import VIRTUAL_IPE_URL, register_ipe_graph, get_ipe_metadata
 from gbdxtools.ipe.error import NotFound, BadRequest
 from gbdxtools.ipe.interface import Ipe
 from gbdxtools.auth import Auth

@@ -8,7 +8,7 @@ def get_ipe_graph(conn, graph_id):
     url = "{}/graph/{}".format(VIRTUAL_IPE_URL, graph_id)
     req = conn.get(url)
     if req.status_code == 200:
-        return graph_id
+        return req.json()
     else:
         raise NotFound("No IPE graph found matching id: {}".format(graph_id))
 
@@ -19,7 +19,7 @@ def register_ipe_graph(conn, ipe_graph):
     return res.content
 
 
-def fetch_metadata(conn, url):
+def __fetch_metadata(conn, url):
     res = conn.get(url)
     res_json = res.json()
     if res.status_code != 200 or ('error' in res_json or 'message' in res_json):
@@ -30,9 +30,9 @@ def fetch_metadata(conn, url):
 
 def get_ipe_metadata(conn, ipe_id, node='toa_reflectance'):
     meta = dict()
-    meta['image'] = fetch_metadata(conn,
+    meta['image'] = __fetch_metadata(conn,
                                    VIRTUAL_IPE_URL + "/metadata/idaho-virtual/{}/{}/image.json".format(ipe_id, node))
-    meta['georef'] = fetch_metadata(conn,
+    meta['georef'] = __fetch_metadata(conn,
                                     VIRTUAL_IPE_URL + "/metadata/idaho-virtual/{}/{}/georeferencing.json".format(ipe_id,
                                                                                                                  node))
     return meta
