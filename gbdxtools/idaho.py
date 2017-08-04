@@ -267,7 +267,7 @@ class Idaho(object):
                 bboxes.append(bbox)
 
                 # Get the bucket. It has to be the same for all entries in the part.
-                bucket = part[list(part.keys()[0])]['bucket']
+                bucket = part[list(part.keys())[0]]['bucket']
 
                 # Get the token
                 token = self.gbdx_connection.access_token
