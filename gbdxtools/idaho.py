@@ -267,7 +267,7 @@ class Idaho(object):
                 bboxes.append(bbox)
 
                 # Get the bucket. It has to be the same for all entries in the part.
-                bucket = part[part.keys()[0]]['bucket']
+                bucket = part[list(part.keys()[0])]['bucket']
 
                 # Get the token
                 token = self.gbdx_connection.access_token
@@ -338,7 +338,10 @@ class Idaho(object):
             __location__ = os.path.realpath(
                 os.path.join(os.getcwd(), os.path.dirname(__file__)))
             with open(os.path.join(__location__, 'leafletmap_template.html'), 'r') as htmlfile:
-                data = htmlfile.read().decode("utf8")
+                try:
+                    data = htmlfile.read().decode("utf8")
+                except AttributeError:
+                    data = htmlfile.read()
 
             data = data.replace('FUNCTIONSTRING', functionstring)
             data = data.replace('CENTERLAT', str(S))
