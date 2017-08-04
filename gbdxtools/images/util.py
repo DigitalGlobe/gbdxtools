@@ -8,6 +8,8 @@ def orthorectify(img, z=0):
     x, xsamp = np.linspace(xmin, xmax, num=data.shape[-1], retstep=True)
     y, ysamp = np.linspace(ymax, ymin, num=data.shape[1], retstep=True)
     xv, yv = np.meshgrid(x, y, indexing='xy')
+    if isinstance(z, np.ndarray):
+        z = tf.resize(z[0,:,:], data.shape[1:])
     transpix = img.__geo_transform__.rev(xv, yv, z=z, _type=np.float32)[::-1]
     transpix[0,:,:] -= transpix[0,0,0]
     transpix[1,:,:] -= transpix[1,0,0]
