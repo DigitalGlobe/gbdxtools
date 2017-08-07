@@ -7,10 +7,9 @@ def orthorectify(img, z=0):
     xmin, ymin, xmax, ymax = shape(img).bounds
     data = img.read()
     gsd = max((xmax-xmin)/data.shape[2], (ymax-ymin)/data.shape[1])
-    print("gsd:", gsd)
     x = np.linspace(xmin, xmax, num=int((xmax-xmin)/gsd))
     y = np.linspace(ymax, ymin, num=int((ymax-ymin)/gsd))
-    xv, yv = np.meshgrid(x, y, indexing='xy')
+    xv, yv = np.meshgrid(x, yt, indexing='xy')
     if isinstance(z, np.ndarray):
         # TODO: potentially reproject
         z = tf.resize(z[0,:,:], data.shape[1:])
