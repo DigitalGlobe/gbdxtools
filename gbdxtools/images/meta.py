@@ -10,6 +10,8 @@ from shapely import ops
 from shapely.geometry import box, shape, mapping
 from shapely import wkt
 
+import skimage.transform as tf
+
 import pyproj
 import dask
 import dask.array as da
@@ -173,6 +175,21 @@ class GeoImage(Container):
         if 'proj' not in kwargs:
             kwargs['proj'] = self.proj
         return to_geotiff(self, **kwargs)
+
+    def orthorectify(self, **kwargs):
+        # TODO: potientially reproject
+        data = self.read()
+        xmin, ymin, xmax, ymax = shape(img).bounds
+        gsd = max((xmax-xmin)/data.shape[2], (ymax-ymin)/data.shape[1])
+        x = np.linspace(xmin, xmax, num=int((xmax-xmin)/gsd))
+        y = np.linspace(ymax, ymin, num=int((ymax-ymin)/gsd))
+        xv, yv = np.meshgrid(x, y, indexing='xy')
+        z = kwargs.get('z', 0)
+        if isinstance(z, np.ndarray):
+            # TODO: potentially reproject
+            z = tf.resize(z[0,:,:], xv.shape)
+        transpix = self.__geo_transform__.rev(xv, yv, z=z, _type=np.float32)[::-1]
+        return np.rollaxis(np.dstack([tf.warp(data[b,:,:].squeeze(), transpix, preserve_range=True) for b in xrange(data.shape[0])]), 2, 0)
 
     def _parse_geoms(self, **kwargs):
         """ Finds supported geometry types, parses them and returns the bbox """
