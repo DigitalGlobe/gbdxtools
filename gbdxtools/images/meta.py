@@ -179,7 +179,7 @@ class GeoImage(Container):
     def orthorectify(self, **kwargs):
         # TODO: potientially reproject
         data = self.read()
-        xmin, ymin, xmax, ymax = shape(img).bounds
+        xmin, ymin, xmax, ymax = self.bounds
         gsd = max((xmax-xmin)/data.shape[2], (ymax-ymin)/data.shape[1])
         x = np.linspace(xmin, xmax, num=int((xmax-xmin)/gsd))
         y = np.linspace(ymax, ymin, num=int((ymax-ymin)/gsd))
