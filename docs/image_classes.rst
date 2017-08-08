@@ -7,20 +7,29 @@ Image Class Overview
 The image classes in gbdxtools provide access to remote imagery hosted on GBDX. The access is deferred, meaning that images can be initialized
 and manipulated as numpy arrays and the actual pixel data is only fetched from the server when compute is necessary.
 
-The classes are two: CatalogImage and IdahoImage. CatalogImage uses a GBDX Catalog id (http://gbdxdocs.digitalglobe.com/docs/catalog-course) to aggregate image parts
-into a single point of access. IdahoImage represents a one-to-one relationship with a given IDAHO id (http://gbdxdocs.digitalglobe.com/docs/idaho-course).
+The available classes are CatalogImage, IdahoImage, WV02, WV03_VNIR, IkonosImage, LandsatImage, TmsImage and DemImage. Each class behaves in very similar ways and extends the base-class "IpeImage". Imagery at DigitalGlobe are stored and processed by a service called the Image Processing Engine, or IPE. This service accepts processing graphs that are capable of running many different operations on an image before serving the pixels. For example, image orthorectification, mosaicing, and pansharpening are all possible via IPE. Users submit graphs to IPE and a new image id is created. However, the new id is only a virtual id, meaning that image tiles are only processed once requested. 
+
+The image classes in gbdxtools attempt to hide the processing, graph creation and tile access from the end-user as much as possible.  
+
 
 Catalog Images
 -----------------------
 
-The following snippet will initialize a CatalogImage from a catalog id and print the shape of the array:
+CatalogImage uses a GBDX Catalog id (http://gbdxdocs.digitalglobe.com/docs/catalog-course) to aggregate image parts
+into a single point of access. CatalogImages act as a generic image wrapper meaning that they can accept a range of 
+id types (worldview, landsat, ikonos, etc.). The first thing a CatalogImage does is query the GBDX Platform to 
+discover metadata about the image type. It will then instantiate the appropriate image class that matches the image id. 
+
+
+The following snippet will initialize a CatalogImage from a catalog id for a WorldView3 image and print the shape of the array:
 
 .. code-block:: python
 
-    from gbdxtools import CatalogImage
+    from gbdxtools import CatalogImage, WV03_VNIR
 
     img = CatalogImage('104001001BA7C400')
-    print img.shape
+    print img.shape, img.bounds
+    print isinstance(img, WV03_VNIR)
 
 It's worth noting that a CatalogImage represents a mosaic of tiles stored on the server and no pixel data
 is fetched until you call the `read()` method (which will cause the entire image to be fetched from the server).
@@ -58,7 +67,7 @@ By default, CatalogImage returns a multispectral image. CatalogImage can be conf
     from gbdxtools import CatalogImage
 
     img = CatalogImage('104001001BA7C400', band_type='Pan', bbox=[2.2889757156372075,48.87067123176554,2.301077842712403,48.87705036103764])
-    print img.shape
+    print img.shape, img.bounds
 
 To fetch 8-band pan-sharpened imagery you can pass the `pansharpen=True|False` flag:
 
@@ -91,6 +100,17 @@ You can also specify projections in the image constructor:
     print img.shape
 
 The `proj='PROJ4 String'` parameter will project imagery into the given projection.
+
+Each image class' primary format are Numpy arrays, but sometimes other formats are needed. We provide a helper method to create GeoTiff files directly from images:
+
+.. code-block:: python
+
+    from gbdxtools import CatalogImage
+
+    img = CatalogImage('104001001BA7C400', band_type='Pan', bbox=[2.2889757156372075,48.87067123176554,2.301077842712403,48.87705036103764], proj='EPSG:3857')
+    tif = img.geotiff(path="./output.tif", proj="EPSG:4326")
+
+The above code generates a geotiff on the filesystem with the name `output.tif` and the projection `EPSG:4326`. You can also specify a data type (`dtype="uint16|float32|etc"`) and/or an array of band indices (`bands=[4,2,1]`). 
 
 
 Idaho Images
@@ -125,3 +145,32 @@ GBDX also indexes all Landsat8 images and are served up by AWS. The LandsatImage
     aoi.plot(bands=[3,2,1])
 
 
+DEM Images
+-----------------------
+
+Both the DemImage and TmsImage (below) classes behave in a bit different fashion than the other image classes. The DemImage class is used to fetch a numpy array of Digital Elevation Model (DEM) data from the NED/SRTM dataset. Since the dataset is static this class uses an Area of Interest (AOI) in place of a catalog id. 
+
+.. code-block:: python
+
+    from gbdxtools import DemImage
+
+    aoi = [5.279273986816407, 60.35854536321686, 5.402183532714844, 60.419106714507116]
+    dem = DemImage(aoi)
+    print dem.shape
+
+Beyond replacing catalog ids for AOIs the DemImage class share all the same methods as the above image classes.
+
+TMS Images
+-----------------------
+
+The TmsImage class is used to access imagery available from the Maps API. These are global mosiacs of imagery that can be useful for training Machine Learning algorithms or whenever high-resolution is needed. Since the Map API is static, or changes less frequently, these images are best suited when there are no temporal requirements on an analysis. 
+
+.. code-block:: python
+
+    from gbdxtools import TmsImage
+
+    img = TmsImage('LC80370302014268LGN00')
+    print img.shape
+    aoi = img.aoi(bbox=[-109.84, 43.19, -109.59, 43.34])
+    print aoi.shape
+    aoi.plot(bands=[3,2,1])

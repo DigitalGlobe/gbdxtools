@@ -40,9 +40,9 @@ class IpeImageTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        mock_gbdx_session = get_mock_gbdx_session(token='dummytoken')
-        cls.gbdx = Interface(gbdx_connection=mock_gbdx_session)
-        # cls.gbdx = Interface()
+        #mock_gbdx_session = get_mock_gbdx_session(token='dummytoken')
+        #cls.gbdx = Interface(gbdx_connection=mock_gbdx_session)
+        cls.gbdx = Interface()
         cls._temp_path = tempfile.mkdtemp()
         print("Created: {}".format(cls._temp_path))
 
@@ -57,6 +57,23 @@ class IpeImageTest(unittest.TestCase):
         idahoid = '1ec49348-8950-49ff-bd71-ea2e4d8754ac'
         img = self.gbdx.idaho_image(idahoid)
         self.assertTrue(isinstance(img, IdahoImage))
+        assert img.shape == (8, 10290, 14625)
+        assert img.proj == 'EPSG:4326'
+
+    @my_vcr.use_cassette('tests/unit/cassettes/test_ipe_image_missing_product.yaml', filter_headers=['authorization'])
+    def test_ipe_image_unsupported(self):
+        try:
+            idahoid = '1ec49348-8950-49ff-bd71-ea2e4d8754ac'
+            img = self.gbdx.idaho_image(idahoid, product="no_product")
+        except:
+            pass
+
+    @my_vcr.use_cassette('tests/unit/cassettes/test_ipe_image_get_product.yaml', filter_headers=['authorization'])
+    def test_basic_ipe_image(self):
+        idahoid = '1ec49348-8950-49ff-bd71-ea2e4d8754ac'
+        img = self.gbdx.idaho_image(idahoid)
+        ortho = img.get_product('ortho')
+        self.assertTrue(isinstance(ortho, IdahoImage))
         assert img.shape == (8, 10290, 14625)
         assert img.proj == 'EPSG:4326'
 
