@@ -45,7 +45,7 @@ class IpeImageTest(unittest.TestCase):
     def setUpClass(cls):
         mock_gbdx_session = get_mock_gbdx_session(token='dymmytoken')
         cls.gbdx = Interface(gbdx_connection=mock_gbdx_session)
-        # cls.gbdx = Interface()
+        #cls.gbdx = Interface()
         cls._temp_path = tempfile.mkdtemp()
         print("Created: {}".format(cls._temp_path))
 
@@ -89,6 +89,15 @@ class IpeImageTest(unittest.TestCase):
         rgb = aoi.read(bands=[4,2,1])
         assert rgb.shape == (3, 172, 239)
         assert isinstance(rgb, np.ndarray)
+
+    @my_vcr.use_cassette('tests/unit/cassettes/test_ipe_image_ortho.yaml', filter_headers=['authorization'])
+    def test_ipe_image_ortho(self):
+        idahoid = '179269b9-fdb3-49d8-bb62-d15de54ad15d'
+        img = self.gbdx.idaho_image(idahoid, product='dn')
+        aoi = img.aoi(bbox=[-110.85299491882326,32.167148499672855,-110.84870338439943,32.170236308395644])
+        assert aoi.shape == (8, 176, 203)
+        ortho = aoi.orthorectify()
+        assert isinstance(ortho, np.ndarray)
 
     #@my_vcr.use_cassette('tests/unit/cassettes/test_ipe_image_geotiff.yaml', filter_headers=['authorization'])
     #def test_ipe_image_geotiff(self):
