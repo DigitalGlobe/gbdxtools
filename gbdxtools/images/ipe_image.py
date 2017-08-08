@@ -10,6 +10,10 @@ import numpy as np
 from gbdxtools.images.meta import DaskMeta, DaskImage, GeoImage
 from gbdxtools.ipe.util import RatPolyTransform, AffineTransform
 
+try:
+    xrange
+except NameError:
+    xrange = range
 
 class IpeImage(DaskImage, GeoImage):
     _default_proj = "EPSG:4326"
