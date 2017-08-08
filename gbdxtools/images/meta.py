@@ -25,6 +25,11 @@ try:
 except:
     has_pyplot = False
 
+try:
+    xrange
+except NameError:
+    xrange = range
+
 num_workers = int(os.environ.get("GBDX_THREADS", 8))
 threaded_get = partial(dask.threaded.get, num_workers=num_workers)
 
