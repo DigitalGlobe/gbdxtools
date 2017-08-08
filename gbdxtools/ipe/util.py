@@ -211,7 +211,7 @@ class RatPolyTransform(GeometricTransform):
         try:
             d0, d1 = coords.shape
             assert d1 ==2
-        except ValueError, AssertionError:
+        except (ValueError, AssertionError):
             raise NotImplementedError("input coords must be [N x 2] dimension numpy array")
         if d1 != 2:
             raise NotImplementedError("input coords must be [N x 2] dimension numpy array")

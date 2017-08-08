@@ -79,6 +79,11 @@ class IpeImage(DaskImage, GeoImage):
 
     def plot(self, spec="rgb", **kwargs):
         if self.shape[0] == 1 or ("bands" in kwargs and len(kwargs["bands"]) == 1):
+            if "cmap" in kwargs:
+                cmap = kwargs["cmap"]
+                del kwargs["cmap"]
+            else:
+                cmap = "Greys_r"
             super(IpeImage, self).plot(tfm=self._single_band, cmap="Greys_r", **kwargs)
         else:
             super(IpeImage, self).plot(tfm=getattr(self, spec), **kwargs)

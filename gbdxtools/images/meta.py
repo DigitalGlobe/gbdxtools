@@ -25,6 +25,11 @@ try:
 except:
     has_pyplot = False
 
+try:
+    xrange
+except NameError:
+    xrange = range
+
 num_workers = int(os.environ.get("GBDX_THREADS", 8))
 threaded_get = partial(dask.threaded.get, num_workers=num_workers)
 
@@ -177,10 +182,12 @@ class GeoImage(Container):
         return to_geotiff(self, **kwargs)
 
     def orthorectify(self, **kwargs):
-        # TODO: potientially reproject
-        data = self.read()
-        xmin, ymin, xmax, ymax = self.bounds
-        gsd = max((xmax-xmin)/data.shape[2], (ymax-ymin)/data.shape[1])
+        if 'proj' in kwargs:
+            to_proj = kwargs['proj']
+            xmin, ymin, xmax, ymax = self._reproject(shape(self), from_proj=self.proj, to_proj=to_proj).bounds
+        else:
+            xmin, ymin, xmax, ymax = self.bounds
+        gsd = max((xmax-xmin)/self.shape[2], (ymax-ymin)/self.shape[1])
         x = np.linspace(xmin, xmax, num=int((xmax-xmin)/gsd))
         y = np.linspace(ymax, ymin, num=int((ymax-ymin)/gsd))
         xv, yv = np.meshgrid(x, y, indexing='xy')
@@ -188,12 +195,10 @@ class GeoImage(Container):
         if isinstance(z, np.ndarray):
             # TODO: potentially reproject
             z = tf.resize(z[0,:,:], xv.shape)
-        transpix = self.__geo_transform__.rev(xv, yv, z=z, _type=np.float32)[::-1]
-        ortho = np.rollaxis(np.dstack([tf.warp(data[b,:,:].squeeze(), transpix, preserve_range=True) for b in xrange(data.shape[0])]), 2, 0)
-        #ortho.__geo_interface__ = self.__geo_interface__
-        #ortho.__geo_transform__ = self.__geo_transform__
-        #ortho.__class__ = self.__class__
-        return ortho
+        transpix = self.__geo_transform__.rev(xv, yv, z=z, _type=np.float32)
+        data = self.read()
+        ortho = np.rollaxis(np.dstack([tf.warp(data[b,:,:].squeeze(), transpix[::-1], preserve_range=True) for b in xrange(data.shape[0])]), 2, 0)
+        return GeoDaskWrapper(ortho, self)
 
     def _parse_geoms(self, **kwargs):
         """ Finds supported geometry types, parses them and returns the bbox """
@@ -236,3 +241,39 @@ class GeoImage(Container):
         geometry = ops.transform(self.__geo_transform__.rev, g)
         img_bounds = box(0, 0, *self.shape[2:0:-1])
         return img_bounds.contains(geometry)
+
+
+class DaskMetaWrapper(DaskMeta):
+    def __init__(self, dask):
+        self.da = dask
+  
+    @property
+    def dask(self):
+        return self.da.dask
+
+    @property
+    def name(self):
+        return self.da.name
+
+    @property
+    def chunks(self):
+        return self.da.chunks
+
+    @property
+    def dtype(self):
+        return self.da.dtype
+
+    @property
+    def shape(self):
+        return self.da.shape
+
+
+class GeoDaskWrapper(DaskImage, GeoImage):
+    def __new__(cls, array, img):
+        dm = DaskMetaWrapper(da.from_array(array, chunks=(256)))
+        self = super(GeoDaskWrapper, cls).create(dm)
+        self.__geo_interface__ = img.__geo_interface__
+        self.__geo_transform__ = img.__geo_transform__
+        self.rgb = img.rgb
+        self.plot = img.plot
+        return self
