@@ -1,0 +1,57 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      User-Agent: [python-requests/2.13.0]
+    method: GET
+    uri: http://idaho.timbr.io/1ec49348-8950-49ff-bd71-ea2e4d8754ac.json
+  response:
+    body: {string: !!python/unicode '{"geometry": {"type": "Polygon", "coordinates":
+        [[[-74.0190588, 45.39276835], [-74.0190588, 45.51937376], [-73.83890812, 45.51937376],
+        [-73.83890812, 45.39276835], [-74.0190588, 45.39276835]]]}, "properties":
+        {"bandid": "Multi", "latlonhae": [45.51934028, -74.0192839, 160.07], "mean_sun_el":
+        37.0, "center": {"type": "Point", "coordinates": [-73.92898346, 45.456071055]},
+        "catid": "1040010023142D00", "cloud_cover": 0.0, "tdilevel": [24.0, 24.0,
+        24.0, 24.0, 24.0, 24.0, 14.0, 14.0], "img_datetime_obj_utc": {"$date": 1476202403770},
+        "warp": {"yStep": 100, "xStep": 100, "numXCells": 147, "yStart": 0, "targetGeoTransform":
+        {"translateX": -74.0192839, "translateY": 45.51937376, "scaleX": 1.2324829320876753e-05,
+        "scaleY": -1.2324829320876753e-05, "shearY": 0.0, "shearX": 0.0, "spatialReferenceSystemCode":
+        "EPSG:4326"}, "xStart": 0, "numYCells": 103}, "rrds": {"reducedResolutionDataset":
+        [{"targetImage": "2a5ee008-820a-470b-92e3-b674a7369407", "sourceImage": "1ec49348-8950-49ff-bd71-ea2e4d8754ac",
+        "inverseScaleFactor": 2.0}, {"targetImage": "13f3aa8e-6b58-42b5-8322-c3d15fb1b4c4",
+        "sourceImage": "2a5ee008-820a-470b-92e3-b674a7369407", "inverseScaleFactor":
+        2.0}, {"targetImage": "eb1df95b-978e-4c66-aa86-291b3109368a", "sourceImage":
+        "13f3aa8e-6b58-42b5-8322-c3d15fb1b4c4", "inverseScaleFactor": 2.0}, {"targetImage":
+        "ac893db0-2ee9-4d66-9442-0bc0c9419035", "sourceImage": "eb1df95b-978e-4c66-aa86-291b3109368a",
+        "inverseScaleFactor": 2.0}, {"targetImage": "ccdad1cb-1438-482b-81f9-ee75ad9f8830",
+        "sourceImage": "ac893db0-2ee9-4d66-9442-0bc0c9419035", "inverseScaleFactor":
+        2.0}]}, "effbandwidth": [0.0889, 0.0387, 0.0618, 0.0381, 0.054, 0.0405, 0.1004,
+        0.0585], "abscalfactor": [0.0106378, 0.00621996, 0.007802301, 0.00684307,
+        0.0103103, 0.0143287, 0.0117971, 0.0102], "bbox": [-74.0190588, 45.39276835,
+        -73.83890812, 45.51937376], "band_centers": [427.38, 481.92, 547.14, 604.28,
+        660.11, 722.73, 824.04, 913.65], "satid": "WV03", "band_names": ["C", "B",
+        "G", "Y", "R", "RE", "N1", "N2"], "off_nadir": 19.4, "image": {"satAzimuth":
+        178.9, "sunAzimuth": 171.0, "cloudCover": 0.0, "imageId": "1ec49348-8950-49ff-bd71-ea2e4d8754ac",
+        "nativeTileFileFormat": "TIF", "numXTiles": 42, "imageWidth": 10651, "tileYSize":
+        256, "sensorName": "8-band (Coastal, Blue, Green, Yellow, Red, Red-edge, NIR1,
+        NIR2) Multispectral", "vendorDatasetIdentifier": "LV1B:055927792010_01_P006:1040010023142D00:A01001022FD0EC00",
+        "version": "1.0", "numBands": 8, "imageHeight": 9922, "offNadirAngle": 19.4,
+        "vendorName": "DigitalGlobe, Inc.", "imageBoundsWGS84": "POLYGON ((-74.0192839
+        45.51934028, -73.83890812 45.51937376, -73.83912668 45.39250174, -74.0190588
+        45.39276835, -74.0192839 45.51934028))", "sunElevation": 37.0, "acquisitionDate":
+        "2016-10-11T16:13:23.770Z", "dataType": "UNSIGNED_SHORT", "tileYOffset": 0,
+        "tileXSize": 256, "colorInterpretation": "WORLDVIEW_8_BAND", "profileName":
+        "dg_1b", "tilePartition": "0000", "groundSampleDistanceMeters": 1.372, "tileBucketName":
+        "idaho-images", "tileXOffset": 0, "pniirs": 3.5, "satElevation": 68.4, "sensorPlatformName":
+        "WV03", "numYTiles": 39}, "product_level": "LV1B"}, "_acquisitionDate": {"$date":
+        1476202403770}, "_id": {"$oid": "58c800519db347af059f57e5"}, "type": "Feature",
+        "id": "1ec49348-8950-49ff-bd71-ea2e4d8754ac"}'}
+    headers:
+      content-type: [application/json]
+      date: ['Tue, 08 Aug 2017 20:41:33 GMT']
+      server: [TwistedWeb/16.4.1]
+    status: {code: 200, message: OK}
+version: 1

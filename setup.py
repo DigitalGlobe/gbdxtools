@@ -1,9 +1,14 @@
 import sys
+import os.path
 from setuptools import setup, find_packages
 
 open_kwds = {}
 if sys.version_info > (3,):
     open_kwds['encoding'] = 'utf-8'
+
+with open("requirements.txt") as f:
+    requires = f.read().splitlines()
+
 
 # with open('README.md', **open_kwds) as f:
 #     readme = f.read()
@@ -11,7 +16,7 @@ if sys.version_info > (3,):
 # long_description=readme,
 
 setup(name='gbdxtools',
-      version='0.11.14',
+      version='0.12.0',
       description='Additional s3 functionality.',
       classifiers=[],
       keywords='',
@@ -22,24 +27,7 @@ setup(name='gbdxtools',
       packages=find_packages(exclude=['docs','tests']),
       include_package_data=True,
       zip_safe=False,
-      install_requires=['requests==2.12.1',
-                        'boto==2.47.0',
-                        'gbdx-auth==0.2.4',
-                        'pygeoif==0.6',
-                        'ndg-httpsclient==0.4.2',
-                        'six==1.10.0',
-                        'future==0.15.2',
-                        'geomet==0.1.1',
-                        'shapely',
-                        'ephem',
-                        'numpy',
-                        'toolz',
-                        'dask==0.13.0',
-                        'cloudpickle',
-                        'pycurl',
-                        'rasterio>=1.0a3',
-                        'pyproj'
-                        ],
+      install_requires=requires,
       setup_requires=['pytest-runner'],
       tests_require=['pytest','vcrpy']
       )
