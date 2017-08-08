@@ -1,0 +1,31 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      User-Agent: [python-requests/2.12.1]
+    method: GET
+    uri: https://idahoapi.geobigdata.io/v1/graph/ba79f76782438c70087765c35f413def88f92b73627227830a531cddbfa2ed1a
+  response:
+    body: {string: '{"id":"ba79f76782438c70087765c35f413def88f92b73627227830a531cddbfa2ed1a","edges":[{"id":"c87d2093-6707-510f-a706-00ed903b8cff","index":1,"source":"b70986d7-5d40-5073-8f63-c9446462bf11","destination":"0ed7b1f0-5adc-5c6e-bf31-72d7147d0368"},{"id":"17e5a315-28d5-5e07-a438-325325e95120","index":1,"source":"3fca7bd2-f586-549a-bc30-cda11da8e034","destination":"162cb3b9-519d-50bf-96b1-45296d0cccda"},{"id":"d1ca3978-c4ad-5600-af36-9d51071af943","index":1,"source":"0ed7b1f0-5adc-5c6e-bf31-72d7147d0368","destination":"46661bad-31d4-5fe1-91ae-d37cca30dbd4"},{"id":"94a0968d-e40a-5b1a-91a7-1c0d53d5e4c5","index":1,"source":"1278f144-46fa-56be-8751-e7439abf31a4","destination":"b70986d7-5d40-5073-8f63-c9446462bf11"},{"id":"867e99b0-260b-5df9-a169-045e2d2b9587","index":1,"source":"46661bad-31d4-5fe1-91ae-d37cca30dbd4","destination":"3fca7bd2-f586-549a-bc30-cda11da8e034"}],"nodes":[{"id":"1278f144-46fa-56be-8751-e7439abf31a4","operator":"IdahoRead","parameters":{"objectStore":"S3","bucketName":"idaho-images","imageId":"1ec49348-8950-49ff-bd71-ea2e4d8754ac"}},{"id":"3fca7bd2-f586-549a-bc30-cda11da8e034","operator":"AddConst","parameters":{"constants":"[-7.154,
+        -4.189, -3.287, -1.816, -1.35, -2.617, -3.752, -1.507]"}},{"id":"162cb3b9-519d-50bf-96b1-45296d0cccda","operator":"MultiplyConst","parameters":{"constants":"[0.002958531417393051,
+        0.002594406290161713, 0.002841672837273421, 0.0030377103700906334, 0.003387397362991064,
+        0.003857911098244222, 0.0049252540800813205, 0.006056071815877442]"}},{"id":"b70986d7-5d40-5073-8f63-c9446462bf11","operator":"Orthorectify","parameters":{"Elevation
+        Source":"null","Output Coordinate Reference System":"EPSG:4326","Output Pixel
+        to World Transform":"null","Sensor Model":"null"}},{"id":"46661bad-31d4-5fe1-91ae-d37cca30dbd4","operator":"MultiplyConst","parameters":{"constants":"[0.10326683239595048,
+        0.1454538449612403, 0.11450949849514563, 0.16847243202099735, 0.18043025,
+        0.3467191604938271, 0.11538597808764939, 0.16633846153846152]"}},{"id":"0ed7b1f0-5adc-5c6e-bf31-72d7147d0368","operator":"Format","parameters":{"dataType":"4"}}]}'}
+    headers:
+      Access-Control-Allow-Headers: ['x-requested-with, X-Auth-Token, Content-Type,
+          Authorization']
+      Access-Control-Allow-Methods: ['GET, OPTIONS, HEAD, PUT, POST, DELETE']
+      Access-Control-Allow-Origin: ['*']
+      Access-Control-Max-Age: ['3600']
+      Connection: [keep-alive]
+      Content-Length: ['2081']
+      Content-Type: [application/json]
+      Date: ['Fri, 04 Aug 2017 17:34:31 GMT']
+    status: {code: 200, message: ''}
+version: 1

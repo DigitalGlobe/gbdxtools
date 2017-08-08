@@ -7,7 +7,6 @@ from __future__ import print_function
 from __future__ import division
 from builtins import str
 from builtins import object
-from past.utils import old_div
 
 from pygeoif import geometry
 import codecs
@@ -18,14 +17,14 @@ import requests
 from gbdxtools.catalog import Catalog
 from gbdxtools.auth import Auth
 
-class Idaho(object):
 
+class Idaho(object):
     def __init__(self, **kwargs):
-        ''' Construct the Idaho interface class.
+        """ Construct the Idaho interface class.
 
             Returns:
                 An instance of the Idaho interface class.
-        '''
+        """
         interface = Auth(**kwargs)
         self.base_url = '%s/catalog/v2' % interface.root_url
         self.gbdx_connection = interface.gbdx_connection
@@ -33,14 +32,14 @@ class Idaho(object):
         self.logger = interface.logger
 
     def get_images_by_catid_and_aoi(self, catid, aoi_wkt):
-        ''' Retrieves the IDAHO image records associated with a given catid.
+        """ Retrieves the IDAHO image records associated with a given catid.
         Args:
             catid (str): The source catalog ID from the platform catalog.
             aoi_wkt (str): The well known text of the area of interest.
         Returns:
             results (json): The full catalog-search response for IDAHO images
                             within the catID.
-        '''
+        """
 
         self.logger.debug('Retrieving IDAHO metadata')
 
@@ -50,8 +49,6 @@ class Idaho(object):
         body = {"filters": ["catalogID = '%s'" % catid],
                 "types": ["IDAHOImage"],
                 "searchAreaWkt": aoi_wkt}
-
-        headers = {'Content-Type': 'application/json'}
 
         r = self.gbdx_connection.post(url, data=json.dumps(body))
 
@@ -65,13 +62,13 @@ class Idaho(object):
             return results
 
     def get_images_by_catid(self, catid):
-        ''' Retrieves the IDAHO image records associated with a given catid.
+        """ Retrieves the IDAHO image records associated with a given catid.
         Args:
             catid (str): The source catalog ID from the platform catalog.
         Returns:
             results (json): The full catalog-search response for IDAHO images
                             within the catID.
-        '''
+        """
 
         self.logger.debug('Retrieving IDAHO metadata')
 
@@ -85,22 +82,22 @@ class Idaho(object):
             pass
 
         if not footprint:
-            self.logger.debug('''Cannot get IDAHO metadata for strip %s,
-                                 footprint not found''' % catid)
+            self.logger.debug("""Cannot get IDAHO metadata for strip %s,
+                                 footprint not found""" % catid)
             return None
 
         return self.get_images_by_catid_and_aoi(catid=catid,
                                                 aoi_wkt=footprint)
 
     def describe_images(self, idaho_image_results):
-        '''Describe the result set of a catalog search for IDAHO images.
+        """Describe the result set of a catalog search for IDAHO images.
 
         Args:
             idaho_image_results (dict): Result set of catalog search.
         Returns:
             results (json): The full catalog-search response for IDAHO images
                             corresponding to the given catID.
-        '''
+        """
 
         results = idaho_image_results['results']
 
@@ -123,7 +120,7 @@ class Idaho(object):
                 part = int(image['properties']['vendorDatasetIdentifier'].split(':')[1][-3:])
                 color = image['properties']['colorInterpretation']
                 bucket = image['properties']['tileBucketName']
-                id = image['identifier']
+                identifier = image['identifier']
                 boundstr = image['properties']['footprintWkt']
 
                 try:
@@ -132,15 +129,14 @@ class Idaho(object):
                     description[catid]['parts'][part] = {}
 
                 description[catid]['parts'][part][color] = {}
-                description[catid]['parts'][part][color]['id'] = id
+                description[catid]['parts'][part][color]['id'] = identifier
                 description[catid]['parts'][part][color]['bucket'] = bucket
                 description[catid]['parts'][part][color]['boundstr'] = boundstr
 
         return description
 
-
     def get_chip(self, coordinates, catid, chip_type='PAN', chip_format='TIF', filename='chip.tif'):
-        '''Downloads a native resolution, orthorectified chip in tif format
+        """Downloads a native resolution, orthorectified chip in tif format
         from a user-specified catalog id.
 
         Args:
@@ -155,15 +151,15 @@ class Idaho(object):
 
         Returns:
             True if chip is successfully downloaded; else False.
-        '''
+        """
 
         def t2s1(t):
-            'Tuple to string 1'
-            return str(t).strip('(,)').replace(',','')
+            # Tuple to string 1
+            return str(t).strip('(,)').replace(',', '')
 
         def t2s2(t):
-            'Tuple to string 2'
-            return str(t).strip('(,)').replace(' ','')
+            # Tuple to string 2
+            return str(t).strip('(,)').replace(' ', '')
 
         if len(coordinates) != 4:
             print('Wrong coordinate entry')
@@ -204,7 +200,7 @@ class Idaho(object):
         # specify location information
         location_str = '&upperLeft={}&lowerRight={}'.format(t2s2((W, N)), t2s2((E, S)))
 
-        service_url = 'http://idaho.geobigdata.io/v1/chip/bbox/idaho-images/'
+        service_url = 'https://idaho.geobigdata.io/v1/chip/bbox/idaho-images/'
         url = service_url + band_str + location_str
         url += '&format=' + chip_format + '&token=' + self.gbdx_connection.access_token
         r = requests.get(url)
@@ -225,7 +221,7 @@ class Idaho(object):
                        lowcutoff=0.02,
                        brightness=1.0,
                        contrast=1.0):
-        '''Get list of urls and bounding boxes corrsponding to idaho images for a given catalog id.
+        """Get list of urls and bounding boxes corrsponding to idaho images for a given catalog id.
 
         Args:
            catid (str): Catalog id
@@ -239,7 +235,7 @@ class Idaho(object):
            urls (list): TMS urls.
            bboxes (list of tuples): Each tuple is (W, S, E, N) where (W,S,E,N) are the bounds of the
                                     corresponding idaho part.
-        '''
+        """
 
         description = self.describe_images(self.get_images_by_catid(catid))
         service_url = 'http://idaho.geobigdata.io/v1/tile/'
@@ -271,15 +267,15 @@ class Idaho(object):
                 bboxes.append(bbox)
 
                 # Get the bucket. It has to be the same for all entries in the part.
-                bucket = part[part.keys()[0]]['bucket']
+                bucket = part[list(part.keys())[0]]['bucket']
 
                 # Get the token
                 token = self.gbdx_connection.access_token
 
                 # Assemble url
                 url = (service_url + bucket + '/'
-                                   + band_str
-                                   + """&gamma={}
+                       + band_str
+                       + """&gamma={}
                                         &highCutoff={}
                                         &lowCutoff={}
                                         &brightness={}
@@ -295,13 +291,13 @@ class Idaho(object):
         return urls, bboxes
 
     def create_leaflet_viewer(self, idaho_image_results, filename):
-        '''Create a leaflet viewer html file for viewing idaho images.
+        """Create a leaflet viewer html file for viewing idaho images.
 
         Args:
             idaho_image_results (dict): IDAHO image result set as returned from
                                         the catalog.
             filename (str): Where to save output html file.
-        '''
+        """
 
         description = self.describe_images(idaho_image_results)
         if len(description) > 0:
@@ -336,18 +332,23 @@ class Idaho(object):
                     image_id = part[partname]['id']
                     W, S, E, N = part_polygon.bounds
 
-                    functionstring += "addLayerToMap('%s','%s',%s,%s,%s,%s,'%s');\n" % (bucketname, image_id, W,S,E,N, pan_image_id)
+                    functionstring += "addLayerToMap('%s','%s',%s,%s,%s,%s,'%s');\n" % (
+                        bucketname, image_id, W, S, E, N, pan_image_id)
 
             __location__ = os.path.realpath(
                 os.path.join(os.getcwd(), os.path.dirname(__file__)))
-            with open(os.path.join(__location__, 'leafletmap_template.html'), 'r') as htmlfile:
-                data=htmlfile.read().decode("utf8")
+            try:
+                with open(os.path.join(__location__, 'leafletmap_template.html'), 'r') as htmlfile:
+                    data = htmlfile.read().decode("utf8")
+            except AttributeError:
+                with open(os.path.join(__location__, 'leafletmap_template.html'), 'r') as htmlfile:
+                    data = htmlfile.read()
 
-            data = data.replace('FUNCTIONSTRING',functionstring)
-            data = data.replace('CENTERLAT',str(S))
-            data = data.replace('CENTERLON',str(W))
-            data = data.replace('BANDS',bandstr)
-            data = data.replace('TOKEN',self.gbdx_connection.access_token)
+            data = data.replace('FUNCTIONSTRING', functionstring)
+            data = data.replace('CENTERLAT', str(S))
+            data = data.replace('CENTERLON', str(W))
+            data = data.replace('BANDS', bandstr)
+            data = data.replace('TOKEN', self.gbdx_connection.access_token)
 
             with codecs.open(filename, 'w', 'utf8') as outputfile:
                 self.logger.debug("Saving %s" % filename)

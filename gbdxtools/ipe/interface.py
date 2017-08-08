@@ -67,7 +67,7 @@ def load_url(url, token, shape=(8, 256, 256)):
         return arr
 
 
-class ContentHashedDict(OrderedDict):
+class ContentHashedDict(dict):
     @property
     def _id(self):
         _id = str(uuid.uuid5(NAMESPACE_UUID, self.__hash__()))
