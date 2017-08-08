@@ -138,28 +138,6 @@ def calc_toa_gain_offset(meta):
     return zip(scale, scale2, offset)
 
 
-# http://stackoverflow.com/questions/17402323/use-xml-etree-elementtree-to-write-out-nicely-formatted-xml-files
-def prettify(elem):
-    """
-    Return a pretty-printed XML string for the Element.
-    """
-    rough_string = ET.tostring(elem, 'utf-8')
-    reparsed = minidom.parseString(rough_string)
-    return reparsed.toprettyxml(indent="\t")
-
-
-def timeit(func):
-    @wraps(func)
-    def newfunc(*args, **kwargs):
-        startTime = time.time()
-        res = func(*args, **kwargs)
-        elapsedTime = time.time() - startTime
-        print('function [{}] finished in {} seconds'.format(
-            func.__name__, elapsedTime))
-        return res
-    return newfunc
-
-
 class RatPolyTransform(object):
     def __init__(self, A, B, offset, scale, px_offset, px_scale, proj=None):
         self.proj = proj
@@ -269,11 +247,3 @@ class AffineTransform(object):
                                georef["translateY"], georef["shearY"], georef["scaleY"])
         return cls(tfm, proj=georef["spatialReferenceSystemCode"])
 
-
-def shift_func(offset):
-    def decorator(wrapped):
-        @wraps(wrapped)
-        def fn(*args):
-            return wrapped(*[arg + offset for arg,offset in zip(args, offset)])
-        return fn
-    return decorator
