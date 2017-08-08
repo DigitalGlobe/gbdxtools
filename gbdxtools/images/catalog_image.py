@@ -38,7 +38,7 @@ class CatalogImage(object):
             return WV03_VNIR(cat_id, **kwargs)
         elif 'Landsat8' in types:
             return LandsatImage(cat_id, **kwargs)
-        elif 'IKONOS' in types:
-            return IkonosImage(rec['properties']['attributes']['prefix'], bucket=rec['properties']['attributes']['bucket_name'], **kwargs)
+        #elif 'IKONOS' in types:
+        #    return IkonosImage(rec['properties']['attributes']['prefix'], bucket=rec['properties']['attributes']['bucket_name'], **kwargs)
         else: 
             raise UnsupportedImageType('Unsupported image type: {}'.format(str(types)))

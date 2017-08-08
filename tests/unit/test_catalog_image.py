@@ -7,6 +7,7 @@ Unit tests for the gbdxtools.Idaho class
 
 from gbdxtools import Interface
 from gbdxtools import *
+from gbdxtools.ipe.error import UnsupportedImageType
 from auth_mock import get_mock_gbdx_session
 import vcr
 from os.path import join, isfile, dirname, realpath
@@ -66,4 +67,16 @@ class CatalogImageTest(unittest.TestCase):
         lsat = CatalogImage('LC80380302013160LGN00')
         self.assertTrue(isinstance(lsat, LandsatImage))
     
+    def test_catalog_image_err(self):
+        try:
+            img = CatalogImage('XXXX')
+        except:
+            pass
 
+    @my_vcr.use_cassette('tests/unit/cassettes/test_cat_image_unsupported_type.yaml', filter_headers=['authorization'])
+    def test_catalog_image_unsupported_type(self):
+        try:
+            img = CatalogImage('1020010050BE7E00')
+        except UnsupportedImageType:
+            pass
+    
