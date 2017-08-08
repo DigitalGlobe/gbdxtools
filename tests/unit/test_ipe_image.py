@@ -105,11 +105,3 @@ class IpeImageTest(unittest.TestCase):
     #        assert src.meta['width'] == 239
     #        assert src.meta['height'] == 172
     #        assert src.meta['dtype'] == 'uint16'
-
-    @my_vcr.use_cassette('tests/unit/cassettes/test_ipe_metadata.yaml', filter_headers=['authorization'])
-    def test_ipe_metadata_error(self):
-        ipe_id = 'no_id'
-        try:
-            get_ipe_metadata(self.gbdx.gbdx_connection, ipe_id)
-        except BadRequest:
-            pass
