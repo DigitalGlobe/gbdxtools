@@ -189,7 +189,11 @@ class GeoImage(Container):
             # TODO: potentially reproject
             z = tf.resize(z[0,:,:], xv.shape)
         transpix = self.__geo_transform__.rev(xv, yv, z=z, _type=np.float32)[::-1]
-        return np.rollaxis(np.dstack([tf.warp(data[b,:,:].squeeze(), transpix, preserve_range=True) for b in xrange(data.shape[0])]), 2, 0)
+        ortho = np.rollaxis(np.dstack([tf.warp(data[b,:,:].squeeze(), transpix, preserve_range=True) for b in xrange(data.shape[0])]), 2, 0)
+        #ortho.__geo_interface__ = self.__geo_interface__
+        #ortho.__geo_transform__ = self.__geo_transform__
+        #ortho.__class__ = self.__class__
+        return ortho
 
     def _parse_geoms(self, **kwargs):
         """ Finds supported geometry types, parses them and returns the bbox """
