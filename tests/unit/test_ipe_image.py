@@ -69,7 +69,7 @@ class IpeImageTest(unittest.TestCase):
             pass
 
     @my_vcr.use_cassette('tests/unit/cassettes/test_ipe_image_get_product.yaml', filter_headers=['authorization'])
-    def test_basic_ipe_image(self):
+    def test_ipe_image_get_product(self):
         idahoid = '1ec49348-8950-49ff-bd71-ea2e4d8754ac'
         img = self.gbdx.idaho_image(idahoid)
         ortho = img.get_product('ortho')

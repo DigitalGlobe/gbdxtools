@@ -15,11 +15,6 @@ import unittest
 import rasterio
 import dask.array as da
 
-try:
-    from urlparse import urlparse
-except:
-    from urllib.parse import urlparse
-
 def force(r1, r2):
     return True
 

@@ -15,11 +15,6 @@ import tempfile
 import unittest
 import rasterio
 
-try:
-    from urlparse import urlparse
-except: 
-    from urllib.parse import urlparse
-
 # How to use the mock_gbdx_session and vcr to create unit tests:
 # 1. Add a new test that is dependent upon actually hitting GBDX APIs.
 # 2. Decorate the test with @vcr appropriately
