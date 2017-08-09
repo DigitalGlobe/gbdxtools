@@ -5,6 +5,11 @@ from gbdxtools.ipe.util import calc_toa_gain_offset, ortho_params
 from gbdxtools.ipe.interface import Ipe
 ipe = Ipe()
 
+import skimage.transform as tf
+import numpy as np
+import math
+
+
 
 class IdahoImage(IpeImage):
     """
@@ -56,3 +61,30 @@ class IdahoImage(IpeImage):
             "ortho": ortho_op,
             "toa_reflectance": toa_reflectance_op
         }
+    def _orthorectify(self, **kwargs):
+        if 'proj' in kwargs:
+            to_proj = kwargs['proj']
+            xmin, ymin, xmax, ymax = self._reproject(shape(self), from_proj=self.proj, to_proj=to_proj).bounds
+        else:
+            xmin, ymin, xmax, ymax = self.bounds
+        gsd = max((xmax-xmin)/self.shape[2], (ymax-ymin)/self.shape[1])
+        x = np.linspace(xmin, xmax, num=int((xmax-xmin)/gsd))
+        y = np.linspace(ymax, ymin, num=int((ymax-ymin)/gsd))
+        xv, yv = np.meshgrid(x, y, indexing='xy')
+        z = kwargs.get('z', 0)
+        if isinstance(z, np.ndarray):
+            # TODO: potentially reproject
+            z = tf.resize(z[0,:,:], xv.shape)
+        im_full = IdahoImage(self.ipe.metadata['image']['imageId'], product='dn')
+        transpix = im_full.__geo_transform__.rev(xv, yv, z=z, _type=np.float32)[::-1]
+
+        ymint = math.floor(transpix[0,:,:].min() - 10.0)
+        xmint = math.floor(transpix[1,:,:].min() - 10.0)
+        ymaxt = math.ceil(transpix[0,:,:].max())
+        xmaxt = math.ceil(transpix[1,:,:].max())
+        shifted = np.stack([transpix[0,:,:] - int(ymint), transpix[1,:,:] - int(xmint)])
+
+        data = im_full[:,ymint:ymaxt,xmint:xmaxt].read()
+        return  np.rollaxis(np.dstack([tf.warp(data[b,:,:].squeeze(), shifted, preserve_range=True) for b in xrange(data.shape[0])]), 2, 0)
+
+
