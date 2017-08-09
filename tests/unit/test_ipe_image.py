@@ -7,8 +7,13 @@ Unit tests for the gbdxtools.Idaho class
 
 from gbdxtools import Interface
 from gbdxtools import IdahoImage
+<<<<<<< HEAD
 from gbdxtools.ipe.graph import get_ipe_metadata, get_ipe_graph
 from gbdxtools.ipe.error import BadRequest
+=======
+from gbdxtools.images.meta import DaskImage
+
+>>>>>>> ortho
 from auth_mock import get_mock_gbdx_session
 import vcr
 import tempfile
@@ -130,6 +135,15 @@ class IpeImageTest(unittest.TestCase):
         rgb = aoi.rgb()
         assert rgb.shape == (172, 239, 3)
         assert isinstance(rgb, np.ndarray)
+    
+    @my_vcr.use_cassette('tests/unit/cassettes/test_ipe_image_ortho.yaml', filter_headers=['authorization'])
+    def test_ipe_image_ortho(self):
+        idahoid = '179269b9-fdb3-49d8-bb62-d15de54ad15d'
+        img = self.gbdx.idaho_image(idahoid, product='dn')
+        aoi = img.aoi(bbox=[-110.85299491882326,32.167148499672855,-110.84870338439943,32.170236308395644])
+        assert aoi.shape == (8, 176, 203)
+        ortho = aoi.orthorectify()
+        assert isinstance(ortho, DaskImage)
 
     #@my_vcr.use_cassette('tests/unit/cassettes/test_ipe_image_geotiff.yaml', filter_headers=['authorization'])
     #def test_ipe_image_geotiff(self):

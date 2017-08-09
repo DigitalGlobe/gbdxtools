@@ -26,7 +26,10 @@ class DemImage(IpeImage):
         self = self.aoi(**kwargs)
         self.idaho_id = idaho_id
         self._products = standard_products
-        return self
+        if self.ipe.metadata['image']['minX'] == -1:
+            return self[:,:,1:-1]
+        else:
+            return self
 
     def get_product(self, product):
         return self.__class__(self.idaho_id, proj=self.proj, product=product)

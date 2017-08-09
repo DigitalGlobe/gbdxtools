@@ -12,6 +12,7 @@ except ImportError:  #python3.x
 
 import numpy as np
 from numpy.linalg import pinv
+from skimage.transform._geometric import GeometricTransform
 
 import xml.etree.cElementTree as ET
 from xml.dom import minidom
@@ -88,7 +89,7 @@ def calc_toa_gain_offset(meta):
     return zip(scale, scale2, offset)
 
 
-class RatPolyTransform(object):
+class RatPolyTransform(GeometricTransform):
     def __init__(self, A, B, offset, scale, px_offset, px_scale, proj=None):
         self.proj = proj
         self._A = A
@@ -106,12 +107,21 @@ class RatPolyTransform(object):
         # only using the numerator (more dynamic range for the fit?)
         # self._B_rev = np.dot(pinv(np.dot(np.transpose(B), B)), np.transpose(B))
 
-    def rev(self, lng, lat, z=0):
-        coord = np.asarray([lng, lat, z])
-        normed = np.sum(self._offscl * np.vstack([np.ones(coord.shape), coord]), axis=0)
+    def rev(self, lng, lat, z=0, _type=np.int32):
+        if all(isinstance(var, (int, float, tuple)) for var in [lng, lat]):
+            lng, lat = (np.array([lng]), np.array([lat]))
+        if not all(isinstance(var, np.ndarray) for var in [lng, lat]):
+            raise ValueError("lng, lat inputs must be of type int, float, tuple or numpy.ndarray")
+        if not isinstance(z, np.ndarray):
+            z = np.zeros_like(lng) + z
+        coord = np.dstack([lng, lat, z])
+        offset, scale = np.vsplit(self._offscl, 2)
+        normed = coord * scale + offset
         X = self._rpc(normed)
-        result = np.dot(self._A, X) / np.dot(self._B, X)
-        return np.int32(np.sum(self._px_offscl_rev * np.vstack([np.ones(result.shape), result]), axis=0))[::-1]
+        result = np.rollaxis(np.inner(self._A, X) / np.inner(self._B, X), 0, 3)
+        rev_offset, rev_scale = np.vsplit(self._px_offscl_rev, 2)
+        # needs to return x/y
+        return  np.rollaxis(result * rev_scale + rev_offset, 2).squeeze().astype(_type)[::-1]
 
     def fwd(self, x, y, z=None):
         if isinstance(x, (Sequence, np.ndarray)):
@@ -120,20 +130,41 @@ class RatPolyTransform(object):
             return  np.transpose(np.asarray([self.fwd(x_i, y_i, z_i) for x_i, y_i, z_i in izip(x, y, z)]))
         coord = np.asarray([x, y])
         normed = np.sum(self._px_offscl * np.vstack([np.ones(coord.shape), coord]), axis=0)
-        coord = np.dot(self._A_rev, normed)[[2,1,3]] # likely unstable
+        coord = np.dot(self._A_rev, normed)[[1,2,3]] # likely unstable
         return np.sum(self._offscl_rev * np.vstack([np.ones(coord.shape), coord]), axis=0)
 
+    def __call__(self, coords):
+        assert isinstance(coords, np.ndarray)
+        try:
+            d0, d1 = coords.shape
+            assert d1 ==2
+        except (ValueError, AssertionError):
+            raise NotImplementedError("input coords must be [N x 2] dimension numpy array")
+        if d1 != 2:
+            raise NotImplementedError("input coords must be [N x 2] dimension numpy array")
+
+        xarr, yarr = np.hsplit(coords, 2)
+        res = self.fwd(xarr, yarr)
+        return res
+
+    def inverse(self, coords):
+        pass
+
+    def residuals(self, src, dst):
+        pass
+
     def _rpc(self, x):
-        L, P, H = x[0], x[1], x[2]
-        return np.asarray([1.0, L, P, H, L*P, L*H, P*H, L**2, P**2, H**2,
+        L, P, H = np.dsplit(x, 3)
+        return np.dstack([np.ones((x.shape[0], x.shape[1]), dtype=np.float32), L, P, H, L*P, L*H, P*H, L**2, P**2, H**2,
                            L*P*H, L**3, L*(P**2), L*(H**2), (L**2)*P, P**3, P*(H**2),
                            (L**2)*H, (P**2)*H, H**3])
 
     def __add__(self, other):
         if isinstance(other, Sequence) and len(other) == 2:
             shift = np.asarray(other)
+            # shift is an x/y px_offset needs to be y/x
             return RatPolyTransform(self._A, self._B, self._offset, self._scale,
-                                    self._px_offset + shift, self._px_scale)
+                                    self._px_offset - shift[::-1], self._px_scale)
         else:
             raise NotImplemented
 
@@ -167,16 +198,36 @@ class RatPolyTransform(object):
         pass
 
 
-class AffineTransform(object):
+class AffineTransform(GeometricTransform):
     def __init__(self, affine, proj=None):
         self._affine = affine
+        self._iaffine = None
         self.proj = proj
 
     def rev(self, lng, lat, z=0):
-        return np.asarray(~self._affine * (lng, lat)).astype(np.int32)
+        if self._iaffine is None:
+            self._iaffine = ~self._affine
+        return np.asarray(self._iaffine * (lng, lat)).astype(np.int32)
 
     def fwd(self, x, y, z=0):
         return self._affine * (x, y)
+
+    def __call__(self, coords):
+        assert isinstance(coords, np.ndarray) and len(coords.shape) == 2 and coords.shape[1] == 2
+        _coords = np.copy(coords)
+        self._affine.itransform(_coords)
+        return _coords
+
+    def inverse(self, coords):
+        assert isinstance(coords, np.ndarray) and len(coords.shape) == 2 and coords.shape[1] == 2
+        if self._iaffine is None:
+            self._iaffine = ~self._affine
+        _coords = np.copy(coords)
+        self._iaffine.itransform(_coords)
+        return _coords
+
+    def residuals(self, src, dst):
+        return super(AffineTransform, self).residuals(src, dst)
 
     def __add__(self, other):
         if isinstance(other, Sequence) and len(other) == 2:
