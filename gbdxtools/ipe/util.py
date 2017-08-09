@@ -187,14 +187,14 @@ class RatPolyTransform(GeometricTransform):
             raise ValueError("lng, lat inputs must be of type int, float, tuple or numpy.ndarray")
         if not isinstance(z, np.ndarray):
             z = np.zeros_like(lng) + z
-        coord = np.dstack([lat, lng, z])
+        coord = np.dstack([lng, lat, z])
         offset, scale = np.vsplit(self._offscl, 2)
         normed = coord * scale + offset
         X = self._rpc(normed)
         result = np.rollaxis(np.inner(self._A, X) / np.inner(self._B, X), 0, 3)
         rev_offset, rev_scale = np.vsplit(self._px_offscl_rev, 2)
         # needs to return x/y
-        return  np.rollaxis(result * rev_scale + rev_offset, 2).squeeze().astype(_type)
+        return  np.rollaxis(result * rev_scale + rev_offset, 2).squeeze().astype(_type)[::-1]
 
     def fwd(self, x, y, z=None):
         if isinstance(x, (Sequence, np.ndarray)):
@@ -249,20 +249,20 @@ class RatPolyTransform(GeometricTransform):
 
     @classmethod
     def from_rpcs(cls, rpcs):
-        P = np.vstack([np.asarray(rpcs["sampleNumCoefs"]),
-                       np.asarray(rpcs["lineNumCoefs"])])
-        Q = np.vstack([np.asarray(rpcs["sampleDenCoefs"]),
-                       np.asarray(rpcs["lineDenCoefs"])])
+        P = np.vstack([np.asarray(rpcs["lineNumCoefs"]),
+                       np.asarray(rpcs["sampleNumCoefs"])])
+        Q = np.vstack([np.asarray(rpcs["lineDenCoefs"]),
+                       np.asarray(rpcs["sampleDenCoefs"])])
 
-        scale = np.asarray([1.0/rpcs["latScale"],
-                            1.0/rpcs["lonScale"],
+        scale = np.asarray([1.0/rpcs["lonScale"],
+                            1.0/rpcs["latScale"],
                             1.0/rpcs["heightScale"]])
-        offset = np.asarray([-rpcs["latOffset"],
-                             -rpcs["lonOffset"],
+        offset = np.asarray([-rpcs["lonOffset"],
+                             -rpcs["latOffset"],
                              -rpcs["heightOffset"]])*scale
 
-        px_scale = np.asarray([rpcs["sampleScale"], rpcs["lineScale"]])
-        px_offset = np.asarray([rpcs["sampleOffset"], rpcs["lineOffset"]])
+        px_scale = np.asarray([rpcs["lineScale"], rpcs["sampleScale"]])
+        px_offset = np.asarray([rpcs["lineOffset"], rpcs["sampleOffset"]])
 
         return cls(P, Q, offset, scale, px_offset, px_scale, rpcs["spatialReferenceSystem"])
 
