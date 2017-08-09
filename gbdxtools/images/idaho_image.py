@@ -98,7 +98,7 @@ class IdahoImage(IpeImage):
 def _pad_safe_negative(padsize=2, transpix=None, ref_im=None, ind=0):
     trans = transpix[ind,:,:].min() - padsize
     if trans < 0.0:
-        return 0
+        trans = transpix[ind,:,:].min()
     return int(math.floor(trans))
 
 def _pad_safe_positive(padsize=2, transpix=None, ref_im=None, ind=0):
