@@ -88,6 +88,6 @@ class IdahoImage(IpeImage):
 
         data = im_full[:,ymint:ymaxt,xmint:xmaxt].read()
         ortho = np.rollaxis(np.dstack([tf.warp(data[b,:,:].squeeze(), shifted, preserve_range=True) for b in xrange(data.shape[0])]), 2, 0)
-        return GeoDaskWrapper(ortho, self)
+        return GeoDaskWrapper(ortho, self) # __geo_interface__ and __geo_transform__
 
 

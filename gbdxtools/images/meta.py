@@ -124,15 +124,6 @@ class DaskImage(da.Array):
             arr = self[bands, ...]
         return arr.compute(get=threaded_get)
 
-    def plot(self, tfm={lambda x: x}, **kwargs):
-        assert has_pyplot, "To plot images please install matplotlib"
-        assert self.shape[1] and self.shape[-1], "No data to plot, dimensions are invalid {}".format(str(self.shape))
-
-        f, ax1 = plt.subplots(1, figsize=(kwargs.get("w", 10), kwargs.get("h", 10)))
-        ax1.axis('off')
-        plt.imshow(tfm(**kwargs), interpolation='nearest', cmap=kwargs.get("cmap", None))
-        plt.show(block=False)
-
 
 @add_metaclass(abc.ABCMeta)
 class GeoImage(Container):
@@ -249,12 +240,66 @@ class DaskMetaWrapper(DaskMeta):
         return self.da.shape
 
 
-class GeoDaskWrapper(DaskImage, GeoImage):
+# Mixin class that defines plotting methods and rgb/ndvi methods
+# used as a mixin to provide access to the plot method on 
+# GeoDaskWrapper images and ipe images
+class PlotMixin(object):
+    @property
+    def _rgb_bands(self):
+        return [4, 2, 1]
+
+    @property
+    def _ndvi_bands(self):
+        return [7, 4]
+
+    def rgb(self, **kwargs):
+        data = self._read(self[kwargs.get("bands", self._rgb_bands),...])
+        data = np.rollaxis(data.astype(np.float32), 0, 3)
+        lims = np.percentile(data, kwargs.get("stretch", [2, 98]), axis=(0, 1))
+        for x in xrange(len(data[0,0,:])):
+            top = lims[:,x][1]
+            bottom = lims[:,x][0]
+            data[:,:,x] = (data[:,:,x] - bottom) / float(top - bottom)
+        return np.clip(data, 0, 1)
+
+    def ndvi(self, **kwargs):
+        data = self._read(self[self._ndvi_bands,...]).astype(np.float32)
+        return (data[0,:,:] - data[1,:,:]) / (data[0,:,:] + data[1,:,:])
+
+    def plot(self, spec="rgb", **kwargs):
+        if self.shape[0] == 1 or ("bands" in kwargs and len(kwargs["bands"]) == 1):
+            if "cmap" in kwargs:
+                cmap = kwargs["cmap"]
+                del kwargs["cmap"]
+            else:
+                cmap = "Greys_r"
+            self._plot(tfm=self._single_band, cmap="Greys_r", **kwargs)
+        else:
+            self._plot(tfm=getattr(self, spec), **kwargs)
+
+    def _plot(self, tfm=lambda x: x, **kwargs):
+        assert has_pyplot, "To plot images please install matplotlib"
+        assert self.shape[1] and self.shape[-1], "No data to plot, dimensions are invalid {}".format(str(self.shape))
+
+        f, ax1 = plt.subplots(1, figsize=(kwargs.get("w", 10), kwargs.get("h", 10)))
+        ax1.axis('off')
+        plt.imshow(tfm(**kwargs), interpolation='nearest', cmap=kwargs.get("cmap", None))
+        plt.show(block=False)
+
+    def _read(self, data):
+        if hasattr(data, 'read'):
+            return data.read()
+        else:
+            return data.compute()
+
+    def _single_band(self, **kwargs):
+        data = self._read(self[0,:,:])
+
+
+class GeoDaskWrapper(DaskImage, GeoImage, PlotMixin):
     def __new__(cls, array, img):
         dm = DaskMetaWrapper(da.from_array(array, chunks=(256)))
         self = super(GeoDaskWrapper, cls).create(dm)
         self.__geo_interface__ = img.__geo_interface__
         self.__geo_transform__ = img.__geo_transform__
-        self.rgb = img.rgb
-        self.plot = img.plot
         return self
