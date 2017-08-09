@@ -181,25 +181,6 @@ class GeoImage(Container):
             kwargs['proj'] = self.proj
         return to_geotiff(self, **kwargs)
 
-    def orthorectify(self, **kwargs):
-        if 'proj' in kwargs:
-            to_proj = kwargs['proj']
-            xmin, ymin, xmax, ymax = self._reproject(shape(self), from_proj=self.proj, to_proj=to_proj).bounds
-        else:
-            xmin, ymin, xmax, ymax = self.bounds
-        gsd = max((xmax-xmin)/self.shape[2], (ymax-ymin)/self.shape[1])
-        x = np.linspace(xmin, xmax, num=int((xmax-xmin)/gsd))
-        y = np.linspace(ymax, ymin, num=int((ymax-ymin)/gsd))
-        xv, yv = np.meshgrid(x, y, indexing='xy')
-        z = kwargs.get('z', 0)
-        if isinstance(z, np.ndarray):
-            # TODO: potentially reproject
-            z = tf.resize(z[0,:,:], xv.shape)
-        transpix = self.__geo_transform__.rev(xv, yv, z=z, _type=np.float32)
-        data = self.read()
-        ortho = np.rollaxis(np.dstack([tf.warp(data[b,:,:].squeeze(), transpix[::-1], preserve_range=True) for b in xrange(data.shape[0])]), 2, 0)
-        return GeoDaskWrapper(ortho, self)
-
     def _parse_geoms(self, **kwargs):
         """ Finds supported geometry types, parses them and returns the bbox """
         bbox = kwargs.get('bbox', None)

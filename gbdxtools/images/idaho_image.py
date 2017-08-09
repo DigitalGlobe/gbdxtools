@@ -1,5 +1,6 @@
 from __future__ import print_function
 import requests
+from gbdxtools.images.meta import GeoDaskWrapper
 from gbdxtools.images.ipe_image import IpeImage
 from gbdxtools.ipe.util import calc_toa_gain_offset, ortho_params
 from gbdxtools.ipe.interface import Ipe
@@ -57,11 +58,12 @@ class IdahoImage(IpeImage):
             constants=reflectance_scales)
 
         return {
-            "dn": dn_op,
+            "1b": dn_op,
             "ortho": ortho_op,
             "toa_reflectance": toa_reflectance_op
         }
-    def _orthorectify(self, **kwargs):
+
+    def orthorectify(self, **kwargs):
         if 'proj' in kwargs:
             to_proj = kwargs['proj']
             xmin, ymin, xmax, ymax = self._reproject(shape(self), from_proj=self.proj, to_proj=to_proj).bounds
@@ -75,7 +77,7 @@ class IdahoImage(IpeImage):
         if isinstance(z, np.ndarray):
             # TODO: potentially reproject
             z = tf.resize(z[0,:,:], xv.shape)
-        im_full = IdahoImage(self.ipe.metadata['image']['imageId'], product='dn')
+        im_full = IdahoImage(self.ipe.metadata['image']['imageId'], product='1b')
         transpix = im_full.__geo_transform__.rev(xv, yv, z=z, _type=np.float32)[::-1]
 
         ymint = math.floor(transpix[0,:,:].min() - 10.0)
@@ -85,6 +87,7 @@ class IdahoImage(IpeImage):
         shifted = np.stack([transpix[0,:,:] - int(ymint), transpix[1,:,:] - int(xmint)])
 
         data = im_full[:,ymint:ymaxt,xmint:xmaxt].read()
-        return  np.rollaxis(np.dstack([tf.warp(data[b,:,:].squeeze(), shifted, preserve_range=True) for b in xrange(data.shape[0])]), 2, 0)
+        ortho = np.rollaxis(np.dstack([tf.warp(data[b,:,:].squeeze(), shifted, preserve_range=True) for b in xrange(data.shape[0])]), 2, 0)
+        return GeoDaskWrapper(ortho, self)
 
 
