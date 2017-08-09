@@ -10,6 +10,8 @@ import skimage.transform as tf
 import numpy as np
 import math
 
+from functools import partial
+
 
 
 class IdahoImage(IpeImage):
@@ -63,7 +65,7 @@ class IdahoImage(IpeImage):
             "toa_reflectance": toa_reflectance_op
         }
 
-    def orthorectify(self, **kwargs):
+    def orthorectify(self, padsize=(2,2), **kwargs):
         if 'proj' in kwargs:
             to_proj = kwargs['proj']
             xmin, ymin, xmax, ymax = self._reproject(shape(self), from_proj=self.proj, to_proj=to_proj).bounds
@@ -77,17 +79,36 @@ class IdahoImage(IpeImage):
         if isinstance(z, np.ndarray):
             # TODO: potentially reproject
             z = tf.resize(z[0,:,:], xv.shape)
+
         im_full = IdahoImage(self.ipe.metadata['image']['imageId'], product='1b')
         transpix = im_full.__geo_transform__.rev(xv, yv, z=z, _type=np.float32)[::-1]
+        xpad, ypad =  padsize
 
-        ymint = math.floor(transpix[0,:,:].min() - 10.0)
-        xmint = math.floor(transpix[1,:,:].min() - 10.0)
-        ymaxt = math.ceil(transpix[0,:,:].max())
-        xmaxt = math.ceil(transpix[1,:,:].max())
-        shifted = np.stack([transpix[0,:,:] - int(ymint), transpix[1,:,:] - int(xmint)])
+        psn = partial(_pad_safe_negative, transpix=transpix, ref_im=im_full)
+        psp = partial(_pad_safe_positive, transpix=transpix, ref_im=im_full)
+        ymint, xmint = (psn(padsize=ypad, ind=0), psn(padsize=xpad, ind=1))
+        ymaxt, xmaxt = (psp(padsize=ypad, ind=0), psp(padsize=xpad, ind=1))
+
+        shifted = np.stack([transpix[0,:,:] - ymint, transpix[1,:,:] - xmint])
 
         data = im_full[:,ymint:ymaxt,xmint:xmaxt].read()
         ortho = np.rollaxis(np.dstack([tf.warp(data[b,:,:].squeeze(), shifted, preserve_range=True) for b in xrange(data.shape[0])]), 2, 0)
         return GeoDaskWrapper(ortho, self) # __geo_interface__ and __geo_transform__
 
+def _pad_safe_negative(padsize=2, transpix=None, ref_im=None, ind=0):
+    trans = transpix[ind,:,:].min() - padsize
+    if trans < 0.0:
+        return 0
+    return int(math.floor(trans))
 
+def _pad_safe_positive(padsize=2, transpix=None, ref_im=None, ind=0):
+    trans = transpix[ind,:,:].max() + padsize
+    if len(ref_im.shape) == 3:
+        critical = ref_im.shape[ind + 1]
+    elif len(ref_im.shape) == 2:
+        critical = ref_im.shape[ind]
+    else:
+        raise NotImplementedError("Padding supported only for reference images of shape (L, W) or (Nbands, L, W)")
+    if trans > critical:
+        return critical
+    return int(math.ceil(trans))
