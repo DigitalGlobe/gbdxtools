@@ -273,7 +273,7 @@ class PlotMixin(object):
                 del kwargs["cmap"]
             else:
                 cmap = "Greys_r"
-            self._plot(tfm=self._single_band, cmap="Greys_r", **kwargs)
+            self._plot(tfm=self._single_band, cmap=cmap, **kwargs)
         else:
             self._plot(tfm=getattr(self, spec), **kwargs)
 
@@ -293,7 +293,7 @@ class PlotMixin(object):
             return data.compute()
 
     def _single_band(self, **kwargs):
-        data = self._read(self[0,:,:])
+        return self._read(self[0,:,:])
 
 
 class GeoDaskWrapper(DaskImage, GeoImage, PlotMixin):
