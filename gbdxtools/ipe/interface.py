@@ -8,6 +8,7 @@ import threading
 import rasterio
 from rasterio.io import MemoryFile
 import pycurl
+import certifi
 import numpy as np
 
 
@@ -51,9 +52,8 @@ def load_url(url, token, shape=(8, 256, 256)):
     """ Loads a geotiff url inside a thread and returns as an ndarray """
     thread_id = threading.current_thread().ident
     _curl = _curl_pool[thread_id]
+    _curl.setopt(pycurl.CAINFO, certifi.where())
     _curl.setopt(_curl.URL, url)
-    _curl.setopt(pycurl.SSL_VERIFYPEER, 1)
-    _curl.setopt(pycurl.SSL_VERIFYHOST, 2)
     _curl.setopt(pycurl.NOSIGNAL, 1)
     _curl.setopt(pycurl.HTTPHEADER, ['Authorization: Bearer {}'.format(token)])
     with MemoryFile() as memfile:
