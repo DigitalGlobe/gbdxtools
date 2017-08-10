@@ -108,9 +108,9 @@ class IpeImageTest(unittest.TestCase):
         img = self.gbdx.idaho_image(idahoid)
         aoi = img.aoi(bbox=[-110.85299491882326,32.167148499672855,-110.84870338439943,32.170236308395644])
         assert aoi.shape == (8, 172, 239)
-        rgb = aoi.read(bands=[4,2,1])
-        assert rgb.shape == (3, 172, 239)
-        assert isinstance(rgb, np.ndarray)
+        #rgb = aoi.read(bands=[4,2,1])
+        #assert rgb.shape == (3, 172, 239)
+        #assert isinstance(rgb, np.ndarray)
 
     @my_vcr.use_cassette('tests/unit/cassettes/test_ipe_image_1b.yaml', filter_headers=['authorization'])
     def test_ipe_image_1b(self):
