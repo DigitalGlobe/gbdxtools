@@ -10,8 +10,6 @@ from shapely import ops
 from shapely.geometry import box, shape, mapping
 from shapely import wkt
 
-import skimage.transform as tf
-
 import pyproj
 import dask
 import dask.array as da
@@ -148,19 +146,31 @@ class GeoImage(Container):
 
     @property
     def affine(self):
+        """ The affine transformation of the image """
         # TODO add check for Ratpoly or whatevs
         return self.__geo_transform__._affine
 
     @property
     def bounds(self):
+        """ The spatial bounding box for the image """
         return shape(self).bounds
 
     @property
     def proj(self):
+        """ The projection of the image """
         return self.__geo_transform__.proj
 
     def aoi(self, **kwargs):
-        """ Subsets the IpeImage by the given bounds """
+        """ Subsets the Image by the given bounds
+
+        kwargs:
+            bbox: optional. A bounding box array [minx, miny, maxx, maxy]
+            wkt: optional. A WKT geometry string
+            geojson: optional. A GeoJSON geometry dictionary
+
+        Returns:
+            image (ndarray): an image instance
+        """
         g = self._parse_geoms(**kwargs)
         if g is None:
             return self
@@ -168,6 +178,17 @@ class GeoImage(Container):
             return self[g]
 
     def geotiff(self, **kwargs):
+        """ Creates a geotiff on the filesystem
+
+        kwargs:
+            path (str): optional. The path to save the geotiff to.
+            bands (list): optional. A list of band indices to save to the output geotiff ([4,2,1])
+            dtype (str): optional. The data type to assign the geotiff to ("float32", "uint16", etc)
+            proj (str): optional. An EPSG proj string to project the image data into ("EPSG:32612")
+
+        Returns:
+            path (str): the path to created geotiff
+        """
         if 'proj' not in kwargs:
             kwargs['proj'] = self.proj
         return to_geotiff(self, **kwargs)

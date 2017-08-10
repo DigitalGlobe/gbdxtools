@@ -26,3 +26,4 @@ For a varied collection of gbdxtools examples see http://github.com/platformstor
    catalog_search
    vector_service
    image_classes
+   api_reference

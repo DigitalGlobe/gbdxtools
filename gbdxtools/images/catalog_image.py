@@ -13,6 +13,23 @@ from shapely import wkt
 from shapely.geometry import box
 
 class CatalogImage(object):
+    '''Creates an image instance matching the type of the Catalog ID.
+
+    Args:
+        catalogID (str): The source catalog ID from the platform catalog.
+        proj (str): Optional EPSG projection string for the image in the form of "EPSG:4326"
+        product (str): One of "ortho" or "toa_reflectance"
+        band_type (str): The product spec / band type for the image returned (band_type='MS'|'Pan')
+        pansharpen: Whether or not to return a pansharpened image (defaults to False)
+
+    Returns:
+        image (ndarray): An image instance - one of IdahoImage, WV02, WV03_VNIR, LandsatImage, IkonosImage 
+
+    Properties:
+        :affine: The image affine transformation
+        :bounds: Spatial bounds of the image
+        :proj: The image projection
+    '''
     def __new__(cls, cat_id, **kwargs):
         return cls._image_by_type(cat_id, **kwargs)
 
