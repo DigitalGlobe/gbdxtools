@@ -7,7 +7,9 @@ env:
   global:
     - BOTO_CONFIG=/doesnotexist
 before_install: 
-  - sudo apt-get install -y libgdal1h libgdal-dev gdal-bin
+  - sudo add-apt-repository -y ppa:ubuntugis/ubuntugis-unstable
+  - sudo apt update
+  - sudo apt-get install -y libgdal1h libgdal-dev gdal-bin python-gdal python3-gdal
 # command to install dependencies
 install:
   - CPLUS_INCLUDE_PATH=/usr/include/gdal C_INCLUDE_PATH=/usr/include/gdal pip install GDAL==`gdal-config --version`
