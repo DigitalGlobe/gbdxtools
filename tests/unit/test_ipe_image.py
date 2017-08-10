@@ -108,9 +108,9 @@ class IpeImageTest(unittest.TestCase):
         img = self.gbdx.idaho_image(idahoid)
         aoi = img.aoi(bbox=[-110.85299491882326,32.167148499672855,-110.84870338439943,32.170236308395644])
         assert aoi.shape == (8, 172, 239)
-        #rgb = aoi.read(bands=[4,2,1])
-        #assert rgb.shape == (3, 172, 239)
-        #assert isinstance(rgb, np.ndarray)
+        rgb = aoi.read(bands=[4,2,1])
+        assert rgb.shape == (3, 172, 239)
+        assert isinstance(rgb, np.ndarray)
 
     @my_vcr.use_cassette('tests/unit/cassettes/test_ipe_image_1b.yaml', filter_headers=['authorization'])
     def test_ipe_image_1b(self):
@@ -127,10 +127,10 @@ class IpeImageTest(unittest.TestCase):
         idahoid = '179269b9-fdb3-49d8-bb62-d15de54ad15d'
         img = self.gbdx.idaho_image(idahoid)
         aoi = img.aoi(bbox=[-110.85299491882326,32.167148499672855,-110.84870338439943,32.170236308395644])
-        #rgb = aoi.rgb()
-        #assert rgb.shape == (172, 239, 3)
-        #assert isinstance(rgb, np.ndarray)
-        assert isinstance(aoi, da.Array)
+        rgb = aoi.rgb()
+        assert rgb.shape == (172, 239, 3)
+        assert isinstance(rgb, np.ndarray)
+        #assert isinstance(aoi, da.Array)
     
     @my_vcr.use_cassette('tests/unit/cassettes/test_ipe_image_ortho.yaml', filter_headers=['authorization'])
     def test_ipe_image_ortho(self):
@@ -138,8 +138,8 @@ class IpeImageTest(unittest.TestCase):
         img = self.gbdx.idaho_image(idahoid, product='1b')
         aoi = img.aoi(bbox=[-110.85299491882326,32.167148499672855,-110.84870338439943,32.170236308395644])
         assert aoi.shape == (8, 176, 203)
-        #ortho = aoi.orthorectify()
-        assert isinstance(aoi, DaskImage)
+        ortho = aoi.orthorectify()
+        assert isinstance(ortho, DaskImage)
 
     #@my_vcr.use_cassette('tests/unit/cassettes/test_ipe_image_geotiff.yaml', filter_headers=['authorization'])
     #def test_ipe_image_geotiff(self):
