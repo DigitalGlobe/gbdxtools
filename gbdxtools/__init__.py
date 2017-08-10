@@ -1,4 +1,5 @@
 from __future__ import absolute_import
+from gbdxtools.images.ipe_image import IpeImage
 from gbdxtools.images.idaho_image import IdahoImage
 from gbdxtools.images.ikonos import IkonosImage
 from gbdxtools.images.worldview import WV02, WV03_VNIR

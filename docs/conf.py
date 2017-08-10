@@ -32,14 +32,27 @@ class Mock(MagicMock):
 MOCK_MODULES = ['json',
                 'boto',
                 'requests',
+                'requests.adapters',
                 'requests.exceptions',
                 'requests.packages',
                 'requests.packages.urllib3',
                 'requests.packages.urllib3.exceptions',
                 'gbdx_auth',
+                'gbdxtools.images.ipe_image',
+                'gbdxtools.images.worldview',
                 'gdal',
+                'abc',
+                'six.add_metaclass',
+                'dask',
+                'dask.array',
                 'numpy',
-                'rasterio']
+                'numpy.linalg',
+                'rasterio',
+                'rasterio.io',
+                'rasterio.transform',
+                'skimage',
+                'skimage.transform',
+                'skimage.transform._geometric']
 sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
 
 # If extensions (or modules to document with autodoc) are in another directory,
@@ -74,8 +87,8 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'gbdxtools'
-copyright = u'2016, Kostas Stamatiou'
-author = u'Kostas Stamatiou'
+copyright = u'2016, DigitalGlobe'
+author = u'DigitalGlobe'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
