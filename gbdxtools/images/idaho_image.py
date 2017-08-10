@@ -13,7 +13,10 @@ import math
 
 from functools import partial
 
-
+try:
+    xrange
+except NameError:
+    xrange = range
 
 class IdahoImage(IpeImage):
     """
