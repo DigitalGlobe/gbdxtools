@@ -20,11 +20,16 @@ environment:
     #  DISTUTILS_USE_SDK: "1"
     #- PYTHON: "C:\\Python35-x64"
 
+init:
+  - "ECHO %PYTHON_VERSION% %MINICONDA%"
+
 install:
   # We need wheel installed to build wheels
   - "set PATH=%MINICONDA%;%MINICONDA%\\Scripts;%PATH%"
   - "conda config --set always_yes yes --set changeps1 no"
   - "conda update -q conda"
+  - "conda create -q -n test-environment python=%PYTHON_VERSION% numpy"
+  - "activate test-environment"
   - "conda install pycurl"
   - "python -m pip install wheel"
   - "appveyor DownloadFile https://github.com/DigitalGlobe/gbdxtools-windows-binaries/raw/master/numpy-1.13.1+mkl-cp27-cp27m-win32.whl"
