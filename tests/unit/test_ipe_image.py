@@ -27,7 +27,6 @@ my_vcr.match_on = ['force']
 
 
 def read_mock(**kwargs):
-    print('\n\n\tread mock\n\n')
     return np.zeros((8,100,100)).astype(np.float32)
 
 # How to use the mock_gbdx_session and vcr to create unit tests:
