@@ -24,4 +24,3 @@ requests_futures
 configparser
 mercantile
 scikit-image
-certifi

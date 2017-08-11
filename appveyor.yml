@@ -45,7 +45,7 @@ install:
   #- "%PYTHON%\\python.exe -m pip install pyproj-1.9.5.1-cp27-cp27m-win32.whl"
   #- "%PYTHON%\\python.exe -m pip install matplotlib pytest"
   #- "%PYTHON%\\python.exe -m pip install -r requirements_windows_build.txt"
-  - "pip install -r gbdx-auth"
+  - "pip install gbdx-auth"
   #- "conda install --yes --file requirements.txt"
   - "while read requirement; do conda install --yes $requirement; done < requirements.txt"
 
