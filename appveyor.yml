@@ -37,7 +37,7 @@ install:
   - "%PYTHON%\\python.exe -m pip install rasterio-1.0a5-cp27-cp27m-win32.whl"
   - "appveyor DownloadFile https://github.com/DigitalGlobe/gbdxtools-windows-binaries/raw/master/pyproj-1.9.5.1-cp27-cp27m-win32.whl"
   - "%PYTHON%\\python.exe -m pip install pyproj-1.9.5.1-cp27-cp27m-win32.whl"
-   "%PYTHON%\\python.exe -m pip install matplotlib pytest"
+  - "%PYTHON%\\python.exe -m pip install matplotlib pytest"
   - "%PYTHON%\\python.exe -m pip install -r requirements_windows_build.txt"
 
 build: off
