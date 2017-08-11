@@ -9,9 +9,4 @@ ephem
 toolz
 dask
 cloudpickle
-numpy
-pycurl
-rasterio>=1.0a3
-pyproj
 configparser
-scikit-image
