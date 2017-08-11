@@ -61,6 +61,7 @@ test_script:
   # to put the Python version you want to use on PATH.
   #- "build.cmd %PYTHON%\\python.exe setup.py test"
   - "set PATH=%MINICONDA%;%MINICONDA%\\Scripts;%PATH%"
+  - "activate test-environment"
   - "python unit_tests.py"
 
 after_test:
