@@ -3,7 +3,6 @@ future==0.15.2
 requests==2.12.1
 boto==2.47.0
 pytest==2.9.1
-geomet==0.1.1
 mock
 shapely
 ephem

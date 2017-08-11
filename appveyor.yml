@@ -45,7 +45,7 @@ install:
   #- "%PYTHON%\\python.exe -m pip install pyproj-1.9.5.1-cp27-cp27m-win32.whl"
   #- "%PYTHON%\\python.exe -m pip install matplotlib pytest"
   #- "%PYTHON%\\python.exe -m pip install -r requirements_windows_build.txt"
-  - "pip install gbdx-auth pygeoif==0.6  pytest-runner==2.7 vcrpy ndg-httpsclient==0.4.2 bumpversion requests_futures mercantile"
+  - "pip install gbdx-auth pygeoif==0.6  pytest-runner==2.7 vcrpy ndg-httpsclient==0.4.2 bumpversion requests_futures mercantile geomet==0.1.1"
   - "conda install --yes --file requirements_windows_build.txt"
 
 build: off
