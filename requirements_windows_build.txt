@@ -13,7 +13,12 @@ ndg-httpsclient==0.4.2
 bumpversion
 ephem
 toolz
-dask==0.13.0
+shapely
+dask
 cloudpickle
 numpy
 pycurl
+pyproj
+requests_futures
+configparser
+mercantile
