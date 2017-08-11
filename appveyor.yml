@@ -28,7 +28,7 @@ install:
   - "set PATH=%MINICONDA%;%MINICONDA%\\Scripts;%PATH%"
   - "conda config --set always_yes yes --set changeps1 no"
   - "conda update -q conda"
-  - "conda create -q -n test-environment python=%PYTHON_VERSION% numpy"
+  - "conda create -q -n test-environment python=%PYTHON_VERSION% numpy pycurl matplotlib pytest"
   - "activate test-environment"
   - "conda install pycurl"
   - "python -m pip install wheel"
@@ -46,7 +46,7 @@ install:
   - "pip install rasterio-1.0a5-cp27-cp27m-win32.whl"
   - "appveyor DownloadFile https://github.com/DigitalGlobe/gbdxtools-windows-binaries/raw/master/pyproj-1.9.5.1-cp27-cp27m-win32.whl"
   - "pip install pyproj-1.9.5.1-cp27-cp27m-win32.whl"
-  - "pip install matplotlib pytest"
+  #- "pip install matplotlib pytest"
   - "pip install -r requirements_windows_build.txt"
 
 build: off
