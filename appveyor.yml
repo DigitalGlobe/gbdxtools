@@ -8,6 +8,7 @@ environment:
     # isn't covered by this document) at the time of writing.
 
     - PYTHON: "C:\\Python27"
+    - MINICONDA: "C:\\Miniconda"
     #- PYTHON: "C:\\Python33"
     #- PYTHON: "C:\\Python34"
     #- PYTHON: "C:\\Python35"
@@ -20,7 +21,10 @@ environment:
 
 install:
   # We need wheel installed to build wheels
-  - "conda install --yes pycurl"
+  - "set PATH=%MINICONDA%;%MINICONDA%\\Scripts;%PATH%"
+  - "conda config --set always_yes yes --set changeps1 no"
+  - "conda update -q conda"
+  - "conda install pycurl"
   - "appveyor DownloadFile https://github.com/DigitalGlobe/gbdxtools-windows-binaries/raw/master/pycurl-7.43.0-cp27-cp27m-win32.whl"
   - "%PYTHON%\\python.exe -m pip install pycurl-7.43.0-cp27-cp27m-win32.whl"
   - "appveyor DownloadFile https://github.com/DigitalGlobe/gbdxtools-windows-binaries/raw/master/numpy-1.13.1+mkl-cp27-cp27m-win32.whl"
