@@ -27,7 +27,7 @@ install:
   - "conda config --set always_yes yes --set changeps1 no"
   - "conda update -q conda"
   - "set GDAL_VERSION=2.1.3"
-  - "conda install -c conda-forge shapely rasterio>=v1.0a3"
+  - "conda install -c conda-forge shapely"
   - "conda install pycurl numpy scipy scikit-image gdal pyproj matplotlib pytest"
   #- "appveyor DownloadFile https://github.com/DigitalGlobe/gbdxtools-windows-binaries/raw/master/pycurl-7.43.0-cp27-cp27m-win32.whl"
   #- "%PYTHON%\\python.exe -m pip install pycurl-7.43.0-cp27-cp27m-win32.whl"
@@ -45,7 +45,7 @@ install:
   #- "%PYTHON%\\python.exe -m pip install pyproj-1.9.5.1-cp27-cp27m-win32.whl"
   #- "%PYTHON%\\python.exe -m pip install matplotlib pytest"
   #- "%PYTHON%\\python.exe -m pip install -r requirements_windows_build.txt"
-  - "pip install gbdx-auth pygeoif==0.6  pytest-runner==2.7 vcrpy ndg-httpsclient==0.4.2 bumpversion requests_futures mercantile geomet==0.1.1"
+  - "pip install gbdx-auth pygeoif==0.6  pytest-runner==2.7 vcrpy ndg-httpsclient==0.4.2 bumpversion requests_futures mercantile geomet==0.1.1 rasterio>=v1.0a3"
   - "conda install --yes --file requirements_windows_build.txt"
 
 build: off
