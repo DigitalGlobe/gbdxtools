@@ -21,6 +21,8 @@ environment:
 install:
   # We need wheel installed to build wheels
   - "%PYTHON%\\python.exe -m pip install wheel"
+  - "appveyor DownloadFile https://github.com/DigitalGlobe/gbdxtools-windows-binaries/raw/master/pycurl-7.43.0-cp27-cp27m-win32.whl"
+  - "%PYTHON%\\python.exe -m pip install pycurl-7.43.0-cp27-cp27m-win32.whl"
   - "appveyor DownloadFile https://github.com/DigitalGlobe/gbdxtools-windows-binaries/raw/master/numpy-1.13.1+mkl-cp27-cp27m-win32.whl"
   - "%PYTHON%\\python.exe -m pip install numpy-1.13.1+mkl-cp27-cp27m-win32.whl"
   - "appveyor DownloadFile https://github.com/DigitalGlobe/gbdxtools-windows-binaries/raw/master/scipy-0.19.1-cp27-cp27m-win32.whl"
@@ -35,7 +37,7 @@ install:
   - "%PYTHON%\\python.exe -m pip install rasterio-1.0a5-cp27-cp27m-win32.whl"
   - "appveyor DownloadFile https://github.com/DigitalGlobe/gbdxtools-windows-binaries/raw/master/pyproj-1.9.5.1-cp27-cp27m-win32.whl"
   - "%PYTHON%\\python.exe -m pip install pyproj-1.9.5.1-cp27-cp27m-win32.whl"
-  - "%PYTHON%\\python.exe -m pip install matplotlib pytest"
+   "%PYTHON%\\python.exe -m pip install matplotlib pytest"
   - "%PYTHON%\\python.exe -m pip install -r requirements_windows_build.txt"
 
 build: off
