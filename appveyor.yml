@@ -22,10 +22,12 @@ environment:
 install:
   # We need wheel installed to build wheels
   - "set PATH=%MINICONDA%;%MINICONDA%\\Scripts;%PATH%"
+  - "appveyor DownloadFile https://github.com/DigitalGlobe/gbdxtools-windows-binaries/raw/master/GDAL-2.1.3-cp27-cp27m-win32.whl"
+  - "python -m pip install GDAL-2.1.3-cp27-cp27m-win32.whl"
   - "conda config --set always_yes yes --set changeps1 no"
   - "conda update -q conda"
   - "conda install pycurl numpy scipy scikit-image gdal pyproj matplotlib pytest"
-  - "conda install -c conda-forge shapely rasterio"
+  - "conda install -c conda-forge shapely rasterio>=v1.0a3"
   #- "appveyor DownloadFile https://github.com/DigitalGlobe/gbdxtools-windows-binaries/raw/master/pycurl-7.43.0-cp27-cp27m-win32.whl"
   #- "%PYTHON%\\python.exe -m pip install pycurl-7.43.0-cp27-cp27m-win32.whl"
   #- "appveyor DownloadFile https://github.com/DigitalGlobe/gbdxtools-windows-binaries/raw/master/numpy-1.13.1+mkl-cp27-cp27m-win32.whl"
@@ -34,8 +36,6 @@ install:
   #- "%PYTHON%\\python.exe -m pip install scipy-0.19.1-cp27-cp27m-win32.whl"
   #- "appveyor DownloadFile https://github.com/DigitalGlobe/gbdxtools-windows-binaries/raw/master/scikit_image-0.13.0-cp27-cp27m-win32.whl"
   #- "%PYTHON%\\python.exe -m pip install scikit_image-0.13.0-cp27-cp27m-win32.whl"
-  #- "appveyor DownloadFile https://github.com/DigitalGlobe/gbdxtools-windows-binaries/raw/master/GDAL-2.1.3-cp27-cp27m-win32.whl"
-  #- "%PYTHON%\\python.exe -m pip install GDAL-2.1.3-cp27-cp27m-win32.whl"
   #- "appveyor DownloadFile https://github.com/DigitalGlobe/gbdxtools-windows-binaries/raw/master/Shapely-1.5.17-cp27-cp27m-win32.whl"
   #- "%PYTHON%\\python.exe -m pip install Shapely-1.5.17-cp27-cp27m-win32.whl"
   #- "appveyor DownloadFile https://github.com/DigitalGlobe/gbdxtools-windows-binaries/raw/master/rasterio-1.0a5-cp27-cp27m-win32.whl"
