@@ -13,7 +13,6 @@ ndg-httpsclient==0.4.2
 bumpversion
 ephem
 toolz
-shapely
 dask
 cloudpickle
 numpy
