@@ -2,6 +2,7 @@ from __future__ import print_function
 import abc
 import types
 import os
+import random
 from functools import wraps, partial
 from collections import Container
 from six import add_metaclass
@@ -120,16 +121,16 @@ class DaskImage(da.Array):
     def randwindow(self, window_shape):
         row = random.randrange(window_shape[0], self.shape[1])
         col = random.randrange(window_shape[1], self.shape[2])
-        return (row-window[0],col-window[0], row, col)
+        return (row-window_shape[0],col-window_shape[0], row, col)
 
     def iterwindows(self, count=64, window_shape=(256, 256)):
         if count is None:
             while True:
-                minrow, maxrow, mincol, maxcol = randwindow(window_shape)
+                minrow, maxrow, mincol, maxcol = self.randwindow(window_shape)
                 yield self[:, minrow:maxrow, mincol:maxcol]
         else:
             for i in xrange(count):
-                minrow, maxrow, mincol, maxcol = randwindow(window_shape)
+                minrow, maxrow, mincol, maxcol = self.randwindow(window_shape)
                 yield self[:, minrow:maxrow, mincol:maxcol]
 
     def plot(self, tfm={lambda x: x}, **kwargs):
