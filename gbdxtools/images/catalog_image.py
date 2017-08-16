@@ -23,7 +23,7 @@ class CatalogImage(object):
         pansharpen: Whether or not to return a pansharpened image (defaults to False)
 
     Returns:
-        image (ndarray): An image instance - one of IdahoImage, WV02, WV03_VNIR, LandsatImage, IkonosImage 
+        image (ndarray): An image instance - one of IdahoImage, WV02, WV03_VNIR, LandsatImage, IkonosImage
 
     Properties:
         :affine: The image affine transformation
@@ -40,7 +40,7 @@ class CatalogImage(object):
         query = "item_type:GBDXCatalogRecord AND id:{}".format(cat_id)
         result = vectors.query(aoi, query=query, count=1)
         if len(result) == 0:
-            raise 'Could not find a catalog entry for the given id: {}'.format(cat_id)
+            raise Exception('Could not find a catalog entry for the given id: {}'.format(cat_id))
         else:
             return cls._image_class(cat_id, result[0], **kwargs)
 
@@ -57,5 +57,5 @@ class CatalogImage(object):
             return LandsatImage(cat_id, **kwargs)
         #elif 'IKONOS' in types:
         #    return IkonosImage(rec['properties']['attributes']['prefix'], bucket=rec['properties']['attributes']['bucket_name'], **kwargs)
-        else: 
+        else:
             raise UnsupportedImageType('Unsupported image type: {}'.format(str(types)))
