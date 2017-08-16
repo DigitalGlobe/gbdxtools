@@ -131,11 +131,12 @@ class DaskImage(da.Array):
     def iterwindows(self, count=64, window_shape=(256, 256)):
         if count is None:
             while True:
-                minrow, maxrow, mincol, maxcol = self.randwindow(window_shape)
+                minrow, mincol, maxrow, maxcol = self.randwindow(window_shape)
                 yield self[:, minrow:maxrow, mincol:maxcol]
         else:
             for i in xrange(count):
-                minrow, maxrow, mincol, maxcol = self.randwindow(window_shape)
+                minrow, mincol, maxrow, maxcol = self.randwindow(window_shape)
+                print(minrow, maxrow, mincol, maxcol, self.shape)
                 yield self[:, minrow:maxrow, mincol:maxcol]
 
 
