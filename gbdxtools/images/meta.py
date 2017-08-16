@@ -136,7 +136,6 @@ class DaskImage(da.Array):
         else:
             for i in xrange(count):
                 minrow, mincol, maxrow, maxcol = self.randwindow(window_shape)
-                print(minrow, maxrow, mincol, maxcol, self.shape)
                 yield self[:, minrow:maxrow, mincol:maxcol]
 
 
