@@ -11,11 +11,13 @@ vcrpy
 mock
 ndg-httpsclient==0.4.2
 bumpversion
-shapely
 ephem
 toolz
 dask
 cloudpickle
 numpy
-rasterio==1.0a3
+pycurl
 pyproj
+requests_futures
+configparser
+mercantile

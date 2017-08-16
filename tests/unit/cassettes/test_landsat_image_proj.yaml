@@ -1,0 +1,58 @@
+interactions:
+- request:
+    body: !!python/unicode '{"edges": [{"destination": "b4002706-8d03-5bc4-9ada-47bed2760beb",
+      "id": "8e5ff05d-1437-568b-8529-aaf8a1f18a95", "index": 1, "source": "79c59ebf-a95d-5084-a5d6-66e8ed69096f"}],
+      "nodes": [{"id": "b4002706-8d03-5bc4-9ada-47bed2760beb", "operator": "Reproject",
+      "parameters": {"Dest SRS Code": "EPSG:4326", "Dest pixel-to-world transform":
+      "null", "Source SRS Code": "EPSG:4326", "Source pixel-to-world transform": "null"}},
+      {"id": "79c59ebf-a95d-5084-a5d6-66e8ed69096f", "operator": "LandsatRead", "parameters":
+      {"landsatId": "LC80370302014268LGN00", "productSpec": "multispectral"}}]}'
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      Content-Length: ['583']
+      Content-Type: [application/json]
+      User-Agent: [python-requests/2.13.0]
+    method: POST
+    uri: https://idahoapi.geobigdata.io/v1/graph
+  response:
+    body: {string: !!python/unicode 554218ced6391daa8358e98f1c19e93fb13f4a1888208a0df398bdde5a4b869e}
+    headers:
+      access-control-allow-headers: ['x-requested-with, X-Auth-Token, Content-Type,
+          Authorization']
+      access-control-allow-methods: ['GET, OPTIONS, HEAD, PUT, POST, DELETE']
+      access-control-allow-origin: ['*']
+      access-control-max-age: ['3600']
+      connection: [keep-alive]
+      content-length: ['64']
+      content-type: [text/plain]
+      date: ['Tue, 08 Aug 2017 20:19:30 GMT']
+    status: {code: 200, message: ''}
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      User-Agent: [python-requests/2.13.0]
+    method: GET
+    uri: https://idahoapi.geobigdata.io/v1/metadata/554218ced6391daa8358e98f1c19e93fb13f4a1888208a0df398bdde5a4b869e/b4002706-8d03-5bc4-9ada-47bed2760beb/metadata.json
+  response:
+    body: {string: !!python/unicode '{"imageMetadata":{"imageId":"LC80370302014268LGN00","version":"1.0","tilePartition":"0000","tileXOffset":0,"tileYOffset":0,"numXTiles":37,"numYTiles":27,"tileXSize":256,"tileYSize":256,"numBands":8,"dataType":"UNSIGNED_SHORT","imageHeight":6787,"imageWidth":9101,"sensorPlatformName":"LANDSAT8","sensorName":"Operational
+        Land Imager","vendorName":"NASA/USGS","vendorDatasetIdentifier":"Path=37:Row=30","acquisitionDate":"2014-09-25T18:01:18.581Z","colorInterpretation":"LANDSAT_8_30M","imageBoundsWGS84":"POLYGON
+        ((-110.88552639621763 44.246537170966825, -108.00423432976561 44.246537170966825,
+        -108.00423432976561 42.09783601120308, -110.88552639621763 42.09783601120308,
+        -110.88552639621763 44.246537170966825))","groundSampleDistanceMeters":30.0,"minX":-55,"minY":1,"maxX":9045,"maxY":6787,"minTileX":-1,"minTileY":0,"maxTileX":35,"maxTileY":26,"sunAzimuth":156.24916298,"sunElevation":43.39473382,"cloudCover":0.04},"imageGeoreferencing":{"spatialReferenceSystemCode":"EPSG:4326","scaleX":3.165907116198241E-4,"scaleY":-3.165907116198241E-4,"translateX":-110.86811390707854,"translateY":44.246853761678445,"shearX":0.0,"shearY":0.0},"rpcSensorModel":null,"histogram":null,"sensorMetadata":null,"imageAssociations":null,"rrdMetadata":null}'}
+    headers:
+      access-control-allow-headers: ['x-requested-with, X-Auth-Token, Content-Type,
+          Authorization']
+      access-control-allow-methods: ['GET, OPTIONS, HEAD, PUT, POST, DELETE']
+      access-control-allow-origin: ['*']
+      access-control-max-age: ['3600']
+      connection: [keep-alive]
+      content-length: ['1242']
+      content-type: [application/json]
+      date: ['Tue, 08 Aug 2017 20:19:45 GMT']
+    status: {code: 200, message: ''}
+version: 1

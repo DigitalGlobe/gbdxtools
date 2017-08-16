@@ -120,11 +120,11 @@ class Catalog(object):
         Args:
             address: any address string
             filters: Array of filters.  Optional.  Example:
-                [  
-                    "(sensorPlatformName = 'WORLDVIEW01' OR sensorPlatformName ='QUICKBIRD02')",
-                    "cloudCover < 10",
-                    "offNadirAngle < 10"
-                ]
+            [  
+                "(sensorPlatformName = 'WORLDVIEW01' OR sensorPlatformName ='QUICKBIRD02')",
+                "cloudCover < 10",
+                "offNadirAngle < 10"
+            ]
             startDate: string.  Optional.  Example: "2004-01-01T00:00:00.000Z"
             endDate: string.  Optional.  Example: "2004-01-01T00:00:00.000Z"
             types: Array of types to search for.  Optional.  Example (and default):  ["Acquisition"]
@@ -143,11 +143,11 @@ class Catalog(object):
             lat: latitude
             lng: longitude
             filters: Array of filters.  Optional.  Example:
-                [  
-                    "(sensorPlatformName = 'WORLDVIEW01' OR sensorPlatformName ='QUICKBIRD02')",
-                    "cloudCover < 10",
-                    "offNadirAngle < 10"
-                ]
+            [  
+                "(sensorPlatformName = 'WORLDVIEW01' OR sensorPlatformName ='QUICKBIRD02')",
+                "cloudCover < 10",
+                "offNadirAngle < 10"
+            ]
             startDate: string.  Optional.  Example: "2004-01-01T00:00:00.000Z"
             endDate: string.  Optional.  Example: "2004-01-01T00:00:00.000Z"
             types: Array of types to search for.  Optional.  Example (and default):  ["Acquisition"]
@@ -195,11 +195,11 @@ class Catalog(object):
         Args:
             searchAreaWkt: WKT Polygon of area to search.  Optional.
             filters: Array of filters.  Optional.  Example:
-                [  
-                    "(sensorPlatformName = 'WORLDVIEW01' OR sensorPlatformName ='QUICKBIRD02')",
-                    "cloudCover < 10",
-                    "offNadirAngle < 10"
-                ]
+            [  
+                "(sensorPlatformName = 'WORLDVIEW01' OR sensorPlatformName ='QUICKBIRD02')",
+                "cloudCover < 10",
+                "offNadirAngle < 10"
+            ]
             startDate: string.  Optional.  Example: "2004-01-01T00:00:00.000Z"
             endDate: string.  Optional.  Example: "2004-01-01T00:00:00.000Z"
             types: Array of types to search for.  Optional.  Example (and default):  ["Acquisition"]
@@ -257,6 +257,7 @@ class Catalog(object):
 
         Returns:
             single catalog item, or none if not found
+
         '''
         if not len(results):
             return None

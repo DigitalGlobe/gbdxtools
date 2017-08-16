@@ -23,8 +23,8 @@ interactions:
       connection: [keep-alive]
       content-length: ['64']
       content-type: [text/plain]
-      date: ['Tue, 11 Jul 2017 17:30:22 GMT']
-    status: {code: 200, message: OK}
+      date: ['Tue, 08 Aug 2017 20:19:15 GMT']
+    status: {code: 200, message: ''}
 - request:
     body: null
     headers:
@@ -49,6 +49,6 @@ interactions:
       connection: [keep-alive]
       content-length: ['1186']
       content-type: [application/json]
-      date: ['Tue, 11 Jul 2017 17:30:36 GMT']
-    status: {code: 200, message: OK}
+      date: ['Tue, 08 Aug 2017 20:19:29 GMT']
+    status: {code: 200, message: ''}
 version: 1

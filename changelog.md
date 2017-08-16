@@ -1,3 +1,33 @@
+0.12.0
+-------
+* upgrading to new dask version support (dask >= 0.15.1)
+* using the __new__ pattern for image classes
+* fixes for creating geotiffs from images  
+
+0.11.14
+-------
+* orthorectify parameters bugfix
+
+0.11.13
+-------
+* dtype fix for the to_geotiff method
+
+0.11.12
+-------
+* Handle ipe image metadata errors
+
+0.11.11
+-------
+* more verbose error when idaho cannot download chip
+
+0.11.10
+-------
+* Minor patch to use new serverside IPE ids
+
+0.11.9
+------
+* Fix signals exception handling for Windows OS.
+
 0.11.8
 ------
 * add LandsatImage class
