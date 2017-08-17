@@ -5,6 +5,9 @@ from itertools import chain
 from collections import OrderedDict, defaultdict
 import threading
 
+
+
+
 import rasterio
 from rasterio.io import MemoryFile
 import pycurl
@@ -57,10 +60,16 @@ def load_url(url, token, shape=(8, 256, 256)):
     with MemoryFile() as memfile:
         _curl.setopt(_curl.WRITEDATA, memfile)
         _curl.perform()
+        code = _curl.getinfo(pycurl.HTTP_CODE)
         try:
+            if(code != 200):
+                raise TypeError("Request for {} returned unexpected error code: {}".format(url, code))
             with memfile.open(driver="GTiff") as dataset:
                 arr = dataset.read()
-        except (TypeError, rasterio.RasterioIOError):
+        except (TypeError, rasterio.RasterioIOError) as e:
+            print(e)
+            memfile.seek(0)
+            print(memfile.read())
             arr = np.zeros(shape, dtype=np.float32)
             _curl.close()
             del _curl_pool[thread_id]
