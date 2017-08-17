@@ -50,7 +50,7 @@ class TmsImageTest(unittest.TestCase):
     def test_tms_image(self):
         img = self.gbdx.tms_image(zoom=18, bounds=[-105.00444889068605, 39.75299710099606, -104.9962091445923, 39.75431683540881])
         self.assertTrue(isinstance(img, TmsImage))
-        assert img.shape == (3, 768, 2048)
+        assert img.shape == (3, 256, 256)
         assert img.proj == 'EPSG:3857'
 
     def test_tms_image_global(self):
@@ -63,5 +63,5 @@ class TmsImageTest(unittest.TestCase):
         img = self.gbdx.tms_image(zoom=18)
         aoi = img.aoi(bbox=[-105.00444889068605, 39.75299710099606, -104.9962091445923, 39.75431683540881])
         self.assertTrue(isinstance(aoi, TmsImage))
-        assert aoi.shape == (3, 480, 1755)
+        assert aoi.shape == (3, 320, 1317)
         assert aoi.proj == 'EPSG:3857'

@@ -42,11 +42,6 @@ class CatalogImageTest(unittest.TestCase):
         cls._temp_path = tempfile.mkdtemp()
         print("Created: {}".format(cls._temp_path))
 
-    @my_vcr.use_cassette('tests/unit/cassettes/test_cat_image_idaho.yaml', filter_headers=['authorization'])
-    def test_idaho_image(self):
-        img = CatalogImage('7f35f1b1-a760-4928-bfab-41006bef200a')
-        self.assertTrue(isinstance(img, IdahoImage))
-
     @my_vcr.use_cassette('tests/unit/cassettes/test_cat_image_wv2.yaml', filter_headers=['authorization'])
     def test_wv2_image(self):
         wv2 = CatalogImage('10300100373FAF00')

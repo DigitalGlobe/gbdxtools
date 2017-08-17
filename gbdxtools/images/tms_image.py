@@ -17,7 +17,7 @@ from shapely import ops
 import pyproj
 
 import pycurl
-from gbdxtools.images.meta import DaskImage, DaskMeta, GeoImage
+from gbdxtools.images.meta import DaskImage, DaskMeta, GeoImage, PlotMixin
 from gbdxtools.ipe.util import AffineTransform
 
 _curl_pool = defaultdict(pycurl.Curl)
@@ -129,7 +129,6 @@ class TmsMeta(DaskMeta):
         minx, miny, maxx, maxy = self._tile_coords(bounds)
         urls = {(y - miny, x - minx): self._url_template.format(z=self.zoom_level, x=x, y=y, token=self._token)
                 for y in xrange(miny, maxy + 1) for x in xrange(minx, maxx + 1)}
-
         return urls, (3, self._tile_size * (maxy - miny), self._tile_size * (maxx - minx))
 
     def _expand_bounds(self, bounds):
@@ -158,7 +157,7 @@ class TmsMeta(DaskMeta):
         return minx, miny, maxx, maxy
 
 
-class TmsImage(DaskImage, GeoImage):
+class TmsImage(DaskImage, GeoImage, PlotMixin):
     _default_proj = "EPSG:3857"
 
     def __new__(cls, access_token=os.environ.get("DG_MAPS_API_TOKEN"),
@@ -183,8 +182,8 @@ class TmsImage(DaskImage, GeoImage):
     def rgb(self, **kwargs):
         return np.rollaxis(self.read(), 0, 3)
 
-    def plot(self, **kwargs):
-        super(TmsImage, self).plot(tfm=self.rgb, **kwargs)
+    #def plot(self, **kwargs):
+    #    super(TmsImage, self).plot(tfm=self.rgb, **kwargs)
 
     def aoi(self, **kwargs):
         g = self._parse_geoms(**kwargs)
@@ -193,7 +192,7 @@ class TmsImage(DaskImage, GeoImage):
     def __getitem__(self, geometry):
         if isinstance(geometry, BaseGeometry) or getattr(geometry, "__geo_interface__", None) is not None:
             if self._tms_meta._bounds is None:
-                return self.aoi(geojson=mapping(geometry))
+                return self.aoi(geojson=mapping(geometry), from_proj=self.proj)
             image = GeoImage.__getitem__(self, geometry)
             image._tms_meta = self._tms_meta
             return image

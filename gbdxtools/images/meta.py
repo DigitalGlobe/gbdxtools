@@ -225,7 +225,7 @@ class GeoImage(Container):
         if self.proj is None:
             return g
         else:
-            return self._reproject(g)
+            return self._reproject(g, from_proj=kwargs.get('from_proj', 'EPSG:4326'))
 
     def _reproject(self, geometry, from_proj=None, to_proj=None):
         if from_proj is None:
