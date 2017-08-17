@@ -39,8 +39,11 @@ class CatalogImage(object):
     def _image_by_type(cls, cat_id, **kwargs):
         vectors = Vectors()
         aoi = wkt.dumps(box(-180, -90, 180, 90))
-        query = "item_type:DigitalGlobeProduct AND attributes.catalogID:{} AND NOT item_type:IDAHOImage".format(cat_id)
+        query = "item_type:GBDXCatalogRecord AND attributes.catalogID:{}".format(cat_id)
+        query += " AND NOT item_type:IDAHOImage"
         result = vectors.query(aoi, query=query, count=1)
+        for r in result:
+            print(r['properties']['item_type'])
         if len(result) == 0:
             raise Exception('Could not find a catalog entry for the given id: {}'.format(cat_id))
         else:
@@ -58,6 +61,6 @@ class CatalogImage(object):
         elif 'GE01' in types:
             return GE01(rec, **kwargs)
         elif 'IKONOS' in types:
-            return IkonosImage(rec['properties']['attributes']['prefix'], bucket=rec['properties']['attributes']['bucket_name'], **kwargs)
+            return IkonosImage(rec, **kwargs)
         else: 
             raise UnsupportedImageType('Unsupported image type: {}'.format(str(types)))
