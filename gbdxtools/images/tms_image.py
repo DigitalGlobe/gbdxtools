@@ -3,6 +3,7 @@ import uuid
 import threading
 from collections import defaultdict
 from itertools import chain
+from functools import partial
 
 import numpy as np
 import rasterio
@@ -13,6 +14,7 @@ import mercantile
 from shapely.geometry import mapping, box
 from shapely.geometry.base import BaseGeometry
 from shapely import ops
+import pyproj
 
 import pycurl
 from gbdxtools.images.meta import DaskImage, DaskMeta, GeoImage
@@ -64,7 +66,8 @@ class TmsMeta(DaskMeta):
 
         _first_tile = mercantile.Tile(z=self.zoom_level, x=0, y=0)
         _last_tile = mercantile.tile(180, -85.05, self.zoom_level)
-        g = box(*mercantile.bounds(_first_tile)).union(box(*mercantile.bounds(_last_tile)))
+        g = box(*mercantile.xy_bounds(_first_tile)).union(box(*mercantile.xy_bounds(_last_tile)))
+
         self._full_bounds = g.bounds
 
         # TODO: populate rest of fields automatically
@@ -127,20 +130,24 @@ class TmsMeta(DaskMeta):
         urls = {(y - miny, x - minx): self._url_template.format(z=self.zoom_level, x=x, y=y, token=self._token)
                 for y in xrange(miny, maxy + 1) for x in xrange(minx, maxx + 1)}
 
-        return urls, (3, self._tile_size * (maxy - miny + 1), self._tile_size * (maxx - minx + 1))
+        return urls, (3, self._tile_size * (maxy - miny), self._tile_size * (maxx - minx))
 
     def _expand_bounds(self, bounds):
         if bounds is None:
             return bounds
         min_tile_x, min_tile_y, max_tile_x, max_tile_y = self._tile_coords(bounds)
 
-        ul = box(*mercantile.bounds(mercantile.Tile(z=self.zoom_level, x=min_tile_x, y=max_tile_y)))
-        lr = box(*mercantile.bounds(mercantile.Tile(z=self.zoom_level, x=max_tile_x, y=min_tile_y)))
+        ul = box(*mercantile.xy_bounds(mercantile.Tile(z=self.zoom_level, x=min_tile_x, y=max_tile_y)))
+        lr = box(*mercantile.xy_bounds(mercantile.Tile(z=self.zoom_level, x=max_tile_x, y=min_tile_y)))
 
         return ul.union(lr).bounds
 
     def _tile_coords(self, bounds):
         """ Convert tile coords mins/maxs to lng/lat bounds """
+        tfm = partial(pyproj.transform,
+                      pyproj.Proj(init="epsg:3857"),
+                      pyproj.Proj(init="epsg:4326"))
+        bounds = ops.transform(tfm, box(*bounds)).bounds
         params = list(bounds) + [[self.zoom_level]]
         tile_coords = [(tile.x, tile.y) for tile in mercantile.tiles(*params)]
         xtiles, ytiles = zip(*tile_coords)
@@ -184,7 +191,6 @@ class TmsImage(DaskImage, GeoImage):
         return self.__class__(bounds=list(g.bounds), **self._base_args)[g]
 
     def __getitem__(self, geometry):
-
         if isinstance(geometry, BaseGeometry) or getattr(geometry, "__geo_interface__", None) is not None:
             if self._tms_meta._bounds is None:
                 return self.aoi(geojson=mapping(geometry))
@@ -201,10 +207,8 @@ class TmsImage(DaskImage, GeoImage):
                 ymax = self.shape[1] if ymax is None else ymax
 
                 g = ops.transform(self.__geo_transform__.fwd, box(xmin, ymin, xmax, ymax))
-
                 image.__geo_interface__ = mapping(g)
-                bounds = g.bounds
-                image.__geo_transform__ = self.__geo_transform__ + (bounds[0], bounds[1])
+                image.__geo_transform__ = self.__geo_transform__ + (xmin, ymin)
             else:
                 image.__geo_interface__ = self.__geo_interface__
                 image.__geo_transform__ = self.__geo_transform__
