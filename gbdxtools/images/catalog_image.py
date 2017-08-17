@@ -40,7 +40,7 @@ class CatalogImage(object):
         vectors = Vectors()
         aoi = wkt.dumps(box(-180, -90, 180, 90))
         query = "item_type:GBDXCatalogRecord AND attributes.catalogID:{}".format(cat_id)
-        query += " AND NOT item_type:IDAHOImage"
+        query += " AND NOT item_type:IDAHOImage AND NOT item_type:DigitalGlobeAcquisition"
         result = vectors.query(aoi, query=query, count=1)
         for r in result:
             print(r['properties']['item_type'])
