@@ -5,7 +5,6 @@ Contact: chris.helm@digitalglobe.com
 """
 from __future__ import print_function
 from gbdxtools import WV02, WV03_VNIR, LandsatImage, IkonosImage, GE01
-from gbdxtools.images.s3Image import S3Image
 from gbdxtools.images.ipe_image import IpeImage
 from gbdxtools.vectors import Vectors
 from gbdxtools.ipe.error import UnsupportedImageType
