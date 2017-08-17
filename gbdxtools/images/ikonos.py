@@ -14,7 +14,7 @@ class IkonosImage(IpeImage):
             "spec": kwargs.get("spec", "multispectral")
         }
 
-        standard_products = cls._build_standard_products(bucket, prefix, options["spec"], kwargs.get("proj", None))
+        standard_products = cls._build_standard_products(bucket, prefix, options["spec"], kwargs.get("proj", "EPSG:4326"))
         try:
             self = super(IkonosImage, cls).__new__(cls, standard_products[options["product"]])
         except KeyError as e:
