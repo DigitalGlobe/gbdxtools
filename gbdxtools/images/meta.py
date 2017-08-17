@@ -2,6 +2,7 @@ from __future__ import print_function
 import abc
 import types
 import os
+import random
 from functools import wraps, partial
 from collections import Container
 from six import add_metaclass
@@ -122,6 +123,21 @@ class DaskImage(da.Array):
             arr = self[bands, ...]
         return arr.compute(get=threaded_get)
 
+    def randwindow(self, window_shape):
+        row = random.randrange(window_shape[0], self.shape[1])
+        col = random.randrange(window_shape[1], self.shape[2])
+        return (row-window_shape[0],col-window_shape[0], row, col)
+
+    def iterwindows(self, count=64, window_shape=(256, 256)):
+        if count is None:
+            while True:
+                minrow, mincol, maxrow, maxcol = self.randwindow(window_shape)
+                yield self[:, minrow:maxrow, mincol:maxcol]
+        else:
+            for i in xrange(count):
+                minrow, mincol, maxrow, maxcol = self.randwindow(window_shape)
+                yield self[:, minrow:maxrow, mincol:maxcol]
+
 
 @add_metaclass(abc.ABCMeta)
 class GeoImage(Container):
@@ -239,7 +255,7 @@ class GeoImage(Container):
 class DaskMetaWrapper(DaskMeta):
     def __init__(self, dask):
         self.da = dask
-  
+
     @property
     def dask(self):
         return self.da.dask
@@ -262,7 +278,7 @@ class DaskMetaWrapper(DaskMeta):
 
 
 # Mixin class that defines plotting methods and rgb/ndvi methods
-# used as a mixin to provide access to the plot method on 
+# used as a mixin to provide access to the plot method on
 # GeoDaskWrapper images and ipe images
 class PlotMixin(object):
     @property
