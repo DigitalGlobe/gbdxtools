@@ -141,7 +141,7 @@ class IpeImageTest(unittest.TestCase):
     #    aoi = img.aoi(bbox=[-110.85299491882326,32.167148499672855,-110.84870338439943,32.170236308395644])
     #    assert aoi.shape == (8, 176, 203)
     #    aoi.ortho = read_mock
-    #    ortho = aoi.orthorectify()
+    #    ortho = aoi.warp()
     #    assert isinstance(ortho, DaskImage)
 
     #@my_vcr.use_cassette('tests/unit/cassettes/test_ipe_image_geotiff.yaml', filter_headers=['authorization'])

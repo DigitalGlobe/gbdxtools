@@ -244,7 +244,6 @@ class GeoImage(Container):
         ymaxt, xmaxt = (psp(padsize=ypad, ind=0), psp(padsize=xpad, ind=1))
 
         shifted = np.stack([transpix[0,:,:] - ymint, transpix[1,:,:] - xmint])
-        print(self.ntiles, ymint, ymaxt, xmint, xmaxt)
         data = im_full[:,ymint:ymaxt,xmint:xmaxt].read()
         ortho = np.rollaxis(np.dstack([tf.warp(data[b,:,:].squeeze(), shifted, preserve_range=True) for b in xrange(data.shape[0])]), 2, 0)
         return GeoDaskWrapper(ortho, self)

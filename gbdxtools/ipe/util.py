@@ -249,7 +249,6 @@ class AffineTransform(GeometricTransform):
                                georef["translateY"], georef["shearY"], georef["scaleY"])
         return cls(tfm, proj=georef["spatialReferenceSystemCode"])
 
-
 def pad_safe_negative(padsize=2, transpix=None, ref_im=None, ind=0):
     trans = transpix[ind,:,:].min() - padsize
     if trans < 0.0:
@@ -266,3 +265,4 @@ def pad_safe_positive(padsize=2, transpix=None, ref_im=None, ind=0):
         raise NotImplementedError("Padding supported only for reference images of shape (L, W) or (Nbands, L, W)")
     if trans > critical:
         return critical
+    return int(math.ceil(trans))
