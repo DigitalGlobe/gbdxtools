@@ -31,7 +31,7 @@ requires=[
 ]
 
 setup(name='gbdxtools',
-      version='0.13.0',
+      version='0.13.1',
       description='Additional s3 functionality.',
       classifiers=[],
       keywords='',
