@@ -4,6 +4,7 @@ GBDX Vector Services Interface.
 Contact: nate.ricklin@digitalglobe.com
 """
 #from __future__ import absolute_import
+from string import Template
 from builtins import object
 import six
 
@@ -11,7 +12,10 @@ import requests
 from pygeoif import geometry
 from geomet import wkt as wkt2geojson
 from collections import OrderedDict
-import json
+import json, time, os
+
+from shapely.ops import cascaded_union
+from shapely.geometry import shape, box
 
 from gbdxtools.auth import Auth
 
@@ -207,7 +211,7 @@ class Vectors(object):
           data = page['data']
 
           for vector in data:
-            yield vector
+              yield vector
 
     def aggregate_query(self, searchAreaWkt, agg_def, query=None, start_date=None, end_date=None, count=10, index=default_index):
         """Aggregates results of a query into buckets defined by the 'agg_def' parameter.  The aggregations are
@@ -250,6 +254,119 @@ class Vectors(object):
         r.raise_for_status()
 
         return r.json(object_pairs_hook=OrderedDict)['aggregations']
+
+
+    def map(self, features=None, query=None, style={}, bbox=[-180,-90,180,90], zoom=10):
+        """
+          Renders a mapbox gl map from a vector service query
+        """
+        try:
+            from IPython.display import Javascript, HTML, display
+        except:
+            print("IPython is required to produce maps.")
+            return
+
+        if features is None and query is not None:
+            wkt = box(*bbox).wkt
+            features = self.query(wkt, query, index=None)
+        elif features is None and query is None:
+            print('Must provide either a list of features or a query')
+            return
+    
+        union = cascaded_union([shape(f['geometry']) for f in features])
+        lon, lat = union.centroid.coords[0]
+        geojson = {"type":"FeatureCollection", "features": features}
+    
+        map_id = "map_{}".format(str(int(time.time())))
+        display(HTML(Template('''
+           <div id="$map_id"/>
+           <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.37.0/mapbox-gl.css' rel='stylesheet' />
+           <style>body{margin:0;padding:0;}#$map_id{position:relative;top:0;bottom:0;width:100%;height:400px;}</style>
+           <style>.mapboxgl-popup-content table tr{border: 1px solid #efefef;} .mapboxgl-popup-content table, td, tr{border: none;}</style>
+        ''').substitute({"map_id": map_id})))
+
+    
+        js = Template("""
+            require.config({
+              paths: {
+                  mapboxgl: 'https://api.tiles.mapbox.com/mapbox-gl-js/v0.37.0/mapbox-gl',
+              }
+            });
+    
+            require(['mapboxgl'], function(mapboxgl){
+                mapboxgl.accessToken = "$mbkey";
+
+                function html( attrs, id ) {
+                  var json = JSON.parse( attrs );
+                  var html = '<table><tbody>';
+                  html += '<tr><td>ID</td><td>' + id + '</td></tr>';
+                  for ( var i=0; i < Object.keys(json).length; i++) {
+                    var key = Object.keys( json )[ i ];
+                    var val = json[ key ];
+                    html += '<tr><td>' + key + '</td><td>' + val + '</td></tr>';
+                  }
+                  html += '</tbody></table>';
+                  return html;
+                }
+
+                window.map = new mapboxgl.Map({
+                    container: '$map_id',
+                    style: 'mapbox://styles/mapbox/satellite-v9',
+                    center: [$lon, $lat],
+                    zoom: $zoom
+                });
+                var map = window.map;
+                var geojson = $geojson;
+                var style = Object.keys($style).length
+                    ? $style
+                    : {
+                        "line-color": '#ff0000',
+                        "line-opacity": .75,
+                        "line-width": 2
+                    };
+
+                map.on("click", function(e){
+                  var features = map.queryRenderedFeatures(e.point);
+                  if ( features.length ) {
+                    var popup = new mapboxgl.Popup({closeOnClick: false})
+                      .setLngLat(e.lngLat)
+                      .setHTML(html(features[0].properties.attributes, features[0].properties.id))
+                      .addTo(map);
+                  }
+                });
+              
+                map.once('style.load', function(e) {
+                    function addLayer(mapid) {
+                        try {
+                            mapid.addSource('features',
+                            {
+                                type: "geojson",
+                                data: geojson
+                            });
+                            var layer =  {
+                                "id": "gbdx",
+                                "type": "line",
+                                "source": "features",
+                                "paint": style
+                            };
+                            mapid.addLayer(layer);
+                        } catch (err) {
+                            console.log(err);
+                        }
+                    }
+                    addLayer(map);
+                });
+            });
+        """).substitute({
+            "map_id": map_id, 
+            "lat": lat, 
+            "lon": lon, 
+            "zoom": zoom, 
+            "geojson": json.dumps(geojson), 
+            "style": json.dumps(style),
+            "mbkey": os.environ.get('MAPBOX_API_KEY')
+        })
+        display(Javascript(js))
 
 
 class AggregationDef(object):

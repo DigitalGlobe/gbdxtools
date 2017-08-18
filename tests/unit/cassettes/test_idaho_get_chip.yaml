@@ -9,34 +9,18 @@ interactions:
       Accept-Encoding: ['gzip, deflate']
       Connection: [keep-alive]
       Content-Length: ['294']
-      User-Agent: [python-requests/2.12.1]
+      User-Agent: [python-requests/2.13.0]
     method: POST
     uri: https://geobigdata.io/catalog/v2/search
   response:
     body: {string: !!python/unicode '{"stats": {"recordsReturned": 4, "totalRecords":
         4, "typeCounts": {"IDAHOImage": 4, "GBDXCatalogRecord": 4, "WV03_VNIR": 4,
-        "DigitalGlobeProduct": 4}}, "results": [{"identifier": "8191fe69-baa3-4503-8f36-bd5499e3ef82",
+        "DigitalGlobeProduct": 4}}, "results": [{"identifier": "b1f6448b-aecd-4d9b-99ec-9cad8d079043",
         "type": ["GBDXCatalogRecord", "IDAHOImage", "DigitalGlobeProduct", "WV03_VNIR"],
-        "properties": {"satAzimuth": 221.9, "sunAzimuth": 154.6, "epsgCode": "4326",
-        "cloudCover": 0, "numYTiles": 161, "numXTiles": 167, "imageWidth": 42500,
-        "tileXOffset": 0, "tileYSize": 256, "idahoImageId": "8191fe69-baa3-4503-8f36-bd5499e3ef82",
-        "catalogID": "10400100203F1300", "vendorDatasetIdentifier": "LV1B:055640773010_01_P002:10400100203F1300:A01001020110D600",
-        "version": "1.0", "numBands": 1, "offNadirAngle": 19.7, "platformName": "WORLDVIEW03_VNIR",
-        "vendorName": "DigitalGlobe", "imageHeight": 40968, "sunElevation": 63.0,
-        "vendor": "DigitalGlobe", "acquisitionDate": "2016-08-12T18:18:29.639Z", "dataType":
-        "UNSIGNED_SHORT", "timestamp": "2016-08-12T18:18:29.639Z", "tileYOffset":
-        0, "bucketName": "idaho-images", "tileXSize": 256, "colorInterpretation":
-        "PAN", "profileName": "dg_1b", "tilePartition": "0000", "groundSampleDistanceMeters":
-        0.344, "sensorName": "Panchromatic", "tileBucketName": "idaho-images", "footprintWkt":
-        "MULTIPOLYGON(((-105.09559027 39.92467781, -104.9258919 39.93448694, -104.92569712
-        39.80760395, -105.09552572 39.79759936, -105.09559027 39.92467781)))", "nativeTileFileFormat":
-        "PNG", "pniirs": 5.5, "satElevation": 68.1, "sensorPlatformName": "WORLDVIEW03_VNIR"}},
-        {"identifier": "b1f6448b-aecd-4d9b-99ec-9cad8d079043", "type": ["GBDXCatalogRecord",
-        "IDAHOImage", "DigitalGlobeProduct", "WV03_VNIR"], "properties": {"satAzimuth":
-        221.3, "sunAzimuth": 154.7, "epsgCode": "4326", "cloudCover": 0, "numYTiles":
-        148, "numXTiles": 167, "imageWidth": 42500, "tileXOffset": 0, "tileYSize":
-        256, "idahoImageId": "b1f6448b-aecd-4d9b-99ec-9cad8d079043", "catalogID":
-        "10400100203F1300", "vendorDatasetIdentifier": "LV1B:055640773010_01_P001:10400100203F1300:A01001020110C000",
+        "properties": {"satAzimuth": 221.3, "sunAzimuth": 154.7, "epsgCode": "4326",
+        "cloudCover": 0, "numYTiles": 148, "numXTiles": 167, "imageWidth": 42500,
+        "tileXOffset": 0, "tileYSize": 256, "idahoImageId": "b1f6448b-aecd-4d9b-99ec-9cad8d079043",
+        "catalogID": "10400100203F1300", "vendorDatasetIdentifier": "LV1B:055640773010_01_P001:10400100203F1300:A01001020110C000",
         "version": "1.0", "numBands": 1, "offNadirAngle": 19.6, "platformName": "WORLDVIEW03_VNIR",
         "vendorName": "DigitalGlobe", "imageHeight": 37696, "sunElevation": 62.9,
         "vendor": "DigitalGlobe", "acquisitionDate": "2016-08-12T18:18:28.179Z", "dataType":
@@ -47,6 +31,22 @@ interactions:
         "MULTIPOLYGON(((-105.09529973 40.01534076, -104.92573604 40.02494806, -104.92584554
         39.9081648, -105.09560199 39.89828465, -105.09529973 40.01534076)))", "nativeTileFileFormat":
         "PNG", "pniirs": 5.5, "satElevation": 68.2, "sensorPlatformName": "WORLDVIEW03_VNIR"}},
+        {"identifier": "8191fe69-baa3-4503-8f36-bd5499e3ef82", "type": ["GBDXCatalogRecord",
+        "IDAHOImage", "DigitalGlobeProduct", "WV03_VNIR"], "properties": {"satAzimuth":
+        221.9, "sunAzimuth": 154.6, "epsgCode": "4326", "cloudCover": 0, "numYTiles":
+        161, "numXTiles": 167, "imageWidth": 42500, "tileXOffset": 0, "tileYSize":
+        256, "idahoImageId": "8191fe69-baa3-4503-8f36-bd5499e3ef82", "catalogID":
+        "10400100203F1300", "vendorDatasetIdentifier": "LV1B:055640773010_01_P002:10400100203F1300:A01001020110D600",
+        "version": "1.0", "numBands": 1, "offNadirAngle": 19.7, "platformName": "WORLDVIEW03_VNIR",
+        "vendorName": "DigitalGlobe", "imageHeight": 40968, "sunElevation": 63.0,
+        "vendor": "DigitalGlobe", "acquisitionDate": "2016-08-12T18:18:29.639Z", "dataType":
+        "UNSIGNED_SHORT", "timestamp": "2016-08-12T18:18:29.639Z", "tileYOffset":
+        0, "bucketName": "idaho-images", "tileXSize": 256, "colorInterpretation":
+        "PAN", "profileName": "dg_1b", "tilePartition": "0000", "groundSampleDistanceMeters":
+        0.344, "sensorName": "Panchromatic", "tileBucketName": "idaho-images", "footprintWkt":
+        "MULTIPOLYGON(((-105.09559027 39.92467781, -104.9258919 39.93448694, -104.92569712
+        39.80760395, -105.09552572 39.79759936, -105.09559027 39.92467781)))", "nativeTileFileFormat":
+        "PNG", "pniirs": 5.5, "satElevation": 68.1, "sensorPlatformName": "WORLDVIEW03_VNIR"}},
         {"identifier": "b1adf5de-2360-4966-8773-addef360e80b", "type": ["GBDXCatalogRecord",
         "IDAHOImage", "DigitalGlobeProduct", "WV03_VNIR"], "properties": {"satAzimuth":
         221.9, "sunAzimuth": 154.6, "epsgCode": "4326", "cloudCover": 0, "numYTiles":
@@ -86,11 +86,11 @@ interactions:
       connection: [keep-alive]
       content-length: ['5678']
       content-type: [application/json]
-      date: ['Fri, 04 Aug 2017 15:29:52 GMT']
+      date: ['Thu, 10 Aug 2017 15:10:46 GMT']
       via: [kong/0.5.2]
-      x-amz-cf-id: [y4MSbMran59jod7ti6kXbf5ty_XWMIH61GPkrtbtqDTg1KCpeJgzUw==]
-      x-amzn-requestid: [c2b5e534-7929-11e7-8cf6-abb1348729e3]
-      x-amzn-trace-id: [sampled=0;root=1-598492f0-e4068265395431b31e18055b]
+      x-amz-cf-id: [n1lLgUbqdijqozprnHUlgKdbpT1Ahp9xGMF5rtfU4TdIEi5EoHgaWw==]
+      x-amzn-requestid: [15349a0e-7dde-11e7-a6aa-f17082f5a228]
+      x-amzn-trace-id: [sampled=0;root=1-598c7775-2e47c9812df059850d3f9b11]
       x-cache: [Miss from cloudfront]
     status: {code: 200, message: OK}
 - request:
@@ -99,7 +99,7 @@ interactions:
       Accept: ['*/*']
       Accept-Encoding: ['gzip, deflate']
       Connection: [keep-alive]
-      User-Agent: [python-requests/2.12.1]
+      User-Agent: [python-requests/2.13.0]
     method: GET
     uri: https://idaho.geobigdata.io/v1/chip/bbox/idaho-images/8191fe69-baa3-4503-8f36-bd5499e3ef82?bands=0&upperLeft=-105.00032901763916,39.91310862390189&lowerRight=-104.99874114990234,39.91207173503864&format=TIF&token=dummytoken
   response:
@@ -6178,8 +6178,8 @@ interactions:
     headers:
       connection: [keep-alive]
       content-type: [image/tif]
-      date: ['Fri, 04 Aug 2017 15:29:56 GMT']
+      date: ['Thu, 10 Aug 2017 15:10:50 GMT']
       server: [Apache-Coyote/1.1]
-      set-cookie: [JSESSIONID=2CD06E6091EB0EF55CFBD1EFE4488A31; Path=/; Secure; HttpOnly]
+      set-cookie: [JSESSIONID=F73F353B94250E5AF6728E13E72A871A; Path=/; Secure; HttpOnly]
     status: {code: 200, message: OK}
 version: 1

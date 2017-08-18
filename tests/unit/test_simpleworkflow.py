@@ -1,6 +1,9 @@
 """
 Unit tests for the Task class
 """
+import sys
+if sys.version_info > (3,):
+    long = int
 
 from gbdxtools.simpleworkflows import Task, Workflow, InvalidInputPort, WorkflowError
 from gbdxtools.workflow import Workflow as WorkflowAPI
@@ -341,6 +344,9 @@ class SimpleWorkflowTests(unittest.TestCase):
 
         assert len(batch_workflow_id) > 0
 
+        # will fail if string is not base 10
+        assert type(int(batch_workflow_id)) in [int, long]
+
         # sub workflows should be still running
         assert workflow.running is True
 
@@ -417,6 +423,9 @@ class SimpleWorkflowTests(unittest.TestCase):
         batch_workflow_id = workflow.execute()
 
         assert len(batch_workflow_id) > 0
+
+        # will fail if string is not base 10
+        assert type(int(batch_workflow_id)) in [int, long]
 
         # sub workflows should be still running
         assert workflow.running is True

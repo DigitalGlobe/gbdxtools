@@ -6,18 +6,14 @@ Unit tests for the gbdxtools.Idaho class
 '''
 
 from gbdxtools import Interface
-from gbdxtools import CatalogImage
+from gbdxtools import *
+from gbdxtools.ipe.error import UnsupportedImageType
 from auth_mock import get_mock_gbdx_session
 import vcr
 from os.path import join, isfile, dirname, realpath
 import tempfile
 import unittest
 import rasterio
-
-try:
-    from urlparse import urlparse
-except: 
-    from urllib.parse import urlparse
 
 # How to use the mock_gbdx_session and vcr to create unit tests:
 # 1. Add a new test that is dependent upon actually hitting GBDX APIs.
@@ -46,53 +42,31 @@ class CatalogImageTest(unittest.TestCase):
         cls._temp_path = tempfile.mkdtemp()
         print("Created: {}".format(cls._temp_path))
 
-    @my_vcr.use_cassette('tests/unit/cassettes/test_image_default.yaml', filter_headers=['authorization'])
-    def test_basic_catalog_image(self):
-        _id = '104001002838EC00'
-        img = self.gbdx.catalog_image(_id)
-        self.assertTrue(isinstance(img, CatalogImage))
-        assert img._node_id == 'toa_reflectance'
-        assert img.shape == (8, 79616, 11008)
-        assert img._proj == 'EPSG:4326'
+    @my_vcr.use_cassette('tests/unit/cassettes/test_cat_image_wv2.yaml', filter_headers=['authorization'])
+    def test_wv2_image(self):
+        wv2 = CatalogImage('10300100373FAF00')
+        self.assertTrue(isinstance(wv2, WV02))
 
-    @my_vcr.use_cassette('tests/unit/cassettes/test_image_default.yaml', filter_headers=['authorization'])
-    def test_cat_image_with_aoi(self):
-        _id = '104001002838EC00'
-        img = self.gbdx.catalog_image(_id, bbox=[-85.81455230712892,10.416235163695223,-85.77163696289064,10.457089934231618])
-        assert img._node_id == 'toa_reflectance'
-        assert img.shape == (8, 3037, 3189)
-        assert img._proj == 'EPSG:4326'
+    @my_vcr.use_cassette('tests/unit/cassettes/test_cat_image_wv3.yaml', filter_headers=['authorization'])
+    def test_wv3_image(self):
+        wv3 = CatalogImage('1040010013955A00')
+        self.assertTrue(isinstance(wv3, WV03_VNIR))
 
-    @my_vcr.use_cassette('tests/unit/cassettes/test_image_proj.yaml', filter_headers=['authorization'])
-    def test_cat_image_with_proj(self):
-        _id = '104001002838EC00'
-        img = CatalogImage(_id, bbox=[-85.81455230712892,10.416235163695223,-85.77163696289064,10.457089934231618], proj='EPSG:3857')
-        assert img._node_id == 'toa_reflectance'
-        assert img.shape == (8, 3088, 3190)
-        assert img._proj == 'EPSG:3857' 
+    @my_vcr.use_cassette('tests/unit/cassettes/test_cat_image_landsat.yaml', filter_headers=['authorization'])
+    def test_landsat_image(self):
+        lsat = CatalogImage('LC80380302013160LGN00')
+        self.assertTrue(isinstance(lsat, LandsatImage))
+    
+    def test_catalog_image_err(self):
+        try:
+            img = CatalogImage('XXXX')
+        except:
+            pass
 
-    @my_vcr.use_cassette('tests/unit/cassettes/test_image_aoi.yaml', filter_headers=['authorization'])
-    def test_cat_image_aoi(self):
-        _id = '104001002838EC00'
-        img = CatalogImage(_id)
-        aoi = img.aoi(bbox=[-85.81455230712892,10.416235163695223,-85.77163696289064,10.457089934231618])
-        assert aoi.shape == (8, 3037, 3189)
-
-    @my_vcr.use_cassette('tests/unit/cassettes/test_image_pan_band.yaml', filter_headers=['authorization'])
-    def test_catalog_image_panchromatic(self):
-        _id = '104001002838EC00'
-        img = self.gbdx.catalog_image(_id, band_type='Pan')
-        self.assertTrue(isinstance(img, CatalogImage))
-        assert img._node_id == 'toa_reflectance'
-        assert img.shape == (1, 318208, 43520)
-        assert img._proj == 'EPSG:4326'
-
-    @my_vcr.use_cassette('tests/unit/cassettes/test_image_pansharpen.yaml', filter_headers=['authorization'])
-    def test_catalog_image_pansharpen(self):
-        _id = '104001002838EC00'
-        img = self.gbdx.catalog_image(_id, pansharpen=True)
-        self.assertTrue(isinstance(img, CatalogImage))
-        assert img._node_id == 'pansharpened'
-        assert img.shape == (8, 318208, 43520)
-        assert img._proj == 'EPSG:4326' 
-
+    @my_vcr.use_cassette('tests/unit/cassettes/test_cat_image_unsupported_type.yaml', filter_headers=['authorization'])
+    def test_catalog_image_unsupported_type(self):
+        try:
+            img = CatalogImage('1020010050BE7E00')
+        except UnsupportedImageType:
+            pass
+    

@@ -19,7 +19,7 @@ from gbdxtools.workflow import Workflow
 from gbdxtools.catalog import Catalog
 from gbdxtools.vectors import Vectors
 from gbdxtools.idaho import Idaho
-from gbdxtools import IdahoImage, CatalogImage, LandsatImage
+from gbdxtools import CatalogImage, IdahoImage, LandsatImage, TmsImage, DemImage, WV03_VNIR, WV02, GE01
 from gbdxtools.task_registry import TaskRegistry
 import gbdxtools.simpleworkflows
 
@@ -52,6 +52,11 @@ class Interface(object):
         self.catalog_image = CatalogImage
         self.idaho_image = IdahoImage
         self.landsat_image = LandsatImage
+        self.tms_image = TmsImage
+        self.dem_image = DemImage
+        self.wv03_vnir = WV03_VNIR
+        self.wv02 = WV02
+        self.ge01 = GE01
 
         self.task_registry = TaskRegistry()
 
