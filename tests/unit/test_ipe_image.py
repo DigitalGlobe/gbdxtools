@@ -125,6 +125,15 @@ class IpeImageTest(unittest.TestCase):
         assert img.shape == (8, 176, 203)
         assert isinstance(img, da.Array)
 
+    @my_vcr.use_cassette('tests/unit/cassettes/test_ipe_image_default.yaml', filter_headers=['authorization'])
+    def test_ipe_image_randwindow(self):
+        idahoid = '1ec49348-8950-49ff-bd71-ea2e4d8754ac'
+        img = self.gbdx.idaho_image(idahoid)
+        raoi = img.randwindow((500,500))
+        assert raoi.shape == (8, 500, 500)
+        aois = [a for a in img.iterwindows(count=5)]
+        assert len(aois) == 5
+
     #@my_vcr.use_cassette('tests/unit/cassettes/test_ipe_image_rgb.yaml', filter_headers=['authorization'])
     #def test_ipe_image_rgb(self):
     #    idahoid = '179269b9-fdb3-49d8-bb62-d15de54ad15d'

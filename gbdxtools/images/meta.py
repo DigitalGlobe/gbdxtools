@@ -129,17 +129,15 @@ class DaskImage(da.Array):
     def randwindow(self, window_shape):
         row = random.randrange(window_shape[0], self.shape[1])
         col = random.randrange(window_shape[1], self.shape[2])
-        return (row-window_shape[0],col-window_shape[0], row, col)
+        return self[:, row-window_shape[0]:row, col-window_shape[0]:col]
 
     def iterwindows(self, count=64, window_shape=(256, 256)):
         if count is None:
             while True:
-                minrow, mincol, maxrow, maxcol = self.randwindow(window_shape)
-                yield self[:, minrow:maxrow, mincol:maxcol]
+                yield self.randwindow(window_shape)
         else:
             for i in xrange(count):
-                minrow, mincol, maxrow, maxcol = self.randwindow(window_shape)
-                yield self[:, minrow:maxrow, mincol:maxcol]
+                yield self.randwindow(window_shape)
 
 
 @add_metaclass(abc.ABCMeta)
