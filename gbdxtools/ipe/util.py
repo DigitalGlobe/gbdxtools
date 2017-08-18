@@ -3,6 +3,7 @@ import os
 import errno
 import datetime
 import time
+import math
 from functools import wraps
 from collections import Sequence
 try:
@@ -248,3 +249,20 @@ class AffineTransform(GeometricTransform):
                                georef["translateY"], georef["shearY"], georef["scaleY"])
         return cls(tfm, proj=georef["spatialReferenceSystemCode"])
 
+
+def pad_safe_negative(padsize=2, transpix=None, ref_im=None, ind=0):
+    trans = transpix[ind,:,:].min() - padsize
+    if trans < 0.0:
+        trans = transpix[ind,:,:].min()
+    return int(math.floor(trans))
+
+def pad_safe_positive(padsize=2, transpix=None, ref_im=None, ind=0):
+    trans = transpix[ind,:,:].max() + padsize
+    if len(ref_im.shape) == 3:
+        critical = ref_im.shape[ind + 1]
+    elif len(ref_im.shape) == 2:
+        critical = ref_im.shape[ind]
+    else:
+        raise NotImplementedError("Padding supported only for reference images of shape (L, W) or (Nbands, L, W)")
+    if trans > critical:
+        return critical

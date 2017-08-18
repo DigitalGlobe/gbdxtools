@@ -41,8 +41,6 @@ class CatalogImage(object):
         query = "item_type:GBDXCatalogRecord AND attributes.catalogID:{}".format(cat_id)
         query += " AND NOT item_type:IDAHOImage AND NOT item_type:DigitalGlobeAcquisition"
         result = vectors.query(aoi, query=query, count=1)
-        for r in result:
-            print(r['properties']['item_type'])
         if len(result) == 0:
             raise Exception('Could not find a catalog entry for the given id: {}'.format(cat_id))
         else:

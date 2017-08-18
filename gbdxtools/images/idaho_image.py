@@ -1,22 +1,10 @@
 from __future__ import print_function
 import requests
-from gbdxtools.images.meta import GeoDaskWrapper
 from gbdxtools.images.ipe_image import IpeImage
 from gbdxtools.ipe.util import calc_toa_gain_offset, ortho_params
 from gbdxtools.ipe.interface import Ipe
 
 ipe = Ipe()
-
-import skimage.transform as tf
-import numpy as np
-import math
-
-from functools import partial
-
-try:
-    xrange
-except NameError:
-    xrange = range
 
 class IdahoImage(IpeImage):
     """
@@ -68,51 +56,3 @@ class IdahoImage(IpeImage):
             "ortho": ortho_op,
             "toa_reflectance": toa_reflectance_op
         }
-
-    def orthorectify(self, padsize=(2,2), **kwargs):
-        if 'proj' in kwargs:
-            to_proj = kwargs['proj']
-            xmin, ymin, xmax, ymax = self._reproject(shape(self), from_proj=self.proj, to_proj=to_proj).bounds
-        else:
-            xmin, ymin, xmax, ymax = self.bounds
-        gsd = max((xmax-xmin)/self.shape[2], (ymax-ymin)/self.shape[1])
-        x = np.linspace(xmin, xmax, num=int((xmax-xmin)/gsd))
-        y = np.linspace(ymax, ymin, num=int((ymax-ymin)/gsd))
-        xv, yv = np.meshgrid(x, y, indexing='xy')
-        z = kwargs.get('z', 0)
-        if isinstance(z, np.ndarray):
-            # TODO: potentially reproject
-            z = tf.resize(z[0,:,:], xv.shape)
-
-        im_full = IdahoImage(self.ipe.metadata['image']['imageId'], product='1b')
-        transpix = im_full.__geo_transform__.rev(xv, yv, z=z, _type=np.float32)[::-1]
-        xpad, ypad =  padsize
-
-        psn = partial(_pad_safe_negative, transpix=transpix, ref_im=im_full)
-        psp = partial(_pad_safe_positive, transpix=transpix, ref_im=im_full)
-        ymint, xmint = (psn(padsize=ypad, ind=0), psn(padsize=xpad, ind=1))
-        ymaxt, xmaxt = (psp(padsize=ypad, ind=0), psp(padsize=xpad, ind=1))
-
-        shifted = np.stack([transpix[0,:,:] - ymint, transpix[1,:,:] - xmint])
-
-        data = im_full[:,ymint:ymaxt,xmint:xmaxt].read()
-        ortho = np.rollaxis(np.dstack([tf.warp(data[b,:,:].squeeze(), shifted, preserve_range=True) for b in xrange(data.shape[0])]), 2, 0)
-        return GeoDaskWrapper(ortho, self) 
-
-def _pad_safe_negative(padsize=2, transpix=None, ref_im=None, ind=0):
-    trans = transpix[ind,:,:].min() - padsize
-    if trans < 0.0:
-        trans = transpix[ind,:,:].min()
-    return int(math.floor(trans))
-
-def _pad_safe_positive(padsize=2, transpix=None, ref_im=None, ind=0):
-    trans = transpix[ind,:,:].max() + padsize
-    if len(ref_im.shape) == 3:
-        critical = ref_im.shape[ind + 1]
-    elif len(ref_im.shape) == 2:
-        critical = ref_im.shape[ind]
-    else:
-        raise NotImplementedError("Padding supported only for reference images of shape (L, W) or (Nbands, L, W)")
-    if trans > critical:
-        return critical
-    return int(math.ceil(trans))

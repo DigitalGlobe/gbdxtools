@@ -11,12 +11,15 @@ from shapely import ops
 from shapely.geometry import box, shape, mapping
 from shapely import wkt
 
+import skimage.transform as tf
+
 import pyproj
 import dask
 import dask.array as da
 import numpy as np
 
 from gbdxtools.ipe.io import to_geotiff
+from gbdxtools.ipe.util import pad_safe_positive, pad_safe_negative
 
 try:
     from matplotlib import pyplot as plt
@@ -208,6 +211,43 @@ class GeoImage(Container):
         if 'proj' not in kwargs:
             kwargs['proj'] = self.proj
         return to_geotiff(self, **kwargs)
+
+    def warp(self, padsize=(2,2), dem=0, **kwargs):
+        if 'proj' in kwargs:
+            to_proj = kwargs['proj']
+            xmin, ymin, xmax, ymax = self._reproject(shape(self), from_proj=self.proj, to_proj=to_proj).bounds
+        else:
+            xmin, ymin, xmax, ymax = self.bounds
+
+        if 'gsd' in kwargs:
+            gsd = kwargs['gsd']
+        else:
+            # try to look this up from ratpoly/rcp metadata
+            gsd = max((xmax-xmin)/self.shape[2], (ymax-ymin)/self.shape[1])
+
+        x = np.linspace(xmin, xmax, num=int((xmax-xmin)/gsd))
+        y = np.linspace(ymax, ymin, num=int((ymax-ymin)/gsd))
+        xv, yv = np.meshgrid(x, y, indexing='xy')
+
+        if isinstance(dem, np.ndarray):
+            # TODO: potentially reproject
+            dem = tf.resize(dem[0,:,:], xv.shape)
+
+        # TODO how do we hook this up when doing other image types?
+        im_full = self.__class__(self.ipe.metadata['image']['imageId'], product='1b')
+        transpix = im_full.__geo_transform__.rev(xv, yv, z=dem, _type=np.float32)[::-1]
+        xpad, ypad =  padsize
+
+        psn = partial(pad_safe_negative, transpix=transpix, ref_im=im_full)
+        psp = partial(pad_safe_positive, transpix=transpix, ref_im=im_full)
+        ymint, xmint = (psn(padsize=ypad, ind=0), psn(padsize=xpad, ind=1))
+        ymaxt, xmaxt = (psp(padsize=ypad, ind=0), psp(padsize=xpad, ind=1))
+
+        shifted = np.stack([transpix[0,:,:] - ymint, transpix[1,:,:] - xmint])
+        print(self.ntiles, ymint, ymaxt, xmint, xmaxt)
+        data = im_full[:,ymint:ymaxt,xmint:xmaxt].read()
+        ortho = np.rollaxis(np.dstack([tf.warp(data[b,:,:].squeeze(), shifted, preserve_range=True) for b in xrange(data.shape[0])]), 2, 0)
+        return GeoDaskWrapper(ortho, self)
 
     def _parse_geoms(self, **kwargs):
         """ Finds supported geometry types, parses them and returns the bbox """
