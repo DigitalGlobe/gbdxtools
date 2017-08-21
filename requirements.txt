@@ -1,12 +1,12 @@
-six==1.10.0
-future==0.15.2
-requests==2.12.1
+six>=1.10.0
+future>=0.15.2
+requests>=2.12.1
 boto==2.47.0
 gbdx-auth==0.2.4
-pygeoif==0.6
+pygeoif>=0.6
 pytest
 pytest-runner
-geomet==0.1.1
+geomet>=0.1.1
 vcrpy
 mock
 ndg-httpsclient
@@ -18,7 +18,6 @@ cloudpickle
 dask>=0.14.2
 numpy
 pycurl
-rasterio>=1.0a3
 pyproj
 requests_futures
 configparser
