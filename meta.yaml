@@ -35,6 +35,7 @@ requirements:
     - mercantile
     - scikit-image
     - gbdx-auth ==0.2.4
+    - bumpversion
     - pytest
     - pytest-runner
     - vcrpy
@@ -62,6 +63,7 @@ requirements:
     - mercantile
     - scikit-image
     - gbdx-auth ==0.2.4
+    - bumpversion
     - pytest
     - pytest-runner
     - vcrpy
