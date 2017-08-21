@@ -4,11 +4,11 @@ import threading
 from collections import defaultdict
 from itertools import chain
 from functools import partial
+from tempfile import NamedTemporaryFile
 
 import numpy as np
 import rasterio
 from rasterio.transform import from_bounds as transform_from_bounds
-from rasterio.io import MemoryFile
 
 import mercantile
 from shapely.geometry import mapping, box
@@ -28,19 +28,27 @@ except NameError:
     xrange = range
 
 
-def load_url(url, shape=(3, 256, 256)):
+def load_url(url, shape=(8, 256, 256)):
     """ Loads a geotiff url inside a thread and returns as an ndarray """
     thread_id = threading.current_thread().ident
     _curl = _curl_pool[thread_id]
     _curl.setopt(_curl.URL, url)
     _curl.setopt(pycurl.NOSIGNAL, 1)
-    with MemoryFile() as memfile:
-        _curl.setopt(_curl.WRITEDATA, memfile)
+    _, ext = os.path.splitext(urlparse(url).path)
+    with NamedTemporaryFile(suffix="."+ext) as temp: # TODO: apply correct file extension
+        _curl.setopt(_curl.WRITEDATA, temp.file)
         _curl.perform()
+        code = _curl.getinfo(pycurl.HTTP_CODE)
         try:
-            with memfile.open(driver="PNG") as dataset:
+            if(code != 200):
+                raise TypeError("Request for {} returned unexpected error code: {}".format(url, code))
+            temp.file.flush()
+            with rasterio.open(temp.name) as dataset:
                 arr = dataset.read()
-        except (TypeError, rasterio.RasterioIOError):
+        except (TypeError, rasterio.RasterioIOError) as e:
+            print(e)
+            memfile.seek(0)
+            print(memfile.read())
             arr = np.zeros(shape, dtype=np.uint8)
             _curl.close()
             del _curl_pool[thread_id]
