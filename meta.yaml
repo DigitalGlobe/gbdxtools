@@ -30,6 +30,7 @@ requirements:
     - pycurl
     - rasterio >=0.36.0
     - pyproj
+    - ndg-httpsclient
     - requests-futures
     - configparser
     - mercantile
@@ -58,6 +59,7 @@ requirements:
     - pycurl
     - rasterio >=0.36.0
     - pyproj
+    - ndg-httpsclient
     - requests-futures
     - configparser
     - mercantile
