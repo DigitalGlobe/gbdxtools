@@ -62,7 +62,7 @@ requirements:
     - configparser
     - mercantile
     - scikit-image
-    - gbdx-auth ==v0.2.1
+    - gbdx-auth ==0.2.4
     - pytest
     - pytest-runner
     - vcrpy
