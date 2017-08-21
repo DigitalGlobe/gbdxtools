@@ -331,7 +331,7 @@ class PlotMixin(object):
         return [7, 4]
 
     def rgb(self, **kwargs):
-        data = self._read(self[kwargs.get("bands", self._rgb_bands),...])
+        data = self._read(self[kwargs.get("bands", self._rgb_bands),...], **kwargs)
         data = np.rollaxis(data.astype(np.float32), 0, 3)
         lims = np.percentile(data, kwargs.get("stretch", [2, 98]), axis=(0, 1))
         for x in xrange(len(data[0,0,:])):
@@ -364,9 +364,9 @@ class PlotMixin(object):
         plt.imshow(tfm(**kwargs), interpolation='nearest', cmap=kwargs.get("cmap", None))
         plt.show(block=False)
 
-    def _read(self, data):
+    def _read(self, data, **kwargs):
         if hasattr(data, 'read'):
-            return data.read()
+            return data.read(**kwargs)
         else:
             return data.compute()
 
