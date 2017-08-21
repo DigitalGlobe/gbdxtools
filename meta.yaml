@@ -14,7 +14,7 @@ source:
 
 requirements:
   run:
-    - python >=2.7.4
+    - python
     - six >=1.10.0
     - future >=0.15.2
     - requests >=2.12.1
@@ -43,7 +43,7 @@ requirements:
 
 
   build:
-    - python >=2.7.4
+    - python {{ python }}
     - six >=1.10.0
     - future >=0.15.2
     - requests >=2.12.1
