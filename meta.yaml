@@ -1,0 +1,80 @@
+# NOTE: not used
+{% set data = load_setup_py_data() %}
+
+package:
+  name: gbdxtools
+  version: {{ GIT_DESCRIBE_TAG }}
+
+build:
+  number: {{ GIT_DESCRIBE_NUMBER }}
+  script: python setup.py install
+  noarch_python: True
+
+source:
+  git_url: ./
+
+requirements:
+  run:
+    - python >=2.7.4
+    - six >=1.10.0
+    - future >=0.15.2
+    - requests >=2.12.1
+    - boto >=2.47.0
+    - pygeoif >=0.6
+    - geomet >=0.1.1
+    - shapely
+    - ephem
+    - toolz
+    - cloudpickle
+    - dask >=0.14.2
+    - numpy
+    - pycurl
+    - rasterio >=0.36.0
+    - pyproj
+    - requests-futures
+    - configparser
+    - mercantile
+    - scikit-image
+    - gbdx-auth ==0.2.4
+    - pytest
+    - pytest-runner
+    - vcrpy
+
+
+  build:
+    - python >=2.7.4
+    - six >=1.10.0
+    - future >=0.15.2
+    - requests >=2.12.1
+    - boto >=2.47.0
+    - pygeoif >=0.6
+    - geomet >=0.1.1
+    - shapely
+    - ephem
+    - toolz
+    - cloudpickle
+    - dask >=0.14.2
+    - {{ pin_compatible('numpy', min_pin='1.9') }}
+    - pycurl
+    - rasterio >=0.36.0
+    - pyproj
+    - requests-futures
+    - configparser
+    - mercantile
+    - scikit-image
+    - gbdx-auth ==0.2.4
+    - pytest
+    - pytest-runner
+    - vcrpy
+    
+test:
+  requires:
+    - mock
+    - pytest
+    - pytest-runner
+    - vcrpy
+  imports:
+    - gbdxtools
+    - gbdxtools.images
+  commands:
+    - py.test tests/unit/test_*_image.py
