@@ -19,7 +19,7 @@ import dask.array as da
 import numpy as np
 
 from gbdxtools.ipe.io import to_geotiff
-from gbdxtools.ipe.util import pad_safe_positive, pad_safe_negative
+from gbdxtools.ipe.util import RatPolyTransform, pad_safe_positive, pad_safe_negative
 
 try:
     from matplotlib import pyplot as plt
@@ -212,7 +212,7 @@ class GeoImage(Container):
             kwargs['proj'] = self.proj
         return to_geotiff(self, **kwargs)
 
-    def warp(self, padsize=(2,2), dem=0, **kwargs):
+    def warp(self, padsize=(2,2), dem=0, gtf=None, **kwargs):
         if 'proj' in kwargs:
             to_proj = kwargs['proj']
             xmin, ymin, xmax, ymax = self._reproject(shape(self), from_proj=self.proj, to_proj=to_proj).bounds
@@ -235,7 +235,11 @@ class GeoImage(Container):
 
         # TODO how do we hook this up when doing other image types?
         im_full = self.__class__(self.ipe.metadata['image']['imageId'], product='1b')
-        transpix = im_full.__geo_transform__.rev(xv, yv, z=dem, _type=np.float32)[::-1]
+        if gtf is not None:
+            transpix = gtf.rev(xv, yv, z=dem, _type=np.float32)[::1]
+        else:
+            transpix = im_full.__geo_transform__.rev(xv, yv, z=dem, _type=np.float32)[::-1]
+
         xpad, ypad =  padsize
 
         psn = partial(pad_safe_negative, transpix=transpix, ref_im=im_full)
