@@ -1,4 +1,3 @@
-# NOTE: not used
 {% set data = load_setup_py_data() %}
 
 package:
@@ -29,7 +28,7 @@ requirements:
     - dask >=0.14.2
     - numpy
     - pycurl
-    - rasterio ==0.36.0
+    - rasterio >=0.36.0
     - pyproj
     - requests-futures
     - configparser
@@ -56,7 +55,7 @@ requirements:
     - dask >=0.14.2
     - {{ pin_compatible('numpy', min_pin='1.9') }}
     - pycurl
-    - rasterio ==0.36.0
+    - rasterio >=0.36.0
     - pyproj
     - requests-futures
     - configparser
