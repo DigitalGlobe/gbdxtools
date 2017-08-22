@@ -6,9 +6,9 @@ open_kwds = {}
 if sys.version_info > (3,):
     open_kwds['encoding'] = 'utf-8'
 
-with open("requirements.txt") as f:
+req_path = os.path.join(os.path.abspath(os.path.dirname(__file__)), "requirements.txt")
+with open(req_path) as f:
     requires = f.read().splitlines()
-
 
 # with open('README.md', **open_kwds) as f:
 #     readme = f.read()
