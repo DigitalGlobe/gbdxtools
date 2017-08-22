@@ -51,8 +51,8 @@ def load_url(url, shape=(8, 256, 256)):
                 arr = dataset.read()
         except (TypeError, rasterio.RasterioIOError) as e:
             print(e)
-            memfile.seek(0)
-            print(memfile.read())
+            temp.seek(0)
+            print(temp.read())
             arr = np.zeros(shape, dtype=np.uint8)
             _curl.close()
             del _curl_pool[thread_id]
