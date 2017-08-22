@@ -15,7 +15,7 @@ def to_geotiff(arr, path='./output.tif', proj=None, dtype=None, bands=None, **kw
         'width': w,
         'height': h,
         'count': c,
-        'dtype': data.dtype if dtype is None else dtype,
+        'dtype': data.dtype.name if dtype is None else dtype.name,
         'driver': 'GTiff',
         'transform': tfm
     }
