@@ -91,7 +91,7 @@ def calc_toa_gain_offset(meta):
 
 
 class RatPolyTransform(GeometricTransform):
-    def __init__(self, A, B, offset, scale, px_offset, px_scale, proj=None):
+    def __init__(self, A, B, offset, scale, px_offset, px_scale, gsd=None, proj=None):
         self.proj = proj
         self._A = A
         self._B = B
@@ -99,6 +99,7 @@ class RatPolyTransform(GeometricTransform):
         self._scale = scale
         self._px_offset = px_offset
         self._px_scale = px_scale
+        self._gsd = gsd
         self._offscl = np.vstack([offset, scale])
         self._offscl_rev = np.vstack([-offset/scale, 1.0/scale])
         self._px_offscl_rev = np.vstack([px_offset, px_scale])
@@ -107,6 +108,10 @@ class RatPolyTransform(GeometricTransform):
         self._A_rev = np.dot(pinv(np.dot(np.transpose(A), A)), np.transpose(A))
         # only using the numerator (more dynamic range for the fit?)
         # self._B_rev = np.dot(pinv(np.dot(np.transpose(B), B)), np.transpose(B))
+
+    @property
+    def gsd(self):
+        return self._gsd
 
     def rev(self, lng, lat, z=0, _type=np.int32):
         if all(isinstance(var, (int, float, tuple)) for var in [lng, lat]):
@@ -192,7 +197,7 @@ class RatPolyTransform(GeometricTransform):
         px_scale = np.asarray([rpcs["lineScale"], rpcs["sampleScale"]])
         px_offset = np.asarray([rpcs["lineOffset"], rpcs["sampleOffset"]])
 
-        return cls(P, Q, offset, scale, px_offset, px_scale, rpcs["spatialReferenceSystem"])
+        return cls(P, Q, offset, scale, px_offset, px_scale, rpcs["gsd"], rpcs["spatialReferenceSystem"])
 
     @classmethod
     def from_affine(cls, affine):
