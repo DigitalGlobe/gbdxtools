@@ -49,15 +49,15 @@ conda convert <filename> -p all
 ```
 
 Several packages for different operating systems will get created.  Upload them all.
-
+```
+anaconda upload -u digitalglobe <files>
+```
 
 
 
 If the above build fails due to missing dependencies, you may need to make sure that the dependencies are in fact available in conda.  If they are not, push them up to the digitalglobe channel.
 
 
+5. Repeat for other python versions
+---------
 
-
-conda skeleton pypi gbdx-auth --version 0.2.4 --python-version 3.5
-conda convert <file> -p all
-anaconda upload -u digitalglobe <files>
