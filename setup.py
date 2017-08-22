@@ -6,17 +6,32 @@ open_kwds = {}
 if sys.version_info > (3,):
     open_kwds['encoding'] = 'utf-8'
 
-with open("requirements.txt") as f:
-    requires = f.read().splitlines()
-
-
-# with open('README.md', **open_kwds) as f:
-#     readme = f.read()
-
-# long_description=readme,
+requires=[
+  'six==1.10.0',
+  'future==0.15.2',
+  'requests==2.12.1',
+  'boto==2.47.0',
+  'gbdx-auth==0.2.4',
+  'pygeoif==0.6',
+  'geomet==0.1.1',
+  'ndg-httpsclient',
+  'shapely',
+  'ephem',
+  'toolz',
+  'cloudpickle',
+  'dask>=0.14.2',
+  'numpy',
+  'pycurl',
+  'rasterio>=1.0a3',
+  'pyproj',
+  'requests_futures',
+  'configparser',
+  'mercantile',
+  'scikit-image'
+]
 
 setup(name='gbdxtools',
-      version='0.12.0',
+      version='0.13.1',
       description='Additional s3 functionality.',
       classifiers=[],
       keywords='',
