@@ -6,7 +6,10 @@ from itertools import chain
 from collections import OrderedDict, defaultdict
 import threading
 from tempfile import NamedTemporaryFile
-from urlparse import urlparse
+try:
+    from urlparse import urlparse
+except ImportError:
+    from urllib.parse import urlparse
 
 import rasterio
 import pycurl
