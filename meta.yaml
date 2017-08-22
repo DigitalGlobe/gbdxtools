@@ -1,0 +1,70 @@
+{% set data = load_setup_py_data() %}
+
+package:
+  name: gbdxtools
+  version: {{ data.get('version') }}
+
+build:
+  number: {{ environ.get('GIT_DESCRIBE_NUMBER', 0) }}
+  script: pip install .
+  noarch: python
+
+source:
+  git_url: ./
+
+requirements:
+  run:
+    - python
+    - six >=1.10.0
+    - future >=0.15.2
+    - requests >=2.12.1
+    - boto >=2.47.0
+    - shapely
+    - ephem
+    - toolz
+    - cloudpickle
+    - dask >=0.14.2
+    - numpy
+    - pycurl
+    - rasterio >=0.36.0
+    - pyproj
+    - ndg-httpsclient
+    - requests-futures
+    - configparser
+    - mercantile
+    - scikit-image
+    - gbdx-auth ==0.2.4
+    - bumpversion
+    - pytest
+    - pytest-runner
+    - vcrpy
+
+
+  build:
+    - setuptools
+    - python {{ python }}
+    - six >=1.10.0
+    - future >=0.15.2
+    - requests >=2.12.1
+    - boto >=2.47.0
+    - pygeoif >=0.6
+    - geomet >=0.1.1
+    - shapely
+    - ephem
+    - toolz
+    - cloudpickle
+    - dask >=0.14.2
+    - {{ pin_compatible('numpy', min_pin='1.9') }}
+    - pycurl
+    - rasterio >=0.36.0
+    - pyproj
+    - ndg-httpsclient
+    - requests-futures
+    - configparser
+    - mercantile
+    - scikit-image
+    - gbdx-auth ==0.2.4
+    - bumpversion
+    - pytest
+    - pytest-runner
+    - vcrpy

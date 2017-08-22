@@ -1,2 +1,4 @@
 include README.md
 recursive-include gbdxtools *
+include requirements.txt
+recursive-exclude tests

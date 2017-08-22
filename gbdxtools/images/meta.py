@@ -19,7 +19,7 @@ import dask.array as da
 import numpy as np
 
 from gbdxtools.ipe.io import to_geotiff
-from gbdxtools.ipe.util import pad_safe_positive, pad_safe_negative
+from gbdxtools.ipe.util import RatPolyTransform, pad_safe_positive, pad_safe_negative
 
 try:
     from matplotlib import pyplot as plt
@@ -210,17 +210,23 @@ class GeoImage(Container):
             kwargs['proj'] = self.proj
         return to_geotiff(self, **kwargs)
 
-    def warp(self, padsize=(2,2), dem=0, **kwargs):
-        if 'proj' in kwargs:
-            to_proj = kwargs['proj']
-            xmin, ymin, xmax, ymax = self._reproject(shape(self), from_proj=self.proj, to_proj=to_proj).bounds
+    def warp(self, padsize=(2,2), dem=0, gtf=None, rpcs=None, proj=None, **kwargs):
+        if proj:
+            xmin, ymin, xmax, ymax = self._reproject(shape(self), from_proj=self.proj, to_proj=proj).bounds
         else:
             xmin, ymin, xmax, ymax = self.bounds
 
-        if 'gsd' in kwargs:
-            gsd = kwargs['gsd']
+        im_full = self.__class__(self.ipe.metadata['image']['imageId'], product='1b')
+
+        if gtf is None:
+            if rpcs is not None:
+                gtf = RatPolyTransform.from_rpcs(rpcs)
+            else:
+                gtf = im_full.__geo_transform__
+
+        if hasattr(gtf, "gsd") and gtf.gsd is not None:
+            gsd = gtf.gsd
         else:
-            # try to look this up from ratpoly/rcp metadata
             gsd = max((xmax-xmin)/self.shape[2], (ymax-ymin)/self.shape[1])
 
         x = np.linspace(xmin, xmax, num=int((xmax-xmin)/gsd))
@@ -232,8 +238,7 @@ class GeoImage(Container):
             dem = tf.resize(dem[0,:,:], xv.shape)
 
         # TODO how do we hook this up when doing other image types?
-        im_full = self.__class__(self.ipe.metadata['image']['imageId'], product='1b')
-        transpix = im_full.__geo_transform__.rev(xv, yv, z=dem, _type=np.float32)[::-1]
+        transpix = gtf.rev(xv, yv, z=dem, _type=np.float32)[::-1]
         xpad, ypad =  padsize
 
         psn = partial(pad_safe_negative, transpix=transpix, ref_im=im_full)
@@ -243,8 +248,8 @@ class GeoImage(Container):
 
         shifted = np.stack([transpix[0,:,:] - ymint, transpix[1,:,:] - xmint])
         data = im_full[:,ymint:ymaxt,xmint:xmaxt].read()
-        ortho = np.rollaxis(np.dstack([tf.warp(data[b,:,:].squeeze(), shifted, preserve_range=True) for b in xrange(data.shape[0])]), 2, 0)
-        return GeoDaskWrapper(ortho, self)
+        warped = np.rollaxis(np.dstack([tf.warp(data[b,:,:].squeeze(), shifted, preserve_range=True) for b in xrange(data.shape[0])]), 2, 0)
+        return GeoDaskWrapper(warped, self)
 
     def _parse_geoms(self, **kwargs):
         """ Finds supported geometry types, parses them and returns the bbox """
@@ -327,7 +332,7 @@ class PlotMixin(object):
         return [7, 4]
 
     def rgb(self, **kwargs):
-        data = self._read(self[kwargs.get("bands", self._rgb_bands),...])
+        data = self._read(self[kwargs.get("bands", self._rgb_bands),...], **kwargs)
         data = np.rollaxis(data.astype(np.float32), 0, 3)
         lims = np.percentile(data, kwargs.get("stretch", [2, 98]), axis=(0, 1))
         for x in xrange(len(data[0,0,:])):
@@ -360,9 +365,9 @@ class PlotMixin(object):
         plt.imshow(tfm(**kwargs), interpolation='nearest', cmap=kwargs.get("cmap", None))
         plt.show(block=False)
 
-    def _read(self, data):
+    def _read(self, data, **kwargs):
         if hasattr(data, 'read'):
-            return data.read()
+            return data.read(**kwargs)
         else:
             return data.compute()
 

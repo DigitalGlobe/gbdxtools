@@ -1,15 +1,17 @@
+import os
 import uuid
 import json
 from hashlib import sha256
 from itertools import chain
 from collections import OrderedDict, defaultdict
 import threading
-
-
-
+from tempfile import NamedTemporaryFile
+try:
+    from urlparse import urlparse
+except ImportError:
+    from urllib.parse import urlparse
 
 import rasterio
-from rasterio.io import MemoryFile
 import pycurl
 import numpy as np
 
@@ -57,19 +59,21 @@ def load_url(url, token, shape=(8, 256, 256)):
     _curl.setopt(_curl.URL, url)
     _curl.setopt(pycurl.NOSIGNAL, 1)
     _curl.setopt(pycurl.HTTPHEADER, ['Authorization: Bearer {}'.format(token)])
-    with MemoryFile() as memfile:
-        _curl.setopt(_curl.WRITEDATA, memfile)
+    _, ext = os.path.splitext(urlparse(url).path)
+    with NamedTemporaryFile(suffix="."+ext) as temp: # TODO: apply correct file extension
+        _curl.setopt(_curl.WRITEDATA, temp.file)
         _curl.perform()
         code = _curl.getinfo(pycurl.HTTP_CODE)
         try:
             if(code != 200):
                 raise TypeError("Request for {} returned unexpected error code: {}".format(url, code))
-            with memfile.open(driver="GTiff") as dataset:
+            temp.file.flush()
+            with rasterio.open(temp.name) as dataset:
                 arr = dataset.read()
         except (TypeError, rasterio.RasterioIOError) as e:
             print(e)
-            memfile.seek(0)
-            print(memfile.read())
+            temp.seek(0)
+            print(temp.read())
             arr = np.zeros(shape, dtype=np.float32)
             _curl.close()
             del _curl_pool[thread_id]

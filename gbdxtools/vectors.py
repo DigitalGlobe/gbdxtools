@@ -9,13 +9,13 @@ from builtins import object
 import six
 
 import requests
-from pygeoif import geometry
-from geomet import wkt as wkt2geojson
+from shapely.wkt import loads as load_wkt
 from collections import OrderedDict
 import json, time, os
 
 from shapely.ops import cascaded_union
 from shapely.geometry import shape, box
+from shapely.wkt import loads as from_wkt
 
 from gbdxtools.auth import Auth
 
@@ -103,7 +103,7 @@ class Vectors(object):
         '''
         # verify the "depth" of the attributes is single layer
 
-        geojson = wkt2geojson.loads(wkt)
+        geojson = load_wkt(wkt).__geo_interface__
         vector = {
             'type': "Feature",
             'geometry': geojson,
@@ -169,7 +169,7 @@ class Vectors(object):
     
         '''
 
-        search_area_polygon = geometry.from_wkt(searchAreaWkt)
+        search_area_polygon = from_wkt(searchAreaWkt)
         left, lower, right, upper = search_area_polygon.bounds
 
         params = {
@@ -233,7 +233,7 @@ class Vectors(object):
             results (list): A (usually single-element) list of dict objects containing the aggregation results.
         """
 
-        geojson = wkt2geojson.loads(searchAreaWkt)
+        geojson = load_wkt(searchAreaWkt).__geo_interface__
         aggs_str = str(agg_def) # could be string or AggregationDef
 
         params = {
