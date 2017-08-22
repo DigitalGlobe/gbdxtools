@@ -1,4 +1,8 @@
-0.12.0
+0.13.1
+------
+* fix to enable proper installation via pypi
+
+0.13.0
 -------
 * upgrading to new dask version support (dask >= 0.15.1)
 * using the __new__ pattern for image classes
