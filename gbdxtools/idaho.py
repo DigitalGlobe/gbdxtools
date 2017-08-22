@@ -8,7 +8,7 @@ from __future__ import division
 from builtins import str
 from builtins import object
 
-from pygeoif import geometry
+from shapely.wkt import loads as from_wkt
 import codecs
 import json
 import os
@@ -77,7 +77,7 @@ class Idaho(object):
 
         # try to convert from multipolygon to polygon:
         try:
-            footprint = geometry.from_wkt(footprint).geoms[0].wkt
+            footprint = from_wkt(footprint).geoms[0].wkt
         except:
             pass
 
@@ -257,10 +257,10 @@ class Idaho(object):
                         band_str = ms_id + '/{z}/{x}/{y}?bands=' + bands + '&panId=' + pan_id
                     else:
                         band_str = ms_id + '/{z}/{x}/{y}?bands=' + bands
-                    bbox = geometry.from_wkt(part[ms_partname]['boundstr']).bounds
+                    bbox = from_wkt(part[ms_partname]['boundstr']).bounds
                 elif not ms_id and pan_id:
                     band_str = pan_id + '/{z}/{x}/{y}?bands=0'
-                    bbox = geometry.from_wkt(part['PAN']['boundstr']).bounds
+                    bbox = from_wkt(part['PAN']['boundstr']).bounds
                 else:
                     continue
 
@@ -327,7 +327,7 @@ class Idaho(object):
                     }.get(partname, '0,1,2')
 
                     part_boundstr_wkt = part[partname]['boundstr']
-                    part_polygon = geometry.from_wkt(part_boundstr_wkt)
+                    part_polygon = from_wkt(part_boundstr_wkt)
                     bucketname = part[partname]['bucket']
                     image_id = part[partname]['id']
                     W, S, E, N = part_polygon.bounds
