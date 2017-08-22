@@ -5,6 +5,10 @@ from collections import defaultdict
 from itertools import chain
 from functools import partial
 from tempfile import NamedTemporaryFile
+try:
+    from urlparse import urlparse
+except ImportError:
+    from urllib.parse import urlparse
 
 import numpy as np
 import rasterio
