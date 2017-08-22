@@ -19,8 +19,6 @@ requirements:
     - future >=0.15.2
     - requests >=2.12.1
     - boto >=2.47.0
-    - pygeoif >=0.6
-    - geomet >=0.1.1
     - shapely
     - ephem
     - toolz
