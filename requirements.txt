@@ -18,6 +18,7 @@ cloudpickle
 dask>=0.14.2
 numpy
 pycurl
+rasterio>=0.36
 pyproj
 requests_futures
 configparser
