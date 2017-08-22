@@ -18,6 +18,7 @@ import dask
 import dask.array as da
 import numpy as np
 
+#from gbdxtools.images.dem_image import DemImage
 from gbdxtools.ipe.io import to_geotiff
 from gbdxtools.ipe.util import RatPolyTransform, pad_safe_positive, pad_safe_negative
 
@@ -227,7 +228,8 @@ class GeoImage(Container):
         if hasattr(gtf, "gsd") and gtf.gsd is not None:
             gsd = gtf.gsd
         else:
-            gsd = max((xmax-xmin)/self.shape[2], (ymax-ymin)/self.shape[1])
+            gsd = im_full.ipe.metadata["rpcs"]["gsd"]
+            #gsd = max((xmax-xmin)/self.shape[2], (ymax-ymin)/self.shape[1])
 
         x = np.linspace(xmin, xmax, num=int((xmax-xmin)/gsd))
         y = np.linspace(ymax, ymin, num=int((ymax-ymin)/gsd))
@@ -235,7 +237,7 @@ class GeoImage(Container):
 
         if isinstance(dem, np.ndarray):
             # TODO: potentially reproject
-            dem = tf.resize(dem[0,:,:], xv.shape)
+            dem = tf.resize(np.squeeze(dem), xv.shape, preserve_range=True)
 
         # TODO how do we hook this up when doing other image types?
         transpix = gtf.rev(xv, yv, z=dem, _type=np.float32)[::-1]
