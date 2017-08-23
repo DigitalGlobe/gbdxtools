@@ -329,7 +329,7 @@ class PlotMixin(object):
 
     @property
     def _ndvi_bands(self):
-        return [7, 4]
+        return [6, 4]
 
     def rgb(self, **kwargs):
         data = self._read(self[kwargs.get("bands", self._rgb_bands),...])
