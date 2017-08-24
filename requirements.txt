@@ -20,5 +20,5 @@ rasterio>=0.36
 pyproj
 requests_futures
 configparser
-mercantile
+mercantile>=0.10.0
 scikit-image
