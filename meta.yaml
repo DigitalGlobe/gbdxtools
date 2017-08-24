@@ -31,7 +31,7 @@ requirements:
     - ndg-httpsclient
     - requests-futures
     - configparser
-    - mercantile
+    - mercantile >=0.10.0
     - scikit-image
     - gbdx-auth ==0.2.4
     - bumpversion
@@ -61,7 +61,7 @@ requirements:
     - ndg-httpsclient
     - requests-futures
     - configparser
-    - mercantile
+    - mercantile >=0.10.0
     - scikit-image
     - gbdx-auth ==0.2.4
     - bumpversion
