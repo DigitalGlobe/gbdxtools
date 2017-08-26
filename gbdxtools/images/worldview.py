@@ -64,7 +64,7 @@ class WVImage(IpeImage):
     def parts(self):
         if self._parts is None:
             self._parts = [IdahoImage(rec['properties']['attributes']['idahoImageId'],
-                                      product=self.options["product"], proj=self.options["proj"])
+                                      product=self.options["product"], proj=self.options["proj"], gsd=self.options["gsd"])
                            for rec in self._find_parts(self.cat_id, self.options["band_type"])]
         return self._parts
 
@@ -92,10 +92,10 @@ class WVImage(IpeImage):
 
         dn_ops = [ipe.IdahoRead(bucketName="idaho-images", imageId=p['properties']['attributes']['idahoImageId'],
                                 objectStore="S3") for p in _parts]
-        ortho_params = {"Dest SRS Code": proj}
+        mosaic_params = {"Dest SRS Code": proj}
         if gsd is not None:
-            ortho_params["Requested GSD"] = gsd
-        ortho_op = ipe.GeospatialMosaic(*dn_ops, **ortho_params)
+            mosaic_params["Requested GSD"] = gsd
+        ortho_op = ipe.GeospatialMosaic(*dn_ops, **mosaic_params)
 
         toa_reflectance_op = ipe.MultiplyConst(
             ipe.AddConst(
