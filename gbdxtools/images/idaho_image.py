@@ -32,9 +32,10 @@ class IdahoImage(IpeImage):
         return self.__class__(self.idaho_id, proj=self.proj, product=product)
 
     @staticmethod
-    def _build_standard_products(idaho_id, proj):
+    def _build_standard_products(idaho_id, proj, gsd):
         dn_op = ipe.IdahoRead(bucketName="idaho-images", imageId=idaho_id, objectStore="S3")
-        ortho_op = ipe.Orthorectify(dn_op, **ortho_params(proj))
+        params = ortho_params(proj, gsd)
+        ortho_op = ipe.Orthorectify(dn_op, **params)
 
         # TODO: Switch to direct metadata access (ie remove this block)
         idaho_md = requests.get('http://idaho.timbr.io/{}.json'.format(idaho_id)).json()

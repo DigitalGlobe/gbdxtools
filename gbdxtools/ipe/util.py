@@ -36,13 +36,16 @@ def reproject_params(proj):
         _params["Dest pixel-to-world transform"] = None
     return _params
 
-def ortho_params(proj):
+def ortho_params(proj, gsd):
     params = {}
     if proj is not None:
         params["Output Coordinate Reference System"] = proj
         params["Sensor Model"] = None
         params["Elevation Source"] = ""
         params["Output Pixel to World Transform"] = ""
+    if gsd is not None:
+        params["Requested GSD"] = gsd
+
     return params
 
 

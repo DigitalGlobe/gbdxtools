@@ -11,7 +11,8 @@ class IkonosImage(IpeImage):
     def __new__(cls, record, **kwargs):
         options = {
             "product": kwargs.get("product", "ikonos"),
-            "spec": kwargs.get("spec", "multispectral")
+            "spec": kwargs.get("spec", "multispectral"),
+            "gsd": kwargs.get("gsd", None)
         }
   
         standard_products = cls._build_standard_products(record, options["spec"], kwargs.get("proj", "EPSG:4326"))
@@ -24,6 +25,7 @@ class IkonosImage(IpeImage):
         self = self.aoi(**kwargs)
         self._record = record
         self._spec = options["spec"]
+        self._gsd = options["gsd"]
         self._products = standard_products
         return self
 
@@ -32,14 +34,15 @@ class IkonosImage(IpeImage):
         return [2,1,0]
 
     def get_product(self, product):
-        return self.__class__(self._record, proj=self.proj, product=product)
+        return self.__class__(self._record, proj=self.proj, product=product, gsd=self._gsd)
 
     @staticmethod
-    def _build_standard_products(record, spec, proj):
+    def _build_standard_products(record, spec, proj, gsd):
         prefix = record['properties']['attributes']['bucketPrefix']
         bucket = record['properties']['attributes']['bucketName']
         ikonos = ipe.IkonosRead(path="{}/{}/{}_0000000:{}".format(bucket, prefix, prefix, spec))
-        ikonos = ipe.Orthorectify(ikonos, **ortho_params(proj))
+        params = ortho_params(proj, gsd)
+        ikonos = ipe.Orthorectify(ikonos, **params)
         return {
             "ikonos": ikonos
         }

@@ -11,6 +11,7 @@ class GE01(IpeImage):
     def __new__(cls, record, **kwargs):
         options = {
             "product": kwargs.get("product", "ortho")
+            "gsd": kwargs.get("gsd", None)
         }
 
         standard_products = cls._build_standard_products(record, kwargs.get("proj", None))
@@ -33,14 +34,15 @@ class GE01(IpeImage):
         return self.__class__(self._record, proj=self.proj, product=product)
 
     @staticmethod
-    def _build_standard_products(rec, proj):
+    def _build_standard_products(rec, proj, gsd):
         s3path = "/vsis3/{}/{}/{}".format(
                                 rec['properties']['attributes']['bucketName'],
                                 rec['properties']['attributes']['bucketPrefix'],
                                 rec['properties']['attributes']['imageFile']
                             )
         ge = ipe.GdalImageRead(path=s3path)
-        ortho = ipe.Orthorectify(ge, **ortho_params(proj))
+        params = ortho_params(proj, gsd)
+        ortho = ipe.Orthorectify(ge, **params)
         return {
             "ortho": ortho
         }
