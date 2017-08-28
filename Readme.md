@@ -19,25 +19,56 @@ Supported Python versions: `2.7`, `3.3`, `3.4`, `3.5`
 
 ## Announcement
 
-There have been reports of authentication errors while creating a gbdx interface if the file `~/.gbdx-config` is already populated with an access token. In this case, delete everything below and including the line `[gbdx_token]` within `~/.gbdx-config` and create a new gbdx interface. 
+There have been reports of authentication errors while creating a gbdx interface if the file `~/.gbdx-config` is already populated with an access token. In this case, delete everything below and including the line `[gbdx_token]` within `~/.gbdx-config` and create a new gbdx interface.
 
 
-## Installing gbdxtools
+## Installation
 
-1. Find your [GBDX API Credentials in your profile](https://gbdx.geobigdata.io/profile). If you don't have a GBDX account, you can [sign up for GBDX](https://gbdx.geobigdata.io).
+Install the latest stable version from pypi:
 
-1. Install the latest stable version from pypi:
+    $ pip install gbdxtools
 
-        $ pip install gbdxtools
+Optional: you can install the current version of the master branch:
 
-    Optional: you can install the current version of the master branch:
+    $ pip install git+https://github.com/digitalglobe/gbdxtools
 
-        $ pip install git+https://github.com/digitalglobe/gbdxtools
-
-    Keep in mind that the master branch is constantly under development. 
+Keep in mind that the master branch is constantly under development.
 
 
-### Troubleshooting Installation
+## Usage
+
+The library needs to be configured with your account's API credentials, which is available in your [GBDX Profile](https://gbdx.geobigdata.io/profile). If you don't have a GBDX account, you can [sign up for GBDX](https://gbdx.geobigdata.io).
+
+There are 3 ways to configure your API credentials:
+
+1. Pass API credentials to the gbdxtools constructor:
+
+        from gbdxtools import Interface
+        gbdx = Interface(username='your_username',
+             password='your_password',
+             client_id='your_client_id',
+             client_secret='your_client_secret')
+
+1. Set API credentials in your environment variables:
+
+        GBDX_USERNAME=your_username
+        GBDX_PASSWORD=your_password
+        GBDX_CLIENT_ID=your_client_id
+        GBDX_CLIENT_SECRET=your_client_secret
+
+1. Store API credentials in a `~/.gbdx-config` file (`ini` format).
+
+    Create a file in your home directory named `.gbdx-config` with the following contents:
+
+        [gbdx]
+        auth_url = https://geobigdata.io/auth/v1/oauth/token/
+        client_id = your_client_id
+        client_secret = your_client_secret
+        user_name = your_username
+        user_password = your_password
+
+
+## Troubleshooting Installation
 
 These are various tips to follow if your installation fails.
 
@@ -47,7 +78,7 @@ These are various tips to follow if your installation fails.
 
         # Ubuntu
         $ sudo add-apt-repository -y ppa:ubuntugis/ubuntugis-unstable
-        $ sudo apt update 
+        $ sudo apt update
         $ sudo apt-get install gdal-bin python-gdal python3-gdal libcurl4-openssl-dev
 
         # macOS / OSX
@@ -90,28 +121,28 @@ These are various tips to follow if your installation fails.
         $ . venv/bin/activate
         $ pip install --upgrade pip
         $ pip install --upgrade gbdxtools
-        
+
     You might also need to remove token from your `.gbdx-config` file
-        
+
         $ nano -w ~.gbdx-config
-        
+
     Then remove the `[gbdx_token]` section and `json=` part
-    
+
 
 * **GDAL**
 
-    Versions of gbdxtools >= 0.11.3 require the GDAL library (>= 2.1.0) to be installed. 
+    Versions of gbdxtools >= 0.11.3 require the GDAL library (>= 2.1.0) to be installed.
 
 * **conda**
 
-    If your installation with pip keeps failing, try creating a conda environment and installing gbdxtools within this environment. 
+    If your installation with pip keeps failing, try creating a conda environment and installing gbdxtools within this environment.
 
     Install conda with the following commands (choose default options at prompt):
 
         # Ubuntu
         $ wget https://repo.continuum.io/miniconda/Miniconda2-latest-Linux-x86_64.sh
         $ bash Miniconda2-latest-Linux-x86_64.sh
-        
+
         # macOS / OSX
         $ wget https://repo.continuum.io/miniconda/Miniconda2-latest-MacOSX-x86_64.sh
         $ bash Miniconda2-latest-MacOSX-x86_64.sh
@@ -119,7 +150,7 @@ These are various tips to follow if your installation fails.
     Make sure that conda is in your path. Then create a conda environment:
 
         $ conda create -n env python ipython   
-   
+
     Activate the environment:
 
         $ source activate env
@@ -133,7 +164,7 @@ These are various tips to follow if your installation fails.
         $ pip install gbdxtools
 
 
-## Contributing to gbdxtools
+## Contributing
 
 Please contribute! Every contribution matters to us, including submitting an issue, investigating or fixing a bug, adding a new feature, improving the documentation, or helping to answer questions.
 
@@ -145,10 +176,10 @@ Please contribute! Every contribution matters to us, including submitting an iss
         $ cd gbdxtools
 
 1. Start a virtual environment:
-   
+
         $ virtualenv venv
         $ . venv/bin/activate
- 
+
 1. Install the requirements:
 
         $ pip install -r requirements.txt
@@ -176,7 +207,7 @@ If you want only the unit or integration tests do either of:
 Note for **virtualenv** users: you may need to run the following command in your virtualenv for the tests to find gbdxtools properly:
 
     $ pip install -e .
-    
+
 ### Submitting a Pull Request
 
 Please make pull requests directly to master. Before making a pull request, please:
