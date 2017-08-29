@@ -18,9 +18,10 @@ import dask
 import dask.array as da
 import numpy as np
 
-#from gbdxtools.images.dem_image import DemImage
+from affine import Affine
+
 from gbdxtools.ipe.io import to_geotiff
-from gbdxtools.ipe.util import RatPolyTransform, pad_safe_positive, pad_safe_negative
+from gbdxtools.ipe.util import RatPolyTransform, pad_safe_positive, pad_safe_negative, IPE_TO_DTYPE
 
 try:
     from matplotlib import pyplot as plt
@@ -211,47 +212,90 @@ class GeoImage(Container):
             kwargs['proj'] = self.proj
         return to_geotiff(self, **kwargs)
 
-    def warp(self, padsize=(2,2), dem=0, gtf=None, rpcs=None, proj=None, **kwargs):
+    def warp(self, dem=0, rpcs=None, proj=None, **kwargs):
+        """
+          Delayed warp across an entire AOI or Image
+          creates a new dask image by deferring calls to the warp_geometry on chunks 
+        """
+        img_md = self.ipe.metadata["image"]
+        im_full = self.__class__(img_md['imageId'], product='1b')
+        x_size = img_md["tileXSize"]
+        y_size = img_md["tileYSize"] 
+
+        # Create an affine transform to convert between real-world and pixels 
+        gsd = kwargs.get("gsd", im_full.ipe.metadata["rpcs"]["gsd"])
+        gtf = Affine.from_gdal(im_full.bounds[0], gsd, 0.0, im_full.bounds[3], 0.0, -1 * gsd)
+
+        ll = ~gtf * (self.bounds[:2])
+        ur = ~gtf * (self.bounds[2:])
+        x_chunks = int((ur[0] - ll[0]) / x_size) + 1
+        y_chunks = int((ll[1] - ur[1]) / y_size) + 1
+
+        daskmeta = {
+            "dask": {},
+            "chunks": (img_md["numBands"], y_size, x_size),
+            "dtype": IPE_TO_DTYPE[img_md["dataType"]],
+            "name": "warp-{}".format(self.ipe_id),
+            "shape": (img_md["numBands"], y_chunks * y_size, x_chunks * x_size)
+        }
+
+        def px_to_geom(xmin, ymin):
+            xmax = int(xmin + img_md["tileXSize"])
+            ymax = int(ymin + img_md["tileYSize"])
+            bounds = list((gtf * (xmin, ymax)) + (gtf * (xmax, ymin)))
+            return box(*bounds)
+        
+        for y in xrange(y_chunks):
+            for x in xrange(x_chunks):
+                xmin = ll[0] + (x * x_size)
+                ymin = ur[1] + (y * y_size)
+                geometry = px_to_geom(xmin, ymin)
+                daskmeta["dask"][(daskmeta["name"], 0, y - img_md['minTileY'], x - img_md['minTileX'])] = (im_full.warp_geometry, geometry, dem, rpcs, proj, gsd)
+
+        return GeoDaskWrapper(daskmeta, self)
+        
+
+    def warp_geometry(self, geometry, dem=0, rpcs=None, proj=None, gsd=None, gtf=None, **kwargs):
+        """
+          Warps a geometry
+          pads the image aoi and creates a pixel translation matrix to warp data to
+        """
         if proj:
-            xmin, ymin, xmax, ymax = self._reproject(shape(self), from_proj=self.proj, to_proj=proj).bounds
+            xmin, ymin, xmax, ymax = self._reproject(geometry, from_proj=self.proj, to_proj=proj).bounds
         else:
-            xmin, ymin, xmax, ymax = self.bounds
-
-        im_full = self.__class__(self.ipe.metadata['image']['imageId'], product='1b')
-
+            xmin, ymin, xmax, ymax = geometry.bounds
+        
         if gtf is None:
             if rpcs is not None:
                 gtf = RatPolyTransform.from_rpcs(rpcs)
             else:
-                gtf = im_full.__geo_transform__
+                gtf = self.__geo_transform__
 
-        if hasattr(gtf, "gsd") and gtf.gsd is not None:
-            gsd = gtf.gsd
-        else:
-            gsd = im_full.ipe.metadata["rpcs"]["gsd"]
-            #gsd = max((xmax-xmin)/self.shape[2], (ymax-ymin)/self.shape[1])
+        if gsd is None:
+            if hasattr(gtf, "gsd") and gtf.gsd is not None:
+                gsd = gtf.gsd
+            else:
+                gsd = self.ipe.metadata["rpcs"]["gsd"]
 
         x = np.linspace(xmin, xmax, num=int((xmax-xmin)/gsd))
         y = np.linspace(ymax, ymin, num=int((ymax-ymin)/gsd))
         xv, yv = np.meshgrid(x, y, indexing='xy')
 
         if isinstance(dem, np.ndarray):
-            # TODO: potentially reproject
+            # TODO what do we do about projection here?
             dem = tf.resize(np.squeeze(dem), xv.shape, preserve_range=True)
 
-        # TODO how do we hook this up when doing other image types?
         transpix = gtf.rev(xv, yv, z=dem, _type=np.float32)[::-1]
-        xpad, ypad =  padsize
 
-        psn = partial(pad_safe_negative, transpix=transpix, ref_im=im_full)
-        psp = partial(pad_safe_positive, transpix=transpix, ref_im=im_full)
+        xpad, ypad = kwargs.get("padsize", (2,2))
+        psn = partial(pad_safe_negative, transpix=transpix, ref_im=self)
+        psp = partial(pad_safe_positive, transpix=transpix, ref_im=self)
         ymint, xmint = (psn(padsize=ypad, ind=0), psn(padsize=xpad, ind=1))
         ymaxt, xmaxt = (psp(padsize=ypad, ind=0), psp(padsize=xpad, ind=1))
-
         shifted = np.stack([transpix[0,:,:] - ymint, transpix[1,:,:] - xmint])
-        data = im_full[:,ymint:ymaxt,xmint:xmaxt].read()
-        warped = np.rollaxis(np.dstack([tf.warp(data[b,:,:].squeeze(), shifted, preserve_range=True) for b in xrange(data.shape[0])]), 2, 0)
-        return GeoDaskWrapper(warped, self)
+
+        data = self[:,ymint:ymaxt,xmint:xmaxt].read(quiet=True)
+        return np.rollaxis(np.dstack([tf.warp(data[b,:,:].squeeze(), shifted, preserve_range=True) for b in xrange(data.shape[0])]), 2, 0)
 
     def _parse_geoms(self, **kwargs):
         """ Finds supported geometry types, parses them and returns the bbox """
@@ -302,23 +346,23 @@ class DaskMetaWrapper(DaskMeta):
 
     @property
     def dask(self):
-        return self.da.dask
+        return self.da["dask"]
 
     @property
     def name(self):
-        return self.da.name
+        return self.da["name"]
 
     @property
     def chunks(self):
-        return self.da.chunks
+        return self.da["chunks"]
 
     @property
     def dtype(self):
-        return self.da.dtype
+        return self.da["dtype"]
 
     @property
     def shape(self):
-        return self.da.shape
+        return self.da["shape"]
 
 
 # Mixin class that defines plotting methods and rgb/ndvi methods
@@ -367,19 +411,19 @@ class PlotMixin(object):
         plt.imshow(tfm(**kwargs), interpolation='nearest', cmap=kwargs.get("cmap", None))
         plt.show(block=False)
 
-    def _read(self, data):
+    def _read(self, data, **kwargs):
         if hasattr(data, 'read'):
-            return data.read()
+            return data.read(**kwargs)
         else:
             return data.compute()
 
     def _single_band(self, **kwargs):
-        return self._read(self[0,:,:])
+        return self._read(self[0,:,:], **kwargs)
 
 
 class GeoDaskWrapper(DaskImage, GeoImage, PlotMixin):
-    def __new__(cls, array, img):
-        dm = DaskMetaWrapper(da.from_array(array, chunks=(256)))
+    def __new__(cls, daskmeta, img):
+        dm = DaskMetaWrapper(daskmeta)
         self = super(GeoDaskWrapper, cls).create(dm)
         self.__geo_interface__ = img.__geo_interface__
         self.__geo_transform__ = img.__geo_transform__

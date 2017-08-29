@@ -15,7 +15,7 @@ class IkonosImage(IpeImage):
             "gsd": kwargs.get("gsd", None)
         }
   
-        standard_products = cls._build_standard_products(record, options["spec"], kwargs.get("proj", "EPSG:4326"))
+        standard_products = cls._build_standard_products(record, options["spec"], kwargs.get("proj", "EPSG:4326"), gsd=options["gsd"])
         try:
             self = super(IkonosImage, cls).__new__(cls, standard_products[options["product"]])
         except KeyError as e:
@@ -37,11 +37,11 @@ class IkonosImage(IpeImage):
         return self.__class__(self._record, proj=self.proj, product=product, gsd=self._gsd)
 
     @staticmethod
-    def _build_standard_products(record, spec, proj, gsd):
+    def _build_standard_products(record, spec, proj, gsd=None):
         prefix = record['properties']['attributes']['bucketPrefix']
         bucket = record['properties']['attributes']['bucketName']
         ikonos = ipe.IkonosRead(path="{}/{}/{}_0000000:{}".format(bucket, prefix, prefix, spec))
-        params = ortho_params(proj, gsd)
+        params = ortho_params(proj, gsd=gsd)
         ikonos = ipe.Orthorectify(ikonos, **params)
         return {
             "ikonos": ikonos

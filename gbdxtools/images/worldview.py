@@ -41,7 +41,7 @@ class WVImage(IpeImage):
             options["band_type"] = "MS"
             options["product"] = "pansharpened"
 
-        standard_products = cls._build_standard_products(cat_id, options["band_type"], options["proj"], options["gsd"])
+        standard_products = cls._build_standard_products(cat_id, options["band_type"], options["proj"], gsd=options["gsd"])
         pan_products = cls._build_standard_products(cat_id, "pan", options["proj"], options["gsd"])
         pan = ipe.Format(ipe.MultiplyConst(pan_products['toa_reflectance'], constants=json.dumps([1000])), dataType="1")
         ms = ipe.Format(ipe.MultiplyConst(standard_products['toa_reflectance'],
@@ -80,7 +80,7 @@ class WVImage(IpeImage):
         return sorted(vectors.query(aoi, query=query), key=lambda x: x['properties']['id'])
 
     @classmethod
-    def _build_standard_products(cls, cat_id, band_type, proj, gsd):
+    def _build_standard_products(cls, cat_id, band_type, proj, gsd=None):
         # TODO: Switch to direct metadata access (ie remove this block)
         _parts = cls._find_parts(cat_id, band_type)
         _id = _parts[0]['properties']['attributes']['idahoImageId']
@@ -94,7 +94,7 @@ class WVImage(IpeImage):
                                 objectStore="S3") for p in _parts]
         mosaic_params = {"Dest SRS Code": proj}
         if gsd is not None:
-            mosaic_params["Requested GSD"] = gsd
+            mosaic_params["Requested GSD"] = str(gsd)
         ortho_op = ipe.GeospatialMosaic(*dn_ops, **mosaic_params)
 
         toa_reflectance_op = ipe.MultiplyConst(

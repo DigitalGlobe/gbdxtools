@@ -83,7 +83,7 @@ class IpeImage(DaskImage, GeoImage, PlotMixin):
             image.__class__ = self.__class__
             return image
 
-    def read(self, bands=None, quiet=False):
+    def read(self, bands=None, quiet=False, **kwargs):
         if not quiet: 
             print('Fetching Image... {} {}'.format(self.ntiles, 'tiles' if self.ntiles > 1 else 'tile'))
         return super(IpeImage, self).read(bands=bands)

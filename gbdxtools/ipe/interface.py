@@ -17,6 +17,7 @@ import numpy as np
 
 
 import gbdxtools as gbdx
+from gbdxtools.ipe.util import IPE_TO_DTYPE
 from gbdxtools.ipe.graph import VIRTUAL_IPE_URL, register_ipe_graph, get_ipe_metadata
 from gbdxtools.images.meta import DaskMeta
 from gbdxtools.auth import Auth
@@ -35,19 +36,6 @@ try:
     xrange
 except NameError:
     xrange = range
-
-IPE_TO_DTYPE = {
-    "BINARY": "bool",
-    "BYTE": "byte",
-    "SHORT": "short",
-    "UNSIGNED_SHORT": "ushort",
-    "INTEGER": "int32",
-    "UNSIGNED_INTEGER": "uint32",
-    "LONG": "int64",
-    "UNSIGNED_LONG": "uint64",
-    "FLOAT": "float32",
-    "DOUBLE": "float64"
-}
 
 NAMESPACE_UUID = uuid.NAMESPACE_DNS
 

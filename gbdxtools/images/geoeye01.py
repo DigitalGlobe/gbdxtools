@@ -10,7 +10,7 @@ class GE01(IpeImage):
     """
     def __new__(cls, record, **kwargs):
         options = {
-            "product": kwargs.get("product", "ortho")
+            "product": kwargs.get("product", "ortho"),
             "gsd": kwargs.get("gsd", None)
         }
 

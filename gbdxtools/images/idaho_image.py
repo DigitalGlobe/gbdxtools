@@ -13,10 +13,11 @@ class IdahoImage(IpeImage):
     def __new__(cls, idaho_id, **kwargs):
         options = {
             "proj": kwargs.get("proj", "EPSG:4326"),
-            "product": kwargs.get("product", "toa_reflectance")
+            "product": kwargs.get("product", "toa_reflectance"),
+            "gsd": kwargs.get("gsd", None)
         }
 
-        standard_products = cls._build_standard_products(idaho_id, options["proj"])
+        standard_products = cls._build_standard_products(idaho_id, options["proj"], gsd=options["gsd"])
         try:
             self = super(IdahoImage, cls).__new__(cls, standard_products.get(options["product"], "toa_reflectance"))
         except KeyError as e:
@@ -32,9 +33,9 @@ class IdahoImage(IpeImage):
         return self.__class__(self.idaho_id, proj=self.proj, product=product)
 
     @staticmethod
-    def _build_standard_products(idaho_id, proj, gsd):
+    def _build_standard_products(idaho_id, proj, gsd=None):
         dn_op = ipe.IdahoRead(bucketName="idaho-images", imageId=idaho_id, objectStore="S3")
-        params = ortho_params(proj, gsd)
+        params = ortho_params(proj, gsd=gsd)
         ortho_op = ipe.Orthorectify(dn_op, **params)
 
         # TODO: Switch to direct metadata access (ie remove this block)
