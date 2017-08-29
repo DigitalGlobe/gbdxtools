@@ -104,10 +104,12 @@ class DaskImage(da.Array):
             def wrapped(*args, **kwargs):
                 result = fn(*args, **kwargs)
                 if isinstance(result, da.Array) and len(result.shape) in [2,3]:
-                    result = super(DaskImage, self.__class__).__new__(self.__class__,
-                                                                      result.dask, result.name, result.chunks,
-                                                                      result.dtype, result.shape)
-                    result.__dict__.update(self.__dict__)
+                    copy = super(DaskImage, self.__class__).__new__(self.__class__,
+                                                                    result.dask, result.name, result.chunks,
+                                                                    result.dtype, result.shape)
+                    copy.__dict__.update(self.__dict__)
+                    copy.__dict__.update(result.__dict__)
+                    return copy
                 return result
             return wrapped
         else:
