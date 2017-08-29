@@ -76,7 +76,7 @@ class DaskImage(da.Array):
     A DaskImage is a 2 or 3 dimension dask array that contains implements the `__daskmeta__` interface.
     """
 
-    @abc.abstractproperty
+    @property
     def __daskmeta__(self):
         """ Should return a DaskMeta """
         pass
@@ -104,7 +104,10 @@ class DaskImage(da.Array):
             def wrapped(*args, **kwargs):
                 result = fn(*args, **kwargs)
                 if isinstance(result, da.Array) and len(result.shape) in [2,3]:
-                    self.__daskmeta__.infect(result)
+                    result = super(DaskImage, self.__class__).__new__(self.__class__,
+                                                                      result.dask, result.name, result.chunks,
+                                                                      result.dtype, result.shape)
+                    result.__dict__.update(self.__dict__)
                 return result
             return wrapped
         else:
@@ -117,8 +120,7 @@ class DaskImage(da.Array):
         """
         assert isinstance(dm, DaskMeta), "argument must be an instance of a DaskMeta subclass"
         with dask.set_options(array_plugins=[dm.infect]):
-            obj = da.Array(dm.dask, dm.name, dm.chunks, dm.dtype, dm.shape)
-            obj.__class__ = cls
+            obj = da.Array.__new__(cls, dm.dask, dm.name, dm.chunks, dm.dtype, dm.shape)
             return obj
 
     def read(self, bands=None):
@@ -146,13 +148,11 @@ class DaskImage(da.Array):
 class GeoImage(Container):
     _default_proj = "EPSG:4326"
 
-    @abc.abstractmethod
-    def __geo_interface__(self):
-        pass
+    # def __geo_interface__(self):
+    #     pass
 
-    @abc.abstractmethod
-    def __geo_transform__(self):
-        pass
+    # def __geo_transform__(self):
+    #     pass
 
     @classmethod
     def __subclasshook__(cls, C):
@@ -215,14 +215,14 @@ class GeoImage(Container):
     def warp(self, dem=0, rpcs=None, proj=None, **kwargs):
         """
           Delayed warp across an entire AOI or Image
-          creates a new dask image by deferring calls to the warp_geometry on chunks 
+          creates a new dask image by deferring calls to the warp_geometry on chunks
         """
         img_md = self.ipe.metadata["image"]
         im_full = self.__class__(img_md['imageId'], product='1b')
         x_size = img_md["tileXSize"]
-        y_size = img_md["tileYSize"] 
+        y_size = img_md["tileYSize"]
 
-        # Create an affine transform to convert between real-world and pixels 
+        # Create an affine transform to convert between real-world and pixels
         gsd = kwargs.get("gsd", im_full.ipe.metadata["rpcs"]["gsd"])
         gtf = Affine.from_gdal(im_full.bounds[0], gsd, 0.0, im_full.bounds[3], 0.0, -1 * gsd)
 
@@ -244,7 +244,7 @@ class GeoImage(Container):
             ymax = int(ymin + img_md["tileYSize"])
             bounds = list((gtf * (xmin, ymax)) + (gtf * (xmax, ymin)))
             return box(*bounds)
-        
+
         for y in xrange(y_chunks):
             for x in xrange(x_chunks):
                 xmin = ll[0] + (x * x_size)
@@ -253,7 +253,7 @@ class GeoImage(Container):
                 daskmeta["dask"][(daskmeta["name"], 0, y - img_md['minTileY'], x - img_md['minTileX'])] = (im_full.warp_geometry, geometry, dem, rpcs, proj, gsd)
 
         return GeoDaskWrapper(daskmeta, self)
-        
+
 
     def warp_geometry(self, geometry, dem=0, rpcs=None, proj=None, gsd=None, gtf=None, **kwargs):
         """
@@ -264,7 +264,7 @@ class GeoImage(Container):
             xmin, ymin, xmax, ymax = self._reproject(geometry, from_proj=self.proj, to_proj=proj).bounds
         else:
             xmin, ymin, xmax, ymax = geometry.bounds
-        
+
         if gtf is None:
             if rpcs is not None:
                 gtf = RatPolyTransform.from_rpcs(rpcs)
@@ -328,10 +328,13 @@ class GeoImage(Container):
         assert g in self, "Image does not contain specified geometry {} not in {}".format(g.bounds, self.bounds)
         bounds = ops.transform(self.__geo_transform__.rev, g).bounds
         # NOTE: image is a dask array that implements daskmeta interface (via op)
-        image = self[:, bounds[1]:bounds[3], bounds[0]:bounds[2]]
+        result = self[:, bounds[1]:bounds[3], bounds[0]:bounds[2]]
+        image = super(DaskImage, self.__class__).__new__(self.__class__,
+                                                         result.dask, result.name, result.chunks,
+                                                         result.dtype, result.shape)
+
         image.__geo_interface__ = mapping(g)
         image.__geo_transform__ = self.__geo_transform__ + (bounds[0], bounds[1])
-        image.__class__ = self.__class__
         return image
 
     def __contains__(self, g):
