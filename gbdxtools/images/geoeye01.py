@@ -14,7 +14,7 @@ class GE01(IpeImage):
             "gsd": kwargs.get("gsd", None)
         }
 
-        standard_products = cls._build_standard_products(record, kwargs.get("proj", None))
+        standard_products = cls._build_standard_products(record, kwargs.get("proj", None), options['gsd'])
         try:
             self = super(GE01, cls).__new__(cls, standard_products[options["product"]])
         except KeyError as e:
