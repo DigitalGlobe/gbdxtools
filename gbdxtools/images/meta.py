@@ -63,6 +63,12 @@ class DaskMeta(object):
     def shape(self):
         pass
 
+    def infect(self, target):
+        assert isinstance(target, da.Array), "DaskMeta can only be attached to Dask Arrays"
+        assert len(target.shape) in [2, 3], "target must be a dask array with 2 or 3 dimensions"
+        target.__dict__["__daskmeta__"] = property(lambda s: self, DaskImage.__set_daskmeta__)
+        return target
+
 
 @add_metaclass(abc.ABCMeta)
 class DaskImage(da.Array):
@@ -90,15 +96,30 @@ class DaskImage(da.Array):
                 pass
         return NotImplemented
 
+    def __getattribute__(self, name):
+        fn = object.__getattribute__(self, name)
+        if(isinstance(fn, types.MethodType) and
+           any(name in C.__dict__ for C in self.__class__.__mro__)):
+            @wraps(fn)
+            def wrapped(*args, **kwargs):
+                result = fn(*args, **kwargs)
+                if isinstance(result, da.Array) and len(result.shape) in [2,3]:
+                    self.__daskmeta__.infect(result)
+                return result
+            return wrapped
+        else:
+            return fn
+
     @classmethod
     def create(cls, dm):
         """
         Given a dask meta object, construct a dask array, attach dask meta object.
         """
         assert isinstance(dm, DaskMeta), "argument must be an instance of a DaskMeta subclass"
-        obj = da.Array(dm.dask, dm.name, dm.chunks, dm.dtype, dm.shape)
-        obj.__class__ = cls
-        return obj
+        with dask.set_options(array_plugins=[dm.infect]):
+            obj = da.Array(dm.dask, dm.name, dm.chunks, dm.dtype, dm.shape)
+            obj.__class__ = cls
+            return obj
 
     def read(self, bands=None):
         """ Reads data from a dask array and returns the computed ndarray matching the given bands """
@@ -194,14 +215,14 @@ class GeoImage(Container):
     def warp(self, dem=0, rpcs=None, proj=None, **kwargs):
         """
           Delayed warp across an entire AOI or Image
-          creates a new dask image by deferring calls to the warp_geometry on chunks
+          creates a new dask image by deferring calls to the warp_geometry on chunks 
         """
         img_md = self.ipe.metadata["image"]
         im_full = self.__class__(img_md['imageId'], product='1b')
         x_size = img_md["tileXSize"]
-        y_size = img_md["tileYSize"]
+        y_size = img_md["tileYSize"] 
 
-        # Create an affine transform to convert between real-world and pixels
+        # Create an affine transform to convert between real-world and pixels 
         gsd = kwargs.get("gsd", im_full.ipe.metadata["rpcs"]["gsd"])
         gtf = Affine.from_gdal(im_full.bounds[0], gsd, 0.0, im_full.bounds[3], 0.0, -1 * gsd)
 
@@ -223,7 +244,7 @@ class GeoImage(Container):
             ymax = int(ymin + img_md["tileYSize"])
             bounds = list((gtf * (xmin, ymax)) + (gtf * (xmax, ymin)))
             return box(*bounds)
-
+        
         for y in xrange(y_chunks):
             for x in xrange(x_chunks):
                 xmin = ll[0] + (x * x_size)
@@ -232,7 +253,7 @@ class GeoImage(Container):
                 daskmeta["dask"][(daskmeta["name"], 0, y - img_md['minTileY'], x - img_md['minTileX'])] = (im_full.warp_geometry, geometry, dem, rpcs, proj, gsd)
 
         return GeoDaskWrapper(daskmeta, self)
-
+        
 
     def warp_geometry(self, geometry, dem=0, rpcs=None, proj=None, gsd=None, gtf=None, **kwargs):
         """
@@ -243,7 +264,7 @@ class GeoImage(Container):
             xmin, ymin, xmax, ymax = self._reproject(geometry, from_proj=self.proj, to_proj=proj).bounds
         else:
             xmin, ymin, xmax, ymax = geometry.bounds
-
+        
         if gtf is None:
             if rpcs is not None:
                 gtf = RatPolyTransform.from_rpcs(rpcs)
