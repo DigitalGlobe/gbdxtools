@@ -206,7 +206,11 @@ class TmsImage(DaskImage, GeoImage, PlotMixin):
             image._tms_meta = self._tms_meta
             return image
         else:
-            image = super(TmsImage, self).__getitem__(geometry)
+            result = super(TmsImage, self).__getitem__(geometry)
+            image = super(TmsImage, self.__class__).__new__(self.__class__,
+                                                            result.dask, result.name, result.chunks,
+                                                            result.dtype, result.shape)
+
             if all([isinstance(e, slice) for e in geometry]) and len(geometry) == len(self.shape):
                 xmin, ymin, xmax, ymax = geometry[2].start, geometry[1].start, geometry[2].stop, geometry[1].stop
                 xmin = 0 if xmin is None else xmin
@@ -221,5 +225,4 @@ class TmsImage(DaskImage, GeoImage, PlotMixin):
                 image.__geo_interface__ = self.__geo_interface__
                 image.__geo_transform__ = self.__geo_transform__
             image._tms_meta = self._tms_meta
-            image.__class__ = self.__class__
             return image

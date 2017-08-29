@@ -33,15 +33,16 @@ class WVImage(IpeImage):
             "band_type": kwargs.get("band_type", "MS"),
             "product": kwargs.get("product", "toa_reflectance"),
             "proj": kwargs.get("proj", "EPSG:4326"),
-            "pansharpen": kwargs.get("pansharpen", False)
+            "pansharpen": kwargs.get("pansharpen", False),
+            "gsd": kwargs.get("gsd", None)
         }
 
         if options["pansharpen"]:
             options["band_type"] = "MS"
             options["product"] = "pansharpened"
 
-        standard_products = cls._build_standard_products(cat_id, options["band_type"], options["proj"])
-        pan_products = cls._build_standard_products(cat_id, "pan", options["proj"])
+        standard_products = cls._build_standard_products(cat_id, options["band_type"], options["proj"], gsd=options["gsd"])
+        pan_products = cls._build_standard_products(cat_id, "pan", options["proj"], options["gsd"])
         pan = ipe.Format(ipe.MultiplyConst(pan_products['toa_reflectance'], constants=json.dumps([1000])), dataType="1")
         ms = ipe.Format(ipe.MultiplyConst(standard_products['toa_reflectance'],
                                           constants=json.dumps([1000]*8)), dataType="1")
@@ -63,12 +64,12 @@ class WVImage(IpeImage):
     def parts(self):
         if self._parts is None:
             self._parts = [IdahoImage(rec['properties']['attributes']['idahoImageId'],
-                                      product=self.options["product"], proj=self.options["proj"])
+                                      product=self.options["product"], proj=self.options["proj"], gsd=self.options["gsd"])
                            for rec in self._find_parts(self.cat_id, self.options["band_type"])]
         return self._parts
 
     def get_product(self, product):
-        return self.__class__(self.idaho_id, proj=self.proj, product=product)
+        return self.__class__(self.cat_id, proj=self.proj, product=product)
 
     @staticmethod
     def _find_parts(cat_id, band_type):
@@ -79,7 +80,7 @@ class WVImage(IpeImage):
         return sorted(vectors.query(aoi, query=query), key=lambda x: x['properties']['id'])
 
     @classmethod
-    def _build_standard_products(cls, cat_id, band_type, proj):
+    def _build_standard_products(cls, cat_id, band_type, proj, gsd=None):
         # TODO: Switch to direct metadata access (ie remove this block)
         _parts = cls._find_parts(cat_id, band_type)
         _id = _parts[0]['properties']['attributes']['idahoImageId']
@@ -91,7 +92,10 @@ class WVImage(IpeImage):
 
         dn_ops = [ipe.IdahoRead(bucketName="idaho-images", imageId=p['properties']['attributes']['idahoImageId'],
                                 objectStore="S3") for p in _parts]
-        ortho_op = ipe.GeospatialMosaic(*dn_ops, **{"Dest SRS Code": proj})
+        mosaic_params = {"Dest SRS Code": proj}
+        if gsd is not None:
+            mosaic_params["Requested GSD"] = str(gsd)
+        ortho_op = ipe.GeospatialMosaic(*dn_ops, **mosaic_params)
 
         toa_reflectance_op = ipe.MultiplyConst(
             ipe.AddConst(

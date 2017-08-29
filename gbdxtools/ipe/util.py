@@ -27,6 +27,19 @@ import gbdxtools.ipe.constants as constants
 with warnings.catch_warnings():
     warnings.simplefilter("ignore")
 
+IPE_TO_DTYPE = {
+    "BINARY": "bool",
+    "BYTE": "byte",
+    "SHORT": "short",
+    "UNSIGNED_SHORT": "ushort",
+    "INTEGER": "int32",
+    "UNSIGNED_INTEGER": "uint32",
+    "LONG": "int64",
+    "UNSIGNED_LONG": "uint64",
+    "FLOAT": "float32",
+    "DOUBLE": "float64"
+}
+
 def reproject_params(proj):
     _params = {}
     if proj is not None:
@@ -36,8 +49,10 @@ def reproject_params(proj):
         _params["Dest pixel-to-world transform"] = None
     return _params
 
-def ortho_params(proj):
+def ortho_params(proj, gsd=None):
     params = {}
+    if gsd is not None:
+        params["Requested GSD"] = str(gsd)
     if proj is not None:
         params["Output Coordinate Reference System"] = proj
         params["Sensor Model"] = None
