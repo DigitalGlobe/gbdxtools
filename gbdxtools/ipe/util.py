@@ -53,6 +53,8 @@ def ortho_params(proj, gsd=None):
     params = {}
     if gsd is not None:
         params["Requested GSD"] = str(gsd)
+        params["Resampling Kernel"] = "INTERP_BILINEAR"
+        params["Grid Size"] = 10
     if proj is not None:
         params["Output Coordinate Reference System"] = proj
         params["Sensor Model"] = None
