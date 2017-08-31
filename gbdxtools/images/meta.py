@@ -340,7 +340,12 @@ class GeoImage(Container):
         return image
 
     def __contains__(self, g):
-        geometry = ops.transform(self.__geo_transform__.rev, g)
+        try:
+            z = self.ipe.metadata["rpcs"]["heightOffset"]
+        except:
+            z = 0
+        rev = partial(self.__geo_transform__.rev, z=z)
+        geometry = ops.transform(rev, g)
         img_bounds = box(0, 0, *self.shape[2:0:-1])
         return img_bounds.contains(geometry)
 
