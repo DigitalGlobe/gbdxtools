@@ -50,6 +50,7 @@ def load_url(url, token, shape=(8, 256, 256)):
     _, ext = os.path.splitext(urlparse(url).path)
     success = False
     for i in xrange(num_retries):
+        print("try {}".format(i))
         with NamedTemporaryFile(suffix="."+ext) as temp: # TODO: apply correct file extension
             _curl.setopt(_curl.WRITEDATA, temp.file)
             _curl.perform()
