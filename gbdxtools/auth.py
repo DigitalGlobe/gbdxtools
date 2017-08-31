@@ -41,5 +41,5 @@ class _Auth(object):
         except Exception as err:
             print(err)
 
-        self.gbdx_connection.mount(VIRTUAL_IPE_URL, HTTPAdapter(max_retries=5, status_forcelist=[500, 502]))
+        self.gbdx_connection.mount(VIRTUAL_IPE_URL, HTTPAdapter(max_retries=5, status_forcelist=[500, 502, 504]))
         self.gbdx_futures_session = FuturesSession(session=self.gbdx_connection, max_workers=64)
