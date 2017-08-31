@@ -48,25 +48,30 @@ def load_url(url, token, shape=(8, 256, 256)):
     _curl.setopt(pycurl.NOSIGNAL, 1)
     _curl.setopt(pycurl.HTTPHEADER, ['Authorization: Bearer {}'.format(token)])
     _, ext = os.path.splitext(urlparse(url).path)
-    with NamedTemporaryFile(suffix="."+ext) as temp: # TODO: apply correct file extension
-        _curl.setopt(_curl.WRITEDATA, temp.file)
-        _curl.perform()
-        code = _curl.getinfo(pycurl.HTTP_CODE)
-        try:
-            if(code != 200):
-                raise TypeError("Request for {} returned unexpected error code: {}".format(url, code))
-            temp.file.flush()
-            with rasterio.open(temp.name) as dataset:
-                arr = dataset.read()
-        except (TypeError, rasterio.RasterioIOError) as e:
-            print(e)
-            temp.seek(0)
-            print(temp.read())
-            arr = np.zeros(shape, dtype=np.float32)
-            _curl.close()
-            del _curl_pool[thread_id]
-        return arr
-
+    success = False
+    for i in xrange(num_retries):
+        print("try {}".format(i))
+        with NamedTemporaryFile(suffix="."+ext) as temp: # TODO: apply correct file extension
+            _curl.setopt(_curl.WRITEDATA, temp.file)
+            _curl.perform()
+            code = _curl.getinfo(pycurl.HTTP_CODE)
+            try:
+                if(code != 200):
+                    raise TypeError("Request for {} returned unexpected error code: {}".format(url, code))
+                temp.file.flush()
+                with rasterio.open(temp.name) as dataset:
+                    arr = dataset.read()
+                success = True
+                return arr
+            except (TypeError, rasterio.RasterioIOError) as e:
+                print(e)
+                temp.seek(0)
+                print(temp.read())
+                _curl.close()
+                del _curl_pool[thread_id]
+    if success is False:
+        arr = np.zeros(shape, dtype=np.float32)
+    return arr
 
 class ContentHashedDict(dict):
     @property
