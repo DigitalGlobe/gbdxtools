@@ -1,6 +1,9 @@
 from requests_futures.sessions import FuturesSession
+from requests.adapters import HTTPAdapter
 from gbdx_auth import gbdx_auth
 import logging
+
+from gbdxtools.ipe.graph import VIRTUAL_IPE_URL
 
 auth = None
 
@@ -9,7 +12,7 @@ def Auth(**kwargs):
     if auth is None or len(kwargs) > 0:
         auth = _Auth(**kwargs)
     return auth
-        
+
 class _Auth(object):
     gbdx_connection = None
     root_url = 'https://geobigdata.io'
@@ -38,4 +41,5 @@ class _Auth(object):
         except Exception as err:
             print(err)
 
-        self.gbdx_futures_session = FuturesSession(session=self.gbdx_connection, max_workers=64)  
+        self.gbdx_connection.mount(VIRTUAL_IPE_URL, HTTPAdapter(max_retries=5, status_forcelist=[500, 502]))
+        self.gbdx_futures_session = FuturesSession(session=self.gbdx_connection, max_workers=64)
