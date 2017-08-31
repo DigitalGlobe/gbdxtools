@@ -49,6 +49,7 @@ def load_url(url, token, shape=(8, 256, 256)):
     _curl.setopt(pycurl.HTTPHEADER, ['Authorization: Bearer {}'.format(token)])
     _, ext = os.path.splitext(urlparse(url).path)
     success = False
+    num_retries = 3
     for i in xrange(num_retries):
         print("try {}".format(i))
         with NamedTemporaryFile(suffix="."+ext) as temp: # TODO: apply correct file extension
