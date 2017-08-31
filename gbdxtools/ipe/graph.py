@@ -27,9 +27,9 @@ def register_ipe_graph(conn, ipe_graph):
     res = resolve_if_future(conn.post(url, json.dumps(ipe_graph, sort_keys=True),
                                       headers={'Content-Type': 'application/json'}))
     if res.status_code == 200:
-        return res.content
+        return res.text
     else:
-        raise BadRequest("Problem registering graph: {}".format(res.content))
+        raise BadRequest("Problem registering graph: {}".format(res.text))
 
 
 
