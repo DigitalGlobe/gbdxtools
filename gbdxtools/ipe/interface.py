@@ -42,14 +42,14 @@ NAMESPACE_UUID = uuid.NAMESPACE_DNS
 
 def load_url(url, token, shape=(8, 256, 256)):
     """ Loads a geotiff url inside a thread and returns as an ndarray """
-    thread_id = threading.current_thread().ident
-    _curl = _curl_pool[thread_id]
-    _curl.setopt(_curl.URL, url)
-    _curl.setopt(pycurl.NOSIGNAL, 1)
-    _curl.setopt(pycurl.HTTPHEADER, ['Authorization: Bearer {}'.format(token)])
     _, ext = os.path.splitext(urlparse(url).path)
     success = False
     for i in xrange(MAX_RETRIES):
+        thread_id = threading.current_thread().ident
+        _curl = _curl_pool[thread_id]
+        _curl.setopt(_curl.URL, url)
+        _curl.setopt(pycurl.NOSIGNAL, 1)
+        _curl.setopt(pycurl.HTTPHEADER, ['Authorization: Bearer {}'.format(token)])
         with NamedTemporaryFile(suffix="."+ext) as temp: # TODO: apply correct file extension
             _curl.setopt(_curl.WRITEDATA, temp.file)
             _curl.perform()
