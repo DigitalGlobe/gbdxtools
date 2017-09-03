@@ -227,10 +227,10 @@ class AffineTransform(GeometricTransform):
         self._iaffine = None
         self.proj = proj
 
-    def rev(self, lng, lat, z=0):
+    def rev(self, lng, lat, z=0, _type=np.int32):
         if self._iaffine is None:
             self._iaffine = ~self._affine
-        return np.asarray(self._iaffine * (lng, lat)).astype(np.int32)
+        return np.asarray(self._iaffine * (lng, lat)).astype(_type)
 
     def fwd(self, x, y, z=0):
         return self._affine * (x, y)
