@@ -50,7 +50,7 @@ def load_url(url, token, shape=(8, 256, 256)):
         _curl.setopt(_curl.URL, url)
         _curl.setopt(pycurl.NOSIGNAL, 1)
         _curl.setopt(pycurl.HTTPHEADER, ['Authorization: Bearer {}'.format(token)])
-        with NamedTemporaryFile(suffix="."+ext) as temp: # TODO: apply correct file extension
+        with NamedTemporaryFile(prefix="gbdxtools", suffix=ext) as temp: # TODO: apply correct file extension
             _curl.setopt(_curl.WRITEDATA, temp.file)
             _curl.perform()
             code = _curl.getinfo(pycurl.HTTP_CODE)
