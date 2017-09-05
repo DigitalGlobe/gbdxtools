@@ -42,6 +42,7 @@ NAMESPACE_UUID = uuid.NAMESPACE_DNS
 
 def load_url(url, token, shape=(8, 256, 256)):
     """ Loads a geotiff url inside a thread and returns as an ndarray """
+    # print("calling load_url ({})".format(url))
     _, ext = os.path.splitext(urlparse(url).path)
     success = False
     for i in xrange(MAX_RETRIES):

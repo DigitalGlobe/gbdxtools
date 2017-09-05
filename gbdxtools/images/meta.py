@@ -221,7 +221,7 @@ class GeoImage(Container):
             kwargs['proj'] = self.proj
         return to_geotiff(self, **kwargs)
 
-    def warp(self, dem=0, proj="EPSG:4326", **kwargs):
+    def warp(self, dem=None, proj="EPSG:4326", **kwargs):
         """
           Delayed warp across an entire AOI or Image
           creates a new dask image by deferring calls to the warp_geometry on chunks
@@ -268,22 +268,33 @@ class GeoImage(Container):
             return box(*bounds)
 
         full_bounds = box(*output_bounds)
-        buf = 2*np.abs(np.asarray(self.__geo_transform__.fwd(0, 0)) - np.asarray(self.__geo_transform__.fwd(-1, -1))).max()
+        # buf = 2*np.abs(np.asarray(self.__geo_transform__.fwd(0, 0)) - np.asarray(self.__geo_transform__.fwd(-1, -1))).max()
         # d = 0.01 * ops.transform(itfm, geometry).area ** 0.5
+
+        center = shape(self).centroid
+        g = box(*(center.buffer(gsd / 2).bounds))
+        # print "Input GSD (deg):", self.ipe.metadata["rpcs"]["gsd"]
+        tfm = partial(pyproj.transform, pyproj.Proj(init=proj), pyproj.Proj(init=from_proj))
+        buf = 5*ops.transform(tfm, g).area ** 0.5
+        print("buf", buf)
 
         def _warp(region, geometry, gsd, dem, proj):
             transpix = region._transpix(geometry, gsd, dem, proj)
-            data = region.compute()
+            data = region.read(quiet=True)
             return np.rollaxis(np.dstack([tf.warp(data[b,:,:].squeeze(), transpix, preserve_range=True) for b in xrange(data.shape[0])]), 2, 0)
 
         dasks = []
+        if isinstance(dem, GeoImage) and dem.proj != proj:
+            dem = dem.warp(proj=proj)
+            dasks.append(dem.dask)
+
         for y in xrange(y_chunks):
             for x in xrange(x_chunks):
                 xmin = x * x_size
                 ymin = y * y_size
                 geometry = px_to_geom(xmin, ymin)
                 full_bounds = box(*full_bounds.union(geometry).bounds)
-                region = self._warp_region(geometry, dem, proj, gsd, AffineTransform(gtf, proj), buf)
+                region = self._warp_region(geometry, proj, buf)
                 dasks.append(region.dask)
                 daskmeta["dask"][(daskmeta["name"], 0, y, x)] = (_warp, region, geometry, gsd, dem, proj)
         daskmeta["dask"], _ = optimize.cull(sharedict.merge(daskmeta["dask"], *dasks), daskmeta["dask"].keys())
@@ -308,15 +319,15 @@ class GeoImage(Container):
 
         xv, yv = itfm(xv, yv) # if that works
 
-        if isinstance(dem, GeoImage) and dem.proj != proj:
-            dem = dem.warp(proj=proj).compute()
+        if isinstance(dem, GeoImage):
+            dem = dem[geometry].compute()
 
         if isinstance(dem, np.ndarray):
             dem = tf.resize(np.squeeze(dem), xv.shape, preserve_range=True)
 
         return self.__geo_transform__.rev(xv, yv, z=dem, _type=np.float32)[::-1]
 
-    def _warp_region(self, geometry, dem=0, proj="EPSG:4326", gsd=None, gtf=None, _buf=0):
+    def _warp_region(self, geometry, proj="EPSG:4326", _buf=0):
         """
         Computes and returns an source data image region necessary for warp
         """
@@ -326,11 +337,12 @@ class GeoImage(Container):
             from_proj = self.proj
 
         itfm = partial(pyproj.transform, pyproj.Proj(init=proj), pyproj.Proj(init=from_proj))
+        g = ops.transform(itfm, geometry).buffer(_buf)
 
-        region = self[ops.transform(itfm, geometry).buffer(_buf)]
+        region = self[g]
+
         return region
 
-        return
     def _parse_geoms(self, **kwargs):
         """ Finds supported geometry types, parses them and returns the bbox """
         bbox = kwargs.get('bbox', None)
@@ -357,22 +369,14 @@ class GeoImage(Container):
         tfm = partial(pyproj.transform, pyproj.Proj(init=from_proj), pyproj.Proj(init=to_proj))
         return ops.transform(tfm, geometry)
 
-    def __getitem__(self, geometry):
-        g = shape(geometry)
 
-        bounds = ops.transform(self.__geo_transform__.rev, g).bounds
+    def _slice_padded(self, bounds):
         pads = (max(-bounds[0], 0), max(-bounds[1], 0),
                 max(bounds[2]-self.shape[2], 0), max(bounds[3]-self.shape[1], 0))
         bounds = (max(bounds[0], 0),
                   max(bounds[1], 0),
                   min(bounds[2], self.shape[2]),
                   min(bounds[3], self.shape[1]))
-
-        try:
-            assert g in self, "Image does not contain specified geometry {} not in {}".format(g.bounds, self.bounds)
-        except AssertionError as ae:
-            warnings.warn(ae.args)
-
 
         # NOTE: image is a dask array that implements daskmeta interface (via op)
         result = self[:, bounds[1]:bounds[3], bounds[0]:bounds[2]]
@@ -398,8 +402,21 @@ class GeoImage(Container):
                                                          result.dask, result.name, result.chunks,
                                                          result.dtype, result.shape)
 
-        image.__geo_interface__ = mapping(g)
         image.__geo_transform__ = self.__geo_transform__ + (bounds[0], bounds[1])
+        return image
+
+    def __getitem__(self, geometry):
+        g = shape(geometry)
+
+        bounds = ops.transform(self.__geo_transform__.rev, g).bounds
+
+        try:
+            assert g in self, "Image does not contain specified geometry {} not in {}".format(g.bounds, self.bounds)
+        except AssertionError as ae:
+            warnings.warn(ae.args)
+
+        image = self._slice_padded(bounds)
+        image.__geo_interface__ = mapping(g)
         return image
 
     def __contains__(self, g):
