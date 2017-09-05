@@ -6,6 +6,7 @@ import random
 from functools import wraps, partial
 from collections import Container
 from six import add_metaclass
+from multiprocessing.pool import ThreadPool
 import warnings
 
 from shapely import ops, wkt
@@ -15,6 +16,8 @@ import skimage.transform as tf
 
 import pyproj
 import dask
+from dask import sharedict, optimize
+from dask.delayed import delayed
 import dask.array as da
 import numpy as np
 
@@ -36,7 +39,7 @@ except NameError:
 
 num_workers = int(os.environ.get("GBDX_THREADS", 8))
 threaded_get = partial(dask.threaded.get, num_workers=num_workers)
-
+dask.set_options(pool=ThreadPool(2*num_workers))
 
 @add_metaclass(abc.ABCMeta)
 class DaskMeta(object):
@@ -241,6 +244,7 @@ class GeoImage(Container):
         gsd = kwargs.get("gsd", ops.transform(tfm, g).area ** 0.5)
 
         tfm = partial(pyproj.transform, pyproj.Proj(init=from_proj), pyproj.Proj(init=proj))
+        itfm = partial(pyproj.transform, pyproj.Proj(init=proj), pyproj.Proj(init=from_proj))
         output_bounds = ops.transform(tfm, box(*self.bounds)).bounds
         gtf = Affine.from_gdal(output_bounds[0], gsd, 0.0, output_bounds[3], 0.0, -1 * gsd)
 
@@ -267,48 +271,66 @@ class GeoImage(Container):
         buf = 2*np.abs(np.asarray(self.__geo_transform__.fwd(0, 0)) - np.asarray(self.__geo_transform__.fwd(-1, -1))).max()
         # d = 0.01 * ops.transform(itfm, geometry).area ** 0.5
 
+        def _warp(region, geometry, gsd, dem, proj):
+            transpix = region._transpix(geometry, gsd, dem, proj)
+            data = region.compute()
+            return np.rollaxis(np.dstack([tf.warp(data[b,:,:].squeeze(), transpix, preserve_range=True) for b in xrange(data.shape[0])]), 2, 0)
+
+        dasks = []
         for y in xrange(y_chunks):
             for x in xrange(x_chunks):
                 xmin = x * x_size
                 ymin = y * y_size
                 geometry = px_to_geom(xmin, ymin)
                 full_bounds = box(*full_bounds.union(geometry).bounds)
-                daskmeta["dask"][(daskmeta["name"], 0, y, x)] = (self.warp_geometry, geometry, dem, proj, gsd, AffineTransform(gtf, proj), buf)
+                region = self._warp_region(geometry, dem, proj, gsd, AffineTransform(gtf, proj), buf)
+                dasks.append(region.dask)
+                daskmeta["dask"][(daskmeta["name"], 0, y, x)] = (_warp, region, geometry, gsd, dem, proj)
+        daskmeta["dask"], _ = optimize.cull(sharedict.merge(daskmeta["dask"], *dasks), daskmeta["dask"].keys())
 
         result = GeoDaskWrapper(daskmeta, self)
         result.__geo_interface__ = mapping(full_bounds)
         result.__geo_transform__ = AffineTransform(gtf, proj)
         return GeoImage.__getitem__(result, box(*output_bounds))
 
-    def warp_geometry(self, geometry, dem=0, proj="EPSG:4326", gsd=None, gtf=None, _buf=0, **kwargs):
+    def _transpix(self, geometry, gsd, dem, proj):
+        xmin, ymin, xmax, ymax = geometry.bounds
+        x = np.linspace(xmin, xmax, num=int((xmax-xmin)/gsd))
+        y = np.linspace(ymax, ymin, num=int((ymax-ymin)/gsd))
+        xv, yv = np.meshgrid(x, y, indexing='xy')
+
+        if self.proj is None:
+            from_proj = "EPSG:4326"
+        else:
+            from_proj = self.proj
+
+        itfm = partial(pyproj.transform, pyproj.Proj(init=proj), pyproj.Proj(init=from_proj))
+
+        xv, yv = itfm(xv, yv) # if that works
+
+        if isinstance(dem, GeoImage) and dem.proj != proj:
+            dem = dem.warp(proj=proj).compute()
+
+        if isinstance(dem, np.ndarray):
+            dem = tf.resize(np.squeeze(dem), xv.shape, preserve_range=True)
+
+        return self.__geo_transform__.rev(xv, yv, z=dem, _type=np.float32)[::-1]
+
+    def _warp_region(self, geometry, dem=0, proj="EPSG:4326", gsd=None, gtf=None, _buf=0):
         """
-          Warps a geometry
-          pads the image aoi and creates a pixel translation matrix to warp data to
+        Computes and returns an source data image region necessary for warp
         """
         if self.proj is None:
             from_proj = "EPSG:4326"
         else:
             from_proj = self.proj
+
         itfm = partial(pyproj.transform, pyproj.Proj(init=proj), pyproj.Proj(init=from_proj))
-        xmin, ymin, xmax, ymax = geometry.bounds
-
-        x = np.linspace(xmin, xmax, num=int((xmax-xmin)/gsd))
-        y = np.linspace(ymax, ymin, num=int((ymax-ymin)/gsd))
-        xv, yv = np.meshgrid(x, y, indexing='xy')
-        xv, yv = itfm(xv, yv) # if that works
-
-        if isinstance(dem, GeoImage) and dem.proj != proj:
-            dem = dem.warp(proj=proj).read()
-
-        if isinstance(dem, np.ndarray):
-            dem = tf.resize(np.squeeze(dem), xv.shape, preserve_range=True)
 
         region = self[ops.transform(itfm, geometry).buffer(_buf)]
-        data = region.read(quiet=True)
-        transpix = region.__geo_transform__.rev(xv, yv, z=dem, _type=np.float32)[::-1]
+        return region
 
-        return np.rollaxis(np.dstack([tf.warp(data[b,:,:].squeeze(), transpix, preserve_range=True) for b in xrange(data.shape[0])]), 2, 0)
-
+        return
     def _parse_geoms(self, **kwargs):
         """ Finds supported geometry types, parses them and returns the bbox """
         bbox = kwargs.get('bbox', None)
