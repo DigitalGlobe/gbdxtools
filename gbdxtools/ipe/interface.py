@@ -68,6 +68,9 @@ def load_url(url, token, shape=(8, 256, 256)):
                 print(temp.read())
                 _curl.close()
                 del _curl_pool[thread_id]
+            finally:
+                temp.close()
+
     if success is False:
         arr = np.zeros(shape, dtype=np.float32)
     return arr
