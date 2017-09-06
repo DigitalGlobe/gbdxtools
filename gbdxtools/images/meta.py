@@ -286,7 +286,7 @@ class GeoImage(Container):
                 geometry = px_to_geom(xmin, ymin)
                 full_bounds = box(*full_bounds.union(geometry).bounds)
                 daskmeta["dask"][(daskmeta["name"], 0, y, x)] = (self._warp, geometry, gsd, dem, proj, 5)
-        daskmeta["dask"], _ = optimize.cull(sharedict.merge(daskmeta["dask"], *dasks), daskmeta["dask"].keys())
+        daskmeta["dask"], _ = optimize.cull(sharedict.merge(daskmeta["dask"], *dasks), list(daskmeta["dask"].keys()))
 
         result = GeoDaskWrapper(daskmeta, self)
         result.__geo_interface__ = mapping(full_bounds)
