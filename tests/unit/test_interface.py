@@ -25,7 +25,7 @@ def test_init_host(monkeypatch):
     test_host = 'test.mydomain.com'
 
     def session(config_file):
-        return None
+        return None 
 
     monkeypatch.setattr(gbdxtools.auth.gbdx_auth, 'get_session', session)
 
