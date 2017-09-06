@@ -243,9 +243,9 @@ class GeoImage(Container):
             # print "Input GSD (deg):", self.ipe.metadata["rpcs"]["gsd"]
             tfm = partial(pyproj.transform, pyproj.Proj(init="EPSG:4326"), pyproj.Proj(init=proj))
             gsd = kwargs.get("gsd", ops.transform(tfm, g).area ** 0.5)
-        except (AttributeError, KeyError):
+        except (AttributeError, KeyError, TypeError):
             tfm = partial(pyproj.transform, pyproj.Proj(init=self.proj), pyproj.Proj(init=proj))
-            gsd = kwargs.get("gsd", ops.transform(tfm, shape(self)).area / (self.shape[1] * self.shape[2]))
+            gsd = kwargs.get("gsd", (ops.transform(tfm, shape(self)).area / (self.shape[1] * self.shape[2])) ** 0.5 )
 
         tfm = partial(pyproj.transform, pyproj.Proj(init=from_proj), pyproj.Proj(init=proj))
         itfm = partial(pyproj.transform, pyproj.Proj(init=proj), pyproj.Proj(init=from_proj))
@@ -324,7 +324,10 @@ class GeoImage(Container):
 
         if isinstance(dem, GeoImage):
             g = box(xv.min(), yv.min(), xv.max(), yv.max())
-            dem = dem[g].read(quiet=True)
+            try:
+                dem = dem[g].read(quiet=True)
+            except AssertionError:
+                dem = 0 # guessing this is indexing by a 0 width geometry.
 
         if isinstance(dem, np.ndarray):
             dem = tf.resize(np.squeeze(dem), xv.shape, preserve_range=True)
