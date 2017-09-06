@@ -34,14 +34,11 @@ requirements:
     - mercantile >=0.10.0
     - scikit-image
     - gbdx-auth ==0.2.4
-    - bumpversion
-    - pytest
-    - pytest-runner
-    - vcrpy
+    - jpeg ==8d
 
   build:
     - setuptools
-    - python {{ python }}
+    - python
     - six >=1.10.0
     - future >=0.15.2
     - requests >=2.12.1
@@ -65,3 +62,4 @@ requirements:
     - pytest
     - pytest-runner
     - vcrpy
+    - jpeg ==8d
