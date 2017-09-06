@@ -1,3 +1,12 @@
+0.13.4
+______
+* retry functionality for Ipe Image classes
+* dask delayed client side reprojection and orthorectification via warp
+* global dask threadpool for `.read` operations
+* gsd support for mosaic op based images
+* handling of errors in workflow status calls
+* misc bugfixes
+
 0.13.1
 ------
 * fix to enable proper installation via pypi
