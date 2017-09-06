@@ -6,22 +6,25 @@ import random
 from functools import wraps, partial
 from collections import Container
 from six import add_metaclass
+from multiprocessing.pool import ThreadPool
+import warnings
 
-from shapely import ops
+from shapely import ops, wkt
 from shapely.geometry import box, shape, mapping
-from shapely import wkt
 
 import skimage.transform as tf
 
 import pyproj
 import dask
+from dask import sharedict, optimize
+from dask.delayed import delayed
 import dask.array as da
 import numpy as np
 
 from affine import Affine
 
 from gbdxtools.ipe.io import to_geotiff
-from gbdxtools.ipe.util import RatPolyTransform, pad_safe_positive, pad_safe_negative, IPE_TO_DTYPE
+from gbdxtools.ipe.util import RatPolyTransform, AffineTransform, pad_safe_positive, pad_safe_negative, IPE_TO_DTYPE
 
 try:
     from matplotlib import pyplot as plt
@@ -36,7 +39,7 @@ except NameError:
 
 num_workers = int(os.environ.get("GBDX_THREADS", 8))
 threaded_get = partial(dask.threaded.get, num_workers=num_workers)
-
+dask.set_options(pool=ThreadPool(2*num_workers))
 
 @add_metaclass(abc.ABCMeta)
 class DaskMeta(object):
@@ -108,7 +111,11 @@ class DaskImage(da.Array):
                                                                     result.dask, result.name, result.chunks,
                                                                     result.dtype, result.shape)
                     copy.__dict__.update(self.__dict__)
-                    copy.__dict__.update(result.__dict__)
+                    try:
+                        copy.__dict__.update(result.__dict__)
+                    except AttributeError:
+                        # this means result was an object with __slots__
+                        pass
                     return copy
                 return result
             return wrapped
@@ -163,7 +170,7 @@ class GeoImage(Container):
            any("__geo_transform__" in B.__dict__ for B in C.__mro__) and
            any("__geo_interface__" in B.__dict__ for B in C.__mro__)):
             return True
-        raise NotImplemented
+        return NotImplemented
 
     @property
     def affine(self):
@@ -214,22 +221,39 @@ class GeoImage(Container):
             kwargs['proj'] = self.proj
         return to_geotiff(self, **kwargs)
 
-    def warp(self, dem=0, rpcs=None, proj=None, **kwargs):
+    def warp(self, dem=None, proj="EPSG:4326", **kwargs):
         """
           Delayed warp across an entire AOI or Image
           creates a new dask image by deferring calls to the warp_geometry on chunks
         """
         img_md = self.ipe.metadata["image"]
-        im_full = self.__class__(img_md['imageId'], product='1b')
         x_size = img_md["tileXSize"]
         y_size = img_md["tileYSize"]
 
         # Create an affine transform to convert between real-world and pixels
-        gsd = kwargs.get("gsd", im_full.ipe.metadata["rpcs"]["gsd"])
-        gtf = Affine.from_gdal(im_full.bounds[0], gsd, 0.0, im_full.bounds[3], 0.0, -1 * gsd)
+        if self.proj is None:
+            from_proj = "EPSG:4326"
+        else:
+            from_proj = self.proj
 
-        ll = ~gtf * (self.bounds[:2])
-        ur = ~gtf * (self.bounds[2:])
+        try:
+            # NOTE: this only works on images that have IPE rpcs metadata
+            center = wkt.loads(self.ipe.metadata["image"]["imageBoundsWGS84"]).centroid
+            g = box(*(center.buffer(self.ipe.metadata["rpcs"]["gsd"] / 2).bounds))
+            # print "Input GSD (deg):", self.ipe.metadata["rpcs"]["gsd"]
+            tfm = partial(pyproj.transform, pyproj.Proj(init="EPSG:4326"), pyproj.Proj(init=proj))
+            gsd = kwargs.get("gsd", ops.transform(tfm, g).area ** 0.5)
+        except (AttributeError, KeyError, TypeError):
+            tfm = partial(pyproj.transform, pyproj.Proj(init=self.proj), pyproj.Proj(init=proj))
+            gsd = kwargs.get("gsd", (ops.transform(tfm, shape(self)).area / (self.shape[1] * self.shape[2])) ** 0.5 )
+
+        tfm = partial(pyproj.transform, pyproj.Proj(init=from_proj), pyproj.Proj(init=proj))
+        itfm = partial(pyproj.transform, pyproj.Proj(init=proj), pyproj.Proj(init=from_proj))
+        output_bounds = ops.transform(tfm, box(*self.bounds)).bounds
+        gtf = Affine.from_gdal(output_bounds[0], gsd, 0.0, output_bounds[3], 0.0, -1 * gsd)
+
+        ll = ~gtf * (output_bounds[:2])
+        ur = ~gtf * (output_bounds[2:])
         x_chunks = int((ur[0] - ll[0]) / x_size) + 1
         y_chunks = int((ll[1] - ur[1]) / y_size) + 1
 
@@ -242,62 +266,75 @@ class GeoImage(Container):
         }
 
         def px_to_geom(xmin, ymin):
-            xmax = int(xmin + img_md["tileXSize"])
-            ymax = int(ymin + img_md["tileYSize"])
+            xmax = int(xmin + x_size)
+            ymax = int(ymin + y_size)
             bounds = list((gtf * (xmin, ymax)) + (gtf * (xmax, ymin)))
             return box(*bounds)
 
+        full_bounds = box(*output_bounds)
+
+        dasks = []
+        if isinstance(dem, GeoImage):
+            if dem.proj != proj:
+                dem = dem.warp(proj=proj)
+            dasks.append(dem.dask)
+
         for y in xrange(y_chunks):
             for x in xrange(x_chunks):
-                xmin = ll[0] + (x * x_size)
-                ymin = ur[1] + (y * y_size)
+                xmin = x * x_size
+                ymin = y * y_size
                 geometry = px_to_geom(xmin, ymin)
-                daskmeta["dask"][(daskmeta["name"], 0, y - img_md['minTileY'], x - img_md['minTileX'])] = (im_full.warp_geometry, geometry, dem, rpcs, proj, gsd)
+                full_bounds = box(*full_bounds.union(geometry).bounds)
+                daskmeta["dask"][(daskmeta["name"], 0, y, x)] = (self._warp, geometry, gsd, dem, proj, 5)
+        daskmeta["dask"], _ = optimize.cull(sharedict.merge(daskmeta["dask"], *dasks), list(daskmeta["dask"].keys()))
 
-        return GeoDaskWrapper(daskmeta, self)
+        result = GeoDaskWrapper(daskmeta, self)
+        result.__geo_interface__ = mapping(full_bounds)
+        result.__geo_transform__ = AffineTransform(gtf, proj)
+        return GeoImage.__getitem__(result, box(*output_bounds))
 
-
-    def warp_geometry(self, geometry, dem=0, rpcs=None, proj=None, gsd=None, gtf=None, **kwargs):
-        """
-          Warps a geometry
-          pads the image aoi and creates a pixel translation matrix to warp data to
-        """
-        if proj:
-            xmin, ymin, xmax, ymax = self._reproject(geometry, from_proj=self.proj, to_proj=proj).bounds
+    def _warp(self, geometry, gsd, dem, proj, buf=0):
+        transpix = self._transpix(geometry, gsd, dem, proj)
+        xmin, xmax, ymin, ymax = (int(max(transpix[0,:,:].min() - buf, 0)),
+                                  int(min(transpix[0,:,:].max() + buf, self.shape[1])),
+                                  int(max(transpix[1,:,:].min() - buf, 0)),
+                                  int(min(transpix[1,:,:].max() + buf, self.shape[2])))
+        transpix[0,:,:] = transpix[0,:,:] - xmin
+        transpix[1,:,:] = transpix[1,:,:] - ymin
+        data = self[:,xmin:xmax, ymin:ymax].compute() # read(quiet=True)
+        if data.shape[1]*data.shape[2] > 0:
+            return np.rollaxis(np.dstack([tf.warp(data[b,:,:].squeeze(), transpix, preserve_range=True, order=3) for b in xrange(data.shape[0])]), 2, 0)
         else:
-            xmin, ymin, xmax, ymax = geometry.bounds
+            return np.zeros((data.shape[0], transpix.shape[1], transpix.shape[2]))
 
-        if gtf is None:
-            if rpcs is not None:
-                gtf = RatPolyTransform.from_rpcs(rpcs)
-            else:
-                gtf = self.__geo_transform__
-
-        if gsd is None:
-            if hasattr(gtf, "gsd") and gtf.gsd is not None:
-                gsd = gtf.gsd
-            else:
-                gsd = self.ipe.metadata["rpcs"]["gsd"]
-
+    def _transpix(self, geometry, gsd, dem, proj):
+        xmin, ymin, xmax, ymax = geometry.bounds
         x = np.linspace(xmin, xmax, num=int((xmax-xmin)/gsd))
         y = np.linspace(ymax, ymin, num=int((ymax-ymin)/gsd))
         xv, yv = np.meshgrid(x, y, indexing='xy')
 
+        if self.proj is None:
+            from_proj = "EPSG:4326"
+        else:
+            from_proj = self.proj
+
+        itfm = partial(pyproj.transform, pyproj.Proj(init=proj), pyproj.Proj(init=from_proj))
+
+        xv, yv = itfm(xv, yv) # if that works
+
+        if isinstance(dem, GeoImage):
+            g = box(xv.min(), yv.min(), xv.max(), yv.max())
+            try:
+                dem = dem[g].compute() # read(quiet=True)
+            except AssertionError:
+                dem = 0 # guessing this is indexing by a 0 width geometry.
+
         if isinstance(dem, np.ndarray):
-            # TODO what do we do about projection here?
             dem = tf.resize(np.squeeze(dem), xv.shape, preserve_range=True)
 
-        transpix = gtf.rev(xv, yv, z=dem, _type=np.float32)[::-1]
+        return self.__geo_transform__.rev(xv, yv, z=dem, _type=np.float32)[::-1]
 
-        xpad, ypad = kwargs.get("padsize", (2,2))
-        psn = partial(pad_safe_negative, transpix=transpix, ref_im=self)
-        psp = partial(pad_safe_positive, transpix=transpix, ref_im=self)
-        ymint, xmint = (psn(padsize=ypad, ind=0), psn(padsize=xpad, ind=1))
-        ymaxt, xmaxt = (psp(padsize=ypad, ind=0), psp(padsize=xpad, ind=1))
-        shifted = np.stack([transpix[0,:,:] - ymint, transpix[1,:,:] - xmint])
 
-        data = self[:,ymint:ymaxt,xmint:xmaxt].read(quiet=True)
-        return np.rollaxis(np.dstack([tf.warp(data[b,:,:].squeeze(), shifted, preserve_range=True) for b in xrange(data.shape[0])]), 2, 0)
 
     def _parse_geoms(self, **kwargs):
         """ Finds supported geometry types, parses them and returns the bbox """
@@ -325,18 +362,54 @@ class GeoImage(Container):
         tfm = partial(pyproj.transform, pyproj.Proj(init=from_proj), pyproj.Proj(init=to_proj))
         return ops.transform(tfm, geometry)
 
-    def __getitem__(self, geometry):
-        g = shape(geometry)
-        assert g in self, "Image does not contain specified geometry {} not in {}".format(g.bounds, self.bounds)
-        bounds = ops.transform(self.__geo_transform__.rev, g).bounds
+
+    def _slice_padded(self, bounds):
+        pads = (max(-bounds[0], 0), max(-bounds[1], 0),
+                max(bounds[2]-self.shape[2], 0), max(bounds[3]-self.shape[1], 0))
+        bounds = (max(bounds[0], 0),
+                  max(bounds[1], 0),
+                  min(bounds[2], self.shape[2]),
+                  min(bounds[3], self.shape[1]))
+
         # NOTE: image is a dask array that implements daskmeta interface (via op)
         result = self[:, bounds[1]:bounds[3], bounds[0]:bounds[2]]
+        if pads[0] > 0:
+            dims = (result.shape[0], result.shape[1], pads[0])
+            result = da.concatenate([da.zeros(dims, chunks=dims, dtype=result.dtype),
+                                     result], axis=2)
+        if pads[2] > 0:
+            dims = (result.shape[0], result.shape[1], pads[2])
+            result = da.concatenate([result,
+                                     da.zeros(dims, chunks=dims, dtype=result.dtype)], axis=2)
+        if pads[1] > 0:
+            dims = (result.shape[0], pads[1], result.shape[2])
+            result = da.concatenate([da.zeros(dims, chunks=dims, dtype=result.dtype),
+                                     result], axis=1)
+        if pads[3] > 0:
+            dims = (result.shape[0], pads[3], result.shape[2])
+            result = da.concatenate([result,
+                                     da.zeros(dims, chunks=dims, dtype=result.dtype)], axis=1)
+
+
         image = super(DaskImage, self.__class__).__new__(self.__class__,
                                                          result.dask, result.name, result.chunks,
                                                          result.dtype, result.shape)
 
-        image.__geo_interface__ = mapping(g)
         image.__geo_transform__ = self.__geo_transform__ + (bounds[0], bounds[1])
+        return image
+
+    def __getitem__(self, geometry):
+        g = shape(geometry)
+
+        bounds = ops.transform(self.__geo_transform__.rev, g).bounds
+
+        try:
+            assert g in self, "Image does not contain specified geometry {} not in {}".format(g.bounds, self.bounds)
+        except AssertionError as ae:
+            warnings.warn(ae.args)
+
+        image = self._slice_padded(bounds)
+        image.__geo_interface__ = mapping(g)
         return image
 
     def __contains__(self, g):

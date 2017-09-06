@@ -15,7 +15,7 @@ from gbdxtools.s3 import S3
 class Workflow(object):
     def __init__(self, **kwargs):
         """Construct the Workflow instance
-        
+
         Returns:
             An instance of the Workflow class.
         """
@@ -70,7 +70,7 @@ class Workflow(object):
             'wf_url': self.workflows_url, 'wf_id': workflow_id
         }
         r = self.gbdx_connection.get(url)
-
+        r.raise_for_status()
         return r.json()['state']
 
     def get(self, workflow_id):

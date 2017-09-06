@@ -53,6 +53,8 @@ def ortho_params(proj, gsd=None):
     params = {}
     if gsd is not None:
         params["Requested GSD"] = str(gsd)
+        params["Resampling Kernel"] = "INTERP_BILINEAR"
+        params["Grid Size"] = 10
     if proj is not None:
         params["Output Coordinate Reference System"] = proj
         params["Sensor Model"] = None
@@ -106,7 +108,7 @@ def calc_toa_gain_offset(meta):
 
 
 class RatPolyTransform(GeometricTransform):
-    def __init__(self, A, B, offset, scale, px_offset, px_scale, gsd=None, proj=None):
+    def __init__(self, A, B, offset, scale, px_offset, px_scale, gsd=None, proj=None, default_z=0):
         self.proj = proj
         self._A = A
         self._B = B
@@ -120,6 +122,8 @@ class RatPolyTransform(GeometricTransform):
         self._px_offscl_rev = np.vstack([px_offset, px_scale])
         self._px_offscl = np.vstack([-px_offset/px_scale, 1.0/px_scale])
 
+        self._default_z = default_z
+
         self._A_rev = np.dot(pinv(np.dot(np.transpose(A), A)), np.transpose(A))
         # only using the numerator (more dynamic range for the fit?)
         # self._B_rev = np.dot(pinv(np.dot(np.transpose(B), B)), np.transpose(B))
@@ -128,7 +132,10 @@ class RatPolyTransform(GeometricTransform):
     def gsd(self):
         return self._gsd
 
-    def rev(self, lng, lat, z=0, _type=np.int32):
+    def rev(self, lng, lat, z=None, _type=np.int32):
+        if z is None:
+            z = self._default_z
+
         if all(isinstance(var, (int, float, tuple)) for var in [lng, lat]):
             lng, lat = (np.array([lng]), np.array([lat]))
         if not all(isinstance(var, np.ndarray) for var in [lng, lat]):
@@ -185,7 +192,8 @@ class RatPolyTransform(GeometricTransform):
             shift = np.asarray(other)
             # shift is an x/y px_offset needs to be y/x
             return RatPolyTransform(self._A, self._B, self._offset, self._scale,
-                                    self._px_offset - shift[::-1], self._px_scale)
+                                    self._px_offset - shift[::-1], self._px_scale,
+                                    self.gsd, self.proj, self._default_z)
         else:
             raise NotImplemented
 
@@ -212,7 +220,8 @@ class RatPolyTransform(GeometricTransform):
         px_scale = np.asarray([rpcs["lineScale"], rpcs["sampleScale"]])
         px_offset = np.asarray([rpcs["lineOffset"], rpcs["sampleOffset"]])
 
-        return cls(P, Q, offset, scale, px_offset, px_scale, rpcs["gsd"], rpcs["spatialReferenceSystem"])
+        return cls(P, Q, offset, scale, px_offset, px_scale, rpcs["gsd"], rpcs["spatialReferenceSystem"],
+                   rpcs["heightOffset"])
 
     @classmethod
     def from_affine(cls, affine):
@@ -225,10 +234,10 @@ class AffineTransform(GeometricTransform):
         self._iaffine = None
         self.proj = proj
 
-    def rev(self, lng, lat, z=0):
+    def rev(self, lng, lat, z=0, _type=np.int32):
         if self._iaffine is None:
             self._iaffine = ~self._affine
-        return np.asarray(self._iaffine * (lng, lat)).astype(np.int32)
+        return np.asarray(self._iaffine * (lng, lat)).astype(_type)
 
     def fwd(self, x, y, z=0):
         return self._affine * (x, y)
