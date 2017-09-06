@@ -301,7 +301,7 @@ class GeoImage(Container):
                                   int(min(transpix[1,:,:].max() + buf, self.shape[2])))
         transpix[0,:,:] = transpix[0,:,:] - xmin
         transpix[1,:,:] = transpix[1,:,:] - ymin
-        data = self[:,xmin:xmax, ymin:ymax].read(quiet=True)
+        data = self[:,xmin:xmax, ymin:ymax].compute() # read(quiet=True)
         if data.shape[1]*data.shape[2] > 0:
             return np.rollaxis(np.dstack([tf.warp(data[b,:,:].squeeze(), transpix, preserve_range=True, order=3) for b in xrange(data.shape[0])]), 2, 0)
         else:
@@ -325,7 +325,7 @@ class GeoImage(Container):
         if isinstance(dem, GeoImage):
             g = box(xv.min(), yv.min(), xv.max(), yv.max())
             try:
-                dem = dem[g].read(quiet=True)
+                dem = dem[g].compute() # read(quiet=True)
             except AssertionError:
                 dem = 0 # guessing this is indexing by a 0 width geometry.
 
