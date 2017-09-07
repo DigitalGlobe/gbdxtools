@@ -5,7 +5,7 @@ package:
   version: {{ data.get('version') }}
 
 build:
-  number: {{ environ.get('GIT_DESCRIBE_NUMBER', 0) }}
+  build: 0
   script: pip install .
   noarch: python
 
@@ -28,13 +28,13 @@ requirements:
     - pycurl
     - rasterio >=0.36.0
     - pyproj
-    - ndg-httpsclient
     - requests-futures
     - configparser
     - mercantile >=0.10.0
     - scikit-image
     - gbdx-auth ==0.2.4
     - jpeg ==8d
+    - libtiff >=4.0.6-2
 
   build:
     - setuptools
@@ -47,12 +47,11 @@ requirements:
     - ephem
     - toolz
     - cloudpickle
-    - dask >=0.14.2
+    - dask >=0.14.2dd
     - {{ pin_compatible('numpy', min_pin='1.9') }}
     - pycurl
     - rasterio >=0.36.0
     - pyproj
-    - ndg-httpsclient
     - requests-futures
     - configparser
     - mercantile >=0.10.0
@@ -63,3 +62,4 @@ requirements:
     - pytest-runner
     - vcrpy
     - jpeg ==8d
+    - libtiff >=4.0.6-2
