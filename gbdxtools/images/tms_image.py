@@ -77,7 +77,7 @@ class TmsMeta(DaskMeta):
         self._url_template = url + "?access_token={token}"
 
         _first_tile = mercantile.Tile(z=self.zoom_level, x=0, y=0)
-        _last_tile = mercantile.tile(180, -85.05, self.zoom_level)
+        _last_tile = mercantile.Tile(z=self.zoom_level, x=180, y=-85.05)
         g = box(*mercantile.xy_bounds(_first_tile)).union(box(*mercantile.xy_bounds(_last_tile)))
 
         self._full_bounds = g.bounds
