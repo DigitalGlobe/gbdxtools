@@ -71,7 +71,6 @@ def load_url(url, token, shape=(8, 256, 256)):
                 return arr
             except (TypeError, rasterio.RasterioIOError) as e:
                 print(e)
-                temp.seek(0)
                 _curl.close()
                 del _curl_pool[thread_id]
             finally:
