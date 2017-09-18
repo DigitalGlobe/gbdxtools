@@ -14,7 +14,7 @@ except ImportError:
 try:
     from functools import lru_cache # python 3
 except ImportError:
-    from cachtools.func import lru_cache
+    from cachetools.func import lru_cache
 
 import rasterio
 try:
