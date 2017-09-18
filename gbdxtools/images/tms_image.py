@@ -17,6 +17,10 @@ except ImportError:
 
 import numpy as np
 import rasterio
+try:
+    from rasterio import RasterioIOError
+except ImportError:
+    from rasterio.errors import RasterioIOError
 from rasterio.transform import from_bounds as transform_from_bounds
 
 import mercantile
@@ -55,7 +59,7 @@ def load_url(url, shape=(8, 256, 256)):
             temp.close()
             with rasterio.open(temp.name) as dataset:
                 arr = dataset.read()
-        except (TypeError, rasterio.RasterioIOError) as e:
+        except (TypeError, RasterioIOError) as e:
             print(e)
             temp.seek(0)
             print(temp.read())
