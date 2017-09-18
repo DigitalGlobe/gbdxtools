@@ -50,7 +50,7 @@ class TmsImageTest(unittest.TestCase):
     def test_tms_image(self):
         img = self.gbdx.tms_image(zoom=18, bbox=[-105.00444889068605, 39.75299710099606, -104.9962091445923, 39.75431683540881])
         self.assertTrue(isinstance(img, TmsImage))
-        assert img.shape == (3, 321, 1317)
+        assert img.shape == (3, 320, 1317)
         assert img.proj == 'EPSG:3857'
 
     def test_tms_image_global(self):

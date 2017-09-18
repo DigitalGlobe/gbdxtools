@@ -17,6 +17,11 @@ except ImportError:
     from cachtools.func import lru_cache
 
 import rasterio
+try:
+    from rasterio import RasterioIOError
+except ImportError:
+    from rasterio.errors import RasterioIOError
+
 import pycurl
 import numpy as np
 
@@ -69,7 +74,7 @@ def load_url(url, token, shape=(8, 256, 256)):
                     arr = dataset.read()
                 success = True
                 return arr
-            except (TypeError, rasterio.RasterioIOError) as e:
+            except (TypeError, RasterioIOError) as e:
                 print(e)
                 _curl.close()
                 del _curl_pool[thread_id]
