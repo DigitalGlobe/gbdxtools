@@ -7,7 +7,6 @@ pytest
 pytest-runner
 vcrpy
 mock
-ndg-httpsclient
 bumpversion
 shapely
 ephem
