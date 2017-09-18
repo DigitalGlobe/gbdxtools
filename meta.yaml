@@ -62,4 +62,4 @@ requirements:
     - pytest-runner
     - vcrpy
     - jpeg ==8d
-    - cachetools >=2.0.0 # py27
+    - cachetools >=2.0.0
