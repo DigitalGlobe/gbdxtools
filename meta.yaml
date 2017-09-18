@@ -34,7 +34,6 @@ requirements:
     - scikit-image
     - gbdx-auth ==0.2.4
     - jpeg ==8d
-    - libtiff >=4.0.6-2
 
   build:
     - setuptools
@@ -62,4 +61,3 @@ requirements:
     - pytest-runner
     - vcrpy
     - jpeg ==8d
-    - libtiff >=4.0.6-2
