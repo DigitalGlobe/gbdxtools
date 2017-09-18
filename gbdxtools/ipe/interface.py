@@ -11,6 +11,11 @@ try:
 except ImportError:
     from urllib.parse import urlparse
 
+try:
+    from functools import lru_cache # python 3
+except ImportError:
+    from cachetools.func import lru_cache
+
 import rasterio
 try:
     from rasterio import RasterioIOError
@@ -44,6 +49,7 @@ except NameError:
 NAMESPACE_UUID = uuid.NAMESPACE_DNS
 
 
+@lru_cache(maxsize=128)
 def load_url(url, token, shape=(8, 256, 256)):
     """ Loads a geotiff url inside a thread and returns as an ndarray """
     # print("calling load_url ({})".format(url))
@@ -70,7 +76,6 @@ def load_url(url, token, shape=(8, 256, 256)):
                 return arr
             except (TypeError, RasterioIOError) as e:
                 print(e)
-                temp.seek(0)
                 _curl.close()
                 del _curl_pool[thread_id]
             finally:

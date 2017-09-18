@@ -10,8 +10,17 @@ try:
 except ImportError:
     from urllib.parse import urlparse
 
+try:
+    from functools import lru_cache # python 3
+except ImportError:
+    from cachetools.func import lru_cache
+
 import numpy as np
 import rasterio
+try:
+    from rasterio import RasterioIOError
+except ImportError:
+    from rasterio.errors import RasterioIOError
 from rasterio.transform import from_bounds as transform_from_bounds
 
 import mercantile
@@ -31,7 +40,7 @@ try:
 except NameError:
     xrange = range
 
-
+@lru_cache(maxsize=128)
 def load_url(url, shape=(8, 256, 256)):
     """ Loads a geotiff url inside a thread and returns as an ndarray """
     thread_id = threading.current_thread().ident
@@ -39,7 +48,7 @@ def load_url(url, shape=(8, 256, 256)):
     _curl.setopt(_curl.URL, url)
     _curl.setopt(pycurl.NOSIGNAL, 1)
     _, ext = os.path.splitext(urlparse(url).path)
-    with NamedTemporaryFile(suffix="."+ext) as temp: # TODO: apply correct file extension
+    with NamedTemporaryFile(prefix="gbdxtools", suffix="."+ext, delete=False) as temp: # TODO: apply correct file extension
         _curl.setopt(_curl.WRITEDATA, temp.file)
         _curl.perform()
         code = _curl.getinfo(pycurl.HTTP_CODE)
@@ -47,15 +56,19 @@ def load_url(url, shape=(8, 256, 256)):
             if(code != 200):
                 raise TypeError("Request for {} returned unexpected error code: {}".format(url, code))
             temp.file.flush()
+            temp.close()
             with rasterio.open(temp.name) as dataset:
                 arr = dataset.read()
-        except (TypeError, rasterio.RasterioIOError) as e:
+        except (TypeError, RasterioIOError) as e:
             print(e)
             temp.seek(0)
             print(temp.read())
             arr = np.zeros(shape, dtype=np.uint8)
             _curl.close()
             del _curl_pool[thread_id]
+        finally:
+            temp.close()
+            os.remove(temp.name)
         return arr
 
 
