@@ -12,9 +12,13 @@ except ImportError:
     from urllib.parse import urlparse
 
 import rasterio
+try:
+    from rasterio import RasterioIOError
+except ImportError:
+    from rasterio.errors import RasterioIOError
+
 import pycurl
 import numpy as np
-
 
 import gbdxtools as gbdx
 from gbdxtools.ipe.util import IPE_TO_DTYPE
@@ -64,7 +68,7 @@ def load_url(url, token, shape=(8, 256, 256)):
                     arr = dataset.read()
                 success = True
                 return arr
-            except (TypeError, rasterio.RasterioIOError) as e:
+            except (TypeError, RasterioIOError) as e:
                 print(e)
                 temp.seek(0)
                 _curl.close()
