@@ -466,7 +466,8 @@ class PlotMixin(object):
         if "blm" in kwargs and not kwargs["blm"]:
             return rgb
         from gbdxtools.images.tms_image import TmsImage
-        tms = TmsImage(zoom=18, bbox=self.bounds, **kwargs)
+        bounds = self._reproject(box(*self.bounds), from_proj=self.proj, to_proj="EPSG:4326").bounds
+        tms = TmsImage(zoom=18, bbox=bounds, **kwargs)
         ref = np.rollaxis(tms.read(), 0, 3)
         out = np.dstack([histogram_match(rgb[:,:,idx], ref[:,:,idx].astype(np.double)/255.0) 
                         for idx in xrange(rgb.shape[-1])])
