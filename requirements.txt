@@ -22,3 +22,4 @@ configparser
 mercantile>=0.10.0
 scikit-image
 cachetools >= 2.0.0
+rio-hist

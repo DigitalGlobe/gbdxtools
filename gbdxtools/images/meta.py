@@ -8,9 +8,12 @@ from collections import Container
 from six import add_metaclass
 from multiprocessing.pool import ThreadPool
 import warnings
+import math 
 
 from shapely import ops, wkt
 from shapely.geometry import box, shape, mapping
+from rio_hist.match import histogram_match
+import mercantile
 
 import skimage.transform as tf
 
@@ -460,6 +463,18 @@ class PlotMixin(object):
     def _ndvi_bands(self):
         return [6, 4]
 
+    def base_layer_match(self, **kwargs):
+        rgb = self.rgb(**kwargs)
+        if "blm" in kwargs and not kwargs["blm"]:
+            return rgb
+        from gbdxtools.images.tms_image import TmsImage
+        bounds = self._reproject(box(*self.bounds), from_proj=self.proj, to_proj="EPSG:4326").bounds
+        tms = TmsImage(zoom=self._calc_tms_zoom(self.affine[0]), bbox=bounds, **kwargs)
+        ref = np.rollaxis(tms.read(), 0, 3)
+        out = np.dstack([histogram_match(rgb[:,:,idx], ref[:,:,idx].astype(np.double)/255.0) 
+                        for idx in xrange(rgb.shape[-1])])
+        return out
+
     def rgb(self, **kwargs):
         data = self._read(self[kwargs.get("bands", self._rgb_bands),...])
         data = np.rollaxis(data.astype(np.float32), 0, 3)
@@ -483,7 +498,16 @@ class PlotMixin(object):
                 cmap = "Greys_r"
             self._plot(tfm=self._single_band, cmap=cmap, **kwargs)
         else:
-            self._plot(tfm=getattr(self, spec), **kwargs)
+            if spec == "rgb" and self._has_token(**kwargs):
+                self._plot(tfm=self.base_layer_match, **kwargs)
+            else:
+                self._plot(tfm=getattr(self, spec), **kwargs)
+
+    def _has_token(self, **kwargs):
+        if "access_token" in kwargs or "MAPBOX_API_KEY" in os.environ:
+            return True
+        else:
+            return False
 
     def _plot(self, tfm=lambda x: x, **kwargs):
         assert has_pyplot, "To plot images please install matplotlib"
@@ -502,6 +526,12 @@ class PlotMixin(object):
 
     def _single_band(self, **kwargs):
         return self._read(self[0,:,:], **kwargs)
+
+    def _calc_tms_zoom(self, scale):
+        for z in range(15,20):
+            b = mercantile.bounds(0,0,z)
+            if scale > math.sqrt((b.north - b.south)*(b.east - b.west) / (256*256)):
+                return z
 
 
 class GeoDaskWrapper(DaskImage, GeoImage, PlotMixin):

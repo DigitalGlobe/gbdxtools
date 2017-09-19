@@ -35,6 +35,7 @@ requirements:
     - gbdx-auth ==0.2.4
     - jpeg ==8d
     - cachetools >=2.0.0 # py27
+    - rio-hist
 
   build:
     - setuptools
@@ -63,3 +64,4 @@ requirements:
     - vcrpy
     - jpeg ==8d
     - cachetools >=2.0.0
+    - rio-hist
