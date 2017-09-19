@@ -71,7 +71,7 @@ class CatalogImageTest(unittest.TestCase):
     @my_vcr.use_cassette('tests/unit/cassettes/test_cat_image_unsupported_type.yaml', filter_headers=['authorization'])
     def test_catalog_image_unsupported_type(self):
         try:
-            img = CatalogImage('1020010050BE7E00')
+            img = CatalogImage('10100100057B2600')
         except UnsupportedImageType:
             pass
     
