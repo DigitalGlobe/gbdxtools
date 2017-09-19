@@ -45,16 +45,30 @@ class GE01ImageTest(unittest.TestCase):
 
     @my_vcr.use_cassette('tests/unit/cassettes/test_geoeye_image.yaml', filter_headers=['authorization'])
     def test_geoeye_image(self):
-        _id = '105001000A536400'
+        _id = '1050410002D77600'
         img = self.gbdx.catalog_image(_id) #, bbox=[-109.84, 43.19, -109.59, 43.34])
         self.assertTrue(isinstance(img, GE01))
-        assert img.shape == (4, 10905, 15350)
+        assert img.shape == (4, 9426, 56783)
         assert img.proj == 'EPSG:4326'
 
     @my_vcr.use_cassette('tests/unit/cassettes/test_geoeye_image_proj.yaml', filter_headers=['authorization'])
     def test_geoeye_image_proj(self):
-        _id = '105001000A536400'
+        _id = '1050410002D77600'
         img = self.gbdx.catalog_image(_id, proj="EPSG:3857")
         self.assertTrue(isinstance(img, GE01))
-        assert img.shape == (4, 15218, 15338)
+        assert img.shape == (4, 10060, 52970)
         assert img.proj == 'EPSG:3857'
+
+    @my_vcr.use_cassette('tests/unit/cassettes/test_geoeye_image_pan.yaml', filter_headers=['authorization'])
+    def test_geoeye_image_pan(self):
+        _id = '1050410002D77600'
+        img = self.gbdx.catalog_image(_id, band_type="pan")
+        self.assertTrue(isinstance(img, GE01))
+        assert img.shape == (1, 37694, 227025)
+
+    @my_vcr.use_cassette('tests/unit/cassettes/test_geoeye_image_pansharpen.yaml', filter_headers=['authorization'])
+    def test_geoeye_image_pansharpen(self):
+        _id = '1050410002D77600'
+        img = self.gbdx.catalog_image(_id, pansharpen=True)
+        self.assertTrue(isinstance(img, GE01))
+        assert img.shape == (4, 37694, 227025)

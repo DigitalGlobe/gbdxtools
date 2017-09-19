@@ -58,7 +58,7 @@ class CatalogImage(object):
         elif 'Landsat8' in types:
             return LandsatImage(cat_id, **kwargs)
         elif 'GE01' in types:
-            return GE01(rec, **kwargs)
+            return GE01(cat_id, **kwargs)
         elif 'IKONOS' in types:
             return IkonosImage(rec, **kwargs)
         else: 
