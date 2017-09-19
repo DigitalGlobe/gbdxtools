@@ -8,10 +8,12 @@ from collections import Container
 from six import add_metaclass
 from multiprocessing.pool import ThreadPool
 import warnings
+import math 
 
 from shapely import ops, wkt
 from shapely.geometry import box, shape, mapping
 from rio_hist.match import histogram_match
+import mercantile
 
 import skimage.transform as tf
 
@@ -467,7 +469,7 @@ class PlotMixin(object):
             return rgb
         from gbdxtools.images.tms_image import TmsImage
         bounds = self._reproject(box(*self.bounds), from_proj=self.proj, to_proj="EPSG:4326").bounds
-        tms = TmsImage(zoom=18, bbox=bounds, **kwargs)
+        tms = TmsImage(zoom=self._calc_tms_zoom(self.affine[0]), bbox=bounds, **kwargs)
         ref = np.rollaxis(tms.read(), 0, 3)
         out = np.dstack([histogram_match(rgb[:,:,idx], ref[:,:,idx].astype(np.double)/255.0) 
                         for idx in xrange(rgb.shape[-1])])
@@ -524,6 +526,12 @@ class PlotMixin(object):
 
     def _single_band(self, **kwargs):
         return self._read(self[0,:,:], **kwargs)
+
+    def _calc_tms_zoom(self, scale):
+        for z in range(15,20):
+            b = mercantile.bounds(0,0,z)
+            if scale > math.sqrt((b.north - b.south)*(b.east - b.west) / (256*256)):
+                return z
 
 
 class GeoDaskWrapper(DaskImage, GeoImage, PlotMixin):
