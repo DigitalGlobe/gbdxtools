@@ -115,4 +115,39 @@ class WV03_VNIR(WVImage):
 
 class WV02(WVImage):
     def __new__(cls, cat_id, **kwargs):
-        return super(WV02, cls).__new__(cls, cat_id, **kwargs)      
+        return super(WV02, cls).__new__(cls, cat_id, **kwargs)
+
+class WV01(WVImage):
+    def __new__(cls, cat_id, **kwargs):
+        options = {
+            "band_type": "pan",
+            "product": kwargs.get("product", "ortho"),
+            "proj": kwargs.get("proj", "EPSG:4326"),
+            "gsd": kwargs.get("gsd", None)
+        }
+
+        standard_products = cls._build_standard_products(cat_id, options["band_type"], options["proj"], gsd=options["gsd"])
+        try:
+            self = super(WVImage, cls).__new__(cls, standard_products[options["product"]])
+        except KeyError as e:
+            print(e)
+            print("Specified product not implemented: {}".format(options["product"]))
+            raise
+        self = self.aoi(**kwargs)
+        self.cat_id = cat_id
+        self._products = standard_products
+        self.options = options
+        return self
+
+    @classmethod
+    def _build_standard_products(cls, cat_id, band_type, proj, gsd=None):
+        _parts = cls._find_parts(cat_id, band_type)
+        _id = _parts[0]['properties']['attributes']['idahoImageId']
+        dn_ops = [ipe.IdahoRead(bucketName="idaho-images", imageId=p['properties']['attributes']['idahoImageId'],
+                                objectStore="S3") for p in _parts]
+        mosaic_params = {"Dest SRS Code": proj}
+        if gsd is not None:
+            mosaic_params["Requested GSD"] = str(gsd)
+        ortho_op = ipe.GeospatialMosaic(*dn_ops, **mosaic_params)
+
+        return {"ortho": ortho_op}

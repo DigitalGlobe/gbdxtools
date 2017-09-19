@@ -52,6 +52,11 @@ class CatalogImageTest(unittest.TestCase):
         wv3 = CatalogImage('1040010013955A00')
         self.assertTrue(isinstance(wv3, WV03_VNIR))
 
+    @my_vcr.use_cassette('tests/unit/cassettes/test_cat_image_wv1.yaml', filter_headers=['authorization'])
+    def test_wv1_image(self):
+        wv1 = CatalogImage('1020010044CEA300')
+        self.assertTrue(isinstance(wv1, WV01))
+
     @my_vcr.use_cassette('tests/unit/cassettes/test_cat_image_landsat.yaml', filter_headers=['authorization'])
     def test_landsat_image(self):
         lsat = CatalogImage('LC80380302013160LGN00')
