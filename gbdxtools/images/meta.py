@@ -11,6 +11,7 @@ import warnings
 
 from shapely import ops, wkt
 from shapely.geometry import box, shape, mapping
+from rio_hist.match import histogram_match
 
 import skimage.transform as tf
 
@@ -460,6 +461,17 @@ class PlotMixin(object):
     def _ndvi_bands(self):
         return [6, 4]
 
+    def base_layer_match(self, **kwargs):
+        rgb = self.rgb(**kwargs)
+        if "blm" in kwargs and not kwargs["blm"]:
+            return rgb
+        from gbdxtools.images.tms_image import TmsImage
+        tms = TmsImage(zoom=18, bbox=self.bounds, **kwargs)
+        ref = np.rollaxis(tms.read(), 0, 3)
+        out = np.dstack([histogram_match(rgb[:,:,idx], ref[:,:,idx].astype(np.double)/255.0) 
+                        for idx in xrange(rgb.shape[-1])])
+        return out
+
     def rgb(self, **kwargs):
         data = self._read(self[kwargs.get("bands", self._rgb_bands),...])
         data = np.rollaxis(data.astype(np.float32), 0, 3)
@@ -483,7 +495,16 @@ class PlotMixin(object):
                 cmap = "Greys_r"
             self._plot(tfm=self._single_band, cmap=cmap, **kwargs)
         else:
-            self._plot(tfm=getattr(self, spec), **kwargs)
+            if spec == "rgb" and self._has_token(**kwargs):
+                self._plot(tfm=self.base_layer_match, **kwargs)
+            else:
+                self._plot(tfm=getattr(self, spec), **kwargs)
+
+    def _has_token(self, **kwargs):
+        if "access_token" in kwargs or "MAPBOX_API_KEY" in os.environ:
+            return True
+        else:
+            return False
 
     def _plot(self, tfm=lambda x: x, **kwargs):
         assert has_pyplot, "To plot images please install matplotlib"
