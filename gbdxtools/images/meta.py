@@ -463,9 +463,9 @@ class PlotMixin(object):
     def _ndvi_bands(self):
         return [6, 4]
 
-    def base_layer_match(self, **kwargs):
+    def base_layer_match(self, blm=False, **kwargs):
         rgb = self.rgb(**kwargs)
-        if "blm" in kwargs and not kwargs["blm"]:
+        if not blm:
             return rgb
         from gbdxtools.images.tms_image import TmsImage
         bounds = self._reproject(box(*self.bounds), from_proj=self.proj, to_proj="EPSG:4326").bounds
