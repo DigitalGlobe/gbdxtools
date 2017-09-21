@@ -304,7 +304,8 @@ class GeoImage(Container):
                                   int(min(transpix[1,:,:].max() + buf, self.shape[2])))
         transpix[0,:,:] = transpix[0,:,:] - xmin
         transpix[1,:,:] = transpix[1,:,:] - ymin
-        data = self[:,xmin:xmax, ymin:ymax].compute() # read(quiet=True)
+        with dask.set_options(pool=ThreadPool()):
+            data = self[:,xmin:xmax, ymin:ymax].compute() # read(quiet=True)
         if data.shape[1]*data.shape[2] > 0:
             return np.rollaxis(np.dstack([tf.warp(data[b,:,:].squeeze(), transpix, preserve_range=True, order=3) for b in xrange(data.shape[0])]), 2, 0)
         else:
@@ -328,7 +329,8 @@ class GeoImage(Container):
         if isinstance(dem, GeoImage):
             g = box(xv.min(), yv.min(), xv.max(), yv.max())
             try:
-                dem = dem[g].compute() # read(quiet=True)
+                with dask.set_options(pool=ThreadPool()):
+                    dem = dem[g].compute() # read(quiet=True)
             except AssertionError:
                 dem = 0 # guessing this is indexing by a 0 width geometry.
 
@@ -336,8 +338,6 @@ class GeoImage(Container):
             dem = tf.resize(np.squeeze(dem), xv.shape, preserve_range=True)
 
         return self.__geo_transform__.rev(xv, yv, z=dem, _type=np.float32)[::-1]
-
-
 
     def _parse_geoms(self, **kwargs):
         """ Finds supported geometry types, parses them and returns the bbox """
@@ -405,7 +405,6 @@ class GeoImage(Container):
         g = shape(geometry)
 
         bounds = ops.transform(self.__geo_transform__.rev, g).bounds
-
         try:
             assert g in self, "Image does not contain specified geometry {} not in {}".format(g.bounds, self.bounds)
         except AssertionError as ae:
