@@ -227,9 +227,13 @@ class GeoImage(Container):
           Delayed warp across an entire AOI or Image
           creates a new dask image by deferring calls to the warp_geometry on chunks
         """
-        img_md = self.ipe.metadata["image"]
-        x_size = img_md["tileXSize"]
-        y_size = img_md["tileYSize"]
+        try:
+            img_md = self.ipe.metadata["image"]
+            x_size = img_md["tileXSize"]
+            y_size = img_md["tileYSize"]
+        except (AttributeError, KeyError):
+            x_size = kwargs.get("chunk_size", 256)
+            y_size = kwargs.get("chunk_size", 256)
 
         # Create an affine transform to convert between real-world and pixels
         if self.proj is None:
