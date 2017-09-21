@@ -244,13 +244,15 @@ class GeoImage(Container):
             # print "Input GSD (deg):", self.ipe.metadata["rpcs"]["gsd"]
             tfm = partial(pyproj.transform, pyproj.Proj(init="EPSG:4326"), pyproj.Proj(init=proj))
             gsd = kwargs.get("gsd", ops.transform(tfm, g).area ** 0.5)
+            current_bounds = wkt.loads(self.ipe.metadata["image"]["imageBoundsWGS84"]).bounds
         except (AttributeError, KeyError, TypeError):
             tfm = partial(pyproj.transform, pyproj.Proj(init=self.proj), pyproj.Proj(init=proj))
             gsd = kwargs.get("gsd", (ops.transform(tfm, shape(self)).area / (self.shape[1] * self.shape[2])) ** 0.5 )
+            current_bounds = self.bounds
 
         tfm = partial(pyproj.transform, pyproj.Proj(init=from_proj), pyproj.Proj(init=proj))
         itfm = partial(pyproj.transform, pyproj.Proj(init=proj), pyproj.Proj(init=from_proj))
-        output_bounds = ops.transform(tfm, box(*self.bounds)).bounds
+        output_bounds = ops.transform(tfm, box(*current_bounds)).bounds
         gtf = Affine.from_gdal(output_bounds[0], gsd, 0.0, output_bounds[3], 0.0, -1 * gsd)
 
         ll = ~gtf * (output_bounds[:2])
