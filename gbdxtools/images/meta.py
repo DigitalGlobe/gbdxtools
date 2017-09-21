@@ -41,8 +41,6 @@ except NameError:
     xrange = range
 
 num_workers = int(os.environ.get("GBDX_THREADS", 8))
-threaded_get = partial(dask.threaded.get, num_workers=num_workers)
-dask.set_options(pool=ThreadPool(2*num_workers))
 
 @add_metaclass(abc.ABCMeta)
 class DaskMeta(object):
@@ -140,7 +138,7 @@ class DaskImage(da.Array):
         arr = self
         if bands is not None:
             arr = self[bands, ...]
-        return arr.compute(get=threaded_get)
+        return arr.compute(num_workers=num_workers)
 
     def randwindow(self, window_shape):
         row = random.randrange(window_shape[0], self.shape[1])
@@ -302,14 +300,12 @@ class GeoImage(Container):
                                   int(min(transpix[0,:,:].max() + buf, self.shape[1])),
                                   int(max(transpix[1,:,:].min() - buf, 0)),
                                   int(min(transpix[1,:,:].max() + buf, self.shape[2])))
-        print(transpix[0,:,:].min(), transpix[0,:,:].max(), transpix[1,:,:].min(), transpix[1,:,:].max())
         transpix[0,:,:] = transpix[0,:,:] - xmin
         transpix[1,:,:] = transpix[1,:,:] - ymin
-        print(xmin, xmax, ymin, ymax)
-        with dask.set_options(pool=ThreadPool()):
-            data = self[:,xmin:xmax, ymin:ymax].compute() # read(quiet=True)
+        data = self[:,xmin:xmax, ymin:ymax].compute(get=dask.get) # read(quiet=True)
+
         if data.shape[1]*data.shape[2] > 0:
-            return np.rollaxis(np.dstack([tf.warp(data[b,:,:].squeeze(), transpix, preserve_range=True, order=3, mode="wrap") for b in xrange(data.shape[0])]), 2, 0)
+            return np.rollaxis(np.dstack([tf.warp(data[b,:,:], transpix, preserve_range=True, order=3, mode="constant", cval=255) for b in xrange(data.shape[0])]), 2, 0)
         else:
             return np.zeros((data.shape[0], transpix.shape[1], transpix.shape[2]))
 
@@ -331,8 +327,7 @@ class GeoImage(Container):
         if isinstance(dem, GeoImage):
             g = box(xv.min(), yv.min(), xv.max(), yv.max())
             try:
-                with dask.set_options(pool=ThreadPool()):
-                    dem = dem[g].compute() # read(quiet=True)
+                dem = dem[g].compute(get=dask.get) # read(quiet=True)
             except AssertionError:
                 dem = 0 # guessing this is indexing by a 0 width geometry.
 
@@ -534,6 +529,11 @@ class GeoDaskWrapper(DaskImage, GeoImage, PlotMixin):
     def __new__(cls, daskmeta, img):
         dm = DaskMetaWrapper(daskmeta)
         self = super(GeoDaskWrapper, cls).create(dm)
+        self._dm = dm
         self.__geo_interface__ = img.__geo_interface__
         self.__geo_transform__ = img.__geo_transform__
         return self
+
+    @property
+    def __daskmeta__(self):
+        return self._dm
