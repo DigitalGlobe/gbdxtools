@@ -8,7 +8,7 @@ from collections import Container
 from six import add_metaclass
 from multiprocessing.pool import ThreadPool
 import warnings
-import math 
+import math
 
 from shapely import ops, wkt
 from shapely.geometry import box, shape, mapping
@@ -302,12 +302,14 @@ class GeoImage(Container):
                                   int(min(transpix[0,:,:].max() + buf, self.shape[1])),
                                   int(max(transpix[1,:,:].min() - buf, 0)),
                                   int(min(transpix[1,:,:].max() + buf, self.shape[2])))
+        print(transpix[0,:,:].min(), transpix[0,:,:].max(), transpix[1,:,:].min(), transpix[1,:,:].max())
         transpix[0,:,:] = transpix[0,:,:] - xmin
         transpix[1,:,:] = transpix[1,:,:] - ymin
+        print(xmin, xmax, ymin, ymax)
         with dask.set_options(pool=ThreadPool()):
             data = self[:,xmin:xmax, ymin:ymax].compute() # read(quiet=True)
         if data.shape[1]*data.shape[2] > 0:
-            return np.rollaxis(np.dstack([tf.warp(data[b,:,:].squeeze(), transpix, preserve_range=True, order=3) for b in xrange(data.shape[0])]), 2, 0)
+            return np.rollaxis(np.dstack([tf.warp(data[b,:,:].squeeze(), transpix, preserve_range=True, order=3, mode="wrap") for b in xrange(data.shape[0])]), 2, 0)
         else:
             return np.zeros((data.shape[0], transpix.shape[1], transpix.shape[2]))
 
@@ -415,12 +417,7 @@ class GeoImage(Container):
         return image
 
     def __contains__(self, g):
-        try:
-            z = self.ipe.metadata["rpcs"]["heightOffset"]
-        except:
-            z = 0
-        rev = partial(self.__geo_transform__.rev, z=z)
-        geometry = ops.transform(rev, g)
+        geometry = ops.transform(self.__geo_transform__.rev, g)
         img_bounds = box(0, 0, *self.shape[2:0:-1])
         return img_bounds.contains(geometry)
 
@@ -470,7 +467,7 @@ class PlotMixin(object):
         bounds = self._reproject(box(*self.bounds), from_proj=self.proj, to_proj="EPSG:4326").bounds
         tms = TmsImage(zoom=self._calc_tms_zoom(self.affine[0]), bbox=bounds, **kwargs)
         ref = np.rollaxis(tms.read(), 0, 3)
-        out = np.dstack([histogram_match(rgb[:,:,idx], ref[:,:,idx].astype(np.double)/255.0) 
+        out = np.dstack([histogram_match(rgb[:,:,idx], ref[:,:,idx].astype(np.double)/255.0)
                         for idx in xrange(rgb.shape[-1])])
         return out
 
