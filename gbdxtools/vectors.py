@@ -256,7 +256,7 @@ class Vectors(object):
         return r.json(object_pairs_hook=OrderedDict)['aggregations']
 
 
-    def map(self, features=None, query=None, style={}, bbox=[-180,-90,180,90], zoom=10):
+    def map(self, features=None, query=None, style={}, bbox=[-180,-90,180,90], zoom=10, api_key=os.environ.get('MAPBOX_API_KEY', None)):
         """
           Renders a mapbox gl map from a vector service query
         """
@@ -265,6 +265,8 @@ class Vectors(object):
         except:
             print("IPython is required to produce maps.")
             return
+
+        assert api_key is not None, "No Mapbox API Key found. You can either pass in a token or set the MAPBOX_API_KEY environment variable."
 
         if features is None and query is not None:
             wkt = box(*bbox).wkt
@@ -364,7 +366,7 @@ class Vectors(object):
             "zoom": zoom, 
             "geojson": json.dumps(geojson), 
             "style": json.dumps(style),
-            "mbkey": os.environ.get('MAPBOX_API_KEY')
+            "mbkey": api_key
         })
         display(Javascript(js))
 
