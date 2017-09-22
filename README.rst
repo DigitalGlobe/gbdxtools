@@ -40,15 +40,9 @@ There have been reports of authentication errors while creating a gbdx interface
 Installation
 ------------
 
-To install the latest stable version on pypi::
+Conda is the recommended way to install gbdxtools::
 
-    pip install gbdxtools
-
-Optional: you can install the current version of the master branch with::
-
-    pip install git+https://github.com/digitalglobe/gbdxtools
-
-Keep in mind that the master branch is constantly under development. 
+    conda install -c digitalglobe gbdxtools
 
 Troubleshooting
 ~~~~~~~~~~~~~~~
@@ -70,11 +64,11 @@ As of gbdxtools version 0.11.3 libcurl and GDAL (>=2.1.0) are required. To insta
 
 **Windows Users**
 
-On windows you can install shapely, gdal, rasterio, and pyproj from wheels. To install these dependencies download the binaries for your system (rasterio and GDAL) and run something like this from the downloads folder::
+Conda installation should work fine on windows for python version 2.7.  If you are using python 3, you can install with pip, first install some dependencies with conda::
 
-  pip install -U pip
-  pip install GDAL-2.1.0-cp27-none-win32.whl
-  pip install rasterio-1.0a3-cp27-none-win32.whl
+  conda install -c conda-forge scipy
+  conda install -c conda-forge scikit-image
+  pip install gbdxtools
 
 **pip**
 
@@ -139,7 +133,7 @@ Upgrade pip (if required)::
 
 Install gbdxtools::
 
-   pip install gbdxtools
+   conda install -c digitalglobe  gbdxtools
 
 
 Development
