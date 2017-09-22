@@ -8,7 +8,7 @@ from collections import Container
 from six import add_metaclass
 from multiprocessing.pool import ThreadPool
 import warnings
-import math 
+import math
 
 from shapely import ops, wkt
 from shapely.geometry import box, shape, mapping
@@ -41,8 +41,6 @@ except NameError:
     xrange = range
 
 num_workers = int(os.environ.get("GBDX_THREADS", 8))
-threaded_get = partial(dask.threaded.get, num_workers=num_workers)
-dask.set_options(pool=ThreadPool(2*num_workers))
 
 @add_metaclass(abc.ABCMeta)
 class DaskMeta(object):
@@ -140,7 +138,7 @@ class DaskImage(da.Array):
         arr = self
         if bands is not None:
             arr = self[bands, ...]
-        return arr.compute(get=threaded_get)
+        return arr.compute(num_workers=num_workers)
 
     def randwindow(self, window_shape):
         row = random.randrange(window_shape[0], self.shape[1])
@@ -229,9 +227,13 @@ class GeoImage(Container):
           Delayed warp across an entire AOI or Image
           creates a new dask image by deferring calls to the warp_geometry on chunks
         """
-        img_md = self.ipe.metadata["image"]
-        x_size = img_md["tileXSize"]
-        y_size = img_md["tileYSize"]
+        try:
+            img_md = self.ipe.metadata["image"]
+            x_size = img_md["tileXSize"]
+            y_size = img_md["tileYSize"]
+        except (AttributeError, KeyError):
+            x_size = kwargs.get("chunk_size", 256)
+            y_size = kwargs.get("chunk_size", 256)
 
         # Create an affine transform to convert between real-world and pixels
         if self.proj is None:
@@ -246,13 +248,15 @@ class GeoImage(Container):
             # print "Input GSD (deg):", self.ipe.metadata["rpcs"]["gsd"]
             tfm = partial(pyproj.transform, pyproj.Proj(init="EPSG:4326"), pyproj.Proj(init=proj))
             gsd = kwargs.get("gsd", ops.transform(tfm, g).area ** 0.5)
+            current_bounds = wkt.loads(self.ipe.metadata["image"]["imageBoundsWGS84"]).bounds
         except (AttributeError, KeyError, TypeError):
             tfm = partial(pyproj.transform, pyproj.Proj(init=self.proj), pyproj.Proj(init=proj))
             gsd = kwargs.get("gsd", (ops.transform(tfm, shape(self)).area / (self.shape[1] * self.shape[2])) ** 0.5 )
+            current_bounds = self.bounds
 
         tfm = partial(pyproj.transform, pyproj.Proj(init=from_proj), pyproj.Proj(init=proj))
         itfm = partial(pyproj.transform, pyproj.Proj(init=proj), pyproj.Proj(init=from_proj))
-        output_bounds = ops.transform(tfm, box(*self.bounds)).bounds
+        output_bounds = ops.transform(tfm, box(*current_bounds)).bounds
         gtf = Affine.from_gdal(output_bounds[0], gsd, 0.0, output_bounds[3], 0.0, -1 * gsd)
 
         ll = ~gtf * (output_bounds[:2])
@@ -304,10 +308,10 @@ class GeoImage(Container):
                                   int(min(transpix[1,:,:].max() + buf, self.shape[2])))
         transpix[0,:,:] = transpix[0,:,:] - xmin
         transpix[1,:,:] = transpix[1,:,:] - ymin
-        with dask.set_options(pool=ThreadPool()):
-            data = self[:,xmin:xmax, ymin:ymax].compute() # read(quiet=True)
+        data = self[:,xmin:xmax, ymin:ymax].compute(get=dask.get) # read(quiet=True)
+
         if data.shape[1]*data.shape[2] > 0:
-            return np.rollaxis(np.dstack([tf.warp(data[b,:,:].squeeze(), transpix, preserve_range=True, order=3) for b in xrange(data.shape[0])]), 2, 0)
+            return np.rollaxis(np.dstack([tf.warp(data[b,:,:], transpix, preserve_range=True, order=3) for b in xrange(data.shape[0])]), 2, 0)
         else:
             return np.zeros((data.shape[0], transpix.shape[1], transpix.shape[2]))
 
@@ -329,8 +333,7 @@ class GeoImage(Container):
         if isinstance(dem, GeoImage):
             g = box(xv.min(), yv.min(), xv.max(), yv.max())
             try:
-                with dask.set_options(pool=ThreadPool()):
-                    dem = dem[g].compute() # read(quiet=True)
+                dem = dem[g].compute(get=dask.get) # read(quiet=True)
             except AssertionError:
                 dem = 0 # guessing this is indexing by a 0 width geometry.
 
@@ -415,12 +418,7 @@ class GeoImage(Container):
         return image
 
     def __contains__(self, g):
-        try:
-            z = self.ipe.metadata["rpcs"]["heightOffset"]
-        except:
-            z = 0
-        rev = partial(self.__geo_transform__.rev, z=z)
-        geometry = ops.transform(rev, g)
+        geometry = ops.transform(self.__geo_transform__.rev, g)
         img_bounds = box(0, 0, *self.shape[2:0:-1])
         return img_bounds.contains(geometry)
 
@@ -470,7 +468,7 @@ class PlotMixin(object):
         bounds = self._reproject(box(*self.bounds), from_proj=self.proj, to_proj="EPSG:4326").bounds
         tms = TmsImage(zoom=self._calc_tms_zoom(self.affine[0]), bbox=bounds, **kwargs)
         ref = np.rollaxis(tms.read(), 0, 3)
-        out = np.dstack([histogram_match(rgb[:,:,idx], ref[:,:,idx].astype(np.double)/255.0) 
+        out = np.dstack([histogram_match(rgb[:,:,idx], ref[:,:,idx].astype(np.double)/255.0)
                         for idx in xrange(rgb.shape[-1])])
         return out
 
@@ -537,6 +535,11 @@ class GeoDaskWrapper(DaskImage, GeoImage, PlotMixin):
     def __new__(cls, daskmeta, img):
         dm = DaskMetaWrapper(daskmeta)
         self = super(GeoDaskWrapper, cls).create(dm)
+        self._dm = dm
         self.__geo_interface__ = img.__geo_interface__
         self.__geo_transform__ = img.__geo_transform__
         return self
+
+    @property
+    def __daskmeta__(self):
+        return self._dm
