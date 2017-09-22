@@ -56,5 +56,3 @@ class IpeInterfaceTest(unittest.TestCase):
         self.assertIn("nodes", g)
         self.assertEqual(len(g["nodes"]), 1)
         self.assertEqual(len(g["edges"]), 0)
-
-        self.assertIsInstance(op.name, types.StringTypes)
