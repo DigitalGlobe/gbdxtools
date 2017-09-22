@@ -133,7 +133,7 @@ Upgrade pip (if required)::
 
 Install gbdxtools::
 
-   conda install -c digitalglobe -c conda-forge gbdxtools
+   conda install -c digitalglobe  gbdxtools
 
 
 Development
