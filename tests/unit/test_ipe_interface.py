@@ -3,13 +3,19 @@ Unit tests for the gbdxtools.ipe.interface module
 """
 
 import unittest
+import types
 
+from gbdxtools import Interface
 from gbdxtools.ipe.interface import Ipe, Op, ContentHashedDict
+
+from auth_mock import get_mock_gbdx_session
 
 class IpeInterfaceTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.ipe = Ipe()
+        mock_gbdx_session = get_mock_gbdx_session(token='dummytoken')
+        cls.gbdx = Interface(gbdx_connection=mock_gbdx_session)
 
     def test_content_hashed_dict(self):
         a = {"one": 1, "two": 2, "three": 3}
@@ -38,9 +44,17 @@ class IpeInterfaceTest(unittest.TestCase):
         self.assertIn("id", ca)
 
     def test_ipe_produces_ops(self):
-        op = self.ipe.TestOperator(param1="one", param2="two")
+        op = Op("TestOperator")(param1="one", param2="two")
         self.assertIsInstance(op, Op)
         self.assertEqual(op._operator, "TestOperator")
 
         self.assertEqual(len(op._nodes), 1)
         self.assertEqual(len(op._edges), 0)
+
+        g = op.graph(conn=None)
+        self.assertIn("edges", g)
+        self.assertIn("nodes", g)
+        self.assertEqual(len(g["nodes"]), 1)
+        self.assertEqual(len(g["edges"]), 0)
+
+        self.assertIsInstance(op.name, types.StringTypes)
