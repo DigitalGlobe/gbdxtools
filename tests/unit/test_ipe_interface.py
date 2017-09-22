@@ -42,6 +42,5 @@ class IpeInterfaceTest(unittest.TestCase):
         self.assertIsInstance(op, Op)
         self.assertEqual(op._operator, "TestOperator")
 
-        # g = op.graph()
-        # self.assertEqual(len(g["nodes"]), 1)
-        # self.assertEqual(len(g["edges"]), 0)
+        self.assertEqual(len(op._nodes), 1)
+        self.assertEqual(len(op._edges), 0)
