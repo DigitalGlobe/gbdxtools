@@ -194,7 +194,7 @@ class Outputs(PortList):
                     p['name'],
                     p['type'],
                     p.get('required'),
-                    p.get('description'), 
+                    p.get('description'),
                     value="source:" + self._task_name + ":" + p['name'],
                     is_input_port=False,
                     is_multiplex=p.get('multiplex',False)
@@ -310,7 +310,7 @@ class Task(object):
 
     @timeout.setter
     def timeout(self, value):
-        if not 0 < int(value) < 40000:
+        if not 0 < int(value) < 172800:
             raise ValueError('timeout of %s is not a valid number' % value)
         self._timeout = int(value)
 
@@ -755,6 +755,3 @@ class Workflow(object):
     @stderr.setter
     def stderr(self, value):
         raise NotImplementedError("Cannot set workflow stderr, readonly.")
-
-
-
