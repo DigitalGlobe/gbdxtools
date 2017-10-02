@@ -12,7 +12,10 @@ import math
 
 from shapely import ops, wkt
 from shapely.geometry import box, shape, mapping
-from rio_hist.match import histogram_match
+try:
+    from rio_hist.match import histogram_match
+except ImportError:
+    pass
 import mercantile
 
 import skimage.transform as tf
