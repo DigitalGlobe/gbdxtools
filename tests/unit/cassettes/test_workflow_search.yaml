@@ -1,0 +1,24 @@
+interactions:
+- request:
+    body: !!python/unicode '{"state": "all", "lookback_h": 12}'
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      Content-Length: ['34']
+      Content-Type: [application/json]
+      User-Agent: [python-requests/2.13.0]
+    method: POST
+    uri: https://geobigdata.io/workflows/v1/workflows/search
+  response:
+    body: {string: !!python/unicode '{"Workflows": []}'}
+    headers:
+      access-control-allow-origin: ['*']
+      connection: [keep-alive]
+      content-length: ['17']
+      content-type: [application/json]
+      date: ['Mon, 02 Oct 2017 14:54:52 GMT']
+      server: [nginx/1.10.2]
+      via: [kong/0.5.2]
+    status: {code: 200, message: OK}
+version: 1
