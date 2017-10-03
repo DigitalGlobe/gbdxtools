@@ -31,7 +31,7 @@ def to_geotiff(arr, path='./output.tif', proj=None, dtype=None, bands=None, **kw
                 ystart,yend = chunk_to_slice(i, y)
                 xstart,xend = chunk_to_slice(j, x)
                 region = arr[:, ystart:yend, xstart:xend]
-                data = region.read(bands=bands, quiet=1)
+                data = region.read(bands=bands, quiet=True)
                 if dtype is not None:
                     data = (data - data.min()) * (float(np.iinfo(dtype).max) * data.max())
                     data = data.astype(dtype)
