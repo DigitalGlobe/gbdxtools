@@ -12,6 +12,7 @@ import math
 
 from shapely import ops, wkt
 from shapely.geometry import box, shape, mapping
+from shapely.geometry.base import BaseGeometry
 try:
     from rio_hist.match import histogram_match
 except ImportError:
@@ -136,7 +137,7 @@ class DaskImage(da.Array):
             obj = da.Array.__new__(cls, dm.dask, dm.name, dm.chunks, dm.dtype, dm.shape)
             return obj
 
-    def read(self, bands=None):
+    def read(self, bands=None, **kwargs):
         """ Reads data from a dask array and returns the computed ndarray matching the given bands """
         arr = self
         if bands is not None:
@@ -546,3 +547,28 @@ class GeoDaskWrapper(DaskImage, GeoImage, PlotMixin):
     @property
     def __daskmeta__(self):
         return self._dm
+
+    def __getitem__(self, geometry):
+        if isinstance(geometry, BaseGeometry) or getattr(geometry, "__geo_interface__", None) is not None:
+            image = GeoImage.__getitem__(self, geometry)
+            return image
+        else:
+            result = DaskImage.__getitem__(self, geometry)
+            image = super(GeoDaskWrapper, self.__class__).__new__(self.__class__,
+                                                            result.dask, result.name, result.chunks,
+                                                            result.dtype, result.shape)
+
+            if all([isinstance(e, slice) for e in geometry]) and len(geometry) == len(self.shape):
+                xmin, ymin, xmax, ymax = geometry[2].start, geometry[1].start, geometry[2].stop, geometry[1].stop
+                xmin = 0 if xmin is None else xmin
+                ymin = 0 if ymin is None else ymin
+                xmax = self.shape[2] if xmax is None else xmax
+                ymax = self.shape[1] if ymax is None else ymax
+
+                g = ops.transform(self.__geo_transform__.fwd, box(xmin, ymin, xmax, ymax))
+                image.__geo_interface__ = mapping(g)
+                image.__geo_transform__ = self.__geo_transform__ + (xmin, ymin)
+            else:
+                image.__geo_interface__ = self.__geo_interface__
+                image.__geo_transform__ = self.__geo_transform__
+            return image
