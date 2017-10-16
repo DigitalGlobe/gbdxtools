@@ -174,7 +174,7 @@ class Vectors(object):
 
         params = {
             "q": query,
-            "count": count,
+            "count": min(count,1000),
             "ttl": ttl,
             "left": left,
             "right": right,
@@ -191,11 +191,15 @@ class Vectors(object):
         item_count = int(page['item_count'])
         data = page['data']
 
+
+        num_results = 0
         for vector in data:
+          num_results += 1
+          if num_results > count: break
           yield vector
 
         # get vectors from each page
-        while paging_id and item_count > 0:
+        while paging_id and item_count > 0 and num_results <= count:
 
           headers = {'Content-Type':'application/x-www-form-urlencoded'}
           data = {
@@ -211,6 +215,8 @@ class Vectors(object):
           data = page['data']
 
           for vector in data:
+              num_results += 1
+              if num_results > count: break
               yield vector
 
     def aggregate_query(self, searchAreaWkt, agg_def, query=None, start_date=None, end_date=None, count=10, index=default_index):
