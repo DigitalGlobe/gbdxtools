@@ -41,7 +41,31 @@ class TestVectors(unittest.TestCase):
     def test_vectors_search(self):
         v = Vectors()
         aoi = "POLYGON((17.75390625 25.418470119273117,24.08203125 25.418470119273117,24.08203125 19.409611549990895,17.75390625 19.409611549990895,17.75390625 25.418470119273117))"
-        results = v.query(aoi, query="item_type:WV03", index=None)
+        results = v.query(aoi, query="item_type:WV03", index=None, count=1000)
+
+        assert len(results) == 310
+
+    @vcr.use_cassette('tests/unit/cassettes/test_vectors_search.yaml', filter_headers=['authorization'], match_on=['method', 'scheme', 'host', 'port', 'path'])
+    def test_vectors_search_count_small(self):
+        v = Vectors()
+        aoi = "POLYGON((17.75390625 25.418470119273117,24.08203125 25.418470119273117,24.08203125 19.409611549990895,17.75390625 19.409611549990895,17.75390625 25.418470119273117))"
+        results = v.query(aoi, query="item_type:WV03", index=None, count=55)
+
+        assert len(results) == 55
+
+    @vcr.use_cassette('tests/unit/cassettes/test_vectors_search.yaml', filter_headers=['authorization'], match_on=['method', 'scheme', 'host', 'port', 'path'])
+    def test_vectors_search_count_single(self):
+        v = Vectors()
+        aoi = "POLYGON((17.75390625 25.418470119273117,24.08203125 25.418470119273117,24.08203125 19.409611549990895,17.75390625 19.409611549990895,17.75390625 25.418470119273117))"
+        results = v.query(aoi, query="item_type:WV03", index=None, count=1)
+
+        assert len(results) == 1
+
+    @vcr.use_cassette('tests/unit/cassettes/test_vectors_search.yaml', filter_headers=['authorization'], match_on=['method', 'scheme', 'host', 'port', 'path'])
+    def test_vectors_search_count_equal_to_num_records(self):
+        v = Vectors()
+        aoi = "POLYGON((17.75390625 25.418470119273117,24.08203125 25.418470119273117,24.08203125 19.409611549990895,17.75390625 19.409611549990895,17.75390625 25.418470119273117))"
+        results = v.query(aoi, query="item_type:WV03", index=None, count=310)
 
         assert len(results) == 310
 
@@ -49,7 +73,7 @@ class TestVectors(unittest.TestCase):
     def test_vectors_search_index(self):
         v = Vectors()
         aoi = "POLYGON((17.75390625 25.418470119273117,24.08203125 25.418470119273117,24.08203125 19.409611549990895,17.75390625 19.409611549990895,17.75390625 25.418470119273117))"
-        results = v.query(aoi, query="item_type:WV03", index="vector-dgcatalog-2016")
+        results = v.query(aoi, query="item_type:WV03", index="vector-dgcatalog-2016", count=1000)
 
         assert len(results) == 140
 
@@ -57,7 +81,7 @@ class TestVectors(unittest.TestCase):
     def test_vectors_search_iteratively(self):
         v = Vectors()
         aoi = "POLYGON((17.75390625 25.418470119273117,24.08203125 25.418470119273117,24.08203125 19.409611549990895,17.75390625 19.409611549990895,17.75390625 25.418470119273117))"
-        g = v.query_iteratively(aoi, query="item_type:WV03", index=None)
+        g = v.query_iteratively(aoi, query="item_type:WV03", index=None, count=1000)
 
         count = 0
         for vector in g:
