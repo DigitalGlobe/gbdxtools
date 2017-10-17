@@ -198,8 +198,11 @@ class Vectors(object):
           if num_results > count: break
           yield vector
 
+        if item_count == num_results:
+          return
+
         # get vectors from each page
-        while paging_id and item_count > 0 and num_results <= count:
+        while paging_id and item_count > 0 and num_results < count:
 
           headers = {'Content-Type':'application/x-www-form-urlencoded'}
           data = {
