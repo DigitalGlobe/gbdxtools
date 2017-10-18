@@ -1,5 +1,5 @@
 """
-Classes to represent AnswerFactory Recipes, Projects.
+AnswerFactory Project and Recipe interfaces
 
 Contact: nricklin@digitalglobe.com
 Contact: mtrotter@digitalglobe.com
