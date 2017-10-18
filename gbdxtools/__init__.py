@@ -8,5 +8,5 @@ from gbdxtools.images.landsat_image import LandsatImage
 from gbdxtools.images.dem_image import DemImage
 from gbdxtools.images.tms_image import TmsImage
 from gbdxtools.images.catalog_image import CatalogImage
-from gbdxtools.images.answerfactory import Recipe, Project
+from gbdxtools.answerfactory import Recipe, Project
 from .interface import Interface
