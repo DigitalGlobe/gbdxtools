@@ -448,11 +448,7 @@ class Recipe(object):
             if 'outputs' in task_json:
                 outputs = []
                 for output_port in task_json['outputs']:
-                    updated_port, acquisition_counter, vector_input_counter, vector_output_counter \
-                        = \
-                        self.__update_port(output_port, task_type, acquisition_counter,
-                                           vector_input_counter, vector_output_counter)
-                    outputs.append(updated_port)
+                    outputs.append(output_port)
                 task_json['outputs'] = outputs
             tasks.append(task_json)
         self._definition = {

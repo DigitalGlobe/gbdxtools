@@ -46,8 +46,7 @@
         ],
         "outputs": [
           {
-            "name": "data",
-            "value": "{raster_path}"
+            "name": "data"
           },
           {
             "name": "log"
