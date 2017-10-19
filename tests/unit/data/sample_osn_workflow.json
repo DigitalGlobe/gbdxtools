@@ -1,0 +1,246 @@
+{
+  "tasks": [
+    {
+      "inputs": [
+        {
+          "name": "data",
+          "value": "s3://receiving-dgcs-tdgplatform-com/057120076010_01_003"
+        },
+        {
+          "name": "enable_dra",
+          "value": "true"
+        },
+        {
+          "name": "enable_pansharpen",
+          "value": "true"
+        },
+        {
+          "name": "enable_acomp",
+          "value": "true"
+        },
+        {
+          "name": "ortho_epsg",
+          "value": "UTM"
+        },
+        {
+          "name": "bands",
+          "value": "PAN+MS"
+        },
+        {
+          "name": "ortho_pixel_size",
+          "value": "auto"
+        },
+        {
+          "name": "ortho_interpolation_type",
+          "value": "Bilinear"
+        }
+      ],
+      "name": "aop",
+      "outputs": [
+        {
+          "name": "log"
+        },
+        {
+          "name": "data"
+        }
+      ],
+      "taskType": "AOP_Strip_Processor"
+    },
+    {
+      "inputs": [
+        {
+          "name": "wkt",
+          "value": "POLYGON ((50.841479244 28.951299993, 50.841693903 28.951908641, 50.842447901 28.952269325, 50.857042 28.952269325, 50.857473074 28.952167579, 50.857907375 28.951735403, 50.858010756 28.951301993, 50.85790927 28.944688533, 50.857476986 28.94425437, 50.857042 28.944150642, 50.842448 28.944150642, 50.842017014 28.94425237, 50.841582731 28.944684533, 50.841479329 28.945117993, 50.841479244 28.951299993))"
+        },
+        {
+          "name": "data",
+          "source": "aop:data"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "data"
+        }
+      ],
+      "name": "crop_aop_to_project",
+      "taskType": "CropGeotiff:0.0.6"
+    },
+    {
+      "name": "bands",
+      "taskType": "gdal-cli-multiplex",
+      "timeout": 36000,
+      "inputs": [
+        {
+          "name": "data",
+          "source": "crop_aop_to_project:data"
+        },
+        {
+          "name": "command",
+          "value": "find $indir/data/ -name *XML -type f -delete; mkdir -p $outdir; cp -R $indir/data/ $outdir/"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "data"
+        }
+      ]
+    },
+    {
+      "containerDescriptors": [
+        {
+          "properties": {
+            "domain": "nvidiagpu"
+          }
+        }
+      ],
+      "name": "openskynet",
+      "inputs": [
+        {
+          "source": "bands:data",
+          "name": "data"
+        },
+        {
+          "name": "model",
+          "value": "s3://vector-lulc-models/0cc0b4716f02f000.zip"
+        },
+        {
+          "name": "log_level",
+          "value": "trace"
+        },
+        {
+          "name": "confidence",
+          "value": "30"
+        },
+        {
+          "name": "pyramid",
+          "value": "true"
+        },
+        {
+          "name": "pyramid_window_sizes",
+          "value": "[768]"
+        },
+        {
+          "name": "pyramid_step_sizes",
+          "value": "[512]"
+        },
+        {
+          "name": "step_size",
+          "value": "512"
+        },
+        {
+          "name": "tags",
+          "value": "Purpose Built Vehicle-1"
+        },
+        {
+          "name": "non_maximum_suppression",
+          "value": "30"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "log"
+        },
+        {
+          "name": "results"
+        }
+      ],
+      "timeout": 36000,
+      "taskType": "openskynet:0.0.14",
+      "impersonation_allowed": true
+    },
+    {
+      "containerDescriptors": [
+        {
+          "properties": {
+            "domain": "t2medium"
+          }
+        }
+      ],
+      "name": "vector",
+      "inputs": [
+        {
+          "source": "openskynet:results",
+          "name": "items"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "result"
+        }
+      ],
+      "timeout": 36000,
+      "taskType": "IngestItemJsonToVectorServices",
+      "impersonation_allowed": true
+    },
+    {
+      "containerDescriptors": [
+        {
+          "properties": {
+            "domain": "t2medium"
+          }
+        }
+      ],
+      "name": "s3_vector",
+      "inputs": [
+        {
+          "source": "vector:result",
+          "name": "data"
+        },
+        {
+          "name": "destination",
+          "value": "s3://vector-test-gbdx-vectors/openskynet-military-vehicles/61cd42e1-5535-445f-8d86-f63c00912062/s3_vector"
+        }
+      ],
+      "outputs": [],
+      "timeout": 36000,
+      "taskType": "StageDataToS3"
+    },
+    {
+      "containerDescriptors": [
+        {
+          "properties": {
+            "domain": "t2medium"
+          }
+        }
+      ],
+      "name": "s3_osn",
+      "inputs": [
+        {
+          "source": "openskynet:log",
+          "name": "data"
+        },
+        {
+          "name": "destination",
+          "value": "s3://insight-cloud-scratch/osn-logs/openskynet-military-vehicles/61cd42e1-5535-445f-8d86-f63c00912062/s3_osn"
+        }
+      ],
+      "outputs": [],
+      "timeout": 36000,
+      "taskType": "StageDataToS3"
+    },
+    {
+      "containerDescriptors": [
+        {
+          "properties": {
+            "domain": "t2medium"
+          }
+        }
+      ],
+      "name": "s3_aop",
+      "inputs": [
+        {
+          "source": "aop:data",
+          "name": "data"
+        },
+        {
+          "name": "destination",
+          "value": "s3://insight-cloud-scratch/osn-aop/openskynet-military-vehicles/61cd42e1-5535-445f-8d86-f63c00912062/s3_aop"
+        }
+      ],
+      "outputs": [],
+      "timeout": 36000,
+      "taskType": "StageDataToS3"
+    }
+  ],
+  "name": "openskynet"
+}

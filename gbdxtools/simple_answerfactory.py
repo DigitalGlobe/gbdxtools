@@ -12,26 +12,102 @@ from gbdxtools.answerfactory import Project as ProjectService
 from gbdxtools.answerfactory import Recipe as RecipeService
 
 import re
+import uuid
 
 REGEX_RECIPE_NAME = re.compile(r'[a-zA0-9\-_\s()\\]*')
+REGEX_VERSIONED_TASK_NAME = re.compile(r'^(?P<task_name>.*):\d+\.\d+\.\d+$')
+REGEX_PARSE_S3_PATH = re.compile(r'^s3://(?P<bucket_name>[^/]+)(?P<key>.*)$')
 
 RECIPE_TYPES = ['workflow', 'partitioned-workflow', 'vector-aggregation', 'es-query']
 RECIPE_INPUT_TYPES = ['none', 'acquisition', 'acquisitions', 'esri-service', 
                       'seasonal-acquisition', 'vector-service']
 RECIPE_OUTPUT_TYPES = ['esri-service', 'es-query-service', 'vector-service']
 
+ACQUISITION_TASKS = ['AOP_Strip_Processor']
+VECTOR_INPUT_TASKS = ['CompareVectors', 'GenerateRandomVectors']
+VECTOR_OUTPUT_TASKS = ['IngestGeoJsonToVectorServices', 'IngestItemJsonToVectorServices',
+                'IngestShpToVectorServices', 'WriteGeoJsonToVectorServices',
+                'WriteItemJsonToVectorServices', 'WriteShpToVectorServices']
+
+VECTOR_INGEST_BUCKETS = ['vector-shapefile-ingest-dev', 'vector-shapefile-ingest-prod',
+                         'vector-test-gbdx-vectors', 'vector-gbdx-vectors-prod']
+VECTOR_MODEL_BUCKETS = ['vector-lulc-models']
+S3_UPLOADS = ['StageDataToS3']
+
+SUBSTITUTION_VAR_WORKFLOW_ACCOUNT_ID = '{account_id}'
+SUBSTITUTION_VAR_WORKFLOW_USER = '{user}'
+SUBSTITUTION_VAR_WORKFLOW_PROJECT_ID = '{project_id}'
+SUBSTITUTION_VAR_WORKFLOW_PROJECT_NAME = '{project_name}'
+SUBSTITUTION_VAR_WORKFLOW_RECIPE_ID = '{recipe_id}'
+SUBSTITUTION_VAR_WORKFLOW_RECIPE_NAME = '{recipe_name}'
+SUBSTITUTION_VAR_WORKFLOW_PROJECT_GEOMETRY = '{project_geometry}'
+SUBSTITUTION_VAR_WORKFLOW_TASK_NAME = '{task_name}'
+
+SUBSTITUTION_VAR_WORKFLOW_VECTOR_SERVICE_OUTPUT_RUN_ID = '{run_id}'
+SUBSTITUTION_VAR_WORKFLOW_VECTOR_SERVICE_OUTPUT_VECTOR_HOST = '{vector_host}'
+SUBSTITUTION_VAR_WORKFLOW_VECTOR_SERVICE_OUTPUT_VECTOR_INGEST_BUCKET = '{vector_ingest_bucket}'
+SUBSTITUTION_VAR_WORKFLOW_VECTOR_SERVICE_OUTPUT_INGEST_DATE = '{ingest_date}'
+SUBSTITUTION_VAR_WORKFLOW_VECTOR_SERVICE_OUTPUT_QUERY_INDEX = '{query_index}'
+
+SUBSTITUTION_VAR_WORKFLOW_ACQUISITION_INPUT_RASTER_PATH = '{raster_path}'
+SUBSTITUTION_VAR_WORKFLOW_ACQUISITION_INPUT_RASTER_PATH_I = '{raster_path_%d}'
+SUBSTITUTION_VAR_WORKFLOW_ACQUISITION_INPUT_CATALOG_ID = '{catalog_id}'
+SUBSTITUTION_VAR_WORKFLOW_ACQUISITION_INPUT_CATALOG_ID_I = '{catalog_id_%d}'
+SUBSTITUTION_VAR_WORKFLOW_ACQUISITION_INPUT_ACQUISITION_ID = '{acquisition_id}'
+SUBSTITUTION_VAR_WORKFLOW_ACQUISITION_INPUT_ACQUISITION_ID_I = '{acquisition_id_%d}'
+SUBSTITUTION_VAR_WORKFLOW_ACQUISITION_INPUT_ACQUISITION_DATE = '{acquisition_date}'
+SUBSTITUTION_VAR_WORKFLOW_ACQUISITION_INPUT_ACQUISITION_DATE_I = '{acquisition_date_%d}'
+SUBSTITUTION_VAR_WORKFLOW_ACQUISITION_INPUT_ACQUISITION_BANDS = '{acquisition_bands}'
+SUBSTITUTION_VAR_WORKFLOW_ACQUISITION_INPUT_ACQUISITION_BANDS_I = '{acquisition_bands_%d}'
+SUBSTITUTION_VAR_WORKFLOW_ACQUISITION_INPUT_ACQUISITION_GEOMETRY = '{acquisition_geometry}'
+SUBSTITUTION_VAR_WORKFLOW_ACQUISITION_INPUT_ACQUISITION_GEOMETRY_I = '{acquisition_geometry_%d}'
+SUBSTITUTION_VAR_WORKFLOW_ACQUISITION_INPUT_ACQUISITION_INDEX_I = '{acquisition_index_%d}'
+SUBSTITUTION_VAR_WORKFLOW_ACQUISITION_INPUT_ACQUISITION_INTERSECTION = '{acquisition_intersection}'
+SUBSTITUTION_VAR_WORKFLOW_ACQUISITION_INPUT_PROJECT_ACQUISITION_INTERSECTION = \
+    '{project_acquisition_intersection}'
+SUBSTITUTION_VAR_WORKFLOW_ACQUISITION_INPUT_MODEL_LOCATION_S3 = '{model_location_s3}'
+
+SUBSTITUTION_VAR_WORKFLOW_VECTOR_SERVICE_INPUT_QUERY_STRING = '{query_string}'
+SUBSTITUTION_VAR_WORKFLOW_VECTOR_SERVICE_INPUT_QUERY_STRING_I = '{query_string_%d}'
+SUBSTITUTION_VAR_WORKFLOW_VECTOR_SERVICE_INPUT_QUERY_INDEX = '{query_index}'
+SUBSTITUTION_VAR_WORKFLOW_VECTOR_SERVICE_INPUT_QUERY_INDEX_I = '{query_index_%d}'
+SUBSTITUTION_VAR_WORKFLOW_VECTOR_SERVICE_INPUT_RESULT_GEOMETRY = '{result_geometry}'
+
+FMT_S3_INGEST_PATH = 's3://' \
+                     + '/'.join([
+    SUBSTITUTION_VAR_WORKFLOW_VECTOR_SERVICE_OUTPUT_VECTOR_INGEST_BUCKET,
+    SUBSTITUTION_VAR_WORKFLOW_RECIPE_ID,
+    SUBSTITUTION_VAR_WORKFLOW_VECTOR_SERVICE_OUTPUT_RUN_ID,
+    SUBSTITUTION_VAR_WORKFLOW_TASK_NAME])
+
 
 class RecipePrerequisite(object):
-    def __init__(self, _id, aggregator, operator, properties):
-        self.id = _id
-        self.aggregator = aggregator
-        self.operator = operator
-        self.properties = properties      
+    def __init__(self, **kwargs):
+        self._id = kwargs.get('id', None)
+        self._aggregator = kwargs.get('aggregator', None)
+        self._operator = kwargs.get('operator', None)
+        self._properties = kwargs.get('properties', {})
 
-    def __new__(cls, _id, aggregator, operator, properties):
+    def __new__(cls, **kwargs):
         return super(RecipePrerequisite, cls).__new__(cls)
+
+    @property
+    def id(self):
+        return self._id
+
+    @property
+    def aggregator(self):
+        return self._aggregator
+
+    @property
+    def operator(self):
+        return self._operator
+
+    @property
+    def properties(self):
+        return self._properties
     
-    def generate_json(self):
+    def generate_dict(self):
         return {
             'id': self.id,
             'aggregator': self.aggregator,
@@ -41,16 +117,16 @@ class RecipePrerequisite(object):
 
 
 class RecipeParameter(object):
-    def __init__(self, name, _type, required, description, allowed_values, allow_multiple):
+    def __init__(self, **kwargs):
         super(object, self).__init__()
-        self._name = name
-        self._type = _type
-        self.required = required
-        self.description = description
-        self._allowed_values = allowed_values
-        self.allowMultiple = allow_multiple
+        self._name = kwargs.get('name', None)
+        self._type = kwargs.get('_type', None)
+        self._required = kwargs.get('required', False)
+        self._description = kwargs.get('description', None)
+        self._allowed_values = kwargs.get('allowed_values', None)
+        self._allow_multiple = kwargs.get('allow_multiple', False)
 
-    def __new__(cls, name, _type, required, description, allowedValues, allowMultiple):
+    def __new__(cls, **kwargs):
         return super(RecipeParameter, cls).__new__(cls)
     
     @property
@@ -64,7 +140,15 @@ class RecipeParameter(object):
         if self._type is None or len(self._name.strip()) == 0:
             raise ValueError("type is empty")
         return self._type
-    
+
+    @property
+    def required(self):
+        return self._required
+
+    @property
+    def description(self):
+        return self._description
+
     @property
     def allowed_values(self):
         if self._allowed_values is not None and \
@@ -72,44 +156,48 @@ class RecipeParameter(object):
             raise ValueError("allowed_values must be unique")
         return self._allowed_values
 
-    def generate_json(self):
+    @property
+    def allow_multiple(self):
+        return self._allow_multiple
+
+    def generate_dict(self):
         return {
             'name': self.name,
             'type': self.type,
             'required': self.required,
             'description': self.description,
             'allowedValues': self._allowed_values,
-            'allowMultiple': self.allowMultiple
+            'allowMultiple': self.allow_multiple
         }
 
 
 class Recipe(object):
-    def __init__(self, _id, name, owner, account_ids, access, description, definition, recipe_type,
-                 input_type, output_type, parent_recipe_id, default_day_range, parameters,
-                 validators, prerequisites, properties):
-        self.id = _id
-        self._name = name,
-        self.owner = owner
-        self._account_ids = account_ids
-        self.access = access
-        self._description = description
-        self.definition = definition
-        self._recipe_type = recipe_type
-        self._input_type = input_type
-        self._output_type = output_type
-        self.parent_recipe_id = parent_recipe_id
-        self.default_day_range = default_day_range
-        self.parameters = parameters
-        self.validators = validators
-        self.prerequisites = prerequisites
-        self.properties = properties
+    def __init__(self, **kwargs):
+        self._id = kwargs.get('id', str(uuid.uuid4()))
+        self._name = kwargs.get('name', None)
+        self._owner = kwargs.get('owner', None)
+        self._account_ids = kwargs.get('accound_ids', [])
+        self._access = kwargs.get('access', None)
+        self._description = kwargs.get('description', None)
+        self._definition = kwargs.get('definition', None)
+        self._recipe_type = kwargs.get('recipe_type', None)
+        self._input_type = kwargs.get('input_type', None)
+        self._output_type = kwargs.get('output_type', None)
+        self._parent_recipe_id = kwargs.get('parent_recipe_id', None)
+        self._default_day_range = kwargs.get('default_day_range', None)
+        self._parameters = kwargs.get('parameters', [])
+        self._validators = kwargs.get('validators', [])
+        self._prerequisites = kwargs.get('prerequisites', [])
+        self._properties = kwargs.get('properties', {})
 
         self.recipe_service = RecipeService()
 
-    def __new__(cls, _id, name, owner, account_id, access, description, definition, recipe_type,
-                input_type, output_type, parent_recipe_id, default_day_range, parameters,
-                validators, prerequisites, properties):
+    def __new__(cls, **kwargs):
         return super(Recipe, cls).__new__(cls)
+
+    @property
+    def id(self):
+        return self._id
 
     @property
     def name(self):
@@ -119,18 +207,30 @@ class Recipe(object):
         if match is None:
             raise ValueError("name is not in format of [a-zA0-9\-_\s()\\]*")
         return self._name
+
+    @property
+    def owner(self):
+        return self._owner
     
     @property
     def account_ids(self):
         if self._account_ids is not None and len(set(self._account_ids)) != len(self._account_ids):
             raise ValueError("account_ids contains duplicates")
         return self._account_ids
+
+    @property
+    def access(self):
+        return self._access
     
     @property
     def description(self):
         if self._description is not None and len(self._description.strip()) == 0:
             raise ValueError("description is empty")
         return self._description
+
+    @property
+    def definition(self):
+        return self._definition
     
     @property
     def recipe_type(self):
@@ -156,20 +256,44 @@ class Recipe(object):
             raise ValueError("output_type is not one of: " + str(RECIPE_OUTPUT_TYPES))
         return self._output_type
 
+    @property
+    def parent_recipe_id(self):
+        return self._parent_recipe_id
+
+    @property
+    def default_day_range(self):
+        return self._default_day_range
+
+    @property
+    def parameters(self):
+        return self._parameters
+
+    @property
+    def validators(self):
+        return self._validators
+
+    @property
+    def prerequisites(self):
+        return self._prerequisites
+
+    @property
+    def properties(self):
+        return self._properties
+
     def with_parent(self, parent_recipe):
         assert parent_recipe is not None, "Parent Recipe is None"
         if self._name is None or len(self._name.strip()) == 0:
             self._name = parent_recipe.name
-        if self.owner is None or len(self.owner.strip()) == 0:
-            self.owner = parent_recipe.owner
+        if self._owner is None or len(self._owner.strip()) == 0:
+            self._owner = parent_recipe.owner
         if self._account_ids is None or len(self._account_ids) == 0:
             self._account_ids = parent_recipe.account_id
-        if self.access is None or len(self.access.strip()) == 0:
-            self.access = parent_recipe.access
+        if self._access is None or len(self._access.strip()) == 0:
+            self._access = parent_recipe.access
         if self._description is None or len(self._description.strip()) == 0:
             self._description = parent_recipe.description
-        if self.definition is None or len(self.definition.strip()) == 0:
-            self.definition = parent_recipe.definition
+        if self._definition is None or len(self._definition.strip()) == 0:
+            self._definition = parent_recipe.definition
         if self._recipe_type is None or len(self._recipe_type.strip()) == 0:
             self._recipe_type = parent_recipe.recipe_type
         if self._input_type is None or len(self._input_type.strip()) == 0:
@@ -185,14 +309,14 @@ class Recipe(object):
                 overridden = len(filter(lambda p: p.name == parent_parameter.name, parameters)) > 0
                 if not overridden:
                     parameters.append(parent_parameter)
-            self.parameters = parameters
+            self._parameters = parameters
         if parent_recipe.validators is not None and len(parent_recipe.validators) > 0:
             if self.validators is None:
                 validators = parent_recipe.validators
             else:
                 validators = self.validators
             validators += parent_recipe.validators
-            self.validators = list(set(validators))
+            self._validators = list(set(validators))
         if parent_recipe.prerequisites is not None and len(parent_recipe.prerequisites) > 0:
             if self.prerequisites is None:
                 prerequisites = parent_recipe.prerequisites
@@ -202,39 +326,225 @@ class Recipe(object):
                 overridden = len(filter(lambda p: p.id == parent_prerequisite.id, prerequisites)) > 0
                 if not overridden:
                     prerequisites.append(parent_prerequisite)
-            self.prerequisites = prerequisites
-        if parent_recipe.properties is not None and self.properties is not None:
-            self.properties.update(parent_recipe.properties)
+            self._prerequisites = prerequisites
+        if parent_recipe.properties is not None and len(self.properties) == 0:
+            self._properties.update(parent_recipe.properties)
 
-    def from_workflow(self, workflow, parallelized=False):
-        if self.id is None or len(self.id.strip()) == 0:
-            self.id = workflow.name
+    def from_workflow(self, workflow, **kwargs):
         if self._name is None or len(self._name.strip()) == 0:
             self._name = workflow.name
+        if self._description is None or len(self._description.strip()) == 0:
+            self._description = workflow.name
 
+        # figure out the type of workflow this is
+        num_acquisitions = 0
+        vector_input_workflow = False
+        vector_output_workflow = False
+        for task in workflow.tasks:
+            version_match = REGEX_VERSIONED_TASK_NAME.match(task.type)
+            if version_match is None:
+                task_type = task.type
+            else:
+                task_type = version_match.group('task_name')
+            # handle acquisitions
+            if task_type in ACQUISITION_TASKS:
+                num_acquisitions += 1
+            # handle vectors
+            if task_type in VECTOR_INPUT_TASKS:
+                vector_input_workflow = True
+            if task_type in VECTOR_OUTPUT_TASKS:
+                vector_output_workflow = True
+            # stage to s3 can output to vector if it's going to one of the vector ingest buckets
+            if task_type in S3_UPLOADS and hasattr(task.inputs, 'destination'):
+                s3_match = REGEX_PARSE_S3_PATH.match(task.inputs.destination.value)
+                if s3_match is not None:
+                    bucket_name = s3_match.group('bucket_name')
+                    if bucket_name in VECTOR_INGEST_BUCKETS:
+                        vector_output_workflow = True
 
+        # set the input type
+        if num_acquisitions > 1:
+            self._input_type = 'acquisitions'
+        elif num_acquisitions == 1:
+            self._input_type = 'acquisition'
+        elif vector_input_workflow:
+            self._input_type = 'vector-service'
+        else:
+            self._input_type = 'none'
+
+        # set the output type
+        if vector_output_workflow:
+            self._output_type = 'vector-service'
+        else:
+            # this shouldn't ever happen
+            raise ValueError("The provided workflow does not output to Vector Services")
 
         # figure out the recipe type
-        if parallelized:
+        if kwargs.get('parallelized', False):
             self._recipe_type = 'partitioned-workflow'
         else:
             self._recipe_type = 'workflow'
 
-    def generate_json(self):
-        parameters = None
-        if self.parameters is not None:
-            parameters = map(lambda param: param.generate_json(), self.parameters)
+        self._properties = kwargs.get('properties', {})
+        self._parameters = kwargs.get('parameters', [])
+        self._validators = kwargs.get('validators', [])
 
-        prerequisites = None
-        if self.prerequisites is not None:
-            prerequisites = map(lambda prerequisite: prerequisite.generate_json(),
-                                self.prerequisites)
+        # generate the workflow template
+        tasks = []
+        acquisition_counter = 0
+        vector_input_counter = 0
+        vector_output_counter = 0
+        names_to_types = {}
+        ignore_tasks = []
+        crop_task_src = {}
+        for task in workflow.tasks:
+            version_match = REGEX_VERSIONED_TASK_NAME.match(task.type)
+            if version_match is None:
+                task_type = task.type
+            else:
+                task_type = version_match.group('task_name')
+            names_to_types[task.name] = task_type
+
+        for task in workflow.tasks:
+            # remove crop tasks if partitioned workflow
+            version_match = REGEX_VERSIONED_TASK_NAME.match(task.type)
+            if version_match is None:
+                task_type = task.type
+            else:
+                task_type = version_match.group('task_name')
+            if task_type == 'CropGeotiff' and self.recipe_type == 'partitioned-workflow' and hasattr(task.inputs, 'data'):
+                source = task.inputs.data.value.split(':')[1]
+                if names_to_types[source] == 'AOP_Strip_Processor':
+                    ignore_tasks.append(task.name)
+                    crop_task_src[task.name] = task.inputs.data.value.replace('source:', '')
+
+        for task in workflow.tasks:
+            if task.name in ignore_tasks:
+                continue
+            version_match = REGEX_VERSIONED_TASK_NAME.match(task.type)
+            if version_match is None:
+                task_type = task.type
+            else:
+                task_type = version_match.group('task_name')
+
+            task_json = task.generate_task_workflow_json()
+            # fix inputs
+            if 'inputs' in task_json:
+                inputs = []
+                for input_port in task_json['inputs']:
+                    # fix sources
+                    if 'source' in input_port:
+                        source = input_port['source'].split(':')[0]
+                        if source in crop_task_src:
+                            input_port['source'] = crop_task_src[source]
+                    # fix values
+                    updated_port, acquisition_counter, vector_input_counter, vector_output_counter \
+                        = \
+                        self.__update_port(input_port, task_type, acquisition_counter,
+                                           vector_input_counter, vector_output_counter)
+                    inputs.append(updated_port)
+                task_json['inputs'] = inputs
+            # fix outputs
+            if 'outputs' in task_json:
+                outputs = []
+                for output_port in task_json['outputs']:
+                    updated_port, acquisition_counter, vector_input_counter, vector_output_counter \
+                        = \
+                        self.__update_port(output_port, task_type, acquisition_counter,
+                                           vector_input_counter, vector_output_counter)
+                    outputs.append(updated_port)
+                task_json['outputs'] = outputs
+            tasks.append(task_json)
+        self._definition = {
+            'tasks': tasks,
+            'name': workflow.name
+        }
+
+    def __update_port(self, port_json, task_type, acquisition_counter,
+                      vector_input_counter, vector_output_counter):
+        # source ports don't need to be updated
+        if 'source' in port_json:
+            return port_json, acquisition_counter, vector_input_counter, vector_output_counter
+        # match properties by name
+        if self.properties is not None:
+            for property_key in self.properties.keys():
+                if port_json['name'] == property_key:
+                    port_json['value'] = '{' + property_key + '}'
+        # match parameters by name
+        if self.parameters is not None:
+            for parameter in self.parameters:
+                if port_json['name'] == parameter.name:
+                    port_json['value'] = '{' + parameter.name + '}'
+        # handle acquisition specific cases
+        if task_type in ACQUISITION_TASKS:
+            # update raster path
+            if port_json['name'] == 'data':
+                if self.input_type == 'acquisitions':
+                    raster_path = SUBSTITUTION_VAR_WORKFLOW_ACQUISITION_INPUT_RASTER_PATH_I % \
+                                  acquisition_counter
+                    acquisition_counter += 1
+                else:
+                    raster_path = SUBSTITUTION_VAR_WORKFLOW_ACQUISITION_INPUT_RASTER_PATH
+                port_json['value'] = raster_path
+        # handle vector input specific cases
+        if task_type in VECTOR_INPUT_TASKS:
+            # really only applies to CompareVectors
+            if port_json['name'] == 'host':
+                # update vector host
+                port_json['value'] = SUBSTITUTION_VAR_WORKFLOW_VECTOR_SERVICE_OUTPUT_VECTOR_HOST
+            elif port_json['name'] == 'query_a':
+                # update vector 1st query
+                port_json['value'] = SUBSTITUTION_VAR_WORKFLOW_VECTOR_SERVICE_INPUT_QUERY_STRING_I \
+                                     % 0
+            elif port_json['name'] == 'query_b':
+                # update vector 2nd query
+                port_json['value'] = SUBSTITUTION_VAR_WORKFLOW_VECTOR_SERVICE_INPUT_QUERY_STRING_I \
+                                     % 1
+            elif port_json['name'] == 'index_a':
+                # update vector 1st index
+                port_json['value'] = SUBSTITUTION_VAR_WORKFLOW_VECTOR_SERVICE_INPUT_QUERY_INDEX_I \
+                                     % 0
+            elif port_json['name'] == 'index_b':
+                # update vector 2nd index
+                port_json['value'] = SUBSTITUTION_VAR_WORKFLOW_VECTOR_SERVICE_INPUT_QUERY_INDEX_I \
+                                     % 1
+            elif port_json['name'] == 'wkt':
+                # update wkt
+                port_json['value'] = SUBSTITUTION_VAR_WORKFLOW_VECTOR_SERVICE_INPUT_RESULT_GEOMETRY
+            elif port_json['name'] == 'wkt2':
+                port_json['value'] = SUBSTITUTION_VAR_WORKFLOW_PROJECT_GEOMETRY
+        # handle vector output tasks
+        if task_type in VECTOR_OUTPUT_TASKS:
+            if port_json['name'] == 'index':
+                port_json['value'] = SUBSTITUTION_VAR_WORKFLOW_VECTOR_SERVICE_OUTPUT_QUERY_INDEX
+            elif port_json['name'] == 'host':
+                port_json['value'] = SUBSTITUTION_VAR_WORKFLOW_VECTOR_SERVICE_OUTPUT_VECTOR_HOST
+        # handle s3 paths
+        if 'value' in port_json:
+            s3_match = REGEX_PARSE_S3_PATH.match(port_json['value'])
+            if s3_match is not None:
+                s3_bucket = s3_match.group('bucket_name')
+                if s3_bucket in VECTOR_INGEST_BUCKETS:
+                    port_json['value'] = FMT_S3_INGEST_PATH
+                elif s3_bucket in VECTOR_MODEL_BUCKETS:
+                    port_json['value'] = SUBSTITUTION_VAR_WORKFLOW_ACQUISITION_INPUT_MODEL_LOCATION_S3
+
+        return port_json, acquisition_counter, vector_input_counter, vector_output_counter
+
+    def generate_dict(self):
+        parameters = map(lambda param: param.generate_dict(), self.parameters)
+        prerequisites = map(lambda prerequisite: prerequisite.generate_dict(),
+                            self.prerequisites)
+        if self._account_ids is None or len(self._account_ids) == 0:
+            account_ids = None
+        else:
+            account_ids = self._account_ids
 
         return {
             'id': self.id,
             'name': self.name,
             'owner': self.owner,
-            'accountId': self._account_ids,
+            'accountId': account_ids,
             'access': self.access,
             'description': self.description,
             'definition': self.definition,
