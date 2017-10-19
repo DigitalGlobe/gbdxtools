@@ -13,6 +13,7 @@ import datetime
 
 from gbdxtools.auth import Auth
 
+
 class Recipe(object):
     def __init__(self, **kwargs):
         '''
@@ -93,7 +94,6 @@ class Recipe(object):
         }
         r = self.gbdx_connection.delete(url)
         r.raise_for_status()
-
 
 
 class Project(object):
