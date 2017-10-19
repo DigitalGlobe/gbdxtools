@@ -27,7 +27,7 @@ class Recipe(object):
 
         '''
         interface = Auth(**kwargs)
-        self.base_url = 'https://vector.geobigdata.io/answer-factory-recipe-service/api/recipe'
+        self.base_url = 'https://vector.geobigdata.io/answer-factory-recipe-service/api'
         self.gbdx_connection = interface.gbdx_connection
         self.logger = interface.logger
 
@@ -42,8 +42,26 @@ class Recipe(object):
             A JSON representation of the recipe
         '''
         self.logger.debug('Retrieving recipe by id: ' + recipe_id)
-        url = '%(base_url)s/%(recipe_id)s' % {
+        url = '%(base_url)s/recipe/%(recipe_id)s' % {
             'base_url': self.base_url, 'recipe_id': recipe_id
+        }
+        r = self.gbdx_connection.get(url)
+        r.raise_for_status()
+        return r.json()
+
+    def list(self):
+        '''
+        Retrieves a list of AnswerFactory Recipes
+
+        Args:
+            None
+
+        Returns:
+            A list of JSON representations of recipes
+        '''
+        self.logger.debug('Retrieving list of recipes.')
+        url = '%(base_url)s/recipes' % {
+            'base_url': self.base_url
         }
         r = self.gbdx_connection.get(url)
         r.raise_for_status()
@@ -63,7 +81,7 @@ class Recipe(object):
         if 'id' in recipe:
             # update -> use put op
             self.logger.debug("Updating existing recipe: " + json.dumps(recipe))
-            url = '%(base_url)s/%(recipe_id)s' % {
+            url = '%(base_url)s/recipe/%(recipe_id)s' % {
                 'base_url': self.base_url, 'recipe_id': recipe['id']
             }
             r = self.gbdx_connection.put(url, recipe)
@@ -89,7 +107,7 @@ class Recipe(object):
              Nothing
         '''
         self.logger.debug('Deleting recipe by id: ' + recipe_id)
-        url = '%(base_url)s/%(recipe_id)s' % {
+        url = '%(base_url)s/recipe/%(recipe_id)s' % {
             'base_url': self.base_url, 'recipe_id': recipe_id
         }
         r = self.gbdx_connection.delete(url)
@@ -179,34 +197,3 @@ class Project(object):
         }
         r = self.gbdx_connection.delete(url)
         r.raise_for_status()
-
-class AnswerFactory(object):
-
-    def __init__(self, **kwargs):
-        ''' Class for base AnswerFactory API methods
-
-        Returns:
-            An instance of the AnswerFactory API interface class.
-        '''
-        interface = Auth(**kwargs)
-        self.base_url = 'https://vector.geobigdata.io/answer-factory-recipe-service/api' 
-        self.gbdx_connection = interface.gbdx_connection
-        self.logger = interface.logger
-
-    def list_recipes(self):
-        '''
-        Retrieves an AnswerFactory Project by id
-
-        Args:
-            None
-
-        Returns:
-            A list of JSON representations of recipes
-        '''
-        self.logger.debug('Retrieving list of recipes.')
-        url = '%(base_url)s/recipes' % {
-            'base_url': self.base_url
-        }
-        r = self.gbdx_connection.get(url)
-        r.raise_for_status()
-        return r.json()
