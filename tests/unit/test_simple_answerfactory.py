@@ -9,7 +9,7 @@ from gbdxtools.simpleworkflows import Workflow, Task
 class TestSimpleAnswerFactory(unittest.TestCase):
     def __build_osn_sample_workflow(self):
         workflow_json = None
-        with open(os.path.join(os.path.curdir, 'data', 'sample_osn_workflow.json')) as fp:
+        with open(os.path.join('data', 'sample_osn_workflow.json')) as fp:
             workflow_json = json.load(fp)
         self.assertIsNotNone(workflow_json)
         tasks = []
@@ -55,8 +55,7 @@ class TestSimpleAnswerFactory(unittest.TestCase):
 
         recipe_dict = recipe.generate_dict()
 
-
-        expected_recipe_dict = json.load(open(os.path.join(os.path.curdir, 'data', 'target_workflow.json')))
+        expected_recipe_dict = json.load(open(os.path.join('data', 'target_workflow.json')))
         recipe_dict['id'] = expected_recipe_dict['id']
 
         self.assertDictEqual(recipe_dict, expected_recipe_dict)
