@@ -88,9 +88,6 @@ class RecipePrerequisite(object):
         self._operator = kwargs.get('operator', None)
         self._properties = kwargs.get('properties', {})
 
-    def __new__(cls, **kwargs):
-        return super(RecipePrerequisite, cls).__new__(cls)
-
     @property
     def id(self):
         return self._id
@@ -126,9 +123,6 @@ class RecipeParameter(object):
         self._allowed_values = kwargs.get('allowed_values', None)
         self._allow_multiple = kwargs.get('allow_multiple', False)
 
-    def __new__(cls, **kwargs):
-        return super(RecipeParameter, cls).__new__(cls)
-    
     @property
     def name(self):
         if self._name is None or len(self._name.strip()) == 0:
@@ -191,9 +185,6 @@ class Recipe(object):
         self._properties = kwargs.get('properties', {})
 
         self.recipe_service = RecipeService()
-
-    def __new__(cls, **kwargs):
-        return super(Recipe, cls).__new__(cls)
 
     @property
     def id(self):
@@ -555,3 +546,259 @@ class Recipe(object):
             'properties': self.properties
         }
 
+
+class Project(object):
+    def __init__(self, **kwargs):
+        self._id = kwargs.get('id', None)
+        self._owner = kwargs.get('owner', None)
+        self._name = kwargs.get('name', None)
+        self._account_id = kwargs.get('account_id', None)
+        self._aois = kwargs.get('aois', [])
+        self._recipe_configs = kwargs.get('recipe_configs', [])
+        self._original_geometries = kwargs.get('original_geometries', [])
+        self._named_buffers = kwargs.get('named_buffers', [])
+        self._create_date = kwargs.get('create_date', None)
+        self._update_date = kwargs.get('update_date', None)
+        self._notes = kwargs.get('notes', None)
+        self._description = kwargs.get('description', None)
+        self._tags = kwargs.get('tags', [])
+        self._visibility = kwargs.get('visibility', set())
+        self._continuously_ordered = kwargs.get('continuously_ordered', False)
+        self._acquisition_ids = kwargs.get('acquisition_ids', [])
+        self._date_range = kwargs.get('date_range', None)
+        self._enabled = kwargs.get('enabled', True)
+        self._attributes = kwargs.get('attributes', {})
+
+        self.project_service = ProjectService()
+
+    @property
+    def id(self):
+        return self._id
+
+    @property
+    def owner(self):
+        return self._owner
+
+    @property
+    def name(self):
+        if self._name is None or len(self._name.strip()) == 0:
+            raise ValueError("name is empty")
+        return self._name
+
+    @property
+    def account_id(self):
+        return self._account_id
+
+    @property
+    def aois(self):
+        return self._aois
+
+    @property
+    def recipe_configs(self):
+        return self._recipe_configs
+
+    @property
+    def original_geometries(self):
+        return self._original_geometries
+
+    @property
+    def named_buffers(self):
+        return self._named_buffers
+
+    @property
+    def create_date(self):
+        return self._create_date
+
+    @property
+    def update_date(self):
+        return self._update_date
+
+    @property
+    def notes(self):
+        return self._notes
+
+    @property
+    def description(self):
+        return self._description
+
+    @property
+    def tags(self):
+        if len(set(self._tags)) != len(self._tags):
+            raise ValueError("tags contains duplicates")
+        return self._tags
+
+    @property
+    def visibility(self):
+        return self._visibility
+
+    @property
+    def public(self):
+        if self._visibility is None:
+            return self._account_id == 'public'
+        return 'public' in self._visibility
+
+    @property
+    def continuously_ordered(self):
+        return self._continuously_ordered
+
+    @property
+    def acquisition_ids(self):
+        return self._acquisition_ids
+
+    @property
+    def date_range(self):
+        return self._date_range
+
+    @property
+    def enabled(self):
+        return self._enabled
+
+    @property
+    def attributes(self):
+        return self._attributes
+
+    def generate_dict(self):
+        acquisition_ids_str = ', '.join(self._acquisition_ids)
+        recipe_configs = map(lambda config: config.generate_dict(), self._recipe_configs)
+        date_range = None
+        if self._date_range is not None:
+            date_range = self._date_range.generate_dict()
+        create_date = None
+        if self.create_date is not None:
+            create_date = self.create_date.isoformat()
+        update_date = None
+        if self.update_date is not None:
+            update_date = self.update_date.isoformat()
+
+        return {
+            'id': self.id,
+            'owner': self.owner,
+            'name': self.name,
+            'accountId': self.account_id,
+            'aois': self.aois,
+            'recipeConfigs': recipe_configs,
+            'originalGeometries': self.original_geometries,
+            'namedBuffers': self.named_buffers,
+            'createDate': create_date,
+            'updateDate': update_date,
+            'notes': self.notes,
+            'description': self.description,
+            'tags': self.tags,
+            'visibility': self.visibility,
+            'continuouslyOrdered': self.continuously_ordered,
+            'acquisitionIds': acquisition_ids_str,
+            'dateRange': date_range,
+            'enabled': self.enabled,
+            'attributes': self.attributes
+        }
+
+
+class RecipeConfig(object):
+    def __init__(self, **kwargs):
+        self._recipe_id = kwargs.get('recipe_id', None)
+        self._recipe_name = kwargs.get('recipe_name', None)
+        self._configuration_date = kwargs.get('configuration_date', None)
+        self._start_date = kwargs.get('start_date', None)
+        self._end_date = kwargs.get('end_date', None)
+        self._parameters = kwargs.get('parameters', [])
+
+    @property
+    def recipe_id(self):
+        if self._recipe_id is None or len(self._recipe_id.strip()) == 0:
+            raise ValueError("recipe_id is empty")
+        return self._recipe_id
+
+    @property
+    def recipe_name(self):
+        if self._recipe_name is None or len(self._recipe_name.strip()) == 0:
+            raise ValueError("recipe_name is empty")
+        return self._recipe_name
+
+    @property
+    def configuration_date(self):
+        return self._configuration_date
+
+    @property
+    def start_date(self):
+        if self._start_date is not None and self._end_date is not None and\
+                        self._start_date > self._end_date:
+            raise ValueError("start_date is after end_date")
+        return self._start_date
+
+    @property
+    def end_date(self):
+        if self._start_date is not None and self._end_date is not None and \
+                        self._start_date > self._end_date:
+            raise ValueError("start_date is after end_date")
+        return self._end_date
+
+    @property
+    def parameters(self):
+        return self.parameters
+
+    def from_recipe(self, recipe):
+        self._recipe_id = recipe.id
+        self._recipe_name = recipe.name
+
+    def generate_dict(self):
+        parameters = map(lambda param: param.generate_dict(), self.parameters)
+        start_date = None
+        end_date = None
+        configuration_date = None
+        if self.start_date is not None:
+            start_date = self.start_date.isoformat()
+        if self.end_date is not None:
+            end_date = self.end_date.isoformat()
+        configuration_date = None
+        if self.configuration_date is not None:
+            configuration_date = self.configuration_date.isoformat()
+
+        return {
+            'recipeId': self.recipe_id,
+            'recipeName': self.recipe_name,
+            'configurationDate': configuration_date,
+            'startDate': start_date,
+            'endDate': end_date,
+            'parameters': parameters
+        }
+
+
+class DateRange(object):
+    def __init__(self, **kwargs):
+        self._start_date = kwargs.get('start_date', None)
+        self._end_date = kwargs.get('end_date', None)
+        self._count = kwargs.get('count', 0)
+
+    @property
+    def start_date(self):
+        if self._start_date is not None and self._end_date is not None and \
+                        self._start_date > self._end_date:
+            raise ValueError("start_date is after end_date")
+        return self._start_date
+
+    @property
+    def end_date(self):
+        if self._start_date is not None and self._end_date is not None and \
+                        self._start_date > self._end_date:
+            raise ValueError("start_date is after end_date")
+        return self._end_date
+
+    @property
+    def count(self):
+        if self._count is not None and self._count < 0:
+            raise ValueError("count is below 0")
+        return self._count
+
+    def generate_dict(self):
+        start_date = None
+        if self._start_date is not None:
+            start_date = self.start_date.isoformat()
+        end_date = None
+        if self._end_date is not None:
+            end_date = self.end_date.isoformat()
+
+        return {
+            'startDate': start_date,
+            'endDate': end_date,
+            'count': self.count
+        }
