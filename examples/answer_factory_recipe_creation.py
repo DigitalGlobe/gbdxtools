@@ -50,16 +50,16 @@ confidence_param = RecipeParameter(
     _type = 'string',
     required = True,
     description = 'Lower bound for match scores',
-    allowMultiple = False,
-    allowedValues = ['5','10','15','20']
+    allow_multiple = False,
+    allowed_values = ['5','10','15','20']
 )
 non_maximum_suppression_param = RecipeParameter(
     name = 'non_maximum_suppression',
     _type = 'string',
     required = True,
     description = 'Lower bound for match scores',
-    allowMultiple = False,
-    allowedValues = ['5','10','15','20']
+    allow_multiple = False,
+    allowed_values = ['5','10','15','20']
 )
 
 properties = {
@@ -72,7 +72,7 @@ properties = {
 }
 
 recipe = Recipe(
-    _id = 'openskynet-military-vehicles',
+    id = 'openskynet-military-vehicles',
     name = 'Extract Military Vehicles',
     owner = '',
     account_ids = '',
