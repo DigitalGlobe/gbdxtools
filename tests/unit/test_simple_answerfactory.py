@@ -11,6 +11,11 @@ from gbdxtools.answerfactory import Project as ProjectService
 from gbdxtools import Interface
 from auth_mock import get_mock_gbdx_session
 
+try:
+    xrange
+except NameError:
+    xrange = range
+
 
 class TestSimpleAnswerFactory(unittest.TestCase):
     @classmethod
