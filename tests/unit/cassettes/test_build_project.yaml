@@ -1,0 +1,41 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      User-Agent: [python-requests/2.18.4]
+    method: GET
+    uri: https://vector.geobigdata.io/answer-factory-recipe-service/api/recipe/query-tweets
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA42ST0/DMAzFvwrKEa2IdTCVSdy4cEEwdq+8xBuW0iRLnG7VtO+OW/aPC+JSKT8/
+        2+9Z3SsyaqY2GWNX8BaRkxopBw0K/ejpzeJE/dZhFKyr1XSql2VhQN8XD1U1KSrzNCnGpZlWBsvH
+        coUiB619dvwq8122dgCY0ullMOlIgck7mXleYnBFjo5080yMTc1dwNlgTgQRNQVcCBJBi5p9LAb7
+        UiMXMv8uJYwt6d6Pz/xHNUBEx/Nh+MWyuIFs+QW6Obh13zj+0cqBGOM5TAuWDMjEMwkRI24yJUlw
+        BX3AyNSTvQJjhqBga0MpWOjqFaE1UlSMuz7sl28xXugbroGpxZtP8UqNfGbAHGmZZcldOsHaHXW1
+        WdrRuxcP/2gKR13fJKuHm9bkDO6u7tWA/CXEkv1WHQ7fRfCBHT4CAAA=
+    headers:
+      access-control-allow-credentials: ['true']
+      access-control-allow-headers: ['origin, content-type, accept, authorization']
+      access-control-allow-methods: ['GET, POST, PUT, DELETE, OPTIONS, HEAD']
+      access-control-allow-origin: ['*']
+      cache-control: ['no-cache, no-store, max-age=0, must-revalidate']
+      connection: [keep-alive]
+      content-encoding: [gzip]
+      content-length: ['326']
+      content-type: [application/json;charset=UTF-8]
+      date: ['Fri, 20 Oct 2017 19:04:53 GMT']
+      expires: ['0']
+      pragma: [no-cache]
+      server: [Apache-Coyote/1.1, Weblogic 12.2.1.1]
+      strict-transport-security: [max-age=604800 ; includeSubDomains]
+      vary: [Accept-Encoding]
+      x-content-type-options: [nosniff, nosniff]
+      x-frame-options: [DENY, SAMEORIGIN]
+      x-permitted-cross-domain-policies: [none]
+      x-xss-protection: [1; mode=block, 1; mode=block]
+    status: {code: 200, message: OK}
+version: 1

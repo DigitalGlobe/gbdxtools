@@ -7,9 +7,7 @@ Contact: mtrotter@digitalglobe.com
 from __future__ import absolute_import
 from builtins import object
 
-import requests
 import json
-import datetime
 
 from gbdxtools.auth import Auth
 
@@ -78,20 +76,22 @@ class Recipe(object):
             AnswerFactory Recipe id
         '''
         # test if this is a create vs. an update
-        if 'id' in recipe:
+        if 'id' in recipe and recipe['id'] is not None:
             # update -> use put op
             self.logger.debug("Updating existing recipe: " + json.dumps(recipe))
-            url = '%(base_url)s/recipe/%(recipe_id)s' % {
+            url = '%(base_url)s/recipe/json/%(recipe_id)s' % {
                 'base_url': self.base_url, 'recipe_id': recipe['id']
             }
-            r = self.gbdx_connection.put(url, recipe)
+            r = self.gbdx_connection.put(url, json=recipe)
             r.raise_for_status()
             return recipe['id']
         else:
             # create -> use post op
             self.logger.debug("Creating new recipe: " + json.dumps(recipe))
-            url = self.base_url
-            r = self.gbdx_connection.post(url, recipe)
+            url = '%(base_url)s/recipe/json' % {
+                'base_url': self.base_url
+            }
+            r = self.gbdx_connection.post(url, json=recipe)
             r.raise_for_status()
             recipe_json = r.json()
             return recipe_json['id']
@@ -161,13 +161,13 @@ class Project(object):
         '''
 
         # test if this is a create vs. an update
-        if 'id' in project:
+        if 'id' in project and project['id'] is not None:
             # update -> use put op
             self.logger.debug('Updating existing project: ' + json.dumps(project))
             url = '%(base_url)s/%(project_id)s' % {
                 'base_url': self.base_url, 'project_id': project['id']
             }
-            r = self.gbdx_connection.put(url, project)
+            r = self.gbdx_connection.put(url, json=project)
             r.raise_for_status()
             # updates only get the Accepted response -> return the original project id
             return project['id']
@@ -175,7 +175,7 @@ class Project(object):
             self.logger.debug('Creating new project: ' + json.dumps(project))
             # create -> use post op
             url = self.base_url
-            r = self.gbdx_connection.post(url, project)
+            r = self.gbdx_connection.post(url, json=project)
             r.raise_for_status()
             project_json = r.json()
             # create returns the saved project -> return the project id that's saved

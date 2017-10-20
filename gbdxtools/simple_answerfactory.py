@@ -565,7 +565,7 @@ class Project(object):
         self._visibility = kwargs.get('visibility', set())
         self._continuously_ordered = kwargs.get('continuously_ordered', False)
         self._acquisition_ids = kwargs.get('acquisition_ids', [])
-        self._date_range = kwargs.get('date_range', None)
+        self._date_range = kwargs.get('date_range', DateRange())
         self._enabled = kwargs.get('enabled', True)
         self._attributes = kwargs.get('attributes', {})
 
@@ -599,7 +599,9 @@ class Project(object):
 
     @property
     def original_geometries(self):
-        return self._original_geometries
+        if self._original_geometries is not None and len(self._original_geometries) > 0:
+            return self._original_geometries
+        return map(lambda aoi: {"type": "Feature", "geometry": aoi}, self._aois)
 
     @property
     def named_buffers(self):
@@ -658,7 +660,9 @@ class Project(object):
         return self._attributes
 
     def generate_dict(self):
-        acquisition_ids_str = ', '.join(self._acquisition_ids)
+        acquisition_ids_str = None
+        if self._acquisition_ids is not None and len(self._acquisition_ids) > 0:
+            acquisition_ids_str = ', '.join(self._acquisition_ids)
         recipe_configs = map(lambda config: config.generate_dict(), self._recipe_configs)
         date_range = None
         if self._date_range is not None:
@@ -669,6 +673,7 @@ class Project(object):
         update_date = None
         if self.update_date is not None:
             update_date = self.update_date.isoformat()
+        visibility = list(self._visibility)
 
         return {
             'id': self.id,
@@ -684,7 +689,7 @@ class Project(object):
             'notes': self.notes,
             'description': self.description,
             'tags': self.tags,
-            'visibility': self.visibility,
+            'visibility': visibility,
             'continuouslyOrdered': self.continuously_ordered,
             'acquisitionIds': acquisition_ids_str,
             'dateRange': date_range,
@@ -734,17 +739,20 @@ class RecipeConfig(object):
 
     @property
     def parameters(self):
-        return self.parameters
+        return self._parameters
 
     def from_recipe(self, recipe):
-        self._recipe_id = recipe.id
-        self._recipe_name = recipe.name
+        if isinstance(recipe, Recipe):
+            self._recipe_id = recipe.id
+            self._recipe_name = recipe.name
+        elif isinstance(recipe, dict):
+            self._recipe_id = recipe['id']
+            self._recipe_name = recipe['name']
 
     def generate_dict(self):
         parameters = map(lambda param: param.generate_dict(), self.parameters)
         start_date = None
         end_date = None
-        configuration_date = None
         if self.start_date is not None:
             start_date = self.start_date.isoformat()
         if self.end_date is not None:
@@ -767,7 +775,7 @@ class DateRange(object):
     def __init__(self, **kwargs):
         self._start_date = kwargs.get('start_date', None)
         self._end_date = kwargs.get('end_date', None)
-        self._count = kwargs.get('count', 0)
+        self._count = kwargs.get('count', None)
 
     @property
     def start_date(self):
