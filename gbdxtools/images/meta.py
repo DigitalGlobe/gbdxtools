@@ -289,12 +289,12 @@ class GeoImage(Container):
                 dem = dem.warp(proj=proj)
             dasks.append(dem.dask)
 
+#
         for y in xrange(y_chunks):
             for x in xrange(x_chunks):
                 xmin = x * x_size
                 ymin = y * y_size
                 geometry = px_to_geom(xmin, ymin)
-                full_bounds = box(*full_bounds.union(geometry).bounds)
                 daskmeta["dask"][(daskmeta["name"], 0, y, x)] = (self._warp, geometry, gsd, dem, proj, 5)
         daskmeta["dask"], _ = optimize.cull(sharedict.merge(daskmeta["dask"], *dasks), list(daskmeta["dask"].keys()))
 
