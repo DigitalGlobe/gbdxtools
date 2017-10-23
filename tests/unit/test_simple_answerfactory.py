@@ -21,8 +21,9 @@ class TestSimpleAnswerFactory(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         # create mock session, replace dummytoken with real token to create cassette
-        mock_gbdx_session = get_mock_gbdx_session(token="dummytoken")
+        mock_gbdx_session = get_mock_gbdx_session(token="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2RpZ2l0YWxnbG9iZS1wbGF0Zm9ybS5hdXRoMC5jb20vIiwic3ViIjoiYXV0aDB8Z2JkeHwxMjQiLCJhdWQiOiJ2aGFORUp5bUw0bTFVQ280VHFYbXVLdGtuOUpDWURrVCIsImlhdCI6MTUwODUxODg2NCwiZXhwIjoxNTA5MTIzNjY0fQ.h3MT47wayPS2NFnQ1K_wAxt-nx5VEYwGEQglphR8998")
         cls.gbdx = Interface(gbdx_connection=mock_gbdx_session)
+       #  cls.gbdx = Interface(gbdx_connection=session_from_existing_token('eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2RpZ2l0YWxnbG9iZS1wbGF0Zm9ybS5hdXRoMC5jb20vIiwic3ViIjoiYXV0aDB8Z2JkeHwxMjQiLCJhdWQiOiJ2aGFORUp5bUw0bTFVQ280VHFYbXVLdGtuOUpDWURrVCIsImlhdCI6MTUwODUxODg2NCwiZXhwIjoxNTA5MTIzNjY0fQ.h3MT47wayPS2NFnQ1K_wAxt-nx5VEYwGEQglphR8998'))
 
         cls.data_path = os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), "data"))
 
@@ -116,7 +117,7 @@ class TestSimpleAnswerFactory(unittest.TestCase):
         with open(os.path.join(self.data_path, 'tweets_project.json')) as fp:
             expected_project = json.load(fp)
 
-        self.assertDictEqual(project_json, expected_project)
+        self.assertDictEqual(expected_project, project_json)
 
         return project_json
 

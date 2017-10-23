@@ -434,13 +434,13 @@ class Recipe(object):
                         self.__update_port(input_port, task_type, acquisition_counter,
                                            vector_input_counter, vector_output_counter)
                     inputs.append(updated_port)
-                task_json['inputs'] = inputs
+                task_json['inputs'] = sorted(inputs, key=lambda item: item['name'])
             # fix outputs
             if 'outputs' in task_json:
                 outputs = []
                 for output_port in task_json['outputs']:
                     outputs.append(output_port)
-                task_json['outputs'] = outputs
+                task_json['outputs'] = sorted(outputs, key=lambda item: item['name'])
             tasks.append(task_json)
         self._definition = {
             'tasks': tasks,
@@ -519,9 +519,9 @@ class Recipe(object):
         return port_json, acquisition_counter, vector_input_counter, vector_output_counter
 
     def generate_dict(self):
-        parameters = map(lambda param: param.generate_dict(), self.parameters)
-        prerequisites = map(lambda prerequisite: prerequisite.generate_dict(),
-                            self.prerequisites)
+        parameters = list(map(lambda param: param.generate_dict(), self.parameters))
+        prerequisites = list(map(lambda prerequisite: prerequisite.generate_dict(),
+                            self.prerequisites))
         if self._account_ids is None or len(self._account_ids) == 0:
             account_ids = None
         else:
@@ -601,7 +601,7 @@ class Project(object):
     def original_geometries(self):
         if self._original_geometries is not None and len(self._original_geometries) > 0:
             return self._original_geometries
-        return map(lambda aoi: {"type": "Feature", "geometry": aoi}, self._aois)
+        return list(map(lambda aoi: {"type": "Feature", "geometry": aoi}, self._aois))
 
     @property
     def named_buffers(self):
@@ -663,7 +663,7 @@ class Project(object):
         acquisition_ids_str = None
         if self._acquisition_ids is not None and len(self._acquisition_ids) > 0:
             acquisition_ids_str = ', '.join(self._acquisition_ids)
-        recipe_configs = map(lambda config: config.generate_dict(), self._recipe_configs)
+        recipe_configs = list(map(lambda config: config.generate_dict(), self._recipe_configs))
         date_range = None
         if self._date_range is not None:
             date_range = self._date_range.generate_dict()
@@ -750,7 +750,7 @@ class RecipeConfig(object):
             self._recipe_name = recipe['name']
 
     def generate_dict(self):
-        parameters = map(lambda param: param.generate_dict(), self.parameters)
+        parameters = list(map(lambda param: param.generate_dict(), self.parameters))
         start_date = None
         end_date = None
         if self.start_date is not None:
