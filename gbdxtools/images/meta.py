@@ -287,7 +287,7 @@ class GeoImage(Container):
         dasks = []
         if isinstance(dem, GeoImage):
             if dem.proj != proj:
-                dem = dem.warp(proj=proj)
+                dem = dem.warp(proj=proj, dem=dem)
             dasks.append(dem.dask)
 
 #
@@ -315,7 +315,7 @@ class GeoImage(Container):
         data = self[:,xmin:xmax, ymin:ymax].compute(get=dask.get) # read(quiet=True)
 
         if data.shape[1]*data.shape[2] > 0:
-            return np.rollaxis(np.dstack([tf.warp(data[b,:,:], transpix, preserve_range=True, order=3) for b in xrange(data.shape[0])]), 2, 0)
+            return np.rollaxis(np.dstack([tf.warp(data[b,:,:], transpix, preserve_range=True, order=3, mode="edge") for b in xrange(data.shape[0])]), 2, 0)
         else:
             return np.zeros((data.shape[0], transpix.shape[1], transpix.shape[2]))
 
@@ -342,7 +342,7 @@ class GeoImage(Container):
                 dem = 0 # guessing this is indexing by a 0 width geometry.
 
         if isinstance(dem, np.ndarray):
-            dem = tf.resize(np.squeeze(dem), xv.shape, preserve_range=True)
+            dem = tf.resize(np.squeeze(dem), xv.shape, preserve_range=True, order=1, mode="edge")
 
         return self.__geo_transform__.rev(xv, yv, z=dem, _type=np.float32)[::-1]
 
