@@ -12,6 +12,7 @@ import math
 
 from shapely import ops, wkt
 from shapely.geometry import box, shape, mapping
+from shapely.geometry.base import BaseGeometry
 try:
     from rio_hist.match import histogram_match
 except ImportError:
@@ -136,7 +137,7 @@ class DaskImage(da.Array):
             obj = da.Array.__new__(cls, dm.dask, dm.name, dm.chunks, dm.dtype, dm.shape)
             return obj
 
-    def read(self, bands=None):
+    def read(self, bands=None, **kwargs):
         """ Reads data from a dask array and returns the computed ndarray matching the given bands """
         arr = self
         if bands is not None:
@@ -286,15 +287,15 @@ class GeoImage(Container):
         dasks = []
         if isinstance(dem, GeoImage):
             if dem.proj != proj:
-                dem = dem.warp(proj=proj)
+                dem = dem.warp(proj=proj, dem=dem)
             dasks.append(dem.dask)
 
+#
         for y in xrange(y_chunks):
             for x in xrange(x_chunks):
                 xmin = x * x_size
                 ymin = y * y_size
                 geometry = px_to_geom(xmin, ymin)
-                full_bounds = box(*full_bounds.union(geometry).bounds)
                 daskmeta["dask"][(daskmeta["name"], 0, y, x)] = (self._warp, geometry, gsd, dem, proj, 5)
         daskmeta["dask"], _ = optimize.cull(sharedict.merge(daskmeta["dask"], *dasks), list(daskmeta["dask"].keys()))
 
@@ -314,7 +315,7 @@ class GeoImage(Container):
         data = self[:,xmin:xmax, ymin:ymax].compute(get=dask.get) # read(quiet=True)
 
         if data.shape[1]*data.shape[2] > 0:
-            return np.rollaxis(np.dstack([tf.warp(data[b,:,:], transpix, preserve_range=True, order=3) for b in xrange(data.shape[0])]), 2, 0)
+            return np.rollaxis(np.dstack([tf.warp(data[b,:,:], transpix, preserve_range=True, order=3, mode="edge") for b in xrange(data.shape[0])]), 2, 0)
         else:
             return np.zeros((data.shape[0], transpix.shape[1], transpix.shape[2]))
 
@@ -341,7 +342,7 @@ class GeoImage(Container):
                 dem = 0 # guessing this is indexing by a 0 width geometry.
 
         if isinstance(dem, np.ndarray):
-            dem = tf.resize(np.squeeze(dem), xv.shape, preserve_range=True)
+            dem = tf.resize(np.squeeze(dem), xv.shape, preserve_range=True, order=1, mode="edge")
 
         return self.__geo_transform__.rev(xv, yv, z=dem, _type=np.float32)[::-1]
 
@@ -546,3 +547,28 @@ class GeoDaskWrapper(DaskImage, GeoImage, PlotMixin):
     @property
     def __daskmeta__(self):
         return self._dm
+
+    def __getitem__(self, geometry):
+        if isinstance(geometry, BaseGeometry) or getattr(geometry, "__geo_interface__", None) is not None:
+            image = GeoImage.__getitem__(self, geometry)
+            return image
+        else:
+            result = DaskImage.__getitem__(self, geometry)
+            image = super(GeoDaskWrapper, self.__class__).__new__(self.__class__,
+                                                            result.dask, result.name, result.chunks,
+                                                            result.dtype, result.shape)
+
+            if all([isinstance(e, slice) for e in geometry]) and len(geometry) == len(self.shape):
+                xmin, ymin, xmax, ymax = geometry[2].start, geometry[1].start, geometry[2].stop, geometry[1].stop
+                xmin = 0 if xmin is None else xmin
+                ymin = 0 if ymin is None else ymin
+                xmax = self.shape[2] if xmax is None else xmax
+                ymax = self.shape[1] if ymax is None else ymax
+
+                g = ops.transform(self.__geo_transform__.fwd, box(xmin, ymin, xmax, ymax))
+                image.__geo_interface__ = mapping(g)
+                image.__geo_transform__ = self.__geo_transform__ + (xmin, ymin)
+            else:
+                image.__geo_interface__ = self.__geo_interface__
+                image.__geo_transform__ = self.__geo_transform__
+            return image

@@ -23,7 +23,7 @@ class DemImage(IpeImage):
             print(e)
             print("Specified product not implemented: {}".format(options["product"]))
             raise
-        self = self.aoi(**kwargs)
+        self = self.aoi(bbox=bbox)
         self.idaho_id = idaho_id
         self._products = standard_products
         if self.ipe.metadata['image']['minX'] == -1:

@@ -112,5 +112,14 @@ class WorkflowTests(unittest.TestCase):
 
         self.assertEquals('<empty>', output)
 
+    @vcr.use_cassette('tests/unit/cassettes/test_workflow_search.yaml', filter_headers=['authorization'])
+    def test_workflow_search(self):
+        """
+        test gbdx.workflow.search(lookback_h=<hours>, state=<state>, owner=<owner>)
+        """
+        wf = Workflow()
+        output = wf.search(lookback_h=12, state='all')
+        self.assertTrue(len(output), 0)
+
 
         
