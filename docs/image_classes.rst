@@ -78,18 +78,6 @@ To fetch 8-band pan-sharpened imagery you can pass the `pansharpen=True|False` f
     img = CatalogImage('104001001BA7C400', pansharpen=True, bbox=[2.2889757156372075,48.87067123176554,2.301077842712403,48.87705036103764])
     img.plot()
 
-We also provide rasterio access to imagery by using the `open()` method:
-
-.. code-block:: python
-
-    from gbdxtools import CatalogImage
-
-    img = CatalogImage('104001001BA7C400', band_type='Pan', bbox=[2.2889757156372075,48.87067123176554,2.301077842712403,48.87705036103764])
-    with img.open() as src:
-        print src.meta, src.nblocks
-
-Using this interface you can leverage rasterio methods for reading data, windowing, and accessing image metadata directly.
-
 You can also specify projections in the image constructor:
 
 .. code-block:: python
