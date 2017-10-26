@@ -45,30 +45,30 @@ class GE01ImageTest(unittest.TestCase):
 
     @my_vcr.use_cassette('tests/unit/cassettes/test_quickbird_image.yaml', filter_headers=['authorization'])
     def test_quickbird_image(self):
-        _id = '1010010013024800'
+        _id = '1010010002B93F00'
         img = self.gbdx.catalog_image(_id) 
         self.assertTrue(isinstance(img, QB02))
-        assert img.shape == (4, 49849, 9684)
+        assert img.shape == (4, 37520, 9850)
         assert img.proj == 'EPSG:4326'
 
     @my_vcr.use_cassette('tests/unit/cassettes/test_quickbird_image_proj.yaml', filter_headers=['authorization'])
     def test_quickbird_image_proj(self):
-        _id = '1010010013024800'
+        _id = '1010010002B93F00'
         img = self.gbdx.catalog_image(_id, proj="EPSG:3857")
         self.assertTrue(isinstance(img, QB02))
-        assert img.shape == (4, 55860, 8491)
+        assert img.shape == (4, 42504, 8469)
         assert img.proj == 'EPSG:3857'
 
     @my_vcr.use_cassette('tests/unit/cassettes/test_quickbird_image_pan.yaml', filter_headers=['authorization'])
     def test_quickbird_image_pan(self):
-        _id = '1010010013024800'
-        img = self.gbdx.catalog_image(_id, band_type="pan", bbox=[-106.9430754909558, 38.80542962709666, -106.93668310863457, 38.811822009417895])
+        _id = '1010010002B93F00'
+        img = self.gbdx.catalog_image(_id, band_type="pan", bbox=[125.259159043295, 40.43603914103845, 125.27301998472511, 40.44990008246856])
         self.assertTrue(isinstance(img, QB02))
-        assert img.shape == (1, 1198, 1198)
+        assert img.shape == (1, 1998, 1999)
 
     @my_vcr.use_cassette('tests/unit/cassettes/test_quickbird_image_pansharpen.yaml', filter_headers=['authorization'])
     def test_quickbird_image_pansharpen(self):
-        _id = '1010010013024800'
-        img = self.gbdx.catalog_image(_id, pansharpen=True, bbox=[-106.9430754909558, 38.80542962709666, -106.93668310863457, 38.811822009417895])
+        _id = '1010010002B93F00'
+        img = self.gbdx.catalog_image(_id, pansharpen=True, bbox=[125.259159043295, 40.43603914103845, 125.27301998472511, 40.44990008246856])
         self.assertTrue(isinstance(img, QB02))
-        assert img.shape == (4, 1198, 1198)
+        assert img.shape == (4, 1998, 1999)
