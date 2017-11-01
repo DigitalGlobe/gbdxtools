@@ -1,0 +1,32 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      Cookie: [AWSELB=07A771471E264EA5ADF82F0AA634B8F4B8E2289A692D741CD1900EEC12F903A3C576B1049D570FEFED604842A5623672C1F12389A8F76AB945B1770B781DD1DD6A9A9AC1441D3A82E6197FD8E002BB6819C88C4CF8;
+          JSESSIONID=C178BE42C0C3B60C46DD196B561AC267.173.50.252.180]
+      User-Agent: [python-requests/2.13.0]
+    method: GET
+    uri: https://vector.geobigdata.io/insight-vector/api/index/query/vector-gbdx-alpha-catalog-v2-*/items?count=1&upper=90.0&lower=-90.0&right=180.0&q=item_type%3AGBDXCatalogRecord+AND+attributes.catalogID%3AS2A_OPER_MSI_L1C_DS_MPS__20160904T224944_S20160904T180250_N02.04+AND+NOT+item_type%3AIDAHOImage+AND+NOT+item_type%3ADigitalGlobeAcquisition&left=-180.0
+  response:
+    body: {string: !!python/unicode '[{"type":"Feature","geometry":{"type":"Polygon","coordinates":[[[-107.43792253952832,39.72681529308022],[-107.43792253952832,38.70656322254825],[-108.66683238984707,38.70656322254825],[-108.66683238984707,39.72681529308022],[-107.43792253952832,39.72681529308022]]]},"properties":{"ingest_source":"GBDX_INGEST_ALPHA","access":{"groups":["_ALL_"],"users":["_ALL_"]},"item_date":"2016-09-04T18:02:52.026Z","original_crs":"EPSG:4326","item_type":["GBDXCatalogRecord","ESAProduct","SENTINEL2"],"format":null,"ingest_date":"2017-08-21T14:12:35.395Z","source":"Sentinel","name":null,"attributes":{"bucketName":"sentinel-s2-l1c","utmSequenceNumber":"N","sunAzimuth_dbl":150.395618801121,"gridSquare":"YJ","sensorPlatformName":"SENTINEL2","tileId":"S2A_OPER_MSI_L1C_TL_MPS__20160904T224944_A006287_T12SYJ_N02.04","latitudeBand":"S","s3Region":"eu-central-1","vendorID":"ESA","xmlFile":"metadata.xml","offNadirAngle_dbl":9.886520748074714,"browseJpgFile":"preview.jpg","cloudCover_int":0,"resolution_dbl":[60.0,10.0,10.0,10.0,20.0,20.0,20.0,10.0,20.0,60.0,60.0,20.0,20.0],"bandsList":["CoastalAerosol","Blue","Green","Red","VegRedEdge5","VegRedEdge6","VegRedEdge7","NIR","VegRedEdge8a","WaterVapor","Cirrus","SWIR11","SWIR12"],"catalogID":"S2A_OPER_MSI_L1C_DS_MPS__20160904T224944_S20160904T180250_N02.04","productLevel":"Level-1C","part_int":1,"utmZone_int":12,"imageFile":"preview.jpg","vendor":"ESA","bucketPrefix":"tiles/12/S/YJ/2016/9/4/0","sunElevation_dbl":35.8041311341337,"platformName":"SENTINEL2"},"ingest_attributes":{},"id":"743249c6-e42b-5f65-bac3-5c83428eac23","text":""}}]'}
+    headers:
+      access-control-allow-credentials: ['true']
+      access-control-allow-headers: ['origin, content-type, accept, authorization']
+      access-control-allow-methods: ['GET, POST, PUT, DELETE, OPTIONS, HEAD']
+      access-control-allow-origin: ['*']
+      connection: [keep-alive]
+      content-encoding: [UTF-8]
+      content-length: ['1579']
+      content-type: [application/json;charset=UTF-8]
+      date: ['Wed, 01 Nov 2017 19:18:26 GMT']
+      server: [Apache-Coyote/1.1, Weblogic 12.2.1.1]
+      strict-transport-security: [max-age=604800 ; includeSubDomains]
+      x-content-type-options: [nosniff]
+      x-frame-options: [SAMEORIGIN]
+      x-permitted-cross-domain-policies: [none]
+      x-xss-protection: [1; mode=block]
+    status: {code: 200, message: OK}
+version: 1
