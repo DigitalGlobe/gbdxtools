@@ -286,6 +286,106 @@ class Vectors(object):
         return r.json(object_pairs_hook=OrderedDict)['aggregations']
 
 
+    def tilemap(self, query, style={}, bbox=[-180,-90,180,90], zoom=16, api_key=os.environ.get('MAPBOX_API_KEY', None), index=None):
+        """
+          Renders a mapbox gl map from a vector service query
+        """
+        try:
+            from IPython.display import Javascript, HTML, display
+        except:
+            print("IPython is required to produce maps.")
+            return
+
+        assert api_key is not None, "No Mapbox API Key found. You can either pass in a token or set the MAPBOX_API_KEY environment variable."
+
+        wkt = box(*bbox).wkt
+        features = self.query(wkt, query, index=index)
+
+        union = cascaded_union([shape(f['geometry']) for f in features])
+        lon, lat = union.centroid.coords[0]
+
+        map_id = "map_{}".format(str(int(time.time())))
+        display(HTML(Template('''
+           <div id="$map_id"/>
+           <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.41.0/mapbox-gl.css' rel='stylesheet' />
+           <style>body{margin:0;padding:0;}#$map_id{position:relative;top:0;bottom:0;width:100%;height:400px;}</style>
+           <style>.mapboxgl-popup-content table tr{border: 1px solid #efefef;} .mapboxgl-popup-content table, td, tr{border: none;}</style>
+        ''').substitute({"map_id": map_id})))
+
+        js = Template("""
+            require.config({
+              paths: {
+                  mapboxgl: 'https://api.tiles.mapbox.com/mapbox-gl-js/v0.41.0/mapbox-gl',
+              }
+            });
+
+            require(['mapboxgl'], function(mapboxgl){
+                mapboxgl.accessToken = "$mbkey";
+
+                function html( attrs, id ) {
+                  var json = JSON.parse( attrs );
+                  var html = '<table><tbody>';
+                  html += '<tr><td>ID</td><td>' + id + '</td></tr>';
+                  for ( var i=0; i < Object.keys(json).length; i++) {
+                    var key = Object.keys( json )[ i ];
+                    var val = json[ key ];
+                    html += '<tr><td>' + key + '</td><td>' + val + '</td></tr>';
+                  }
+                  html += '</tbody></table>';
+                  return html;
+                }
+
+                window.map = new mapboxgl.Map({
+                    container: '$map_id',
+                    style: 'mapbox://styles/mapbox/satellite-v9',
+                    center: [$lon, $lat],
+                    zoom: $zoom,
+                    transformRequest: function( url, resourceType ) {
+                      if (resourceType == 'Tile' && url.startsWith('https://vector.geobigdata')) {
+                        return {
+                            url: url,
+                            headers: { 'Authorization': 'Bearer $token' }
+                        }
+                      }
+                    }
+                });
+                var map = window.map;
+                var style = Object.keys($style).length
+                    ? $style
+                    : {
+                        "line-color": '#ff0000',
+                        "line-opacity": .75,
+                        "line-width": 2
+                    };
+                var url = 'https://vector.geobigdata.io/insight-vector/api/mvt/{z}/{x}/{y}?';
+                url += 'q=$query&index=vector-user-provided';
+                
+                map.once('style.load', function(e) {
+                    map.addLayer({
+                        "id": "user-data",
+                        "type": "line",
+                        "source": {
+                            type: 'vector',
+                            tiles: [url]
+                        },
+                        "source-layer": "GBDX_Task_Output",
+                        "paint": style
+                    });
+                });
+            });
+        """).substitute({
+            "map_id": map_id,
+            "query": query,
+            "lat": lat,
+            "lon": lon,
+            "zoom": zoom,
+            "style": json.dumps(style),
+            "mbkey": api_key,
+            "token": self.gbdx_connection.access_token
+        })
+        display(Javascript(js))
+
+
     def map(self, features=None, query=None, style={}, bbox=[-180,-90,180,90], zoom=10, api_key=os.environ.get('MAPBOX_API_KEY', None)):
         """
           Renders a mapbox gl map from a vector service query
@@ -328,8 +428,7 @@ class Vectors(object):
             require(['mapboxgl'], function(mapboxgl){
                 mapboxgl.accessToken = "$mbkey";
 
-                function html( attrs, id ) {
-                  var json = JSON.parse( attrs );
+                function html( json, id ) {
                   var html = '<table><tbody>';
                   html += '<tr><td>ID</td><td>' + id + '</td></tr>';
                   for ( var i=0; i < Object.keys(json).length; i++) {
@@ -362,7 +461,7 @@ class Vectors(object):
                   if ( features.length ) {
                     var popup = new mapboxgl.Popup({closeOnClick: false})
                       .setLngLat(e.lngLat)
-                      .setHTML(html(features[0].properties.attributes, features[0].properties.id))
+                      .setHTML(html(features[0].properties, features[0].properties['_item.id']))
                       .addTo(map);
                   }
                 });
