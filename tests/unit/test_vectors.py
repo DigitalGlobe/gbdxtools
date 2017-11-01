@@ -37,6 +37,14 @@ class TestVectors(unittest.TestCase):
         c = Vectors()
         self.assertTrue(isinstance(c, Vectors))
 
+    @vcr.use_cassette('tests/unit/cassettes/test_vectors_search_1010.yaml', filter_headers=['authorization'], match_on=['method', 'scheme', 'host', 'port', 'path'])
+    def test_vectors_search_paging(self):
+        v = Vectors()
+        aoi = "POLYGON ((180 -90, 180 90, -180 90, -180 -90, 180 -90))"
+        results = v.query(aoi, query="item_type:WV03_VNIR", index=None, count=1010)
+
+        assert len(results) == 1010
+
     @vcr.use_cassette('tests/unit/cassettes/test_vectors_search_1000.yaml', filter_headers=['authorization'], match_on=['method', 'scheme', 'host', 'port', 'path'])
     def test_vectors_search(self):
         v = Vectors()
