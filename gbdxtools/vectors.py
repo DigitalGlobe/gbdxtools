@@ -32,8 +32,10 @@ class Vectors(object):
         interface = Auth(**kwargs)
         self.gbdx_connection = interface.gbdx_connection
         self.logger = interface.logger
-        self.query_url = 'https://vector.geobigdata.io/insight-vector/api/vectors/query/paging'
-        self.query_index_url = 'https://vector.geobigdata.io/insight-vector/api/index/query/%s/paging'
+        self.query_url = 'https://vector.geobigdata.io/insight-vector/api/vectors/query/items'
+        self.query_index_url = 'https://vector.geobigdata.io/insight-vector/api/index/query/%s/items'
+        self.query_page_url = 'https://vector.geobigdata.io/insight-vector/api/vectors/query/paging'
+        self.query_index_page_url = 'https://vector.geobigdata.io/insight-vector/api/index/query/%s/paging'
         self.page_url = 'https://vector.geobigdata.io/insight-vector/api/vectors/paging'
         self.get_url = 'https://vector.geobigdata.io/insight-vector/api/vector/%s/'
         self.create_url = 'https://vector.geobigdata.io/insight-vector/api/vectors'
@@ -149,8 +151,26 @@ class Vectors(object):
             List of vector results
     
         '''
+        if count < 1000:
+            # issue a single page query
+            search_area_polygon = from_wkt(searchAreaWkt)
+            left, lower, right, upper = search_area_polygon.bounds
 
-        return list(self.query_iteratively(searchAreaWkt, query, count, ttl, index))
+            params = {
+                "q": query,
+                "count": min(count,1000),
+                "left": left,
+                "right": right,
+                "lower": lower,
+                "upper": upper
+            }
+
+            url = self.query_index_url % index if index else self.query_url
+            r = self.gbdx_connection.get(url, params=params)
+            r.raise_for_status()
+            return r.json()
+        else:
+            return list(self.query_iteratively(searchAreaWkt, query, count, ttl, index))
 
 
     def query_iteratively(self, searchAreaWkt, query, count=100, ttl='5m', index=default_index):
@@ -183,7 +203,7 @@ class Vectors(object):
         }
 
         # initialize paging request
-        url = self.query_index_url % index if index else self.query_url
+        url = self.query_index_page_url % index if index else self.query_page_url
         r = self.gbdx_connection.get(url, params=params)
         r.raise_for_status()
         page = r.json()
@@ -198,8 +218,9 @@ class Vectors(object):
           if num_results > count: break
           yield vector
 
-        if item_count == num_results:
+        if num_results == count:
           return
+
 
         # get vectors from each page
         while paging_id and item_count > 0 and num_results < count:
