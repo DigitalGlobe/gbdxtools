@@ -286,7 +286,7 @@ class Vectors(object):
         return r.json(object_pairs_hook=OrderedDict)['aggregations']
 
 
-    def tilemap(self, query, style={}, bbox=[-180,-90,180,90], zoom=16, api_key=os.environ.get('MAPBOX_API_KEY', None), index=None):
+    def tilemap(self, query, style={}, bbox=[-180,-90,180,90], zoom=16, api_key=os.environ.get('MAPBOX_API_KEY', None), index="vector-user-provided", name="GBDX_Task_Output"):
         """
           Renders a mapbox gl map from a vector service query
         """
@@ -358,7 +358,7 @@ class Vectors(object):
                         "line-width": 2
                     };
                 var url = 'https://vector.geobigdata.io/insight-vector/api/mvt/{z}/{x}/{y}?';
-                url += 'q=$query&index=vector-user-provided';
+                url += 'q=$query&index=$index';
                 
                 map.once('style.load', function(e) {
                     map.addLayer({
@@ -368,7 +368,7 @@ class Vectors(object):
                             type: 'vector',
                             tiles: [url]
                         },
-                        "source-layer": "GBDX_Task_Output",
+                        "source-layer": "$name",
                         "paint": style
                     });
                 });
@@ -381,7 +381,9 @@ class Vectors(object):
             "zoom": zoom,
             "style": json.dumps(style),
             "mbkey": api_key,
-            "token": self.gbdx_connection.access_token
+            "token": self.gbdx_connection.access_token,
+            "index": index,
+            "name": name
         })
         display(Javascript(js))
 
