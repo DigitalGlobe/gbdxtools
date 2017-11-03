@@ -5,13 +5,13 @@ interactions:
       Accept: ['*/*']
       Accept-Encoding: ['gzip, deflate']
       Connection: [keep-alive]
-      Cookie: [AWSELB=07A771471E264EA5ADF82F0AA634B8F4B8E2289A69D137FD7D2E968C8A7F5F0968A01F97C8EE1E80BA080CE964BACFB8FA58260634DB45B8724B74F9BAF006F829FAB04EDB79A862EE1CBB6961EE836EB192603F29;
-          JSESSIONID=91801902A1CE01350FC349A768F8330A.node01]
+      Cookie: [AWSELB=07A771471E264EA5ADF82F0AA634B8F4B8E2289A692D741CD1900EEC12F903A3C576B1049D570FEFED604842A5623672C1F12389A8F76AB945B1770B781DD1DD6A9A9AC1441D3A82E6197FD8E002BB6819C88C4CF8;
+          JSESSIONID=C178BE42C0C3B60C46DD196B561AC267.173.50.252.180]
       User-Agent: [python-requests/2.13.0]
     method: GET
-    uri: https://vector.geobigdata.io/insight-vector/api/index/query/vector-gbdx-alpha-catalog-v2-*/paging?count=1&upper=90.0&lower=-90.0&right=180.0&q=item_type%3AGBDXCatalogRecord+AND+id%3ALC80380302013160LGN00&ttl=5m&left=-180.0
+    uri: https://vector.geobigdata.io/insight-vector/api/index/query/vector-gbdx-alpha-catalog-v2-*/items?count=1&upper=90.0&lower=-90.0&right=180.0&q=item_type%3AGBDXCatalogRecord+AND+attributes.catalogID%3ALC80380302013160LGN00+AND+NOT+item_type%3AIDAHOImage+AND+NOT+item_type%3ADigitalGlobeAcquisition&left=-180.0
   response:
-    body: {string: !!python/unicode '{ "data" : [{"type":"Feature","geometry":{"type":"MultiPolygon","coordinates":[[[[-112.47753,42.16063],[-112.47753,44.18066],[-109.64058,44.18066],[-109.64058,42.16063],[-112.47753,42.16063]]]]},"properties":{"ingest_source":"GBDX_INGEST_ALPHA","access":{"groups":["_ALL_"],"users":["_ALL_"]},"item_date":"2013-06-09T18:09:25.351Z","original_crs":"EPSG:4326","item_type":["GBDXCatalogRecord","Acquisition","Landsat8","LandsatAcquisition"],"format":null,"ingest_date":"2017-05-08T19:19:41.695Z","source":null,"name":null,"attributes":{"row_int":30,"bucketName":"landsat-pds","catalogID":"LC80380302013160LGN00","sensorPlatformName":"LANDSAT08","browseURL":"https://s3-us-west-2.amazonaws.com/landsat-pds/L8/038/030/LC80380302013160LGN00/LC80380302013160LGN00_thumb_large.jpg","panResolution_dbl":15.0,"vendor":"Landsat","bucketPrefix":"L8/038/030/LC80380302013160LGN00","platformName":"LANDSAT08","cloudCover_int":0,"path_int":38,"multiResolution_dbl":30.0},"ingest_attributes":{"_rest_user":"acquisitionsvc","_rest_url":"https://vector.geobigdata.io/insight-vector/api/vectors/gbdx-alpha-catalog-v2-%257Bitem_date%253Ayyyy%257D"},"id":"LC80380302013160LGN00","text":""}}],"next_paging_id":"DnF1ZXJ5VGhlbkZldGNoHwAAAAAABnDaFmxXeTZ4THZXVGpDTFZmLUdhVGFiQWcAAAAAAAZw2RZsV3k2eEx2V1RqQ0xWZi1HYVRhYkFnAAAAAAATV1QWZjlXdWEyNUVUZ0NZUUJ4ZFd3NzdSQQAAAAAAFYnNFmtadHYtVDRSUVdDQzVGVmtkS2Y1NmcAAAAAAAXBTRZuLU84SFBJSVRKYXhtTWV3bHNTSV93AAAAAAAGcNsWbFd5NnhMdldUakNMVmYtR2FUYWJBZwAAAAAABnDcFmxXeTZ4THZXVGpDTFZmLUdhVGFiQWcAAAAAAAbJqxZPck9HY2laMVR6eVJrWk5IS3RrbTRRAAAAAAAD3bMWbUJpbmNaNjFUMnVYVDdqRkpMMXRVQQAAAAAAEDnzFlVxV2dQcmpaVHVpRVN2SkVNam9XMHcAAAAAABqUWhZhV3JmSGhiNVJ4YUtTWTJPR0g4OUpnAAAAAAAVic4Wa1p0di1UNFJRV0NDNUZWa2RLZjU2ZwAAAAAABJ3OFlA4MWNtZk9pVGp1STZsV0UyRGdhd3cAAAAAAB9nGRZRLW9vTHZaM1FveXJjRXB0bWd1b1hnAAAAAAAM8vwWWnREamNITXZUUzIxcWM3NnNzSDJkQQAAAAAAFYnPFmtadHYtVDRSUVdDQzVGVmtkS2Y1NmcAAAAAAA7wCRZFWVlSTTFMSFJPLWtPbTRISGp0ZnNnAAAAAAATzu0WQUx5eDhWSzJUbDJNZ1hGdmNoNnl3UQAAAAAABJ3PFlA4MWNtZk9pVGp1STZsV0UyRGdhd3cAAAAAABPO7hZBTHl4OFZLMlRsMk1nWEZ2Y2g2eXdRAAAAAAAW9qYWNWxsdkFWU0NUNmliOEVpT1R1RndLdwAAAAAAAo4JFmE1Vy13M1ZVUlBpUFhOaHRXMEFnVXcAAAAAAAbJrRZPck9HY2laMVR6eVJrWk5IS3RrbTRRAAAAAAATzu8WQUx5eDhWSzJUbDJNZ1hGdmNoNnl3UQAAAAAAAWl9FndaZEdJSGI5Um5tM20zc2loLWd1WGcAAAAAAAzy-xZadERqY0hNdlRTMjFxYzc2c3NIMmRBAAAAAAACjgoWYTVXLXczVlVSUGlQWE5odFcwQWdVdwAAAAAAA920Fm1CaW5jWjYxVDJ1WFQ3akZKTDF0VUEAAAAAACLh0xZTcTVGMEJPWFFDdUw3WUF6c1o1QUJ3AAAAAAAGyawWT3JPR2NpWjFUenlSa1pOSEt0a200UQAAAAAADiQJFnM2ZFRXSjR6U09peGFRRnVncE9OR3c=","item_count":"1","total_count":"1"}'}
+    body: {string: !!python/unicode '[{"type":"Feature","geometry":{"type":"MultiPolygon","coordinates":[[[[-112.47753,42.16063],[-112.47753,44.18066],[-109.64058,44.18066],[-109.64058,42.16063],[-112.47753,42.16063]]]]},"properties":{"ingest_source":"GBDX_INGEST_ALPHA","access":{"groups":["_ALL_"],"users":["_ALL_"]},"item_date":"2013-06-09T18:09:25.351Z","original_crs":"EPSG:4326","item_type":["GBDXCatalogRecord","Acquisition","Landsat8","LandsatAcquisition"],"format":null,"ingest_date":"2017-05-08T19:19:41.695Z","source":null,"name":null,"attributes":{"row_int":30,"bucketName":"landsat-pds","catalogID":"LC80380302013160LGN00","sensorPlatformName":"LANDSAT08","browseURL":"https://s3-us-west-2.amazonaws.com/landsat-pds/L8/038/030/LC80380302013160LGN00/LC80380302013160LGN00_thumb_large.jpg","panResolution_dbl":15.0,"vendor":"Landsat","bucketPrefix":"L8/038/030/LC80380302013160LGN00","platformName":"LANDSAT08","cloudCover_int":0,"path_int":38,"multiResolution_dbl":30.0},"ingest_attributes":{"_rest_user":"acquisitionsvc","_rest_url":"https://vector.geobigdata.io/insight-vector/api/vectors/gbdx-alpha-catalog-v2-%257Bitem_date%253Ayyyy%257D"},"id":"LC80380302013160LGN00","text":""}}]'}
     headers:
       access-control-allow-credentials: ['true']
       access-control-allow-headers: ['origin, content-type, accept, authorization']
@@ -19,10 +19,10 @@ interactions:
       access-control-allow-origin: ['*']
       connection: [keep-alive]
       content-encoding: [UTF-8]
-      content-length: ['2531']
+      content-length: ['1160']
       content-type: [application/json;charset=UTF-8]
-      date: ['Tue, 08 Aug 2017 20:35:11 GMT']
-      server: [Apache, Weblogic 12.2.1.1]
+      date: ['Wed, 01 Nov 2017 19:18:27 GMT']
+      server: [Apache-Coyote/1.1, Weblogic 12.2.1.1]
       strict-transport-security: [max-age=604800 ; includeSubDomains]
       x-content-type-options: [nosniff]
       x-frame-options: [SAMEORIGIN]
@@ -52,8 +52,8 @@ interactions:
       access-control-max-age: ['3600']
       connection: [keep-alive]
       content-length: ['64']
-      content-type: [text/plain]
-      date: ['Tue, 08 Aug 2017 20:35:12 GMT']
+      content-type: [text/plain;charset=UTF-8]
+      date: ['Wed, 01 Nov 2017 19:18:28 GMT']
     status: {code: 200, message: ''}
 - request:
     body: null
@@ -78,7 +78,7 @@ interactions:
       access-control-max-age: ['3600']
       connection: [keep-alive]
       content-length: ['1184']
-      content-type: [application/json]
-      date: ['Tue, 08 Aug 2017 20:35:25 GMT']
+      content-type: [application/json;charset=UTF-8]
+      date: ['Wed, 01 Nov 2017 19:18:42 GMT']
     status: {code: 200, message: ''}
 version: 1

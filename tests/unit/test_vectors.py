@@ -37,7 +37,15 @@ class TestVectors(unittest.TestCase):
         c = Vectors()
         self.assertTrue(isinstance(c, Vectors))
 
-    @vcr.use_cassette('tests/unit/cassettes/test_vectors_search.yaml', filter_headers=['authorization'], match_on=['method', 'scheme', 'host', 'port', 'path'])
+    @vcr.use_cassette('tests/unit/cassettes/test_vectors_search_1010.yaml', filter_headers=['authorization'], match_on=['method', 'scheme', 'host', 'port', 'path'])
+    def test_vectors_search_paging(self):
+        v = Vectors()
+        aoi = "POLYGON ((180 -90, 180 90, -180 90, -180 -90, 180 -90))"
+        results = v.query(aoi, query="item_type:WV03_VNIR", index=None, count=1010)
+
+        assert len(results) == 1010
+
+    @vcr.use_cassette('tests/unit/cassettes/test_vectors_search_1000.yaml', filter_headers=['authorization'], match_on=['method', 'scheme', 'host', 'port', 'path'])
     def test_vectors_search(self):
         v = Vectors()
         aoi = "POLYGON((17.75390625 25.418470119273117,24.08203125 25.418470119273117,24.08203125 19.409611549990895,17.75390625 19.409611549990895,17.75390625 25.418470119273117))"
@@ -45,7 +53,7 @@ class TestVectors(unittest.TestCase):
 
         assert len(results) == 310
 
-    @vcr.use_cassette('tests/unit/cassettes/test_vectors_search.yaml', filter_headers=['authorization'], match_on=['method', 'scheme', 'host', 'port', 'path'])
+    @vcr.use_cassette('tests/unit/cassettes/test_vectors_search_55.yaml', filter_headers=['authorization'], match_on=['method', 'scheme', 'host', 'port', 'path'])
     def test_vectors_search_count_small(self):
         v = Vectors()
         aoi = "POLYGON((17.75390625 25.418470119273117,24.08203125 25.418470119273117,24.08203125 19.409611549990895,17.75390625 19.409611549990895,17.75390625 25.418470119273117))"
@@ -53,7 +61,7 @@ class TestVectors(unittest.TestCase):
 
         assert len(results) == 55
 
-    @vcr.use_cassette('tests/unit/cassettes/test_vectors_search.yaml', filter_headers=['authorization'], match_on=['method', 'scheme', 'host', 'port', 'path'])
+    @vcr.use_cassette('tests/unit/cassettes/test_vectors_search_1.yaml', filter_headers=['authorization'], match_on=['method', 'scheme', 'host', 'port', 'path'])
     def test_vectors_search_count_single(self):
         v = Vectors()
         aoi = "POLYGON((17.75390625 25.418470119273117,24.08203125 25.418470119273117,24.08203125 19.409611549990895,17.75390625 19.409611549990895,17.75390625 25.418470119273117))"
@@ -61,7 +69,7 @@ class TestVectors(unittest.TestCase):
 
         assert len(results) == 1
 
-    @vcr.use_cassette('tests/unit/cassettes/test_vectors_search.yaml', filter_headers=['authorization'], match_on=['method', 'scheme', 'host', 'port', 'path'])
+    @vcr.use_cassette('tests/unit/cassettes/test_vectors_search_310.yaml', filter_headers=['authorization'], match_on=['method', 'scheme', 'host', 'port', 'path'])
     def test_vectors_search_count_equal_to_num_records(self):
         v = Vectors()
         aoi = "POLYGON((17.75390625 25.418470119273117,24.08203125 25.418470119273117,24.08203125 19.409611549990895,17.75390625 19.409611549990895,17.75390625 25.418470119273117))"
@@ -77,7 +85,7 @@ class TestVectors(unittest.TestCase):
 
         assert len(results) == 140
 
-    @vcr.use_cassette('tests/unit/cassettes/test_vectors_search.yaml', filter_headers=['authorization'], match_on=['method', 'scheme', 'host', 'port', 'path'])
+    @vcr.use_cassette('tests/unit/cassettes/test_vectors_search_interate.yaml', filter_headers=['authorization'], match_on=['method', 'scheme', 'host', 'port', 'path'])
     def test_vectors_search_iteratively(self):
         v = Vectors()
         aoi = "POLYGON((17.75390625 25.418470119273117,24.08203125 25.418470119273117,24.08203125 19.409611549990895,17.75390625 19.409611549990895,17.75390625 25.418470119273117))"
