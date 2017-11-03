@@ -172,3 +172,18 @@ The TmsImage class is used to access imagery available from the Maps API. These 
     aoi = img.aoi(bbox=[-109.84, 43.19, -109.59, 43.34])
     print aoi.shape
     aoi.plot(bands=[3,2,1])
+
+
+S3 Images
+-----------------------
+
+Sometimes it's necessary to access data directly from an Amazon S3 bucket (for instance when a GBDX Workflow creates new geotiff files). To enable exploration of such datasets we've added an `S3Image` class to `gbdxtools`. This class is a bit limited in its capability for running server side processes like pansharpening or atmospheric compensation, but does support reprojection. 
+ 
+.. code-block:: python
+
+    from gbdxtools import S3Image
+
+    img = S3Image('landsat-pds/c1/L8/139/045/LC08_L1TP_139045_20170304_20170316_01_T1/LC08_L1TP_139045_20170304_20170316_01_T1_B3.TIF', proj="EPSG:4326")
+    print img.shape
+
+Because images living in S3 are not always catalog'd the `S3Image` class accepts an "s3 path". This path is constructed from a `bucket` and `prefix`. In the example above, the bucket is 'landsat-pds' and the prefix is `c1/L8/139/045/LC08_L1TP_139045_20170304_20170316_01_T1/LC08_L1TP_139045_20170304_20170316_01_T1_B3.TIF`. 
