@@ -205,6 +205,13 @@ Checking whether a workflow has succeeded:
    >>> workflow.succeeded
    True
 
+Check whether a workflow has timed out:
+
+.. code-block:: python
+
+    >>> workflow.timedout
+    True
+
 Checking whether a workflow is complete (whether canceled, failed, or succeeded):
 
 .. code-block:: python
