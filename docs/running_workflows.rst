@@ -212,6 +212,34 @@ Check whether a workflow has timed out:
     >>> workflow.timedout
     True
 
+Check whether a workflow is being submitted:
+
+.. code-block:: python
+
+    >>> workflow.submitting
+    True
+
+Check whether a workflow is being scheduled:
+
+.. code-block:: python
+
+    >>> workflow.scheduling
+    True
+
+Check whether a workflow is being rescheduled:
+
+.. code-block:: python
+
+    >>> workflow.rescheduling
+    True
+
+Check whether a workflow is waiting:
+
+.. code-block:: python
+
+    >>> workflow.waiting
+    True
+
 Checking whether a workflow is complete (whether canceled, failed, or succeeded):
 
 .. code-block:: python
