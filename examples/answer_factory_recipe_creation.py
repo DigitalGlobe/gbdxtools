@@ -1,3 +1,7 @@
+from gbdxtools.simple_answerfactory import Recipe, RecipeParameter, Project, RecipeConfig
+from gbdxtools import Interface
+gbdx = Interface()
+
 
 ## the workflow that must be defined in order to specify a recipe
 aop = gbdx.Task('AOP_Strip_Processor:0.0.4')
@@ -15,11 +19,11 @@ aop.inputs.data = '{raster_path}'
 
 # remove xml files (causes a bug in skynet)
 xmlfix = gbdx.Task('gdal-cli-multiplex:0.0.1')
-xmlfix.inputs.data = aop.outputs.data
+xmlfix.inputs.data = aop.outputs.data.value
 xmlfix.inputs.command = "find $indir/data/ -name *XML -type f -delete; mkdir -p $outdir; cp -R $indir/data/ $outdir/"
 
 skynet = gbdx.Task('openskynet:0.0.14')
-skynet.inputs.data = xmlfix.outputs.data
+skynet.inputs.data = xmlfix.outputs.data.value
 # AnswerFactory auto populates {model_location_s3} with the s3 location of the model referred to in
 # the recipe property 'model_type'.  This model must be previously registered with the model catalog service.
 # AF searches the model catalog for the closest model with the specified type to the input acquisition
@@ -72,7 +76,7 @@ properties = {
 }
 
 recipe = Recipe(
-    id = 'openskynet-military-vehicles',
+    id = 'ricklin-test-1',
     name = 'Extract Military Vehicles',
     owner = '',
     account_ids = '',
@@ -86,10 +90,10 @@ recipe = Recipe(
     default_day_range = None,
     parameters = [confidence_param, non_maximum_suppression_param],
     validators = None,
-    prerequisites = None,
+    prerequisites = [],
     properties = properties,
 )
 
-recipe.ingest_vectors( skynet.outputs.results, type='geojson' )
+recipe.ingest_vectors( skynet.outputs.results.value )
 recipe.create()  # Yeah!!
 

@@ -10,6 +10,7 @@ from builtins import str
 
 from gbdxtools.answerfactory import Project as ProjectService
 from gbdxtools.answerfactory import Recipe as RecipeService
+from gbdxtools.simpleworkflows import Task
 
 import re
 import uuid
@@ -545,6 +546,24 @@ class Recipe(object):
             'prerequisites': prerequisites,
             'properties': self.properties
         }
+
+    def ingest_vectors(self, output_port_value):
+        ''' append two required tasks to the given output to ingest to VS
+        '''
+        # append two tasks to self['definition']['tasks']
+        ingest_task = Task('IngestItemJsonToVectorServices')
+        ingest_task.inputs.items = output_port_value
+
+        stage_task = Task('StageDataToS3')
+        stage_task.inputs.destination = 's3://{vector_ingest_bucket}/{recipe_id}/{run_id}/{task_name}'
+        stage_task.inputs.data = ingest_task.outputs.result.value
+
+        self.definition['tasks'].append(ingest_task.generate_task_workflow_json())
+        self.definition['tasks'].append(stage_task.generate_task_workflow_json())
+
+    def create(self):
+        recipe_id = self.recipe_service.save(self.generate_dict())
+        return recipe_id
 
 
 class Project(object):
