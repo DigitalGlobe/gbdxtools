@@ -1,0 +1,52 @@
+interactions:
+- request:
+    body: !!python/unicode '{"edges": [], "nodes": [{"id": "eedff459-696c-59e0-9f03-4cdbea81566b",
+      "operator": "GdalImageRead", "parameters": {"path": "/vsis3/landsat-pds/c1/L8/139/045/LC08_L1TP_139045_20170304_20170316_01_T1/LC08_L1TP_139045_20170304_20170316_01_T1_B3.TIF"}}]}'
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      Content-Length: ['250']
+      Content-Type: [application/json]
+      User-Agent: [python-requests/2.13.0]
+    method: POST
+    uri: https://idahoapi.geobigdata.io/v1/graph
+  response:
+    body: {string: !!python/unicode 00cbc463a83fd2ad2ff5364022a60b857e80463495e4d185c942254201887558}
+    headers:
+      access-control-allow-headers: ['x-requested-with, X-Auth-Token, Content-Type,
+          Authorization']
+      access-control-allow-methods: ['GET, OPTIONS, HEAD, PUT, POST, DELETE']
+      access-control-allow-origin: ['*']
+      access-control-max-age: ['3600']
+      connection: [keep-alive]
+      content-length: ['64']
+      content-type: [text/plain;charset=UTF-8]
+      date: ['Fri, 03 Nov 2017 17:35:32 GMT']
+    status: {code: 200, message: ''}
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      User-Agent: [python-requests/2.13.0]
+    method: GET
+    uri: https://idahoapi.geobigdata.io/v1/metadata/00cbc463a83fd2ad2ff5364022a60b857e80463495e4d185c942254201887558/eedff459-696c-59e0-9f03-4cdbea81566b/metadata.json
+  response:
+    body: {string: !!python/unicode '{"imageMetadata":{"imageId":"/vsis3/landsat-pds/c1/L8/139/045/LC08_L1TP_139045_20170304_20170316_01_T1/LC08_L1TP_139045_20170304_20170316_01_T1_B3.TIF","version":"1.0","profileName":"georectified_image","tilePartition":"0000","tileXOffset":0,"tileYOffset":0,"numXTiles":15,"numYTiles":16,"tileXSize":512,"tileYSize":512,"numBands":1,"dataType":"UNSIGNED_SHORT","imageHeight":7771,"imageWidth":7611,"colorInterpretation":"PAN","imageBoundsWGS84":"POLYGON
+        ((85.8528200258007 22.715800302536994, 88.07610888865464 22.7162943635233,
+        88.06059800714235 20.61034932140382, 85.86935479669117 20.609905339496233,
+        85.8528200258007 22.715800302536994))","groundSampleDistanceMeters":30.0,"minX":0,"minY":0,"maxX":7610,"maxY":7770,"minTileX":0,"minTileY":0,"maxTileX":14,"maxTileY":15},"imageGeoreferencing":{"spatialReferenceSystemCode":"EPSG:32645","scaleX":30.0,"scaleY":-30.0,"translateX":382185.0,"translateY":2512515.0,"shearX":0.0,"shearY":0.0},"rpcSensorModel":null,"histogram":null,"sensorMetadata":null,"imageAssociations":null,"rrdMetadata":{"reducedResolutionDataset":[{"sourceImage":"/vsis3/landsat-pds/c1/L8/139/045/LC08_L1TP_139045_20170304_20170316_01_T1/LC08_L1TP_139045_20170304_20170316_01_T1_B3.TIF","targetImage":"/vsis3/landsat-pds/c1/L8/139/045/LC08_L1TP_139045_20170304_20170316_01_T1/LC08_L1TP_139045_20170304_20170316_01_T1_B3.TIF","inverseScaleFactor":3.0},{"sourceImage":"/vsis3/landsat-pds/c1/L8/139/045/LC08_L1TP_139045_20170304_20170316_01_T1/LC08_L1TP_139045_20170304_20170316_01_T1_B3.TIF","targetImage":"/vsis3/landsat-pds/c1/L8/139/045/LC08_L1TP_139045_20170304_20170316_01_T1/LC08_L1TP_139045_20170304_20170316_01_T1_B3.TIF","inverseScaleFactor":9.0},{"sourceImage":"/vsis3/landsat-pds/c1/L8/139/045/LC08_L1TP_139045_20170304_20170316_01_T1/LC08_L1TP_139045_20170304_20170316_01_T1_B3.TIF","targetImage":"/vsis3/landsat-pds/c1/L8/139/045/LC08_L1TP_139045_20170304_20170316_01_T1/LC08_L1TP_139045_20170304_20170316_01_T1_B3.TIF","inverseScaleFactor":27.0},{"sourceImage":"/vsis3/landsat-pds/c1/L8/139/045/LC08_L1TP_139045_20170304_20170316_01_T1/LC08_L1TP_139045_20170304_20170316_01_T1_B3.TIF","targetImage":"/vsis3/landsat-pds/c1/L8/139/045/LC08_L1TP_139045_20170304_20170316_01_T1/LC08_L1TP_139045_20170304_20170316_01_T1_B3.TIF","inverseScaleFactor":81.0}]}}'}
+    headers:
+      access-control-allow-headers: ['x-requested-with, X-Auth-Token, Content-Type,
+          Authorization']
+      access-control-allow-methods: ['GET, OPTIONS, HEAD, PUT, POST, DELETE']
+      access-control-allow-origin: ['*']
+      access-control-max-age: ['3600']
+      connection: [keep-alive]
+      content-length: ['2285']
+      content-type: [application/json;charset=UTF-8]
+      date: ['Fri, 03 Nov 2017 17:35:33 GMT']
+    status: {code: 200, message: ''}
+version: 1

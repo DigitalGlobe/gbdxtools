@@ -1,8 +1,5 @@
 '''
-Authors: Donnie Marino, Kostas Stamatiou
-Contact: dmarino@digitalglobe.com
-
-Unit tests for the gbdxtools.Idaho class
+Unit tests for the gbdxtools.CatalogImage class
 '''
 
 from gbdxtools import Interface
@@ -44,12 +41,12 @@ class CatalogImageTest(unittest.TestCase):
 
     @my_vcr.use_cassette('tests/unit/cassettes/test_cat_image_wv2.yaml', filter_headers=['authorization'])
     def test_wv2_image(self):
-        wv2 = CatalogImage('10300100373FAF00')
+        wv2 = CatalogImage('1030010048532600')
         self.assertTrue(isinstance(wv2, WV02))
 
     @my_vcr.use_cassette('tests/unit/cassettes/test_cat_image_wv3.yaml', filter_headers=['authorization'])
     def test_wv3_image(self):
-        wv3 = CatalogImage('1040010013955A00')
+        wv3 = CatalogImage('1040010004457A00')
         self.assertTrue(isinstance(wv3, WV03_VNIR))
 
     @my_vcr.use_cassette('tests/unit/cassettes/test_cat_image_wv1.yaml', filter_headers=['authorization'])
@@ -71,7 +68,7 @@ class CatalogImageTest(unittest.TestCase):
     @my_vcr.use_cassette('tests/unit/cassettes/test_cat_image_unsupported_type.yaml', filter_headers=['authorization'])
     def test_catalog_image_unsupported_type(self):
         try:
-            img = CatalogImage('10100100057B2600')
+            img = CatalogImage('S2A_OPER_MSI_L1C_DS_MPS__20160904T224944_S20160904T180250_N02.04')
         except UnsupportedImageType:
             pass
     

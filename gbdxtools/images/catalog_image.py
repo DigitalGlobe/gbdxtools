@@ -4,7 +4,7 @@ GBDX Catalog Image Interface.
 Contact: chris.helm@digitalglobe.com
 """
 from __future__ import print_function
-from gbdxtools import WV01, WV02, WV03_VNIR, LandsatImage, IkonosImage, GE01
+from gbdxtools import WV01, WV02, WV03_VNIR, LandsatImage, IkonosImage, GE01, QB02
 from gbdxtools.images.ipe_image import IpeImage
 from gbdxtools.vectors import Vectors
 from gbdxtools.ipe.error import UnsupportedImageType
@@ -61,5 +61,7 @@ class CatalogImage(object):
             return GE01(cat_id, **kwargs)
         elif 'IKONOS' in types:
             return IkonosImage(rec, **kwargs)
+        elif 'QB02' in types:
+            return QB02(cat_id, **kwargs)
         else: 
             raise UnsupportedImageType('Unsupported image type: {}'.format(str(types)))
