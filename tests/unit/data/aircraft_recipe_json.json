@@ -1,0 +1,35 @@
+{
+        "id": "ricklin-test-3",
+        "name": "Ricklin test 3",
+        "owner": null,
+        "accountId": null,
+        "access": null,
+        "description": "Find some great stuff!",
+        "definition": "{\"tasks\":[{\"inputs\":[{\"name\":\"data\",\"value\":\"{raster_path}\"},{\"name\":\"enable_dra\",\"value\":\"true\"},{\"name\":\"enable_pansharpen\",\"value\":\"true\"},{\"name\":\"enable_acomp\",\"value\":\"true\"},{\"name\":\"ortho_epsg\",\"value\":\"UTM\"},{\"name\":\"bands\",\"value\":\"PAN+MS\"},{\"name\":\"ortho_pixel_size\",\"value\":\"0.5\"},{\"name\":\"ortho_interpolation_type\",\"value\":\"Bilinear\"}],\"name\":\"aop\",\"outputs\":[{\"name\":\"log\"},{\"name\":\"data\"}],\"taskType\":\"AOP_Strip_Processor\"},{\"name\":\"bands\",\"taskType\":\"gdal-cli-multiplex\",\"timeout\":36000,\"inputs\":[{\"name\":\"data\",\"source\":\"aop:data\"},{\"name\":\"command\",\"value\":\"find $indir/data/ -name *XML -type f -delete; mkdir -p $outdir; cp -R $indir/data/ $outdir/\"}],\"outputs\":[{\"name\":\"data\"}]},{\"containerDescriptors\":[{\"properties\":{\"domain\":\"nvidiagpu\"}}],\"name\":\"openskynet\",\"inputs\":[{\"source\":\"bands:data\",\"name\":\"data\"},{\"name\":\"model\",\"value\":\"{model_location_s3}\"},{\"name\":\"log_level\",\"value\":\"trace\"},{\"name\":\"confidence\",\"value\":\"65\"},{\"name\":\"pyramid\",\"value\":\"true\"},{\"name\":\"pyramid_window_sizes\",\"value\":\"[768]\"},{\"name\":\"pyramid_step_sizes\",\"value\":\"[700]\"},{\"name\":\"step_size\",\"value\":\"512\"},{\"name\":\"tags\",\"value\":\"Airliner, Fighter, Other, Military cargo\"},{\"name\":\"non_maximum_suppression\",\"value\":\"60\"}],\"outputs\":[{\"name\":\"log\"},{\"name\":\"results\"}],\"timeout\":36000,\"taskType\":\"openskynet:0.0.10\",\"impersonation_allowed\":true},{\"containerDescriptors\":[{\"properties\":{\"domain\":\"t2medium\"}}],\"name\":\"vector\",\"inputs\":[{\"source\":\"openskynet:results\",\"name\":\"items\"},{\"name\":\"index\",\"value\":\"vector-openskynet-{ingest_date}\"}],\"outputs\":[{\"name\":\"result\"}],\"timeout\":36000,\"taskType\":\"IngestItemJsonToVectorServices\",\"impersonation_allowed\":true},{\"containerDescriptors\":[{\"properties\":{\"domain\":\"t2medium\"}}],\"name\":\"s3_vector\",\"inputs\":[{\"source\":\"vector:result\",\"name\":\"data\"},{\"name\":\"destination\",\"value\":\"s3://{vector_ingest_bucket}/{recipe_id}/{run_id}/{task_name}\"}],\"outputs\":[],\"timeout\":36000,\"taskType\":\"StageDataToS3\"}],\"name\":\"openskynet\"}",
+        "recipeType": "partitioned-workflow",
+        "inputType": "acquisition",
+        "outputType": "vector-service",
+        "parentRecipeId": null,
+        "defaultDayRange": null,
+        "parameters": [
+            {
+                "name": "confidence",
+                "type": "string",
+                "required": true,
+                "description": "Lower bound for match scores",
+                "allowedValues": [
+                    "60",
+                    "65",
+                    "70"
+                ],
+                "allowMultiple": false
+            }
+        ],
+        "validators": [],
+        "prerequisites": [],
+        "properties": {
+            "partition_size": "50.0",
+            "model_type": "OpenSkyNetDetectNetMulti",
+            "image_bands": "Pan_MS1_MS2"
+        }
+    }

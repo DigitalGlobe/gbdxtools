@@ -1,0 +1,259 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      User-Agent: [python-requests/2.14.2]
+    method: GET
+    uri: https://geobigdata.io/workflows/v1/tasks/AOP_Strip_Processor
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA7VYUVPjRgz+K5q8pJ2CncCVAd4CYSjTyyUDdy+9ufGsbTnew/a6u2sgx/DfK62d
+        ECe5dmrCSxJrtdL3abWSnOdepAorZIF6jCbSsrRKm945fH2mlTwXRUwPPT+UhR8Kk4Ifz33xaHxR
+        lsYfTWeHM60iNEYWtXwexk++UGVgLBkLynpV6cAKc//ThUBXBUHwTNo7gJ5dlMhex9PLP69uWULa
+        JWorkaE992Qu5k7DxvOSjZ5nwqKxrBqrnOjwohYy7r28fGNhw00qt9JgRgMChhfgEEHFHMCmCEQL
+        GnwsMlZE9x7blkVZ2ZnSditWGv+upEYOltUVrpGISRyR4sKBa+O4O4ZMRYIfQSUMxXmAWFjB6oXI
+        axv8/HIALT+JyExHRxdVEWcIFyS7h1H8vTI2x8KCRlNl1qy7DsP/9szxK+Y73F4VIszQj6Xhbxhd
+        qrz04DJVMuLYa4Q+R6sPSkPfWe17MMZEEAqQpll1oV/iQWcyEJSc5d6AlaIAkwpdYkH6+0FINhuT
+        e4MZL8iHjECLYo4gVue2H8Cx3t9Jq8pyHluZ/d94LmU3SaN54K5kny5dqoLaYGCiFHMyUt+WnMIA
+        IYJBu4tXvac7tQuqgQasWpaEDTqz0affJncEk3/xV/0wqqzaoOZEB/CYyiglsEITCwMJRSIkF3Az
+        NkQIbiZjSGSGpsWFNUx3Dpdcyg8NlkJToYwhkxQyKgRFlaOmjKorIK3aNtM1+K9iEFm2vqMF1Em6
+        A53yMcPV7O6avX2ngkYLHtw5feh/+TzpMxgypxiGesSYVkuMZLIggSKlR2lTqNOllE+YBUb+QA+m
+        D6i1jGMsIFw06610ApmAcZYkG10/OcZz/uH46KR9cWojWJo3ZFdN2AEFBsopkKNFbf6FF7t8G6NW
+        LlbcCfmWrcGg5GDJaz/awfw1vG/lX8OGBjbfhh9K5ZDhA2YHgB6x7Y+v/xBZMuHYnA9P+yv+hP01
+        Km7vJrod0Ftx6o6e+uqX248crPHVxF1lZ54bMQW9britwJvjc59GqBhzP6q05uJtn+zyIDizgQYd
+        qWK+lIUoTarcReWzIBeGzyrmHGFBIly/30GP7AfLk9fd6a0npywo8KXK6iGCt9IJOM2mEH6iikYz
+        GBe/C44uPfLvyyqU0UYlbGTbuFtOAoevM/jxT7ol5CrexH5Dfgsj7aIehhwHYfCjWKCeCBulGwQ2
+        9b0tfVZrTjijy1nQB48sRIz7o7vLq6rSCgS14YARvgNxKpeEyaok4SSLSERjtAe3To/wJpru3IAr
+        /XAwaBEeeL9TxJiEyz9O9K0Y1HHdpEI+g9rnOxBK5TztyOjszDvryondvh+puaBeDQ8iq7CFeOgd
+        dQXsTL4D1GbMCyW1CCxt2h6NTnnIG560SJx2ZEAuAueiOwuq1aXGRD5xPaV3WYSMr6tDMb4dQfsC
+        N1Viu3Qf8la303848j23rbFExbrKYh5Fqb0QP0q78fVGb3MtDc62CS6tBjXI7jz/WnVO+EV6xIFb
+        4K9M+nUqpxOi2aBBRtzqUbk9IwyPWiCbjsl9OXDWe+7NmnqwaRwPvIH3gbfUfvb4nvw5Xb1S8CgC
+        Ld1VFHe9JHdzkqn5bh+0UNPe/EPCzKowk9GaR5kjWSPB8clgMHhZMzKazgIeaMug+R9CUYv+B5G6
+        FYqJEQAA
+    headers:
+      access-control-allow-origin: ['*']
+      connection: [keep-alive]
+      content-encoding: [gzip]
+      content-length: ['1260']
+      content-type: [application/json]
+      date: ['Thu, 09 Nov 2017 21:49:44 GMT']
+      server: [nginx/1.10.2]
+      via: [kong/0.10.3]
+      x-kong-proxy-latency: ['0']
+      x-kong-upstream-latency: ['26']
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      User-Agent: [python-requests/2.14.2]
+    method: GET
+    uri: https://geobigdata.io/workflows/v1/tasks/gdal-cli-multiplex
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA41SPU8DMQz9K1bEWEphQWJDwIAYQMCGGHI5t7W4Sw7HAarq/jtOei1wfIjNjp/f
+        e3a8Ni54seSRzzE6pk4CR3MCD2sjqw41MufXZ1cXt2YCpuPQIQthRqwNtXZREJ7JPTXkDxa1bfbb
+        1Ah1Db7ti41PJ40VjGL6/lEZ6kGEgs+Np5AhMA8MnLwnvwDLFQlbXkEmAxfa1vo6wivJEioblxA8
+        yBK3FZVFIC/Ic+twCnApgG/okqqChaiczQ48gdihozlhDS+kVeGs2QUW5eiSTPOYJbrRt28rYXxO
+        xFhrJpxQsdslbZhy92jE+w+rIAEq3Lqr1etdqqKQaAZ7RbWsYhPVKuRUejWBvZBE01LU8Eu1OPa2
+        LS4GIdNP4C+zu+Yf/F5uxK3YXzRyKee7bx74y/++IMeBaDadTQ8zcOP4x32OtK+H2b6IZ4p/jjK2
+        NHZdLI6PON6kqiH3iZpaVM/6cHw0m/WfSMp5u4Y+Ttz07zfd5WxCAwAA
+    headers:
+      access-control-allow-origin: ['*']
+      connection: [keep-alive]
+      content-encoding: [gzip]
+      content-length: ['384']
+      content-type: [application/json]
+      date: ['Thu, 09 Nov 2017 21:49:44 GMT']
+      server: [nginx/1.10.2]
+      via: [kong/0.10.3]
+      x-kong-proxy-latency: ['0']
+      x-kong-upstream-latency: ['33']
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      User-Agent: [python-requests/2.14.2]
+    method: GET
+    uri: https://geobigdata.io/workflows/v1/tasks/openskynet:0.0.10
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA81X227bRhD9lYGeWkCWFaQuGr+lVWwEdW3BF/TBNYQVd0htvNxl9yKZNvTvmVlS
+        NimlTqG0QAABIvcy58yZ2Znl0yCzJghl0E3QZ05VwTo/OIbbp0GoK6SnweTit98/XA6GQGvLUhjJ
+        g1UdFtbAoa3C4UWF5uq+PsdwOFfm0EXTjhgMo6rmnZWzFbqgkG0/DUSk3U49iqCsucS/o3LIZoOL
+        SKtVKYoEHWRREQQan4wdr6y7V6Y4WL5jo9KWxJzXmaWSShRVHKzXdzzT+kLWefoyGg92/gmzABID
+        /dEE0E8YSFgQPZkFAaWVqEdsXJkqhql1YUcXt8N3o1TDexf/eoEtTrBA8sCLYkRB6Nor4md4pxFl
+        MiVFEIP1EF6DkzScEa+k8BcgMy28V7nKksyNb8wgekwubrDSxA5YLrTvovngSKMvQF2kJ6EhpccB
+        2VKlMiKghCAKz4irhQoIWnn2V5KruoaV47FShGyBHpTJdJS0RRkIxD1HEaJr9nS5ssX9qf5qo5Ec
+        6bl9gJUKixatFxwe6ERlBCfWEU2gtx/Ozs6sGQL9iTCEm8v0Rn8i/MjM/zy9+uUnoGTnVFO8d4K5
+        iDokFdgwmkCkG8BeEOYttRlR29/B97SUUyKJjiSnjYEexP2z0DlP7iYHcc7Q+2fC7O14NB4ChVKV
+        sWzfU/hK8bAZejOmwa4bVE5yJdFkuL8T09qJUslEU9qV0VZwZgSlOTAyBal/jLUGh55oCxMabf3o
+        LwrH+8vzj+enx3C9IK4r9byMY1XGbAHamgJdE3ZVoh/CnAQrRd1ZKKRUbYY3gySis+W/UTGF/YT9
+        7mpUNf7tL9CNJzk4fcEHrK7UY8pdlsRRuDAxW6AqFs1xWylJS22exr1W6QSslCFtR/A9yJQy6Wjc
+        Ow8Nv5kn5/4LoRpzu1It7KpxcVcbKphL5AoAKLJG6u8iqVitt32xmNs3SsUNg4oFNT0o0JYYXA28
+        qZ/LU6vrot+pkuW9YU+0KEDlm9pL7p5Ob/qY19T1uoCpze+L90dbuwgFIlWU9g7SE/fd0VbhO/qH
+        wjeCj4WxjrtWDkSLJxKTLl3aNOsg7U/93Bo82FDwsaoocXziftW+cLamEAbO4k3Fb/ucgCVSTH3J
+        1VI4FFsJ1S/1PX93qryxZtZOzjpM9vetk31a1HR4GGlIB0XiQ3oGbltiTh2A3/oJ8nKbmqSu0GXa
+        GJ0lo7M0uDfHzqVN26JgiTUu6boIUy4mgS88S6EjSU7y8m1NZGRY4jwW7Epuh7ASztDGIaBz1g0J
+        PAj9EghyJk10PSCsWcLZn/lVv65xoUjCpQzhh7YjNf5QpfnwUJGO5E/+fPW5nSO5TMSNvONg3CZX
+        77pMWyuzTun+hrvaNmkqcf87cwbZ8ObvCDoxKa9pCR/3N+kQNCn1tU+DbT9fu6xPNnNNr+IeQDX4
+        k6dquGkOj6qqyKtYdWm3k1/V+DVsPnmUYpvTl5oQVWLO0qYnpi8vOnv+fisrG4m2vuyUn8a5Vtng
+        5WuFWiAZp4G3P4/H43XHyMuX3WD9GRtASKGKDgAA
+    headers:
+      access-control-allow-origin: ['*']
+      connection: [keep-alive]
+      content-encoding: [gzip]
+      content-length: ['1170']
+      content-type: [application/json]
+      date: ['Thu, 09 Nov 2017 21:49:44 GMT']
+      server: [nginx/1.10.2]
+      via: [kong/0.10.3]
+      x-kong-proxy-latency: ['0']
+      x-kong-upstream-latency: ['22']
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      User-Agent: [python-requests/2.14.2]
+    method: GET
+    uri: https://geobigdata.io/workflows/v1/tasks/IngestItemJsonToVectorServices
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA7VVTW/bMAz9K4QvuSRugA079DasK9B2aIs2XQ/DMMgWbauVJU2S02ZB/vtIOW6S
+        fmBAip0SSyTf4xM/lllpTRTKoD/CUHrlovUhO4QfyywuHNK/7Ojiy9nXq2wMZNu2wkg+vBNzAZPS
+        wYF18aCbq4MHryJO6N8kinCf3wkPZJ9LVasodK1tgbkyQdVNzOdYEk6eDE9MjSF+TycnEdvTYA2D
+        OW8d+qiQ6Swz1Yo60YmydgcqOf3q4xxqEekrW61+kp9c56EoDJn34QM4j5PK+lbEiBJ6RyDGLZxe
+        X5xDtNBTuEY/VyWBUihlXBcvrY8vtHkGMmsQgu18iSCVT3EWHMDj746+WbHoO6STQdQds7bTUTmN
+        jxs7I9pkxwxDthqTAlvBKqHDdrQQPSnCoV4h5rHGR+gvCjKDh0aVDVRKY+C8SWjKNyU8oPLdJSvl
+        zfuwdzUFZSRRYRQG7nmkDOFBaQ0FAldRRJPDEVaCZAEVYNS/1qQu5ONkWaNtRGhWk6WkZ1+NcoBz
+        G4mR0LGxXd1AbNAjOwrKOkUZE8qIa8AWotALqK2ViQHX7JoBfUpVVeRqYk+UCEt0aCSLZg3HBeGc
+        VqXgHPNtxZLD+7RqKTYjbQqfOXWBRFExZTXUWHq6Hfi17/4EPkPACLYCIaXiQ6EJBrUkFQ31i9Bd
+        z4fu+SdptkNh43ic/PbnwmLcXH1LtWlDhFJoXYjyPsFXVJQQupJLFqiFK6F0R89N1IemTh2/w22I
+        cOP1/rSuSSBiMOIOHW2qp1Wlt5FehHjSoLM1UAH5xVMFJ9VGCWW0+2aD4y3H2Z8Xy8UVk4oS2Bxo
+        0KV6eZPb1RqHehDNxiwxSS2Xknyd7oWbMaV38a2sjY7uuTMN3J7NmDLN5vH/pX48wN7e07rgbTFH
+        H9a8pvk0/8hutotvzf1Xx/eLVnq67TtXwB/lUtPCettym3OS/1hK/Yjm/lv3905WHgOVV5/G82UZ
+        LruC5lS22TuqRcqLDj58mk6nq604/YYcVu/MPtuDq7+nc5wiJAgAAA==
+    headers:
+      access-control-allow-origin: ['*']
+      connection: [keep-alive]
+      content-encoding: [gzip]
+      content-length: ['781']
+      content-type: [application/json]
+      date: ['Thu, 09 Nov 2017 21:49:44 GMT']
+      server: [nginx/1.10.2]
+      via: [kong/0.10.3]
+      x-kong-proxy-latency: ['0']
+      x-kong-upstream-latency: ['24']
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      User-Agent: [python-requests/2.14.2]
+    method: GET
+    uri: https://geobigdata.io/workflows/v1/tasks/StageDataToS3
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA32RS08CMRDHv8qkZ4KrHEy4iidNJIAn46HbHdiJ24fTqYSQ/e6260YRibc+/o9f
+        p0dlvBNNDnmB0TAF8RzVHF6O+cZa7Zq8UWoCSg4By3rxdPdwvyongX1AFsJiOCqyejcopNmFqyh5
+        Jz7O5p0WjKL6/jV7mrGFvCvSdVFBo0XDlr0FDQ0xmgxxAHLiQTtYz6BO5g2ldJILSZae5Q8u43vK
+        3sIrnPCE+DuyBJwBbFqE6BMb/GkuMqftlzejqX4C/+VHYXK7C+Hb1HUF/3n1CPsWGUHa8bV7ylc1
+        wp5JBN30V2ceFzk9pAxD+0COY2Q1rabXReyTXJ5EMZz/TFymuiNzgk4Wc0I+uL2pqv6kfPiRRUbc
+        +PVM9Z8p9ALBIQIAAA==
+    headers:
+      access-control-allow-origin: ['*']
+      connection: [keep-alive]
+      content-encoding: [gzip]
+      content-length: ['298']
+      content-type: [application/json]
+      date: ['Thu, 09 Nov 2017 21:49:44 GMT']
+      server: [nginx/1.10.2]
+      via: [kong/0.10.3]
+      x-kong-proxy-latency: ['0']
+      x-kong-upstream-latency: ['25']
+    status: {code: 200, message: OK}
+- request:
+    body: !!python/unicode '{"recipeType": "partitioned-workflow", "definition": {"tasks":
+      [{"containerDescriptors": [{"properties": {"domain": "raid"}}], "name": "AOP_Strip_Processor_38902de2",
+      "inputs": [{"name": "enable_dra", "value": "true"}, {"name": "bands", "value":
+      "PAN+MS"}, {"name": "enable_acomp", "value": "true"}, {"name": "ortho_pixel_size",
+      "value": "0.5"}, {"name": "ortho_epsg", "value": "UTM"}, {"name": "enable_pansharpen",
+      "value": "true"}, {"name": "ortho_interpolation_type", "value": "Bilinear"},
+      {"name": "data", "value": "{raster_path}"}], "outputs": [{"name": "data"}, {"name":
+      "log"}], "timeout": 36000, "taskType": "AOP_Strip_Processor"}, {"containerDescriptors":
+      [{"properties": {"domain": "default"}}], "name": "gdal-cli-multiplex_f80021df",
+      "inputs": [{"source": "AOP_Strip_Processor_38902de2:data", "name": "data"},
+      {"name": "command", "value": "find $indir/data/ -name *XML -type f -delete;
+      mkdir -p $outdir; cp -R $indir/data/ $outdir/"}], "outputs": [{"name": "data"}],
+      "timeout": 7200, "taskType": "gdal-cli-multiplex"}, {"containerDescriptors":
+      [{"properties": {"domain": "nvidiagpu"}}], "name": "openskynet_0.0.10_58805dc0",
+      "inputs": [{"name": "confidence", "value": "{confidence}"}, {"name": "pyramid",
+      "value": "true"}, {"name": "log_level", "value": "trace"}, {"name": "pyramid_step_sizes",
+      "value": "[700]"}, {"name": "tags", "value": "Airliner, Fighter, Other, Military
+      cargo"}, {"name": "pyramid_window_sizes", "value": "[768]"}, {"name": "step_size",
+      "value": "512"}, {"name": "model", "value": "{model_location_s3}"}, {"source":
+      "gdal-cli-multiplex_f80021df:data", "name": "data"}, {"name": "non_maximum_suppression",
+      "value": "60"}], "outputs": [{"name": "results"}, {"name": "log"}], "timeout":
+      36000, "taskType": "openskynet:0.0.10", "impersonation_allowed": true}, {"containerDescriptors":
+      [{"properties": {"domain": "default"}}], "name": "IngestItemJsonToVectorServices_5c31ac48",
+      "inputs": [{"source": "openskynet_0.0.10_58805dc0:results", "name": "items"}],
+      "outputs": [{"name": "result"}], "timeout": 36000, "taskType": "IngestItemJsonToVectorServices"},
+      {"containerDescriptors": [{"properties": {"domain": "default"}}], "name": "StageDataToS3_ddf64c3f",
+      "inputs": [{"name": "destination", "value": "s3://{vector_ingest_bucket}/{recipe_id}/{run_id}/{task_name}"},
+      {"source": "IngestItemJsonToVectorServices_5c31ac48:result", "name": "data"}],
+      "outputs": [], "timeout": 7200, "taskType": "StageDataToS3"}], "name": "5c7341f0"},
+      "properties": {"partition_size": "50.0", "model_type": "OpenSkyNetDetectNetMulti",
+      "image_bands": "Pan_MS1_MS2"}, "name": "Ricklin test 3", "parameters": [{"name":
+      "confidence", "allowMultiple": false, "required": true, "allowedValues": ["60",
+      "65", "70"], "type": "string", "description": "Lower bound for match scores"}],
+      "prerequisites": [], "defaultDayRange": null, "description": "Find some great
+      stuff!", "outputType": "vector-service", "inputType": "acquisition", "access":
+      null, "validators": [], "owner": null, "parentRecipeId": null, "id": "ricklin-test-3",
+      "accountId": null}'
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      Content-Length: ['3041']
+      Content-Type: [application/json]
+      User-Agent: [python-requests/2.14.2]
+    method: PUT
+    uri: https://vector.geobigdata.io/answer-factory-recipe-service/api/recipe/json/ricklin-test-3
+  response:
+    body: {string: !!python/unicode ''}
+    headers:
+      access-control-allow-credentials: ['true']
+      access-control-allow-headers: ['origin, content-type, accept, authorization']
+      access-control-allow-methods: ['GET, POST, PUT, DELETE, OPTIONS, HEAD']
+      access-control-allow-origin: ['*']
+      cache-control: ['no-cache, no-store, max-age=0, must-revalidate']
+      connection: [keep-alive]
+      content-length: ['0']
+      content-type: [text/plain]
+      date: ['Thu, 09 Nov 2017 21:47:21 GMT']
+      expires: ['0']
+      pragma: [no-cache]
+      server: [Apache-Coyote/1.1]
+      x-content-type-options: [nosniff]
+      x-frame-options: [DENY]
+      x-xss-protection: [1; mode=block]
+    status: {code: 202, message: Accepted}
+version: 1

@@ -133,3 +133,97 @@ class TestSimpleAnswerFactory(unittest.TestCase):
 
         self.assertIsNotNone(project_id)
 
+    @vcr.use_cassette('tests/unit/cassettes/test_answerfactory_recipe_explicit_creation.yaml', filter_headers=['authorization'])
+    def test_answerfactory_recipe_explicit_creation(self):
+        aop = self.gbdx.Task('AOP_Strip_Processor')
+        aop.inputs.ortho_interpolation_type = 'Bilinear'
+        aop.inputs.ortho_pixel_size = 'auto'
+        aop.inputs.bands = 'PAN+MS'
+        aop.inputs.ortho_epsg = 'UTM'
+        aop.inputs.enable_acomp = 'true'
+        aop.inputs.enable_pansharpen = 'true'
+        aop.inputs.enable_dra = 'true'
+        aop.inputs.ortho_pixel_size = '0.5'
+        aop.inputs.data = '{raster_path}'
+
+        xmlfix = self.gbdx.Task('gdal-cli-multiplex')
+        xmlfix.inputs.data = aop.outputs.data.value
+        xmlfix.inputs.command = "find $indir/data/ -name *XML -type f -delete; mkdir -p $outdir; cp -R $indir/data/ $outdir/"
+
+        skynet = self.gbdx.Task('openskynet:0.0.10')
+        skynet.inputs.data = xmlfix.outputs.data.value
+        skynet.inputs.model = '{model_location_s3}'
+        skynet.inputs.log_level = 'trace'
+        skynet.inputs.confidence = '{confidence}'
+        skynet.inputs.pyramid = 'true'
+        skynet.inputs.pyramid_window_sizes = '[768]'
+        skynet.inputs.pyramid_step_sizes = '[700]'
+        skynet.inputs.step_size = '512'
+        skynet.inputs.tags = 'Airliner, Fighter, Other, Military cargo'
+        skynet.inputs.non_maximum_suppression = '60'
+        skynet.impersonation_allowed = True
+
+        workflow = self.gbdx.Workflow([aop,xmlfix,skynet])
+
+        confidence_param = RecipeParameter(
+            name = 'confidence',
+            _type = 'string',
+            required = True,
+            description = 'Lower bound for match scores',
+            allow_multiple = False,
+            allowed_values = ['60','65','70']
+        )
+
+        properties = {
+            "partition_size": "50.0",
+            "model_type": "OpenSkyNetDetectNetMulti", # type of model; registered in the model catalog
+            "image_bands": "Pan_MS1_MS2", # Pan | Pan_MS1 | Pan_MS1_MS2
+        }
+
+        recipe = Recipe(
+            id = 'ricklin-test-3',  # id must be unique
+            name = 'Ricklin test 3', # name must also be unique
+            description = 'Find some great stuff!',
+            definition = workflow.generate_workflow_description(),
+            recipe_type = 'partitioned-workflow', # workflow | partitioned-workflow | vector-query | vector-aggregation | es-query
+            input_type = 'acquisition', # acquisition | seasonal-acquisition | acquisitions | vector-service | esri-service | None
+            output_type = 'vector-service', # vector-service | es-query-service | esri-service
+            parameters = [confidence_param],
+            properties = properties,
+        )
+        recipe.ingest_vectors( skynet.outputs.results.value )
+
+
+        recipe_dict = recipe.generate_dict()
+        expected_recipe_dict = json.load(open(os.path.join(self.data_path, 'aircraft_recipe_json.json')))
+
+        self.assertEqual(recipe_dict['id'], expected_recipe_dict['id'])
+        self.assertEqual(recipe_dict['name'], expected_recipe_dict['name'])
+        self.assertEqual(recipe_dict['owner'], expected_recipe_dict['owner'])
+        self.assertEqual(recipe_dict['accountId'], expected_recipe_dict['accountId'])
+        self.assertEqual(recipe_dict['access'], expected_recipe_dict['access'])
+        self.assertEqual(recipe_dict['description'], expected_recipe_dict['description'])
+        self.assertEqual(recipe_dict['recipeType'], expected_recipe_dict['recipeType'])
+        self.assertEqual(recipe_dict['inputType'], expected_recipe_dict['inputType'])
+        self.assertEqual(recipe_dict['outputType'], expected_recipe_dict['outputType'])
+        self.assertEqual(recipe_dict['parentRecipeId'], expected_recipe_dict['parentRecipeId'])
+        self.assertEqual(recipe_dict['defaultDayRange'], expected_recipe_dict['defaultDayRange'])
+        self.assertEqual(recipe_dict['validators'], expected_recipe_dict['validators'])
+        self.assertEqual(recipe_dict['prerequisites'], expected_recipe_dict['prerequisites'])
+        self.assertDictEqual(recipe_dict['properties'], expected_recipe_dict['properties'])
+        self.assertDictEqual(recipe_dict['parameters'][0], expected_recipe_dict['parameters'][0])
+
+        recipe_def = recipe_dict['definition']
+        expected_recipe_def = json.loads(expected_recipe_dict['definition'])
+
+        recipe_task_list = [t['taskType'] for t in recipe_def['tasks']]
+        expected_recipe_task_list = [t['taskType'] for t in expected_recipe_def['tasks']]
+
+        for task in recipe_task_list:
+            assert task in expected_recipe_task_list
+
+        recipe.create() 
+
+        self.assertIsNotNone(recipe.id)
+
+
