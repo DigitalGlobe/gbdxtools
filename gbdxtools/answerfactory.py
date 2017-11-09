@@ -86,7 +86,7 @@ class Recipe(object):
             try:
                 r.raise_for_status()
             except:
-                print r.text
+                print(r.text)
                 raise
             return recipe['id']
         else:
@@ -99,7 +99,7 @@ class Recipe(object):
             try:
                 r.raise_for_status()
             except:
-                print r.text
+                print(r.text)
                 raise
             recipe_json = r.json()
             return recipe_json['id']
@@ -179,7 +179,7 @@ class Project(object):
             try:
                 r.raise_for_status()
             except:
-                print r.text
+                print(r.text)
                 raise
             # updates only get the Accepted response -> return the original project id
             return project['id']
@@ -191,7 +191,7 @@ class Project(object):
             try:
                 r.raise_for_status()
             except:
-                print r.text
+                print(r.text)
                 raise
             project_json = r.json()
             # create returns the saved project -> return the project id that's saved
