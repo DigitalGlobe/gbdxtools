@@ -97,15 +97,16 @@ class WVImage(IpeImage):
             mosaic_params["Requested GSD"] = str(gsd)
         ortho_op = ipe.GeospatialMosaic(*dn_ops, **mosaic_params)
 
-        toa_reflectance_op = ipe.MultiplyConst(
-            ipe.AddConst(
-                ipe.MultiplyConst(
-                    ipe.Format(ortho_op, dataType="4"),
-                    constants=radiance_scales),
-                constants=radiance_offsets),
-            constants=reflectance_scales)
+        radiance_op = ipe.AddConst(
+            ipe.MultiplyConst(
+                ipe.Format(ortho_op, dataType="4"),
+                constants=radiance_scales),
+            constants=radiance_offsets)
 
-        return {"ortho": ortho_op, "toa_reflectance": toa_reflectance_op}
+        toa_reflectance_op = ipe.MultiplyConst(radiance_op,
+                                               constants=reflectance_scales)
+
+        return {"ortho": ortho_op, "toa_reflectance": toa_reflectance_op, "radiance": radiance_op}
 
 
 class WV03_VNIR(WVImage):
