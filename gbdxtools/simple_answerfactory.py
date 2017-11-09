@@ -565,6 +565,9 @@ class Recipe(object):
         recipe_id = self.recipe_service.save(self.generate_dict())
         return recipe_id
 
+    def delete(self):
+        self.recipe_service.delete(self.id)
+
 
 class Project(object):
     def __init__(self, **kwargs):

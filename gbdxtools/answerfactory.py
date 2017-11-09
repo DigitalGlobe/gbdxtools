@@ -83,7 +83,11 @@ class Recipe(object):
                 'base_url': self.base_url, 'recipe_id': recipe['id']
             }
             r = self.gbdx_connection.put(url, json=recipe)
-            r.raise_for_status()
+            try:
+                r.raise_for_status()
+            except:
+                print r.text
+                raise
             return recipe['id']
         else:
             # create -> use post op
@@ -92,7 +96,11 @@ class Recipe(object):
                 'base_url': self.base_url
             }
             r = self.gbdx_connection.post(url, json=recipe)
-            r.raise_for_status()
+            try:
+                r.raise_for_status()
+            except:
+                print r.text
+                raise
             recipe_json = r.json()
             return recipe_json['id']
 
@@ -168,7 +176,11 @@ class Project(object):
                 'base_url': self.base_url, 'project_id': project['id']
             }
             r = self.gbdx_connection.put(url, json=project)
-            r.raise_for_status()
+            try:
+                r.raise_for_status()
+            except:
+                print r.text
+                raise
             # updates only get the Accepted response -> return the original project id
             return project['id']
         else:
@@ -176,7 +188,11 @@ class Project(object):
             # create -> use post op
             url = self.base_url
             r = self.gbdx_connection.post(url, json=project)
-            r.raise_for_status()
+            try:
+                r.raise_for_status()
+            except:
+                print r.text
+                raise
             project_json = r.json()
             # create returns the saved project -> return the project id that's saved
             return project_json['id']
