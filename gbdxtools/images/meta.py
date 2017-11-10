@@ -10,6 +10,10 @@ from multiprocessing.pool import ThreadPool
 import warnings
 import math
 
+
+from gbdxtools.ipe.io import to_geotiff
+from gbdxtools.ipe.util import RatPolyTransform, AffineTransform, pad_safe_positive, pad_safe_negative, IPE_TO_DTYPE
+
 from shapely import ops, wkt
 from shapely.geometry import box, shape, mapping
 from shapely.geometry.base import BaseGeometry
@@ -29,9 +33,6 @@ import dask.array as da
 import numpy as np
 
 from affine import Affine
-
-from gbdxtools.ipe.io import to_geotiff
-from gbdxtools.ipe.util import RatPolyTransform, AffineTransform, pad_safe_positive, pad_safe_negative, IPE_TO_DTYPE
 
 try:
     from matplotlib import pyplot as plt

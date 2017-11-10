@@ -24,14 +24,16 @@ except ImportError:
 from rasterio.transform import from_bounds as transform_from_bounds
 
 import mercantile
+
+from gbdxtools.images.meta import DaskImage, DaskMeta, GeoImage, PlotMixin
+from gbdxtools.ipe.util import AffineTransform
+
 from shapely.geometry import mapping, box
 from shapely.geometry.base import BaseGeometry
 from shapely import ops
 import pyproj
 
 import pycurl
-from gbdxtools.images.meta import DaskImage, DaskMeta, GeoImage, PlotMixin
-from gbdxtools.ipe.util import AffineTransform
 
 _curl_pool = defaultdict(pycurl.Curl)
 

@@ -6,16 +6,17 @@ Contact: chris.helm@digitalglobe.com
 from __future__ import print_function
 import json
 
-from shapely import wkt
-from shapely.geometry import box
-
-import requests
-
 from gbdxtools import IdahoImage
 from gbdxtools.ipe.util import calc_toa_gain_offset
 from gbdxtools.images.ipe_image import IpeImage
 from gbdxtools.vectors import Vectors
 from gbdxtools.ipe.interface import Ipe
+
+from shapely import wkt
+from shapely.geometry import box
+
+import requests
+
 ipe = Ipe()
 
 band_types = {
