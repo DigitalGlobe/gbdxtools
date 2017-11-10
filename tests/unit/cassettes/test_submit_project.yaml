@@ -1,0 +1,115 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      User-Agent: [python-requests/2.18.4]
+    method: GET
+    uri: https://vector.geobigdata.io/answer-factory-recipe-service/api/recipe/query-tweets
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA42ST0/DMAzFvwrKEa2IdTCVSdy4cEEwdq+8xBuW0iRLnG7VtO+OW/aPC+JSKT8/
+        2+9Z3SsyaqY2GWNX8BaRkxopBw0K/ejpzeJE/dZhFKyr1XSql2VhQN8XD1U1KSrzNCnGpZlWBsvH
+        coUiB619dvwq8122dgCY0ullMOlIgck7mXleYnBFjo5080yMTc1dwNlgTgQRNQVcCBJBi5p9LAb7
+        UiMXMv8uJYwt6d6Pz/xHNUBEx/Nh+MWyuIFs+QW6Obh13zj+0cqBGOM5TAuWDMjEMwkRI24yJUlw
+        BX3AyNSTvQJjhqBga0MpWOjqFaE1UlSMuz7sl28xXugbroGpxZtP8UqNfGbAHGmZZcldOsHaHXW1
+        WdrRuxcP/2gKR13fJKuHm9bkDO6u7tWA/CXEkv1WHQ7fRfCBHT4CAAA=
+    headers:
+      access-control-allow-credentials: ['true']
+      access-control-allow-headers: ['origin, content-type, accept, authorization']
+      access-control-allow-methods: ['GET, POST, PUT, DELETE, OPTIONS, HEAD']
+      access-control-allow-origin: ['*']
+      cache-control: ['no-cache, no-store, max-age=0, must-revalidate']
+      connection: [keep-alive]
+      content-encoding: [gzip]
+      content-length: ['326']
+      content-type: [application/json;charset=UTF-8]
+      date: ['Fri, 20 Oct 2017 19:04:53 GMT']
+      expires: ['0']
+      pragma: [no-cache]
+      server: [Apache-Coyote/1.1, Weblogic 12.2.1.1]
+      strict-transport-security: [max-age=604800 ; includeSubDomains]
+      vary: [Accept-Encoding]
+      x-content-type-options: [nosniff, nosniff]
+      x-frame-options: [DENY, SAMEORIGIN]
+      x-permitted-cross-domain-policies: [none]
+      x-xss-protection: [1; mode=block, 1; mode=block]
+    status: {code: 200, message: OK}
+- request:
+    body: !!python/unicode '{"namedBuffers": [], "name": "White House Tweets", "tags":
+      [], "notes": null, "createDate": null, "description": null, "enabled": true,
+      "visibility": [], "acquisitionIds": null, "aois": [{"type": "Polygon", "coordinates":
+      [[[-77.039373, 38.898819], [-77.033633, 38.898961], [-77.033632, 38.898961],
+      [-77.03363, 38.89896], [-77.033629, 38.89896], [-77.033627, 38.898959], [-77.033626,
+      38.898958], [-77.033626, 38.898956], [-77.033625, 38.898955], [-77.033625, 38.898953],
+      [-77.033614, 38.896431], [-77.033614, 38.89643], [-77.033615, 38.896428], [-77.033616,
+      38.896427], [-77.033617, 38.896426], [-77.033618, 38.896425], [-77.033619, 38.896424],
+      [-77.033621, 38.896424], [-77.033622, 38.896423], [-77.039416, 38.896398], [-77.039417,
+      38.896398], [-77.039419, 38.896399], [-77.03942, 38.8964], [-77.039422, 38.896401],
+      [-77.039423, 38.896402], [-77.039423, 38.896403], [-77.039424, 38.896405], [-77.039424,
+      38.896406], [-77.039381, 38.898811], [-77.039381, 38.898813], [-77.03938, 38.898814],
+      [-77.03938, 38.898816], [-77.039379, 38.898817], [-77.039377, 38.898818], [-77.039376,
+      38.898818], [-77.039375, 38.898819], [-77.039373, 38.898819]]]}], "dateRange":
+      {"count": null, "startDate": null, "endDate": null}, "continuouslyOrdered":
+      false, "updateDate": null, "recipeConfigs": [{"startDate": null, "endDate":
+      null, "parameters": [], "recipeId": "query-tweets", "configurationDate": null,
+      "recipeName": "Query Tweets"}], "originalGeometries": [{"geometry": {"type":
+      "Polygon", "coordinates": [[[-77.039373, 38.898819], [-77.033633, 38.898961],
+      [-77.033632, 38.898961], [-77.03363, 38.89896], [-77.033629, 38.89896], [-77.033627,
+      38.898959], [-77.033626, 38.898958], [-77.033626, 38.898956], [-77.033625, 38.898955],
+      [-77.033625, 38.898953], [-77.033614, 38.896431], [-77.033614, 38.89643], [-77.033615,
+      38.896428], [-77.033616, 38.896427], [-77.033617, 38.896426], [-77.033618, 38.896425],
+      [-77.033619, 38.896424], [-77.033621, 38.896424], [-77.033622, 38.896423], [-77.039416,
+      38.896398], [-77.039417, 38.896398], [-77.039419, 38.896399], [-77.03942, 38.8964],
+      [-77.039422, 38.896401], [-77.039423, 38.896402], [-77.039423, 38.896403], [-77.039424,
+      38.896405], [-77.039424, 38.896406], [-77.039381, 38.898811], [-77.039381, 38.898813],
+      [-77.03938, 38.898814], [-77.03938, 38.898816], [-77.039379, 38.898817], [-77.039377,
+      38.898818], [-77.039376, 38.898818], [-77.039375, 38.898819], [-77.039373, 38.898819]]]},
+      "type": "Feature"}], "owner": null, "attributes": {}, "id": null, "accountId":
+      null}'
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      Content-Length: ['2496']
+      Content-Type: [application/json]
+      User-Agent: [python-requests/2.18.4]
+    method: POST
+    uri: https://vector.geobigdata.io/answer-factory-project-service/api/project
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAAwAAAP//7dZNb5wwEAbgvxL5DBHGfNh7bKu2ufRLlXqI9mDwQC0RmxjTaLXa/14b
+        dr2ORNRbT3sLzzjjEdp3xBFJgXaozaASlLYpq6lIC8aytGnaLgUBvIKyICUtUIL0iwLjjj9Zo611
+        fyZI8Sdw8uu3tHD3Wc8T3P18AbCTq/G21bOyD8sNtKuqtslTwdssLSglKRWMpDgXFRWQl3kH/l+0
+        nNDu8YjsYfR9v+nh0GvlKq3WRkjFLfgDj49pXd9nhJGaJITeU0YpZvvkzKQiF2YVjjnf5qAR5mxT
+        64uW8X15FZhu86smZeBym0nEuFi5Kgje5ljLi+bxILgKXMdcB47nwzRwPB9mgYt4bLzNeeDrgKwI
+        kxBGY663mQVmEYfWsQXMcMwkcL7N8XR5eKlZuc3X98QIxeHHh7eZxBy02NS4c80C1zHXgWnM1TaX
+        gVnMcWT2+9M+QQZaOcJ7rTrZrwFcZcnu8wzmkNpLrNfKlzX4333tGvl26TAbbqVWH1xY0U7Nw5Cg
+        yXJjYwAl4seRG9fQ7RR/+zKSNrJ3eR8+gXYFI+HVYvgI3M7Gr4zR6BGMXerHU4L69fzBPd22yG2L
+        3LbIf9oiPrP+a0C8m7vunGMXOOOCCmvScZnRMneJIP5NoHkUb5WUXgK6rgYBU2vk6DfKhSzvz/3/
+        yEk2cpD2cL5PKyvV7D5EhsNXI8CA22AdHybw3yPPszvuGz2Ia3s3wA+uevAL419ravmgWR9Ovsib
+        wV9gzez7W7emmtmum+j0F5OVg7NcCQAA
+    headers:
+      access-control-allow-credentials: ['true']
+      access-control-allow-headers: ['origin, content-type, accept, authorization']
+      access-control-allow-methods: ['GET, POST, PUT, DELETE, OPTIONS, HEAD']
+      access-control-allow-origin: ['*']
+      cache-control: ['no-cache, no-store, max-age=0, must-revalidate']
+      connection: [keep-alive]
+      content-encoding: [gzip]
+      content-length: ['594']
+      content-type: [application/json;charset=UTF-8]
+      date: ['Fri, 20 Oct 2017 19:04:53 GMT']
+      expires: ['0']
+      pragma: [no-cache]
+      server: [Apache-Coyote/1.1]
+      vary: [Accept-Encoding]
+      x-content-type-options: [nosniff]
+      x-frame-options: [DENY]
+      x-xss-protection: [1; mode=block]
+    status: {code: 202, message: Accepted}
+version: 1

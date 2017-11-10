@@ -404,7 +404,7 @@ class Workflow(object):
         Save output data from any task in this workflow to S3
 
         Args:
-               output: Reference task output (e.g. task.inputs.output1).
+               output: Reference task output (e.g. task.outputs.output1).
 
                location (optional): Subfolder under which the output will be saved.
                                     It will be placed under the account directory in gbd-customer-data bucket:

@@ -1,0 +1,319 @@
+{
+  "definition": {
+    "tasks": [
+      {
+        "inputs": [
+          {
+            "name": "bands",
+            "value": "PAN+MS"
+          },
+          {
+            "name": "data",
+            "value": "{raster_path}"
+          },
+          {
+            "name": "enable_acomp",
+            "value": "true"
+          },
+          {
+            "name": "enable_dra",
+            "value": "true"
+          },
+          {
+            "name": "enable_pansharpen",
+            "value": "true"
+          },
+          {
+            "name": "ortho_epsg",
+            "value": "UTM"
+          },
+          {
+            "name": "ortho_interpolation_type",
+            "value": "Bilinear"
+          },
+          {
+            "name": "ortho_pixel_size",
+            "value": "auto"
+          }
+        ],
+        "taskType": "AOP_Strip_Processor",
+        "outputs": [
+          {
+            "name": "data"
+          },
+          {
+            "name": "log"
+          }
+        ],
+        "containerDescriptors": [
+          {
+            "properties": {
+              "domain": "raid"
+            }
+          }
+        ],
+        "name": "aop",
+        "timeout": 36000
+      },
+      {
+        "inputs": [
+          {
+            "name": "command",
+            "value": "find $indir/data/ -name *XML -type f -delete; mkdir -p $outdir; cp -R $indir/data/ $outdir/"
+          },
+          {
+            "source": "aop:data",
+            "name": "data"
+          }
+        ],
+        "taskType": "gdal-cli-multiplex",
+        "outputs": [
+          {
+            "name": "data"
+          }
+        ],
+        "containerDescriptors": [
+          {
+            "properties": {
+              "domain": "default"
+            }
+          }
+        ],
+        "name": "bands",
+        "timeout": 7200
+      },
+      {
+        "inputs": [
+          {
+            "name": "confidence",
+            "value": "{confidence}"
+          },
+          {
+            "source": "bands:data",
+            "name": "data"
+          },
+          {
+            "name": "log_level",
+            "value": "trace"
+          },
+          {
+            "name": "model",
+            "value": "{model_location_s3}"
+          },
+          {
+            "name": "non_maximum_suppression",
+            "value": "{non_maximum_suppression}"
+          },
+          {
+            "name": "pyramid",
+            "value": "true"
+          },
+          {
+            "name": "pyramid_step_sizes",
+            "value": "[512]"
+          },
+          {
+            "name": "pyramid_window_sizes",
+            "value": "[768]"
+          },
+          {
+            "name": "step_size",
+            "value": "512"
+          },
+          {
+            "name": "tags",
+            "value": "Purpose Built Vehicle-1"
+          }
+        ],
+        "taskType": "openskynet:0.0.14",
+        "outputs": [
+          {
+            "name": "log"
+          },
+          {
+            "name": "results"
+          }
+        ],
+        "containerDescriptors": [
+          {
+            "properties": {
+              "domain": "nvidiagpu"
+            }
+          }
+        ],
+        "name": "openskynet",
+        "timeout": 36000
+      },
+      {
+        "inputs": [
+          {
+            "source": "openskynet:results",
+            "name": "items"
+          }
+        ],
+        "taskType": "IngestItemJsonToVectorServices",
+        "outputs": [
+          {
+            "name": "result"
+          }
+        ],
+        "containerDescriptors": [
+          {
+            "properties": {
+              "domain": "default"
+            }
+          }
+        ],
+        "name": "vector",
+        "timeout": 36000
+      },
+      {
+        "inputs": [
+          {
+            "source": "vector:result",
+            "name": "data"
+          },
+          {
+            "name": "destination",
+            "value": "s3://{vector_ingest_bucket}/{recipe_id}/{run_id}/{task_name}"
+          }
+        ],
+        "taskType": "StageDataToS3",
+        "outputs": [],
+        "containerDescriptors": [
+          {
+            "properties": {
+              "domain": "default"
+            }
+          }
+        ],
+        "name": "s3_vector",
+        "timeout": 7200
+      },
+      {
+        "inputs": [
+          {
+            "source": "openskynet:log",
+            "name": "data"
+          },
+          {
+            "name": "destination",
+            "value": "s3://insight-cloud-scratch/osn-logs/openskynet-military-vehicles/61cd42e1-5535-445f-8d86-f63c00912062/s3_osn"
+          }
+        ],
+        "taskType": "StageDataToS3",
+        "outputs": [],
+        "containerDescriptors": [
+          {
+            "properties": {
+              "domain": "default"
+            }
+          }
+        ],
+        "name": "s3_osn",
+        "timeout": 7200
+      },
+      {
+        "inputs": [
+          {
+            "source": "aop:data",
+            "name": "data"
+          },
+          {
+            "name": "destination",
+            "value": "s3://insight-cloud-scratch/osn-aop/openskynet-military-vehicles/61cd42e1-5535-445f-8d86-f63c00912062/s3_aop"
+          }
+        ],
+        "taskType": "StageDataToS3",
+        "outputs": [],
+        "containerDescriptors": [
+          {
+            "properties": {
+              "domain": "default"
+            }
+          }
+        ],
+        "name": "s3_aop",
+        "timeout": 7200
+      }
+    ],
+    "name": "openskynet"
+  },
+  "outputType": "vector-service",
+  "inputType": "acquisition",
+  "parameters": [
+    {
+      "allowMultiple": false,
+      "required": true,
+      "description": "Lower bound for match score",
+      "name": "confidence",
+      "allowedValues": [
+        5,
+        10,
+        15,
+        20,
+        25,
+        30,
+        35,
+        40,
+        45,
+        50,
+        55,
+        60,
+        65,
+        70,
+        75,
+        80,
+        85,
+        90,
+        95
+      ],
+      "type": "string"
+    },
+    {
+      "allowMultiple": false,
+      "required": true,
+      "description": "Non Maximum Suppression for combining overlapping geometries",
+      "name": "non_maximum_suppression",
+      "allowedValues": [
+        5,
+        10,
+        15,
+        20,
+        25,
+        30,
+        35,
+        40,
+        45,
+        50,
+        55,
+        60,
+        65,
+        70,
+        75,
+        80,
+        85,
+        90,
+        95
+      ],
+      "type": "string"
+    }
+  ],
+  "description": "openskynet",
+  "access": null,
+  "properties": {
+    "model_type": "ObjectDetectionMilitaryVehicle",
+    "partition_size": "50.0",
+    "sensors": "WORLDVIEW03_VNIR,WORLDVIEW04_VNIR",
+    "image_bands": "Pan_MS1, Pan_MS1_MS2"
+  },
+  "name": "openskynet",
+  "defaultDayRange": null,
+  "validators": [],
+  "owner": null,
+  "parentRecipeId": null,
+  "id": "08283fcf-77b7-4b3d-bc52-a0fa0815682d",
+  "prerequisites": [],
+  "accountId": null,
+  "recipeType": "partitioned-workflow"
+}
