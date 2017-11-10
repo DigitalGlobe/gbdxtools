@@ -38,23 +38,30 @@ class IdahoImage(IpeImage):
         params = ortho_params(proj, gsd=gsd)
         ortho_op = ipe.Orthorectify(dn_op, **params)
 
-        # TODO: Switch to direct metadata access (ie remove this block)
-        idaho_md = requests.get('http://idaho.timbr.io/{}.json'.format(idaho_id)).json()
-        meta = idaho_md["properties"]
-        gains_offsets = calc_toa_gain_offset(meta)
-        radiance_scales, reflectance_scales, radiance_offsets = zip(*gains_offsets)
-        # ---
-
-        toa_reflectance_op = ipe.MultiplyConst(
-            ipe.AddConst(
-                ipe.MultiplyConst(
-                    ipe.Format(ortho_op, dataType="4"),
-                    constants=radiance_scales),
-                constants=radiance_offsets),
-            constants=reflectance_scales)
-
-        return {
+        graph = {
             "1b": dn_op,
-            "ortho": ortho_op,
-            "toa_reflectance": toa_reflectance_op
+            "ortho": ortho_op
         }
+
+        try: 
+            # TODO: Switch to direct metadata access (ie remove this block)
+            idaho_md = requests.get('http://idaho.timbr.io/{}.json'.format(idaho_id)).json()
+            meta = idaho_md["properties"]
+            gains_offsets = calc_toa_gain_offset(meta)
+            radiance_scales, reflectance_scales, radiance_offsets = zip(*gains_offsets)
+            # ---
+
+            toa_reflectance_op = ipe.MultiplyConst(
+                ipe.AddConst(
+                    ipe.MultiplyConst(
+                        ipe.Format(ortho_op, dataType="4"),
+                        constants=radiance_scales),
+                    constants=radiance_offsets),
+                constants=reflectance_scales)
+
+            graph["toa_reflectance"] = toa_reflectance_op
+
+        except:
+            pass
+
+        return graph
