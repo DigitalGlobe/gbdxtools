@@ -553,6 +553,7 @@ class Recipe(object):
         # append two tasks to self['definition']['tasks']
         ingest_task = Task('IngestItemJsonToVectorServices')
         ingest_task.inputs.items = output_port_value
+        ingest_task.impersonation_allowed = True
 
         stage_task = Task('StageDataToS3')
         stage_task.inputs.destination = 's3://{vector_ingest_bucket}/{recipe_id}/{run_id}/{task_name}'
