@@ -6,7 +6,7 @@ Unit tests for the gbdxtools.Idaho class
 '''
 
 from gbdxtools import Interface
-from gbdxtools import CatalogImage, WV02, WV03_VNIR
+from gbdxtools import CatalogImage, WV02, WV03_VNIR, WV03_SWIR
 from auth_mock import get_mock_gbdx_session
 import vcr
 from os.path import join, isfile, dirname, realpath
@@ -40,9 +40,9 @@ class CatalogImageTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        #mock_gbdx_session = get_mock_gbdx_session(token='dymmytoken')
-        #cls.gbdx = Interface(gbdx_connection=mock_gbdx_session)
-        cls.gbdx = Interface()
+        mock_gbdx_session = get_mock_gbdx_session(token='dymmytoken')
+        cls.gbdx = Interface(gbdx_connection=mock_gbdx_session)
+        #cls.gbdx = Interface()
         cls._temp_path = tempfile.mkdtemp()
         print("Created: {}".format(cls._temp_path))
 
@@ -96,4 +96,13 @@ class CatalogImageTest(unittest.TestCase):
         assert img.cat_id == _id
         assert img.shape == (8, 317959, 43511)
         assert img.proj == 'EPSG:4326' 
+
+    @my_vcr.use_cassette('tests/unit/cassettes/test_wv3_swir.yaml', filter_headers=['authorization'])
+    def test_catalog_image_pansharpen(self):
+        _id = '104A010010C29F00'
+        img = self.gbdx.catalog_image(_id)
+        self.assertTrue(isinstance(img, WV03_SWIR))
+        assert img.cat_id == _id
+        assert img.shape == (8, 1950, 1446)
+        assert img.proj == 'EPSG:4326'
 
