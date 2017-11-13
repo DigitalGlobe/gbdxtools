@@ -671,6 +671,58 @@ class Workflow(object):
         raise NotImplementedError("Cannot set workflow timedout, readonly.")
 
     @property
+    def scheduling(self):
+        if not self.id:
+            return False
+        if self.batch_values:
+            raise NotImplementedError("Query Each Workflow Id within the Batch Workflow for Current State")
+        status = self.status
+        return status['event'] == 'scheduled' and status['state'] in ['pending', 'running']
+
+    @scheduling.setter
+    def scheduling(self, value):
+        raise NotImplementedError("Cannot set workflow scheduling, readonly.")
+
+    @property
+    def rescheduling(self):
+        if not self.id:
+            return False
+        if self.batch_values:
+            raise NotImplementedError("Query Each Workflow Id within the Batch Workflow for Current State")
+        status = self.status
+        return status['event'] == 'rescheduling' and status['state'] in ['pending', 'running']
+
+    @rescheduling.setter
+    def rescheduling(self, value):
+        raise NotImplementedError("Cannot set workflow rescheduling, readonly.")
+
+    @property
+    def waiting(self):
+        if not self.id:
+            return False
+        if self.batch_values:
+            raise NotImplementedError("Query Each Workflow Id within the Batch Workflow for Current State")
+        status = self.status
+        return status['event'] == 'waiting' and status['state'] in ['pending', 'running']
+
+    @waiting.setter
+    def waiting(self, value):
+        raise NotImplementedError("Cannot set workflow waiting, readonly.")
+
+    @property
+    def submitting(self):
+        if not self.id:
+            return False
+        if self.batch_values:
+            raise NotImplementedError("Query Each Workflow Id within the Batch Workflow for Current State")
+        status = self.status
+        return status['event'] == 'submitting' and status['state'] in ['pending', 'running']
+
+    @submitting.setter
+    def submitting(self, value):
+        raise NotImplementedError("Cannot set workflow submitting, readonly.")
+
+    @property
     def stdout(self):
         '''
         Get stdout from all the tasks of a workflow.
