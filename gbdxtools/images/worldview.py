@@ -108,6 +108,16 @@ class WVImage(IpeImage):
 
         return {"ortho": ortho_op, "toa_reflectance": toa_reflectance_op, "radiance": radiance_op}
 
+class WV03_SWIR(WVImage):
+    def __new__(cls, cat_id, **kwargs):
+        return super(WV03_SWIR, cls).__new__(cls, cat_id, **kwargs)
+
+    @staticmethod
+    def _find_parts(cat_id, band_type):
+        vectors = Vectors()
+        aoi = wkt.dumps(box(-180, -90, 180, 90))
+        query = "item_type:IDAHOImage AND attributes.catalogID:{}".format(cat_id)
+        return sorted(vectors.query(aoi, query=query), key=lambda x: x['properties']['id'])
 
 class WV03_VNIR(WVImage):
     def __new__(cls, cat_id, **kwargs):
