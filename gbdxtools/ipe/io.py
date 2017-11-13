@@ -38,7 +38,9 @@ def to_geotiff(arr, path='./output.tif', proj=None, bands=None, **kwargs):
     }
     if proj is not None:
         meta["crs"] = {'init': proj}
-    meta.update(blockxsize=x_size, blockysize=y_size, tiled='yes')
+
+    if "tiled" in kwargs and kwargs["tiled"]:
+        meta.update(blockxsize=x_size, blockysize=y_size, tiled="yes")
 
     with rasterio.open(path, "w", **meta) as dst:
         writer = rio_writer(dst)
