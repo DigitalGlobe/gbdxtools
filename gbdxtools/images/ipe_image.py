@@ -1,14 +1,14 @@
 from __future__ import print_function
 import math
 
+from gbdxtools.images.meta import DaskMeta, DaskImage, GeoImage, PlotMixin
+from gbdxtools.ipe.util import RatPolyTransform, AffineTransform
+
 from shapely import wkt, ops
 from shapely.geometry import box, mapping
 from shapely.geometry.base import BaseGeometry
 
 import numpy as np
-
-from gbdxtools.images.meta import DaskMeta, DaskImage, GeoImage, PlotMixin
-from gbdxtools.ipe.util import RatPolyTransform, AffineTransform
 
 try:
     xrange
