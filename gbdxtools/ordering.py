@@ -24,7 +24,7 @@ class Ordering(object):
         self.logger = interface.logger
     
 
-    def order(self, image_catalog_ids, batch_size=100):
+    def order(self, image_catalog_ids, batch_size=100, callback=None):
         '''Orders images from GBDX.
 
            Args:
@@ -34,6 +34,7 @@ class Ordering(object):
                                  batches of batch_size. The ordering API max 
                                  batch size is 100, if batch_size is greater 
                                  than 100 it will be truncated.
+               callback (str): A url to call when ordering is completed.
 
            Returns:
                order_ids (str or list): If one batch, returns a string. If more
@@ -41,14 +42,15 @@ class Ordering(object):
                                         one for each batch.
         '''
         def _order_single_batch(url_, ids, results_list):
-            r = self.gbdx_connection.post(url_, data=json.dumps(ids))
+            data = json.dumps(ids) if callback is None else json.dumps({"acquisitionIds": ids, "callback": callback})
+            r = self.gbdx_connection.post(url_, data=data)
             r.raise_for_status()
             order_id = r.json().get("order_id")
             if order_id:
                 results_list.append(order_id)
 
         self.logger.debug('Place order')
-        url = '%s/order' % self.base_url
+        url = ('%s/order' if callback is None else '%s/ordercb') % self.base_url
 
         batch_size = min(100, batch_size)
         
