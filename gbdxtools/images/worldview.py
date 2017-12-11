@@ -74,11 +74,17 @@ class WVImage(IpeImage):
 
     @staticmethod
     def _find_parts(cat_id, band_type):
+        def vendor_id(rec):
+          _id = rec['properties']['attributes']['vendorDatasetIdentifier']
+          return _id.split(':')[1].split('_')[0]
+
         vectors = Vectors()
         aoi = wkt.dumps(box(-180, -90, 180, 90))
         query = "item_type:IDAHOImage AND attributes.catalogID:{} " \
                 "AND attributes.colorInterpretation:{}".format(cat_id, band_types[band_type])
-        return sorted(vectors.query(aoi, query=query), key=lambda x: x['properties']['id'])
+        _parts = sorted(vectors.query(aoi, query=query), key=lambda x: x['properties']['id'])
+        _id = vendor_id(_parts[0])
+        return [p for p in _parts if vendor_id(p) == _id]
 
     @classmethod
     def _build_standard_products(cls, cat_id, band_type, proj, gsd=None):
