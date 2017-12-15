@@ -38,11 +38,11 @@ class Sentinel2(IpeImage):
 
     @property
     def _rgb_bands(self):
-        return [3,2,1]
+        return [2,1,0]
 
     @property
     def _ndvi_bands(self):
-        return [7,3]
+        return [6,3]
 
     def get_product(self, product):
         return self.__class__(self._id, proj=self.proj, product=product)

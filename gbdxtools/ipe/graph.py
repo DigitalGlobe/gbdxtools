@@ -3,8 +3,7 @@ import json
 from concurrent.futures import Future
 from gbdxtools.ipe.error import NotFound, BadRequest
 
-VIRTUAL_IPE_URL = os.environ.get("VIRTUAL_IPE_URL", "https://idahoapitest.geobigdata.io/v1")
-#VIRTUAL_IPE_URL = os.environ.get("VIRTUAL_IPE_URL", "https://idahoapi.geobigdata.io/v1")
+VIRTUAL_IPE_URL = os.environ.get("VIRTUAL_IPE_URL", "https://idahoapi.geobigdata.io/v1")
 
 def resolve_if_future(future):
     if isinstance(future, Future):
