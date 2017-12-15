@@ -65,5 +65,7 @@ class CatalogImage(object):
             return IkonosImage(rec, **kwargs)
         elif 'QB02' in types:
             return QB02(cat_id, **kwargs)
+        elif 'SENTINEL2' in types:
+            return Sentinel2(rec['properties']['attributes']['bucketPrefix'], **kwargs)
         else: 
             raise UnsupportedImageType('Unsupported image type: {}'.format(str(types)))

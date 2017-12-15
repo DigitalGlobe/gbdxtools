@@ -139,18 +139,45 @@ class DaskImage(da.Array):
             return obj
 
     def read(self, bands=None, **kwargs):
-        """ Reads data from a dask array and returns the computed ndarray matching the given bands """
+        """
+        Reads data from a dask array and returns the computed ndarray matching the given bands 
+  
+        kwargs:
+            bands (list): band indices to read from the image. Returns bands in the order specified in the list of bands.
+
+        Returns:
+            array (ndarray): a numpy array of image data
+        """
         arr = self
         if bands is not None:
             arr = self[bands, ...]
         return arr.compute(num_workers=num_workers)
 
     def randwindow(self, window_shape):
+        """
+        Get a random window of a given shape from withing an image
+
+        kwargs:
+            window_shape (tuple): The desired shape of the returned image as (height, width) in pixels.
+
+        Returns:
+            image (dask): a new image object of the specified shape
+        """
         row = random.randrange(window_shape[0], self.shape[1])
         col = random.randrange(window_shape[1], self.shape[2])
         return self[:, row-window_shape[0]:row, col-window_shape[0]:col]
 
     def iterwindows(self, count=64, window_shape=(256, 256)):
+        """
+        Iterate over random windows of an image 
+
+        kwargs:
+            count (int): the number of the windows to generate. Defaults to 64, if `None` with continue to iterate over random windows until stopped.  
+            window_shape (tuple): The desired shape of each image as (height, width) in pixels.
+
+        Returns:
+            windows (generator): a generator of windows of the given shape 
+        """
         if count is None:
             while True:
                 yield self.randwindow(window_shape)
@@ -180,13 +207,21 @@ class GeoImage(Container):
 
     @property
     def affine(self):
-        """ The affine transformation of the image """
+        """ The geo transform of the image 
+
+        Returns:
+            affine (dict): The image's affine transform
+        """
         # TODO add check for Ratpoly or whatevs
         return self.__geo_transform__._affine
 
     @property
     def bounds(self):
-        """ The spatial bounding box for the image """
+        """ Access the spatial bounding box of the image 
+
+        Returns:
+            bounds (list): list of bounds in image projected coordinates (minx, miny, maxx, maxy)
+        """
         return shape(self).bounds
 
     @property
@@ -229,8 +264,15 @@ class GeoImage(Container):
 
     def warp(self, dem=None, proj="EPSG:4326", **kwargs):
         """
-          Delayed warp across an entire AOI or Image
-          creates a new dask image by deferring calls to the warp_geometry on chunks
+        Delayed warp across an entire AOI or Image
+        creates a new dask image by deferring calls to the warp_geometry on chunks
+
+        kwargs:
+            dem (ndarray): optional. A DEM for warping to specific elevation planes
+            proj (str): optional. An EPSG proj string to project the image data into ("EPSG:32612")
+
+        Returns:
+            image (dask): a warped image as deferred image array (a dask)
         """
         try:
             img_md = self.ipe.metadata["image"]
