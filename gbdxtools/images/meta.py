@@ -311,12 +311,19 @@ class GeoImage(Container):
         x_chunks = int((ur[0] - ll[0]) / x_size) + 1
         y_chunks = int((ll[1] - ur[1]) / y_size) + 1
 
+        num_bands = self.shape[0]
+
+        try:
+            dtype = img_md["dataType"] 
+        except:
+            dtype = 'UNSIGNED_INTEGER'
+
         daskmeta = {
             "dask": {},
-            "chunks": (img_md["numBands"], y_size, x_size),
-            "dtype": IPE_TO_DTYPE[img_md["dataType"]],
-            "name": "warp-{}".format(self.ipe_id),
-            "shape": (img_md["numBands"], y_chunks * y_size, x_chunks * x_size)
+            "chunks": (num_bands, y_size, x_size),
+            "dtype": IPE_TO_DTYPE[dtype],
+            "name": "warp-{}".format(self.name),
+            "shape": (num_bands, y_chunks * y_size, x_chunks * x_size)
         }
 
         def px_to_geom(xmin, ymin):

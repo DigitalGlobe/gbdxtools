@@ -33,7 +33,7 @@ IPE_TO_DTYPE = {
     "SHORT": "short",
     "UNSIGNED_SHORT": "ushort",
     "INTEGER": "int32",
-    "UNSIGNED_INTEGER": "uint32",
+    "UNSIGNED_INTEGER": "uint8",
     "LONG": "int64",
     "UNSIGNED_LONG": "uint64",
     "FLOAT": "float32",
