@@ -11,6 +11,7 @@ from gbdxtools.ipe.util import calc_toa_gain_offset
 from gbdxtools.images.ipe_image import IpeImage
 from gbdxtools.vectors import Vectors
 from gbdxtools.ipe.interface import Ipe
+from gbdxtools.ipe.error import MissingMetadata, MissingIdahoImages
 
 from shapely import wkt
 from shapely.geometry import box
@@ -83,6 +84,8 @@ class WVImage(IpeImage):
         query = "item_type:IDAHOImage AND attributes.catalogID:{} " \
                 "AND attributes.colorInterpretation:{}".format(cat_id, band_types[band_type])
         _parts = sorted(vectors.query(aoi, query=query), key=lambda x: x['properties']['id'])
+        if not len(_parts):
+            raise MissingIdahoImages('Unable to find IDAHO imagery in the catalog: {}'.format(query))
         _id = vendor_id(_parts[0])
         return [p for p in _parts if vendor_id(p) == _id]
 
@@ -91,7 +94,10 @@ class WVImage(IpeImage):
         # TODO: Switch to direct metadata access (ie remove this block)
         _parts = cls._find_parts(cat_id, band_type)
         _id = _parts[0]['properties']['attributes']['idahoImageId']
-        idaho_md = requests.get('http://idaho.timbr.io/{}.json'.format(_id)).json()
+        try:
+            idaho_md = requests.get('http://idaho.timbr.io/{}.json'.format(_id)).json()
+        except ValueError:
+            raise MissingMetadata('Metadata not found in S3 for image: {}'.format(_id))
         meta = idaho_md["properties"]
         gains_offsets = calc_toa_gain_offset(meta)
         radiance_scales, reflectance_scales, radiance_offsets = zip(*gains_offsets)

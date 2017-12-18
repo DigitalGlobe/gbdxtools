@@ -23,7 +23,7 @@ requirements:
     - ephem
     - toolz
     - cloudpickle
-    - dask ==0.15.2
+    - dask ==0.15.4
     - numpy
     - pycurl
     - rasterio >=0.36.0
@@ -47,7 +47,7 @@ requirements:
     - ephem
     - toolz
     - cloudpickle
-    - dask ==0.15.2
+    - dask ==0.15.4
     - {{ pin_compatible('numpy', min_pin='1.9') }}
     - pycurl
     - rasterio >=0.36.0

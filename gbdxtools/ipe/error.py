@@ -23,3 +23,9 @@ class MaxTries(Exception):
 
 class UnsupportedImageType(Exception):
     pass
+
+class MissingMetadata(Exception):
+    pass
+
+class MissingIdahoImages(Exception):
+    pass
