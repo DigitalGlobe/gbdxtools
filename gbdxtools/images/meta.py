@@ -314,14 +314,14 @@ class GeoImage(Container):
         num_bands = self.shape[0]
 
         try:
-            dtype = img_md["dataType"] 
+            dtype = IPE_TO_DTYPE[img_md["dataType"]]
         except:
-            dtype = 'UNSIGNED_INTEGER'
+            dtype = 'uint8'
 
         daskmeta = {
             "dask": {},
             "chunks": (num_bands, y_size, x_size),
-            "dtype": IPE_TO_DTYPE[dtype],
+            "dtype": dtype,
             "name": "warp-{}".format(self.name),
             "shape": (num_bands, y_chunks * y_size, x_chunks * x_size)
         }
@@ -340,13 +340,12 @@ class GeoImage(Container):
                 dem = dem.warp(proj=proj, dem=dem)
             dasks.append(dem.dask)
 
-#
         for y in xrange(y_chunks):
             for x in xrange(x_chunks):
                 xmin = x * x_size
                 ymin = y * y_size
                 geometry = px_to_geom(xmin, ymin)
-                daskmeta["dask"][(daskmeta["name"], 0, y, x)] = (self._warp, geometry, gsd, dem, proj, 5)
+                daskmeta["dask"][(daskmeta["name"], 0, y, x)] = (self._warp, geometry, gsd, dem, proj, dtype, 5)
         daskmeta["dask"], _ = optimize.cull(sharedict.merge(daskmeta["dask"], *dasks), list(daskmeta["dask"].keys()))
 
         result = GeoDaskWrapper(daskmeta, self)
@@ -354,7 +353,7 @@ class GeoImage(Container):
         result.__geo_transform__ = AffineTransform(gtf, proj)
         return GeoImage.__getitem__(result, box(*output_bounds))
 
-    def _warp(self, geometry, gsd, dem, proj, buf=0):
+    def _warp(self, geometry, gsd, dem, proj, dtype, buf=0):
         transpix = self._transpix(geometry, gsd, dem, proj)
         xmin, xmax, ymin, ymax = (int(max(transpix[0,:,:].min() - buf, 0)),
                                   int(min(transpix[0,:,:].max() + buf, self.shape[1])),
@@ -365,7 +364,7 @@ class GeoImage(Container):
         data = self[:,xmin:xmax, ymin:ymax].compute(get=dask.get) # read(quiet=True)
 
         if data.shape[1]*data.shape[2] > 0:
-            return np.rollaxis(np.dstack([tf.warp(data[b,:,:], transpix, preserve_range=True, order=3, mode="edge") for b in xrange(data.shape[0])]), 2, 0)
+            return np.rollaxis(np.dstack([tf.warp(data[b,:,:], transpix, preserve_range=True, order=3, mode="edge") for b in xrange(data.shape[0])]).astype(dtype), 2, 0)
         else:
             return np.zeros((data.shape[0], transpix.shape[1], transpix.shape[2]))
 
