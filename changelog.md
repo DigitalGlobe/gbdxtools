@@ -1,3 +1,16 @@
+0.13.9
+* support for sentinel2 images
+* better error reporting for missing metadata and missing/corrupt catalog data
+* bug fixes
+* pinning to dask 0.15.4
+
+0.13.8
+* pinning dask to 0.15.2
+* misc bug fixes 
+
+0.13.7
+* using dask.store for mutlithreaded geotiff creation
+
 0.13.4
 ______
 * retry functionality for Ipe Image classes
