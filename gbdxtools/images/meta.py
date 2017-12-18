@@ -165,7 +165,7 @@ class DaskImage(da.Array):
         """
         row = random.randrange(window_shape[0], self.shape[1])
         col = random.randrange(window_shape[1], self.shape[2])
-        return self[:, row-window_shape[0]:row, col-window_shape[0]:col]
+        return self[:, row-window_shape[0]:row, col-window_shape[1]:col]
 
     def iterwindows(self, count=64, window_shape=(256, 256)):
         """
