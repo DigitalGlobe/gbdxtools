@@ -16,12 +16,8 @@ except ImportError:
     from cachetools.func import lru_cache
 
 import numpy as np
-import rasterio
-try:
-    from rasterio import RasterioIOError
-except ImportError:
-    from rasterio.errors import RasterioIOError
-from rasterio.transform import from_bounds as transform_from_bounds
+from affine import Affine
+from scipy.misc import imread
 
 import mercantile
 
@@ -57,11 +53,8 @@ def load_url(url, shape=(8, 256, 256)):
         try:
             if(code != 200):
                 raise TypeError("Request for {} returned unexpected error code: {}".format(url, code))
-            temp.file.flush()
-            temp.close()
-            with rasterio.open(temp.name) as dataset:
-                arr = dataset.read()
-        except (TypeError, RasterioIOError) as e:
+            arr = np.rollaxis(imread(temp), 2, 0)
+        except Exception as e:
             print(e)
             temp.seek(0)
             print(temp.read())
@@ -69,6 +62,7 @@ def load_url(url, shape=(8, 256, 256)):
             _curl.close()
             del _curl_pool[thread_id]
         finally:
+            temp.file.flush()
             temp.close()
             os.remove(temp.name)
         return arr
@@ -149,7 +143,8 @@ class TmsMeta(DaskMeta):
 
     @property
     def __geo_transform__(self):
-        tfm = transform_from_bounds(*tuple(e for e in chain(self.bounds, self.shape[2:0:-1])))
+        west, south, east, north = self.bounds
+        tfm = Affine.translation(west, north) * Affine.scale((east - west) / self.shape[2], (south - north) / self.shape[1])
         return AffineTransform(tfm, "EPSG:3857")
 
     def _collect_urls(self, bounds):

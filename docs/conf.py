@@ -29,7 +29,7 @@ class Mock(MagicMock):
     def __getattr__(cls, name):
             return Mock()
 
-MOCK_MODULES = ['pycurl', 'pyproj', 'rasterio', 'rio_hist']
+MOCK_MODULES = ['pycurl', 'pyproj']
 sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
 
 #                'boto',
@@ -49,9 +49,6 @@ sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
 #                'dask.array',
 #                'numpy',
 #                'numpy.linalg',
-#                'rasterio',
-#                'rasterio.io',
-#                'rasterio.transform',
 #                'skimage',
 #                'skimage.transform',
 #                'skimage.transform._geometric']

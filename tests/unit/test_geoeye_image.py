@@ -12,7 +12,6 @@ import vcr
 from os.path import join, isfile, dirname, realpath
 import tempfile
 import unittest
-import rasterio
 import dask.array as da
 
 def force(r1, r2):
