@@ -1,3 +1,4 @@
+import os
 from requests_futures.sessions import FuturesSession
 from requests.adapters import HTTPAdapter
 from gbdx_auth import gbdx_auth
@@ -44,3 +45,7 @@ class _Auth(object):
         if self.gbdx_connection is not None:
             self.gbdx_connection.mount(VIRTUAL_IPE_URL, HTTPAdapter(max_retries=5)) #status_forcelist=[500, 502, 504]))
         self.gbdx_futures_session = FuturesSession(session=self.gbdx_connection, max_workers=64)
+        if 'GBDX_USER' in os.environ:
+            header = {'User-Agent': os.environ['GBDX_USER']}
+            self.gbdx_futures_session.headers.update(header)
+            self.gbdx_connection.headers.update(header)
