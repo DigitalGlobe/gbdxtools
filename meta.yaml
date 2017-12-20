@@ -32,7 +32,6 @@ requirements:
     - mercantile >=0.10.0
     - scikit-image
     - gbdx-auth ==0.2.4
-    - jpeg ==8d
     - cachetools >=2.0.0 # py27
     - affine
 
@@ -60,6 +59,5 @@ requirements:
     - pytest
     - pytest-runner
     - vcrpy
-    - jpeg ==8d
     - cachetools >=2.0.0
     - affine
