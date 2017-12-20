@@ -65,7 +65,11 @@ def load_url(url, token, shape=(8, 256, 256)):
                     raise TypeError("Request for {} returned unexpected error code: {}".format(url, code))
                 temp.file.flush()
                 temp.close()
-                arr = np.rollaxis(imread(temp.name), 2, 0)
+                arr = imread(temp.name)
+                if len(arr.shape) == 3:
+                    arr = np.rollaxis(arr, 2, 0)
+                else:
+                    arr = np.expand_dims(arr, axis=0)
                 success = True
                 return arr
             except Exception as e:
