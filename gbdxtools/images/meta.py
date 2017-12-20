@@ -427,8 +427,8 @@ class GeoImage(Container):
                 max(bounds[2]-self.shape[2], 0), max(bounds[3]-self.shape[1], 0))
         bounds = (max(bounds[0], 0),
                   max(bounds[1], 0),
-                  min(bounds[2], self.shape[2]),
-                  min(bounds[3], self.shape[1]))
+                  max(min(bounds[2], self.shape[2]), 0),
+                  max(min(bounds[3], self.shape[1]), 0))
 
         # NOTE: image is a dask array that implements daskmeta interface (via op)
         result = self[:, bounds[1]:bounds[3], bounds[0]:bounds[2]]
@@ -449,7 +449,6 @@ class GeoImage(Container):
             result = da.concatenate([result,
                                      da.zeros(dims, chunks=dims, dtype=result.dtype)], axis=1)
 
-
         image = super(DaskImage, self.__class__).__new__(self.__class__,
                                                          result.dask, result.name, result.chunks,
                                                          result.dtype, result.shape)
@@ -466,6 +465,7 @@ class GeoImage(Container):
         except AssertionError as ae:
             warnings.warn(ae.args)
 
+        print(bounds)
         image = self._slice_padded(bounds)
         image.__geo_interface__ = mapping(g)
         return image
