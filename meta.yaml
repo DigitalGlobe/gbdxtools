@@ -23,7 +23,7 @@ requirements:
     - ephem
     - toolz
     - cloudpickle
-    - dask ==0.15.4
+    - dask
     - numpy
     - pycurl
     - pyproj
