@@ -30,6 +30,7 @@ import dask
 from dask import sharedict, optimize
 from dask.delayed import delayed
 import dask.array as da
+from dask.base import is_dask_collection
 import numpy as np
 
 from affine import Affine
@@ -98,8 +99,7 @@ class DaskImage(da.Array):
     def __subclasshook__(cls, C):
         if cls is DaskImage:
             try:
-                if(issubclass(C, da.Array) and
-                   any("__daskmeta__" in B.__dict__ for B in C.__mro__)):
+                if(is_dask_collection(C) and any("__daskmeta__" in B.__dict__ for B in C.__mro__)):
                     return True
             except AttributeError:
                 pass
@@ -140,8 +140,8 @@ class DaskImage(da.Array):
 
     def read(self, bands=None, **kwargs):
         """
-        Reads data from a dask array and returns the computed ndarray matching the given bands 
-  
+        Reads data from a dask array and returns the computed ndarray matching the given bands
+
         kwargs:
             bands (list): band indices to read from the image. Returns bands in the order specified in the list of bands.
 
@@ -169,14 +169,14 @@ class DaskImage(da.Array):
 
     def iterwindows(self, count=64, window_shape=(256, 256)):
         """
-        Iterate over random windows of an image 
+        Iterate over random windows of an image
 
         kwargs:
-            count (int): the number of the windows to generate. Defaults to 64, if `None` with continue to iterate over random windows until stopped.  
+            count (int): the number of the windows to generate. Defaults to 64, if `None` with continue to iterate over random windows until stopped.
             window_shape (tuple): The desired shape of each image as (height, width) in pixels.
 
         Returns:
-            windows (generator): a generator of windows of the given shape 
+            windows (generator): a generator of windows of the given shape
         """
         if count is None:
             while True:
@@ -207,7 +207,7 @@ class GeoImage(Container):
 
     @property
     def affine(self):
-        """ The geo transform of the image 
+        """ The geo transform of the image
 
         Returns:
             affine (dict): The image's affine transform
@@ -217,7 +217,7 @@ class GeoImage(Container):
 
     @property
     def bounds(self):
-        """ Access the spatial bounding box of the image 
+        """ Access the spatial bounding box of the image
 
         Returns:
             bounds (list): list of bounds in image projected coordinates (minx, miny, maxx, maxy)
