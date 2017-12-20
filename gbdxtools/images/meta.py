@@ -30,6 +30,7 @@ import dask
 from dask import sharedict, optimize
 from dask.delayed import delayed
 import dask.array as da
+from dask.base import is_dask_collection
 import numpy as np
 
 from affine import Affine
@@ -98,8 +99,7 @@ class DaskImage(da.Array):
     def __subclasshook__(cls, C):
         if cls is DaskImage:
             try:
-                if( #issubclass(C, da.Array) and
-                   any("__daskmeta__" in B.__dict__ for B in C.__mro__)):
+                if(is_dask_collection(C) and any("__daskmeta__" in B.__dict__ for B in C.__mro__)):
                     return True
             except AttributeError:
                 pass
