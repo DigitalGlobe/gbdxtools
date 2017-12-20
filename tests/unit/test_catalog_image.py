@@ -10,7 +10,6 @@ import vcr
 from os.path import join, isfile, dirname, realpath
 import tempfile
 import unittest
-import rasterio
 
 # How to use the mock_gbdx_session and vcr to create unit tests:
 # 1. Add a new test that is dependent upon actually hitting GBDX APIs.

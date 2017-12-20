@@ -12,7 +12,6 @@ import vcr
 from os.path import join, isfile, dirname, realpath
 import tempfile
 import unittest
-import rasterio
 
 try:
     from urlparse import urlparse

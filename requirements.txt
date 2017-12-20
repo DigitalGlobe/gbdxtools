@@ -15,10 +15,10 @@ cloudpickle
 dask==0.15.4
 numpy
 pycurl
-rasterio>=0.36
 pyproj
 requests_futures
 configparser
 mercantile>=0.10.0
 scikit-image
 cachetools >= 2.0.0
+affine

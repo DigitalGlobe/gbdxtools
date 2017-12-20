@@ -1,4 +1,9 @@
-import rasterio
+try:
+    import rasterio
+    has_rasterio = True
+except:
+    has_rasterio = False
+
 import numpy as np
 from dask.array import store
 
@@ -12,6 +17,7 @@ class rio_writer(object):
         self.dst.write(chunk, window=window)
 
 def to_geotiff(arr, path='./output.tif', proj=None, bands=None, **kwargs):
+    assert has_rasterio, "To create geotiff images please install rasterio" 
     if bands is not None:
         arr = arr[bands,...]
 

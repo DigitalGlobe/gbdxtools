@@ -216,8 +216,6 @@ dependencies:
 - !!python/unicode
   'pyyaml=3.12=py27_1'
 - !!python/unicode
-  'rasterio=0.36.0=py27_1'
-- !!python/unicode
   'readline=6.2=0'
 - !!python/unicode
   'requests=2.12.1=py27_0'
