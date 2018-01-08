@@ -103,7 +103,7 @@ class WVImage(IpeImage):
         radiance_scales, reflectance_scales, radiance_offsets = zip(*gains_offsets)
         # ---
 
-        dn_ops = [ipe.IdahoRead(bucketName="idaho-images", imageId=p['properties']['attributes']['idahoImageId'],
+        dn_ops = [ipe.IdahoRead(bucketName=p['properties']['attributes']['bucketName'], imageId=p['properties']['attributes']['idahoImageId'],
                                 objectStore="S3") for p in _parts]
         mosaic_params = {"Dest SRS Code": proj}
         if gsd is not None:
@@ -167,7 +167,7 @@ class WV01(WVImage):
     def _build_standard_products(cls, cat_id, band_type, proj, gsd=None):
         _parts = cls._find_parts(cat_id, band_type)
         _id = _parts[0]['properties']['attributes']['idahoImageId']
-        dn_ops = [ipe.IdahoRead(bucketName="idaho-images", imageId=p['properties']['attributes']['idahoImageId'],
+        dn_ops = [ipe.IdahoRead(bucketName=p['properties']['attributes']['bucketName'], imageId=p['properties']['attributes']['idahoImageId'],
                                 objectStore="S3") for p in _parts]
         mosaic_params = {"Dest SRS Code": proj}
         if gsd is not None:
