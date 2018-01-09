@@ -30,6 +30,7 @@ import dask
 from dask import sharedict, optimize
 from dask.delayed import delayed
 import dask.array as da
+from dask.base import is_dask_collection
 import numpy as np
 
 from affine import Affine
@@ -98,8 +99,7 @@ class DaskImage(da.Array):
     def __subclasshook__(cls, C):
         if cls is DaskImage:
             try:
-                if(issubclass(C, da.Array) and
-                   any("__daskmeta__" in B.__dict__ for B in C.__mro__)):
+                if(is_dask_collection(C) and any("__daskmeta__" in B.__dict__ for B in C.__mro__)):
                     return True
             except AttributeError:
                 pass
@@ -122,6 +122,8 @@ class DaskImage(da.Array):
                     except AttributeError:
                         # this means result was an object with __slots__
                         pass
+                    dsk, _ = optimize.cull(copy.dask, copy.__dask_keys__())
+                    copy.dask = dsk
                     return copy
                 return result
             return wrapped
@@ -140,8 +142,8 @@ class DaskImage(da.Array):
 
     def read(self, bands=None, **kwargs):
         """
-        Reads data from a dask array and returns the computed ndarray matching the given bands 
-  
+        Reads data from a dask array and returns the computed ndarray matching the given bands
+
         kwargs:
             bands (list): band indices to read from the image. Returns bands in the order specified in the list of bands.
 
@@ -169,14 +171,14 @@ class DaskImage(da.Array):
 
     def iterwindows(self, count=64, window_shape=(256, 256)):
         """
-        Iterate over random windows of an image 
+        Iterate over random windows of an image
 
         kwargs:
-            count (int): the number of the windows to generate. Defaults to 64, if `None` with continue to iterate over random windows until stopped.  
+            count (int): the number of the windows to generate. Defaults to 64, if `None` with continue to iterate over random windows until stopped.
             window_shape (tuple): The desired shape of each image as (height, width) in pixels.
 
         Returns:
-            windows (generator): a generator of windows of the given shape 
+            windows (generator): a generator of windows of the given shape
         """
         if count is None:
             while True:
@@ -207,7 +209,7 @@ class GeoImage(Container):
 
     @property
     def affine(self):
-        """ The geo transform of the image 
+        """ The geo transform of the image
 
         Returns:
             affine (dict): The image's affine transform
@@ -217,7 +219,7 @@ class GeoImage(Container):
 
     @property
     def bounds(self):
-        """ Access the spatial bounding box of the image 
+        """ Access the spatial bounding box of the image
 
         Returns:
             bounds (list): list of bounds in image projected coordinates (minx, miny, maxx, maxy)
@@ -427,8 +429,8 @@ class GeoImage(Container):
                 max(bounds[2]-self.shape[2], 0), max(bounds[3]-self.shape[1], 0))
         bounds = (max(bounds[0], 0),
                   max(bounds[1], 0),
-                  min(bounds[2], self.shape[2]),
-                  min(bounds[3], self.shape[1]))
+                  max(min(bounds[2], self.shape[2]), 0),
+                  max(min(bounds[3], self.shape[1]), 0))
 
         # NOTE: image is a dask array that implements daskmeta interface (via op)
         result = self[:, bounds[1]:bounds[3], bounds[0]:bounds[2]]
@@ -449,7 +451,6 @@ class GeoImage(Container):
             result = da.concatenate([result,
                                      da.zeros(dims, chunks=dims, dtype=result.dtype)], axis=1)
 
-
         image = super(DaskImage, self.__class__).__new__(self.__class__,
                                                          result.dask, result.name, result.chunks,
                                                          result.dtype, result.shape)
@@ -466,6 +467,7 @@ class GeoImage(Container):
         except AssertionError as ae:
             warnings.warn(ae.args)
 
+        print(bounds)
         image = self._slice_padded(bounds)
         image.__geo_interface__ = mapping(g)
         return image
@@ -526,7 +528,7 @@ class PlotMixin(object):
         return out
 
     def rgb(self, **kwargs):
-        data = self._read(self[kwargs.get("bands", self._rgb_bands),...])
+        data = self._read(self[kwargs.get("bands", self._rgb_bands),...], **kwargs)
         data = np.rollaxis(data.astype(np.float32), 0, 3)
         lims = np.percentile(data, kwargs.get("stretch", [2, 98]), axis=(0, 1))
         for x in xrange(len(data[0,0,:])):

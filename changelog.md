@@ -1,3 +1,9 @@
+0.14.0
+* pin dask to 0.16.0 and fix subclasshook in images/meta
+* respect image bucket names correctly
+* removing requirement for rasterio
+* trimming dask graphs when spatially indexing images
+
 0.13.9
 * support for sentinel2 images
 * better error reporting for missing metadata and missing/corrupt catalog data

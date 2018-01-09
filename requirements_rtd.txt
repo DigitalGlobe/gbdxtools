@@ -12,10 +12,11 @@ shapely
 ephem
 toolz
 cloudpickle
-dask==0.15.4
+dask >= 0.16.0
 numpy
 requests_futures
 configparser
 mercantile>=0.10.0
 scikit-image
 cachetools >=2.0.0
+affine

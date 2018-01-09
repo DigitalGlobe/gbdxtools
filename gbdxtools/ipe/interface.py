@@ -16,12 +16,7 @@ try:
 except ImportError:
     from cachetools.func import lru_cache
 
-import rasterio
-try:
-    from rasterio import RasterioIOError
-except ImportError:
-    from rasterio.errors import RasterioIOError
-
+from skimage.io import imread
 import pycurl
 import numpy as np
 
@@ -70,11 +65,14 @@ def load_url(url, token, shape=(8, 256, 256)):
                     raise TypeError("Request for {} returned unexpected error code: {}".format(url, code))
                 temp.file.flush()
                 temp.close()
-                with rasterio.open(temp.name) as dataset:
-                    arr = dataset.read()
+                arr = imread(temp.name)
+                if len(arr.shape) == 3:
+                    arr = np.rollaxis(arr, 2, 0)
+                else:
+                    arr = np.expand_dims(arr, axis=0)
                 success = True
                 return arr
-            except (TypeError, RasterioIOError) as e:
+            except Exception as e:
                 print(e)
                 _curl.close()
                 del _curl_pool[thread_id]

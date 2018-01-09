@@ -26,13 +26,6 @@ curl -outf Shapely-1.5.17-cp27-cp27m-win32.whl https://github.com/DigitalGlobe/g
 pip install .\Shapely-1.5.17-cp27-cp27m-win32.whl
 ```
 
-Install rasterio:
-
-```
-curl -outf rasterio-1.0a5-cp27-cp27m-win32.whl https://github.com/DigitalGlobe/gbdxtools-windows-binaries/blob/master/rasterio-1.0a5-cp27-cp27m-win32.whl?raw=true
-pip install .\rasterio-1.0a5-cp27-cp27m-win32.whl
-```
-
 Install pyproj:
 
 ```
