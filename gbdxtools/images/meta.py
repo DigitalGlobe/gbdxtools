@@ -122,6 +122,8 @@ class DaskImage(da.Array):
                     except AttributeError:
                         # this means result was an object with __slots__
                         pass
+                    dsk, _ = optimize.cull(copy.dask, copy.__dask_keys__())
+                    copy.dask = dsk
                     return copy
                 return result
             return wrapped
