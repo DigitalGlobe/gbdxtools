@@ -66,7 +66,10 @@ class WVImage(IpeImage):
     def parts(self):
         if self._parts is None:
             self._parts = [IdahoImage(rec['properties']['attributes']['idahoImageId'],
-                                      product=self.options["product"], proj=self.options["proj"], gsd=self.options["gsd"])
+                                      product=self.options["product"], 
+                                      proj=self.options["proj"], 
+                                      bucket=rec['properties']['attributes']['bucketName']
+                                      gsd=self.options["gsd"])
                            for rec in self._find_parts(self.cat_id, self.options["band_type"])]
         return self._parts
 
