@@ -8,6 +8,8 @@ from shapely import wkt, ops
 from shapely.geometry import box, mapping
 from shapely.geometry.base import BaseGeometry
 
+from dask import optimize
+
 import numpy as np
 
 try:
@@ -66,8 +68,9 @@ class IpeImage(DaskImage, GeoImage, PlotMixin):
             return image
         else:
             result = super(IpeImage, self).__getitem__(geometry)
+            dsk, _ = optimize.cull(result.dask, result.__dask_keys__())
             image = super(IpeImage, self.__class__).__new__(self.__class__,
-                                                            result.dask, result.name, result.chunks,
+                                                            dsk, result.name, result.chunks,
                                                             result.dtype, result.shape)
 
             if all([isinstance(e, slice) for e in geometry]) and len(geometry) == len(self.shape):
