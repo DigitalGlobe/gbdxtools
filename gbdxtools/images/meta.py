@@ -113,8 +113,9 @@ class DaskImage(da.Array):
             def wrapped(*args, **kwargs):
                 result = fn(*args, **kwargs)
                 if isinstance(result, da.Array) and len(result.shape) in [2,3]:
+                    dsk, _ = optimize.cull(result.dask, result.__dask_keys__())
                     copy = super(DaskImage, self.__class__).__new__(self.__class__,
-                                                                    result.dask, result.name, result.chunks,
+                                                                    dsk, result.name, result.chunks,
                                                                     result.dtype, result.shape)
                     copy.__dict__.update(self.__dict__)
                     try:
@@ -122,8 +123,6 @@ class DaskImage(da.Array):
                     except AttributeError:
                         # this means result was an object with __slots__
                         pass
-                    dsk, _ = optimize.cull(copy.dask, copy.__dask_keys__())
-                    copy.dask = dsk
                     return copy
                 return result
             return wrapped
