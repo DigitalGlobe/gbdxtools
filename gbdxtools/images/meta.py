@@ -466,7 +466,6 @@ class GeoImage(Container):
         except AssertionError as ae:
             warnings.warn(ae.args)
 
-        print(bounds)
         image = self._slice_padded(bounds)
         image.__geo_interface__ = mapping(g)
         return image
