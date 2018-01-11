@@ -12,6 +12,7 @@ try:
 except ImportError:
     from urllib.parse import urlparse
 
+from functools import partial
 try:
     from functools import lru_cache # python 3
 except ImportError:
@@ -258,8 +259,10 @@ class Op(DaskMeta):
         _chunks = self.chunks
         _name = self.name
         img_md = self.metadata["image"]
-        return {(_name, 0, y - img_md['minTileY'], x - img_md['minTileX']): (load_url, url, token, _chunks)
+        dsk = {(_name, 0, y - img_md['minTileY'], x - img_md['minTileX']): (url, (y - img_md['minTileY'], x - img_md['minTileX']))
                 for (y, x), url in self._collect_urls().items()}
+        #dsk["load_urls"] = (partial(load_urls, token=token), [dsk[key] for key in dsk.keys() if key[0] == _name])
+        return dsk
 
     @property
     def name(self):

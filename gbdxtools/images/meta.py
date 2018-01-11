@@ -13,6 +13,7 @@ import math
 
 from gbdxtools.ipe.io import to_geotiff
 from gbdxtools.ipe.util import RatPolyTransform, AffineTransform, pad_safe_positive, pad_safe_negative, IPE_TO_DTYPE
+from gbdxtools.ipe.interface import load_urls
 
 from shapely import ops, wkt
 from shapely.geometry import box, shape, mapping
@@ -31,7 +32,11 @@ from dask import sharedict, optimize
 from dask.delayed import delayed
 import dask.array as da
 from dask.base import is_dask_collection
+from dask.rewrite import RewriteRule, Ruleset
 import numpy as np
+
+import operator
+from toolz import valmap
 
 from affine import Affine
 
@@ -105,6 +110,18 @@ class DaskImage(da.Array):
                 pass
         return NotImplemented
 
+    def _optimize_fetch(self, dsk, keys=None):
+        if not keys:
+            keys = dsk.keys()
+        _dsk, deps = optimize.cull(dsk, keys)
+        _dsk["load_urls"] = (partial(load_urls, token=self.ipe._interface.gbdx_connection.access_token),
+                             [_dsk[key] for key in _dsk.keys() if key[0] == self.ipe.name])
+        rs = RuleSet(
+                    RewriteRule((operator.getitem, (self.ipe.name, 'x', 'y', 'z'), ('s1', 's2', 's3')),
+                                (operator.getitem, ('load_urls', 'x', 'y', 'z'), ('s1', 's2', 's3')),
+                                ('x', 'y', 'z', 's1', 's2', 's3')))
+        return valmap(rs.rewrite, _dsk)
+
     def __getattribute__(self, name):
         fn = object.__getattribute__(self, name)
         if(isinstance(fn, types.MethodType) and
@@ -114,6 +131,7 @@ class DaskImage(da.Array):
                 result = fn(*args, **kwargs)
                 if isinstance(result, da.Array) and len(result.shape) in [2,3]:
                     dsk, _ = optimize.cull(result.dask, result.__dask_keys__())
+                    #dsk["load_urls"] = (partial(load_urls, token=self.ipe._interface.gbdx_connection.acces_token), [key for key in dsk.keys() if key.startswith(self.name)])
                     copy = super(DaskImage, self.__class__).__new__(self.__class__,
                                                                     dsk, result.name, result.chunks,
                                                                     result.dtype, result.shape)
