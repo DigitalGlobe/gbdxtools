@@ -1,4 +1,5 @@
 import os
+import sys
 import uuid
 import json
 from hashlib import sha256
@@ -26,6 +27,14 @@ from gbdxtools.ipe.graph import VIRTUAL_IPE_URL, register_ipe_graph, get_ipe_met
 from gbdxtools.images.meta import DaskMeta
 from gbdxtools.auth import Auth
 
+try:
+    import signal
+    from signal import SIGPIPE, SIG_IGN
+except ImportError:
+    pass
+else:
+    signal.signal(SIGPIPE, SIG_IGN)
+
 import warnings
 warnings.filterwarnings('ignore')
 
@@ -43,6 +52,75 @@ except NameError:
 
 NAMESPACE_UUID = uuid.NAMESPACE_DNS
 
+def optimize_fetch(dsk, keys=None):
+    dsk2 = {}
+    if not keys:
+        keys = dsk.keys()
+    for k in keys:
+        if dsk[k][0] is load_url:
+            dsk2[k] = (dsk[k][1], (k[1:]))
+        else:
+            dsk2[k] = dsk[k]
+    return dsk2
+
+def load_urls(collection, token, shape=(8,256,256), timeout=0.1):
+    mc = pycurl.CurlMulti()
+    nhandles = len(collection)
+    results = {}
+    handles = []
+    for url, index in collection:
+        _, ext = os.path.splitext(urlparse(url).path)
+        _curl = pycurl.Curl()
+        _curl.setopt(pycurl.NOSIGNAL, 1)
+        _curl.setopt(pycurl.HTTPHEADER, ['Authorization: Bearer {}'.format(token)])
+        _curl.setopt(pycurl.CONNECTTIMEOUT, 30)
+        _curl.setopt(pycurl.TIMEOUT, 300)
+        _curl.setopt(pycurl.URL, url)
+        _curl.fp = NamedTemporaryFile(prefix='gbdxtools', suffix=ext, delete=False)
+        _curl.setopt(pycurl.WRITEDATA, _curl.fp.file)
+        _curl.url = url
+        _curl.index = index
+
+        handles.append(_curl)
+        mc.add_handle(_curl)
+
+    while nhandles:
+        ret = mc.select(timeout)
+        if ret == -1:
+            continue
+        while True:
+            ret, nhandles = mc.perform()
+            if ret != pycurl.E_CALL_MULTI_PERFORM:
+                break
+        nqueued, successful, failed = mc.info_read()
+        for h in successful:
+            h.fp.file.flush()
+            h.fp.close()
+            print("Success: URL={}, filename={}, info={}".format(h.url, h.fp.name, h.getinfo(pycurl.EFFECTIVE_URL)))
+            mc.remove_handle(h)
+        for h, errno, errmsg in failed:
+            h.fp.file.flush()
+            h.fp.close()
+            print("Failed: URL={}, filename={}, code={}, message={}".format(h.url, h.fp.name, errno, errmsg))
+            mc.remove_handle(h)
+
+    for h in handles:
+        try:
+            arr = imread(h.fp.name)
+            if len(arr) == 3:
+                arr = np.rollaxis(arr, 2, 0)
+            else:
+                arr = np.expand_dims(arr, axis=0)
+        except Exception as e:
+            print(e)
+            arr = np.zeros(shape, dtype=np.float32)
+        finally:
+            results[h.index] = arr
+            h.fp.close()
+            os.remove(h.fp.name)
+            h.close()
+    mc.close()
+    return results
 
 @lru_cache(maxsize=128)
 def load_url(url, token, shape=(8, 256, 256)):
@@ -83,6 +161,7 @@ def load_url(url, token, shape=(8, 256, 256)):
     if success is False:
         arr = np.zeros(shape, dtype=np.float32)
     return arr
+
 
 class ContentHashedDict(dict):
     @property
