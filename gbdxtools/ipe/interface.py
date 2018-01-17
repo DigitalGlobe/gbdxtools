@@ -39,8 +39,6 @@ else:
 import warnings
 warnings.filterwarnings('ignore')
 
-_curl_pool = defaultdict(pycurl.Curl)
-MAX_RETRIES = 5
 try:
     basestring
 except NameError:
@@ -53,20 +51,9 @@ except NameError:
 
 NAMESPACE_UUID = uuid.NAMESPACE_DNS
 
-def optimize_fetch(dsk, keys=None):
-    dsk2 = {}
-    if not keys:
-        keys = dsk.keys()
-    for k in keys:
-        if dsk[k][0] is load_url:
-            dsk2[k] = (dsk[k][1], (k[1:]))
-        else:
-            dsk2[k] = dsk[k]
-    return dsk2
-
 def load_urls(collection, token, shape=(8,256,256), timeout=0.1):
     mc = pycurl.CurlMulti()
-    nhandles = len(collection)
+    nqueued = len(collection)
     results = {}
     handles = []
     for url, index in collection:
@@ -85,27 +72,13 @@ def load_urls(collection, token, shape=(8,256,256), timeout=0.1):
         handles.append(_curl)
         mc.add_handle(_curl)
 
-    while nhandles:
-        ret = mc.select(timeout)
-        if ret == -1:
-            continue
-        while True:
-            ret, nhandles = mc.perform()
-            if ret != pycurl.E_CALL_MULTI_PERFORM:
-                break
-        nqueued, successful, failed = mc.info_read()
-        for h in successful:
-            h.fp.file.flush()
-            h.fp.close()
-            print("Success: URL={}, filename={}, info={}".format(h.url, h.fp.name, h.getinfo(pycurl.EFFECTIVE_URL)))
-            mc.remove_handle(h)
-        for h, errno, errmsg in failed:
-            h.fp.file.flush()
-            h.fp.close()
-            print("Failed: URL={}, filename={}, code={}, message={}".format(h.url, h.fp.name, errno, errmsg))
-            mc.remove_handle(h)
-
+    while nqueued > 0:
+        ret, nhandles = mc.perform()
+        if ret != pycurl.E_CALL_MULTI_PERFORM:
+            nqueued, successful, failed = mc.info_read()
     for h in handles:
+        h.fp.file.flush()
+        h.fp.close()
         try:
             arr = imread(h.fp.name)
             if len(arr) == 3:
@@ -117,52 +90,10 @@ def load_urls(collection, token, shape=(8,256,256), timeout=0.1):
             arr = np.zeros(shape, dtype=np.float32)
         finally:
             results[h.index] = arr
-            h.fp.close()
             os.remove(h.fp.name)
             h.close()
     mc.close()
     return results
-
-@lru_cache(maxsize=128)
-def load_url(url, token, shape=(8, 256, 256)):
-    """ Loads a geotiff url inside a thread and returns as an ndarray """
-    # print("calling load_url ({})".format(url))
-    _, ext = os.path.splitext(urlparse(url).path)
-    success = False
-    for i in xrange(MAX_RETRIES):
-        thread_id = threading.current_thread().ident
-        _curl = _curl_pool[thread_id]
-        _curl.setopt(_curl.URL, url)
-        _curl.setopt(pycurl.NOSIGNAL, 1)
-        _curl.setopt(pycurl.HTTPHEADER, ['Authorization: Bearer {}'.format(token)])
-        with NamedTemporaryFile(prefix="gbdxtools", suffix=ext, delete=False) as temp: # TODO: apply correct file extension
-            _curl.setopt(_curl.WRITEDATA, temp.file)
-            _curl.perform()
-            code = _curl.getinfo(pycurl.HTTP_CODE)
-            try:
-                if(code != 200):
-                    raise TypeError("Request for {} returned unexpected error code: {}".format(url, code))
-                temp.file.flush()
-                temp.close()
-                arr = imread(temp.name)
-                if len(arr.shape) == 3:
-                    arr = np.rollaxis(arr, 2, 0)
-                else:
-                    arr = np.expand_dims(arr, axis=0)
-                success = True
-                return arr
-            except Exception as e:
-                print(e)
-                _curl.close()
-                del _curl_pool[thread_id]
-            finally:
-                temp.close()
-                os.remove(temp.name)
-
-    if success is False:
-        arr = np.zeros(shape, dtype=np.float32)
-    return arr
-
 
 class ContentHashedDict(dict):
     @property
@@ -259,9 +190,8 @@ class Op(DaskMeta):
         _chunks = self.chunks
         _name = self.name
         img_md = self.metadata["image"]
-        dsk = {(_name, 0, y - img_md['minTileY'], x - img_md['minTileX']): (url, (y - img_md['minTileY'], x - img_md['minTileX']))
+        dsk = {(_name, 0, y - img_md['minTileY'], x - img_md['minTileX']): (url, (0, y - img_md['minTileY'], x - img_md['minTileX']))
                 for (y, x), url in self._collect_urls().items()}
-        #dsk["load_urls"] = (partial(load_urls, token=token), [dsk[key] for key in dsk.keys() if key[0] == _name])
         return dsk
 
     @property

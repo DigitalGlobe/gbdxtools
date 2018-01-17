@@ -13,7 +13,7 @@ import math
 
 from gbdxtools.ipe.io import to_geotiff
 from gbdxtools.ipe.util import RatPolyTransform, AffineTransform, pad_safe_positive, pad_safe_negative, IPE_TO_DTYPE
-from gbdxtools.ipe.interface import load_urls
+#from gbdxtools.ipe.interface import load_urls
 
 from shapely import ops, wkt
 from shapely.geometry import box, shape, mapping
@@ -32,7 +32,7 @@ from dask import sharedict, optimize
 from dask.delayed import delayed
 import dask.array as da
 from dask.base import is_dask_collection
-from dask.rewrite import RewriteRule, Ruleset
+from dask.rewrite import RewriteRule, RuleSet
 import numpy as np
 
 import operator
@@ -84,7 +84,6 @@ class DaskMeta(object):
         target.__dict__["__daskmeta__"] = property(lambda s: self, DaskImage.__set_daskmeta__)
         return target
 
-
 @add_metaclass(abc.ABCMeta)
 class DaskImage(da.Array):
     """
@@ -116,10 +115,17 @@ class DaskImage(da.Array):
         _dsk, deps = optimize.cull(dsk, keys)
         _dsk["load_urls"] = (partial(load_urls, token=self.ipe._interface.gbdx_connection.access_token),
                              [_dsk[key] for key in _dsk.keys() if key[0] == self.ipe.name])
-        rs = RuleSet(
-                    RewriteRule((operator.getitem, (self.ipe.name, 'x', 'y', 'z'), ('s1', 's2', 's3')),
-                                (operator.getitem, ('load_urls', 'x', 'y', 'z'), ('s1', 's2', 's3')),
-                                ('x', 'y', 'z', 's1', 's2', 's3')))
+
+        def insert_multifetch(sd):
+            key, sli = (sd['key'], sd['slice'])
+            if len(key) == 4:
+                tname, z, x, y = key
+                if isinstance(tname, str) and tname.startswith('image'):
+                    return (operator.getitem, 'load_urls', (z, x, y), sli)
+            return (operator.getitem, key, sli)
+
+        lhs = (operator.getitem, 'key', 'slice')
+        rs = RuleSet(RewriteRule(lhs, insert_multifetch, ('key', 'slice')))
         return valmap(rs.rewrite, _dsk)
 
     def __getattribute__(self, name):
@@ -131,7 +137,6 @@ class DaskImage(da.Array):
                 result = fn(*args, **kwargs)
                 if isinstance(result, da.Array) and len(result.shape) in [2,3]:
                     dsk, _ = optimize.cull(result.dask, result.__dask_keys__())
-                    #dsk["load_urls"] = (partial(load_urls, token=self.ipe._interface.gbdx_connection.acces_token), [key for key in dsk.keys() if key.startswith(self.name)])
                     copy = super(DaskImage, self.__class__).__new__(self.__class__,
                                                                     dsk, result.name, result.chunks,
                                                                     result.dtype, result.shape)
