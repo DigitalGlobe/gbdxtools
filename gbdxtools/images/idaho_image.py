@@ -15,10 +15,13 @@ class IdahoImage(IpeImage):
             "proj": kwargs.get("proj", "EPSG:4326"),
             "product": kwargs.get("product", "toa_reflectance"),
             "gsd": kwargs.get("gsd", None),
-            "bucket": kwargs.get("bucket", "idaho-images")
+            "bucket": kwargs.get("bucket", "idaho-images"),
+            "acomp": kwargs.get("acomp", False)
         }
+        if options["acomp"]:
+            options["product"] = "ortho" 
 
-        standard_products = cls._build_standard_products(idaho_id, options["proj"], bucket=options["bucket"], gsd=options["gsd"])
+        standard_products = cls._build_standard_products(idaho_id, options["proj"], bucket=options["bucket"], gsd=options["gsd"], acomp=options["acomp"])
         try:
             self = super(IdahoImage, cls).__new__(cls, standard_products.get(options["product"], "toa_reflectance"))
         except KeyError as e:
@@ -26,6 +29,7 @@ class IdahoImage(IpeImage):
             print("Specified product not implemented: {}".format(options["product"]))
             raise
         self = self.aoi(**kwargs)
+        self.options = options
         self.idaho_id = idaho_id
         self._products = standard_products
         return self
@@ -34,8 +38,10 @@ class IdahoImage(IpeImage):
         return self.__class__(self.idaho_id, proj=self.proj, product=product)
 
     @staticmethod
-    def _build_standard_products(idaho_id, proj, bucket="idaho-images", gsd=None):
+    def _build_standard_products(idaho_id, proj, bucket="idaho-images", gsd=None, acomp=False):
         dn_op = ipe.IdahoRead(bucketName=bucket, imageId=idaho_id, objectStore="S3")
+        if acomp: 
+            dn_op = ipe.Acomp(dn_op)
         params = ortho_params(proj, gsd=gsd)
         ortho_op = ipe.Orthorectify(dn_op, **params)
 

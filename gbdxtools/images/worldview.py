@@ -36,15 +36,23 @@ class WVImage(IpeImage):
             "product": kwargs.get("product", "toa_reflectance"),
             "proj": kwargs.get("proj", "EPSG:4326"),
             "pansharpen": kwargs.get("pansharpen", False),
-            "gsd": kwargs.get("gsd", None)
+            "gsd": kwargs.get("gsd", None),
+            "acomp": kwargs.get("acomp", False)
         }
 
         if options["pansharpen"]:
             options["band_type"] = "MS"
             options["product"] = "pansharpened"
 
-        standard_products = cls._build_standard_products(cat_id, options["band_type"], options["proj"], gsd=options["gsd"])
-        pan_products = cls._build_standard_products(cat_id, "pan", options["proj"], options["gsd"])
+        if options["acomp"]:
+            options["product"] = "ortho"
+
+        standard_products = cls._build_standard_products(cat_id, 
+                                                         options["band_type"], 
+                                                         options["proj"], 
+                                                         gsd=options["gsd"], 
+                                                         acomp=options["acomp"])
+        pan_products = cls._build_standard_products(cat_id, "pan", options["proj"], gsd=options["gsd"], acomp=options["acomp"])
         pan = ipe.Format(ipe.MultiplyConst(pan_products['toa_reflectance'], constants=json.dumps([1000])), dataType="1")
         ms = ipe.Format(ipe.MultiplyConst(standard_products['toa_reflectance'],
                                           constants=json.dumps([1000]*8)), dataType="1")
@@ -69,7 +77,8 @@ class WVImage(IpeImage):
                                       product=self.options["product"],
                                       proj=self.options["proj"],
                                       bucket=rec['properties']['attributes']['bucketName'],
-                                      gsd=self.options["gsd"])
+                                      gsd=self.options["gsd"],
+                                      acomp=self.options["acomp"])
                            for rec in self._find_parts(self.cat_id, self.options["band_type"])]
         return self._parts
 
@@ -93,7 +102,7 @@ class WVImage(IpeImage):
         return [p for p in _parts if vendor_id(p) == _id]
 
     @classmethod
-    def _build_standard_products(cls, cat_id, band_type, proj, gsd=None):
+    def _build_standard_products(cls, cat_id, band_type, proj, gsd=None, acomp=False):
         # TODO: Switch to direct metadata access (ie remove this block)
         _parts = cls._find_parts(cat_id, band_type)
         _id = _parts[0]['properties']['attributes']['idahoImageId']
@@ -108,6 +117,9 @@ class WVImage(IpeImage):
 
         dn_ops = [ipe.IdahoRead(bucketName=p['properties']['attributes']['bucketName'], imageId=p['properties']['attributes']['idahoImageId'],
                                 objectStore="S3") for p in _parts]
+        if acomp: 
+            dn_ops = [ipe.Acomp(dn) for dn in dn_ops]    
+
         mosaic_params = {"Dest SRS Code": proj}
         if gsd is not None:
             mosaic_params["Requested GSD"] = str(gsd)
