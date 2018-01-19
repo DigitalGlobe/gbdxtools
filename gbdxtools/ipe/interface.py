@@ -6,20 +6,14 @@ from hashlib import sha256
 from itertools import chain
 from collections import OrderedDict, defaultdict
 import threading
-from tempfile import NamedTemporaryFile
-try:
-    from urlparse import urlparse
-except ImportError:
-    from urllib.parse import urlparse
 
+import operator
 from functools import partial
 try:
     from functools import lru_cache # python 3
 except ImportError:
     from cachetools.func import lru_cache
 
-from skimage.io import imread
-import pycurl
 import numpy as np
 
 import gbdxtools as gbdx
@@ -27,14 +21,6 @@ from gbdxtools.ipe.util import IPE_TO_DTYPE
 from gbdxtools.ipe.graph import VIRTUAL_IPE_URL, register_ipe_graph, get_ipe_metadata
 from gbdxtools.images.meta import DaskMeta
 from gbdxtools.auth import Auth
-
-try:
-    import signal
-    from signal import SIGPIPE, SIG_IGN
-except ImportError:
-    pass
-else:
-    signal.signal(SIGPIPE, SIG_IGN)
 
 import warnings
 warnings.filterwarnings('ignore')
@@ -50,50 +36,6 @@ except NameError:
     xrange = range
 
 NAMESPACE_UUID = uuid.NAMESPACE_DNS
-
-def load_urls(collection, token, shape=(8,256,256), timeout=0.1):
-    mc = pycurl.CurlMulti()
-    nqueued = len(collection)
-    results = {}
-    handles = []
-    for url, index in collection:
-        _, ext = os.path.splitext(urlparse(url).path)
-        _curl = pycurl.Curl()
-        _curl.setopt(pycurl.NOSIGNAL, 1)
-        _curl.setopt(pycurl.HTTPHEADER, ['Authorization: Bearer {}'.format(token)])
-        _curl.setopt(pycurl.CONNECTTIMEOUT, 30)
-        _curl.setopt(pycurl.TIMEOUT, 300)
-        _curl.setopt(pycurl.URL, url)
-        _curl.fp = NamedTemporaryFile(prefix='gbdxtools', suffix=ext, delete=False)
-        _curl.setopt(pycurl.WRITEDATA, _curl.fp.file)
-        _curl.url = url
-        _curl.index = index
-
-        handles.append(_curl)
-        mc.add_handle(_curl)
-
-    while nqueued > 0:
-        ret, nhandles = mc.perform()
-        if ret != pycurl.E_CALL_MULTI_PERFORM:
-            nqueued, successful, failed = mc.info_read()
-    for h in handles:
-        h.fp.file.flush()
-        h.fp.close()
-        try:
-            arr = imread(h.fp.name)
-            if len(arr) == 3:
-                arr = np.rollaxis(arr, 2, 0)
-            else:
-                arr = np.expand_dims(arr, axis=0)
-        except Exception as e:
-            print(e)
-            arr = np.zeros(shape, dtype=np.float32)
-        finally:
-            results[h.index] = arr
-            os.remove(h.fp.name)
-            h.close()
-    mc.close()
-    return results
 
 class ContentHashedDict(dict):
     @property
@@ -190,8 +132,9 @@ class Op(DaskMeta):
         _chunks = self.chunks
         _name = self.name
         img_md = self.metadata["image"]
-        dsk = {(_name, 0, y - img_md['minTileY'], x - img_md['minTileX']): (url, (0, y - img_md['minTileY'], x - img_md['minTileX']))
+        dsk = {(_name, 0, y - img_md['minTileY'], x - img_md['minTileX']): [url, token, [0, y - img_md['minTileY'], x - img_md['minTileX']]]
                 for (y, x), url in self._collect_urls().items()}
+        dsk['token'] = token
         return dsk
 
     @property

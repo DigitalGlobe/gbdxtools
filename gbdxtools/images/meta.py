@@ -4,12 +4,12 @@ import types
 import os
 import random
 from functools import wraps, partial
+from itertools import chain
 from collections import Container
 from six import add_metaclass
 from multiprocessing.pool import ThreadPool
 import warnings
 import math
-
 
 from gbdxtools.ipe.io import to_geotiff
 from gbdxtools.ipe.util import RatPolyTransform, AffineTransform, pad_safe_positive, pad_safe_negative, IPE_TO_DTYPE
@@ -25,6 +25,7 @@ except ImportError:
 import mercantile
 
 import skimage.transform as tf
+from skimage.io import imread
 
 import pyproj
 import dask
@@ -46,12 +47,83 @@ try:
 except:
     has_pyplot = False
 
+from tempfile import NamedTemporaryFile
+try:
+    from urlparse import urlparse
+except ImportError:
+    from urllib.parse import urlparse
+
+import pycurl
+try:
+    import signal
+    from signal import SIGPIPE, SIG_IGN
+except ImportError:
+    pass
+else:
+    signal.signal(SIGPIPE, SIG_IGN)
+
+
 try:
     xrange
 except NameError:
     xrange = range
 
-num_workers = int(os.environ.get("GBDX_THREADS", 8))
+def load_urls(collection, token, shape=(8,256,256), timeout=0.1):
+    mc = pycurl.CurlMulti()
+    nhandles = len(collection)
+    results, cmap = {}, {}
+    for url, token, index in collection:
+        index = tuple(index)
+        _, ext = os.path.splitext(urlparse(url).path)
+        _curl = pycurl.Curl()
+        _curl.setopt(pycurl.NOSIGNAL, 1)
+        _curl.setopt(pycurl.HTTPHEADER, ['Authorization: Bearer {}'.format(token)])
+        _curl.setopt(pycurl.CONNECTTIMEOUT, 30)
+        _curl.setopt(pycurl.TIMEOUT, 300)
+        _curl.setopt(pycurl.URL, url)
+        fp = NamedTemporaryFile(prefix='gbdxtools', suffix=ext, delete=False)
+        _curl.setopt(pycurl.WRITEDATA, fp.file)
+
+        cmap[index] = (_curl, fp)
+        mc.add_handle(_curl)
+
+    while nhandles:
+        ret = mc.select(1.0)
+        if ret == -1:
+            continue
+        while True:
+            ret, nhandles = mc.perform()
+            if ret != pycurl.E_CALL_MULTI_PERFORM:
+                break
+
+    for idx, (_curl, fp) in cmap.iteritems():
+        fp.flush()
+        fp.close()
+        try:
+            arr = imread(fp.name)
+            if len(arr) == 3:
+                arr = np.rollaxis(arr, 2, 0)
+            else:
+                arr = np.expand_dims(arr, axis=0)
+        except Exception as e:
+            print(e)
+            arr = np.zeros(shape, dtype=np.float32)
+        finally:
+            results[idx] = arr
+            os.remove(fp.name)
+            _curl.close()
+            mc.remove_handle(_curl)
+    mc.close()
+    return results
+
+def inject_multifetch(sd):
+    key, sli = (sd['key'], sd['slice'])
+    if len(key) == 5:
+        name, token, z, x, y = key
+        if isinstance(name, str) and name.startswith('image'):
+            return (operator.getitem, 'load_urls', (z, x, y), sli)
+    return (operator.getitem, key, sli)
+
 
 @add_metaclass(abc.ABCMeta)
 class DaskMeta(object):
@@ -109,24 +181,29 @@ class DaskImage(da.Array):
                 pass
         return NotImplemented
 
-    def _optimize_fetch(self, dsk, keys=None):
+    @staticmethod
+    def _cull(dsk, keys=None):
         if not keys:
-            keys = dsk.keys()
-        _dsk, deps = optimize.cull(dsk, keys)
-        _dsk["load_urls"] = (partial(load_urls, token=self.ipe._interface.gbdx_connection.access_token),
-                             [_dsk[key] for key in _dsk.keys() if key[0] == self.ipe.name])
+            return dsk
+        elif "token" not in dsk:
+            return dsk
+        if "token" not in keys:
+            keys.append("token")
+        dsk1, _ = optimize.cull(dsk, keys)
+        return dsk1
 
-        def insert_multifetch(sd):
-            key, sli = (sd['key'], sd['slice'])
-            if len(key) == 4:
-                tname, z, x, y = key
-                if isinstance(tname, str) and tname.startswith('image'):
-                    return (operator.getitem, 'load_urls', (z, x, y), sli)
-            return (operator.getitem, key, sli)
+    @classmethod
+    def __dask_optimize__(cls, dsk, keys):
+        token = dsk['token']
+        if 'token' not in keys:
+            keys.append('token')
+        dsk1, deps1 = optimize.cull(dsk, keys)
+        dsk1["load_urls"] = (load_urls, [dsk1[key] for key in dsk1.keys() if isinstance(key[0], str) and key[0].startswith('image')], token)
 
         lhs = (operator.getitem, 'key', 'slice')
-        rs = RuleSet(RewriteRule(lhs, insert_multifetch, ('key', 'slice')))
-        return valmap(rs.rewrite, _dsk)
+        rs = RuleSet(RewriteRule(lhs, inject_multifetch, ('key', 'slice')))
+        dsk2 = valmap(rs.rewrite, dsk1)
+        return da.Array.__dask_optimize__(dsk2, dsk2.keys())
 
     def __getattribute__(self, name):
         fn = object.__getattribute__(self, name)
@@ -136,7 +213,7 @@ class DaskImage(da.Array):
             def wrapped(*args, **kwargs):
                 result = fn(*args, **kwargs)
                 if isinstance(result, da.Array) and len(result.shape) in [2,3]:
-                    dsk, _ = optimize.cull(result.dask, result.__dask_keys__())
+                    dsk = self._cull(result.dask, result.__dask_keys__())
                     copy = super(DaskImage, self.__class__).__new__(self.__class__,
                                                                     dsk, result.name, result.chunks,
                                                                     result.dtype, result.shape)
@@ -175,7 +252,7 @@ class DaskImage(da.Array):
         arr = self
         if bands is not None:
             arr = self[bands, ...]
-        return arr.compute(num_workers=num_workers)
+        return arr.compute()
 
     def randwindow(self, window_shape):
         """

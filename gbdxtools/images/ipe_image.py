@@ -68,7 +68,7 @@ class IpeImage(DaskImage, GeoImage, PlotMixin):
             return image
         else:
             result = super(IpeImage, self).__getitem__(geometry)
-            dsk, _ = optimize.cull(result.dask, result.__dask_keys__())
+            dsk = self._cull(result.dask, result.__dask_keys__())
             image = super(IpeImage, self.__class__).__new__(self.__class__,
                                                             dsk, result.name, result.chunks,
                                                             result.dtype, result.shape)
