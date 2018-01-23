@@ -139,11 +139,13 @@ Vector Aggregations
 The following snippet will aggregate the top 10 OSM item types in 3 character geohash buckets over Colorado:
 
 .. code-block:: python
-
+    from gbdxtools.vectors import TermsAggDef, GeohashAggDef
+    
     query = 'ingest_source:OSM'
+    colorado_aoi = "POLYGON((-108.89 40.87,-102.19 40.87,-102.19 37.03,-108.89 37.03,-108.89 40.87))"
 
     child_agg = TermsAggDef('item_type')
-    agg = GeohashAggDef(agg_type='geohash', value='3', children=child_agg)
+    agg = GeohashAggDef('6', children=child_agg)
     result = gbdx.vectors.aggregate_query(colorado_aoi, agg, query, index='read-vector-osm-*')
 
     # the result has a single-element list containing the top-level aggregation
