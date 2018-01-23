@@ -67,6 +67,8 @@ try:
 except NameError:
     xrange = range
 
+NUM_WORKERS = 64
+
 def load_urls(collection, shape=(8,256,256), timeout=0.1):
     mc = pycurl.CurlMulti()
     nhandles = len(collection)
@@ -192,7 +194,7 @@ class DaskImage(da.Array):
         return dsk1
 
     @classmethod
-    def __dask_optimize__(cls, dsk, keys):
+    def __dask_optimize__(cls, dsk, keys, **kwargs):
         dsk1, deps1 = optimize.cull(dsk, keys)
         dsk1["load_urls"] = (load_urls, [dsk1[key] for key in dsk1.keys() if isinstance(key[0], str) and key[0].startswith('image')])
 #        lhs = (operator.getitem, 'key', 'slice')
@@ -255,7 +257,7 @@ class DaskImage(da.Array):
         arr = self
         if bands is not None:
             arr = self[bands, ...]
-        return arr.compute()
+        return arr.compute(num_workers=NUM_WORKERS)
 
     def randwindow(self, window_shape):
         """
