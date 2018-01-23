@@ -13,7 +13,6 @@ import math
 
 from gbdxtools.ipe.io import to_geotiff
 from gbdxtools.ipe.util import RatPolyTransform, AffineTransform, pad_safe_positive, pad_safe_negative, IPE_TO_DTYPE
-#from gbdxtools.ipe.interface import load_urls
 
 from shapely import ops, wkt
 from shapely.geometry import box, shape, mapping
@@ -68,7 +67,7 @@ try:
 except NameError:
     xrange = range
 
-def load_urls(collection, token, shape=(8,256,256), timeout=0.1):
+def load_urls(collection, shape=(8,256,256), timeout=0.1):
     mc = pycurl.CurlMulti()
     nhandles = len(collection)
     results, cmap = {}, {}
@@ -194,16 +193,21 @@ class DaskImage(da.Array):
 
     @classmethod
     def __dask_optimize__(cls, dsk, keys):
-        token = dsk['token']
-        if 'token' not in keys:
-            keys.append('token')
         dsk1, deps1 = optimize.cull(dsk, keys)
-        dsk1["load_urls"] = (load_urls, [dsk1[key] for key in dsk1.keys() if isinstance(key[0], str) and key[0].startswith('image')], token)
-
-        lhs = (operator.getitem, 'key', 'slice')
-        rs = RuleSet(RewriteRule(lhs, inject_multifetch, ('key', 'slice')))
-        dsk2 = valmap(rs.rewrite, dsk1)
-        return da.Array.__dask_optimize__(dsk2, dsk2.keys())
+        dsk1["load_urls"] = (load_urls, [dsk1[key] for key in dsk1.keys() if isinstance(key[0], str) and key[0].startswith('image')])
+#        lhs = (operator.getitem, 'key', 'slice')
+#        rs = RuleSet(RewriteRule(lhs, inject_multifetch, ('key', 'slice')))
+#        dsk2 = valmap(rs.rewrite, dsk1)
+        dsk2 = {}
+        for key, val in dsk1.iteritems():
+            if isinstance(key, tuple) and key[0].startswith('image'):
+                name, z, x, y = key
+                dsk2[key] = (operator.getitem, 'load_urls', (z, x, y))
+            else:
+                dsk2[key] = val
+        print(dsk2)
+        return dsk2
+        #dsk3 = da.Array.__dask_optimize__(dsk2, keys)
 
     def __getattribute__(self, name):
         fn = object.__getattribute__(self, name)
