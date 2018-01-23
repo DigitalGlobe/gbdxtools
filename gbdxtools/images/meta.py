@@ -100,7 +100,7 @@ def load_urls(collection, shape=(8,256,256), timeout=0.1):
         fp.close()
         try:
             arr = imread(fp.name)
-            if len(arr) == 3:
+            if len(arr.shape) == 3:
                 arr = np.rollaxis(arr, 2, 0)
             else:
                 arr = np.expand_dims(arr, axis=0)
@@ -205,7 +205,6 @@ class DaskImage(da.Array):
                 dsk2[key] = (operator.getitem, 'load_urls', (z, x, y))
             else:
                 dsk2[key] = val
-        print(dsk2)
         return dsk2
         #dsk3 = da.Array.__dask_optimize__(dsk2, keys)
 
