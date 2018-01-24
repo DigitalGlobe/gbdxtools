@@ -153,6 +153,7 @@ The following snippet will aggregate the top 10 OSM item types in 3 character ge
     for entry in result[0]['terms']:  # the 'terms' field contains our buckets
         geohash_str = entry['term']  # the 'term' entry contains our geohash
         child_aggs = entry['aggregations']  # the 'aggregations' field contains the child aggregations for the 'item_type' values
+        
         # since the child aggregations have the same structure, we can walk it the same way.
         # let's create a dict of item_types and their counts
         for child in child_aggs:
