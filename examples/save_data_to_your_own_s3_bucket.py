@@ -15,7 +15,7 @@ session_token = response['Credentials']['SessionToken']
 
 # Save the data to your s3 bucket using the SaveToS3 task:
 savetask = gbdx.Task('SaveToS3')
-savetask.inputs.data = acomp.outputs.data
+savetask.inputs.data = acomp.outputs.data.value
 savetask.inputs.destination = "s3://your-bucket/your-path/"
 savetask.inputs.access_key_id = access_key_id
 savetask.inputs.secret_key = secret_key
