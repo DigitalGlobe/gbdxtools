@@ -22,15 +22,19 @@ class QB02(WVImage):
             "product": kwargs.get("product", "ortho"),
             "proj": kwargs.get("proj", "EPSG:4326"),
             "pansharpen": kwargs.get("pansharpen", False),
-            "gsd": kwargs.get("gsd", None)
+            "gsd": kwargs.get("gsd", None),
+            "acomp": kwargs.get("acomp", False)
         }
+
+        if options["acomp"]:
+            options["product"] = "acomp"
 
         if options["pansharpen"]:
             options["band_type"] = "MS"
             options["product"] = "pansharpened"
 
-        standard_products = cls._build_standard_products(cat_id, options["band_type"], options["proj"], gsd=options["gsd"])
-        pan_products = cls._build_standard_products(cat_id, "pan", options["proj"], options["gsd"])
+        standard_products = cls._build_standard_products(cat_id, options["band_type"], options["proj"], gsd=options["gsd"], acomp=options["acomp"])
+        pan_products = cls._build_standard_products(cat_id, "pan", options["proj"], gsd=options["gsd"], acomp=options["acomp"])
         pan = pan_products['ortho']
         ms = standard_products['ortho']
         standard_products["pansharpened"] = ipe.LocallyProjectivePanSharpen(ms, pan)
@@ -64,15 +68,22 @@ class QB02(WVImage):
         return sorted(vectors.query(aoi, query=query), key=lambda x: x['properties']['id']) 
 
     @classmethod
-    def _build_standard_products(cls, cat_id, band_type, proj, gsd=None):
+    def _build_standard_products(cls, cat_id, band_type, proj, gsd=None, acomp=False):
         _parts = cls._find_parts(cat_id, band_type)
-        _id = _parts[0]['properties']['attributes']['idahoImageId']
+        _bucket = _parts[0]['properties']['attributes']['bucketName']
         dn_ops = [ipe.IdahoRead(bucketName=p['properties']['attributes']['bucketName'], imageId=p['properties']['attributes']['idahoImageId'],
                                 objectStore="S3") for p in _parts]
         mosaic_params = {"Dest SRS Code": proj}
         if gsd is not None:
             mosaic_params["Requested GSD"] = str(gsd)
         ortho_op = ipe.GeospatialMosaic(*dn_ops, **mosaic_params)
+  
+        if acomp and _bucket is not 'idaho-images':
+            _op = ipe.Acomp
+        else:
+            _op = ipe.TOAReflectance
 
-        return {"ortho": ortho_op}
+        _ops = [ipe.Format(ipe.MultiplyConst(_op(dn), constants=json.dumps([10000])), dataType="1") for dn in dn_ops]
+        acomp_op = ipe.GeospatialMosaic(*_ops, **mosaic_params)
 
+        return {"ortho": ortho_op, "acomp": acomp_op}

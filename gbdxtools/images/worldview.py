@@ -40,12 +40,12 @@ class WVImage(IpeImage):
             "acomp": kwargs.get("acomp", False)
         }
 
+        if options["acomp"]:
+            options["product"] = "ortho"
+
         if options["pansharpen"]:
             options["band_type"] = "MS"
             options["product"] = "pansharpened"
-
-        if options["acomp"]:
-            options["product"] = "ortho"
 
         standard_products = cls._build_standard_products(cat_id, 
                                                          options["band_type"], 
@@ -53,9 +53,8 @@ class WVImage(IpeImage):
                                                          gsd=options["gsd"], 
                                                          acomp=options["acomp"])
         pan_products = cls._build_standard_products(cat_id, "pan", options["proj"], gsd=options["gsd"], acomp=options["acomp"])
-        pan = ipe.Format(ipe.MultiplyConst(pan_products['toa_reflectance'], constants=json.dumps([1000])), dataType="1")
-        ms = ipe.Format(ipe.MultiplyConst(standard_products['toa_reflectance'],
-                                          constants=json.dumps([1000]*8)), dataType="1")
+        pan = pan_products['ortho'] if options["acomp"] else pan_products['toa_reflectance']
+        ms = standard_products['ortho'] if options["acomp"] else standard_products['toa_reflectance']
         standard_products["pansharpened"] = ipe.LocallyProjectivePanSharpen(ms, pan)
 
         try:
@@ -103,38 +102,24 @@ class WVImage(IpeImage):
 
     @classmethod
     def _build_standard_products(cls, cat_id, band_type, proj, gsd=None, acomp=False):
-        # TODO: Switch to direct metadata access (ie remove this block)
         _parts = cls._find_parts(cat_id, band_type)
-        _id = _parts[0]['properties']['attributes']['idahoImageId']
-        try:
-            idaho_md = requests.get('http://idaho.timbr.io/{}.json'.format(_id)).json()
-        except ValueError:
-            raise MissingMetadata('Metadata not found in S3 for image: {}'.format(_id))
-        meta = idaho_md["properties"]
-        gains_offsets = calc_toa_gain_offset(meta)
-        radiance_scales, reflectance_scales, radiance_offsets = zip(*gains_offsets)
-        # ---
+        _bucket = _parts[0]['properties']['attributes']['bucketName']
 
         dn_ops = [ipe.IdahoRead(bucketName=p['properties']['attributes']['bucketName'], imageId=p['properties']['attributes']['idahoImageId'],
                                 objectStore="S3") for p in _parts]
-        if acomp: 
-            dn_ops = [ipe.Acomp(dn) for dn in dn_ops]    
+
+        if acomp and _bucket is not 'idaho-images': 
+            dn_ops = [ipe.Format(ipe.MultiplyConst(ipe.Acomp(dn), constants=json.dumps([10000])), dataType="1") for dn in dn_ops]    
 
         mosaic_params = {"Dest SRS Code": proj}
         if gsd is not None:
             mosaic_params["Requested GSD"] = str(gsd)
         ortho_op = ipe.GeospatialMosaic(*dn_ops, **mosaic_params)
 
-        radiance_op = ipe.AddConst(
-            ipe.MultiplyConst(
-                ipe.Format(ortho_op, dataType="4"),
-                constants=radiance_scales),
-            constants=radiance_offsets)
+        toa = [ipe.Format(ipe.MultiplyConst(ipe.TOAReflectance(dn), constants=json.dumps([10000])), dataType="1") for dn in dn_ops]
+        toa_reflectance_op = ipe.GeospatialMosaic(*toa, **mosaic_params)
 
-        toa_reflectance_op = ipe.MultiplyConst(radiance_op,
-                                               constants=reflectance_scales)
-
-        return {"ortho": ortho_op, "toa_reflectance": toa_reflectance_op, "radiance": radiance_op}
+        return {"ortho": ortho_op, "toa_reflectance": toa_reflectance_op}
 
 class WV03_SWIR(WVImage):
     def __new__(cls, cat_id, **kwargs):
