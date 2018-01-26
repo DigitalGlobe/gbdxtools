@@ -39,9 +39,9 @@ class CatalogImageTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        mock_gbdx_session = get_mock_gbdx_session(token='dymmytoken')
-        cls.gbdx = Interface(gbdx_connection=mock_gbdx_session)
-        #cls.gbdx = Interface()
+        #mock_gbdx_session = get_mock_gbdx_session(token='dymmytoken')
+        #cls.gbdx = Interface(gbdx_connection=mock_gbdx_session)
+        cls.gbdx = Interface()
         cls._temp_path = tempfile.mkdtemp()
         print("Created: {}".format(cls._temp_path))
 
@@ -55,7 +55,7 @@ class CatalogImageTest(unittest.TestCase):
         assert img.proj == 'EPSG:4326'
 
     @my_vcr.use_cassette('tests/unit/cassettes/test_wv_image_acomp.yaml', filter_headers=['authorization'])
-    def test_basic_catalog_image(self):
+    def test_basic_catalog_acomp(self):
         _id = '104001002838EC00'
         img = self.gbdx.catalog_image(_id, acomp=True)
         self.assertTrue(isinstance(img, WV03_VNIR))
