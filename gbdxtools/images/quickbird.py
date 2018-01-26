@@ -78,7 +78,7 @@ class QB02(WVImage):
             mosaic_params["Requested GSD"] = str(gsd)
         ortho_op = ipe.GeospatialMosaic(*dn_ops, **mosaic_params)
   
-        if acomp and _bucket is not 'idaho-images':
+        if acomp and _bucket != 'idaho-images':
             _op = ipe.Acomp
         else:
             _op = ipe.TOAReflectance
