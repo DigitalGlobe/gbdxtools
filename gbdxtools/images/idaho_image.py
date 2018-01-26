@@ -18,8 +18,10 @@ class IdahoImage(IpeImage):
             "bucket": kwargs.get("bucket", "idaho-images"),
             "acomp": kwargs.get("acomp", False)
         }
-        if options["acomp"] and options["bucket"] is not "idaho-images":
-            options["product"] = "acomp" 
+        if options["acomp"] and options["bucket"] != "idaho-images":
+            options["product"] = "acomp"
+        else:
+            options["product"] = "toa_reflectance" 
 
         standard_products = cls._build_standard_products(idaho_id, options["proj"], bucket=options["bucket"], gsd=options["gsd"], acomp=options["acomp"])
         try:
@@ -46,7 +48,7 @@ class IdahoImage(IpeImage):
             "1b": dn_op,
             "ortho": ipe.Orthorectify(dn_op, **params),
             "acomp": ipe.Orthorectify(ipe.Acomp(dn_op), **params),
-            "toa_reflectance": ipe.TOAReflectance(dn_op)
+            "toa_reflectance": ipe.Orthorectify(ipe.TOAReflectance(dn_op), **params)
         }
 
         return graph
