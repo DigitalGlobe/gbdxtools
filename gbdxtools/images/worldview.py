@@ -41,7 +41,7 @@ class WVImage(IpeImage):
         }
 
         if options["acomp"]:
-            options["product"] = "ortho"
+            options["product"] = "acomp"
 
         if options["pansharpen"]:
             options["band_type"] = "MS"
@@ -53,10 +53,10 @@ class WVImage(IpeImage):
                                                          gsd=options["gsd"], 
                                                          acomp=options["acomp"])
         pan_products = cls._build_standard_products(cat_id, "pan", options["proj"], gsd=options["gsd"], acomp=options["acomp"])
-        pan = pan_products['ortho'] if options["acomp"] else pan_products['toa_reflectance']
-        ms = standard_products['ortho'] if options["acomp"] else standard_products['toa_reflectance']
+        pan = pan_products['acomp'] if options["acomp"] else pan_products['toa_reflectance']
+        ms = standard_products['acomp'] if options["acomp"] else standard_products['toa_reflectance']
         standard_products["pansharpened"] = ipe.LocallyProjectivePanSharpen(ms, pan)
-
+        
         try:
             self = super(WVImage, cls).__new__(cls, standard_products[options["product"]])
         except KeyError as e:
@@ -108,21 +108,26 @@ class WVImage(IpeImage):
         dn_ops = [ipe.IdahoRead(bucketName=p['properties']['attributes']['bucketName'], imageId=p['properties']['attributes']['idahoImageId'],
                                 objectStore="S3") for p in _parts]
 
-        if acomp and _bucket is not 'idaho-images': 
-            dn_ops = [ipe.Format(ipe.MultiplyConst(ipe.Acomp(dn), constants=json.dumps([10000])), dataType="1") for dn in dn_ops]    
-
         mosaic_params = {"Dest SRS Code": proj}
         if gsd is not None:
             mosaic_params["Requested GSD"] = str(gsd)
-        ortho_op = ipe.GeospatialMosaic(*dn_ops, **mosaic_params)
 
+        ortho_op = ipe.GeospatialMosaic(*dn_ops, **mosaic_params)
+        
         toa = [ipe.Format(ipe.MultiplyConst(ipe.TOAReflectance(dn), constants=json.dumps([10000])), dataType="1") for dn in dn_ops]
         toa_reflectance_op = ipe.GeospatialMosaic(*toa, **mosaic_params)
+       
+        if acomp and _bucket != 'idaho-images': 
+            _ops = [ipe.Format(ipe.MultiplyConst(ipe.Acomp(dn), constants=json.dumps([10000])), dataType="1") for dn in dn_ops]
+            acomp_op = ipe.GeospatialMosaic(*_ops, **mosaic_params)
+        else:
+            acomp_op = toa_reflectance_op
 
-        return {"ortho": ortho_op, "toa_reflectance": toa_reflectance_op}
+        return {"ortho": ortho_op, "toa_reflectance": toa_reflectance_op, "acomp": acomp_op}
 
 class WV03_SWIR(WVImage):
     def __new__(cls, cat_id, **kwargs):
+        kwargs["product"] = "ortho"
         return super(WV03_SWIR, cls).__new__(cls, cat_id, **kwargs)
 
     @staticmethod
@@ -131,6 +136,21 @@ class WV03_SWIR(WVImage):
         aoi = wkt.dumps(box(-180, -90, 180, 90))
         query = "item_type:IDAHOImage AND attributes.catalogID:{}".format(cat_id)
         return sorted(vectors.query(aoi, query=query), key=lambda x: x['properties']['id'])
+
+    @classmethod
+    def _build_standard_products(cls, cat_id, band_type, proj, gsd=None, acomp=False):
+        _parts = cls._find_parts(cat_id, band_type)
+        _bucket = _parts[0]['properties']['attributes']['bucketName']
+
+        dn_ops = [ipe.IdahoRead(bucketName=p['properties']['attributes']['bucketName'], imageId=p['properties']['attributes']['idahoImageId'],
+                                objectStore="S3") for p in _parts]
+
+        mosaic_params = {"Dest SRS Code": proj}
+        if gsd is not None:
+            mosaic_params["Requested GSD"] = str(gsd)
+        ortho_op = ipe.GeospatialMosaic(*dn_ops, **mosaic_params)
+
+        return {"ortho": ortho_op, "toa_reflectance": ortho_op}
 
 class WV03_VNIR(WVImage):
     def __new__(cls, cat_id, **kwargs):

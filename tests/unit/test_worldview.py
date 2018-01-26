@@ -54,6 +54,15 @@ class CatalogImageTest(unittest.TestCase):
         assert img.shape == (8, 79386, 10889)
         assert img.proj == 'EPSG:4326'
 
+    @my_vcr.use_cassette('tests/unit/cassettes/test_wv_image_acomp.yaml', filter_headers=['authorization'])
+    def test_basic_catalog_image(self):
+        _id = '104001002838EC00'
+        img = self.gbdx.catalog_image(_id, acomp=True)
+        self.assertTrue(isinstance(img, WV03_VNIR))
+        assert img.cat_id == _id
+        assert img.shape == (8, 79386, 10889)
+        assert img.proj == 'EPSG:4326'
+
     @my_vcr.use_cassette('tests/unit/cassettes/test_wv_image_default_aoi.yaml', filter_headers=['authorization'])
     def test_cat_image_with_aoi(self):
         _id = '104001002838EC00'
@@ -97,7 +106,7 @@ class CatalogImageTest(unittest.TestCase):
         assert img.proj == 'EPSG:4326' 
 
     @my_vcr.use_cassette('tests/unit/cassettes/test_wv3_swir.yaml', filter_headers=['authorization'])
-    def test_catalog_image_pansharpen(self):
+    def test_catalog_image_swir(self):
         _id = '104A010010C29F00'
         img = self.gbdx.catalog_image(_id)
         self.assertTrue(isinstance(img, WV03_SWIR))
