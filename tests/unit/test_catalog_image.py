@@ -32,20 +32,20 @@ class CatalogImageTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        mock_gbdx_session = get_mock_gbdx_session(token='dymmytoken')
-        cls.gbdx = Interface(gbdx_connection=mock_gbdx_session)
-        #cls.gbdx = Interface()
+        #mock_gbdx_session = get_mock_gbdx_session(token='dymmytoken')
+        #cls.gbdx = Interface(gbdx_connection=mock_gbdx_session)
+        cls.gbdx = Interface()
         cls._temp_path = tempfile.mkdtemp()
         print("Created: {}".format(cls._temp_path))
 
     @my_vcr.use_cassette('tests/unit/cassettes/test_cat_image_wv2.yaml', filter_headers=['authorization'])
     def test_wv2_image(self):
-        wv2 = CatalogImage('1030010048532600')
+        wv2 = CatalogImage('1030010076B8F500')
         self.assertTrue(isinstance(wv2, WV02))
 
     @my_vcr.use_cassette('tests/unit/cassettes/test_cat_image_wv3.yaml', filter_headers=['authorization'])
     def test_wv3_image(self):
-        wv3 = CatalogImage('1040010004457A00')
+        wv3 = CatalogImage('10400100343F3D00')
         self.assertTrue(isinstance(wv3, WV03_VNIR))
 
     @my_vcr.use_cassette('tests/unit/cassettes/test_cat_image_wv1.yaml', filter_headers=['authorization'])
