@@ -67,53 +67,80 @@ try:
 except NameError:
     xrange = range
 
-NUM_WORKERS = 64
+NUM_WORKERS = 5
+MAX_RETRIES = 5
 
-def load_urls(collection, shape=(8,256,256), timeout=0.1):
+def _setup_curl(url, token, index, NOSIGNAL=1, CONNECTTIMEOUT=30, TIMEOUT=300):
+    _, ext = os.path.splitext(urlparse(url).path)
+    fp = NamedTemporaryFile(prefix='gbdxtools', suffix=ext, delete=False)
+    _curl = pycurl.Curl()
+    _curl.setopt(pycurl.NOSIGNAL, NOSIGNAL)
+    _curl.setopt(pycurl.CONNECTTIMEOUT, CONNECTTIMEOUT)
+    _curl.setopt(pycurl.TIMEOUT, TIMEOUT)
+    _curl.setopt(pycurl.URL, url)
+    _curl.setopt(pycurl.HTTPHEADER, ['Authorization: Bearer {}'.format(token)])
+    _curl.setopt(pycurl.WRITEDATA, fp.file)
+    _curl.index = index
+    _curl.token = token
+    _curl.url = url
+    return (_curl, fp)
+
+def load_urls(collection, shape=(8,256,256), max_retries=MAX_RETRIES):
     mc = pycurl.CurlMulti()
-    nhandles = len(collection)
-    results, cmap = {}, {}
+    results, cmap, pending = {}, {}, {}
     for url, token, index in collection:
         index = tuple(index)
-        _, ext = os.path.splitext(urlparse(url).path)
-        _curl = pycurl.Curl()
-        _curl.setopt(pycurl.NOSIGNAL, 1)
-        _curl.setopt(pycurl.HTTPHEADER, ['Authorization: Bearer {}'.format(token)])
-        _curl.setopt(pycurl.CONNECTTIMEOUT, 30)
-        _curl.setopt(pycurl.TIMEOUT, 300)
-        _curl.setopt(pycurl.URL, url)
-        fp = NamedTemporaryFile(prefix='gbdxtools', suffix=ext, delete=False)
-        _curl.setopt(pycurl.WRITEDATA, fp.file)
-
+        print(index)
+        _curl, fp = _setup_curl(url, token, index)
         cmap[index] = (_curl, fp)
+        pending[index] = True
         mc.add_handle(_curl)
 
-    while nhandles:
-        ret = mc.select(1.0)
-        if ret == -1:
-            continue
+    pending_collection = [key for key in pending.keys() if pending[key]]
+    nhandles = len(pending_collection)
+    print("nhandles = {}".format(nhandles))
+    #suc, failed = [], []
+    nprocessed = 0
+    while nhandles - nprocessed:
         while True:
-            ret, nhandles = mc.perform()
+            ret, something = mc.perform()
             if ret != pycurl.E_CALL_MULTI_PERFORM:
                 break
+        nq, suc, failed = mc.info_read()
+        nprocessed += len(suc)
+        #print("len nq, suc, failed, nprocessed, something: {}, {}, {}, {}, {}".format(nq, len(suc), len(failed), nprocessed, something))
 
-    for idx, (_curl, fp) in cmap.iteritems():
-        fp.flush()
-        fp.close()
-        try:
-            arr = imread(fp.name)
-            if len(arr.shape) == 3:
-                arr = np.rollaxis(arr, 2, 0)
-            else:
-                arr = np.expand_dims(arr, axis=0)
-        except Exception as e:
-            print(e)
-            arr = np.zeros(shape, dtype=np.float32)
-        finally:
-            results[idx] = arr
-            os.remove(fp.name)
-            _curl.close()
-            mc.remove_handle(_curl)
+        for h in suc:
+            pending[h.index] = False
+            _fp = cmap[h.index][-1]
+            _fp.flush()
+            _fp.close()
+            try:
+                arr = imread(_fp.name)
+                if len(arr.shape) == 3:
+                    arr = np.rollaxis(arr, 2, 0)
+                else:
+                    arr = np.expand_dims(arr, axis=0)
+            except Exception as e:
+                print(e)
+                arr = np.zeros(shape, dtype=np.float32)
+            finally:
+                results[h.index] = arr
+                h.close()
+                mc.remove_handle(h)
+                os.remove(_fp.name)
+        for h, err_num, err_msg in failed:
+            print('failed: {}, code={}, msg={}'.format(h.index, err_num, err_msg))
+            _fp = cmap[h.index][-1]
+            _fp.flush()
+            _fp.close()
+            os.remove(_fp.name)
+            h.close()
+            mc.remove_handle(h)
+            _curl, fp = _setup_curl(h.url, h.token, h.index)
+            cmap[h.index] = (_curl, fp)
+            mc.add_handle(_curl)
+
     mc.close()
     return results
 
