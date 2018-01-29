@@ -101,15 +101,42 @@ def load_urls(collection, shape=(8,256,256), max_retries=MAX_RETRIES):
     print("nhandles = {}".format(nhandles))
     #suc, failed = [], []
     nprocessed = 0
-    while nhandles - nprocessed:
+    #while nhandles - nprocessed:
+    while True:
+        ret, something = mc.perform()
+        if ret != pycurl.E_CALL_MULTI_PERFORM:
+            break
+    print('something={}'.format(something))
+    while something:
+        mc.select(0.5)
         while True:
             ret, something = mc.perform()
             if ret != pycurl.E_CALL_MULTI_PERFORM:
+            #nq, suc, failed = mc.info_read()
+            #nprocessed += len(suc)
+            #print("len nq, suc, failed, nprocessed, something: {}, {}, {}, {}, {}".format(nq, len(suc), len(failed), nprocessed, something))
                 break
-        nq, suc, failed = mc.info_read()
-        nprocessed += len(suc)
-        #print("len nq, suc, failed, nprocessed, something: {}, {}, {}, {}, {}".format(nq, len(suc), len(failed), nprocessed, something))
+    nq, suc, failed = mc.info_read()
+    print("len nq, suc, failed, nprocessed, something: {}, {}, {}, {}, {}".format(nq, len(suc), len(failed), nprocessed, something))
+    for k, (_h, _fp) in cmap.iteritems():
+        _h.close()
+        _fp.flush()
+        _fp.close()
+        try:
+            arr = imread(_fp.name)
+            if len(arr.shape) == 3:
+                arr = np.rollaxis(arr, 2, 0)
+            else:
+                arr = np.expand_dims(arr, axis=0)
+        except Exception as e:
+            print(e)
+            arr = np.zeros(shape, dtype=np.float32)
+        finally:
+            results[k] = arr
+            mc.remove_handle(_h)
+            os.remove(_fp.name)
 
+    if False:
         for h in suc:
             pending[h.index] = False
             _fp = cmap[h.index][-1]
@@ -284,7 +311,8 @@ class DaskImage(da.Array):
         arr = self
         if bands is not None:
             arr = self[bands, ...]
-        return arr.compute(num_workers=NUM_WORKERS)
+        with dask.set_options(get=dask.get):
+            return arr.compute()
 
     def randwindow(self, window_shape):
         """
