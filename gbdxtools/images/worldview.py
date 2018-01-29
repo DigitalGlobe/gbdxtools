@@ -127,7 +127,6 @@ class WVImage(IpeImage):
 
 class WV03_SWIR(WVImage):
     def __new__(cls, cat_id, **kwargs):
-        kwargs["product"] = "ortho"
         return super(WV03_SWIR, cls).__new__(cls, cat_id, **kwargs)
 
     @staticmethod
@@ -136,21 +135,6 @@ class WV03_SWIR(WVImage):
         aoi = wkt.dumps(box(-180, -90, 180, 90))
         query = "item_type:IDAHOImage AND attributes.catalogID:{}".format(cat_id)
         return sorted(vectors.query(aoi, query=query), key=lambda x: x['properties']['id'])
-
-    @classmethod
-    def _build_standard_products(cls, cat_id, band_type, proj, gsd=None, acomp=False):
-        _parts = cls._find_parts(cat_id, band_type)
-        _bucket = _parts[0]['properties']['attributes']['bucketName']
-
-        dn_ops = [ipe.IdahoRead(bucketName=p['properties']['attributes']['bucketName'], imageId=p['properties']['attributes']['idahoImageId'],
-                                objectStore="S3") for p in _parts]
-
-        mosaic_params = {"Dest SRS Code": proj}
-        if gsd is not None:
-            mosaic_params["Requested GSD"] = str(gsd)
-        ortho_op = ipe.GeospatialMosaic(*dn_ops, **mosaic_params)
-
-        return {"ortho": ortho_op, "toa_reflectance": ortho_op}
 
 class WV03_VNIR(WVImage):
     def __new__(cls, cat_id, **kwargs):
