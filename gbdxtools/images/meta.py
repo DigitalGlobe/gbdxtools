@@ -12,7 +12,7 @@ import math
 
 
 from gbdxtools.ipe.io import to_geotiff
-from gbdxtools.ipe.util import RatPolyTransform, AffineTransform, pad_safe_positive, pad_safe_negative, IPE_TO_DTYPE
+from gbdxtools.ipe.util import RatPolyTransform, AffineTransform, pad_safe_positive, pad_safe_negative, IPE_TO_DTYPE, preview
 
 from shapely import ops, wkt
 from shapely.geometry import box, shape, mapping
@@ -262,6 +262,9 @@ class GeoImage(Container):
         if 'proj' not in kwargs:
             kwargs['proj'] = self.proj
         return to_geotiff(self, **kwargs)
+
+    def preview(self, **kwargs):
+        preview(self, **kwargs)
 
     def warp(self, dem=None, proj="EPSG:4326", **kwargs):
         """

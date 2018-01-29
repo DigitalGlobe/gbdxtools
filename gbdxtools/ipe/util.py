@@ -4,6 +4,7 @@ import errno
 import datetime
 import time
 import math
+import json
 from functools import wraps
 from collections import Sequence
 try:
@@ -15,13 +16,18 @@ import numpy as np
 from numpy.linalg import pinv
 from skimage.transform._geometric import GeometricTransform
 
+from shapely.geometry import shape
+from shapely.wkt import loads
+
 import xml.etree.cElementTree as ET
 from xml.dom import minidom
 import ephem
+from string import Template
 
 from shapely import wkt
 from affine import Affine
 
+from gbdxtools.ipe.graph import get_graph_stats
 import gbdxtools.ipe.constants as constants
 
 with warnings.catch_warnings():
@@ -39,6 +45,131 @@ IPE_TO_DTYPE = {
     "FLOAT": "float32",
     "DOUBLE": "float64"
 }
+
+# TODO need to handle diff projections: project WGS84 bounds into image proj
+def preview(image, **kwargs):
+    try:
+        from IPython.display import Javascript, HTML, display
+        from gbdxtools import Interface
+        gbdx = Interface()
+    except:
+        print("IPython is required to produce maps.")
+        return
+
+    zoom = kwargs.get("zoom", 16)
+    bands = kwargs.get("bands", image._rgb_bands)
+    bounds = kwargs.get("bounds", list(image.bounds)) #list(loads(image.ipe_metadata["image"]["imageBoundsWGS84"]).bounds))
+    center = kwargs.get("center", list(shape(image).centroid.bounds[0:2]))
+    graph_id = image.ipe_id
+    node_id = image.ipe.graph()['nodes'][0]['id']
+    
+    stats = get_graph_stats(gbdx.gbdx_connection, graph_id, node_id)
+    scales = map(stats["scale"].__getitem__, bands)
+    offsets = map(stats["offset"].__getitem__, bands)
+
+    map_id = "map_{}".format(str(int(time.time())))
+    display(HTML(Template('''
+       <div id="$map_id"/>
+       <link href='https://openlayers.org/en/v4.6.4/css/ol.css' rel='stylesheet' />
+       <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=requestAnimationFrame,Element.prototype.classList,URL"></script>
+       <style>body{margin:0;padding:0;}#$map_id{position:relative;top:0;bottom:0;width:100%;height:400px;}</style>
+       <style></style>
+    ''').substitute({"map_id": map_id}))) 
+
+    js = Template("""
+        require.config({
+            paths: {
+                ol: 'https://openlayers.org/en/v4.6.4/build/ol',
+            }
+        });
+
+        require(['ol'], function(ol) {
+            var md = $md;
+            var georef = $georef;
+            var graphId = '$graphId';
+            var nodeId = '$nodeId';
+            var extents = $bounds; 
+
+            var x1 = md.minTileX * md.tileXSize;
+            var y1 = ((md.minTileY + md.numYTiles) * md.tileYSize + md.tileYSize);
+            var x2 = ((md.minTileX + md.numXTiles) * md.tileXSize + md.tileXSize);
+            var y2 = md.minTileY * md.tileYSize;
+            var tileLayerResolutions = [georef.scaleX];
+
+            var url = "https://idahoapitest.geobigdata.io/v1/tile/";
+            url += graphId + '/' + nodeId;
+            url += "/{x}/{y}.png?token=$token&bands=$bands&scales=$scales&offsets=$offsets";
+
+            var proj = $proj;    
+            if ( proj !== 'EPSG:4326' ) {
+                /*var proj4def = json["proj4"];
+                var area = json["area_of_use"];
+                var bbox = [area["area_west_bound_lon"], area["area_south_bound_lat"], area["area_east_bound_lon"], area["area_north_bound_lat"]]
+                var newProjCode = `EPSG:${code}`;
+                proj4.defs(newProjCode, proj4def);
+                var projection = ol.proj.get(newProjCode);
+                var fromLonLat = ol.proj.getTransform('EPSG:4326', projection);
+                var extent = ol.extent.applyTransform(
+                    [bbox[1], bbox[2], bbox[3], bbox[0]], fromLonLat);
+                projection.setExtent(extent);
+                return projection;*/
+            } else {
+                var projection = ol.proj.get(proj);
+            }
+            var projection = ol.proj.get(proj);
+
+            var rda = new ol.layer.Tile({
+              title: 'RDA',
+              opacity: 1,
+              extent: extents,
+              source: new ol.source.TileImage({
+                      crossOrigin: null,
+                      projection: projection,
+                      extent: extents,
+
+                      tileGrid: new ol.tilegrid.TileGrid({
+                          extent: extents,
+                          origin: [extents[0], extents[3]],
+                          resolutions: tileLayerResolutions,
+                          tileSize: [md.tileXSize, md.tileYSize],
+                      }),
+                      tileUrlFunction: function (coordinate) {
+                          if (coordinate === null) return undefined;
+                          const x = coordinate[1] + md.minTileX;
+                          const y = -(coordinate[2] + 1 - md.minTileY);
+                          if (x < md.minTileX || x > md.maxTileX) return undefined;
+                          if (y < md.minTileY || y > md.maxTileY) return undefined;
+                          return url.replace('{x}', x).replace('{y}', y);
+                      }
+                  })
+            });
+
+            var map = new ol.Map({
+              layers: [ rda ],
+              target: '$map_id',
+              view: new ol.View({
+                projection: '$proj',
+                center: $center,
+                zoom: $zoom
+              })
+            });
+        });
+    """).substitute({
+        "map_id": map_id,
+        "proj": image.proj,
+        "graphId": graph_id,
+        "bounds": bounds,
+        "bands": ",".join(map(str, bands)),
+        "nodeId": node_id,
+        "md": json.dumps(image.ipe_metadata["image"]),
+        "georef": json.dumps(image.ipe_metadata["georef"]),
+        "center": center,
+        "zoom": zoom,
+        "token": gbdx.gbdx_connection.access_token,
+        "scales": ",".join(map(str, scales)),
+        "offsets": ",".join(map(str, offsets))
+    })
+    display(Javascript(js))
 
 def reproject_params(proj):
     _params = {}
