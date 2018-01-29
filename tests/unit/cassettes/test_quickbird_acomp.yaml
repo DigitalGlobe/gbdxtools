@@ -5,6 +5,8 @@ interactions:
       Accept: ['*/*']
       Accept-Encoding: ['gzip, deflate']
       Connection: [keep-alive]
+      Cookie: [AWSELB=07A771471E264EA5ADF82F0AA634B8F4B8E2289A692D808495CD910FC0DF3E3AEFABF72FC360E695E31EC8D6E8B974D1756EAF80D1F76AB945B1770B781DD1DD6A9A9AC14431C14379770963AF3559E7A473B7E420;
+          JSESSIONID=D246439DE26F8A8B7C92290226C2F059.173.50.254.129]
       User-Agent: [python-requests/2.9.1]
     method: GET
     uri: https://vector.geobigdata.io/insight-vector/api/index/query/vector-gbdx-alpha-catalog-v2-*/items?count=1&upper=90.0&lower=-90.0&right=180.0&q=item_type%3AGBDXCatalogRecord+AND+attributes.catalogID%3A1010010002B93F00+AND+NOT+item_type%3AIDAHOImage+AND+NOT+item_type%3ADigitalGlobeAcquisition&left=-180.0
@@ -19,10 +21,8 @@ interactions:
       content-encoding: [UTF-8]
       content-length: ['1799']
       content-type: [application/json;charset=UTF-8]
-      date: ['Fri, 26 Jan 2018 18:08:19 GMT']
+      date: ['Fri, 26 Jan 2018 18:08:24 GMT']
       server: [Apache-Coyote/1.1, Weblogic 12.2.1.1]
-      set-cookie: [JSESSIONID=D246439DE26F8A8B7C92290226C2F059.173.50.254.129; Path=/;
-          HttpOnly, AWSELB=07A771471E264EA5ADF82F0AA634B8F4B8E2289A692D808495CD910FC0DF3E3AEFABF72FC360E695E31EC8D6E8B974D1756EAF80D1F76AB945B1770B781DD1DD6A9A9AC14431C14379770963AF3559E7A473B7E420;PATH=/;HTTPONLY]
       strict-transport-security: [max-age=604800 ; includeSubDomains]
       x-content-type-options: [nosniff]
       x-frame-options: [SAMEORIGIN]
@@ -61,7 +61,7 @@ interactions:
       content-encoding: [UTF-8]
       content-length: ['17066']
       content-type: [application/json;charset=UTF-8]
-      date: ['Fri, 26 Jan 2018 18:08:19 GMT']
+      date: ['Fri, 26 Jan 2018 18:08:24 GMT']
       server: [Apache-Coyote/1.1, Weblogic 12.2.1.1]
       strict-transport-security: [max-age=604800 ; includeSubDomains]
       x-content-type-options: [nosniff]
@@ -91,7 +91,7 @@ interactions:
       content-encoding: [UTF-8]
       content-length: ['16758']
       content-type: [application/json;charset=UTF-8]
-      date: ['Fri, 26 Jan 2018 18:08:19 GMT']
+      date: ['Fri, 26 Jan 2018 18:08:25 GMT']
       server: [Apache-Coyote/1.1, Weblogic 12.2.1.1]
       strict-transport-security: [max-age=604800 ; includeSubDomains]
       x-content-type-options: [nosniff]
@@ -100,59 +100,159 @@ interactions:
       x-xss-protection: [1; mode=block]
     status: {code: 200, message: OK}
 - request:
-    body: !!python/unicode '{"edges": [{"destination": "03533492-f3b6-58c9-b89f-c01d42f7bf50",
-      "id": "dce0db30-01ea-523f-9ed9-45aa49c57301", "index": 1, "source": "995948bc-d0e8-5cf1-93ec-9df744ded613"},
-      {"destination": "03533492-f3b6-58c9-b89f-c01d42f7bf50", "id": "5a89d27a-00c4-577e-b6a4-d6b9d62a0e46",
-      "index": 2, "source": "c06c12d6-7453-55e1-9fbd-6c2b9b035861"}, {"destination":
-      "03533492-f3b6-58c9-b89f-c01d42f7bf50", "id": "6eb52f56-1d27-5679-83d9-91627a339c49",
-      "index": 3, "source": "d0cd97ca-0df5-5954-a0d2-ce5d39b58fa4"}, {"destination":
-      "03533492-f3b6-58c9-b89f-c01d42f7bf50", "id": "d611afa5-6673-5ecf-a21a-405a18810b81",
-      "index": 4, "source": "7a25531c-2758-54f5-b795-5fa7e58b1e89"}, {"destination":
-      "03533492-f3b6-58c9-b89f-c01d42f7bf50", "id": "fba34b1f-6df6-5231-bccd-5d66132d00a1",
-      "index": 5, "source": "fb35de60-6c65-55c6-b7a9-c00f5abf787f"}, {"destination":
-      "03533492-f3b6-58c9-b89f-c01d42f7bf50", "id": "a26cef9f-6117-51d9-9fc0-f29b05bd6801",
-      "index": 6, "source": "ccf8cd2f-ff80-55fb-a836-5e9238d3dd08"}, {"destination":
-      "03533492-f3b6-58c9-b89f-c01d42f7bf50", "id": "a7701712-8216-54c0-aede-9ce55d6a4dcc",
-      "index": 7, "source": "cdc90a52-1323-5bd5-810a-b9d304b8d963"}, {"destination":
-      "03533492-f3b6-58c9-b89f-c01d42f7bf50", "id": "19215c7b-2bef-5973-af2c-b0278d043bb3",
-      "index": 8, "source": "a950cfb3-a261-538a-8bc5-197199643999"}, {"destination":
-      "03533492-f3b6-58c9-b89f-c01d42f7bf50", "id": "6b683e90-2ea2-5449-a433-e67c4abbf38d",
-      "index": 9, "source": "a321a72f-9190-5e20-84c2-8b9ea05a78dc"}, {"destination":
-      "03533492-f3b6-58c9-b89f-c01d42f7bf50", "id": "da51e430-ef92-5ccb-9a82-d530ee23554f",
-      "index": 10, "source": "20dbe269-77b1-5bb2-b5dd-fde2f2aab63b"}], "nodes": [{"id":
-      "03533492-f3b6-58c9-b89f-c01d42f7bf50", "operator": "GeospatialMosaic", "parameters":
-      {"Dest SRS Code": "EPSG:4326"}}, {"id": "995948bc-d0e8-5cf1-93ec-9df744ded613",
-      "operator": "IdahoRead", "parameters": {"bucketName": "idaho-images", "imageId":
-      "1e6f7e3a-6edc-44bb-8c93-f8130a0f25a2", "objectStore": "S3"}}, {"id": "c06c12d6-7453-55e1-9fbd-6c2b9b035861",
-      "operator": "IdahoRead", "parameters": {"bucketName": "idaho-images", "imageId":
-      "262f5097-6b8c-48cc-809f-861034a2bf66", "objectStore": "S3"}}, {"id": "d0cd97ca-0df5-5954-a0d2-ce5d39b58fa4",
-      "operator": "IdahoRead", "parameters": {"bucketName": "idaho-images", "imageId":
-      "3430c260-1996-45b5-834e-e5c663c06259", "objectStore": "S3"}}, {"id": "7a25531c-2758-54f5-b795-5fa7e58b1e89",
-      "operator": "IdahoRead", "parameters": {"bucketName": "idaho-images", "imageId":
-      "6d1b9a4f-2b64-4b9d-b922-89067a888c41", "objectStore": "S3"}}, {"id": "fb35de60-6c65-55c6-b7a9-c00f5abf787f",
-      "operator": "IdahoRead", "parameters": {"bucketName": "idaho-images", "imageId":
-      "839d5f39-2a6a-4b29-b30e-c4c099597fd7", "objectStore": "S3"}}, {"id": "ccf8cd2f-ff80-55fb-a836-5e9238d3dd08",
-      "operator": "IdahoRead", "parameters": {"bucketName": "idaho-images", "imageId":
-      "b0588be1-d871-4d94-9cf7-8efb3d381f14", "objectStore": "S3"}}, {"id": "cdc90a52-1323-5bd5-810a-b9d304b8d963",
-      "operator": "IdahoRead", "parameters": {"bucketName": "idaho-images", "imageId":
-      "c1b3c490-eaee-4d49-8b46-e5533cd1b5c1", "objectStore": "S3"}}, {"id": "a950cfb3-a261-538a-8bc5-197199643999",
-      "operator": "IdahoRead", "parameters": {"bucketName": "idaho-images", "imageId":
-      "d2712864-e255-4d09-bbb8-1e26d775b723", "objectStore": "S3"}}, {"id": "a321a72f-9190-5e20-84c2-8b9ea05a78dc",
-      "operator": "IdahoRead", "parameters": {"bucketName": "idaho-images", "imageId":
-      "ed7f1f26-0dc6-4446-b8e8-e274b82aafea", "objectStore": "S3"}}, {"id": "20dbe269-77b1-5bb2-b5dd-fde2f2aab63b",
-      "operator": "IdahoRead", "parameters": {"bucketName": "idaho-images", "imageId":
-      "fef739c3-7a49-4767-9b94-6fbd022a75e8", "objectStore": "S3"}}]}'
+    body: !!python/unicode '{"edges": [{"destination": "6f8ed79b-3182-5491-9d6c-04e329004921",
+      "id": "933e86ad-5d54-5062-9c2e-1fda7556697c", "index": 1, "source": "a731c51a-1b42-5dd6-9009-3e9afede9606"},
+      {"destination": "6f8ed79b-3182-5491-9d6c-04e329004921", "id": "1b3c238f-bfa2-5422-a4bb-53598099260a",
+      "index": 2, "source": "8cd2b03d-5a33-5ceb-90a0-59c86353aa37"}, {"destination":
+      "6f8ed79b-3182-5491-9d6c-04e329004921", "id": "c9d8da4c-d8ed-521a-b2fd-b882a3786760",
+      "index": 3, "source": "6daf2ee7-ac3c-59e1-a5e8-500a5df7d93c"}, {"destination":
+      "6f8ed79b-3182-5491-9d6c-04e329004921", "id": "34bbca41-3241-5ff8-b974-8a7901771401",
+      "index": 4, "source": "7b66f819-147e-51f7-9a4d-bccf174efddb"}, {"destination":
+      "6f8ed79b-3182-5491-9d6c-04e329004921", "id": "449deef5-b306-50a3-93e0-1de633b4a30f",
+      "index": 5, "source": "b98fa3fd-e27e-51a1-9401-b31edf0c6fc9"}, {"destination":
+      "6f8ed79b-3182-5491-9d6c-04e329004921", "id": "b361717f-2401-5b0c-9eb6-c91a40111944",
+      "index": 6, "source": "1b4dc912-b257-5a76-ad7f-68dc3e82cfc3"}, {"destination":
+      "6f8ed79b-3182-5491-9d6c-04e329004921", "id": "2129cc0e-3e79-59b4-93b1-0c3db04da903",
+      "index": 7, "source": "45167c07-5834-5773-9ddf-12a18447d158"}, {"destination":
+      "6f8ed79b-3182-5491-9d6c-04e329004921", "id": "20bf8087-bed4-5b23-9cf2-a120f4a7142e",
+      "index": 8, "source": "1f33d6d2-d37d-5c7e-9832-b5b112ec2219"}, {"destination":
+      "6f8ed79b-3182-5491-9d6c-04e329004921", "id": "ee07bb5a-6392-5906-bb32-2b8f50c45a4c",
+      "index": 9, "source": "5c2746fa-ae3a-5656-9565-ec4b7c6c5ce4"}, {"destination":
+      "6f8ed79b-3182-5491-9d6c-04e329004921", "id": "65e2a314-d4a2-5686-ae7d-d91b8151a4ce",
+      "index": 10, "source": "48c374d4-2e4d-519c-a5cf-fa31872cc820"}, {"destination":
+      "a731c51a-1b42-5dd6-9009-3e9afede9606", "id": "d27b776a-3362-5287-b142-c9ecef373f83",
+      "index": 1, "source": "a70905a7-69dd-5b72-8f96-3bcda79196e6"}, {"destination":
+      "a70905a7-69dd-5b72-8f96-3bcda79196e6", "id": "07c07008-6a4d-5002-bc22-6fc7e39b1da0",
+      "index": 1, "source": "3ba8b539-ee59-5b08-9bed-92ab26006f14"}, {"destination":
+      "3ba8b539-ee59-5b08-9bed-92ab26006f14", "id": "eaa97ff0-9ccf-5784-ab51-abb0eb38494a",
+      "index": 1, "source": "995948bc-d0e8-5cf1-93ec-9df744ded613"}, {"destination":
+      "8cd2b03d-5a33-5ceb-90a0-59c86353aa37", "id": "2571b3d5-658a-572d-b404-91bbbc04e94c",
+      "index": 1, "source": "8dc42749-5558-5320-9577-b27a15390f0f"}, {"destination":
+      "8dc42749-5558-5320-9577-b27a15390f0f", "id": "df24a5c9-f449-5d71-9b61-29390ce5e38b",
+      "index": 1, "source": "fa2a4af4-3b48-5680-881f-34b7535a612f"}, {"destination":
+      "fa2a4af4-3b48-5680-881f-34b7535a612f", "id": "fe08ec2f-f786-5262-a435-6fc4491c1694",
+      "index": 1, "source": "c06c12d6-7453-55e1-9fbd-6c2b9b035861"}, {"destination":
+      "6daf2ee7-ac3c-59e1-a5e8-500a5df7d93c", "id": "4688e9b3-f648-53da-a8b2-e3555df56a3a",
+      "index": 1, "source": "093c3a1d-27ca-5d71-8844-4a9452b266ce"}, {"destination":
+      "093c3a1d-27ca-5d71-8844-4a9452b266ce", "id": "24af9d50-fdbc-594e-b4f3-c7cbbd09dea1",
+      "index": 1, "source": "e383ded4-c036-5c76-9b43-f2ea7d677cb8"}, {"destination":
+      "e383ded4-c036-5c76-9b43-f2ea7d677cb8", "id": "080d003b-1b0d-56ea-9b83-08f837199356",
+      "index": 1, "source": "d0cd97ca-0df5-5954-a0d2-ce5d39b58fa4"}, {"destination":
+      "7b66f819-147e-51f7-9a4d-bccf174efddb", "id": "e12a766d-86ce-556a-bf31-3b38c3112873",
+      "index": 1, "source": "22b080d9-0e94-59a1-8f3d-ce3e7ae2c060"}, {"destination":
+      "22b080d9-0e94-59a1-8f3d-ce3e7ae2c060", "id": "93610d86-749f-58da-a044-8378262142a9",
+      "index": 1, "source": "f9a67ddc-e7db-544e-b608-ccc7f03ea39f"}, {"destination":
+      "f9a67ddc-e7db-544e-b608-ccc7f03ea39f", "id": "cbc084e5-5326-5c4e-ae70-7987aa3590fc",
+      "index": 1, "source": "7a25531c-2758-54f5-b795-5fa7e58b1e89"}, {"destination":
+      "b98fa3fd-e27e-51a1-9401-b31edf0c6fc9", "id": "d920bc7d-472a-5860-83a1-c9b756a13d34",
+      "index": 1, "source": "8f0e2383-4ea9-5a7e-8a93-a6e3f2f4c6a3"}, {"destination":
+      "8f0e2383-4ea9-5a7e-8a93-a6e3f2f4c6a3", "id": "0d96be81-d2d8-5587-b9fd-67603d7665e2",
+      "index": 1, "source": "75cfa4b8-df50-5948-b174-53d1ec1456c2"}, {"destination":
+      "75cfa4b8-df50-5948-b174-53d1ec1456c2", "id": "024c922c-44b7-5cb2-ba0e-6fbf52233fc7",
+      "index": 1, "source": "fb35de60-6c65-55c6-b7a9-c00f5abf787f"}, {"destination":
+      "1b4dc912-b257-5a76-ad7f-68dc3e82cfc3", "id": "b0272c2f-2c1f-5ba6-abf5-c555b62e8f21",
+      "index": 1, "source": "593cb533-771c-592c-9d84-d6090399ccfb"}, {"destination":
+      "593cb533-771c-592c-9d84-d6090399ccfb", "id": "b6707f78-cb92-595b-8d72-c9236b9ac81b",
+      "index": 1, "source": "91d6ed9e-eca0-5394-9a19-54e9bf5d687b"}, {"destination":
+      "91d6ed9e-eca0-5394-9a19-54e9bf5d687b", "id": "83c15c00-032d-5230-aed1-a4a4ec260a83",
+      "index": 1, "source": "ccf8cd2f-ff80-55fb-a836-5e9238d3dd08"}, {"destination":
+      "45167c07-5834-5773-9ddf-12a18447d158", "id": "bab8a8e0-0c21-5af1-9025-1615ae834879",
+      "index": 1, "source": "bb9aa49c-2235-5990-89e2-a6a56b72f97e"}, {"destination":
+      "bb9aa49c-2235-5990-89e2-a6a56b72f97e", "id": "2f97bd30-82ad-591d-9423-0b0415f9b277",
+      "index": 1, "source": "3270fe43-868a-5a70-a1b2-315de8c84946"}, {"destination":
+      "3270fe43-868a-5a70-a1b2-315de8c84946", "id": "57f5140e-fb08-5aaa-a7db-82ca511134cf",
+      "index": 1, "source": "cdc90a52-1323-5bd5-810a-b9d304b8d963"}, {"destination":
+      "1f33d6d2-d37d-5c7e-9832-b5b112ec2219", "id": "51aa73a8-3088-5e11-bf2c-40ba5e3fde5e",
+      "index": 1, "source": "ba82ca7a-1b4e-5476-8126-31e6ae6b1daa"}, {"destination":
+      "ba82ca7a-1b4e-5476-8126-31e6ae6b1daa", "id": "39dd2cd7-e98d-5bd7-8fef-8f20fde93d96",
+      "index": 1, "source": "0bded27f-0958-57ea-980b-ed8e0e0681a6"}, {"destination":
+      "0bded27f-0958-57ea-980b-ed8e0e0681a6", "id": "5af8299b-5314-55f3-b7de-5acbc1f5b874",
+      "index": 1, "source": "a950cfb3-a261-538a-8bc5-197199643999"}, {"destination":
+      "5c2746fa-ae3a-5656-9565-ec4b7c6c5ce4", "id": "1c321a83-e2a4-511c-a6ef-279bc954d438",
+      "index": 1, "source": "0a613381-1676-5d32-aad0-40d9794fa468"}, {"destination":
+      "0a613381-1676-5d32-aad0-40d9794fa468", "id": "2c746d19-3ab3-52f6-84c2-9b40a3a800a1",
+      "index": 1, "source": "ff3e5bf8-fc00-5e95-b15f-3bf979699f12"}, {"destination":
+      "ff3e5bf8-fc00-5e95-b15f-3bf979699f12", "id": "0c144167-7c96-5a47-b4d5-ab4480feffd5",
+      "index": 1, "source": "a321a72f-9190-5e20-84c2-8b9ea05a78dc"}, {"destination":
+      "48c374d4-2e4d-519c-a5cf-fa31872cc820", "id": "ba547cc7-a070-551f-879b-bad9ffa38506",
+      "index": 1, "source": "2d25a908-53c5-5394-a151-98dcbc74442d"}, {"destination":
+      "2d25a908-53c5-5394-a151-98dcbc74442d", "id": "a7b297b8-2baf-5696-8349-dbb1a7ef34c9",
+      "index": 1, "source": "34eec16f-333a-5fe6-b06a-f5365d0abe04"}, {"destination":
+      "34eec16f-333a-5fe6-b06a-f5365d0abe04", "id": "d09a25a3-adcb-57e3-b5f6-4493104c4c1e",
+      "index": 1, "source": "20dbe269-77b1-5bb2-b5dd-fde2f2aab63b"}], "nodes": [{"id":
+      "6f8ed79b-3182-5491-9d6c-04e329004921", "operator": "GeospatialMosaic", "parameters":
+      {"Dest SRS Code": "EPSG:4326"}}, {"id": "a731c51a-1b42-5dd6-9009-3e9afede9606",
+      "operator": "Format", "parameters": {"dataType": "1"}}, {"id": "a70905a7-69dd-5b72-8f96-3bcda79196e6",
+      "operator": "MultiplyConst", "parameters": {"constants": "[10000]"}}, {"id":
+      "3ba8b539-ee59-5b08-9bed-92ab26006f14", "operator": "TOAReflectance", "parameters":
+      {}}, {"id": "995948bc-d0e8-5cf1-93ec-9df744ded613", "operator": "IdahoRead",
+      "parameters": {"bucketName": "idaho-images", "imageId": "1e6f7e3a-6edc-44bb-8c93-f8130a0f25a2",
+      "objectStore": "S3"}}, {"id": "8cd2b03d-5a33-5ceb-90a0-59c86353aa37", "operator":
+      "Format", "parameters": {"dataType": "1"}}, {"id": "8dc42749-5558-5320-9577-b27a15390f0f",
+      "operator": "MultiplyConst", "parameters": {"constants": "[10000]"}}, {"id":
+      "fa2a4af4-3b48-5680-881f-34b7535a612f", "operator": "TOAReflectance", "parameters":
+      {}}, {"id": "c06c12d6-7453-55e1-9fbd-6c2b9b035861", "operator": "IdahoRead",
+      "parameters": {"bucketName": "idaho-images", "imageId": "262f5097-6b8c-48cc-809f-861034a2bf66",
+      "objectStore": "S3"}}, {"id": "6daf2ee7-ac3c-59e1-a5e8-500a5df7d93c", "operator":
+      "Format", "parameters": {"dataType": "1"}}, {"id": "093c3a1d-27ca-5d71-8844-4a9452b266ce",
+      "operator": "MultiplyConst", "parameters": {"constants": "[10000]"}}, {"id":
+      "e383ded4-c036-5c76-9b43-f2ea7d677cb8", "operator": "TOAReflectance", "parameters":
+      {}}, {"id": "d0cd97ca-0df5-5954-a0d2-ce5d39b58fa4", "operator": "IdahoRead",
+      "parameters": {"bucketName": "idaho-images", "imageId": "3430c260-1996-45b5-834e-e5c663c06259",
+      "objectStore": "S3"}}, {"id": "7b66f819-147e-51f7-9a4d-bccf174efddb", "operator":
+      "Format", "parameters": {"dataType": "1"}}, {"id": "22b080d9-0e94-59a1-8f3d-ce3e7ae2c060",
+      "operator": "MultiplyConst", "parameters": {"constants": "[10000]"}}, {"id":
+      "f9a67ddc-e7db-544e-b608-ccc7f03ea39f", "operator": "TOAReflectance", "parameters":
+      {}}, {"id": "7a25531c-2758-54f5-b795-5fa7e58b1e89", "operator": "IdahoRead",
+      "parameters": {"bucketName": "idaho-images", "imageId": "6d1b9a4f-2b64-4b9d-b922-89067a888c41",
+      "objectStore": "S3"}}, {"id": "b98fa3fd-e27e-51a1-9401-b31edf0c6fc9", "operator":
+      "Format", "parameters": {"dataType": "1"}}, {"id": "8f0e2383-4ea9-5a7e-8a93-a6e3f2f4c6a3",
+      "operator": "MultiplyConst", "parameters": {"constants": "[10000]"}}, {"id":
+      "75cfa4b8-df50-5948-b174-53d1ec1456c2", "operator": "TOAReflectance", "parameters":
+      {}}, {"id": "fb35de60-6c65-55c6-b7a9-c00f5abf787f", "operator": "IdahoRead",
+      "parameters": {"bucketName": "idaho-images", "imageId": "839d5f39-2a6a-4b29-b30e-c4c099597fd7",
+      "objectStore": "S3"}}, {"id": "1b4dc912-b257-5a76-ad7f-68dc3e82cfc3", "operator":
+      "Format", "parameters": {"dataType": "1"}}, {"id": "593cb533-771c-592c-9d84-d6090399ccfb",
+      "operator": "MultiplyConst", "parameters": {"constants": "[10000]"}}, {"id":
+      "91d6ed9e-eca0-5394-9a19-54e9bf5d687b", "operator": "TOAReflectance", "parameters":
+      {}}, {"id": "ccf8cd2f-ff80-55fb-a836-5e9238d3dd08", "operator": "IdahoRead",
+      "parameters": {"bucketName": "idaho-images", "imageId": "b0588be1-d871-4d94-9cf7-8efb3d381f14",
+      "objectStore": "S3"}}, {"id": "45167c07-5834-5773-9ddf-12a18447d158", "operator":
+      "Format", "parameters": {"dataType": "1"}}, {"id": "bb9aa49c-2235-5990-89e2-a6a56b72f97e",
+      "operator": "MultiplyConst", "parameters": {"constants": "[10000]"}}, {"id":
+      "3270fe43-868a-5a70-a1b2-315de8c84946", "operator": "TOAReflectance", "parameters":
+      {}}, {"id": "cdc90a52-1323-5bd5-810a-b9d304b8d963", "operator": "IdahoRead",
+      "parameters": {"bucketName": "idaho-images", "imageId": "c1b3c490-eaee-4d49-8b46-e5533cd1b5c1",
+      "objectStore": "S3"}}, {"id": "1f33d6d2-d37d-5c7e-9832-b5b112ec2219", "operator":
+      "Format", "parameters": {"dataType": "1"}}, {"id": "ba82ca7a-1b4e-5476-8126-31e6ae6b1daa",
+      "operator": "MultiplyConst", "parameters": {"constants": "[10000]"}}, {"id":
+      "0bded27f-0958-57ea-980b-ed8e0e0681a6", "operator": "TOAReflectance", "parameters":
+      {}}, {"id": "a950cfb3-a261-538a-8bc5-197199643999", "operator": "IdahoRead",
+      "parameters": {"bucketName": "idaho-images", "imageId": "d2712864-e255-4d09-bbb8-1e26d775b723",
+      "objectStore": "S3"}}, {"id": "5c2746fa-ae3a-5656-9565-ec4b7c6c5ce4", "operator":
+      "Format", "parameters": {"dataType": "1"}}, {"id": "0a613381-1676-5d32-aad0-40d9794fa468",
+      "operator": "MultiplyConst", "parameters": {"constants": "[10000]"}}, {"id":
+      "ff3e5bf8-fc00-5e95-b15f-3bf979699f12", "operator": "TOAReflectance", "parameters":
+      {}}, {"id": "a321a72f-9190-5e20-84c2-8b9ea05a78dc", "operator": "IdahoRead",
+      "parameters": {"bucketName": "idaho-images", "imageId": "ed7f1f26-0dc6-4446-b8e8-e274b82aafea",
+      "objectStore": "S3"}}, {"id": "48c374d4-2e4d-519c-a5cf-fa31872cc820", "operator":
+      "Format", "parameters": {"dataType": "1"}}, {"id": "2d25a908-53c5-5394-a151-98dcbc74442d",
+      "operator": "MultiplyConst", "parameters": {"constants": "[10000]"}}, {"id":
+      "34eec16f-333a-5fe6-b06a-f5365d0abe04", "operator": "TOAReflectance", "parameters":
+      {}}, {"id": "20dbe269-77b1-5bb2-b5dd-fde2f2aab63b", "operator": "IdahoRead",
+      "parameters": {"bucketName": "idaho-images", "imageId": "fef739c3-7a49-4767-9b94-6fbd022a75e8",
+      "objectStore": "S3"}}]}'
     headers:
       Accept: ['*/*']
       Accept-Encoding: ['gzip, deflate']
       Connection: [keep-alive]
-      Content-Length: ['3709']
+      Content-Length: ['11819']
       Content-Type: [application/json]
       User-Agent: [python-requests/2.9.1]
     method: POST
     uri: https://idahoapi.geobigdata.io/v1/graph
   response:
-    body: {string: !!python/unicode f30fa1428b81193d898ecb6529b0b5b854b172808068794a324d0e6d28574da4}
+    body: {string: !!python/unicode c4f65c0705cada38b58caf1b005219c98fe200cb58c906ae3054fda1e5fb9abb}
     headers:
       access-control-allow-headers: ['x-requested-with, X-Auth-Token, Content-Type,
           Authorization']
@@ -162,7 +262,7 @@ interactions:
       connection: [keep-alive]
       content-length: ['64']
       content-type: [text/plain;charset=UTF-8]
-      date: ['Fri, 26 Jan 2018 18:08:20 GMT']
+      date: ['Fri, 26 Jan 2018 18:08:25 GMT']
     status: {code: 200, message: ''}
 - request:
     body: null
@@ -172,7 +272,7 @@ interactions:
       Connection: [keep-alive]
       User-Agent: [python-requests/2.9.1]
     method: GET
-    uri: https://idahoapi.geobigdata.io/v1/metadata/f30fa1428b81193d898ecb6529b0b5b854b172808068794a324d0e6d28574da4/03533492-f3b6-58c9-b89f-c01d42f7bf50/metadata.json
+    uri: https://idahoapi.geobigdata.io/v1/metadata/c4f65c0705cada38b58caf1b005219c98fe200cb58c906ae3054fda1e5fb9abb/6f8ed79b-3182-5491-9d6c-04e329004921/metadata.json
   response:
     body: {string: !!python/unicode '{"imageMetadata":{"imageId":"1e6f7e3a-6edc-44bb-8c93-f8130a0f25a2","version":1.0,"profileName":"georectified_image","tilePartition":"0000","tileXOffset":0,"tileYOffset":0,"numXTiles":39,"numYTiles":147,"tileXSize":256,"tileYSize":256,"numBands":4,"dataType":"UNSIGNED_SHORT","imageHeight":37521,"imageWidth":9851,"sensorPlatformName":"QB02","sensorName":"4-band
         (Blue, Green, Red, NIR) Multispectral","vendorName":"DigitalGlobe, Inc.","vendorDatasetIdentifier":"LV1B:057114153010_01_P006:1010010002B93F00:A010010301936800","acquisitionDate":"2004-02-20T02:33:14.832Z","colorInterpretation":"BGRN","imageBoundsWGS84":"POLYGON
@@ -186,6 +286,6 @@ interactions:
       access-control-max-age: ['3600']
       connection: [keep-alive]
       content-type: [application/json;charset=UTF-8]
-      date: ['Fri, 26 Jan 2018 18:08:22 GMT']
+      date: ['Fri, 26 Jan 2018 18:08:30 GMT']
     status: {code: 200, message: ''}
 version: 1
