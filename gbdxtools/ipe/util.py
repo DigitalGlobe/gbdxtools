@@ -64,6 +64,7 @@ def preview(image, **kwargs):
     node_id = image.ipe.graph()['nodes'][0]['id']
     
     stats = get_graph_stats(gbdx.gbdx_connection, graph_id, node_id)
+    #print(stats)
     scales = map(stats["scale"].__getitem__, bands)
     offsets = map(stats["offset"].__getitem__, bands)
 
@@ -96,26 +97,27 @@ def preview(image, **kwargs):
             var y2 = md.minTileY * md.tileYSize;
             var tileLayerResolutions = [georef.scaleX];
 
-            var url = "https://idahoapitest.geobigdata.io/v1/tile/";
+            var url = "https://idahoapi.geobigdata.io/v1/tile/";
             url += graphId + '/' + nodeId;
             url += "/{x}/{y}.png?token=$token&bands=$bands&scales=$scales&offsets=$offsets";
 
-            var proj = $proj;    
-            if ( proj !== 'EPSG:4326' ) {
-                /*var proj4def = json["proj4"];
+            var proj = '$proj';    
+            /*if ( proj !== 'EPSG:4326' ) {
+                var proj4def = json["proj4"];
                 var area = json["area_of_use"];
                 var bbox = [area["area_west_bound_lon"], area["area_south_bound_lat"], area["area_east_bound_lon"], area["area_north_bound_lat"]]
-                var newProjCode = `EPSG:${code}`;
+                var newProjCode = `EPSG:code`;
                 proj4.defs(newProjCode, proj4def);
                 var projection = ol.proj.get(newProjCode);
                 var fromLonLat = ol.proj.getTransform('EPSG:4326', projection);
                 var extent = ol.extent.applyTransform(
                     [bbox[1], bbox[2], bbox[3], bbox[0]], fromLonLat);
                 projection.setExtent(extent);
-                return projection;*/
+                return projection;
             } else {
                 var projection = ol.proj.get(proj);
             }
+            */
             var projection = ol.proj.get(proj);
 
             var rda = new ol.layer.Tile({
