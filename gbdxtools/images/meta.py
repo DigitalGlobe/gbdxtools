@@ -87,6 +87,7 @@ def _setup_curl(url, token, index, NOSIGNAL=1, CONNECTTIMEOUT=120, TIMEOUT=300):
 
 def load_urls(collection, shape=(8,256,256), max_retries=MAX_RETRIES):
     mc = pycurl.CurlMulti()
+    mc.setopt(pycurl.M_PIPELINING, True)
     nhandles = len(collection)
     results, cmap = {}, {}
     for url, token, index in collection:
@@ -96,14 +97,15 @@ def load_urls(collection, shape=(8,256,256), max_retries=MAX_RETRIES):
         mc.add_handle(_curl)
 
     nprocessed = 0
-    #while nhandles - nprocessed:
     while nhandles - nprocessed:
+        mc.select(1.0)
         while True:
             ret, something = mc.perform()
             if ret != pycurl.E_CALL_MULTI_PERFORM:
                 break
         nq, suc, failed = mc.info_read()
         nprocessed += len(suc)
+        #TODO: handler function
         for h in suc:
             _fp = cmap[h.index][-1]
             _fp.flush()
@@ -144,7 +146,6 @@ def inject_multifetch(sd):
         if isinstance(name, str) and name.startswith('image'):
             return (operator.getitem, 'load_urls', (z, x, y), sli)
     return (operator.getitem, key, sli)
-
 
 @add_metaclass(abc.ABCMeta)
 class DaskMeta(object):
@@ -217,9 +218,6 @@ class DaskImage(da.Array):
     def __dask_optimize__(cls, dsk, keys, **kwargs):
         dsk1, deps1 = optimize.cull(dsk, keys)
         dsk1["load_urls"] = (load_urls, [dsk1[key] for key in dsk1.keys() if isinstance(key[0], str) and key[0].startswith('image')])
-#        lhs = (operator.getitem, 'key', 'slice')
-#        rs = RuleSet(RewriteRule(lhs, inject_multifetch, ('key', 'slice')))
-#        dsk2 = valmap(rs.rewrite, dsk1)
         dsk2 = {}
         for key, val in dsk1.iteritems():
             if isinstance(key, tuple) and key[0].startswith('image'):
@@ -227,8 +225,7 @@ class DaskImage(da.Array):
                 dsk2[key] = (operator.getitem, 'load_urls', (z, x, y))
             else:
                 dsk2[key] = val
-        return dsk2
-        #dsk3 = da.Array.__dask_optimize__(dsk2, keys)
+        return da.Array.__dask_optimize__(dsk2, keys)
 
     def __getattribute__(self, name):
         fn = object.__getattribute__(self, name)
