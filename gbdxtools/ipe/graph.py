@@ -3,8 +3,8 @@ import json
 from concurrent.futures import Future
 from gbdxtools.ipe.error import NotFound, BadRequest
 
-#VIRTUAL_IPE_URL = os.environ.get("VIRTUAL_IPE_URL", "https://idahoapitest.geobigdata.io/v1")
-VIRTUAL_IPE_URL = os.environ.get("VIRTUAL_IPE_URL", "https://idahoapi.geobigdata.io/v1")
+VIRTUAL_IPE_URL = os.environ.get("VIRTUAL_IPE_URL", "https://idahoapitest.geobigdata.io/v1")
+#VIRTUAL_IPE_URL = os.environ.get("VIRTUAL_IPE_URL", "https://idahoapi.geobigdata.io/v1")
 
 def resolve_if_future(future):
     if isinstance(future, Future):
@@ -41,7 +41,6 @@ def register_ipe_graph(conn, ipe_graph):
 
 
 def get_ipe_metadata(conn, ipe_id, node='toa_reflectance'):
-    print(ipe_id)
     md_response = conn.get(VIRTUAL_IPE_URL + "/metadata/{}/{}/metadata.json".format(ipe_id, node)).result()
     if md_response.status_code != 200:
         raise BadRequest("Problem fetching image metadata: status {} / {}".format(md_response.status_code, md_response.reason))

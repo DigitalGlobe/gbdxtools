@@ -16,15 +16,13 @@ import numpy as np
 from numpy.linalg import pinv
 from skimage.transform._geometric import GeometricTransform
 
-from shapely.geometry import shape
-from shapely.wkt import loads
-
 import xml.etree.cElementTree as ET
 from xml.dom import minidom
 import ephem
 from string import Template
 
-from shapely import wkt
+from shapely.geometry import shape
+from shapely.wkt import loads
 from affine import Affine
 
 from gbdxtools.ipe.graph import get_graph_stats
@@ -62,12 +60,23 @@ def preview(image, **kwargs):
     center = kwargs.get("center", list(shape(image).centroid.bounds[0:2]))
     graph_id = image.ipe_id
     node_id = image.ipe.graph()['nodes'][0]['id']
-    
-    stats = get_graph_stats(gbdx.gbdx_connection, graph_id, node_id)
-    #print(stats)
-    scales = map(stats["scale"].__getitem__, bands)
-    offsets = map(stats["offset"].__getitem__, bands)
 
+    # fetch a tile in order to calc stats and do a simple stretch
+    y = image.shape[1] / 2
+    x = image.shape[2] / 2
+    aoi = image[:, y:y+256, x:x+256].read(quiet=True)
+    means, stds = aoi.mean(axis=(1,2)), aoi.std(axis=(1,2))
+    scales = (255.0 / (4.0 * stds))
+    offsets = map(list(((means - (2.0 * stds)) * scales * -1.0)).__getitem__, bands)
+    scales = map(list(scales).__getitem__, bands)
+
+    if image.proj != 'EPSG:4326':
+        code = image.proj.split(':')[1]
+        conn = gbdx.gbdx_connection
+        proj_info = conn.get('https://ughlicoordinates.geobigdata.io/ughli/v1/projinfo/{}'.format(code)).json()
+    else:
+        proj_info = {}
+    
     map_id = "map_{}".format(str(int(time.time())))
     display(HTML(Template('''
        <div id="$map_id"/>
@@ -81,10 +90,12 @@ def preview(image, **kwargs):
         require.config({
             paths: {
                 ol: 'https://openlayers.org/en/v4.6.4/build/ol',
+                proj4: 'https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.4.4/proj4'
             }
         });
 
-        require(['ol'], function(ol) {
+        require(['ol', 'proj4'], function(ol, proj4) {
+            ol.proj.setProj4(proj4);
             var md = $md;
             var georef = $georef;
             var graphId = '$graphId';
@@ -101,24 +112,23 @@ def preview(image, **kwargs):
             url += graphId + '/' + nodeId;
             url += "/{x}/{y}.png?token=$token&bands=$bands&scales=$scales&offsets=$offsets";
 
-            var proj = '$proj';    
-            /*if ( proj !== 'EPSG:4326' ) {
-                var proj4def = json["proj4"];
-                var area = json["area_of_use"];
-                var bbox = [area["area_west_bound_lon"], area["area_south_bound_lat"], area["area_east_bound_lon"], area["area_north_bound_lat"]]
-                var newProjCode = `EPSG:code`;
-                proj4.defs(newProjCode, proj4def);
-                var projection = ol.proj.get(newProjCode);
+            var proj = '$proj';
+            var projInfo = $projInfo;
+    
+            if ( proj !== 'EPSG:4326' ) {
+                var proj4def = projInfo["proj4"];
+                proj4.defs(proj, proj4def);
+                var area = projInfo["area_of_use"];
+                var bbox = [area["area_west_bound_lon"], area["area_south_bound_lat"], 
+                            area["area_east_bound_lon"], area["area_north_bound_lat"]]
+                var projection = ol.proj.get(proj);
                 var fromLonLat = ol.proj.getTransform('EPSG:4326', projection);
                 var extent = ol.extent.applyTransform(
-                    [bbox[1], bbox[2], bbox[3], bbox[0]], fromLonLat);
+                    [bbox[0], bbox[1], bbox[2], bbox[3]], fromLonLat);
                 projection.setExtent(extent);
-                return projection;
             } else {
                 var projection = ol.proj.get(proj);
             }
-            */
-            var projection = ol.proj.get(proj);
 
             var rda = new ol.layer.Tile({
               title: 'RDA',
@@ -150,7 +160,7 @@ def preview(image, **kwargs):
               layers: [ rda ],
               target: '$map_id',
               view: new ol.View({
-                projection: '$proj',
+                projection: projection,
                 center: $center,
                 zoom: $zoom
               })
@@ -159,6 +169,7 @@ def preview(image, **kwargs):
     """).substitute({
         "map_id": map_id,
         "proj": image.proj,
+        "projInfo": json.dumps(proj_info),
         "graphId": graph_id,
         "bounds": bounds,
         "bands": ",".join(map(str, bands)),
