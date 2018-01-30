@@ -87,56 +87,24 @@ def _setup_curl(url, token, index, NOSIGNAL=1, CONNECTTIMEOUT=30, TIMEOUT=300):
 
 def load_urls(collection, shape=(8,256,256), max_retries=MAX_RETRIES):
     mc = pycurl.CurlMulti()
-    results, cmap, pending = {}, {}, {}
+    nhandles = len(collection)
+    results, cmap = {}, {}
     for url, token, index in collection:
         index = tuple(index)
-        print(index)
         _curl, fp = _setup_curl(url, token, index)
         cmap[index] = (_curl, fp)
-        pending[index] = True
         mc.add_handle(_curl)
 
-    pending_collection = [key for key in pending.keys() if pending[key]]
     nhandles = len(pending_collection)
-    print("nhandles = {}".format(nhandles))
-    #suc, failed = [], []
     nprocessed = 0
     #while nhandles - nprocessed:
-    while True:
-        ret, something = mc.perform()
-        if ret != pycurl.E_CALL_MULTI_PERFORM:
-            break
-    print('something={}'.format(something))
-    while something:
-        mc.select(0.5)
+    while nhandles - nprocessed:
         while True:
             ret, something = mc.perform()
             if ret != pycurl.E_CALL_MULTI_PERFORM:
-            #nq, suc, failed = mc.info_read()
-            #nprocessed += len(suc)
-            #print("len nq, suc, failed, nprocessed, something: {}, {}, {}, {}, {}".format(nq, len(suc), len(failed), nprocessed, something))
                 break
-    nq, suc, failed = mc.info_read()
-    print("len nq, suc, failed, nprocessed, something: {}, {}, {}, {}, {}".format(nq, len(suc), len(failed), nprocessed, something))
-    for k, (_h, _fp) in cmap.iteritems():
-        _h.close()
-        _fp.flush()
-        _fp.close()
-        try:
-            arr = imread(_fp.name)
-            if len(arr.shape) == 3:
-                arr = np.rollaxis(arr, 2, 0)
-            else:
-                arr = np.expand_dims(arr, axis=0)
-        except Exception as e:
-            print(e)
-            arr = np.zeros(shape, dtype=np.float32)
-        finally:
-            results[k] = arr
-            mc.remove_handle(_h)
-            os.remove(_fp.name)
-
-    if False:
+        nq, suc, failed = mc.info_read()
+        nprocessed += len(suc)
         for h in suc:
             pending[h.index] = False
             _fp = cmap[h.index][-1]
