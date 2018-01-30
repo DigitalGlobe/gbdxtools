@@ -70,7 +70,7 @@ except NameError:
 NUM_WORKERS = 5
 MAX_RETRIES = 5
 
-def _setup_curl(url, token, index, NOSIGNAL=1, CONNECTTIMEOUT=30, TIMEOUT=300):
+def _setup_curl(url, token, index, NOSIGNAL=1, CONNECTTIMEOUT=120, TIMEOUT=300):
     _, ext = os.path.splitext(urlparse(url).path)
     fp = NamedTemporaryFile(prefix='gbdxtools', suffix=ext, delete=False)
     _curl = pycurl.Curl()
