@@ -95,7 +95,6 @@ def load_urls(collection, shape=(8,256,256), max_retries=MAX_RETRIES):
         cmap[index] = (_curl, fp)
         mc.add_handle(_curl)
 
-    nhandles = len(pending_collection)
     nprocessed = 0
     #while nhandles - nprocessed:
     while nhandles - nprocessed:
@@ -106,7 +105,6 @@ def load_urls(collection, shape=(8,256,256), max_retries=MAX_RETRIES):
         nq, suc, failed = mc.info_read()
         nprocessed += len(suc)
         for h in suc:
-            pending[h.index] = False
             _fp = cmap[h.index][-1]
             _fp.flush()
             _fp.close()
