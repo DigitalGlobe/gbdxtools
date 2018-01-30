@@ -27,7 +27,7 @@ from shapely import ops
 from affine import Affine
 import pyproj
 
-from gbdxtools.ipe.graph import get_graph_stats
+from gbdxtools.ipe.graph import VIRTUAL_IPE_URL 
 import gbdxtools.ipe.constants as constants
 
 with warnings.catch_warnings():
@@ -113,7 +113,7 @@ def preview(image, **kwargs):
             var y2 = md.minTileY * md.tileYSize;
             var tileLayerResolutions = [georef.scaleX];
 
-            var url = "https://idahoapi.geobigdata.io/v1/tile/";
+            var url = '$url' + '/tile/';
             url += graphId + '/' + nodeId;
             url += "/{x}/{y}.png?token=$token&bands=$bands&scales=$scales&offsets=$offsets";
 
@@ -185,7 +185,8 @@ def preview(image, **kwargs):
         "zoom": zoom,
         "token": gbdx.gbdx_connection.access_token,
         "scales": ",".join(map(str, scales)),
-        "offsets": ",".join(map(str, offsets))
+        "offsets": ",".join(map(str, offsets)),
+        "url": VIRTUAL_IPE_URL
     })
     display(Javascript(js))
 
