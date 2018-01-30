@@ -5,7 +5,7 @@ import datetime
 import time
 import math
 import json
-from functools import wraps
+from functools import wraps, partial
 from collections import Sequence
 try:
     from itertools import izip
@@ -21,9 +21,11 @@ from xml.dom import minidom
 import ephem
 from string import Template
 
-from shapely.geometry import shape
+from shapely.geometry import shape, box
 from shapely.wkt import loads
+from shapely import ops
 from affine import Affine
+import pyproj
 
 from gbdxtools.ipe.graph import get_graph_stats
 import gbdxtools.ipe.constants as constants
@@ -56,7 +58,7 @@ def preview(image, **kwargs):
 
     zoom = kwargs.get("zoom", 16)
     bands = kwargs.get("bands", image._rgb_bands)
-    bounds = kwargs.get("bounds", list(image.bounds)) #list(loads(image.ipe_metadata["image"]["imageBoundsWGS84"]).bounds))
+    wgs84_bounds = kwargs.get("bounds", list(loads(image.ipe_metadata["image"]["imageBoundsWGS84"]).bounds))
     center = kwargs.get("center", list(shape(image).centroid.bounds[0:2]))
     graph_id = image.ipe_id
     node_id = image.ipe.graph()['nodes'][0]['id']
@@ -74,8 +76,11 @@ def preview(image, **kwargs):
         code = image.proj.split(':')[1]
         conn = gbdx.gbdx_connection
         proj_info = conn.get('https://ughlicoordinates.geobigdata.io/ughli/v1/projinfo/{}'.format(code)).json()
+        tfm = partial(pyproj.transform, pyproj.Proj(init='EPSG:4326'), pyproj.Proj(init=image.proj))
+        bounds = list(ops.transform(tfm, box(*wgs84_bounds)).bounds)
     else:
         proj_info = {}
+        bounds = wgs84_bounds
     
     map_id = "map_{}".format(str(int(time.time())))
     display(HTML(Template('''
