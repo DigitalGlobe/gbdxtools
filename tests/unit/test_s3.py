@@ -52,6 +52,4 @@ class S3Tests(unittest.TestCase):
         location = 'gbdxtools/ski_areas.geojson'
         s = S3()
         s.download(location, local_dir=self._temp_path)
-        print(os.path.join(self._temp_path, 'test_dir', 'model.json'))
-        assert os.path.isfile(os.path.join(self._temp_path, 'test_dir', 'model.json'))
-        assert os.path.isfile(os.path.join(self._temp_path, 'model.json'))
+        assert os.path.isfile(os.path.join(self._temp_path, 'ski_areas.geojson'))

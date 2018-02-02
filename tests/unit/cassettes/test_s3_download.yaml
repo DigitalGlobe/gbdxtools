@@ -1,0 +1,798 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      User-Agent: [python-requests/2.14.2]
+    method: GET
+    uri: https://geobigdata.io/s3creds/v1/prefix?duration=36000
+  response:
+    body: {string: !!python/unicode '{"S3_secret_key": "so31U85OFD9TwmJA27NpuVgkf8J4xeuqhNfoa5yx",
+        "prefix": "c56b10a9-da6e-4118-8b9e-1a7005bea51b", "bucket": "gbd-customer-data",
+        "S3_access_key": "ASIAJBCEDH273ERSM2LA", "S3_session_token": "FQoDYXdzEE4aDECLJbDcXfhaCrQtXSKTA1fGrUy/zLIJdyBISJkggLXAk/WHUm8Q2LXjdPEwmItpqjqLM4FDzdA0EUqVsw+5kHXOcD2WmnKgiTwfejtgyX5noaz0VB+5rwWfHIAc2ECpxiwpk/asuFncrJ11bnEn/ozeXsLNlA/J0JHgYYKVTvL1NX4xd0RiGZTbkqPqe6x1SQujZkZbh9axy2cWPrrh4s+5dswcSji4iaUsB+y0GqwVUjBFDjekk+k1814fPI5KPp43pojcXnVSXtXEWikOrCnqgRXoXD3MOC2UNYVbcj8LOp4ncAN6rHfm1voBOYJ5gRNXmcT9ocwhiLj+WQQLsngiwd5Uh8toVHl+NUzOe4N97VqS623RMOeDERGZzM4MTK26Vl9djU6+VnpguwXTfJGcanASY5khqoLMU4TnBt3cSJOD433XL9B9xHB/arWX7ilILj2FvnTBHkRd+bVRIVeVBaV9ZKFyKkoPP0WXWnGB2QE8lU8RYjJmr+4/olZFa7JIaeDZP84irv0cf20IgVjufD0UdH6ea8JJktc7wJurL+kozqvT0wU="}'}
+    headers:
+      access-control-allow-origin: ['*']
+      connection: [keep-alive]
+      content-length: ['787']
+      content-type: [application/json]
+      date: ['Fri, 02 Feb 2018 21:20:34 GMT']
+      server: [Apache/2.4.27 (Amazon) mod_wsgi/3.5 Python/2.7.12]
+      via: [kong/0.10.3]
+      x-kong-proxy-latency: ['0']
+      x-kong-upstream-latency: ['2505']
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      User-Agent: [Boto3/1.4.5 Python/2.7.14 Darwin/15.6.0 Botocore/1.5.92]
+      X-Amz-Content-SHA256: [e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855]
+      X-Amz-Date: [20180202T211910Z]
+      X-Amz-Security-Token: [FQoDYXdzEE4aDECLJbDcXfhaCrQtXSKTA1fGrUy/zLIJdyBISJkggLXAk/WHUm8Q2LXjdPEwmItpqjqLM4FDzdA0EUqVsw+5kHXOcD2WmnKgiTwfejtgyX5noaz0VB+5rwWfHIAc2ECpxiwpk/asuFncrJ11bnEn/ozeXsLNlA/J0JHgYYKVTvL1NX4xd0RiGZTbkqPqe6x1SQujZkZbh9axy2cWPrrh4s+5dswcSji4iaUsB+y0GqwVUjBFDjekk+k1814fPI5KPp43pojcXnVSXtXEWikOrCnqgRXoXD3MOC2UNYVbcj8LOp4ncAN6rHfm1voBOYJ5gRNXmcT9ocwhiLj+WQQLsngiwd5Uh8toVHl+NUzOe4N97VqS623RMOeDERGZzM4MTK26Vl9djU6+VnpguwXTfJGcanASY5khqoLMU4TnBt3cSJOD433XL9B9xHB/arWX7ilILj2FvnTBHkRd+bVRIVeVBaV9ZKFyKkoPP0WXWnGB2QE8lU8RYjJmr+4/olZFa7JIaeDZP84irv0cf20IgVjufD0UdH6ea8JJktc7wJurL+kozqvT0wU=]
+    method: !!python/unicode GET
+    uri: https://s3-us-west-2.amazonaws.com/gbd-customer-data?prefix=c56b10a9-da6e-4118-8b9e-1a7005bea51b%2Fgbdxtools%2Fski_areas.geojson&encoding-type=url
+  response:
+    body: {string: !!python/unicode '<?xml version="1.0" encoding="UTF-8"?>
+
+        <Error><Code>PermanentRedirect</Code><Message>The bucket you are attempting
+        to access must be addressed using the specified endpoint. Please send all
+        future requests to this endpoint.</Message><Bucket>gbd-customer-data</Bucket><Endpoint>s3.amazonaws.com</Endpoint><RequestId>0462BDAAF32F728A</RequestId><HostId>wN2SKZWKzhWRQDnvm/an+CsyWEBA1/IjjU74Z3h9QTGYC439jVBN76tBEQ1riCFS223mHjV4J2o=</HostId></Error>'}
+    headers:
+      content-type: [application/xml]
+      date: ['Fri, 02 Feb 2018 21:19:10 GMT']
+      server: [AmazonS3]
+      x-amz-bucket-region: [us-east-1]
+      x-amz-id-2: [wN2SKZWKzhWRQDnvm/an+CsyWEBA1/IjjU74Z3h9QTGYC439jVBN76tBEQ1riCFS223mHjV4J2o=]
+      x-amz-request-id: [0462BDAAF32F728A]
+    status: {code: 301, message: Moved Permanently}
+- request:
+    body: null
+    headers:
+      User-Agent: [Boto3/1.4.5 Python/2.7.14 Darwin/15.6.0 Botocore/1.5.92]
+      X-Amz-Content-SHA256: [e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855]
+      X-Amz-Date: [20180202T211910Z]
+      X-Amz-Security-Token: [FQoDYXdzEE4aDECLJbDcXfhaCrQtXSKTA1fGrUy/zLIJdyBISJkggLXAk/WHUm8Q2LXjdPEwmItpqjqLM4FDzdA0EUqVsw+5kHXOcD2WmnKgiTwfejtgyX5noaz0VB+5rwWfHIAc2ECpxiwpk/asuFncrJ11bnEn/ozeXsLNlA/J0JHgYYKVTvL1NX4xd0RiGZTbkqPqe6x1SQujZkZbh9axy2cWPrrh4s+5dswcSji4iaUsB+y0GqwVUjBFDjekk+k1814fPI5KPp43pojcXnVSXtXEWikOrCnqgRXoXD3MOC2UNYVbcj8LOp4ncAN6rHfm1voBOYJ5gRNXmcT9ocwhiLj+WQQLsngiwd5Uh8toVHl+NUzOe4N97VqS623RMOeDERGZzM4MTK26Vl9djU6+VnpguwXTfJGcanASY5khqoLMU4TnBt3cSJOD433XL9B9xHB/arWX7ilILj2FvnTBHkRd+bVRIVeVBaV9ZKFyKkoPP0WXWnGB2QE8lU8RYjJmr+4/olZFa7JIaeDZP84irv0cf20IgVjufD0UdH6ea8JJktc7wJurL+kozqvT0wU=]
+    method: !!python/unicode GET
+    uri: https://s3.amazonaws.com/gbd-customer-data?prefix=c56b10a9-da6e-4118-8b9e-1a7005bea51b%2Fgbdxtools%2Fski_areas.geojson&encoding-type=url
+  response:
+    body: {string: !!python/unicode '<?xml version="1.0" encoding="UTF-8"?>
+
+        <ListBucketResult xmlns="http://s3.amazonaws.com/doc/2006-03-01/"><Name>gbd-customer-data</Name><Prefix>c56b10a9-da6e-4118-8b9e-1a7005bea51b/gbdxtools/ski_areas.geojson</Prefix><Marker></Marker><MaxKeys>1000</MaxKeys><EncodingType>url</EncodingType><IsTruncated>false</IsTruncated><Contents><Key>c56b10a9-da6e-4118-8b9e-1a7005bea51b/gbdxtools/ski_areas.geojson</Key><LastModified>2018-02-02T17:52:54.000Z</LastModified><ETag>&quot;c20c6dd6507ae2b4f584b501ac6af6ce&quot;</ETag><Size>140639</Size><StorageClass>STANDARD</StorageClass></Contents></ListBucketResult>'}
+    headers:
+      content-type: [application/xml]
+      date: ['Fri, 02 Feb 2018 21:19:12 GMT']
+      server: [AmazonS3]
+      x-amz-bucket-region: [us-east-1]
+      x-amz-id-2: [IjWBrgLDpMA3Cp4jQN8nvpCPAkTCql4cAigLJIFy/zM9gRPtCEwbqvukIOkJv5D2UItgWwKIxso=]
+      x-amz-request-id: [74A40CB38186E333]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      User-Agent: [Boto3/1.4.5 Python/2.7.14 Darwin/15.6.0 Botocore/1.5.92]
+      X-Amz-Content-SHA256: [e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855]
+      X-Amz-Date: [20180202T211911Z]
+      X-Amz-Security-Token: [FQoDYXdzEE4aDECLJbDcXfhaCrQtXSKTA1fGrUy/zLIJdyBISJkggLXAk/WHUm8Q2LXjdPEwmItpqjqLM4FDzdA0EUqVsw+5kHXOcD2WmnKgiTwfejtgyX5noaz0VB+5rwWfHIAc2ECpxiwpk/asuFncrJ11bnEn/ozeXsLNlA/J0JHgYYKVTvL1NX4xd0RiGZTbkqPqe6x1SQujZkZbh9axy2cWPrrh4s+5dswcSji4iaUsB+y0GqwVUjBFDjekk+k1814fPI5KPp43pojcXnVSXtXEWikOrCnqgRXoXD3MOC2UNYVbcj8LOp4ncAN6rHfm1voBOYJ5gRNXmcT9ocwhiLj+WQQLsngiwd5Uh8toVHl+NUzOe4N97VqS623RMOeDERGZzM4MTK26Vl9djU6+VnpguwXTfJGcanASY5khqoLMU4TnBt3cSJOD433XL9B9xHB/arWX7ilILj2FvnTBHkRd+bVRIVeVBaV9ZKFyKkoPP0WXWnGB2QE8lU8RYjJmr+4/olZFa7JIaeDZP84irv0cf20IgVjufD0UdH6ea8JJktc7wJurL+kozqvT0wU=]
+    method: !!python/unicode HEAD
+    uri: https://s3.amazonaws.com/gbd-customer-data/c56b10a9-da6e-4118-8b9e-1a7005bea51b/gbdxtools/ski_areas.geojson
+  response:
+    body: {string: !!python/unicode ''}
+    headers:
+      accept-ranges: [bytes]
+      content-length: ['140639']
+      content-type: [binary/octet-stream]
+      date: ['Fri, 02 Feb 2018 21:19:12 GMT']
+      etag: ['"c20c6dd6507ae2b4f584b501ac6af6ce"']
+      last-modified: ['Fri, 02 Feb 2018 17:52:54 GMT']
+      server: [AmazonS3]
+      x-amz-id-2: [tOJRddRcPSQbbHb9PY0FWoCghHT4jVoxAFOdgczWbmDnZJR3eHL1LMC9Mp3FKrgUb5pc2fviax8=]
+      x-amz-request-id: [2F1702B2B0BF4D7A]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      User-Agent: [Boto3/1.4.5 Python/2.7.14 Darwin/15.6.0 Botocore/1.5.92]
+      X-Amz-Content-SHA256: [e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855]
+      X-Amz-Date: [20180202T211911Z]
+      X-Amz-Security-Token: [FQoDYXdzEE4aDECLJbDcXfhaCrQtXSKTA1fGrUy/zLIJdyBISJkggLXAk/WHUm8Q2LXjdPEwmItpqjqLM4FDzdA0EUqVsw+5kHXOcD2WmnKgiTwfejtgyX5noaz0VB+5rwWfHIAc2ECpxiwpk/asuFncrJ11bnEn/ozeXsLNlA/J0JHgYYKVTvL1NX4xd0RiGZTbkqPqe6x1SQujZkZbh9axy2cWPrrh4s+5dswcSji4iaUsB+y0GqwVUjBFDjekk+k1814fPI5KPp43pojcXnVSXtXEWikOrCnqgRXoXD3MOC2UNYVbcj8LOp4ncAN6rHfm1voBOYJ5gRNXmcT9ocwhiLj+WQQLsngiwd5Uh8toVHl+NUzOe4N97VqS623RMOeDERGZzM4MTK26Vl9djU6+VnpguwXTfJGcanASY5khqoLMU4TnBt3cSJOD433XL9B9xHB/arWX7ilILj2FvnTBHkRd+bVRIVeVBaV9ZKFyKkoPP0WXWnGB2QE8lU8RYjJmr+4/olZFa7JIaeDZP84irv0cf20IgVjufD0UdH6ea8JJktc7wJurL+kozqvT0wU=]
+    method: !!python/unicode GET
+    uri: https://s3.amazonaws.com/gbd-customer-data/c56b10a9-da6e-4118-8b9e-1a7005bea51b/gbdxtools/ski_areas.geojson
+  response:
+    body: {string: !!python/unicode '{"next_feature":null,"type":"FeatureCollection","start":0,"features":[{"type":"Feature","id":"0","geometry":{"type":"Point","coordinates":[-117.93367,34.34613]},"properties":{"NAME":"Mt.
+        Waterman","TYPE":"Cross-Country","STATE":"CALIFORNIA","LAT":34.34613,"LONG":-117.93367}},{"type":"Feature","id":"1","geometry":{"type":"Point","coordinates":[-105.45278,36.59449]},"properties":{"NAME":"Als
+        Run","TYPE":"Cross-Country","STATE":"NEW MEXICO","LAT":36.59449,"LONG":-105.45278}},{"type":"Feature","id":"2","geometry":{"type":"Point","coordinates":[-105.45278,36.59449]},"properties":{"NAME":"High
+        Noon","TYPE":"Cross-Country","STATE":"NEW MEXICO","LAT":36.59449,"LONG":-105.45278}},{"type":"Feature","id":"3","geometry":{"type":"Point","coordinates":[-105.45278,36.59449]},"properties":{"NAME":"Psycho
+        Path","TYPE":"Cross-Country","STATE":"NEW MEXICO","LAT":36.59449,"LONG":-105.45278}},{"type":"Feature","id":"4","geometry":{"type":"Point","coordinates":[-105.45278,36.59449]},"properties":{"NAME":"Snakedance","TYPE":"Cross-Country","STATE":"NEW
+        MEXICO","LAT":36.59449,"LONG":-105.45278}},{"type":"Feature","id":"5","geometry":{"type":"Point","coordinates":[-105.45278,36.59449]},"properties":{"NAME":"Totemoff","TYPE":"Cross-Country","STATE":"NEW
+        MEXICO","LAT":36.59449,"LONG":-105.45278}},{"type":"Feature","id":"6","geometry":{"type":"Point","coordinates":[-105.45278,36.59449]},"properties":{"NAME":"Whitefeather","TYPE":"Cross-Country","STATE":"NEW
+        MEXICO","LAT":36.59449,"LONG":-105.45278}},{"type":"Feature","id":"7","geometry":{"type":"Point","coordinates":[-87.90361,45.78694]},"properties":{"NAME":"Norway
+        Mt.","TYPE":"Cross-Country","STATE":"MICHIGAN","LAT":45.78694,"LONG":-87.90361}},{"type":"Feature","id":"8","geometry":{"type":"Point","coordinates":[-113.99639,47.02361]},"properties":{"NAME":"Montana
+        Snow Bowl","TYPE":"Cross-Country","STATE":"MONTANA","LAT":47.02361,"LONG":-113.99639}},{"type":"Feature","id":"9","geometry":{"type":"Point","coordinates":[-114.35278,48.485]},"properties":{"NAME":"Big
+        Mt.","TYPE":"Cross-Country","STATE":"MONTANA","LAT":48.485,"LONG":-114.35278}},{"type":"Feature","id":"10","geometry":{"type":"Point","coordinates":[-85.60333,34.54]},"properties":{"NAME":"Cloudmont-Mentone
+        Ski Area","TYPE":"Both","STATE":"ALABAMA","LAT":34.54,"LONG":-85.60333}},{"type":"Feature","id":"11","geometry":{"type":"Point","coordinates":[-111.96611,35.36667]},"properties":{"NAME":"Cococino
+        XC Ski Trail","TYPE":"Alpine","STATE":"ARIZONA","LAT":35.36667,"LONG":-111.96611}},{"type":"Feature","id":"12","geometry":{"type":"Point","coordinates":[-111.69517,35.32782]},"properties":{"NAME":"Snowbowl
+        Ski Area","TYPE":"Both","STATE":"ARIZONA","LAT":35.32782,"LONG":-111.69517}},{"type":"Feature","id":"13","geometry":{"type":"Point","coordinates":[-109.56344,33.97341]},"properties":{"NAME":"Sunrise
+        Peak Ski Area","TYPE":"Both","STATE":"ARIZONA","LAT":33.97341,"LONG":-109.56344}},{"type":"Feature","id":"14","geometry":{"type":"Point","coordinates":[-112.19241,35.2106]},"properties":{"NAME":"Williams
+        Ski Area","TYPE":"Both","STATE":"ARIZONA","LAT":35.2106,"LONG":-112.19241}},{"type":"Feature","id":"15","geometry":{"type":"Point","coordinates":[-120.23907,39.1574]},"properties":{"NAME":"Alpine
+        Meadows Ski Area","TYPE":"Both","STATE":"CALIFORNIA","LAT":39.1574,"LONG":-120.23907}},{"type":"Feature","id":"16","geometry":{"type":"Point","coordinates":[-119.6643,37.66243]},"properties":{"NAME":"Badger
+        Pass Ski Area","TYPE":"Both","STATE":"CALIFORNIA","LAT":37.66243,"LONG":-119.6643}},{"type":"Feature","id":"17","geometry":{"type":"Point","coordinates":[-120.26461,38.56102]},"properties":{"NAME":"Bear
+        River Resort Ski Area","TYPE":"Both","STATE":"CALIFORNIA","LAT":38.56102,"LONG":-120.26461}},{"type":"Feature","id":"18","geometry":{"type":"Point","coordinates":[-120.0446,38.49213]},"properties":{"NAME":"Bear
+        Valley Ski Area","TYPE":"Both","STATE":"CALIFORNIA","LAT":38.49213,"LONG":-120.0446}},{"type":"Feature","id":"19","geometry":{"type":"Point","coordinates":[-118.84861,36.69889]},"properties":{"NAME":"Big
+        Meadows Nordic Ski Trail","TYPE":"Alpine","STATE":"CALIFORNIA","LAT":36.69889,"LONG":-118.84861}},{"type":"Feature","id":"20","geometry":{"type":"Point","coordinates":[-117.69194,34.36917]},"properties":{"NAME":"Blue
+        Ridge Ski Lift","TYPE":"Both","STATE":"CALIFORNIA","LAT":34.36917,"LONG":-117.69194}},{"type":"Feature","id":"21","geometry":{"type":"Point","coordinates":[-120.35101,39.33157]},"properties":{"NAME":"Boreal
+        Ridge Ski Area","TYPE":"Both","STATE":"CALIFORNIA","LAT":39.33157,"LONG":-120.35101}},{"type":"Feature","id":"22","geometry":{"type":"Point","coordinates":[-120.0385,38.92908]},"properties":{"NAME":"Camp
+        Richardson Cross Country Ski Ar","TYPE":"Alpine","STATE":"CALIFORNIA","LAT":38.92908,"LONG":-120.0385}},{"type":"Feature","id":"23","geometry":{"type":"Point","coordinates":[-120.26104,41.55598]},"properties":{"NAME":"Cedar
+        Pass Ski Area","TYPE":"Both","STATE":"CALIFORNIA","LAT":41.55598,"LONG":-120.26104}},{"type":"Feature","id":"24","geometry":{"type":"Point","coordinates":[-119.15651,37.22716]},"properties":{"NAME":"Chinese
+        Peak Ski Area","TYPE":"Both","STATE":"CALIFORNIA","LAT":37.22716,"LONG":-119.15651}},{"type":"Feature","id":"25","geometry":{"type":"Point","coordinates":[-120.26361,41.555]},"properties":{"NAME":"Cidar
+        Pass Ski Course","TYPE":"Both","STATE":"CALIFORNIA","LAT":41.555,"LONG":-120.26361}},{"type":"Feature","id":"26","geometry":{"type":"Point","coordinates":[-120.90278,40.34528]},"properties":{"NAME":"Coppervale
+        Ski Tow","TYPE":"Both","STATE":"CALIFORNIA","LAT":40.34528,"LONG":-120.90278}},{"type":"Feature","id":"27","geometry":{"type":"Point","coordinates":[-120.19907,39.18657]},"properties":{"NAME":"Deer
+        Park Ski Area","TYPE":"Both","STATE":"CALIFORNIA","LAT":39.18657,"LONG":-120.19907}},{"type":"Feature","id":"28","geometry":{"type":"Point","coordinates":[-119.95016,38.18631]},"properties":{"NAME":"Dodge
+        Ridge Ski Area","TYPE":"Both","STATE":"CALIFORNIA","LAT":38.18631,"LONG":-119.95016}},{"type":"Feature","id":"29","geometry":{"type":"Point","coordinates":[-120.3299,39.32351]},"properties":{"NAME":"Donner
+        Summit Ski Area","TYPE":"Both","STATE":"CALIFORNIA","LAT":39.32351,"LONG":-120.3299}},{"type":"Feature","id":"30","geometry":{"type":"Point","coordinates":[-120.12046,39.9735]},"properties":{"NAME":"Eagles
+        Peak Ski Area","TYPE":"Both","STATE":"CALIFORNIA","LAT":39.9735,"LONG":-120.12046}},{"type":"Feature","id":"31","geometry":{"type":"Point","coordinates":[-116.86447,34.22642]},"properties":{"NAME":"Gold
+        Mine Ski Area","TYPE":"Both","STATE":"CALIFORNIA","LAT":34.22642,"LONG":-116.86447}},{"type":"Feature","id":"32","geometry":{"type":"Point","coordinates":[-120.15628,39.1549]},"properties":{"NAME":"Granlibakken
+        Ski Area","TYPE":"Both","STATE":"CALIFORNIA","LAT":39.1549,"LONG":-120.15628}},{"type":"Feature","id":"33","geometry":{"type":"Point","coordinates":[-117.07222,34.23611]},"properties":{"NAME":"Green
+        Valley Ski Area","TYPE":"Both","STATE":"CALIFORNIA","LAT":34.23611,"LONG":-117.07222}},{"type":"Feature","id":"34","geometry":{"type":"Point","coordinates":[-117.67833,34.36472]},"properties":{"NAME":"Holiday
+        Hill Ski Lift","TYPE":"Alpine","STATE":"CALIFORNIA","LAT":34.36472,"LONG":-117.67833}},{"type":"Feature","id":"35","geometry":{"type":"Point","coordinates":[-120.16739,39.0799]},"properties":{"NAME":"Homewood
+        Ski Area","TYPE":"Both","STATE":"CALIFORNIA","LAT":39.0799,"LONG":-120.16739}},{"type":"Feature","id":"36","geometry":{"type":"Point","coordinates":[-119.07263,37.75133]},"properties":{"NAME":"June
+        Mountain Ski Area","TYPE":"Both","STATE":"CALIFORNIA","LAT":37.75133,"LONG":-119.07263}},{"type":"Feature","id":"37","geometry":{"type":"Point","coordinates":[-120.04294,38.67824]},"properties":{"NAME":"Kirkwood
+        Ski Area","TYPE":"Both","STATE":"CALIFORNIA","LAT":38.67824,"LONG":-120.04294}},{"type":"Feature","id":"38","geometry":{"type":"Point","coordinates":[-117.89811,34.35113]},"properties":{"NAME":"Kratka
+        Ridge Ski Area","TYPE":"Both","STATE":"CALIFORNIA","LAT":34.35113,"LONG":-117.89811}},{"type":"Feature","id":"39","geometry":{"type":"Point","coordinates":[-117.67977,34.36919]},"properties":{"NAME":"Mount
+        High East Ski Area","TYPE":"Both","STATE":"CALIFORNIA","LAT":34.36919,"LONG":-117.67977}},{"type":"Feature","id":"40","geometry":{"type":"Point","coordinates":[-117.43059,34.36696]},"properties":{"NAME":"Mount
+        High East Ski Area","TYPE":"Alpine","STATE":"CALIFORNIA","LAT":34.36696,"LONG":-117.43059}},{"type":"Feature","id":"41","geometry":{"type":"Point","coordinates":[-117.69199,34.37169]},"properties":{"NAME":"Mount
+        High West Ski Area","TYPE":"Both","STATE":"CALIFORNIA","LAT":34.37169,"LONG":-117.69199}},{"type":"Feature","id":"42","geometry":{"type":"Point","coordinates":[-117.7406,34.35474]},"properties":{"NAME":"Mount
+        High West Ski Area","TYPE":"Alpine","STATE":"CALIFORNIA","LAT":34.35474,"LONG":-117.7406}},{"type":"Feature","id":"43","geometry":{"type":"Point","coordinates":[-120.04905,38.49547]},"properties":{"NAME":"Mount
+        Reba Ski Area","TYPE":"Both","STATE":"CALIFORNIA","LAT":38.49547,"LONG":-120.04905}},{"type":"Feature","id":"44","geometry":{"type":"Point","coordinates":[-122.20194,41.32222]},"properties":{"NAME":"Mount
+        Shasta Ski Park Resort","TYPE":"Both","STATE":"CALIFORNIA","LAT":41.32222,"LONG":-122.20194}},{"type":"Feature","id":"45","geometry":{"type":"Point","coordinates":[-117.93367,34.34613]},"properties":{"NAME":"Mount
+        Waterman Ski Area","TYPE":"Alpine","STATE":"CALIFORNIA","LAT":34.34613,"LONG":-117.93367}},{"type":"Feature","id":"46","geometry":{"type":"Point","coordinates":[-120.12268,39.25573]},"properties":{"NAME":"North
+        Star Ski Area","TYPE":"Both","STATE":"CALIFORNIA","LAT":39.25573,"LONG":-120.12268}},{"type":"Feature","id":"47","geometry":{"type":"Point","coordinates":[-120.1024,39.27323]},"properties":{"NAME":"Northstar-at-Tahoe
+        Ski Area","TYPE":"Alpine","STATE":"CALIFORNIA","LAT":39.27323,"LONG":-120.1024}},{"type":"Feature","id":"48","geometry":{"type":"Point","coordinates":[-120.20212,39.18157]},"properties":{"NAME":"Powder
+        Bowl Ski Area","TYPE":"Both","STATE":"CALIFORNIA","LAT":39.18157,"LONG":-120.20212}},{"type":"Feature","id":"49","geometry":{"type":"Point","coordinates":[-118.55925,35.70915]},"properties":{"NAME":"Shirley
+        Meadow Ski Area","TYPE":"Both","STATE":"CALIFORNIA","LAT":35.70915,"LONG":-118.55925}},{"type":"Feature","id":"50","geometry":{"type":"Point","coordinates":[-120.07806,38.79694]},"properties":{"NAME":"Sierra
+        Ski Ranch","TYPE":"Both","STATE":"CALIFORNIA","LAT":38.79694,"LONG":-120.07806}},{"type":"Feature","id":"51","geometry":{"type":"Point","coordinates":[-120.20767,38.63241]},"properties":{"NAME":"Silver
+        Basin Ski Area","TYPE":"Both","STATE":"CALIFORNIA","LAT":38.63241,"LONG":-120.20767}},{"type":"Feature","id":"52","geometry":{"type":"Point","coordinates":[-120.035,38.80667]},"properties":{"NAME":"Ski
+        Echo Tahoe","TYPE":"Both","STATE":"CALIFORNIA","LAT":38.80667,"LONG":-120.035}},{"type":"Feature","id":"53","geometry":{"type":"Point","coordinates":[-121.52111,40.47278]},"properties":{"NAME":"Ski
+        Heil Peak","TYPE":"Both","STATE":"CALIFORNIA","LAT":40.47278,"LONG":-121.52111}},{"type":"Feature","id":"54","geometry":{"type":"Point","coordinates":[-116.91667,34.23444]},"properties":{"NAME":"Snow
+        Forest Ski Area","TYPE":"Alpine","STATE":"CALIFORNIA","LAT":34.23444,"LONG":-116.91667}},{"type":"Feature","id":"55","geometry":{"type":"Point","coordinates":[-116.89028,34.22861]},"properties":{"NAME":"Snow
+        Summit Ski Area","TYPE":"Both","STATE":"CALIFORNIA","LAT":34.22861,"LONG":-116.89028}},{"type":"Feature","id":"56","geometry":{"type":"Point","coordinates":[-117.03472,34.21722]},"properties":{"NAME":"Snow
+        Valley Ski Area","TYPE":"Alpine","STATE":"CALIFORNIA","LAT":34.21722,"LONG":-117.03472}},{"type":"Feature","id":"57","geometry":{"type":"Point","coordinates":[-120.38351,39.31907]},"properties":{"NAME":"Soda
+        Springs Ski Area","TYPE":"Both","STATE":"CALIFORNIA","LAT":39.31907,"LONG":-120.38351}},{"type":"Feature","id":"58","geometry":{"type":"Point","coordinates":[-120.25184,39.19129]},"properties":{"NAME":"Squaw
+        Valley Ski Area","TYPE":"Both","STATE":"CALIFORNIA","LAT":39.19129,"LONG":-120.25184}},{"type":"Feature","id":"59","geometry":{"type":"Point","coordinates":[-121.28938,40.28931]},"properties":{"NAME":"Stover
+        Mountain Ski Area","TYPE":"Both","STATE":"CALIFORNIA","LAT":40.28931,"LONG":-121.28938}},{"type":"Feature","id":"60","geometry":{"type":"Point","coordinates":[-120.33573,39.30434]},"properties":{"NAME":"Sugar
+        Bowl Ski Area","TYPE":"Both","STATE":"CALIFORNIA","LAT":39.30434,"LONG":-120.33573}},{"type":"Feature","id":"61","geometry":{"type":"Point","coordinates":[-117.68421,34.38835]},"properties":{"NAME":"Sunrise
+        Ski Area","TYPE":"Both","STATE":"CALIFORNIA","LAT":34.38835,"LONG":-117.68421}},{"type":"Feature","id":"62","geometry":{"type":"Point","coordinates":[-120.27157,39.3524]},"properties":{"NAME":"Tahoe
+        Donner Ski Area","TYPE":"Both","STATE":"CALIFORNIA","LAT":39.3524,"LONG":-120.27157}},{"type":"Feature","id":"63","geometry":{"type":"Point","coordinates":[-120.15917,39.065]},"properties":{"NAME":"Tahoe
+        Ski Bowl Area","TYPE":"Both","STATE":"CALIFORNIA","LAT":39.065,"LONG":-120.15917}},{"type":"Feature","id":"64","geometry":{"type":"Point","coordinates":[-119.00556,37.61861]},"properties":{"NAME":"Tamarack
+        Cross Country Ski Center","TYPE":"Alpine","STATE":"CALIFORNIA","LAT":37.61861,"LONG":-119.00556}},{"type":"Feature","id":"65","geometry":{"type":"Point","coordinates":[-105.87309,39.6436]},"properties":{"NAME":"Arapaho
+        Basin Ski Area","TYPE":"Both","STATE":"COLORADO","LAT":39.6436,"LONG":-105.87309}},{"type":"Feature","id":"66","geometry":{"type":"Point","coordinates":[-106.81694,39.19111]},"properties":{"NAME":"Aspen
+        Highlands Ski Area","TYPE":"Alpine","STATE":"COLORADO","LAT":39.19111,"LONG":-106.81694}},{"type":"Feature","id":"67","geometry":{"type":"Point","coordinates":[-106.82861,39.17611]},"properties":{"NAME":"Aspen
+        Mountain Ski Area","TYPE":"Both","STATE":"COLORADO","LAT":39.17611,"LONG":-106.82861}},{"type":"Feature","id":"68","geometry":{"type":"Point","coordinates":[-105.78003,39.79943]},"properties":{"NAME":"Berthoud
+        Pass Ski Area","TYPE":"Both","STATE":"COLORADO","LAT":39.79943,"LONG":-105.78003}},{"type":"Feature","id":"69","geometry":{"type":"Point","coordinates":[-106.07393,39.47388]},"properties":{"NAME":"Breckenridge
+        Ski Area","TYPE":"Both","STATE":"COLORADO","LAT":39.47388,"LONG":-106.07393}},{"type":"Feature","id":"70","geometry":{"type":"Point","coordinates":[-106.81694,39.19111]},"properties":{"NAME":"Buttermilk
+        Ski Area","TYPE":"Both","STATE":"COLORADO","LAT":39.19111,"LONG":-106.81694}},{"type":"Feature","id":"71","geometry":{"type":"Point","coordinates":[-107.86952,37.28308]},"properties":{"NAME":"Chapman
+        Hill Municipal Ski Area","TYPE":"Both","STATE":"COLORADO","LAT":37.28308,"LONG":-107.86952}},{"type":"Feature","id":"72","geometry":{"type":"Point","coordinates":[-105.58501,38.11752]},"properties":{"NAME":"Conquistador
+        Ski Area","TYPE":"Both","STATE":"COLORADO","LAT":38.11752,"LONG":-105.58501}},{"type":"Feature","id":"73","geometry":{"type":"Point","coordinates":[-106.30228,39.36055]},"properties":{"NAME":"Cooper
+        Hill Ski Area","TYPE":"Both","STATE":"COLORADO","LAT":39.36055,"LONG":-106.30228}},{"type":"Feature","id":"74","geometry":{"type":"Point","coordinates":[-106.16143,39.48638]},"properties":{"NAME":"Copper
+        Mountain Ski Area","TYPE":"Both","STATE":"COLORADO","LAT":39.48638,"LONG":-106.16143}},{"type":"Feature","id":"75","geometry":{"type":"Point","coordinates":[-106.94306,38.88333]},"properties":{"NAME":"Crested
+        Butte Ski Area","TYPE":"Both","STATE":"COLORADO","LAT":38.88333,"LONG":-106.94306}},{"type":"Feature","id":"76","geometry":{"type":"Point","coordinates":[-105.12583,37.34781]},"properties":{"NAME":"Cuchara
+        Valley Ski Area","TYPE":"Both","STATE":"COLORADO","LAT":37.34781,"LONG":-105.12583}},{"type":"Feature","id":"77","geometry":{"type":"Point","coordinates":[-105.76806,39.83278]},"properties":{"NAME":"First
+        Creek Ski Cabin","TYPE":"Alpine","STATE":"COLORADO","LAT":39.83278,"LONG":-105.76806}},{"type":"Feature","id":"78","geometry":{"type":"Point","coordinates":[-105.73031,39.56806]},"properties":{"NAME":"Geneva
+        Basin Ski Area","TYPE":"Both","STATE":"COLORADO","LAT":39.56806,"LONG":-105.73031}},{"type":"Feature","id":"79","geometry":{"type":"Point","coordinates":[-105.63111,39.93556]},"properties":{"NAME":"Guinn
+        Mountain Ski Trail","TYPE":"Alpine","STATE":"COLORADO","LAT":39.93556,"LONG":-105.63111}},{"type":"Feature","id":"80","geometry":{"type":"Point","coordinates":[-108.05444,37.29778]},"properties":{"NAME":"Hesperus
+        Ski Center","TYPE":"Both","STATE":"COLORADO","LAT":37.29778,"LONG":-108.05444}},{"type":"Feature","id":"81","geometry":{"type":"Point","coordinates":[-106.83896,40.48276]},"properties":{"NAME":"Howelsen
+        Hill Ski Area","TYPE":"Both","STATE":"COLORADO","LAT":40.48276,"LONG":-106.83896}},{"type":"Feature","id":"82","geometry":{"type":"Point","coordinates":[-105.77837,39.92471]},"properties":{"NAME":"Idlewild
+        Ski Area","TYPE":"Both","STATE":"COLORADO","LAT":39.92471,"LONG":-105.77837}},{"type":"Feature","id":"83","geometry":{"type":"Point","coordinates":[-105.7292,39.24472]},"properties":{"NAME":"Indian
+        Mountain Ski Area","TYPE":"Both","STATE":"COLORADO","LAT":39.24472,"LONG":-105.7292}},{"type":"Feature","id":"84","geometry":{"type":"Point","coordinates":[-105.58642,39.93527]},"properties":{"NAME":"Jenny
+        Creek Ski Area","TYPE":"Both","STATE":"COLORADO","LAT":39.93527,"LONG":-105.58642}},{"type":"Feature","id":"85","geometry":{"type":"Point","coordinates":[-105.95338,39.59055]},"properties":{"NAME":"Keystone
+        Ski Area","TYPE":"Both","STATE":"COLORADO","LAT":39.59055,"LONG":-105.95338}},{"type":"Feature","id":"86","geometry":{"type":"Point","coordinates":[-105.59087,39.9361]},"properties":{"NAME":"Lake
+        Eldora Ski Area","TYPE":"Both","STATE":"COLORADO","LAT":39.9361,"LONG":-105.59087}},{"type":"Feature","id":"87","geometry":{"type":"Point","coordinates":[-105.90116,39.67805]},"properties":{"NAME":"Loveland
+        Ski Area","TYPE":"Both","STATE":"COLORADO","LAT":39.67805,"LONG":-105.90116}},{"type":"Feature","id":"88","geometry":{"type":"Point","coordinates":[-105.77115,39.86805]},"properties":{"NAME":"Mary
+        Jane Ski Area","TYPE":"Both","STATE":"COLORADO","LAT":39.86805,"LONG":-105.77115}},{"type":"Feature","id":"89","geometry":{"type":"Point","coordinates":[-106.33949,38.51029]},"properties":{"NAME":"Monarch
+        Ski Area","TYPE":"Both","STATE":"COLORADO","LAT":38.51029,"LONG":-106.33949}},{"type":"Feature","id":"90","geometry":{"type":"Point","coordinates":[-105.06167,38.8864]},"properties":{"NAME":"Pikes
+        Peak Ski Area","TYPE":"Both","STATE":"COLORADO","LAT":38.8864,"LONG":-105.06167}},{"type":"Feature","id":"91","geometry":{"type":"Point","coordinates":[-108.15899,39.06749]},"properties":{"NAME":"Powderhorn
+        Ski Area","TYPE":"Both","STATE":"COLORADO","LAT":39.06749,"LONG":-108.15899}},{"type":"Feature","id":"92","geometry":{"type":"Point","coordinates":[-107.82814,37.62445]},"properties":{"NAME":"Purgatory
+        Ski Area","TYPE":"Both","STATE":"COLORADO","LAT":37.62445,"LONG":-107.82814}},{"type":"Feature","id":"93","geometry":{"type":"Point","coordinates":[-104.34611,37.00528]},"properties":{"NAME":"Raton
+        Ski Basin","TYPE":"Both","STATE":"COLORADO","LAT":37.00528,"LONG":-104.34611}},{"type":"Feature","id":"94","geometry":{"type":"Point","coordinates":[-105.5367,40.16082]},"properties":{"NAME":"Rock
+        Creek Ski Area","TYPE":"Both","STATE":"COLORADO","LAT":40.16082,"LONG":-105.5367}},{"type":"Feature","id":"95","geometry":{"type":"Point","coordinates":[-105.12084,38.09196]},"properties":{"NAME":"San
+        Isabel Ski Area","TYPE":"Both","STATE":"COLORADO","LAT":38.09196,"LONG":-105.12084}},{"type":"Feature","id":"96","geometry":{"type":"Point","coordinates":[-105.7675,39.81583]},"properties":{"NAME":"Sevenmile
+        Ski Trail","TYPE":"Alpine","STATE":"COLORADO","LAT":39.81583,"LONG":-105.7675}},{"type":"Feature","id":"97","geometry":{"type":"Point","coordinates":[-105.90421,40.03999]},"properties":{"NAME":"Silver
+        Creek Ski Area","TYPE":"Both","STATE":"COLORADO","LAT":40.03999,"LONG":-105.90421}},{"type":"Feature","id":"98","geometry":{"type":"Point","coordinates":[-105.64531,39.82693]},"properties":{"NAME":"Silver
+        Lake Ski Area","TYPE":"Both","STATE":"COLORADO","LAT":39.82693,"LONG":-105.64531}},{"type":"Feature","id":"99","geometry":{"type":"Point","coordinates":[-107.3475,37.76472]},"properties":{"NAME":"Ski
+        Hi Ranch","TYPE":"Alpine","STATE":"COLORADO","LAT":37.76472,"LONG":-107.3475}},{"type":"Feature","id":"100","geometry":{"type":"Point","coordinates":[-107.06583,39.11889]},"properties":{"NAME":"Snowmass
+        Ski Area","TYPE":"Both","STATE":"COLORADO","LAT":39.11889,"LONG":-107.06583}},{"type":"Feature","id":"101","geometry":{"type":"Point","coordinates":[-105.52002,39.68527]},"properties":{"NAME":"Squaw
+        Pass Ski Area","TYPE":"Both","STATE":"COLORADO","LAT":39.68527,"LONG":-105.52002}},{"type":"Feature","id":"102","geometry":{"type":"Point","coordinates":[-106.8673,40.24442]},"properties":{"NAME":"Stagecoach
+        Ski Area","TYPE":"Both","STATE":"COLORADO","LAT":40.24442,"LONG":-106.8673}},{"type":"Feature","id":"103","geometry":{"type":"Point","coordinates":[-106.77285,40.45637]},"properties":{"NAME":"Steamboat
+        Ski Area","TYPE":"Both","STATE":"COLORADO","LAT":40.45637,"LONG":-106.77285}},{"type":"Feature","id":"104","geometry":{"type":"Point","coordinates":[-108.32009,37.58418]},"properties":{"NAME":"Stoner
+        Ski Area","TYPE":"Both","STATE":"COLORADO","LAT":37.58418,"LONG":-108.32009}},{"type":"Feature","id":"105","geometry":{"type":"Point","coordinates":[-107.84342,37.92612]},"properties":{"NAME":"Telluride
+        Ski Area","TYPE":"Both","STATE":"COLORADO","LAT":37.92612,"LONG":-107.84342}},{"type":"Feature","id":"106","geometry":{"type":"Point","coordinates":[-105.14862,38.76751]},"properties":{"NAME":"Tenderfoot
+        Ski Area","TYPE":"Both","STATE":"COLORADO","LAT":38.76751,"LONG":-105.14862}},{"type":"Feature","id":"107","geometry":{"type":"Point","coordinates":[-106.37505,39.61416]},"properties":{"NAME":"Vail
+        Ski Area","TYPE":"Both","STATE":"COLORADO","LAT":39.61416,"LONG":-106.37505}},{"type":"Feature","id":"108","geometry":{"type":"Point","coordinates":[-105.77392,39.88332]},"properties":{"NAME":"Winter
+        Park Ski Area","TYPE":"Both","STATE":"COLORADO","LAT":39.88332,"LONG":-105.77392}},{"type":"Feature","id":"109","geometry":{"type":"Point","coordinates":[-73.30778,41.83167]},"properties":{"NAME":"Mohawk
+        Mountain Ski Area","TYPE":"Both","STATE":"CONNECTICUT","LAT":41.83167,"LONG":-73.30778}},{"type":"Feature","id":"110","geometry":{"type":"Point","coordinates":[-72.92556,41.5825]},"properties":{"NAME":"Mt.
+        Southington Ski Area","TYPE":"Both","STATE":"CONNECTICUT","LAT":41.5825,"LONG":-72.92556}},{"type":"Feature","id":"111","geometry":{"type":"Point","coordinates":[-72.52667,41.75056]},"properties":{"NAME":"Northview
+        Ski Slope","TYPE":"Both","STATE":"CONNECTICUT","LAT":41.75056,"LONG":-72.52667}},{"type":"Feature","id":"112","geometry":{"type":"Point","coordinates":[-72.7125,41.51722]},"properties":{"NAME":"Powder
+        Ridge Ski Area","TYPE":"Both","STATE":"CONNECTICUT","LAT":41.51722,"LONG":-72.7125}},{"type":"Feature","id":"113","geometry":{"type":"Point","coordinates":[-72.9775,41.88222]},"properties":{"NAME":"Ski
+        Sundown","TYPE":"Both","STATE":"CONNECTICUT","LAT":41.88222,"LONG":-72.9775}},{"type":"Feature","id":"114","geometry":{"type":"Point","coordinates":[-72.84611,41.75528]},"properties":{"NAME":"Winding
+        Trails Cross Country Ski Cen","TYPE":"Alpine","STATE":"CONNECTICUT","LAT":41.75528,"LONG":-72.84611}},{"type":"Feature","id":"115","geometry":{"type":"Point","coordinates":[-73.34917,41.79833]},"properties":{"NAME":"Woodbury
+        Ski Area","TYPE":"Both","STATE":"CONNECTICUT","LAT":41.79833,"LONG":-73.34917}},{"type":"Feature","id":"116","geometry":{"type":"Point","coordinates":[-83.33333,34.9875]},"properties":{"NAME":"Sky
+        Valley Ski Area","TYPE":"Both","STATE":"GEORGIA","LAT":34.9875,"LONG":-83.33333}},{"type":"Feature","id":"117","geometry":{"type":"Point","coordinates":[-114.40833,43.655]},"properties":{"NAME":"Bald
+        Mountain Ski Area","TYPE":"Both","STATE":"IDAHO","LAT":43.655,"LONG":-114.40833}},{"type":"Feature","id":"118","geometry":{"type":"Point","coordinates":[-111.28914,44.14964]},"properties":{"NAME":"Bear
+        Gulch Ski Area","TYPE":"Both","STATE":"IDAHO","LAT":44.14964,"LONG":-111.28914}},{"type":"Feature","id":"119","geometry":{"type":"Point","coordinates":[-113.55921,43.50823]},"properties":{"NAME":"Blizzard
+        Mountain Ski Area","TYPE":"Both","STATE":"IDAHO","LAT":43.50823,"LONG":-113.55921}},{"type":"Feature","id":"120","geometry":{"type":"Point","coordinates":[-112.33139,42.86825]},"properties":{"NAME":"Caribou
+        Ski Area","TYPE":"Both","STATE":"IDAHO","LAT":42.86825,"LONG":-112.33139}},{"type":"Feature","id":"121","geometry":{"type":"Point","coordinates":[-115.82262,43.82905]},"properties":{"NAME":"City
+        Ski Area","TYPE":"Both","STATE":"IDAHO","LAT":43.82905,"LONG":-115.82262}},{"type":"Feature","id":"122","geometry":{"type":"Point","coordinates":[-114.34222,43.67917]},"properties":{"NAME":"Dollar
+        Mountain Ski Area","TYPE":"Both","STATE":"IDAHO","LAT":43.67917,"LONG":-114.34222}},{"type":"Feature","id":"123","geometry":{"type":"Point","coordinates":[-116.92822,44.62931]},"properties":{"NAME":"Hitt
+        Mountain Ski Area","TYPE":"Both","STATE":"IDAHO","LAT":44.62931,"LONG":-116.92822}},{"type":"Feature","id":"124","geometry":{"type":"Point","coordinates":[-111.62999,43.64575]},"properties":{"NAME":"Kelly
+        Canyon Ski Area","TYPE":"Both","STATE":"IDAHO","LAT":43.64575,"LONG":-111.62999}},{"type":"Feature","id":"125","geometry":{"type":"Point","coordinates":[-116.82547,46.81569]},"properties":{"NAME":"Lamarack
+        Ski Area","TYPE":"Both","STATE":"IDAHO","LAT":46.81569,"LONG":-116.82547}},{"type":"Feature","id":"126","geometry":{"type":"Point","coordinates":[-113.19448,43.83324]},"properties":{"NAME":"Little
+        Lost Ski Area","TYPE":"Both","STATE":"IDAHO","LAT":43.83324,"LONG":-113.19448}},{"type":"Feature","id":"127","geometry":{"type":"Point","coordinates":[-114.57652,46.63655]},"properties":{"NAME":"Lolo
+        Pass Ski Area","TYPE":"Both","STATE":"IDAHO","LAT":46.63655,"LONG":-114.57652}},{"type":"Feature","id":"128","geometry":{"type":"Point","coordinates":[-115.69684,47.45488]},"properties":{"NAME":"Lookout
+        Pass Ski Area","TYPE":"Both","STATE":"IDAHO","LAT":47.45488,"LONG":-115.69684}},{"type":"Feature","id":"129","geometry":{"type":"Point","coordinates":[-114.2856,42.18824]},"properties":{"NAME":"Magic
+        Mountain Ski Area","TYPE":"Both","STATE":"IDAHO","LAT":42.18824,"LONG":-114.2856}},{"type":"Feature","id":"130","geometry":{"type":"Point","coordinates":[-116.65667,47.06583]},"properties":{"NAME":"North-South
+        Ski Bowl","TYPE":"Both","STATE":"IDAHO","LAT":47.06583,"LONG":-116.65667}},{"type":"Feature","id":"131","geometry":{"type":"Point","coordinates":[-116.16181,44.92821]},"properties":{"NAME":"Payette
+        Lake Ski Area","TYPE":"Alpine","STATE":"IDAHO","LAT":44.92821,"LONG":-116.16181}},{"type":"Feature","id":"132","geometry":{"type":"Point","coordinates":[-116.1632,44.92988]},"properties":{"NAME":"Payette
+        Lakes Ski Area","TYPE":"Both","STATE":"IDAHO","LAT":44.92988,"LONG":-116.1632}},{"type":"Feature","id":"133","geometry":{"type":"Point","coordinates":[-112.15276,42.77575]},"properties":{"NAME":"Pebble
+        Creek Ski Area","TYPE":"Both","STATE":"IDAHO","LAT":42.77575,"LONG":-112.15276}},{"type":"Feature","id":"134","geometry":{"type":"Point","coordinates":[-111.3272,43.53159]},"properties":{"NAME":"Pine
+        Basin Ski Area","TYPE":"Both","STATE":"IDAHO","LAT":43.53159,"LONG":-111.3272}},{"type":"Feature","id":"135","geometry":{"type":"Point","coordinates":[-116.62578,48.28348]},"properties":{"NAME":"Pine
+        Street Ski Area","TYPE":"Both","STATE":"IDAHO","LAT":48.28348,"LONG":-116.62578}},{"type":"Feature","id":"136","geometry":{"type":"Point","coordinates":[-113.61197,42.31213]},"properties":{"NAME":"Pomerelle
+        Ski Area","TYPE":"Both","STATE":"IDAHO","LAT":42.31213,"LONG":-113.61197}},{"type":"Feature","id":"137","geometry":{"type":"Point","coordinates":[-116.61328,48.38654]},"properties":{"NAME":"Schweitzer
+        Basin Ski Area","TYPE":"Both","STATE":"IDAHO","LAT":48.38654,"LONG":-116.61328}},{"type":"Feature","id":"138","geometry":{"type":"Point","coordinates":[-116.13714,47.48959]},"properties":{"NAME":"Silverhorn
+        Ski Area","TYPE":"Both","STATE":"IDAHO","LAT":47.48959,"LONG":-116.13714}},{"type":"Feature","id":"139","geometry":{"type":"Point","coordinates":[-116.09127,45.86904]},"properties":{"NAME":"Snow
+        Haven Ski Area","TYPE":"Both","STATE":"IDAHO","LAT":45.86904,"LONG":-116.09127}},{"type":"Feature","id":"140","geometry":{"type":"Point","coordinates":[-111.93082,43.32548]},"properties":{"NAME":"Taylor
+        Mountain Ski Area","TYPE":"Both","STATE":"IDAHO","LAT":43.32548,"LONG":-111.93082}},{"type":"Feature","id":"141","geometry":{"type":"Point","coordinates":[-90.42889,42.41667]},"properties":{"NAME":"Chestnut
+        Mountain","TYPE":"Both","STATE":"ILLINOIS","LAT":42.41667,"LONG":-90.42889}},{"type":"Feature","id":"142","geometry":{"type":"Point","coordinates":[-88.07472,41.80111]},"properties":{"NAME":"Four
+        Lakes Village","TYPE":"Both","STATE":"ILLINOIS","LAT":41.80111,"LONG":-88.07472}},{"type":"Feature","id":"143","geometry":{"type":"Point","coordinates":[-88.29417,42.16556]},"properties":{"NAME":"Raging
+        Buffalo Snowboard Park","TYPE":"Both","STATE":"ILLINOIS","LAT":42.16556,"LONG":-88.29417}},{"type":"Feature","id":"144","geometry":{"type":"Point","coordinates":[-90.66806,41.38667]},"properties":{"NAME":"Ski
+        Snow Star","TYPE":"Both","STATE":"ILLINOIS","LAT":41.38667,"LONG":-90.66806}},{"type":"Feature","id":"145","geometry":{"type":"Point","coordinates":[-88.22,42.0125]},"properties":{"NAME":"Villa
+        Olivia Ski Area","TYPE":"Both","STATE":"ILLINOIS","LAT":42.0125,"LONG":-88.22}},{"type":"Feature","id":"146","geometry":{"type":"Point","coordinates":[-86.46833,38.55611]},"properties":{"NAME":"Paoli
+        Peaks Ski Area","TYPE":"Both","STATE":"INDIANA","LAT":38.55611,"LONG":-86.46833}},{"type":"Feature","id":"147","geometry":{"type":"Point","coordinates":[-84.85,39.09083]},"properties":{"NAME":"Perfect
+        North Ski Area","TYPE":"Both","STATE":"INDIANA","LAT":39.09083,"LONG":-84.85}},{"type":"Feature","id":"148","geometry":{"type":"Point","coordinates":[-87.06111,41.47306]},"properties":{"NAME":"Pines
+        Peak Ski Area","TYPE":"Both","STATE":"INDIANA","LAT":41.47306,"LONG":-87.06111}},{"type":"Feature","id":"149","geometry":{"type":"Point","coordinates":[-86.25111,39.20722]},"properties":{"NAME":"Ski
+        World","TYPE":"Both","STATE":"INDIANA","LAT":39.20722,"LONG":-86.25111}},{"type":"Feature","id":"150","geometry":{"type":"Point","coordinates":[-92.58194,41.56667]},"properties":{"NAME":"Fun
+        Valley Ski Area","TYPE":"Both","STATE":"IOWA","LAT":41.56667,"LONG":-92.58194}},{"type":"Feature","id":"151","geometry":{"type":"Point","coordinates":[-95.86389,41.39333]},"properties":{"NAME":"Mt.
+        Crescent Ski Area","TYPE":"Both","STATE":"IOWA","LAT":41.39333,"LONG":-95.86389}},{"type":"Feature","id":"152","geometry":{"type":"Point","coordinates":[-91.81389,43.325]},"properties":{"NAME":"Nor-Ski
+        Runs Ski Area","TYPE":"Both","STATE":"IOWA","LAT":43.325,"LONG":-91.81389}},{"type":"Feature","id":"153","geometry":{"type":"Point","coordinates":[-94.83333,43.3875]},"properties":{"NAME":"Riverside
+        Hills Ski Area","TYPE":"Both","STATE":"IOWA","LAT":43.3875,"LONG":-94.83333}},{"type":"Feature","id":"154","geometry":{"type":"Point","coordinates":[-93.88,42.05972]},"properties":{"NAME":"Seven
+        Oaks Ski Area","TYPE":"Both","STATE":"IOWA","LAT":42.05972,"LONG":-93.88}},{"type":"Feature","id":"155","geometry":{"type":"Point","coordinates":[-69.71167,45.48417]},"properties":{"NAME":"Big
+        Squaw Ski Area","TYPE":"Both","STATE":"MAINE","LAT":45.48417,"LONG":-69.71167}},{"type":"Feature","id":"156","geometry":{"type":"Point","coordinates":[-67.81417,46.52139]},"properties":{"NAME":"Bigrock-Mars
+        Hill Ski Area","TYPE":"Both","STATE":"MAINE","LAT":46.52139,"LONG":-67.81417}},{"type":"Feature","id":"157","geometry":{"type":"Point","coordinates":[-70.6375,44.58472]},"properties":{"NAME":"Black
+        Mountain Ski Area","TYPE":"Both","STATE":"MAINE","LAT":44.58472,"LONG":-70.6375}},{"type":"Feature","id":"158","geometry":{"type":"Point","coordinates":[-69.06528,44.20972]},"properties":{"NAME":"Camden
+        Snow Bowl","TYPE":"Both","STATE":"MAINE","LAT":44.20972,"LONG":-69.06528}},{"type":"Feature","id":"159","geometry":{"type":"Point","coordinates":[-69.62556,44.76528]},"properties":{"NAME":"Eaton
+        Mountain Ski Area","TYPE":"Both","STATE":"MAINE","LAT":44.76528,"LONG":-69.62556}},{"type":"Feature","id":"160","geometry":{"type":"Point","coordinates":[-70.28056,44.13611]},"properties":{"NAME":"Lost
+        Valley Ski Area","TYPE":"Both","STATE":"MAINE","LAT":44.13611,"LONG":-70.28056}},{"type":"Feature","id":"161","geometry":{"type":"Point","coordinates":[-70.7025,44.4]},"properties":{"NAME":"Mt.
+        Abram Ski Area","TYPE":"Both","STATE":"MAINE","LAT":44.4,"LONG":-70.7025}},{"type":"Feature","id":"162","geometry":{"type":"Point","coordinates":[-68.28472,45.36389]},"properties":{"NAME":"Mt.
+        Jefferson Ski Area","TYPE":"Both","STATE":"MAINE","LAT":45.36389,"LONG":-68.28472}},{"type":"Feature","id":"163","geometry":{"type":"Point","coordinates":[-68.87417,44.84222]},"properties":{"NAME":"New
+        Hermon Mountain Ski Area","TYPE":"Both","STATE":"MAINE","LAT":44.84222,"LONG":-68.87417}},{"type":"Feature","id":"164","geometry":{"type":"Point","coordinates":[-70.52778,44.94722]},"properties":{"NAME":"Saddleback
+        Mountain Ski Area","TYPE":"Both","STATE":"MAINE","LAT":44.94722,"LONG":-70.52778}},{"type":"Feature","id":"165","geometry":{"type":"Point","coordinates":[-70.71333,44.05472]},"properties":{"NAME":"Shawneepeak
+        Ski Area","TYPE":"Both","STATE":"MAINE","LAT":44.05472,"LONG":-70.71333}},{"type":"Feature","id":"166","geometry":{"type":"Point","coordinates":[-70.20056,44.55639]},"properties":{"NAME":"Spruce
+        Mountain Ski Area","TYPE":"Both","STATE":"MAINE","LAT":44.55639,"LONG":-70.20056}},{"type":"Feature","id":"167","geometry":{"type":"Point","coordinates":[-70.27389,45.06611]},"properties":{"NAME":"Sugarloaf
+        Ski Area","TYPE":"Both","STATE":"MAINE","LAT":45.06611,"LONG":-70.27389}},{"type":"Feature","id":"168","geometry":{"type":"Point","coordinates":[-70.86389,44.46556]},"properties":{"NAME":"Sunday
+        River Ski Area","TYPE":"Both","STATE":"MAINE","LAT":44.46556,"LONG":-70.86389}},{"type":"Feature","id":"169","geometry":{"type":"Point","coordinates":[-70.17167,44.64861]},"properties":{"NAME":"Titcomb
+        Ski Area","TYPE":"Both","STATE":"MAINE","LAT":44.64861,"LONG":-70.17167}},{"type":"Feature","id":"170","geometry":{"type":"Point","coordinates":[-79.35306,39.55833]},"properties":{"NAME":"Wisp
+        - McHenry Ski Area","TYPE":"Both","STATE":"MARYLAND","LAT":39.55833,"LONG":-79.35306}},{"type":"Feature","id":"171","geometry":{"type":"Point","coordinates":[-70.93472,42.86833]},"properties":{"NAME":"Atlantic
+        Forest Ski Area","TYPE":"Both","STATE":"MASSACHUSETTS","LAT":42.86833,"LONG":-70.93472}},{"type":"Feature","id":"172","geometry":{"type":"Point","coordinates":[-72.48722,42.48722]},"properties":{"NAME":"Berkshire
+        Show Basin Ski Area","TYPE":"Both","STATE":"MASSACHUSETTS","LAT":42.48722,"LONG":-72.48722}},{"type":"Feature","id":"173","geometry":{"type":"Point","coordinates":[-72.9175,42.19556]},"properties":{"NAME":"Blandford
+        Ski Area","TYPE":"Both","STATE":"MASSACHUSETTS","LAT":42.19556,"LONG":-72.9175}},{"type":"Feature","id":"174","geometry":{"type":"Point","coordinates":[-71.09861,42.24306]},"properties":{"NAME":"Blue
+        Hills Ski Area","TYPE":"Both","STATE":"MASSACHUSETTS","LAT":42.24306,"LONG":-71.09861}},{"type":"Feature","id":"175","geometry":{"type":"Point","coordinates":[-71.09472,42.64917]},"properties":{"NAME":"Boston
+        Hill Ski Area","TYPE":"Both","STATE":"MASSACHUSETTS","LAT":42.64917,"LONG":-71.09472}},{"type":"Feature","id":"176","geometry":{"type":"Point","coordinates":[-73.27972,42.41611]},"properties":{"NAME":"Bousquet
+        Ski Area","TYPE":"Both","STATE":"MASSACHUSETTS","LAT":42.41611,"LONG":-73.27972}},{"type":"Feature","id":"177","geometry":{"type":"Point","coordinates":[-71.05944,42.74361]},"properties":{"NAME":"Bradford
+        Ski Area","TYPE":"Both","STATE":"MASSACHUSETTS","LAT":42.74361,"LONG":-71.05944}},{"type":"Feature","id":"178","geometry":{"type":"Point","coordinates":[-73.26278,42.59528]},"properties":{"NAME":"Brodie
+        Mountain Ski Area","TYPE":"Both","STATE":"MASSACHUSETTS","LAT":42.59528,"LONG":-73.26278}},{"type":"Feature","id":"179","geometry":{"type":"Point","coordinates":[-73.13417,42.35944]},"properties":{"NAME":"Bucksteep
+        Cross-Country Ski Area","TYPE":"Alpine","STATE":"MASSACHUSETTS","LAT":42.35944,"LONG":-73.13417}},{"type":"Feature","id":"180","geometry":{"type":"Point","coordinates":[-73.31472,42.17028]},"properties":{"NAME":"Butternut
+        Basin Ski Area","TYPE":"Both","STATE":"MASSACHUSETTS","LAT":42.17028,"LONG":-73.31472}},{"type":"Feature","id":"181","geometry":{"type":"Point","coordinates":[-73.25944,42.42722]},"properties":{"NAME":"Catamount
+        Ski Area","TYPE":"Both","STATE":"MASSACHUSETTS","LAT":42.42722,"LONG":-73.25944}},{"type":"Feature","id":"182","geometry":{"type":"Point","coordinates":[-72.87028,42.62778]},"properties":{"NAME":"Charlemont
+        Ski Area","TYPE":"Both","STATE":"MASSACHUSETTS","LAT":42.62778,"LONG":-72.87028}},{"type":"Feature","id":"183","geometry":{"type":"Point","coordinates":[-72.52111,42.41944]},"properties":{"NAME":"Cherry
+        Hill Cross Country Ski Center","TYPE":"Alpine","STATE":"MASSACHUSETTS","LAT":42.41944,"LONG":-72.52111}},{"type":"Feature","id":"184","geometry":{"type":"Point","coordinates":[-72.69278,42.15861]},"properties":{"NAME":"East
+        Mountain Ski Touring Center","TYPE":"Alpine","STATE":"MASSACHUSETTS","LAT":42.15861,"LONG":-72.69278}},{"type":"Feature","id":"185","geometry":{"type":"Point","coordinates":[-71.54111,42.62306]},"properties":{"NAME":"Groton
+        Hills Ski Area","TYPE":"Both","STATE":"MASSACHUSETTS","LAT":42.62306,"LONG":-71.54111}},{"type":"Feature","id":"186","geometry":{"type":"Point","coordinates":[-71.55972,42.32917]},"properties":{"NAME":"Jericho
+        Hill Ski Slope","TYPE":"Both","STATE":"MASSACHUSETTS","LAT":42.32917,"LONG":-71.55972}},{"type":"Feature","id":"187","geometry":{"type":"Point","coordinates":[-73.29139,42.55083]},"properties":{"NAME":"Jiminy
+        Peak Ski Area","TYPE":"Both","STATE":"MASSACHUSETTS","LAT":42.55083,"LONG":-73.29139}},{"type":"Feature","id":"188","geometry":{"type":"Point","coordinates":[-71.39722,42.08333]},"properties":{"NAME":"Klein-Innsbruck
+        Ski Area","TYPE":"Both","STATE":"MASSACHUSETTS","LAT":42.08333,"LONG":-71.39722}},{"type":"Feature","id":"189","geometry":{"type":"Point","coordinates":[-73.21583,42.63306]},"properties":{"NAME":"Mount
+        Greylock Ski Club","TYPE":"Both","STATE":"MASSACHUSETTS","LAT":42.63306,"LONG":-73.21583}},{"type":"Feature","id":"190","geometry":{"type":"Point","coordinates":[-72.63333,42.24861]},"properties":{"NAME":"Mount
+        Tom Ski and Recreation Area","TYPE":"Alpine","STATE":"MASSACHUSETTS","LAT":42.24861,"LONG":-72.63333}},{"type":"Feature","id":"191","geometry":{"type":"Point","coordinates":[-71.46611,42.54417]},"properties":{"NAME":"Nashoba
+        Valley Ski Area","TYPE":"Both","STATE":"MASSACHUSETTS","LAT":42.54417,"LONG":-71.46611}},{"type":"Feature","id":"192","geometry":{"type":"Point","coordinates":[-73.1,42.19583]},"properties":{"NAME":"Otis
+        Ridge Ski Area","TYPE":"Both","STATE":"MASSACHUSETTS","LAT":42.19583,"LONG":-73.1}},{"type":"Feature","id":"193","geometry":{"type":"Point","coordinates":[-72.10556,42.40194]},"properties":{"NAME":"Pine
+        Ridge Ski Area","TYPE":"Both","STATE":"MASSACHUSETTS","LAT":42.40194,"LONG":-72.10556}},{"type":"Feature","id":"194","geometry":{"type":"Point","coordinates":[-71.25056,42.39444]},"properties":{"NAME":"Prospect
+        Hill Ski Area","TYPE":"Both","STATE":"MASSACHUSETTS","LAT":42.39444,"LONG":-71.25056}},{"type":"Feature","id":"195","geometry":{"type":"Point","coordinates":[-72.81833,42.07861]},"properties":{"NAME":"Sodom
+        Mountain Ski Area","TYPE":"Both","STATE":"MASSACHUSETTS","LAT":42.07861,"LONG":-72.81833}},{"type":"Feature","id":"196","geometry":{"type":"Point","coordinates":[-73.20778,42.64417]},"properties":{"NAME":"Stony
+        Ledge Ski Trail","TYPE":"Alpine","STATE":"MASSACHUSETTS","LAT":42.64417,"LONG":-73.20778}},{"type":"Feature","id":"197","geometry":{"type":"Point","coordinates":[-73.1525,42.6375]},"properties":{"NAME":"Thunderbolt
+        Ski Trail","TYPE":"Alpine","STATE":"MASSACHUSETTS","LAT":42.6375,"LONG":-73.1525}},{"type":"Feature","id":"198","geometry":{"type":"Point","coordinates":[-71.88694,42.49944]},"properties":{"NAME":"Wachusett
+        Mountain Ski Area","TYPE":"Both","STATE":"MASSACHUSETTS","LAT":42.49944,"LONG":-71.88694}},{"type":"Feature","id":"199","geometry":{"type":"Point","coordinates":[-71.71333,42.29583]},"properties":{"NAME":"Ward
+        Hill Ski Area","TYPE":"Both","STATE":"MASSACHUSETTS","LAT":42.29583,"LONG":-71.71333}},{"type":"Feature","id":"200","geometry":{"type":"Point","coordinates":[-71.30361,42.36667]},"properties":{"NAME":"Weston
+        XC Ski Trail","TYPE":"Alpine","STATE":"MASSACHUSETTS","LAT":42.36667,"LONG":-71.30361}},{"type":"Feature","id":"201","geometry":{"type":"Point","coordinates":[-73.27972,42.70083]},"properties":{"NAME":"Williams
+        College Ski Area","TYPE":"Both","STATE":"MASSACHUSETTS","LAT":42.70083,"LONG":-73.27972}},{"type":"Feature","id":"202","geometry":{"type":"Point","coordinates":[-90.17083,46.45472]},"properties":{"NAME":"ABR
+        Cross Country Ski","TYPE":"Alpine","STATE":"MICHIGAN","LAT":46.45472,"LONG":-90.17083}},{"type":"Feature","id":"203","geometry":{"type":"Point","coordinates":[-86.80806,46.34444]},"properties":{"NAME":"Addis
+        Lakes Ski Trail","TYPE":"Alpine","STATE":"MICHIGAN","LAT":46.34444,"LONG":-86.80806}},{"type":"Feature","id":"204","geometry":{"type":"Point","coordinates":[-83.55417,42.69167]},"properties":{"NAME":"Alpine
+        Valley Ski Area","TYPE":"Both","STATE":"MICHIGAN","LAT":42.69167,"LONG":-83.55417}},{"type":"Feature","id":"205","geometry":{"type":"Point","coordinates":[-87.6675,46.48861]},"properties":{"NAME":"Alquaal
+        - Ishpeming Ski Area","TYPE":"Both","STATE":"MICHIGAN","LAT":46.48861,"LONG":-87.6675}},{"type":"Feature","id":"206","geometry":{"type":"Point","coordinates":[-84.1075,43.47056]},"properties":{"NAME":"Apple
+        Mountain Ski Area","TYPE":"Both","STATE":"MICHIGAN","LAT":43.47056,"LONG":-84.1075}},{"type":"Feature","id":"207","geometry":{"type":"Point","coordinates":[-90.05278,46.48139]},"properties":{"NAME":"Big
+        Powderhorn Mt. Ski Area","TYPE":"Both","STATE":"MICHIGAN","LAT":46.48139,"LONG":-90.05278}},{"type":"Feature","id":"208","geometry":{"type":"Point","coordinates":[-85.69639,42.46056]},"properties":{"NAME":"Bittersweet
+        Ski Area","TYPE":"Both","STATE":"MICHIGAN","LAT":42.46056,"LONG":-85.69639}},{"type":"Feature","id":"209","geometry":{"type":"Point","coordinates":[-90.05278,46.48139]},"properties":{"NAME":"Blackjack
+        Ski Area","TYPE":"Both","STATE":"MICHIGAN","LAT":46.48139,"LONG":-90.05278}},{"type":"Feature","id":"210","geometry":{"type":"Point","coordinates":[-84.92222,45.46861]},"properties":{"NAME":"Boyne
+        Highlands Ski Area","TYPE":"Both","STATE":"MICHIGAN","LAT":45.46861,"LONG":-84.92222}},{"type":"Feature","id":"211","geometry":{"type":"Point","coordinates":[-84.93889,45.15861]},"properties":{"NAME":"Boyne
+        Mountain Ski Area","TYPE":"Both","STATE":"MICHIGAN","LAT":45.15861,"LONG":-84.93889}},{"type":"Feature","id":"212","geometry":{"type":"Point","coordinates":[-85.66667,44.39861]},"properties":{"NAME":"Briar
+        Hill Ski Jump","TYPE":"Both","STATE":"MICHIGAN","LAT":44.39861,"LONG":-85.66667}},{"type":"Feature","id":"213","geometry":{"type":"Point","coordinates":[-88.70694,46.02917]},"properties":{"NAME":"Brule
+        Mountain Ski Area","TYPE":"Both","STATE":"MICHIGAN","LAT":46.02917,"LONG":-88.70694}},{"type":"Feature","id":"214","geometry":{"type":"Point","coordinates":[-85.69944,44.2225]},"properties":{"NAME":"Caberfae
+        Peaks Ski Area","TYPE":"Both","STATE":"MICHIGAN","LAT":44.2225,"LONG":-85.69944}},{"type":"Feature","id":"215","geometry":{"type":"Point","coordinates":[-85.46972,43.05389]},"properties":{"NAME":"Cannonsburg
+        Ski Area","TYPE":"Both","STATE":"MICHIGAN","LAT":43.05389,"LONG":-85.46972}},{"type":"Feature","id":"216","geometry":{"type":"Point","coordinates":[-86.88667,46.35694]},"properties":{"NAME":"Chatham
+        Hill Ski Area","TYPE":"Both","STATE":"MICHIGAN","LAT":46.35694,"LONG":-86.88667}},{"type":"Feature","id":"217","geometry":{"type":"Point","coordinates":[-86.89194,46.36139]},"properties":{"NAME":"Chatham
+        Ski Trail","TYPE":"Alpine","STATE":"MICHIGAN","LAT":46.36139,"LONG":-86.89194}},{"type":"Feature","id":"218","geometry":{"type":"Point","coordinates":[-85.99167,44.51972]},"properties":{"NAME":"Crystal
+        Mountain Ski Area","TYPE":"Both","STATE":"MICHIGAN","LAT":44.51972,"LONG":-85.99167}},{"type":"Feature","id":"219","geometry":{"type":"Point","coordinates":[-87.02889,45.89472]},"properties":{"NAME":"Gladstone
+        Ski Park","TYPE":"Both","STATE":"MICHIGAN","LAT":45.89472,"LONG":-87.02889}},{"type":"Feature","id":"220","geometry":{"type":"Point","coordinates":[-84.75528,44.64444]},"properties":{"NAME":"Hanson
+        Hills Ski Area","TYPE":"Both","STATE":"MICHIGAN","LAT":44.64444,"LONG":-84.75528}},{"type":"Feature","id":"221","geometry":{"type":"Point","coordinates":[-84.93583,45.46778]},"properties":{"NAME":"Harbor
+        Highlands Ski Club","TYPE":"Both","STATE":"MICHIGAN","LAT":45.46778,"LONG":-84.93583}},{"type":"Feature","id":"222","geometry":{"type":"Point","coordinates":[-85.62056,44.76306]},"properties":{"NAME":"Hickory
+        Hills Ski Area","TYPE":"Both","STATE":"MICHIGAN","LAT":44.76306,"LONG":-85.62056}},{"type":"Feature","id":"223","geometry":{"type":"Point","coordinates":[-84.65222,45.03194]},"properties":{"NAME":"Hidden
+        Valley Resort","TYPE":"Both","STATE":"MICHIGAN","LAT":45.03194,"LONG":-84.65222}},{"type":"Feature","id":"224","geometry":{"type":"Point","coordinates":[-85.98528,44.8975]},"properties":{"NAME":"Homestead
+        Ski Area","TYPE":"Both","STATE":"MICHIGAN","LAT":44.8975,"LONG":-85.98528}},{"type":"Feature","id":"225","geometry":{"type":"Point","coordinates":[-85.62722,43.71306]},"properties":{"NAME":"Hungerford
+        Cross Country Ski Trail","TYPE":"Alpine","STATE":"MICHIGAN","LAT":43.71306,"LONG":-85.62722}},{"type":"Feature","id":"226","geometry":{"type":"Point","coordinates":[-89.93972,46.47528]},"properties":{"NAME":"Indianhead
+        Mountain Ski Area","TYPE":"Both","STATE":"MICHIGAN","LAT":46.47528,"LONG":-89.93972}},{"type":"Feature","id":"227","geometry":{"type":"Point","coordinates":[-84.68611,46.4775]},"properties":{"NAME":"Iroquois
+        Mountain Ski Area","TYPE":"Both","STATE":"MICHIGAN","LAT":46.4775,"LONG":-84.68611}},{"type":"Feature","id":"228","geometry":{"type":"Point","coordinates":[-86.65333,46.40278]},"properties":{"NAME":"Maple
+        Mountain Ski Area","TYPE":"Both","STATE":"MICHIGAN","LAT":46.40278,"LONG":-86.65333}},{"type":"Feature","id":"229","geometry":{"type":"Point","coordinates":[-87.39528,46.54361]},"properties":{"NAME":"Marquette
+        Mountain Ski Area","TYPE":"Both","STATE":"MICHIGAN","LAT":46.54361,"LONG":-87.39528}},{"type":"Feature","id":"230","geometry":{"type":"Point","coordinates":[-85.72917,44.23889]},"properties":{"NAME":"McKenzie
+        Ski Trial","TYPE":"Alpine","STATE":"MICHIGAN","LAT":44.23889,"LONG":-85.72917}},{"type":"Feature","id":"231","geometry":{"type":"Point","coordinates":[-84.14,44.63778]},"properties":{"NAME":"Mio
+        Mountain Ski Area","TYPE":"Both","STATE":"MICHIGAN","LAT":44.63778,"LONG":-84.14}},{"type":"Feature","id":"232","geometry":{"type":"Point","coordinates":[-85.215,44.33528]},"properties":{"NAME":"Missaukee
+        Mountain Ski Area","TYPE":"Both","STATE":"MICHIGAN","LAT":44.33528,"LONG":-85.215}},{"type":"Feature","id":"233","geometry":{"type":"Point","coordinates":[-88.56889,47.12194]},"properties":{"NAME":"Mont
+        Ripley Ski Area","TYPE":"Both","STATE":"MICHIGAN","LAT":47.12194,"LONG":-88.56889}},{"type":"Feature","id":"234","geometry":{"type":"Point","coordinates":[-83.80694,42.53806]},"properties":{"NAME":"Mount
+        Brighton Ski Area","TYPE":"Both","STATE":"MICHIGAN","LAT":42.53806,"LONG":-83.80694}},{"type":"Feature","id":"235","geometry":{"type":"Point","coordinates":[-85.62056,44.76306]},"properties":{"NAME":"Mt.
+        Holiday Ski Area","TYPE":"Both","STATE":"MICHIGAN","LAT":44.76306,"LONG":-85.62056}},{"type":"Feature","id":"236","geometry":{"type":"Point","coordinates":[-83.56722,42.82806]},"properties":{"NAME":"Mt.
+        Holly Ski Area","TYPE":"Both","STATE":"MICHIGAN","LAT":42.82806,"LONG":-83.56722}},{"type":"Feature","id":"237","geometry":{"type":"Point","coordinates":[-85.24528,45.33417]},"properties":{"NAME":"Mt.
+        Mcsauba Ski Area","TYPE":"Both","STATE":"MICHIGAN","LAT":45.33417,"LONG":-85.24528}},{"type":"Feature","id":"238","geometry":{"type":"Point","coordinates":[-90.16778,46.47722]},"properties":{"NAME":"Mt.
+        Zion Ski Area","TYPE":"Both","STATE":"MICHIGAN","LAT":46.47722,"LONG":-90.16778}},{"type":"Feature","id":"239","geometry":{"type":"Point","coordinates":[-86.24,43.05694]},"properties":{"NAME":"Mulligans
+        Ski Area","TYPE":"Both","STATE":"MICHIGAN","LAT":43.05694,"LONG":-86.24}},{"type":"Feature","id":"240","geometry":{"type":"Point","coordinates":[-87.90361,45.78694]},"properties":{"NAME":"Norway
+        Mountain Ski Area","TYPE":"Alpine","STATE":"MICHIGAN","LAT":45.78694,"LONG":-87.90361}},{"type":"Feature","id":"241","geometry":{"type":"Point","coordinates":[-84.90361,45.46833]},"properties":{"NAME":"Nubs
+        Nob Ski Area","TYPE":"Both","STATE":"MICHIGAN","LAT":45.46833,"LONG":-84.90361}},{"type":"Feature","id":"242","geometry":{"type":"Point","coordinates":[-85.56,43.12]},"properties":{"NAME":"Pando
+        Ski Area","TYPE":"Both","STATE":"MICHIGAN","LAT":43.12,"LONG":-85.56}},{"type":"Feature","id":"243","geometry":{"type":"Point","coordinates":[-84.95528,45.37333]},"properties":{"NAME":"Petoskey
+        Ski Area","TYPE":"Both","STATE":"MICHIGAN","LAT":45.37333,"LONG":-84.95528}},{"type":"Feature","id":"244","geometry":{"type":"Point","coordinates":[-83.36722,42.74222]},"properties":{"NAME":"Pine
+        Knob Ski Area","TYPE":"Both","STATE":"MICHIGAN","LAT":42.74222,"LONG":-83.36722}},{"type":"Feature","id":"245","geometry":{"type":"Point","coordinates":[-88.08194,45.83306]},"properties":{"NAME":"Pine
+        Mountain Ski Area","TYPE":"Both","STATE":"MICHIGAN","LAT":45.83306,"LONG":-88.08194}},{"type":"Feature","id":"246","geometry":{"type":"Point","coordinates":[-84.66833,44.49694]},"properties":{"NAME":"Pioneer
+        Ski Hill","TYPE":"Both","STATE":"MICHIGAN","LAT":44.49694,"LONG":-84.66833}},{"type":"Feature","id":"247","geometry":{"type":"Point","coordinates":[-89.85,46.68917]},"properties":{"NAME":"Porcupine
+        Ski Area","TYPE":"Both","STATE":"MICHIGAN","LAT":46.68917,"LONG":-89.85}},{"type":"Feature","id":"248","geometry":{"type":"Point","coordinates":[-85.20917,44.92806]},"properties":{"NAME":"Shanty
+        Creek Ski Area","TYPE":"Both","STATE":"MICHIGAN","LAT":44.92806,"LONG":-85.20917}},{"type":"Feature","id":"249","geometry":{"type":"Point","coordinates":[-84.24167,44.92444]},"properties":{"NAME":"Sheridan
+        Valley Ski Area","TYPE":"Both","STATE":"MICHIGAN","LAT":44.92444,"LONG":-84.24167}},{"type":"Feature","id":"250","geometry":{"type":"Point","coordinates":[-84.69083,44.57389]},"properties":{"NAME":"Skyline
+        Ski Slide","TYPE":"Both","STATE":"MICHIGAN","LAT":44.57389,"LONG":-84.69083}},{"type":"Feature","id":"251","geometry":{"type":"Point","coordinates":[-84.79944,44.01917]},"properties":{"NAME":"Snow
+        Snake Mt. Ski Area","TYPE":"Both","STATE":"MICHIGAN","LAT":44.01917,"LONG":-84.79944}},{"type":"Feature","id":"252","geometry":{"type":"Point","coordinates":[-84.71028,44.95889]},"properties":{"NAME":"Snow
+        Valley Ski Club","TYPE":"Both","STATE":"MICHIGAN","LAT":44.95889,"LONG":-84.71028}},{"type":"Feature","id":"253","geometry":{"type":"Point","coordinates":[-85.81917,44.91306]},"properties":{"NAME":"Sugar
+        Loaf Ski Area","TYPE":"Both","STATE":"MICHIGAN","LAT":44.91306,"LONG":-85.81917}},{"type":"Feature","id":"254","geometry":{"type":"Point","coordinates":[-83.72944,42.74667]},"properties":{"NAME":"Summit
+        Ski Club","TYPE":"Both","STATE":"MICHIGAN","LAT":42.74667,"LONG":-83.72944}},{"type":"Feature","id":"255","geometry":{"type":"Point","coordinates":[-85.79944,41.9025]},"properties":{"NAME":"Swiss
+        Valley Ski Area","TYPE":"Both","STATE":"MICHIGAN","LAT":41.9025,"LONG":-85.79944}},{"type":"Feature","id":"256","geometry":{"type":"Point","coordinates":[-85.87944,42.36083]},"properties":{"NAME":"Timber
+        Ridge Ski Area","TYPE":"Both","STATE":"MICHIGAN","LAT":42.36083,"LONG":-85.87944}},{"type":"Feature","id":"257","geometry":{"type":"Point","coordinates":[-84.67472,45.0275]},"properties":{"NAME":"Tree
+        Tops Sylvan Ski Area","TYPE":"Both","STATE":"MICHIGAN","LAT":45.0275,"LONG":-84.67472}},{"type":"Feature","id":"258","geometry":{"type":"Point","coordinates":[-86.69944,46.36306]},"properties":{"NAME":"Valley
+        Spur Ski Trail","TYPE":"Alpine","STATE":"MICHIGAN","LAT":46.36306,"LONG":-86.69944}},{"type":"Feature","id":"259","geometry":{"type":"Point","coordinates":[-92.85222,44.74333]},"properties":{"NAME":"Afton
+        Alps Ski Area","TYPE":"Both","STATE":"MINNESOTA","LAT":44.74333,"LONG":-92.85222}},{"type":"Feature","id":"260","geometry":{"type":"Point","coordinates":[-95.69583,45.77806]},"properties":{"NAME":"Andes
+        Tower Hills Ski Area","TYPE":"Both","STATE":"MINNESOTA","LAT":45.77806,"LONG":-95.69583}},{"type":"Feature","id":"261","geometry":{"type":"Point","coordinates":[-92.93722,48.46333]},"properties":{"NAME":"Blue
+        Fin XC Area","TYPE":"Cross-Country","STATE":"MINNESOTA","LAT":48.46333,"LONG":-92.93722}},{"type":"Feature","id":"262","geometry":{"type":"Point","coordinates":[-93.28694,44.72306]},"properties":{"NAME":"Buck
+        Hill Ski Area","TYPE":"Both","STATE":"MINNESOTA","LAT":44.72306,"LONG":-93.28694}},{"type":"Feature","id":"263","geometry":{"type":"Point","coordinates":[-94.87778,47.65833]},"properties":{"NAME":"Buena
+        Vista Ski Area","TYPE":"Both","STATE":"MINNESOTA","LAT":47.65833,"LONG":-94.87778}},{"type":"Feature","id":"264","geometry":{"type":"Point","coordinates":[-90.71222,47.66417]},"properties":{"NAME":"Cascade
+        Lodge XC Trail","TYPE":"Cross-Country","STATE":"MINNESOTA","LAT":47.66417,"LONG":-90.71222}},{"type":"Feature","id":"265","geometry":{"type":"Point","coordinates":[-92.10639,46.78333]},"properties":{"NAME":"Chester
+        Bowl Ski Area","TYPE":"Both","STATE":"MINNESOTA","LAT":46.78333,"LONG":-92.10639}},{"type":"Feature","id":"266","geometry":{"type":"Point","coordinates":[-92.08306,44.36889]},"properties":{"NAME":"Coffee
+        Mill Ski Area","TYPE":"Both","STATE":"MINNESOTA","LAT":44.36889,"LONG":-92.08306}},{"type":"Feature","id":"267","geometry":{"type":"Point","coordinates":[-95.78306,46.81639]},"properties":{"NAME":"Detroit
+        Mountain Ski Area","TYPE":"Both","STATE":"MINNESOTA","LAT":46.81639,"LONG":-95.78306}},{"type":"Feature","id":"268","geometry":{"type":"Point","coordinates":[-92.30056,47.57556]},"properties":{"NAME":"Giants
+        Ridge Ski Area","TYPE":"Both","STATE":"MINNESOTA","LAT":47.57556,"LONG":-92.30056}},{"type":"Feature","id":"269","geometry":{"type":"Point","coordinates":[-93.37111,44.83056]},"properties":{"NAME":"Hyland
+        Hills Ski Area","TYPE":"Both","STATE":"MINNESOTA","LAT":44.83056,"LONG":-93.37111}},{"type":"Feature","id":"270","geometry":{"type":"Point","coordinates":[-90.71222,47.66417]},"properties":{"NAME":"Lutsen
+        Mountains Ski Area","TYPE":"Both","STATE":"MINNESOTA","LAT":47.66417,"LONG":-90.71222}},{"type":"Feature","id":"271","geometry":{"type":"Point","coordinates":[-92.35639,44.51111]},"properties":{"NAME":"Mount
+        Frontenac Ski Area","TYPE":"Both","STATE":"MINNESOTA","LAT":44.51111,"LONG":-92.35639}},{"type":"Feature","id":"272","geometry":{"type":"Point","coordinates":[-93.99917,44.16361]},"properties":{"NAME":"Mount
+        Kato Ski Area","TYPE":"Both","STATE":"MINNESOTA","LAT":44.16361,"LONG":-93.99917}},{"type":"Feature","id":"273","geometry":{"type":"Point","coordinates":[-94.3,45.3125]},"properties":{"NAME":"Powder
+        Ridge Ski Area","TYPE":"Both","STATE":"MINNESOTA","LAT":45.3125,"LONG":-94.3}},{"type":"Feature","id":"274","geometry":{"type":"Point","coordinates":[-93.58667,46.96306]},"properties":{"NAME":"Quadna
+        Mountain Ski Area","TYPE":"Both","STATE":"MINNESOTA","LAT":46.96306,"LONG":-93.58667}},{"type":"Feature","id":"275","geometry":{"type":"Point","coordinates":[-95.93889,47.18056]},"properties":{"NAME":"Rainbow
+        Resort XC Trail","TYPE":"Cross-Country","STATE":"MINNESOTA","LAT":47.18056,"LONG":-95.93889}},{"type":"Feature","id":"276","geometry":{"type":"Point","coordinates":[-94.6425,47.03528]},"properties":{"NAME":"Shingobee
+        Ski Area","TYPE":"Both","STATE":"MINNESOTA","LAT":47.03528,"LONG":-94.6425}},{"type":"Feature","id":"277","geometry":{"type":"Point","coordinates":[-94.20056,46.35806]},"properties":{"NAME":"Ski
+        Gull Ski Area","TYPE":"Both","STATE":"MINNESOTA","LAT":46.35806,"LONG":-94.20056}},{"type":"Feature","id":"278","geometry":{"type":"Point","coordinates":[-92.10639,46.78333]},"properties":{"NAME":"Spirit
+        Mountain Ski Area","TYPE":"Both","STATE":"MINNESOTA","LAT":46.78333,"LONG":-92.10639}},{"type":"Feature","id":"279","geometry":{"type":"Point","coordinates":[-92.73833,44.56833]},"properties":{"NAME":"Welch
+        Village Ski Area","TYPE":"Both","STATE":"MINNESOTA","LAT":44.56833,"LONG":-92.73833}},{"type":"Feature","id":"280","geometry":{"type":"Point","coordinates":[-92.71306,45.48694]},"properties":{"NAME":"Wild
+        Mountain Ski Area","TYPE":"Both","STATE":"MINNESOTA","LAT":45.48694,"LONG":-92.71306}},{"type":"Feature","id":"281","geometry":{"type":"Point","coordinates":[-90.62778,38.5025]},"properties":{"NAME":"Hidden
+        Valley Ski Area","TYPE":"Both","STATE":"MISSOURI","LAT":38.5025,"LONG":-90.62778}},{"type":"Feature","id":"282","geometry":{"type":"Point","coordinates":[-93.34778,37.45778]},"properties":{"NAME":"Snow
+        Bluff Ski Area","TYPE":"Both","STATE":"MISSOURI","LAT":37.45778,"LONG":-93.34778}},{"type":"Feature","id":"283","geometry":{"type":"Point","coordinates":[-90.3525,36.96639]},"properties":{"NAME":"Snow
+        Creek Ski Area","TYPE":"Both","STATE":"MISSOURI","LAT":36.96639,"LONG":-90.3525}},{"type":"Feature","id":"284","geometry":{"type":"Point","coordinates":[-111.40583,45.28083]},"properties":{"NAME":"Africa
+        Ski Trail","TYPE":"Alpine","STATE":"MONTANA","LAT":45.28083,"LONG":-111.40583}},{"type":"Feature","id":"285","geometry":{"type":"Point","coordinates":[-110.89583,45.81722]},"properties":{"NAME":"Alpine
+        Access Ski Trail","TYPE":"Alpine","STATE":"MONTANA","LAT":45.81722,"LONG":-110.89583}},{"type":"Feature","id":"286","geometry":{"type":"Point","coordinates":[-114.35278,48.485]},"properties":{"NAME":"Alpinglow
+        Alley Ski Trail","TYPE":"Alpine","STATE":"MONTANA","LAT":48.485,"LONG":-114.35278}},{"type":"Feature","id":"287","geometry":{"type":"Point","coordinates":[-110.70806,46.83861]},"properties":{"NAME":"Arkansas
+        Traveller Ski Trail","TYPE":"Alpine","STATE":"MONTANA","LAT":46.83861,"LONG":-110.70806}},{"type":"Feature","id":"288","geometry":{"type":"Point","coordinates":[-113.24111,46.25639]},"properties":{"NAME":"Atlantic
+        Cable Ski Trail","TYPE":"Alpine","STATE":"MONTANA","LAT":46.25639,"LONG":-113.24111}},{"type":"Feature","id":"289","geometry":{"type":"Point","coordinates":[-109.35,45.1875]},"properties":{"NAME":"Auto
+        Bahn Ski Trail","TYPE":"Alpine","STATE":"MONTANA","LAT":45.1875,"LONG":-109.35}},{"type":"Feature","id":"290","geometry":{"type":"Point","coordinates":[-113.95139,45.69306]},"properties":{"NAME":"B-2
+        Ski Trail","TYPE":"Alpine","STATE":"MONTANA","LAT":45.69306,"LONG":-113.95139}},{"type":"Feature","id":"291","geometry":{"type":"Point","coordinates":[-110.92194,45.60694]},"properties":{"NAME":"Bear
+        Canyon Ski Lodge","TYPE":"Both","STATE":"MONTANA","LAT":45.60694,"LONG":-110.92194}},{"type":"Feature","id":"292","geometry":{"type":"Point","coordinates":[-109.63333,48.17778]},"properties":{"NAME":"Bear
+        Paw Ski Bowl","TYPE":"Both","STATE":"MONTANA","LAT":48.17778,"LONG":-109.63333}},{"type":"Feature","id":"293","geometry":{"type":"Point","coordinates":[-111.40583,45.28074]},"properties":{"NAME":"Big
+        Sky Ski Area","TYPE":"Both","STATE":"MONTANA","LAT":45.28074,"LONG":-111.40583}},{"type":"Feature","id":"294","geometry":{"type":"Point","coordinates":[-113.99639,47.02361]},"properties":{"NAME":"Big
+        Sky Ski Trail","TYPE":"Alpine","STATE":"MONTANA","LAT":47.02361,"LONG":-113.99639}},{"type":"Feature","id":"295","geometry":{"type":"Point","coordinates":[-114.3732,48.01656]},"properties":{"NAME":"Blacktail
+        Ski Area","TYPE":"Both","STATE":"MONTANA","LAT":48.01656,"LONG":-114.3732}},{"type":"Feature","id":"296","geometry":{"type":"Point","coordinates":[-110.89666,45.81713]},"properties":{"NAME":"Bridger
+        Bowl Ski Area","TYPE":"Both","STATE":"MONTANA","LAT":45.81713,"LONG":-110.89666}},{"type":"Feature","id":"297","geometry":{"type":"Point","coordinates":[-112.60056,45.9525]},"properties":{"NAME":"Butte
+        Ski Club","TYPE":"Both","STATE":"MONTANA","LAT":45.9525,"LONG":-112.60056}},{"type":"Feature","id":"298","geometry":{"type":"Point","coordinates":[-109.38135,46.9502]},"properties":{"NAME":"Castle
+        Hill Ski Area","TYPE":"Both","STATE":"MONTANA","LAT":46.9502,"LONG":-109.38135}},{"type":"Feature","id":"299","geometry":{"type":"Point","coordinates":[-113.11396,45.90407]},"properties":{"NAME":"Deep
+        Creek Ski Area","TYPE":"Both","STATE":"MONTANA","LAT":45.90407,"LONG":-113.11396}},{"type":"Feature","id":"300","geometry":{"type":"Point","coordinates":[-113.24202,46.25629]},"properties":{"NAME":"Discovery
+        Basin Ski Area","TYPE":"Both","STATE":"MONTANA","LAT":46.25629,"LONG":-113.24202}},{"type":"Feature","id":"301","geometry":{"type":"Point","coordinates":[-113.62485,48.27378]},"properties":{"NAME":"Essex
+        Cross Country Ski Area","TYPE":"Cross-Country","STATE":"MONTANA","LAT":48.27378,"LONG":-113.62485}},{"type":"Feature","id":"302","geometry":{"type":"Point","coordinates":[-113.99264,48.14295]},"properties":{"NAME":"Foothills
+        Cross Country Ski Area","TYPE":"Alpine","STATE":"MONTANA","LAT":48.14295,"LONG":-113.99264}},{"type":"Feature","id":"303","geometry":{"type":"Point","coordinates":[-113.99875,48.13961]},"properties":{"NAME":"Foothills
+        Cross-Country Ski Area","TYPE":"Alpine","STATE":"MONTANA","LAT":48.13961,"LONG":-113.99875}},{"type":"Feature","id":"304","geometry":{"type":"Point","coordinates":[-114.35515,48.14878]},"properties":{"NAME":"Foy
+        Lake Cross Country Ski Area","TYPE":"Alpine","STATE":"MONTANA","LAT":48.14878,"LONG":-114.35515}},{"type":"Feature","id":"305","geometry":{"type":"Point","coordinates":[-111.10667,46.35602]},"properties":{"NAME":"Grass
+        Mountain Ski Area","TYPE":"Both","STATE":"MONTANA","LAT":46.35602,"LONG":-111.10667}},{"type":"Feature","id":"306","geometry":{"type":"Point","coordinates":[-111.81362,44.58991]},"properties":{"NAME":"Lakeview
+        Mountain Ski Area","TYPE":"Both","STATE":"MONTANA","LAT":44.58991,"LONG":-111.81362}},{"type":"Feature","id":"307","geometry":{"type":"Point","coordinates":[-111.2911,44.69548]},"properties":{"NAME":"Lionhead
+        Ski Area","TYPE":"Both","STATE":"MONTANA","LAT":44.69548,"LONG":-111.2911}},{"type":"Feature","id":"308","geometry":{"type":"Point","coordinates":[-113.44815,46.89545]},"properties":{"NAME":"Lubrecht
+        Camp Ski Area","TYPE":"Both","STATE":"MONTANA","LAT":46.89545,"LONG":-113.44815}},{"type":"Feature","id":"309","geometry":{"type":"Point","coordinates":[-113.90677,46.91989]},"properties":{"NAME":"Marshall
+        Ski Area","TYPE":"Both","STATE":"MONTANA","LAT":46.91989,"LONG":-113.90677}},{"type":"Feature","id":"310","geometry":{"type":"Point","coordinates":[-113.1295,45.4349]},"properties":{"NAME":"Maverick
+        Mountain Ski Area","TYPE":"Both","STATE":"MONTANA","LAT":45.4349,"LONG":-113.1295}},{"type":"Feature","id":"311","geometry":{"type":"Point","coordinates":[-109.35077,45.19021]},"properties":{"NAME":"Red
+        Lodge Mountain Ski Area","TYPE":"Both","STATE":"MONTANA","LAT":45.19021,"LONG":-109.35077}},{"type":"Feature","id":"312","geometry":{"type":"Point","coordinates":[-112.75148,47.79157]},"properties":{"NAME":"Rocky
+        Mountain Hi Ski Area","TYPE":"Both","STATE":"MONTANA","LAT":47.79157,"LONG":-112.75148}},{"type":"Feature","id":"313","geometry":{"type":"Point","coordinates":[-114.52905,48.4585]},"properties":{"NAME":"Round
+        Meadow Country Ski Area","TYPE":"Alpine","STATE":"MONTANA","LAT":48.4585,"LONG":-114.52905}},{"type":"Feature","id":"314","geometry":{"type":"Point","coordinates":[-114.54127,48.45822]},"properties":{"NAME":"Round
+        Meadow Cross Country Ski Area","TYPE":"Cross-Country","STATE":"MONTANA","LAT":48.45822,"LONG":-114.54127}},{"type":"Feature","id":"315","geometry":{"type":"Point","coordinates":[-113.99734,47.0235]},"properties":{"NAME":"Snow
+        Bowl Ski Area","TYPE":"Both","STATE":"MONTANA","LAT":47.0235,"LONG":-113.99734}},{"type":"Feature","id":"316","geometry":{"type":"Point","coordinates":[-114.02956,47.01433]},"properties":{"NAME":"Snow
+        Park Ski Area","TYPE":"Alpine","STATE":"MONTANA","LAT":47.01433,"LONG":-114.02956}},{"type":"Feature","id":"317","geometry":{"type":"Point","coordinates":[-115.63047,48.60488]},"properties":{"NAME":"Turner
+        Mountain Ski Area","TYPE":"Alpine","STATE":"MONTANA","LAT":48.60488,"LONG":-115.63047}},{"type":"Feature","id":"318","geometry":{"type":"Point","coordinates":[-113.21174,46.17184]},"properties":{"NAME":"Wraith
+        Hill Ski Area","TYPE":"Alpine","STATE":"MONTANA","LAT":46.17184,"LONG":-113.21174}},{"type":"Feature","id":"319","geometry":{"type":"Point","coordinates":[-115.62944,48.605]},"properties":{"NAME":"Back
+        Side of the Moon Ski Trail","TYPE":"Alpine","STATE":"MONTANA","LAT":48.605,"LONG":-115.62944}},{"type":"Feature","id":"320","geometry":{"type":"Point","coordinates":[-119.90878,38.93769]},"properties":{"NAME":"Heavenly
+        Valley Ski Area","TYPE":"Both","STATE":"NEVADA","LAT":38.93769,"LONG":-119.90878}},{"type":"Feature","id":"321","geometry":{"type":"Point","coordinates":[-119.9235,39.25379]},"properties":{"NAME":"Incline
+        Ski Area","TYPE":"Both","STATE":"NEVADA","LAT":39.25379,"LONG":-119.9235}},{"type":"Feature","id":"322","geometry":{"type":"Point","coordinates":[-115.67974,36.3036]},"properties":{"NAME":"Lee
+        Canyon Ski Area","TYPE":"Both","STATE":"NEVADA","LAT":36.3036,"LONG":-115.67974}},{"type":"Feature","id":"323","geometry":{"type":"Point","coordinates":[-119.88572,39.32907]},"properties":{"NAME":"Mount
+        Rose Ski Area","TYPE":"Both","STATE":"NEVADA","LAT":39.32907,"LONG":-119.88572}},{"type":"Feature","id":"324","geometry":{"type":"Point","coordinates":[-115.67752,36.32055]},"properties":{"NAME":"Old
+        Mill Cross Country Ski Area","TYPE":"Alpine","STATE":"NEVADA","LAT":36.32055,"LONG":-115.67752}},{"type":"Feature","id":"325","geometry":{"type":"Point","coordinates":[-119.8735,39.33657]},"properties":{"NAME":"Sky
+        Tavern Ski Area","TYPE":"Both","STATE":"NEVADA","LAT":39.33657,"LONG":-119.8735}},{"type":"Feature","id":"326","geometry":{"type":"Point","coordinates":[-119.901,39.33796]},"properties":{"NAME":"Sky
+        Tavern Ski Area","TYPE":"Alpine","STATE":"NEVADA","LAT":39.33796,"LONG":-119.901}},{"type":"Feature","id":"327","geometry":{"type":"Point","coordinates":[-119.87128,39.31879]},"properties":{"NAME":"Slide
+        Mountain Ski Area","TYPE":"Both","STATE":"NEVADA","LAT":39.31879,"LONG":-119.87128}},{"type":"Feature","id":"328","geometry":{"type":"Point","coordinates":[-71.22833,43.61139]},"properties":{"NAME":"Abenaki
+        Ski Area","TYPE":"Both","STATE":"NEW HAMPSHIRE","LAT":43.61139,"LONG":-71.22833}},{"type":"Feature","id":"329","geometry":{"type":"Point","coordinates":[-71.36889,43.54583]},"properties":{"NAME":"Alpine
+        Ridge Ski Area","TYPE":"Both","STATE":"NEW HAMPSHIRE","LAT":43.54583,"LONG":-71.36889}},{"type":"Feature","id":"330","geometry":{"type":"Point","coordinates":[-71.23,44.08278]},"properties":{"NAME":"Attitash
+        Bear Peak Ski Area","TYPE":"Both","STATE":"NEW HAMPSHIRE","LAT":44.08278,"LONG":-71.23}},{"type":"Feature","id":"331","geometry":{"type":"Point","coordinates":[-71.79389,44.85694]},"properties":{"NAME":"Balsams-Wilderness
+        Ski Area","TYPE":"Both","STATE":"NEW HAMPSHIRE","LAT":44.85694,"LONG":-71.79389}},{"type":"Feature","id":"332","geometry":{"type":"Point","coordinates":[-71.2975,44.04583]},"properties":{"NAME":"Bear
+        Mountain Ski Trail","TYPE":"Alpine","STATE":"NEW HAMPSHIRE","LAT":44.04583,"LONG":-71.2975}},{"type":"Feature","id":"333","geometry":{"type":"Point","coordinates":[-71.16472,44.16722]},"properties":{"NAME":"Black
+        Mountain Ski Areal","TYPE":"Both","STATE":"NEW HAMPSHIRE","LAT":44.16722,"LONG":-71.16472}},{"type":"Feature","id":"334","geometry":{"type":"Point","coordinates":[-70.91667,43.24194]},"properties":{"NAME":"Black
+        Water Ski Area","TYPE":"Both","STATE":"NEW HAMPSHIRE","LAT":43.24194,"LONG":-70.91667}},{"type":"Feature","id":"335","geometry":{"type":"Point","coordinates":[-71.46111,44.25417]},"properties":{"NAME":"Bretton
+        Woods Ski Area","TYPE":"Both","STATE":"NEW HAMPSHIRE","LAT":44.25417,"LONG":-71.46111}},{"type":"Feature","id":"336","geometry":{"type":"Point","coordinates":[-71.69167,42.73611]},"properties":{"NAME":"Brookline
+        Ski Area","TYPE":"Both","STATE":"NEW HAMPSHIRE","LAT":42.73611,"LONG":-71.69167}},{"type":"Feature","id":"337","geometry":{"type":"Point","coordinates":[-71.70194,44.17722]},"properties":{"NAME":"Cannon
+        Mountain Ski Area","TYPE":"Both","STATE":"NEW HAMPSHIRE","LAT":44.17722,"LONG":-71.70194}},{"type":"Feature","id":"338","geometry":{"type":"Point","coordinates":[-72.10083,43.78694]},"properties":{"NAME":"Dartmouth
+        Skiway","TYPE":"Both","STATE":"NEW HAMPSHIRE","LAT":43.78694,"LONG":-72.10083}},{"type":"Feature","id":"339","geometry":{"type":"Point","coordinates":[-71.14,44.16861]},"properties":{"NAME":"Doublehead
+        Ski Trail","TYPE":"Alpine","STATE":"NEW HAMPSHIRE","LAT":44.16861,"LONG":-71.14}},{"type":"Feature","id":"340","geometry":{"type":"Point","coordinates":[-72.12917,43.52222]},"properties":{"NAME":"Eastman
+        Ski Area","TYPE":"Both","STATE":"NEW HAMPSHIRE","LAT":43.52222,"LONG":-72.12917}},{"type":"Feature","id":"341","geometry":{"type":"Point","coordinates":[-71.53472,43.26333]},"properties":{"NAME":"Elgin
+        Kirby Ski Area","TYPE":"Both","STATE":"NEW HAMPSHIRE","LAT":43.26333,"LONG":-71.53472}},{"type":"Feature","id":"342","geometry":{"type":"Point","coordinates":[-71.74833,44.22694]},"properties":{"NAME":"Franconia
+        Cross Country Center","TYPE":"Alpine","STATE":"NEW HAMPSHIRE","LAT":44.22694,"LONG":-71.74833}},{"type":"Feature","id":"343","geometry":{"type":"Point","coordinates":[-71.17361,44.38778]},"properties":{"NAME":"Great
+        Glen Trails","TYPE":"Both","STATE":"NEW HAMPSHIRE","LAT":44.38778,"LONG":-71.17361}},{"type":"Feature","id":"344","geometry":{"type":"Point","coordinates":[-71.37889,43.52556]},"properties":{"NAME":"Gunstock
+        Ski Area","TYPE":"Both","STATE":"NEW HAMPSHIRE","LAT":43.52556,"LONG":-71.37889}},{"type":"Feature","id":"345","geometry":{"type":"Point","coordinates":[-71.55417,43.40528]},"properties":{"NAME":"Highland
+        Ski Area","TYPE":"Both","STATE":"NEW HAMPSHIRE","LAT":43.40528,"LONG":-71.55417}},{"type":"Feature","id":"346","geometry":{"type":"Point","coordinates":[-71.04722,42.86278]},"properties":{"NAME":"Indian
+        Mound Ski Area","TYPE":"Both","STATE":"NEW HAMPSHIRE","LAT":42.86278,"LONG":-71.04722}},{"type":"Feature","id":"347","geometry":{"type":"Point","coordinates":[-71.14083,44.10444]},"properties":{"NAME":"Intervale
+        Ski Area","TYPE":"Both","STATE":"NEW HAMPSHIRE","LAT":44.10444,"LONG":-71.14083}},{"type":"Feature","id":"348","geometry":{"type":"Point","coordinates":[-71.18583,44.145]},"properties":{"NAME":"Jackson
+        Ski Touring Foundation","TYPE":"Alpine","STATE":"NEW HAMPSHIRE","LAT":44.145,"LONG":-71.18583}},{"type":"Feature","id":"349","geometry":{"type":"Point","coordinates":[-71.09167,43.87083]},"properties":{"NAME":"King
+        Pine Ski Area","TYPE":"Both","STATE":"NEW HAMPSHIRE","LAT":43.87083,"LONG":-71.09167}},{"type":"Feature","id":"350","geometry":{"type":"Point","coordinates":[-71.99028,43.37194]},"properties":{"NAME":"King
+        Ridge Ski Area","TYPE":"Both","STATE":"NEW HAMPSHIRE","LAT":43.37194,"LONG":-71.99028}},{"type":"Feature","id":"351","geometry":{"type":"Point","coordinates":[-71.63028,44.05667]},"properties":{"NAME":"Loon
+        Mountain Ski Area","TYPE":"Both","STATE":"NEW HAMPSHIRE","LAT":44.05667,"LONG":-71.63028}},{"type":"Feature","id":"352","geometry":{"type":"Point","coordinates":[-71.43944,43.00417]},"properties":{"NAME":"McIntyre
+        Ski Area","TYPE":"Both","STATE":"NEW HAMPSHIRE","LAT":43.00417,"LONG":-71.43944}},{"type":"Feature","id":"353","geometry":{"type":"Point","coordinates":[-71.07806,43.53278]},"properties":{"NAME":"Moose
+        Mountain Ski Area","TYPE":"Both","STATE":"NEW HAMPSHIRE","LAT":43.53278,"LONG":-71.07806}},{"type":"Feature","id":"354","geometry":{"type":"Point","coordinates":[-71.09389,44.05556]},"properties":{"NAME":"Mount
+        Cranmore Ski Area","TYPE":"Both","STATE":"NEW HAMPSHIRE","LAT":44.05556,"LONG":-71.09389}},{"type":"Feature","id":"355","geometry":{"type":"Point","coordinates":[-72.07139,43.34056]},"properties":{"NAME":"Mount
+        Sunapee Ski Area","TYPE":"Both","STATE":"NEW HAMPSHIRE","LAT":43.34056,"LONG":-72.07139}},{"type":"Feature","id":"356","geometry":{"type":"Point","coordinates":[-71.54222,43.96278]},"properties":{"NAME":"Mount
+        Tecumseh Ski Area","TYPE":"Both","STATE":"NEW HAMPSHIRE","LAT":43.96278,"LONG":-71.54222}},{"type":"Feature","id":"357","geometry":{"type":"Point","coordinates":[-71.21444,43.80806]},"properties":{"NAME":"Mount
+        Whittier Ski Area","TYPE":"Both","STATE":"NEW HAMPSHIRE","LAT":43.80806,"LONG":-71.21444}},{"type":"Feature","id":"358","geometry":{"type":"Point","coordinates":[-71.14167,44.16333]},"properties":{"NAME":"Nestlenook
+        Farm on the River Ski Are","TYPE":"Both","STATE":"NEW HAMPSHIRE","LAT":44.16333,"LONG":-71.14167}},{"type":"Feature","id":"359","geometry":{"type":"Point","coordinates":[-71.98556,43.41389]},"properties":{"NAME":"Norsk
+        Cross Country Resort","TYPE":"Alpine","STATE":"NEW HAMPSHIRE","LAT":43.41389,"LONG":-71.98556}},{"type":"Feature","id":"360","geometry":{"type":"Point","coordinates":[-71.12139,44.09722]},"properties":{"NAME":"Number
+        Five Ski Trail","TYPE":"Alpine","STATE":"NEW HAMPSHIRE","LAT":44.09722,"LONG":-71.12139}},{"type":"Feature","id":"361","geometry":{"type":"Point","coordinates":[-71.35417,43.76]},"properties":{"NAME":"Ossipee
+        Mountain Ski Area","TYPE":"Both","STATE":"NEW HAMPSHIRE","LAT":43.76,"LONG":-71.35417}},{"type":"Feature","id":"362","geometry":{"type":"Point","coordinates":[-71.79667,43.16222]},"properties":{"NAME":"Pats
+        Peak Ski Area","TYPE":"Both","STATE":"NEW HAMPSHIRE","LAT":43.16222,"LONG":-71.79667}},{"type":"Feature","id":"363","geometry":{"type":"Point","coordinates":[-72.21306,42.97083]},"properties":{"NAME":"Pinnacle
+        Mountain Ski Area","TYPE":"Both","STATE":"NEW HAMPSHIRE","LAT":42.97083,"LONG":-72.21306}},{"type":"Feature","id":"364","geometry":{"type":"Point","coordinates":[-71.08889,43.86111]},"properties":{"NAME":"Purity
+        Springs Ski Area","TYPE":"Both","STATE":"NEW HAMPSHIRE","LAT":43.86111,"LONG":-71.08889}},{"type":"Feature","id":"365","geometry":{"type":"Point","coordinates":[-71.84306,43.47639]},"properties":{"NAME":"Ragged
+        Mountain Ski Area","TYPE":"Both","STATE":"NEW HAMPSHIRE","LAT":43.47639,"LONG":-71.84306}},{"type":"Feature","id":"366","geometry":{"type":"Point","coordinates":[-72.44611,42.88861]},"properties":{"NAME":"Roads
+        End Farm Ski Area","TYPE":"Both","STATE":"NEW HAMPSHIRE","LAT":42.88861,"LONG":-72.44611}},{"type":"Feature","id":"367","geometry":{"type":"Point","coordinates":[-71.82722,43.99722]},"properties":{"NAME":"Snapper
+        Ski Trail","TYPE":"Alpine","STATE":"NEW HAMPSHIRE","LAT":43.99722,"LONG":-71.82722}},{"type":"Feature","id":"368","geometry":{"type":"Point","coordinates":[-72.25167,43.63389]},"properties":{"NAME":"Storrs
+        Hill Ski Area","TYPE":"Both","STATE":"NEW HAMPSHIRE","LAT":43.63389,"LONG":-72.25167}},{"type":"Feature","id":"369","geometry":{"type":"Point","coordinates":[-71.88639,42.84444]},"properties":{"NAME":"Temple
+        Mountain Ski Area","TYPE":"Both","STATE":"NEW HAMPSHIRE","LAT":42.84444,"LONG":-71.88639}},{"type":"Feature","id":"370","geometry":{"type":"Point","coordinates":[-71.79389,43.73583]},"properties":{"NAME":"Tenney
+        Mountain Ski Area","TYPE":"Both","STATE":"NEW HAMPSHIRE","LAT":43.73583,"LONG":-71.79389}},{"type":"Feature","id":"371","geometry":{"type":"Point","coordinates":[-71.27528,44.26306]},"properties":{"NAME":"Tuckerman''s
+        Ravine Ski Area","TYPE":"Both","STATE":"NEW HAMPSHIRE","LAT":44.26306,"LONG":-71.27528}},{"type":"Feature","id":"372","geometry":{"type":"Point","coordinates":[-71.52917,43.96528]},"properties":{"NAME":"Waterville
+        Valley Ski Area","TYPE":"Both","STATE":"NEW HAMPSHIRE","LAT":43.96528,"LONG":-71.52917}},{"type":"Feature","id":"373","geometry":{"type":"Point","coordinates":[-71.62,44.08722]},"properties":{"NAME":"Whaleback
+        Ski Resort","TYPE":"Both","STATE":"NEW HAMPSHIRE","LAT":44.08722,"LONG":-71.62}},{"type":"Feature","id":"374","geometry":{"type":"Point","coordinates":[-71.23528,44.26]},"properties":{"NAME":"Wildcat
+        Mountain Ski Area","TYPE":"Both","STATE":"NEW HAMPSHIRE","LAT":44.26,"LONG":-71.23528}},{"type":"Feature","id":"375","geometry":{"type":"Point","coordinates":[-74.19972,41.05417]},"properties":{"NAME":"Campgaw
+        Mountain Ski Area","TYPE":"Both","STATE":"NEW JERSEY","LAT":41.05417,"LONG":-74.19972}},{"type":"Feature","id":"376","geometry":{"type":"Point","coordinates":[-74.4836,41.19833]},"properties":{"NAME":"Hidden
+        Valley Ski Area","TYPE":"Both","STATE":"NEW JERSEY","LAT":41.19833,"LONG":-74.4836}},{"type":"Feature","id":"377","geometry":{"type":"Point","coordinates":[-74.66194,41.32056]},"properties":{"NAME":"High
+        Point XC Ski Trail","TYPE":"Alpine","STATE":"NEW JERSEY","LAT":41.32056,"LONG":-74.66194}},{"type":"Feature","id":"378","geometry":{"type":"Point","coordinates":[-74.4836,41.19833]},"properties":{"NAME":"Mountain
+        Creek Ski Area","TYPE":"Both","STATE":"NEW JERSEY","LAT":41.19833,"LONG":-74.4836}},{"type":"Feature","id":"379","geometry":{"type":"Point","coordinates":[-105.27222,36.38778]},"properties":{"NAME":"Adventure
+        Ski Trail","TYPE":"Alpine","STATE":"NEW MEXICO","LAT":36.38778,"LONG":-105.27222}},{"type":"Feature","id":"380","geometry":{"type":"Point","coordinates":[-105.79444,35.79111]},"properties":{"NAME":"Alpine
+        Ski Trail","TYPE":"Alpine","STATE":"NEW MEXICO","LAT":35.79111,"LONG":-105.79444}},{"type":"Feature","id":"381","geometry":{"type":"Point","coordinates":[-105.45278,36.59449]},"properties":{"NAME":"Als
+        Run Ski Area","TYPE":"Alpine","STATE":"NEW MEXICO","LAT":36.59449,"LONG":-105.45278}},{"type":"Feature","id":"382","geometry":{"type":"Point","coordinates":[-105.78806,33.39722]},"properties":{"NAME":"Ambush
+        Ski Trail","TYPE":"Alpine","STATE":"NEW MEXICO","LAT":33.39722,"LONG":-105.78806}},{"type":"Feature","id":"383","geometry":{"type":"Point","coordinates":[-105.23555,36.38033]},"properties":{"NAME":"Angel
+        Fire Ski Area","TYPE":"Alpine","STATE":"NEW MEXICO","LAT":36.38033,"LONG":-105.23555}},{"type":"Feature","id":"384","geometry":{"type":"Point","coordinates":[-105.27222,36.38422]},"properties":{"NAME":"Angel
+        Fire Ski Area","TYPE":"Both","STATE":"NEW MEXICO","LAT":36.38422,"LONG":-105.27222}},{"type":"Feature","id":"385","geometry":{"type":"Point","coordinates":[-105.27222,36.43778]},"properties":{"NAME":"Arriba
+        Ski Trail","TYPE":"Alpine","STATE":"NEW MEXICO","LAT":36.43778,"LONG":-105.27222}},{"type":"Feature","id":"386","geometry":{"type":"Point","coordinates":[-106.41836,35.20701]},"properties":{"NAME":"Aspen
+        Bowl Ski Area","TYPE":"Both","STATE":"NEW MEXICO","LAT":35.20701,"LONG":-106.41836}},{"type":"Feature","id":"387","geometry":{"type":"Point","coordinates":[-106.41806,35.20694]},"properties":{"NAME":"Aspen
+        Glade Ski Trail","TYPE":"Alpine","STATE":"NEW MEXICO","LAT":35.20694,"LONG":-106.41806}},{"type":"Feature","id":"388","geometry":{"type":"Point","coordinates":[-106.41778,35.20694]},"properties":{"NAME":"Aspen
+        Narrows Ski Trail","TYPE":"Alpine","STATE":"NEW MEXICO","LAT":35.20694,"LONG":-106.41778}},{"type":"Feature","id":"389","geometry":{"type":"Point","coordinates":[-105.45222,36.59444]},"properties":{"NAME":"Baby
+        Bear Ski Trail","TYPE":"Alpine","STATE":"NEW MEXICO","LAT":36.59444,"LONG":-105.45222}},{"type":"Feature","id":"390","geometry":{"type":"Point","coordinates":[-105.70417,32.95056]},"properties":{"NAME":"Cascade
+        Ski Trail","TYPE":"Alpine","STATE":"NEW MEXICO","LAT":32.95056,"LONG":-105.70417}},{"type":"Feature","id":"391","geometry":{"type":"Point","coordinates":[-105.27222,36.3875]},"properties":{"NAME":"Fire
+        Escape Ski Trail","TYPE":"Alpine","STATE":"NEW MEXICO","LAT":36.3875,"LONG":-105.27222}},{"type":"Feature","id":"392","geometry":{"type":"Point","coordinates":[-105.45222,36.59556]},"properties":{"NAME":"Midway
+        Ski Trail","TYPE":"Alpine","STATE":"NEW MEXICO","LAT":36.59556,"LONG":-105.45222}},{"type":"Feature","id":"393","geometry":{"type":"Point","coordinates":[-106.3928,35.89033]},"properties":{"NAME":"Pajarito
+        Mountain Ski Area","TYPE":"Both","STATE":"NEW MEXICO","LAT":35.89033,"LONG":-106.3928}},{"type":"Feature","id":"394","geometry":{"type":"Point","coordinates":[-105.41584,36.70754]},"properties":{"NAME":"Red
+        River Ski Area","TYPE":"Both","STATE":"NEW MEXICO","LAT":36.70754,"LONG":-105.41584}},{"type":"Feature","id":"395","geometry":{"type":"Point","coordinates":[-105.44806,36.85893]},"properties":{"NAME":"Rio
+        Costilla Ski Area","TYPE":"Both","STATE":"NEW MEXICO","LAT":36.85893,"LONG":-105.44806}},{"type":"Feature","id":"396","geometry":{"type":"Point","coordinates":[-105.79916,33.39733]},"properties":{"NAME":"Sierra
+        Blanca Ski Area","TYPE":"Both","STATE":"NEW MEXICO","LAT":33.39733,"LONG":-105.79916}},{"type":"Feature","id":"397","geometry":{"type":"Point","coordinates":[-105.55195,36.15505]},"properties":{"NAME":"Sipapu
+        Ski Area","TYPE":"Both","STATE":"NEW MEXICO","LAT":36.15505,"LONG":-105.55195}},{"type":"Feature","id":"398","geometry":{"type":"Point","coordinates":[-105.7061,32.9493]},"properties":{"NAME":"Ski
+        Cloudcroft Ski Area","TYPE":"Both","STATE":"NEW MEXICO","LAT":32.9493,"LONG":-105.7061}},{"type":"Feature","id":"399","geometry":{"type":"Point","coordinates":[-105.78861,33.39733]},"properties":{"NAME":"Top
+        Notch Ski Area","TYPE":"Alpine","STATE":"NEW MEXICO","LAT":33.39733,"LONG":-105.78861}},{"type":"Feature","id":"400","geometry":{"type":"Point","coordinates":[-105.78806,33.39778]},"properties":{"NAME":"Triple
+        Chair Number Five Ski Trail","TYPE":"Alpine","STATE":"NEW MEXICO","LAT":33.39778,"LONG":-105.78806}},{"type":"Feature","id":"401","geometry":{"type":"Point","coordinates":[-105.32166,36.55505]},"properties":{"NAME":"Val
+        Verde Ski Area","TYPE":"Both","STATE":"NEW MEXICO","LAT":36.55505,"LONG":-105.32166}},{"type":"Feature","id":"402","geometry":{"type":"Point","coordinates":[-78.71528,42.15778]},"properties":{"NAME":"Allegany
+        XC Trail","TYPE":"Alpine","STATE":"NEW YORK","LAT":42.15778,"LONG":-78.71528}},{"type":"Feature","id":"403","geometry":{"type":"Point","coordinates":[-73.02278,40.84389]},"properties":{"NAME":"Bald
+        Hill Ski Bowl","TYPE":"Both","STATE":"NEW YORK","LAT":40.84389,"LONG":-73.02278}},{"type":"Feature","id":"404","geometry":{"type":"Point","coordinates":[-74.49028,42.14417]},"properties":{"NAME":"Belleayre
+        Ski Area","TYPE":"Both","STATE":"NEW YORK","LAT":42.14417,"LONG":-74.49028}},{"type":"Feature","id":"405","geometry":{"type":"Point","coordinates":[-74.46444,44.22389]},"properties":{"NAME":"Big
+        Tupper Ski Area","TYPE":"Both","STATE":"NEW YORK","LAT":44.22389,"LONG":-74.46444}},{"type":"Feature","id":"406","geometry":{"type":"Point","coordinates":[-74.78611,42.18861]},"properties":{"NAME":"Bob
+        Cat Ski Center","TYPE":"Both","STATE":"NEW YORK","LAT":42.18861,"LONG":-74.78611}},{"type":"Feature","id":"407","geometry":{"type":"Point","coordinates":[-78.71639,42.10111]},"properties":{"NAME":"Bova
+        Ski Tow","TYPE":"Both","STATE":"NEW YORK","LAT":42.10111,"LONG":-78.71639}},{"type":"Feature","id":"408","geometry":{"type":"Point","coordinates":[-77.06917,43.1475]},"properties":{"NAME":"Brantling
+        Ski Area","TYPE":"Both","STATE":"NEW YORK","LAT":43.1475,"LONG":-77.06917}},{"type":"Feature","id":"409","geometry":{"type":"Point","coordinates":[-77.28833,42.87417]},"properties":{"NAME":"Bristol
+        Mountain Ski Area","TYPE":"Both","STATE":"NEW YORK","LAT":42.87417,"LONG":-77.28833}},{"type":"Feature","id":"410","geometry":{"type":"Point","coordinates":[-78.31,42.76333]},"properties":{"NAME":"Byrncliff
+        Resort Ski Area","TYPE":"Both","STATE":"NEW YORK","LAT":42.76333,"LONG":-78.31}},{"type":"Feature","id":"411","geometry":{"type":"Point","coordinates":[-73.52639,42.17889]},"properties":{"NAME":"Catamount
+        Ski Area","TYPE":"Both","STATE":"NEW YORK","LAT":42.17889,"LONG":-73.52639}},{"type":"Feature","id":"412","geometry":{"type":"Point","coordinates":[-79.1,42.29444]},"properties":{"NAME":"Cockaigne
+        Ski Area","TYPE":"Both","STATE":"NEW YORK","LAT":42.29444,"LONG":-79.1}},{"type":"Feature","id":"413","geometry":{"type":"Point","coordinates":[-74.0975,42.19583]},"properties":{"NAME":"Cortina
+        Valley Ski Area","TYPE":"Both","STATE":"NEW YORK","LAT":42.19583,"LONG":-74.0975}},{"type":"Feature","id":"414","geometry":{"type":"Point","coordinates":[-75.91111,43.97472]},"properties":{"NAME":"Dry
+        Hill Ski Area","TYPE":"Both","STATE":"NEW YORK","LAT":43.97472,"LONG":-75.91111}},{"type":"Feature","id":"415","geometry":{"type":"Point","coordinates":[-73.81833,41.47528]},"properties":{"NAME":"Fahnestock
+        Ski Slope","TYPE":"Both","STATE":"NEW YORK","LAT":41.47528,"LONG":-73.81833}},{"type":"Feature","id":"416","geometry":{"type":"Point","coordinates":[-76.00472,43.02972]},"properties":{"NAME":"Four
+        Seasons Ski Area","TYPE":"Both","STATE":"NEW YORK","LAT":43.02972,"LONG":-76.00472}},{"type":"Feature","id":"417","geometry":{"type":"Point","coordinates":[-73.84278,43.62944]},"properties":{"NAME":"Friends
+        Lake Inn XC Trail","TYPE":"Cross-Country","STATE":"NEW YORK","LAT":43.62944,"LONG":-73.84278}},{"type":"Feature","id":"418","geometry":{"type":"Point","coordinates":[-77.98444,42.97833]},"properties":{"NAME":"Frost
+        Ridge Ski Area","TYPE":"Both","STATE":"NEW YORK","LAT":42.97833,"LONG":-77.98444}},{"type":"Feature","id":"419","geometry":{"type":"Point","coordinates":[-74.04917,43.73861]},"properties":{"NAME":"Garnett
+        Hill XC Ski Trail","TYPE":"Cross-Country","STATE":"NEW YORK","LAT":43.73861,"LONG":-74.04917}},{"type":"Feature","id":"420","geometry":{"type":"Point","coordinates":[-74.03556,43.67639]},"properties":{"NAME":"Gore
+        Mountain Ski Area","TYPE":"Both","STATE":"NEW YORK","LAT":43.67639,"LONG":-74.03556}},{"type":"Feature","id":"421","geometry":{"type":"Point","coordinates":[-76.18083,42.60111]},"properties":{"NAME":"Greek
+        Peak Ski Area","TYPE":"Both","STATE":"NEW YORK","LAT":42.60111,"LONG":-76.18083}},{"type":"Feature","id":"422","geometry":{"type":"Point","coordinates":[-73.94,42.81417]},"properties":{"NAME":"Hickory
+        Ski Area","TYPE":"Both","STATE":"NEW YORK","LAT":42.81417,"LONG":-73.94}},{"type":"Feature","id":"423","geometry":{"type":"Point","coordinates":[-74.68972,41.65556]},"properties":{"NAME":"Holiday
+        Mountain Ski Area","TYPE":"Both","STATE":"NEW YORK","LAT":41.65556,"LONG":-74.68972}},{"type":"Feature","id":"424","geometry":{"type":"Point","coordinates":[-78.68,42.26194]},"properties":{"NAME":"Holiday
+        Valley Ski Area","TYPE":"Alpine","STATE":"NEW YORK","LAT":42.26194,"LONG":-78.68}},{"type":"Feature","id":"425","geometry":{"type":"Point","coordinates":[-78.68,42.26194]},"properties":{"NAME":"Holiday
+        Valley Ski Club","TYPE":"Alpine","STATE":"NEW YORK","LAT":42.26194,"LONG":-78.68}},{"type":"Feature","id":"426","geometry":{"type":"Point","coordinates":[-78.68889,42.2725]},"properties":{"NAME":"Holimont
+        Ski Area","TYPE":"Both","STATE":"NEW YORK","LAT":42.2725,"LONG":-78.68889}},{"type":"Feature","id":"427","geometry":{"type":"Point","coordinates":[-78.68889,42.2725]},"properties":{"NAME":"Holimont
+        Ski Club","TYPE":"Alpine","STATE":"NEW YORK","LAT":42.2725,"LONG":-78.68889}},{"type":"Feature","id":"428","geometry":{"type":"Point","coordinates":[-77.40278,42.61528]},"properties":{"NAME":"Hunt
+        Hollow Ski Area","TYPE":"Both","STATE":"NEW YORK","LAT":42.61528,"LONG":-77.40278}},{"type":"Feature","id":"429","geometry":{"type":"Point","coordinates":[-74.23083,42.17778]},"properties":{"NAME":"Hunter
+        Mountain Ski area","TYPE":"Both","STATE":"NEW YORK","LAT":42.17778,"LONG":-74.23083}},{"type":"Feature","id":"430","geometry":{"type":"Point","coordinates":[-78.65806,42.61917]},"properties":{"NAME":"Kissing
+        Bridge Ski Area","TYPE":"Both","STATE":"NEW YORK","LAT":42.61917,"LONG":-78.65806}},{"type":"Feature","id":"431","geometry":{"type":"Point","coordinates":[-76.07417,42.75722]},"properties":{"NAME":"Labrador
+        Mountain Ski Area","TYPE":"Both","STATE":"NEW YORK","LAT":42.75722,"LONG":-76.07417}},{"type":"Feature","id":"432","geometry":{"type":"Point","coordinates":[-74.1725,43.22556]},"properties":{"NAME":"Lapland
+        Lake Ski Area","TYPE":"Both","STATE":"NEW YORK","LAT":43.22556,"LONG":-74.1725}},{"type":"Feature","id":"433","geometry":{"type":"Point","coordinates":[-73.94,42.81417]},"properties":{"NAME":"Maple
+        Ski Ridge","TYPE":"Both","STATE":"NEW YORK","LAT":42.81417,"LONG":-73.94}},{"type":"Feature","id":"434","geometry":{"type":"Point","coordinates":[-74.89,43.39583]},"properties":{"NAME":"McCauley
+        Mt. Ski Area","TYPE":"Both","STATE":"NEW YORK","LAT":43.39583,"LONG":-74.89}},{"type":"Feature","id":"435","geometry":{"type":"Point","coordinates":[-74.29111,41.24139]},"properties":{"NAME":"Mount
+        Peter Ski Area","TYPE":"Both","STATE":"NEW YORK","LAT":41.24139,"LONG":-74.29111}},{"type":"Feature","id":"436","geometry":{"type":"Point","coordinates":[-74.12583,44.34528]},"properties":{"NAME":"Mount
+        Pisgah Ski Area","TYPE":"Both","STATE":"NEW YORK","LAT":44.34528,"LONG":-74.12583}},{"type":"Feature","id":"437","geometry":{"type":"Point","coordinates":[-73.98028,44.27944]},"properties":{"NAME":"Mt.
+        Vanhoevenberg XC Ski Trail","TYPE":"Cross-Country","STATE":"NEW YORK","LAT":44.27944,"LONG":-73.98028}},{"type":"Feature","id":"438","geometry":{"type":"Point","coordinates":[-77.93944,43.21361]},"properties":{"NAME":"North
+        Hampton Park Ski Area","TYPE":"Both","STATE":"NEW YORK","LAT":43.21361,"LONG":-77.93944}},{"type":"Feature","id":"439","geometry":{"type":"Point","coordinates":[-73.965,44.25639]},"properties":{"NAME":"Olympic
+        Ski Jump","TYPE":"Both","STATE":"NEW YORK","LAT":44.25639,"LONG":-73.965}},{"type":"Feature","id":"440","geometry":{"type":"Point","coordinates":[-73.75556,44.38111]},"properties":{"NAME":"Paleface
+        Ski Center","TYPE":"Both","STATE":"NEW YORK","LAT":44.38111,"LONG":-73.75556}},{"type":"Feature","id":"441","geometry":{"type":"Point","coordinates":[-79.73278,42.11917]},"properties":{"NAME":"Peek
+        n Peak Ski Area","TYPE":"Both","STATE":"NEW YORK","LAT":42.11917,"LONG":-79.73278}},{"type":"Feature","id":"442","geometry":{"type":"Point","coordinates":[-78.69583,42.31556]},"properties":{"NAME":"Poverty
+        Hill Ski Club","TYPE":"Both","STATE":"NEW YORK","LAT":42.31556,"LONG":-78.69583}},{"type":"Feature","id":"443","geometry":{"type":"Point","coordinates":[-76.42944,42.94694]},"properties":{"NAME":"Skaneateles
+        Ski Area","TYPE":"Both","STATE":"NEW YORK","LAT":42.94694,"LONG":-76.42944}},{"type":"Feature","id":"444","geometry":{"type":"Point","coordinates":[-74.64861,42.26667]},"properties":{"NAME":"Ski
+        Plattekill Ski Area","TYPE":"Both","STATE":"NEW YORK","LAT":42.26667,"LONG":-74.64861}},{"type":"Feature","id":"445","geometry":{"type":"Point","coordinates":[-78.685,42.64417]},"properties":{"NAME":"Ski
+        Tamarack Ski Area","TYPE":"Both","STATE":"NEW YORK","LAT":42.64417,"LONG":-78.685}},{"type":"Feature","id":"446","geometry":{"type":"Point","coordinates":[-77.40278,42.61528]},"properties":{"NAME":"Ski
+        Valley Club","TYPE":"Both","STATE":"NEW YORK","LAT":42.61528,"LONG":-77.40278}},{"type":"Feature","id":"447","geometry":{"type":"Point","coordinates":[-75.41167,43.62722]},"properties":{"NAME":"Snow
+        Ridge Ski Area","TYPE":"Both","STATE":"NEW YORK","LAT":43.62722,"LONG":-75.41167}},{"type":"Feature","id":"448","geometry":{"type":"Point","coordinates":[-76.10972,42.79806]},"properties":{"NAME":"Song
+        Mountain Ski Area","TYPE":"Both","STATE":"NEW YORK","LAT":42.79806,"LONG":-76.10972}},{"type":"Feature","id":"449","geometry":{"type":"Point","coordinates":[-74.31917,41.1825]},"properties":{"NAME":"Sterling
+        Forest Ski Area","TYPE":"Both","STATE":"NEW YORK","LAT":41.1825,"LONG":-74.31917}},{"type":"Feature","id":"450","geometry":{"type":"Point","coordinates":[-77.85361,42.47778]},"properties":{"NAME":"Swain
+        Ski Area","TYPE":"Both","STATE":"NEW YORK","LAT":42.47778,"LONG":-77.85361}},{"type":"Feature","id":"451","geometry":{"type":"Point","coordinates":[-73.27917,42.72222]},"properties":{"NAME":"Taconic
+        Trails Ski Area","TYPE":"Both","STATE":"NEW YORK","LAT":42.72222,"LONG":-73.27917}},{"type":"Feature","id":"452","geometry":{"type":"Point","coordinates":[-73.60667,41.51361]},"properties":{"NAME":"Thunder
+        Ridge Ski Area","TYPE":"Both","STATE":"NEW YORK","LAT":41.51361,"LONG":-73.60667}},{"type":"Feature","id":"453","geometry":{"type":"Point","coordinates":[-74.23778,44.72611]},"properties":{"NAME":"Titus
+        Mountain Ski Area","TYPE":"Both","STATE":"NEW YORK","LAT":44.72611,"LONG":-74.23778}},{"type":"Feature","id":"454","geometry":{"type":"Point","coordinates":[-75.98639,42.835]},"properties":{"NAME":"Toggenberg
+        Ski Area","TYPE":"Both","STATE":"NEW YORK","LAT":42.835,"LONG":-75.98639}},{"type":"Feature","id":"455","geometry":{"type":"Point","coordinates":[-73.81583,43.30944]},"properties":{"NAME":"West
+        Mountain Ski Area","TYPE":"Both","STATE":"NEW YORK","LAT":43.30944,"LONG":-73.81583}},{"type":"Feature","id":"456","geometry":{"type":"Point","coordinates":[-73.81583,44.38833]},"properties":{"NAME":"White
+        Face Mountain Ski Area","TYPE":"Both","STATE":"NEW YORK","LAT":44.38833,"LONG":-73.81583}},{"type":"Feature","id":"457","geometry":{"type":"Point","coordinates":[-73.52361,43.02]},"properties":{"NAME":"Willard
+        Mountain Ski Area","TYPE":"Both","STATE":"NEW YORK","LAT":43.02,"LONG":-73.52361}},{"type":"Feature","id":"458","geometry":{"type":"Point","coordinates":[-74.25972,42.29167]},"properties":{"NAME":"Windham
+        Ski Area","TYPE":"Both","STATE":"NEW YORK","LAT":42.29167,"LONG":-74.25972}},{"type":"Feature","id":"459","geometry":{"type":"Point","coordinates":[-75.38333,43.30556]},"properties":{"NAME":"Woods
+        Valley Ski Area","TYPE":"Both","STATE":"NEW YORK","LAT":43.30556,"LONG":-75.38333}},{"type":"Feature","id":"460","geometry":{"type":"Point","coordinates":[-81.55278,41.24111]},"properties":{"NAME":"Alpine
+        Valley Ski Area","TYPE":"Both","STATE":"OHIO","LAT":41.24111,"LONG":-81.55278}},{"type":"Feature","id":"461","geometry":{"type":"Point","coordinates":[-81.53833,41.27611]},"properties":{"NAME":"Boston
+        Mills Ski Area","TYPE":"Both","STATE":"OHIO","LAT":41.27611,"LONG":-81.53833}},{"type":"Feature","id":"462","geometry":{"type":"Point","coordinates":[-82.425,40.58833]},"properties":{"NAME":"Clear
+        Fork Ski Resort","TYPE":"Both","STATE":"OHIO","LAT":40.58833,"LONG":-82.425}},{"type":"Feature","id":"463","geometry":{"type":"Point","coordinates":[-83.75972,40.36111]},"properties":{"NAME":"Mad
+        River Mountain Ski Area","TYPE":"Both","STATE":"OHIO","LAT":40.36111,"LONG":-83.75972}},{"type":"Feature","id":"464","geometry":{"type":"Point","coordinates":[-82.51556,40.75833]},"properties":{"NAME":"Snowtrails
+        Ski Area","TYPE":"Both","STATE":"OHIO","LAT":40.75833,"LONG":-82.51556}},{"type":"Feature","id":"465","geometry":{"type":"Point","coordinates":[-83.24667,39.09889]},"properties":{"NAME":"Spicy
+        Run Ski Area","TYPE":"Both","STATE":"OHIO","LAT":39.09889,"LONG":-83.24667}},{"type":"Feature","id":"466","geometry":{"type":"Point","coordinates":[-83.675,40.31333]},"properties":{"NAME":"Valley
+        Hi Ski Area","TYPE":"Both","STATE":"OHIO","LAT":40.31333,"LONG":-83.675}},{"type":"Feature","id":"467","geometry":{"type":"Point","coordinates":[-121.73139,45.31889]},"properties":{"NAME":"Alpine
+        Ski Trail","TYPE":"Alpine","STATE":"OREGON","LAT":45.31889,"LONG":-121.73139}},{"type":"Feature","id":"468","geometry":{"type":"Point","coordinates":[-118.23521,44.96403]},"properties":{"NAME":"Anthony
+        Lakes Ski Area","TYPE":"Both","STATE":"OREGON","LAT":44.96403,"LONG":-118.23521}},{"type":"Feature","id":"469","geometry":{"type":"Point","coordinates":[-119.24275,45.19596]},"properties":{"NAME":"Arbuckle
+        Ski Area","TYPE":"Both","STATE":"OREGON","LAT":45.19596,"LONG":-119.24275}},{"type":"Feature","id":"470","geometry":{"type":"Point","coordinates":[-121.60559,45.4126]},"properties":{"NAME":"Cooper
+        Spur Ski Area","TYPE":"Both","STATE":"OREGON","LAT":45.4126,"LONG":-121.60559}},{"type":"Feature","id":"471","geometry":{"type":"Point","coordinates":[-121.63083,45.40472]},"properties":{"NAME":"Cooper
+        Spur Ski Trail","TYPE":"Alpine","STATE":"OREGON","LAT":45.40472,"LONG":-121.63083}},{"type":"Feature","id":"472","geometry":{"type":"Point","coordinates":[-121.80806,43.97889]},"properties":{"NAME":"Elk
+        Lake Resort","TYPE":"Both","STATE":"OREGON","LAT":43.97889,"LONG":-121.80806}},{"type":"Feature","id":"473","geometry":{"type":"Point","coordinates":[-121.735,45.32083]},"properties":{"NAME":"Glade
+        Ski Trail","TYPE":"Alpine","STATE":"OREGON","LAT":45.32083,"LONG":-121.735}},{"type":"Feature","id":"474","geometry":{"type":"Point","coordinates":[-121.87333,44.40917]},"properties":{"NAME":"Hoodoo
+        Ski Area","TYPE":"Both","STATE":"OREGON","LAT":44.40917,"LONG":-121.87333}},{"type":"Feature","id":"475","geometry":{"type":"Point","coordinates":[-122.70945,42.08317]},"properties":{"NAME":"Mount
+        Ashland Ski Area","TYPE":"Both","STATE":"OREGON","LAT":42.08317,"LONG":-122.70945}},{"type":"Feature","id":"476","geometry":{"type":"Point","coordinates":[-121.66365,45.33121]},"properties":{"NAME":"Mount
+        Hood Meadow Ski Area","TYPE":"Both","STATE":"OREGON","LAT":45.33121,"LONG":-121.66365}},{"type":"Feature","id":"477","geometry":{"type":"Point","coordinates":[-121.68028,43.99528]},"properties":{"NAME":"Mt.
+        Bachelor Ski Area","TYPE":"Both","STATE":"OREGON","LAT":43.99528,"LONG":-121.68028}},{"type":"Feature","id":"478","geometry":{"type":"Point","coordinates":[-122.21944,43.15528]},"properties":{"NAME":"Mt.
+        Bailey Snowcat Skiing","TYPE":"Both","STATE":"OREGON","LAT":43.15528,"LONG":-122.21944}},{"type":"Feature","id":"479","geometry":{"type":"Point","coordinates":[-121.76861,45.29472]},"properties":{"NAME":"Mt.
+        Hood Skibowl","TYPE":"Both","STATE":"OREGON","LAT":45.29472,"LONG":-121.76861}},{"type":"Feature","id":"480","geometry":{"type":"Point","coordinates":[-121.96361,43.54917]},"properties":{"NAME":"Shelter
+        Cove Resort - Odell Lake","TYPE":"Both","STATE":"OREGON","LAT":43.54917,"LONG":-121.96361}},{"type":"Feature","id":"481","geometry":{"type":"Point","coordinates":[-118.05161,45.75403]},"properties":{"NAME":"Spout
+        Springs Ski Area","TYPE":"Both","STATE":"OREGON","LAT":45.75403,"LONG":-118.05161}},{"type":"Feature","id":"482","geometry":{"type":"Point","coordinates":[-121.75361,45.30417]},"properties":{"NAME":"Summit
+        Ski Area","TYPE":"Both","STATE":"OREGON","LAT":45.30417,"LONG":-121.75361}},{"type":"Feature","id":"483","geometry":{"type":"Point","coordinates":[-122.28389,42.39639]},"properties":{"NAME":"Summit
+        Sno-Park","TYPE":"Both","STATE":"OREGON","LAT":42.39639,"LONG":-122.28389}},{"type":"Feature","id":"484","geometry":{"type":"Point","coordinates":[-121.4375,43.88417]},"properties":{"NAME":"Sunriver
+        Resort","TYPE":"Both","STATE":"OREGON","LAT":43.88417,"LONG":-121.4375}},{"type":"Feature","id":"485","geometry":{"type":"Point","coordinates":[-121.72833,45.40306]},"properties":{"NAME":"Timberline
+        Ski Area","TYPE":"Both","STATE":"OREGON","LAT":45.40306,"LONG":-121.72833}},{"type":"Feature","id":"486","geometry":{"type":"Point","coordinates":[-120.29689,42.23736]},"properties":{"NAME":"Warner
+        Canyon Ski Area","TYPE":"Both","STATE":"OREGON","LAT":42.23736,"LONG":-120.29689}},{"type":"Feature","id":"487","geometry":{"type":"Point","coordinates":[-122.03169,43.60177]},"properties":{"NAME":"Willamette
+        Pass Ski Area","TYPE":"Both","STATE":"OREGON","LAT":43.60177,"LONG":-122.03169}},{"type":"Feature","id":"488","geometry":{"type":"Point","coordinates":[-75.23,41.11083]},"properties":{"NAME":"Alpine
+        Mountain Ski Area","TYPE":"Both","STATE":"PENNSYLVANIA","LAT":41.11083,"LONG":-75.23}},{"type":"Feature","id":"489","geometry":{"type":"Point","coordinates":[-75.60861,40.63139]},"properties":{"NAME":"Apple
+        Hill Ski Resort","TYPE":"Both","STATE":"PENNSYLVANIA","LAT":40.63139,"LONG":-75.60861}},{"type":"Feature","id":"490","geometry":{"type":"Point","coordinates":[-75.55556,40.51583]},"properties":{"NAME":"Bear
+        Creek Ski Area","TYPE":"Both","STATE":"PENNSYLVANIA","LAT":40.51583,"LONG":-75.55556}},{"type":"Feature","id":"491","geometry":{"type":"Point","coordinates":[-75.60056,41.05]},"properties":{"NAME":"Big
+        Boulder Ski Resort","TYPE":"Both","STATE":"PENNSYLVANIA","LAT":41.05,"LONG":-75.60056}},{"type":"Feature","id":"492","geometry":{"type":"Point","coordinates":[-78.56194,40.28833]},"properties":{"NAME":"Blue
+        Knob Ski Area","TYPE":"Both","STATE":"PENNSYLVANIA","LAT":40.28833,"LONG":-78.56194}},{"type":"Feature","id":"493","geometry":{"type":"Point","coordinates":[-75.61056,40.80139]},"properties":{"NAME":"Blue
+        Mountain Ski Area","TYPE":"Both","STATE":"PENNSYLVANIA","LAT":40.80139,"LONG":-75.61056}},{"type":"Feature","id":"494","geometry":{"type":"Point","coordinates":[-79.74944,40.46778]},"properties":{"NAME":"Boyce
+        Park Ski Area","TYPE":"Both","STATE":"PENNSYLVANIA","LAT":40.46778,"LONG":-79.74944}},{"type":"Feature","id":"495","geometry":{"type":"Point","coordinates":[-75.35556,41.04778]},"properties":{"NAME":"Camelback
+        Ski Area","TYPE":"Both","STATE":"PENNSYLVANIA","LAT":41.04778,"LONG":-75.35556}},{"type":"Feature","id":"496","geometry":{"type":"Point","coordinates":[-79.85833,41.83222]},"properties":{"NAME":"Canadohta
+        Ski Slope","TYPE":"Both","STATE":"PENNSYLVANIA","LAT":41.83222,"LONG":-79.85833}},{"type":"Feature","id":"497","geometry":{"type":"Point","coordinates":[-75.62167,39.87139]},"properties":{"NAME":"Chadds
+        Peak Camp and Ski School","TYPE":"Both","STATE":"PENNSYLVANIA","LAT":39.87139,"LONG":-75.62167}},{"type":"Feature","id":"498","geometry":{"type":"Point","coordinates":[-76.72417,41.24111]},"properties":{"NAME":"Crystal
+        Lake Ski Area","TYPE":"Both","STATE":"PENNSYLVANIA","LAT":41.24111,"LONG":-76.72417}},{"type":"Feature","id":"499","geometry":{"type":"Point","coordinates":[-77.83194,41.77222]},"properties":{"NAME":"Denton
+        Hill Ski Area","TYPE":"Both","STATE":"PENNSYLVANIA","LAT":41.77222,"LONG":-77.83194}},{"type":"Feature","id":"500","geometry":{"type":"Point","coordinates":[-75.62889,40.47528]},"properties":{"NAME":"Doe
+        Mountain Ski Area","TYPE":"Both","STATE":"PENNSYLVANIA","LAT":40.47528,"LONG":-75.62889}},{"type":"Feature","id":"501","geometry":{"type":"Point","coordinates":[-75.975,40.95833]},"properties":{"NAME":"Eagle
+        Rock Ski Area","TYPE":"Both","STATE":"PENNSYLVANIA","LAT":40.95833,"LONG":-75.975}},{"type":"Feature","id":"502","geometry":{"type":"Point","coordinates":[-75.5575,41.72]},"properties":{"NAME":"Elk
+        Mountain Ski Center","TYPE":"Both","STATE":"PENNSYLVANIA","LAT":41.72,"LONG":-75.5575}},{"type":"Feature","id":"503","geometry":{"type":"Point","coordinates":[-75.01667,41.07972]},"properties":{"NAME":"Fernwood
+        Ski Area (historical)","TYPE":"Both","STATE":"PENNSYLVANIA","LAT":41.07972,"LONG":-75.01667}},{"type":"Feature","id":"504","geometry":{"type":"Point","coordinates":[-79.24083,39.76139]},"properties":{"NAME":"Glade
+        Knob Ski Slope","TYPE":"Both","STATE":"PENNSYLVANIA","LAT":39.76139,"LONG":-79.24083}},{"type":"Feature","id":"505","geometry":{"type":"Point","coordinates":[-79.2575,40.05806]},"properties":{"NAME":"Hidden
+        Valley Ski Area","TYPE":"Both","STATE":"PENNSYLVANIA","LAT":40.05806,"LONG":-79.2575}},{"type":"Feature","id":"506","geometry":{"type":"Point","coordinates":[-75.65361,41.10778]},"properties":{"NAME":"Jack
+        Frost Mountain Ski Area","TYPE":"Both","STATE":"PENNSYLVANIA","LAT":41.10778,"LONG":-75.65361}},{"type":"Feature","id":"507","geometry":{"type":"Point","coordinates":[-79.16806,40.15639]},"properties":{"NAME":"Laurel
+        Mountain Ski Resort","TYPE":"Both","STATE":"PENNSYLVANIA","LAT":40.15639,"LONG":-79.16806}},{"type":"Feature","id":"508","geometry":{"type":"Point","coordinates":[-75.52,40.81]},"properties":{"NAME":"Little
+        Gap Ski Area","TYPE":"Both","STATE":"PENNSYLVANIA","LAT":40.81,"LONG":-75.52}},{"type":"Feature","id":"509","geometry":{"type":"Point","coordinates":[-75.03139,41.51417]},"properties":{"NAME":"Masthope
+        Ski Area","TYPE":"Both","STATE":"PENNSYLVANIA","LAT":41.51417,"LONG":-75.03139}},{"type":"Feature","id":"510","geometry":{"type":"Point","coordinates":[-75.67056,41.35833]},"properties":{"NAME":"Montage
+        Ski Area","TYPE":"Both","STATE":"PENNSYLVANIA","LAT":41.35833,"LONG":-75.67056}},{"type":"Feature","id":"511","geometry":{"type":"Point","coordinates":[-75.32333,41.10667]},"properties":{"NAME":"Mount
+        Airy Lodge Ski Area","TYPE":"Both","STATE":"PENNSYLVANIA","LAT":41.10667,"LONG":-75.32333}},{"type":"Feature","id":"512","geometry":{"type":"Point","coordinates":[-80.07417,41.85222]},"properties":{"NAME":"Mount
+        Pleasant Ski Resort","TYPE":"Both","STATE":"PENNSYLVANIA","LAT":41.85222,"LONG":-80.07417}},{"type":"Feature","id":"513","geometry":{"type":"Point","coordinates":[-75.30333,41.84583]},"properties":{"NAME":"Mount
+        Tone Ski Area","TYPE":"Both","STATE":"PENNSYLVANIA","LAT":41.84583,"LONG":-75.30333}},{"type":"Feature","id":"514","geometry":{"type":"Point","coordinates":[-80.13194,41.87417]},"properties":{"NAME":"Mt.
+        View Ski Area","TYPE":"Both","STATE":"PENNSYLVANIA","LAT":41.87417,"LONG":-80.13194}},{"type":"Feature","id":"515","geometry":{"type":"Point","coordinates":[-79.925,39.87833]},"properties":{"NAME":"Mystic
+        Mountain Ski Area","TYPE":"Both","STATE":"PENNSYLVANIA","LAT":39.87833,"LONG":-79.925}},{"type":"Feature","id":"516","geometry":{"type":"Point","coordinates":[-79.22861,40.07222]},"properties":{"NAME":"Plateau
+        De Mount Ski Area","TYPE":"Both","STATE":"PENNSYLVANIA","LAT":40.07222,"LONG":-79.22861}},{"type":"Feature","id":"517","geometry":{"type":"Point","coordinates":[-75.35667,41.0975]},"properties":{"NAME":"Pocono
+        Manor Ski Area","TYPE":"Both","STATE":"PENNSYLVANIA","LAT":41.0975,"LONG":-75.35667}},{"type":"Feature","id":"518","geometry":{"type":"Point","coordinates":[-77.91389,39.95778]},"properties":{"NAME":"Richmond
+        Hill Ski Area","TYPE":"Both","STATE":"PENNSYLVANIA","LAT":39.95778,"LONG":-77.91389}},{"type":"Feature","id":"519","geometry":{"type":"Point","coordinates":[-75.045,41.12083]},"properties":{"NAME":"Saw
+        Creek Ski Area","TYPE":"Both","STATE":"PENNSYLVANIA","LAT":41.12083,"LONG":-75.045}},{"type":"Feature","id":"520","geometry":{"type":"Point","coordinates":[-79.2975,40.02306]},"properties":{"NAME":"Seven
+        Springs Ski Area","TYPE":"Both","STATE":"PENNSYLVANIA","LAT":40.02306,"LONG":-79.2975}},{"type":"Feature","id":"521","geometry":{"type":"Point","coordinates":[-75.07861,41.03806]},"properties":{"NAME":"Shawnee
+        Mountain Ski Area","TYPE":"Both","STATE":"PENNSYLVANIA","LAT":41.03806,"LONG":-75.07861}},{"type":"Feature","id":"522","geometry":{"type":"Point","coordinates":[-74.98639,41.48194]},"properties":{"NAME":"Ski
+        Big Bear Ski Area","TYPE":"Both","STATE":"PENNSYLVANIA","LAT":41.48194,"LONG":-74.98639}},{"type":"Feature","id":"523","geometry":{"type":"Point","coordinates":[-77.37111,39.75972]},"properties":{"NAME":"Ski
+        Liberty Ski Area","TYPE":"Both","STATE":"PENNSYLVANIA","LAT":39.75972,"LONG":-77.37111}},{"type":"Feature","id":"524","geometry":{"type":"Point","coordinates":[-76.92667,40.10667]},"properties":{"NAME":"Ski
+        Roundtop Ski Area","TYPE":"Both","STATE":"PENNSYLVANIA","LAT":40.10667,"LONG":-76.92667}},{"type":"Feature","id":"525","geometry":{"type":"Point","coordinates":[-77.29111,41.52389]},"properties":{"NAME":"Ski
+        Sawmill Ski Area","TYPE":"Both","STATE":"PENNSYLVANIA","LAT":41.52389,"LONG":-77.29111}},{"type":"Feature","id":"526","geometry":{"type":"Point","coordinates":[-77.24667,40.545]},"properties":{"NAME":"Ski
+        Snowpeak","TYPE":"Both","STATE":"PENNSYLVANIA","LAT":40.545,"LONG":-77.24667}},{"type":"Feature","id":"527","geometry":{"type":"Point","coordinates":[-80.00306,40.25222]},"properties":{"NAME":"Snozone
+        Ski Area","TYPE":"Both","STATE":"PENNSYLVANIA","LAT":40.25222,"LONG":-80.00306}},{"type":"Feature","id":"528","geometry":{"type":"Point","coordinates":[-75.62083,41.06167]},"properties":{"NAME":"Split
+        Rock Ski Area","TYPE":"Both","STATE":"PENNSYLVANIA","LAT":41.06167,"LONG":-75.62083}},{"type":"Feature","id":"529","geometry":{"type":"Point","coordinates":[-75.015,41.13417]},"properties":{"NAME":"Tamiment
+        Ski Area","TYPE":"Both","STATE":"PENNSYLVANIA","LAT":41.13417,"LONG":-75.015}},{"type":"Feature","id":"530","geometry":{"type":"Point","coordinates":[-75.16472,41.41306]},"properties":{"NAME":"Tanglewood
+        Ski Area","TYPE":"Both","STATE":"PENNSYLVANIA","LAT":41.41306,"LONG":-75.16472}},{"type":"Feature","id":"531","geometry":{"type":"Point","coordinates":[-77.75361,40.76917]},"properties":{"NAME":"Tussey
+        Mountain Ski Resort","TYPE":"Both","STATE":"PENNSYLVANIA","LAT":40.76917,"LONG":-77.75361}},{"type":"Feature","id":"532","geometry":{"type":"Point","coordinates":[-79.3325,40.01444]},"properties":{"NAME":"White
+        Mountain Ski Area","TYPE":"Both","STATE":"PENNSYLVANIA","LAT":40.01444,"LONG":-79.3325}},{"type":"Feature","id":"533","geometry":{"type":"Point","coordinates":[-77.90361,39.82778]},"properties":{"NAME":"Whitetail
+        Ski Area","TYPE":"Both","STATE":"PENNSYLVANIA","LAT":39.82778,"LONG":-77.90361}},{"type":"Feature","id":"534","geometry":{"type":"Point","coordinates":[-79.86667,40.125]},"properties":{"NAME":"Willowbrook
+        Ski Area","TYPE":"Both","STATE":"PENNSYLVANIA","LAT":40.125,"LONG":-79.86667}},{"type":"Feature","id":"535","geometry":{"type":"Point","coordinates":[-71.55444,41.53556]},"properties":{"NAME":"Yawgoo
+        Ski Area","TYPE":"Both","STATE":"RHODE ISLAND","LAT":41.53556,"LONG":-71.55444}},{"type":"Feature","id":"536","geometry":{"type":"Point","coordinates":[-103.825,44.30167]},"properties":{"NAME":"Deer
+        Mountain Ski Area","TYPE":"Both","STATE":"SOUTH DAKOTA","LAT":44.30167,"LONG":-103.825}},{"type":"Feature","id":"537","geometry":{"type":"Point","coordinates":[-103.93333,44.40889]},"properties":{"NAME":"Big
+        Hill Ski Trail","TYPE":"Alpine","STATE":"SOUTH DAKOTA","LAT":44.40889,"LONG":-103.93333}},{"type":"Feature","id":"538","geometry":{"type":"Point","coordinates":[-96.7,43.55]},"properties":{"NAME":"Great
+        Bear Ski Area","TYPE":"Both","STATE":"SOUTH DAKOTA","LAT":43.55,"LONG":-96.7}},{"type":"Feature","id":"539","geometry":{"type":"Point","coordinates":[-103.83472,44.3275]},"properties":{"NAME":"Terry
+        Peak Ski Area","TYPE":"Both","STATE":"SOUTH DAKOTA","LAT":44.3275,"LONG":-103.83472}},{"type":"Feature","id":"540","geometry":{"type":"Point","coordinates":[-83.51028,35.71417]},"properties":{"NAME":"Ober
+        Gatlinburg Ski Area","TYPE":"Both","STATE":"TENNESSEE","LAT":35.71417,"LONG":-83.51028}},{"type":"Feature","id":"541","geometry":{"type":"Point","coordinates":[-111.63828,40.57967]},"properties":{"NAME":"Alta
+        Ski Area","TYPE":"Both","STATE":"UTAH","LAT":40.57967,"LONG":-111.63828}},{"type":"Feature","id":"542","geometry":{"type":"Point","coordinates":[-111.54162,41.96826]},"properties":{"NAME":"Beaver
+        Mountain Ski Area","TYPE":"Both","STATE":"UTAH","LAT":41.96826,"LONG":-111.54162}},{"type":"Feature","id":"543","geometry":{"type":"Point","coordinates":[-109.4368,37.86056]},"properties":{"NAME":"Blue
+        Mountain Ski Area","TYPE":"Both","STATE":"UTAH","LAT":37.86056,"LONG":-109.4368}},{"type":"Feature","id":"544","geometry":{"type":"Point","coordinates":[-112.838,37.69192]},"properties":{"NAME":"Brian
+        Head Ski Area","TYPE":"Both","STATE":"UTAH","LAT":37.69192,"LONG":-112.838}},{"type":"Feature","id":"545","geometry":{"type":"Point","coordinates":[-111.58356,40.59995]},"properties":{"NAME":"Brighton
+        Ski Area","TYPE":"Both","STATE":"UTAH","LAT":40.59995,"LONG":-111.58356}},{"type":"Feature","id":"546","geometry":{"type":"Point","coordinates":[-111.58328,40.60134]},"properties":{"NAME":"Brighton
+        Ski Area Heliport","TYPE":"Alpine","STATE":"UTAH","LAT":40.60134,"LONG":-111.58328}},{"type":"Feature","id":"547","geometry":{"type":"Point","coordinates":[-112.93272,37.5972]},"properties":{"NAME":"Cedar
+        Canyon Ski Area","TYPE":"Both","STATE":"UTAH","LAT":37.5972,"LONG":-112.93272}},{"type":"Feature","id":"548","geometry":{"type":"Point","coordinates":[-111.4805,40.63551]},"properties":{"NAME":"Deer
+        Valley Ski Area","TYPE":"Both","STATE":"UTAH","LAT":40.63551,"LONG":-111.4805}},{"type":"Feature","id":"549","geometry":{"type":"Point","coordinates":[-112.37134,38.32386]},"properties":{"NAME":"Elk
+        Meadows Ski Area","TYPE":"Both","STATE":"UTAH","LAT":38.32386,"LONG":-112.37134}},{"type":"Feature","id":"550","geometry":{"type":"Point","coordinates":[-112.38411,38.32053]},"properties":{"NAME":"Mount
+        Holly Ski Area","TYPE":"Both","STATE":"UTAH","LAT":38.32053,"LONG":-112.38411}},{"type":"Feature","id":"551","geometry":{"type":"Point","coordinates":[-111.87247,41.30494]},"properties":{"NAME":"Nordic
+        Valley Ski Area","TYPE":"Both","STATE":"UTAH","LAT":41.30494,"LONG":-111.87247}},{"type":"Feature","id":"552","geometry":{"type":"Point","coordinates":[-111.50495,40.64356]},"properties":{"NAME":"Park
+        City Ski Area","TYPE":"Both","STATE":"UTAH","LAT":40.64356,"LONG":-111.50495}},{"type":"Feature","id":"553","geometry":{"type":"Point","coordinates":[-111.57495,40.68995]},"properties":{"NAME":"Park
+        City West Ski Area","TYPE":"Both","STATE":"UTAH","LAT":40.68995,"LONG":-111.57495}},{"type":"Feature","id":"554","geometry":{"type":"Point","coordinates":[-111.7719,41.37772]},"properties":{"NAME":"Powder
+        Mountain Ski Area","TYPE":"Both","STATE":"UTAH","LAT":41.37772,"LONG":-111.7719}},{"type":"Feature","id":"555","geometry":{"type":"Point","coordinates":[-111.33687,39.65607]},"properties":{"NAME":"Snowland
+        Ski Area","TYPE":"Both","STATE":"UTAH","LAT":39.65607,"LONG":-111.33687}},{"type":"Feature","id":"556","geometry":{"type":"Point","coordinates":[-111.59522,40.62551]},"properties":{"NAME":"Solitude
+        Ski Area","TYPE":"Both","STATE":"UTAH","LAT":40.62551,"LONG":-111.59522}},{"type":"Feature","id":"557","geometry":{"type":"Point","coordinates":[-111.58161,40.38578]},"properties":{"NAME":"Sundance
+        Ski Area","TYPE":"Both","STATE":"UTAH","LAT":40.38578,"LONG":-111.58161}},{"type":"Feature","id":"558","geometry":{"type":"Point","coordinates":[-111.8519,41.21188]},"properties":{"NAME":"Snow
+        Basin Ski Area","TYPE":"Both","STATE":"UTAH","LAT":41.21188,"LONG":-111.8519}},{"type":"Feature","id":"559","geometry":{"type":"Point","coordinates":[-72.94028,43.22056]},"properties":{"NAME":"Big
+        Bromley Ski Area","TYPE":"Both","STATE":"VERMONT","LAT":43.22056,"LONG":-72.94028}},{"type":"Feature","id":"560","geometry":{"type":"Point","coordinates":[-72.82722,44.08528]},"properties":{"NAME":"Blueberry
+        Lake Ski Touring Center","TYPE":"Alpine","STATE":"VERMONT","LAT":44.08528,"LONG":-72.82722}},{"type":"Feature","id":"561","geometry":{"type":"Point","coordinates":[-72.87028,44.41583]},"properties":{"NAME":"Bolton
+        Valley Ski Area","TYPE":"Both","STATE":"VERMONT","LAT":44.41583,"LONG":-72.87028}},{"type":"Feature","id":"562","geometry":{"type":"Point","coordinates":[-71.90194,44.58333]},"properties":{"NAME":"Burke
+        Mountain Ski Area","TYPE":"Both","STATE":"VERMONT","LAT":44.58333,"LONG":-71.90194}},{"type":"Feature","id":"563","geometry":{"type":"Point","coordinates":[-71.90361,44.59861]},"properties":{"NAME":"Burke
+        Mountain Ski Touring Center","TYPE":"Alpine","STATE":"VERMONT","LAT":44.59861,"LONG":-71.90361}},{"type":"Feature","id":"564","geometry":{"type":"Point","coordinates":[-72.94389,44.33222]},"properties":{"NAME":"Camels
+        Hump Nordic Ski Center","TYPE":"Alpine","STATE":"VERMONT","LAT":44.33222,"LONG":-72.94389}},{"type":"Feature","id":"565","geometry":{"type":"Point","coordinates":[-72.89778,42.95722]},"properties":{"NAME":"Carinthia
+        Ski Area","TYPE":"Both","STATE":"VERMONT","LAT":42.95722,"LONG":-72.89778}},{"type":"Feature","id":"566","geometry":{"type":"Point","coordinates":[-73.0533,44.45778]},"properties":{"NAME":"Catamount
+        Family Ski Area","TYPE":"Both","STATE":"VERMONT","LAT":44.45778,"LONG":-73.0533}},{"type":"Feature","id":"567","geometry":{"type":"Point","coordinates":[-72.91278,43.82722]},"properties":{"NAME":"Chittenden
+        Brook Cross-Country Ski T","TYPE":"Alpine","STATE":"VERMONT","LAT":43.82722,"LONG":-72.91278}},{"type":"Feature","id":"568","geometry":{"type":"Point","coordinates":[-73.0525,43.83167]},"properties":{"NAME":"Churchhill
+        House Ski Area","TYPE":"Both","STATE":"VERMONT","LAT":43.83167,"LONG":-73.0525}},{"type":"Feature","id":"569","geometry":{"type":"Point","coordinates":[-72.9825,44.39583]},"properties":{"NAME":"Cochran
+        Ski Center","TYPE":"Both","STATE":"VERMONT","LAT":44.39583,"LONG":-72.9825}},{"type":"Feature","id":"570","geometry":{"type":"Point","coordinates":[-72.72639,44.51111]},"properties":{"NAME":"Edson
+        Hill Cross Country Ski Center","TYPE":"Alpine","STATE":"VERMONT","LAT":44.51111,"LONG":-72.72639}},{"type":"Feature","id":"571","geometry":{"type":"Point","coordinates":[-72.70056,43.4175]},"properties":{"NAME":"Fox
+        Run Cross Country Ski Center","TYPE":"Alpine","STATE":"VERMONT","LAT":43.4175,"LONG":-72.70056}},{"type":"Feature","id":"572","geometry":{"type":"Point","coordinates":[-72.90667,44.17361]},"properties":{"NAME":"Glen
+        Ellen Ski Area","TYPE":"Both","STATE":"VERMONT","LAT":44.17361,"LONG":-72.90667}},{"type":"Feature","id":"573","geometry":{"type":"Point","coordinates":[-72.62306,43.15111]},"properties":{"NAME":"Grafton
+        Cross Country Ski Center","TYPE":"Alpine","STATE":"VERMONT","LAT":43.15111,"LONG":-72.62306}},{"type":"Feature","id":"574","geometry":{"type":"Point","coordinates":[-72.90639,42.92361]},"properties":{"NAME":"Haystack
+        Mountain Ski Area","TYPE":"Both","STATE":"VERMONT","LAT":42.92361,"LONG":-72.90639}},{"type":"Feature","id":"575","geometry":{"type":"Point","coordinates":[-72.58722,44.87694]},"properties":{"NAME":"Hazens
+        Notch Ski Touring Center","TYPE":"Alpine","STATE":"VERMONT","LAT":44.87694,"LONG":-72.58722}},{"type":"Feature","id":"576","geometry":{"type":"Point","coordinates":[-73.08861,43.14694]},"properties":{"NAME":"Hildene
+        Ski Touring Center","TYPE":"Alpine","STATE":"VERMONT","LAT":43.14694,"LONG":-73.08861}},{"type":"Feature","id":"577","geometry":{"type":"Point","coordinates":[-72.79389,42.84917]},"properties":{"NAME":"Hogback
+        Ski Area","TYPE":"Both","STATE":"VERMONT","LAT":42.84917,"LONG":-72.79389}},{"type":"Feature","id":"578","geometry":{"type":"Point","coordinates":[-72.52611,44.92444]},"properties":{"NAME":"Jay
+        Peak Ski Area","TYPE":"Both","STATE":"VERMONT","LAT":44.92444,"LONG":-72.52611}},{"type":"Feature","id":"579","geometry":{"type":"Point","coordinates":[-72.80694,43.62]},"properties":{"NAME":"Killington
+        Ski Area","TYPE":"Both","STATE":"VERMONT","LAT":43.62,"LONG":-72.80694}},{"type":"Feature","id":"580","geometry":{"type":"Point","coordinates":[-72.80694,43.62]},"properties":{"NAME":"Living
+        Memorial Park Ski Area","TYPE":"Both","STATE":"VERMONT","LAT":43.62,"LONG":-72.80694}},{"type":"Feature","id":"581","geometry":{"type":"Point","coordinates":[-71.97472,44.51694]},"properties":{"NAME":"Lyndon
+        Outing Club Ski Area","TYPE":"Both","STATE":"VERMONT","LAT":44.51694,"LONG":-71.97472}},{"type":"Feature","id":"582","geometry":{"type":"Point","coordinates":[-72.925,44.20083]},"properties":{"NAME":"Mad
+        River Glen Ski Area","TYPE":"Both","STATE":"VERMONT","LAT":44.20083,"LONG":-72.925}},{"type":"Feature","id":"583","geometry":{"type":"Point","coordinates":[-72.77306,43.20194]},"properties":{"NAME":"Majic
+        Mountain Ski Center","TYPE":"Both","STATE":"VERMONT","LAT":43.20194,"LONG":-72.77306}},{"type":"Feature","id":"584","geometry":{"type":"Point","coordinates":[-72.6275,42.9425]},"properties":{"NAME":"Maple
+        Valley Ski Center","TYPE":"Both","STATE":"VERMONT","LAT":42.9425,"LONG":-72.6275}},{"type":"Feature","id":"585","geometry":{"type":"Point","coordinates":[-73.18306,44.01194]},"properties":{"NAME":"Middlebury
+        College Ski Area","TYPE":"Both","STATE":"VERMONT","LAT":44.01194,"LONG":-73.18306}},{"type":"Feature","id":"586","geometry":{"type":"Point","coordinates":[-72.46667,43.46333]},"properties":{"NAME":"Mount
+        Ascuteney Ski Area","TYPE":"Both","STATE":"VERMONT","LAT":43.46333,"LONG":-72.46667}},{"type":"Feature","id":"587","geometry":{"type":"Point","coordinates":[-72.79583,44.5275]},"properties":{"NAME":"Mount
+        Mansfield Ski Area","TYPE":"Both","STATE":"VERMONT","LAT":44.5275,"LONG":-72.79583}},{"type":"Feature","id":"588","geometry":{"type":"Point","coordinates":[-72.90639,42.96389]},"properties":{"NAME":"Mount
+        Snow Ski Area","TYPE":"Both","STATE":"VERMONT","LAT":42.96389,"LONG":-72.90639}},{"type":"Feature","id":"589","geometry":{"type":"Point","coordinates":[-72.8,43.66806]},"properties":{"NAME":"Mountain
+        Meadows Ski Touring Center","TYPE":"Alpine","STATE":"VERMONT","LAT":43.66806,"LONG":-72.8}},{"type":"Feature","id":"590","geometry":{"type":"Point","coordinates":[-72.85417,43.23222]},"properties":{"NAME":"Nordio
+        Cross Country Ski Area","TYPE":"Alpine","STATE":"VERMONT","LAT":43.23222,"LONG":-72.85417}},{"type":"Feature","id":"591","geometry":{"type":"Point","coordinates":[-72.64278,44.13889]},"properties":{"NAME":"Norwich
+        University Ski Area","TYPE":"Both","STATE":"VERMONT","LAT":44.13889,"LONG":-72.64278}},{"type":"Feature","id":"592","geometry":{"type":"Point","coordinates":[-72.73278,43.40444]},"properties":{"NAME":"Okemo
+        Mountain Ski Area","TYPE":"Both","STATE":"VERMONT","LAT":43.40444,"LONG":-72.73278}},{"type":"Feature","id":"593","geometry":{"type":"Point","coordinates":[-72.82306,44.11111]},"properties":{"NAME":"Oles
+        Cross Country Ski Center","TYPE":"Alpine","STATE":"VERMONT","LAT":44.11111,"LONG":-72.82306}},{"type":"Feature","id":"594","geometry":{"type":"Point","coordinates":[-72.84306,43.66167]},"properties":{"NAME":"Pico
+        Peak Ski Area","TYPE":"Both","STATE":"VERMONT","LAT":43.66167,"LONG":-72.84306}},{"type":"Feature","id":"595","geometry":{"type":"Point","coordinates":[-73.07583,42.87528]},"properties":{"NAME":"Prospect
+        Mountain Ski Center","TYPE":"Both","STATE":"VERMONT","LAT":42.87528,"LONG":-73.07583}},{"type":"Feature","id":"596","geometry":{"type":"Point","coordinates":[-72.95444,43.9375]},"properties":{"NAME":"Rikert
+        Ski Touring Center","TYPE":"Alpine","STATE":"VERMONT","LAT":43.9375,"LONG":-72.95444}},{"type":"Feature","id":"597","geometry":{"type":"Point","coordinates":[-72.74917,43.53389]},"properties":{"NAME":"Round
+        Top Mountain Ski Area","TYPE":"Both","STATE":"VERMONT","LAT":43.53389,"LONG":-72.74917}},{"type":"Feature","id":"598","geometry":{"type":"Point","coordinates":[-73.02528,44.35667]},"properties":{"NAME":"Sherman
+        Hollow Ski Touring Center","TYPE":"Alpine","STATE":"VERMONT","LAT":44.35667,"LONG":-73.02528}},{"type":"Feature","id":"599","geometry":{"type":"Point","coordinates":[-72.83778,42.92167]},"properties":{"NAME":"Sitzmark
+        Cross Country Ski Center","TYPE":"Alpine","STATE":"VERMONT","LAT":42.92167,"LONG":-72.83778}},{"type":"Feature","id":"600","geometry":{"type":"Point","coordinates":[-72.79611,44.55528]},"properties":{"NAME":"Smuggler''s
+        Notch Ski Area","TYPE":"Both","STATE":"VERMONT","LAT":44.55528,"LONG":-72.79611}},{"type":"Feature","id":"601","geometry":{"type":"Point","coordinates":[-72.97611,43.19444]},"properties":{"NAME":"Snow
+        Valley Ski Area","TYPE":"Both","STATE":"VERMONT","LAT":43.19444,"LONG":-72.97611}},{"type":"Feature","id":"602","geometry":{"type":"Point","coordinates":[-72.58889,43.72444]},"properties":{"NAME":"Sonneberg
+        Ski Area","TYPE":"Both","STATE":"VERMONT","LAT":43.72444,"LONG":-72.58889}},{"type":"Feature","id":"603","geometry":{"type":"Point","coordinates":[-72.77944,44.54167]},"properties":{"NAME":"Spruce
+        Peak Ski Area","TYPE":"Both","STATE":"VERMONT","LAT":44.54167,"LONG":-72.77944}},{"type":"Feature","id":"604","geometry":{"type":"Point","coordinates":[-72.65056,44.42972]},"properties":{"NAME":"Stowe
+        Ski Area","TYPE":"Both","STATE":"VERMONT","LAT":44.42972,"LONG":-72.65056}},{"type":"Feature","id":"605","geometry":{"type":"Point","coordinates":[-72.90944,43.12806]},"properties":{"NAME":"Stratton
+        Mountain Ski Center","TYPE":"Both","STATE":"VERMONT","LAT":43.12806,"LONG":-72.90944}},{"type":"Feature","id":"606","geometry":{"type":"Point","coordinates":[-72.90722,44.13722]},"properties":{"NAME":"Sugarbush
+        Valley Ski Area","TYPE":"Both","STATE":"VERMONT","LAT":44.13722,"LONG":-72.90722}},{"type":"Feature","id":"607","geometry":{"type":"Point","coordinates":[-72.54444,43.66472]},"properties":{"NAME":"Suicide
+        Six Ski Area","TYPE":"Both","STATE":"VERMONT","LAT":43.66472,"LONG":-72.54444}},{"type":"Feature","id":"608","geometry":{"type":"Point","coordinates":[-72.71833,43.22194]},"properties":{"NAME":"Tater
+        Hill Ski Center","TYPE":"Both","STATE":"VERMONT","LAT":43.22194,"LONG":-72.71833}},{"type":"Feature","id":"609","geometry":{"type":"Point","coordinates":[-72.85222,42.87333]},"properties":{"NAME":"The
+        White Horse Ski Touring Center","TYPE":"Alpine","STATE":"VERMONT","LAT":42.87333,"LONG":-72.85222}},{"type":"Feature","id":"610","geometry":{"type":"Point","coordinates":[-72.8875,42.96528]},"properties":{"NAME":"Timber
+        Creek Ski Resort","TYPE":"Both","STATE":"VERMONT","LAT":42.96528,"LONG":-72.8875}},{"type":"Feature","id":"611","geometry":{"type":"Point","coordinates":[-72.74417,44.49806]},"properties":{"NAME":"Topnotch
+        Ski Touring Center","TYPE":"Alpine","STATE":"VERMONT","LAT":44.49806,"LONG":-72.74417}},{"type":"Feature","id":"612","geometry":{"type":"Point","coordinates":[-72.79806,43.77806]},"properties":{"NAME":"Trail
+        Head Ski Touring Center","TYPE":"Alpine","STATE":"VERMONT","LAT":43.77806,"LONG":-72.79806}},{"type":"Feature","id":"613","geometry":{"type":"Point","coordinates":[-72.74528,44.465]},"properties":{"NAME":"Trapp
+        Family Lodge and Cross Country","TYPE":"Alpine","STATE":"VERMONT","LAT":44.465,"LONG":-72.74528}},{"type":"Feature","id":"614","geometry":{"type":"Point","coordinates":[-72.86889,44.18194]},"properties":{"NAME":"Tucker
+        Hill Ski Center","TYPE":"Both","STATE":"VERMONT","LAT":44.18194,"LONG":-72.86889}},{"type":"Feature","id":"615","geometry":{"type":"Point","coordinates":[-72.61944,43.72861]},"properties":{"NAME":"Twin
+        Farms Ski Area","TYPE":"Both","STATE":"VERMONT","LAT":43.72861,"LONG":-72.61944}},{"type":"Feature","id":"616","geometry":{"type":"Point","coordinates":[-72.79556,43.22417]},"properties":{"NAME":"Viking
+        Cross Country Ski Area","TYPE":"Alpine","STATE":"VERMONT","LAT":43.22417,"LONG":-72.79556}},{"type":"Feature","id":"617","geometry":{"type":"Point","coordinates":[-72.90833,43.25972]},"properties":{"NAME":"Wild
+        Wings Ski Touring Center","TYPE":"Alpine","STATE":"VERMONT","LAT":43.25972,"LONG":-72.90833}},{"type":"Feature","id":"618","geometry":{"type":"Point","coordinates":[-72.77722,44.82722]},"properties":{"NAME":"Wolf
+        Run Cross Country Ski Center","TYPE":"Alpine","STATE":"VERMONT","LAT":44.82722,"LONG":-72.77722}},{"type":"Feature","id":"619","geometry":{"type":"Point","coordinates":[-72.51583,43.61472]},"properties":{"NAME":"Woodstock
+        Ski Touring Center","TYPE":"Alpine","STATE":"VERMONT","LAT":43.61472,"LONG":-72.51583}},{"type":"Feature","id":"620","geometry":{"type":"Point","coordinates":[-78.7725,38.80639]},"properties":{"NAME":"Bryce
+        Ski Area","TYPE":"Both","STATE":"VIRGINIA","LAT":38.80639,"LONG":-78.7725}},{"type":"Feature","id":"621","geometry":{"type":"Point","coordinates":[-78.75417,38.40917]},"properties":{"NAME":"Massanutten
+        Ski Area","TYPE":"Both","STATE":"VIRGINIA","LAT":38.40917,"LONG":-78.75417}},{"type":"Feature","id":"622","geometry":{"type":"Point","coordinates":[-78.57778,38.15722]},"properties":{"NAME":"The
+        Homestead Ski Area","TYPE":"Both","STATE":"VIRGINIA","LAT":38.15722,"LONG":-78.57778}},{"type":"Feature","id":"623","geometry":{"type":"Point","coordinates":[-78.89972,37.88472]},"properties":{"NAME":"Wintergreen
+        Ski Area","TYPE":"Both","STATE":"VIRGINIA","LAT":37.88472,"LONG":-78.89972}},{"type":"Feature","id":"624","geometry":{"type":"Point","coordinates":[-121.42952,47.44315]},"properties":{"NAME":"Alpental
+        Ski Area","TYPE":"Both","STATE":"WASHINGTON","LAT":47.44315,"LONG":-121.42952}},{"type":"Feature","id":"625","geometry":{"type":"Point","coordinates":[-117.85494,46.08625]},"properties":{"NAME":"Bluewood
+        Ski Area","TYPE":"Both","STATE":"WASHINGTON","LAT":46.08625,"LONG":-117.85494}},{"type":"Feature","id":"626","geometry":{"type":"Point","coordinates":[-120.67364,45.98622]},"properties":{"NAME":"Brooks
+        Memorial State Park Ski Area","TYPE":"Both","STATE":"WASHINGTON","LAT":45.98622,"LONG":-120.67364}},{"type":"Feature","id":"627","geometry":{"type":"Point","coordinates":[-120.05616,47.93594]},"properties":{"NAME":"Echo
+        Valley Ski Area","TYPE":"Both","STATE":"WASHINGTON","LAT":47.93594,"LONG":-120.05616}},{"type":"Feature","id":"628","geometry":{"type":"Point","coordinates":[-120.41506,47.8565]},"properties":{"NAME":"Entiat
+        Valley Ski Area","TYPE":"Both","STATE":"WASHINGTON","LAT":47.8565,"LONG":-120.41506}},{"type":"Feature","id":"629","geometry":{"type":"Point","coordinates":[-117.57109,48.29403]},"properties":{"NAME":"Forty
+        Nine Degrees North Ski Area","TYPE":"Both","STATE":"WASHINGTON","LAT":48.29403,"LONG":-117.57109}},{"type":"Feature","id":"630","geometry":{"type":"Point","coordinates":[-119.91784,48.39095]},"properties":{"NAME":"Loup
+        Loup Ski Area","TYPE":"Both","STATE":"WASHINGTON","LAT":48.39095,"LONG":-119.91784}},{"type":"Feature","id":"631","geometry":{"type":"Point","coordinates":[-121.3998,47.38815]},"properties":{"NAME":"Pacific
+        West Ski Area","TYPE":"Both","STATE":"WASHINGTON","LAT":47.38815,"LONG":-121.3998}},{"type":"Feature","id":"632","geometry":{"type":"Point","coordinates":[-121.41369,47.40676]},"properties":{"NAME":"Ski
+        Acres Ski Area","TYPE":"Both","STATE":"WASHINGTON","LAT":47.40676,"LONG":-121.41369}},{"type":"Feature","id":"633","geometry":{"type":"Point","coordinates":[-121.41841,47.42482]},"properties":{"NAME":"Snoqualmie
+        Summit Ski Area","TYPE":"Both","STATE":"WASHINGTON","LAT":47.42482,"LONG":-121.41841}},{"type":"Feature","id":"634","geometry":{"type":"Point","coordinates":[-121.38756,46.63538]},"properties":{"NAME":"White
+        Pass Ski Area","TYPE":"Both","STATE":"WASHINGTON","LAT":46.63538,"LONG":-121.38756}},{"type":"Feature","id":"635","geometry":{"type":"Point","coordinates":[-121.40395,46.63538]},"properties":{"NAME":"White
+        Pass X Country Ski Area","TYPE":"Cross-Country","STATE":"WASHINGTON","LAT":46.63538,"LONG":-121.40395}},{"type":"Feature","id":"636","geometry":{"type":"Point","coordinates":[-79.50083,39.47472]},"properties":{"NAME":"Alpine
+        Lake Resort","TYPE":"Both","STATE":"WEST VIRGINIA","LAT":39.47472,"LONG":-79.50083}},{"type":"Feature","id":"637","geometry":{"type":"Point","coordinates":[-79.40472,39.13472]},"properties":{"NAME":"Canaan
+        Valley Ski Area","TYPE":"Both","STATE":"WEST VIRGINIA","LAT":39.13472,"LONG":-79.40472}},{"type":"Feature","id":"638","geometry":{"type":"Point","coordinates":[-79.99694,38.41389]},"properties":{"NAME":"Snowshoe
+        Mountain Ski Area","TYPE":"Both","STATE":"WEST VIRGINIA","LAT":38.41389,"LONG":-79.99694}},{"type":"Feature","id":"639","geometry":{"type":"Point","coordinates":[-79.40472,39.13472]},"properties":{"NAME":"Timberline
+        Ski Area","TYPE":"Both","STATE":"WEST VIRGINIA","LAT":39.13472,"LONG":-79.40472}},{"type":"Feature","id":"640","geometry":{"type":"Point","coordinates":[-81.115,37.59056]},"properties":{"NAME":"Winterplace
+        Ski Area","TYPE":"Both","STATE":"WEST VIRGINIA","LAT":37.59056,"LONG":-81.115}},{"type":"Feature","id":"641","geometry":{"type":"Point","coordinates":[-88.39944,42.78917]},"properties":{"NAME":"Alpine
+        Valley Ski Area","TYPE":"Both","STATE":"WISCONSIN","LAT":42.78917,"LONG":-88.39944}},{"type":"Feature","id":"642","geometry":{"type":"Point","coordinates":[-88.21806,43.13583]},"properties":{"NAME":"Ausblick
+        Ski Area","TYPE":"Both","STATE":"WISCONSIN","LAT":43.13583,"LONG":-88.21806}},{"type":"Feature","id":"643","geometry":{"type":"Point","coordinates":[-92.74861,45.05333]},"properties":{"NAME":"Birch
+        Park Ski Area","TYPE":"Both","STATE":"WISCONSIN","LAT":45.05333,"LONG":-92.74861}},{"type":"Feature","id":"644","geometry":{"type":"Point","coordinates":[-90.79222,44.44389]},"properties":{"NAME":"Bruce
+        Mound Winter Sports Area","TYPE":"Both","STATE":"WISCONSIN","LAT":44.44389,"LONG":-90.79222}},{"type":"Feature","id":"645","geometry":{"type":"Point","coordinates":[-88.16389,44.14028]},"properties":{"NAME":"Calumet
+        Ski Area","TYPE":"Both","STATE":"WISCONSIN","LAT":44.14028,"LONG":-88.16389}},{"type":"Feature","id":"646","geometry":{"type":"Point","coordinates":[-89.51861,43.49306]},"properties":{"NAME":"Cascade
+        Mountain Ski Area","TYPE":"Both","STATE":"WISCONSIN","LAT":43.49306,"LONG":-89.51861}},{"type":"Feature","id":"647","geometry":{"type":"Point","coordinates":[-91.45167,45.47639]},"properties":{"NAME":"Christie
+        Mountain Ski Area","TYPE":"Both","STATE":"WISCONSIN","LAT":45.47639,"LONG":-91.45167}},{"type":"Feature","id":"648","geometry":{"type":"Point","coordinates":[-89.77083,43.6275]},"properties":{"NAME":"Christmas
+        Mountain Ski Area","TYPE":"Both","STATE":"WISCONSIN","LAT":43.6275,"LONG":-89.77083}},{"type":"Feature","id":"649","geometry":{"type":"Point","coordinates":[-88.00972,42.88639]},"properties":{"NAME":"Crystal
+        Ridge Ski Area","TYPE":"Both","STATE":"WISCONSIN","LAT":42.88639,"LONG":-88.00972}},{"type":"Feature","id":"650","geometry":{"type":"Point","coordinates":[-89.62778,43.42167]},"properties":{"NAME":"Devil''s
+        Head Ski Area","TYPE":"Both","STATE":"WISCONSIN","LAT":43.42167,"LONG":-89.62778}},{"type":"Feature","id":"651","geometry":{"type":"Point","coordinates":[-88.98722,45.78722]},"properties":{"NAME":"Giant
+        Pine Ski and Hike Trail","TYPE":"Alpine","STATE":"WISCONSIN","LAT":45.78722,"LONG":-88.98722}},{"type":"Feature","id":"652","geometry":{"type":"Point","coordinates":[-89.63,44.95917]},"properties":{"NAME":"Granite
+        Peak Ski Area","TYPE":"Both","STATE":"WISCONSIN","LAT":44.95917,"LONG":-89.63}},{"type":"Feature","id":"653","geometry":{"type":"Point","coordinates":[-87.80722,44.27639]},"properties":{"NAME":"Hidden
+        Valley Ski Area","TYPE":"Both","STATE":"WISCONSIN","LAT":44.27639,"LONG":-87.80722}},{"type":"Feature","id":"654","geometry":{"type":"Point","coordinates":[-88.42972,42.58861]},"properties":{"NAME":"Lake
+        Geneva Ski Area","TYPE":"Both","STATE":"WISCONSIN","LAT":42.58861,"LONG":-88.42972}},{"type":"Feature","id":"655","geometry":{"type":"Point","coordinates":[-88.28611,43.33361]},"properties":{"NAME":"Little
+        Switzerland Ski Area","TYPE":"Both","STATE":"WISCONSIN","LAT":43.33361,"LONG":-88.28611}},{"type":"Feature","id":"656","geometry":{"type":"Point","coordinates":[-89.71083,45.87139]},"properties":{"NAME":"Minocqua
+        Winter Park","TYPE":"Both","STATE":"WISCONSIN","LAT":45.87139,"LONG":-89.71083}},{"type":"Feature","id":"657","geometry":{"type":"Point","coordinates":[-91.0475,46.71889]},"properties":{"NAME":"Mount
+        Valhalla Ski Area","TYPE":"Both","STATE":"WISCONSIN","LAT":46.71889,"LONG":-91.0475}},{"type":"Feature","id":"658","geometry":{"type":"Point","coordinates":[-91.23944,43.80139]},"properties":{"NAME":"Mt.
+        La Crosse Ski Area","TYPE":"Both","STATE":"WISCONSIN","LAT":43.80139,"LONG":-91.23944}},{"type":"Feature","id":"659","geometry":{"type":"Point","coordinates":[-90.1958,45.94694]},"properties":{"NAME":"Newman
+        Springs Ski Trail","TYPE":"Alpine","STATE":"WISCONSIN","LAT":45.94694,"LONG":-90.1958}},{"type":"Feature","id":"660","geometry":{"type":"Point","coordinates":[-89.18444,44.11806]},"properties":{"NAME":"Nordic
+        Mountain Ski Area","TYPE":"Both","STATE":"WISCONSIN","LAT":44.11806,"LONG":-89.18444}},{"type":"Feature","id":"661","geometry":{"type":"Point","coordinates":[-88.52417,45.32389]},"properties":{"NAME":"Paul
+        Bunyon Ski Area","TYPE":"Both","STATE":"WISCONSIN","LAT":45.32389,"LONG":-88.52417}},{"type":"Feature","id":"662","geometry":{"type":"Point","coordinates":[-89.68417,44.92472]},"properties":{"NAME":"Rib
+        Mountain Ski Area","TYPE":"Both","STATE":"WISCONSIN","LAT":44.92472,"LONG":-89.68417}},{"type":"Feature","id":"663","geometry":{"type":"Point","coordinates":[-91.58472,44.77389]},"properties":{"NAME":"Silver
+        Mine Hill Ski Jump","TYPE":"Both","STATE":"WISCONSIN","LAT":44.77389,"LONG":-91.58472}},{"type":"Feature","id":"664","geometry":{"type":"Point","coordinates":[-89.19917,46.13556]},"properties":{"NAME":"Ski
+        Hill Winter Sports Area","TYPE":"Both","STATE":"WISCONSIN","LAT":46.13556,"LONG":-89.19917}},{"type":"Feature","id":"665","geometry":{"type":"Point","coordinates":[-89.81667,43.97056]},"properties":{"NAME":"Sky
+        Line Ski Area","TYPE":"Both","STATE":"WISCONSIN","LAT":43.97056,"LONG":-89.81667}},{"type":"Feature","id":"666","geometry":{"type":"Point","coordinates":[-92.73417,45.095]},"properties":{"NAME":"Snow
+        Crest Ski Area","TYPE":"Both","STATE":"WISCONSIN","LAT":45.095,"LONG":-92.73417}},{"type":"Feature","id":"667","geometry":{"type":"Point","coordinates":[-89.57444,44.52361]},"properties":{"NAME":"Standing
+        Rocks Ski Area","TYPE":"Both","STATE":"WISCONSIN","LAT":44.52361,"LONG":-89.57444}},{"type":"Feature","id":"668","geometry":{"type":"Point","coordinates":[-89.29028,43.17778]},"properties":{"NAME":"Sunburst
+        Ski Area","TYPE":"Both","STATE":"WISCONSIN","LAT":43.17778,"LONG":-89.29028}},{"type":"Feature","id":"669","geometry":{"type":"Point","coordinates":[-91.25028,46.18472]},"properties":{"NAME":"Telemark
+        Resort","TYPE":"Both","STATE":"WISCONSIN","LAT":46.18472,"LONG":-91.25028}},{"type":"Feature","id":"670","geometry":{"type":"Point","coordinates":[-92.63333,45.35611]},"properties":{"NAME":"Trollhaugen
+        Ski Area","TYPE":"Both","STATE":"WISCONSIN","LAT":45.35611,"LONG":-92.63333}},{"type":"Feature","id":"671","geometry":{"type":"Point","coordinates":[-89.73361,43.00917]},"properties":{"NAME":"Tyrol
+        Basin Ski Area","TYPE":"Both","STATE":"WISCONSIN","LAT":43.00917,"LONG":-89.73361}},{"type":"Feature","id":"672","geometry":{"type":"Point","coordinates":[-90.24583,46.42806]},"properties":{"NAME":"Whitecap
+        Mountain Ski Area","TYPE":"Both","STATE":"WISCONSIN","LAT":46.42806,"LONG":-90.24583}},{"type":"Feature","id":"673","geometry":{"type":"Point","coordinates":[-88.18194,42.51278]},"properties":{"NAME":"Wilmot
+        Mountain Ski Area","TYPE":"Both","STATE":"WISCONSIN","LAT":42.51278,"LONG":-88.18194}},{"type":"Feature","id":"674","geometry":{"type":"Point","coordinates":[-90.08139,43.14444]},"properties":{"NAME":"Wintergreen
+        Downhill Ski Area","TYPE":"Both","STATE":"WISCONSIN","LAT":43.14444,"LONG":-90.08139}},{"type":"Feature","id":"675","geometry":{"type":"Point","coordinates":[-107.51487,44.60938]},"properties":{"NAME":"Bighorn
+        Ski Area","TYPE":"Both","STATE":"WYOMING","LAT":44.60938,"LONG":-107.51487}},{"type":"Feature","id":"676","geometry":{"type":"Point","coordinates":[-109.73333,42.99028]},"properties":{"NAME":"Elkhart
+        Loop Ski Trail","TYPE":"Alpine","STATE":"WYOMING","LAT":42.99028,"LONG":-109.73333}},{"type":"Feature","id":"677","geometry":{"type":"Point","coordinates":[-109.71139,42.94306]},"properties":{"NAME":"Grouse
+        Mountain Ski Trail","TYPE":"Alpine","STATE":"WYOMING","LAT":42.94306,"LONG":-109.71139}},{"type":"Feature","id":"678","geometry":{"type":"Point","coordinates":[-106.3387,42.74552]},"properties":{"NAME":"Hogadon
+        Basin Ski Area","TYPE":"Both","STATE":"WYOMING","LAT":42.74552,"LONG":-106.3387}},{"type":"Feature","id":"679","geometry":{"type":"Point","coordinates":[-110.84746,43.59659]},"properties":{"NAME":"Jackson
+        Hole Ski Area","TYPE":"Both","STATE":"WYOMING","LAT":43.59659,"LONG":-110.84746}},{"type":"Feature","id":"680","geometry":{"type":"Point","coordinates":[-107.21818,44.1605]},"properties":{"NAME":"Meadowlark
+        Ski Area","TYPE":"Both","STATE":"WYOMING","LAT":44.1605,"LONG":-107.21818}},{"type":"Feature","id":"681","geometry":{"type":"Point","coordinates":[-106.18895,41.33719]},"properties":{"NAME":"Medicine
+        Bow Ski Area","TYPE":"Both","STATE":"WYOMING","LAT":41.33719,"LONG":-106.18895}},{"type":"Feature","id":"682","geometry":{"type":"Point","coordinates":[-109.74972,42.94917]},"properties":{"NAME":"Park
+        Loop Ski Trail","TYPE":"Alpine","STATE":"WYOMING","LAT":42.94917,"LONG":-109.74972}},{"type":"Feature","id":"683","geometry":{"type":"Point","coordinates":[-109.75742,42.97772]},"properties":{"NAME":"White
+        Pine Lodge Ski Area","TYPE":"Both","STATE":"WYOMING","LAT":42.97772,"LONG":-109.75742}}],"sort":null,"count":684,"limit":null}'}
+    headers:
+      accept-ranges: [bytes]
+      content-length: ['140639']
+      content-type: [binary/octet-stream]
+      date: ['Fri, 02 Feb 2018 21:19:12 GMT']
+      etag: ['"c20c6dd6507ae2b4f584b501ac6af6ce"']
+      last-modified: ['Fri, 02 Feb 2018 17:52:54 GMT']
+      server: [AmazonS3]
+      x-amz-id-2: [iOLCxZnGWx8mtj8lT6vFiQUdDbVCa0rlz/UXtbWadQqVjwlTWB5x54jnZg/aiEHatwmFQj1linM=]
+      x-amz-request-id: [2DEE58A15E72A1B5]
+    status: {code: 200, message: OK}
+version: 1
