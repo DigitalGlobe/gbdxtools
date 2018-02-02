@@ -5,19 +5,22 @@ interactions:
       Accept: ['*/*']
       Accept-Encoding: ['gzip, deflate']
       Connection: [keep-alive]
-      User-Agent: [python-requests/2.9.1]
+      User-Agent: [python-requests/2.14.2]
     method: GET
     uri: https://geobigdata.io/s3creds/v1/prefix?duration=36000
   response:
-    body: {string: !!python/unicode '{"S3_secret_key": "fdsafdsa",
-        "prefix": "dummy", "bucket": "dummybucket",
-        "S3_access_key": "asdfasdfasdf", "S3_session_token": "fkjhgkjgkjghjkghjghjghjkgkjhjg"}'}
+    body: {string: !!python/unicode '{"S3_secret_key": "vwtFsUUC9DfY2zeIF3jUdz7AQFdmQwAP/M97EfRy",
+        "prefix": "c56b10a9-da6e-4118-8b9e-1a7005bea51b", "bucket": "gbd-customer-data",
+        "S3_access_key": "ASIAJADMRO45YNEZB6AQ", "S3_session_token": "FQoDYXdzEEsaDAtIGk6+AgZSjBdD8CKTA+NZMfcVrDUTBUTIzq1LgU0utWzjVHQO1pOacGLGijddz/tU91+O27Tk5naXvsr120PqqtDgSOikHUYLFgdiwWok+hbNw8lSLaDGTw7Lam6MbIN3yjHcXwiy1DvHWoX+t/K21G7eYSizh4M6nRTKk5hKMAo+y0s4DMO0T8GiW4lkQKbnWPiygkExvqi/OGgTwe/fE234/fyrwmRBQcozpt49PfrvykoMvd78rBz4PcrQaK//NmGcAis+fCIW/BQ5pBmj1vod+49EIaxQ0Zr/VGhI+kk6N780M5LadHjOceAEn1znWTslnNKnSZblPmWgTzg8p24EtWdV6FOQwdVPyNF+clVEglGWNQZQcZv6Pf822WaR7fygx/67LNcJI70NHqeww5lrN/V8OlLH/m/+lAhgo2ovHmtunlIZ7gdl3lr0gIcAC3cm+FPMlBQg9BLC5NuLQW6sJZniNpVBuZqhHgpaZYLIhy1BS+J/NOJNKXr1e0qpvSQY4GLJqFS9Hi10kuDQPX3fKf+grU9iybUd/QNC7sIomcfS0wU="}'}
     headers:
+      access-control-allow-origin: ['*']
       connection: [keep-alive]
       content-length: ['787']
       content-type: [application/json]
-      date: ['Fri, 01 Apr 2016 23:18:58 GMT']
-      server: [Apache/2.4.16 (Amazon) mod_wsgi/3.5 Python/2.7.10]
-      via: [kong/0.5.2]
+      date: ['Fri, 02 Feb 2018 17:46:21 GMT']
+      server: [Apache/2.4.27 (Amazon) mod_wsgi/3.5 Python/2.7.12]
+      via: [kong/0.10.3]
+      x-kong-proxy-latency: ['0']
+      x-kong-upstream-latency: ['809']
     status: {code: 200, message: OK}
 version: 1
