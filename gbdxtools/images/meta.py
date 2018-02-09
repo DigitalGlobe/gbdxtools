@@ -44,13 +44,7 @@ try:
 except:
     has_pyplot = False
 
-def inject_multifetch(sd):
-    key, sli = (sd['key'], sd['slice'])
-    if len(key) == 5:
-        name, token, z, x, y = key
-        if isinstance(name, str) and name.startswith('image'):
-            return (operator.getitem, 'load_urls', (z, x, y), sli)
-    return (operator.getitem, key, sli)
+from gbdxtools.ipe.fetch import aoifetch as load_urls
 
 @add_metaclass(abc.ABCMeta)
 class DaskMeta(object):
@@ -88,7 +82,6 @@ class DaskImage(da.Array):
     """
     A DaskImage is a 2 or 3 dimension dask array that contains implements the `__daskmeta__` interface.
     """
-
     @property
     def __daskmeta__(self):
         """ Should return a DaskMeta """
