@@ -1,5 +1,6 @@
 from __future__ import print_function
 import abc
+import six
 import types
 import os
 import random
@@ -117,7 +118,7 @@ class DaskImage(da.Array):
         dsk1, deps1 = optimize.cull(dsk, keys)
         dsk1["load_urls"] = (load_urls, [dsk1[key] for key in dsk1.keys() if isinstance(key[0], str) and key[0].startswith('image')])
         dsk2 = {}
-        for key, val in dsk1.iteritems():
+        for key, val in six.iteritems(dsk1):
             if isinstance(key, tuple) and key[0].startswith('image'):
                 name, z, x, y = key
                 dsk2[key] = (operator.getitem, 'load_urls', (z, x, y))
