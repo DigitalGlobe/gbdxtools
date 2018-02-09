@@ -84,8 +84,8 @@ async def process(qres):
 async def fetch(reqs, session, nconn, batch_size=2000, nprocs=10):
     results = {}
     qreq, qres = asyncio.Queue(maxsize=batch_size), asyncio.Queue()
-    consumers = [asyncio.ensure_future(consume(qreq, qres, session)) for _ in range(nconn)]
-    producer = await produce(qreq, reqs)
+    consumers = [asyncio.ensure_future(consume_reqs(qreq, qres, session)) for _ in range(nconn)]
+    producer = await produce_reqs(qreq, reqs)
     processors = [asyncio.ensure_future(process(qres)) for _ in range(nprocs)]
     await qreq.join()
     await qres.join()
