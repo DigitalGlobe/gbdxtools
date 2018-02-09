@@ -9,52 +9,106 @@ from concurrent.futures import CancelledError, TimeoutError
 
 import numpy as np
 from skimage.io import imread
-from io import BytesIO
 
-try:
-    from urlparse import urlparse, urlsplit
-except ImportError:
-    from urllib.parse import urlparse, urlsplit
+from tempfile import NamedTemporaryFile
+import os
 
-MAX_TRIES = 5
+MAX_RETRIES = 5
 MAX_CONNECTIONS = 100
 TIMEOUT = 20
 
-async def consume(q, session):
+def on_fail(shape=(8, 256, 256), dtype=np.float32):
+    return np.zeros(shape, dtype=dtype)
+
+def bytes_to_array(bstring):
+    if bstring is None:
+        return onfail()
+    try:
+        fd = NamedTemporaryFile(prefix='gbdxtools', suffix='.tif', delete=False)
+        fd.file.write(bstring)
+        fd.file.flush()
+        fd.close()
+        arr = imread(fd.name)
+        if len(arr.shape) == 3:
+            arr = np.rollaxis(arr, 2, 0)
+        else:
+            arr = np.expand_dims(arr, axis=0)
+    except Exception as e:
+        arr = on_fail()
+    finally:
+        fd.close()
+        os.remove(fd.name)
+    return arr
+
+async def consume_reqs(qreq, qres, session, max_tries=5):
     await asyncio.sleep(0.1)
     while True:
         try:
-            req = await q.get()
-            async with session.get(req.url) as response:
+            url, index, tries = await qreq.get()
+            tries += 1
+            async with session.get(url) as response:
                 response.raise_for_status()
-                result = await response.read()
-                req._response = response
-                q.task_done()
+                bstring = await response.read()
+                await qres.put([index, bstring])
+                qreq.task_done()
         except CancelledError as ce:
             break
         except Exception as e:
-            req.exceptions.append(e)
-            if req.has_retries:
-                await asyncio.sleep(0.2)
-                await q.put(req)
-                q.task_done()
+            if tries < max_tries:
+                await asyncio.sleep(0.1)
+                await qreq.put([url, index, tries])
+                qreq.task_done()
             else:
-                q.task_done()
+                await qres.put([index, None])
+                qreq.task_done()
 
-async def produce(q, reqs):
+async def produce_reqs(qreq, reqs):
     for req in reqs:
-        await q.put(req)
+        await qreq.put(req)
 
-async def fetch(reqmap, session, nconn, batch_size=2000):
-    q = asyncio.Queue(maxsize=batch_size)
-    consumers = [asyncio.ensure_future(consume(q, session)) for _ in range(nconn)]
-    producer = await produce(q, reqmap.values())
-    await q.join()
+async def process(qres):
+    results = {}
+    while True:
+        try:
+            index, payload = await qres.get()
+            if not payload:
+                arr = on_fail()
+            else:
+                arr = await loop.run_in_executor(None, bytes_to_array, payload)
+            results[index] = arr
+            qres.task_done()
+        except CancelledError as ce:
+            break
+    return results
+
+async def fetch(reqs, session, nconn, batch_size=2000, nprocs=10):
+    results = {}
+    qreq, qres = asyncio.Queue(maxsize=batch_size), asyncio.Queue()
+    consumers = [asyncio.ensure_future(consume(qreq, qres, session)) for _ in range(nconn)]
+    producer = await produce(qreq, reqs)
+    processors = [asyncio.ensure_future(process(qres)) for _ in range(nprocs)]
+    await qreq.join()
+    await qres.join()
     for fut in consumers:
         fut.cancel()
-    return reqmap
-
-async def run_fetch(reqmap, nconn, loop):
-    with aiohttp.ClientSession(loop=loop, connector=aiohttp.TCPConnector(limit=nconn), headers=headers) as session:
-        results = await fetch(reqmap, session, nconn)
+    for fut in processors:
+        fut.cancel()
+        results.update(fut.result)
     return results
+
+async def run_fetch(reqs, nconn, headers, loop):
+    with aiohttp.ClientSession(loop=loop, connector=aiohttp.TCPConnector(limit=nconn), headers=headers) as session:
+        results = await fetch(reqs, session, nconn)
+
+def load_urls(collection, shape=(8,256,256), max_retries=MAX_RETRIES, loop=None):
+    reqs = []
+    for url, token, index in collection:
+        reqs.append([url, tuple(index), 0])
+    headers = {"Authorization": "Bearer {}".format(token)}
+    if not loop:
+        loop = asyncio.get_event_loop()
+    results = loop.run_until_complete(run_fetch(reqs, len(reqs), headers, loop))
+    loop.run_until_complete(asyncio.sleep(0))
+    loop.close()
+    return results
+
