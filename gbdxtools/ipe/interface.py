@@ -4,8 +4,7 @@ import uuid
 import json
 from hashlib import sha256
 from itertools import chain
-from collections import OrderedDict, defaultdict
-import threading
+from collections import OrderedDict
 
 import operator
 from functools import partial
@@ -132,8 +131,10 @@ class Op(DaskMeta):
         _chunks = self.chunks
         _name = self.name
         img_md = self.metadata["image"]
-        dsk = {(_name, 0, y - img_md['minTileY'], x - img_md['minTileX']): [url, token, [0, y - img_md['minTileY'], x - img_md['minTileX']]]
-                for (y, x), url in self._collect_urls().items()}
+#        dsk = {(_name, 0, y - img_md['minTileY'], x - img_md['minTileX']): [url, token, [0, y - img_md['minTileY'], x - img_md['minTileX']]]
+#                for (y, x), url in self._collect_urls().items()}
+        dsk = {(_name, 0, y - img_md['minTileY'], x - img_md['minTileX']): (load_url, url, token, _chunks)
+               for (y, x), url in self._collect_urls().items()}
         return dsk
 
     @property
