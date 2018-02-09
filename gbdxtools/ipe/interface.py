@@ -131,10 +131,10 @@ class Op(DaskMeta):
         _chunks = self.chunks
         _name = self.name
         img_md = self.metadata["image"]
-#        dsk = {(_name, 0, y - img_md['minTileY'], x - img_md['minTileX']): [url, token, [0, y - img_md['minTileY'], x - img_md['minTileX']]]
-#                for (y, x), url in self._collect_urls().items()}
-        dsk = {(_name, 0, y - img_md['minTileY'], x - img_md['minTileX']): (load_url, url, token, _chunks)
-               for (y, x), url in self._collect_urls().items()}
+        dsk = {(_name, 0, y - img_md['minTileY'], x - img_md['minTileX']): [url, token, [0, y - img_md['minTileY'], x - img_md['minTileX']]]
+                for (y, x), url in self._collect_urls().items()}
+#        dsk = {(_name, 0, y - img_md['minTileY'], x - img_md['minTileX']): (load_url, url, token, _chunks)
+#               for (y, x), url in self._collect_urls().items()}
         return dsk
 
     @property
