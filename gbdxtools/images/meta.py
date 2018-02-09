@@ -44,7 +44,7 @@ try:
 except:
     has_pyplot = False
 
-from gbdxtools.ipe.fetch import aoifetch as load_urls
+from gbdxtools.ipe.fetch import aiofetch as load_urls
 
 @add_metaclass(abc.ABCMeta)
 class DaskMeta(object):
