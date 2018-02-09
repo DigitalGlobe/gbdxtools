@@ -22,6 +22,7 @@ class CatalogImage(object):
         product (str): One of "ortho" or "toa_reflectance"
         band_type (str): The product spec / band type for the image returned (band_type='MS'|'Pan')
         pansharpen: Whether or not to return a pansharpened image (defaults to False)
+        acomp: Perform atmos. compensation on the image
 
     Returns:
         image (ndarray): An image instance - one of IdahoImage, WV02, WV03_VNIR, LandsatImage, IkonosImage

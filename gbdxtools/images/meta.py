@@ -11,7 +11,7 @@ import warnings
 import math
 
 from gbdxtools.ipe.io import to_geotiff
-from gbdxtools.ipe.util import RatPolyTransform, AffineTransform, pad_safe_positive, pad_safe_negative, IPE_TO_DTYPE
+from gbdxtools.ipe.util import RatPolyTransform, AffineTransform, pad_safe_positive, pad_safe_negative, IPE_TO_DTYPE, preview
 
 from shapely import ops, wkt
 from shapely.geometry import box, shape, mapping
@@ -284,6 +284,9 @@ class GeoImage(Container):
             kwargs['proj'] = self.proj
         return to_geotiff(self, **kwargs)
 
+    def preview(self, **kwargs):
+        preview(self, **kwargs)
+
     def warp(self, dem=None, proj="EPSG:4326", **kwargs):
         """
         Delayed warp across an entire AOI or Image
@@ -487,7 +490,6 @@ class GeoImage(Container):
         except AssertionError as ae:
             warnings.warn(ae.args)
 
-        print(bounds)
         image = self._slice_padded(bounds)
         image.__geo_interface__ = mapping(g)
         return image

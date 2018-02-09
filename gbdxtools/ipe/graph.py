@@ -3,7 +3,7 @@ import json
 from concurrent.futures import Future
 from gbdxtools.ipe.error import NotFound, BadRequest
 
-VIRTUAL_IPE_URL = os.environ.get("VIRTUAL_IPE_URL", "https://idahoapi.geobigdata.io/v1")
+VIRTUAL_IPE_URL = os.environ.get("VIRTUAL_IPE_URL", "https://rda.geobigdata.io/v1")
 
 def resolve_if_future(future):
     if isinstance(future, Future):
@@ -11,6 +11,13 @@ def resolve_if_future(future):
     else:
         return future
 
+def get_graph_stats(conn, graph_id, node_id):
+    url = "{}/metadata/{}/{}/display_stats.json?token={}".format(VIRTUAL_IPE_URL, graph_id, node_id, conn.access_token)
+    req = resolve_if_future(conn.get(url))
+    if req.status_code == 200:
+        return req.json()
+    else:
+        raise NotFound("Could not fetch stats for graph/node: {} / {}".format(graph_id, node_id))
 
 def get_ipe_graph(conn, graph_id):
     url = "{}/graph/{}".format(VIRTUAL_IPE_URL, graph_id)

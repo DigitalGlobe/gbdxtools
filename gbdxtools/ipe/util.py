@@ -4,7 +4,8 @@ import errno
 import datetime
 import time
 import math
-from functools import wraps
+import json
+from functools import wraps, partial
 from collections import Sequence
 try:
     from itertools import izip
@@ -18,10 +19,15 @@ from skimage.transform._geometric import GeometricTransform
 import xml.etree.cElementTree as ET
 from xml.dom import minidom
 import ephem
+from string import Template
 
-from shapely import wkt
+from shapely.geometry import shape, box
+from shapely.wkt import loads
+from shapely import ops
 from affine import Affine
+import pyproj
 
+from gbdxtools.ipe.graph import VIRTUAL_IPE_URL 
 import gbdxtools.ipe.constants as constants
 
 with warnings.catch_warnings():
@@ -39,6 +45,150 @@ IPE_TO_DTYPE = {
     "FLOAT": "float32",
     "DOUBLE": "float64"
 }
+
+# TODO need to handle diff projections: project WGS84 bounds into image proj
+def preview(image, **kwargs):
+    try:
+        from IPython.display import Javascript, HTML, display
+        from gbdxtools import Interface
+        gbdx = Interface()
+    except:
+        print("IPython is required to produce maps.")
+        return
+
+    zoom = kwargs.get("zoom", 16)
+    bands = kwargs.get("bands", image._rgb_bands)
+    wgs84_bounds = kwargs.get("bounds", list(loads(image.ipe_metadata["image"]["imageBoundsWGS84"]).bounds))
+    center = kwargs.get("center", list(shape(image).centroid.bounds[0:2]))
+    graph_id = image.ipe_id
+    node_id = image.ipe.graph()['nodes'][0]['id']
+
+    # fetch a tile in order to calc stats and do a simple stretch
+    y = image.shape[1] / 2
+    x = image.shape[2] / 2
+    aoi = image[:, y:y+256, x:x+256].read(quiet=True)
+    means, stds = aoi.mean(axis=(1,2)), aoi.std(axis=(1,2))
+    scales = (255.0 / (4.0 * stds))
+    offsets = map(list(((means - (2.0 * stds)) * scales * -1.0)).__getitem__, bands)
+    scales = map(list(scales).__getitem__, bands)
+
+    if image.proj != 'EPSG:4326':
+        code = image.proj.split(':')[1]
+        conn = gbdx.gbdx_connection
+        proj_info = conn.get('https://ughlicoordinates.geobigdata.io/ughli/v1/projinfo/{}'.format(code)).json()
+        tfm = partial(pyproj.transform, pyproj.Proj(init='EPSG:4326'), pyproj.Proj(init=image.proj))
+        bounds = list(ops.transform(tfm, box(*wgs84_bounds)).bounds)
+    else:
+        proj_info = {}
+        bounds = wgs84_bounds
+    
+    map_id = "map_{}".format(str(int(time.time())))
+    display(HTML(Template('''
+       <div id="$map_id"/>
+       <link href='https://openlayers.org/en/v4.6.4/css/ol.css' rel='stylesheet' />
+       <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=requestAnimationFrame,Element.prototype.classList,URL"></script>
+       <style>body{margin:0;padding:0;}#$map_id{position:relative;top:0;bottom:0;width:100%;height:400px;}</style>
+       <style></style>
+    ''').substitute({"map_id": map_id}))) 
+
+    js = Template("""
+        require.config({
+            paths: {
+                ol: 'https://openlayers.org/en/v4.6.4/build/ol',
+                proj4: 'https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.4.4/proj4'
+            }
+        });
+
+        require(['ol', 'proj4'], function(ol, proj4) {
+            ol.proj.setProj4(proj4);
+            var md = $md;
+            var georef = $georef;
+            var graphId = '$graphId';
+            var nodeId = '$nodeId';
+            var extents = $bounds; 
+
+            var x1 = md.minTileX * md.tileXSize;
+            var y1 = ((md.minTileY + md.numYTiles) * md.tileYSize + md.tileYSize);
+            var x2 = ((md.minTileX + md.numXTiles) * md.tileXSize + md.tileXSize);
+            var y2 = md.minTileY * md.tileYSize;
+            var tileLayerResolutions = [georef.scaleX];
+
+            var url = '$url' + '/tile/';
+            url += graphId + '/' + nodeId;
+            url += "/{x}/{y}.png?token=$token&bands=$bands&scales=$scales&offsets=$offsets";
+
+            var proj = '$proj';
+            var projInfo = $projInfo;
+    
+            if ( proj !== 'EPSG:4326' ) {
+                var proj4def = projInfo["proj4"];
+                proj4.defs(proj, proj4def);
+                var area = projInfo["area_of_use"];
+                var bbox = [area["area_west_bound_lon"], area["area_south_bound_lat"], 
+                            area["area_east_bound_lon"], area["area_north_bound_lat"]]
+                var projection = ol.proj.get(proj);
+                var fromLonLat = ol.proj.getTransform('EPSG:4326', projection);
+                var extent = ol.extent.applyTransform(
+                    [bbox[0], bbox[1], bbox[2], bbox[3]], fromLonLat);
+                projection.setExtent(extent);
+            } else {
+                var projection = ol.proj.get(proj);
+            }
+
+            var rda = new ol.layer.Tile({
+              title: 'RDA',
+              opacity: 1,
+              extent: extents,
+              source: new ol.source.TileImage({
+                      crossOrigin: null,
+                      projection: projection,
+                      extent: extents,
+
+                      tileGrid: new ol.tilegrid.TileGrid({
+                          extent: extents,
+                          origin: [extents[0], extents[3]],
+                          resolutions: tileLayerResolutions,
+                          tileSize: [md.tileXSize, md.tileYSize],
+                      }),
+                      tileUrlFunction: function (coordinate) {
+                          if (coordinate === null) return undefined;
+                          const x = coordinate[1] + md.minTileX;
+                          const y = -(coordinate[2] + 1 - md.minTileY);
+                          if (x < md.minTileX || x > md.maxTileX) return undefined;
+                          if (y < md.minTileY || y > md.maxTileY) return undefined;
+                          return url.replace('{x}', x).replace('{y}', y);
+                      }
+                  })
+            });
+
+            var map = new ol.Map({
+              layers: [ rda ],
+              target: '$map_id',
+              view: new ol.View({
+                projection: projection,
+                center: $center,
+                zoom: $zoom
+              })
+            });
+        });
+    """).substitute({
+        "map_id": map_id,
+        "proj": image.proj,
+        "projInfo": json.dumps(proj_info),
+        "graphId": graph_id,
+        "bounds": bounds,
+        "bands": ",".join(map(str, bands)),
+        "nodeId": node_id,
+        "md": json.dumps(image.ipe_metadata["image"]),
+        "georef": json.dumps(image.ipe_metadata["georef"]),
+        "center": center,
+        "zoom": zoom,
+        "token": gbdx.gbdx_connection.access_token,
+        "scales": ",".join(map(str, scales)),
+        "offsets": ",".join(map(str, offsets)),
+        "url": VIRTUAL_IPE_URL
+    })
+    display(Javascript(js))
 
 def reproject_params(proj):
     _params = {}

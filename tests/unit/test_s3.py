@@ -27,8 +27,9 @@ class S3Tests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         # create mock session, replace dummytoken with real token to create cassette
-        mock_gbdx_session = get_mock_gbdx_session(token="dummytoken")
-        cls.gbdx = Interface(gbdx_connection=mock_gbdx_session)
+        #mock_gbdx_session = get_mock_gbdx_session(token="dummytoken")
+        #cls.gbdx = Interface(gbdx_connection=mock_gbdx_session)
+        cls.gbdx = Interface()
         cls._temp_path = tempfile.mkdtemp()
         print("Created: {}".format(cls._temp_path))
 
@@ -48,9 +49,7 @@ class S3Tests(unittest.TestCase):
 
     @vcr.use_cassette(cassette_name, filter_headers=['authorization'])
     def test_download(self):
-        location = 'nikki/gbdxtools_test_s3'
+        location = 'gbdxtools/ski_areas.geojson'
         s = S3()
         s.download(location, local_dir=self._temp_path)
-
-        assert os.path.isfile(os.path.join(self._temp_path, 'test_dir', 'model.json'))
-        assert os.path.isfile(os.path.join(self._temp_path, 'model.json'))
+        assert os.path.isfile(os.path.join(self._temp_path, 'ski_areas.geojson'))

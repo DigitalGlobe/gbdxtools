@@ -1,3 +1,8 @@
+0.14.3
+* Removing calls to idaho.timbr.io for metadata
+* Using the ipe.TOAReflectance Op
+* Support for Acomp on WV2, WV3, QB02, and GE01 image classes
+
 0.14.0
 * pin dask to 0.16.0 and fix subclasshook in images/meta
 * respect image bucket names correctly

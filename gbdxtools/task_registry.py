@@ -3,10 +3,16 @@ GBDX Task Registry interface.
 
 Contact: dmitry.zviagintsev@digitalglobe.com
 """
-
+import requests
 import json
 from gbdxtools.auth import Auth
 from gbdxtools.s3 import S3
+
+def raise_for_status(r):
+    try:
+        r.raise_for_status()
+    except Exception as error:
+        raise requests.exceptions.RequestException(r.text)
 
 class TaskRegistry(object):
     def __init__(self, **kwargs):
@@ -29,7 +35,7 @@ class TaskRegistry(object):
             List of tasks
         """
         r = self.gbdx_connection.get(self._base_url)
-        r.raise_for_status()
+        raise_for_status(r)
 
         return r.json()['tasks']
 
@@ -53,7 +59,7 @@ class TaskRegistry(object):
             task_json = json.load(open(json_filename, 'r'))
 
         r = self.gbdx_connection.post(self._base_url, json=task_json)
-        r.raise_for_status()
+        raise_for_status(r)
 
         return r.text
 
@@ -67,7 +73,7 @@ class TaskRegistry(object):
             Dictionary representing the task definition.
         """
         r = self.gbdx_connection.get(self._base_url + '/' + task_name)
-        r.raise_for_status()
+        raise_for_status(r)
 
         return r.json()
 
@@ -81,7 +87,7 @@ class TaskRegistry(object):
             Response (str).
         """
         r = self.gbdx_connection.delete(self._base_url + '/' + task_name)
-        r.raise_for_status()
+        raise_for_status(r)
 
         return r.text
 
@@ -96,6 +102,6 @@ class TaskRegistry(object):
             Dictionary representing the updated task definition.
         """
         r = self.gbdx_connection.put(self._base_url + '/' + task_name, json=task_json)
-        r.raise_for_status()
+        raise_for_status(r)
 
         return r.json()

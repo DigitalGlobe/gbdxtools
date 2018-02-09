@@ -110,6 +110,19 @@ The above code generates a geotiff on the filesystem with the name `output.tif` 
 
 This will create geotiff on the the filesystem with only the bands `4,2,1`.
 
+Atmospheric Compensation
+-----------------------
+
+Currently every catalog image fetches data as Top of Atmosphere (TOA) Reflectance values. As of gbdxtools version 0.14.3 its now possible to fetch data that have been processed via Atmospheric Compensation (acomp). Acomp is a process used to remove haze and vapor particles and clarify imagery in a variety of atmospheric conditions. This can be useful for a variety of applications and can provide more consistent imagery when comparing images over time. To use acomp on a CatalogImage you can pass `acomp=True` to the image constructor.
+
+.. code-block:: python
+
+    from gbdxtools import CatalogImage
+
+    img_acomp = CatalogImage('104001001BA7C400', acomp=True)
+    aoi = img_acomp.randwindow((500,500))
+    aoi.plot()
+
 
 Idaho Images
 -----------------------

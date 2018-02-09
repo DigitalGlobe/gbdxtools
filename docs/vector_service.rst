@@ -140,17 +140,20 @@ The following snippet will aggregate the top 10 OSM item types in 3 character ge
 
 .. code-block:: python
 
+    from gbdxtools.vectors import TermsAggDef, GeohashAggDef
+    
     query = 'ingest_source:OSM'
+    colorado_aoi = "POLYGON((-108.89 40.87,-102.19 40.87,-102.19 37.03,-108.89 37.03,-108.89 40.87))"
 
     child_agg = TermsAggDef('item_type')
-    agg = GeohashAggDef(agg_type='geohash', value='3', children=child_agg)
+    agg = GeohashAggDef('6', children=child_agg)
     result = gbdx.vectors.aggregate_query(colorado_aoi, agg, query, index='read-vector-osm-*')
 
     # the result has a single-element list containing the top-level aggregation
     for entry in result[0]['terms']:  # the 'terms' field contains our buckets
         geohash_str = entry['term']  # the 'term' entry contains our geohash
         child_aggs = entry['aggregations']  # the 'aggregations' field contains the child aggregations for the 'item_type' values
-
+        
         # since the child aggregations have the same structure, we can walk it the same way.
         # let's create a dict of item_types and their counts
         for child in child_aggs:

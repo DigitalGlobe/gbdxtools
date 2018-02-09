@@ -50,6 +50,14 @@ class GE01ImageTest(unittest.TestCase):
         assert img.shape == (4, 57316, 11688)
         assert img.proj == 'EPSG:4326'
 
+    @my_vcr.use_cassette('tests/unit/cassettes/test_geoeye_acomp.yaml', filter_headers=['authorization'])
+    def test_geoeye_acomp(self):
+        _id = '1050010009569E00'
+        img = self.gbdx.catalog_image(_id, acomp=True) #, bbox=[-109.84, 43.19, -109.59, 43.34])
+        self.assertTrue(isinstance(img, GE01))
+        assert img.shape == (4, 57316, 11688)
+        assert img.proj == 'EPSG:4326'
+
     @my_vcr.use_cassette('tests/unit/cassettes/test_geoeye_image_proj.yaml', filter_headers=['authorization'])
     def test_geoeye_image_proj(self):
         _id = '1050010009569E00'

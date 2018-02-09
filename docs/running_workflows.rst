@@ -129,16 +129,19 @@ A GBDX workflow is a set of tasks with inputs and outputs linked appropriately.
 Note that in gbdxtools, a workflow object is instantiated with a list of tasks.
 The tasks will get executed when their inputs are satisfied and ready to go.
 Here is an example of a workflow which consists of the AOP_Strip_Processor task followed by
-the StageDataToS3 task.
+the SaveToS3 task.
 
 .. code-block:: python
 
     data = "s3://receiving-dgcs-tdgplatform-com/054813633050_01_003" # WV02 Image over San Francisco
     aoptask = gbdx.Task("AOP_Strip_Processor", data=data)
 
-    s3task = gbdx.Task("StageDataToS3")
+    s3task = gbdx.Task("SaveToS3")
     s3task.inputs.data = aoptask.outputs.data.value
     s3task.inputs.destination = "s3://path/to/destination"
+    s3task.inputs.access_key_id = "<your-temporary-s3-access-key>"
+    s3task.inputs.secret_key = "<your-temporary-s3-secret-key>"
+    s3task.inputs.session_token = "<your-temporary-s3-session-token>"
 
     workflow = gbdx.Workflow([ aoptask, s3task ])
     workflow.execute()
@@ -352,14 +355,13 @@ As long as you use the original input port name as the prefix for your inputs, i
 Saving Output Data to S3
 -----------------------
 
-Here's a shortcut for saving data to S3.  Rather than creating a "StageDataToS3" task, you can simply do:
+Here's a shortcut for saving data to S3.  Rather than creating a "SaveToS3" task, you can simply do:
 
 .. code-block:: python
 
     workflow.savedata(aoptask.outputs.data, location='some_folder')
 
-This will end up saving the output to: s3://bucket/prefix/some_folder.
-(Remember that 'bucket' and 'prefix' are in your s3 credentials.)
+This will end up saving the output to: s3://<gbdx-customer-data-bucket>/<your-account-id>/some_folder.
 
 You can omit the location parameter and the output location will be s3://bucket/prefix/<random-GUID>
 
@@ -377,7 +379,7 @@ Running workflows via the workflow module (advanced)
 The workflow module is a low-level abstraction of the GBDX workflow API.
 Earlier in this section, you learned how to create Task objects and chain them together in Workflow objects
 which you can then execute. The workflow module allows you to launch workflows by directly passing the workflow dictionary as an argument to the launch() function (similarly to what you would do in POSTMAN).
-Here is a simple example of running a workflow that uses the tasks AOP_Strip_Processor and StageDataToS3:
+Here is a simple example of running a workflow that uses the tasks AOP_Strip_Processor and SaveToS3:
 
 .. code-block:: pycon
 
@@ -402,7 +404,7 @@ Here is a simple example of running a workflow that uses the tasks AOP_Strip_Pro
                 "taskType": "AOP_Strip_Processor"
             },
             {
-                "name": "StagetoS3",
+                "name": "SaveToS3",
                 "inputs": [
                     {
                         "name": "data",
@@ -411,9 +413,21 @@ Here is a simple example of running a workflow that uses the tasks AOP_Strip_Pro
                     {
                         "name": "destination",
                         "value": "s3://bucket/prefix/my_directory"
+                    },
+                    {
+                        "name": "access_key_id",
+                        "value": "<your-temporary-s3-access-key>"
+                    },
+                    {
+                        "name": "secret_key",
+                        "value": "<your-temporary-s3-secret-key>"
+                    },
+                    {
+                        "name": "session_token",
+                        "value": "<your-temporary-s3-session-token>"
                     }
                 ],
-                "taskType": "StageDataToS3"
+                "taskType": "SaveToS3"
             }
         ]
     }

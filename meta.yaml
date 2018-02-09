@@ -18,7 +18,7 @@ requirements:
     - six >=1.10.0
     - future >=0.15.2
     - requests >=2.12.1
-    - boto >=2.47.0
+    - boto3
     - shapely
     - ephem
     - toolz
@@ -41,7 +41,7 @@ requirements:
     - six >=1.10.0
     - future >=0.15.2
     - requests >=2.12.1
-    - boto >=2.47.0
+    - boto3
     - shapely
     - ephem
     - toolz

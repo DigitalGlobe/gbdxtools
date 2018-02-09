@@ -11,5 +11,5 @@ Steps to make a new release:
 9. python setup sdist 
 10. twine upload to pypy
 11. conda clean --all
-12. conda build -u digitalglobe .
-13. anaconda upload 'file from build'
+12. conda build -c digitalglobe .
+13. anaconda upload --user digitalglobe PATH_TO_FILE_FROMBUILD
