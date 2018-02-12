@@ -44,6 +44,11 @@ try:
 except:
     has_pyplot = False
 
+try:
+    xrange
+except NameError:
+    xrange = range
+
 
 @add_metaclass(abc.ABCMeta)
 class DaskMeta(object):
