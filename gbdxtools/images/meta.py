@@ -44,7 +44,6 @@ try:
 except:
     has_pyplot = False
 
-from gbdxtools.ipe.fetch import aiofetch as load_urls
 
 @add_metaclass(abc.ABCMeta)
 class DaskMeta(object):
@@ -112,19 +111,6 @@ class DaskImage(da.Array):
         dsk1, _ = optimize.cull(dsk, keys)
         return dsk1
 
-    @classmethod
-    def __dask_optimize__(cls, dsk, keys, **kwargs):
-        dsk1, deps1 = optimize.cull(dsk, keys)
-        dsk1["load_urls"] = (load_urls, [dsk1[key] for key in dsk1.keys() if isinstance(key[0], str) and key[0].startswith('image')])
-        dsk2 = {}
-        for key, val in dsk1.items():
-            if isinstance(key, tuple) and key[0].startswith('image'):
-                name, z, x, y = key
-                dsk2[key] = (operator.getitem, 'load_urls', (z, x, y))
-            else:
-                dsk2[key] = val
-        return da.Array.__dask_optimize__(dsk2, keys)
-
     def __getattribute__(self, name):
         fn = object.__getattribute__(self, name)
         if(isinstance(fn, types.MethodType) and
@@ -150,14 +136,18 @@ class DaskImage(da.Array):
             return fn
 
     @classmethod
-    def create(cls, dm):
+    def create(cls, dm, **kwargs):
         """
         Given a dask meta object, construct a dask array, attach dask meta object.
         """
         assert isinstance(dm, DaskMeta), "argument must be an instance of a DaskMeta subclass"
         with dask.set_options(array_plugins=[dm.infect]):
-            obj = da.Array.__new__(cls, dm.dask, dm.name, dm.chunks, dm.dtype, dm.shape)
-            return obj
+            #obj = da.Array.__new__(cls, dm.dask, dm.name, dm.chunks, dm.dtype, dm.shape)
+            if "fetch_plugin" in kwargs:
+                klass = kwargs["fetch_plugin"]
+            else:
+                klass = da.Array
+            return klass.__new__(cls, dm.dask, dm.name, dm.chunks, dm.dtype, dm.shape)
 
     def read(self, bands=None, **kwargs):
         """

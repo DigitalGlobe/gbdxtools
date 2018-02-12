@@ -9,6 +9,7 @@ from shapely.geometry import box, mapping
 from shapely.geometry.base import BaseGeometry
 
 from dask import optimize
+import dask.array as da
 
 import numpy as np
 
@@ -17,12 +18,13 @@ try:
 except NameError:
     xrange = range
 
+
 class IpeImage(DaskImage, GeoImage, PlotMixin):
     _default_proj = "EPSG:4326"
 
-    def __new__(cls, op):
+    def __new__(cls, op, **kwargs):
         assert isinstance(op, DaskMeta)
-        self = super(IpeImage, cls).create(op)
+        self = super(IpeImage, cls).create(op, **kwargs)
         self._ipe_op = op
         if self.ipe.metadata["georef"] is None:
             tfm = RatPolyTransform.from_rpcs(self.ipe.metadata["rpcs"])

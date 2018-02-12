@@ -47,18 +47,18 @@ class WVImage(IpeImage):
             options["band_type"] = "MS"
             options["product"] = "pansharpened"
 
-        standard_products = cls._build_standard_products(cat_id, 
-                                                         options["band_type"], 
-                                                         options["proj"], 
-                                                         gsd=options["gsd"], 
+        standard_products = cls._build_standard_products(cat_id,
+                                                         options["band_type"],
+                                                         options["proj"],
+                                                         gsd=options["gsd"],
                                                          acomp=options["acomp"])
         pan_products = cls._build_standard_products(cat_id, "pan", options["proj"], gsd=options["gsd"], acomp=options["acomp"])
         pan = pan_products['acomp'] if options["acomp"] else pan_products['toa_reflectance']
         ms = standard_products['acomp'] if options["acomp"] else standard_products['toa_reflectance']
         standard_products["pansharpened"] = ipe.LocallyProjectivePanSharpen(ms, pan)
-        
+
         try:
-            self = super(WVImage, cls).__new__(cls, standard_products[options["product"]])
+            self = super(WVImage, cls).__new__(cls, standard_products[options["product"]], **kwargs)
         except KeyError as e:
             print(e)
             print("Specified product not implemented: {}".format(options["product"]))
@@ -113,11 +113,11 @@ class WVImage(IpeImage):
             mosaic_params["Requested GSD"] = str(gsd)
 
         ortho_op = ipe.GeospatialMosaic(*dn_ops, **mosaic_params)
-        
+
         toa = [ipe.Format(ipe.MultiplyConst(ipe.TOAReflectance(dn), constants=json.dumps([10000])), dataType="1") for dn in dn_ops]
         toa_reflectance_op = ipe.GeospatialMosaic(*toa, **mosaic_params)
-       
-        if acomp and _bucket != 'idaho-images': 
+
+        if acomp and _bucket != 'idaho-images':
             _ops = [ipe.Format(ipe.MultiplyConst(ipe.Acomp(dn), constants=json.dumps([10000])), dataType="1") for dn in dn_ops]
             acomp_op = ipe.GeospatialMosaic(*_ops, **mosaic_params)
         else:
