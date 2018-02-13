@@ -39,7 +39,6 @@ class IpeImage(DaskImage, GeoImage, PlotMixin):
         maxx = img_md["maxX"] - xshift
         miny = img_md["minY"] - yshift
         maxy = img_md["maxY"] - yshift
-
         return self[:, miny:maxy, minx:maxx]
 
     @property

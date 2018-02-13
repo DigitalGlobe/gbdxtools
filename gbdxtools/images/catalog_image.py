@@ -12,6 +12,7 @@ from gbdxtools.ipe.error import UnsupportedImageType
 from shapely import wkt
 from shapely.geometry import box
 import json
+import types as pytypes
 
 class CatalogImage(object):
     '''Creates an image instance matching the type of the Catalog ID.
@@ -33,7 +34,13 @@ class CatalogImage(object):
         :proj: The image projection
     '''
     def __new__(cls, cat_id, **kwargs):
-        return cls._image_by_type(cat_id, **kwargs)
+        inst = cls._image_by_type(cat_id, **kwargs)
+        fplg = kwargs.get("fetch_plugin")
+        if fplg:
+            for attrname in dir(fplg):
+                if isinstance(getattr(fplg, attrname), pytypes.MethodType) and attrname in ("__dask_optimize__", "__fetch__"):
+                    setattr(inst, attrname, getattr(fplg, attrname))
+        return inst
 
     @classmethod
     def _image_by_type(cls, cat_id, **kwargs):
@@ -68,5 +75,5 @@ class CatalogImage(object):
             return QB02(cat_id, **kwargs)
         elif 'SENTINEL2' in types:
             return Sentinel2(rec['properties']['attributes']['bucketPrefix'], **kwargs)
-        else: 
+        else:
             raise UnsupportedImageType('Unsupported image type: {}'.format(str(types)))

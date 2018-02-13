@@ -142,12 +142,8 @@ class DaskImage(da.Array):
         """
         assert isinstance(dm, DaskMeta), "argument must be an instance of a DaskMeta subclass"
         with dask.set_options(array_plugins=[dm.infect]):
-            #obj = da.Array.__new__(cls, dm.dask, dm.name, dm.chunks, dm.dtype, dm.shape)
-            if "fetch_plugin" in kwargs:
-                klass = kwargs["fetch_plugin"]
-            else:
-                klass = da.Array
-            return klass.__new__(cls, dm.dask, dm.name, dm.chunks, dm.dtype, dm.shape)
+
+            return da.Array.__new__(cls, dm.dask, dm.name, dm.chunks, dm.dtype, dm.shape)
 
     def read(self, bands=None, **kwargs):
         """
