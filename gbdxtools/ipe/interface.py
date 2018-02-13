@@ -84,6 +84,7 @@ def load_url(url, token, shape=(8, 256, 256)):
         arr = np.zeros(shape, dtype=np.float32)
     return arr
 
+
 class ContentHashedDict(dict):
     @property
     def _id(self):
@@ -98,7 +99,66 @@ class ContentHashedDict(dict):
         self.update({"id": self._id})
 
 
-class Op(DaskMeta):
+class DaskProps(object):
+
+    def graph(self):
+        pass
+
+    @property
+    def metadata(self):
+        assert self.graph() is not None
+        if self._ipe_meta is not None:
+            return self._ipe_meta
+        if self._interface is not None:
+            self._ipe_meta = get_ipe_metadata(self._interface.gbdx_futures_session, self._ipe_id, self._id)
+        return self._ipe_meta
+
+    @property
+    def dask(self):
+        token = self._interface.gbdx_connection.access_token
+        _chunks = self.chunks
+        _name = self.name
+        img_md = self.metadata["image"]
+        return {(_name, 0, y - img_md['minTileY'], x - img_md['minTileX']): (load_url, url, token, _chunks)
+                for (y, x), url in self._collect_urls().items()}
+
+    @property
+    def name(self):
+        return "image-{}".format(self._id)
+
+    @property
+    def chunks(self):
+        img_md = self.metadata["image"]
+        return (img_md["numBands"], img_md["tileYSize"], img_md["tileXSize"])
+
+    @property
+    def dtype(self):
+        try:
+            data_type = self.metadata["image"]["dataType"]
+            return IPE_TO_DTYPE[data_type]
+        except KeyError:
+            raise TypeError("Metadata indicates an unrecognized data type: {}".format(data_type))
+
+    @property
+    def shape(self):
+        img_md = self.metadata["image"]
+        return (img_md["numBands"],
+                (img_md["maxTileY"] - img_md["minTileY"] + 1)*img_md["tileYSize"],
+                (img_md["maxTileX"] - img_md["minTileX"] + 1)*img_md["tileXSize"])
+
+    def _ipe_tile(self, x, y, ipe_id, _id):
+        return "{}/tile/{}/{}/{}/{}/{}.tif".format(VIRTUAL_IPE_URL, "idaho-virtual", ipe_id, _id, x, y)
+
+    def _collect_urls(self):
+        img_md = self.metadata["image"]
+        ipe_id = self._ipe_id
+        _id = self._id
+        return {(y, x): self._ipe_tile(x, y, ipe_id, _id)
+                for y in xrange(img_md['minTileY'], img_md["maxTileY"]+1)
+                for x in xrange(img_md['minTileX'], img_md["maxTileX"]+1)}
+
+
+class Op(DaskMeta, DaskProps):
     def __init__(self, name, interface=None):
         self._operator = name
         self._edges = []
@@ -163,59 +223,6 @@ class Op(DaskMeta):
             return self._ipe_graph
 
         return graph
-
-    @property
-    def metadata(self):
-        assert self.graph() is not None
-        if self._ipe_meta is not None:
-            return self._ipe_meta
-        if self._interface is not None:
-            self._ipe_meta = get_ipe_metadata(self._interface.gbdx_futures_session, self._ipe_id, self._id)
-        return self._ipe_meta
-
-    @property
-    def dask(self):
-        token = self._interface.gbdx_connection.access_token
-        _chunks = self.chunks
-        _name = self.name
-        img_md = self.metadata["image"]
-        return {(_name, 0, y - img_md['minTileY'], x - img_md['minTileX']): (load_url, url, token, _chunks)
-                for (y, x), url in self._collect_urls().items()}
-
-    @property
-    def name(self):
-        return "image-{}".format(self._id)
-
-    @property
-    def chunks(self):
-        img_md = self.metadata["image"]
-        return (img_md["numBands"], img_md["tileYSize"], img_md["tileXSize"])
-
-    @property
-    def dtype(self):
-        try:
-            data_type = self.metadata["image"]["dataType"]
-            return IPE_TO_DTYPE[data_type]
-        except KeyError:
-            raise TypeError("Metadata indicates an unrecognized data type: {}".format(data_type))
-
-    @property
-    def shape(self):
-        img_md = self.metadata["image"]
-        return (img_md["numBands"],
-                (img_md["maxTileY"] - img_md["minTileY"] + 1)*img_md["tileYSize"],
-                (img_md["maxTileX"] - img_md["minTileX"] + 1)*img_md["tileXSize"])
-
-    def _ipe_tile(self, x, y, ipe_id, _id):
-        return "{}/tile/{}/{}/{}/{}/{}.tif".format(VIRTUAL_IPE_URL, "idaho-virtual", ipe_id, _id, x, y)
-
-    def _collect_urls(self):
-        img_md = self.metadata["image"]
-        ipe_id = self._ipe_id
-        _id = self._id
-        return {(y, x): self._ipe_tile(x, y, ipe_id, _id)
-                for y in xrange(img_md['minTileY'], img_md["maxTileY"]+1)
-                for x in xrange(img_md['minTileX'], img_md["maxTileX"]+1)}
 
 
 class Ipe(object):

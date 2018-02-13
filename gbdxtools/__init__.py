@@ -1,5 +1,6 @@
 from __future__ import absolute_import
 from gbdxtools.images.ipe_image import IpeImage
+from gbdxtools.images.graph_image import GraphImage
 from gbdxtools.images.idaho_image import IdahoImage
 from gbdxtools.images.ikonos import IkonosImage
 from gbdxtools.images.geoeye01 import GE01
