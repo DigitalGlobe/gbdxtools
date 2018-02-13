@@ -158,7 +158,7 @@ class DaskProps(object):
                 for x in xrange(img_md['minTileX'], img_md["maxTileX"]+1)}
 
 
-class Op(DaskMeta, DaskProps):
+class Op(DaskProps, DaskMeta):
     def __init__(self, name, interface=None):
         self._operator = name
         self._edges = []
