@@ -5,6 +5,7 @@ from gbdx_auth import gbdx_auth
 import logging
 
 from gbdxtools.ipe.graph import VIRTUAL_IPE_URL
+from urllib3.util.retry import Retry
 
 auth = None
 
@@ -42,9 +43,35 @@ class _Auth(object):
         except Exception as err:
             print(err)
 
+        def refresh_token(r, *args, **kwargs):
+            """
+            Requests a new token if 401, mainly for auth v2 migration
+            :param r:
+            :param args:
+            :param kwargs:
+            :return:
+            """
+            if r.status_code == 401:
+                try:
+                    gbdx_auth.get_session(kwargs.get('config_file'))
+                except Exception as e:
+                    print("Error creating session from config, Reason {}".format(e.message))
+
         if self.gbdx_connection is not None:
-            self.gbdx_connection.mount(VIRTUAL_IPE_URL, HTTPAdapter(max_retries=5)) #status_forcelist=[500, 502, 504]))
+            # retry after getting a new token
+            retries = Retry(total=2,
+                            backoff_factor=0.1,
+                            status_forcelist=[401])
+
+            self.gbdx_connection.hooks['response'].append(refresh_token)
+
+            # status_forcelist=[500, 502, 504]))
+            self.gbdx_connection.mount(VIRTUAL_IPE_URL, HTTPAdapter(max_retries=5))
+            # status_forcelist=[401]))
+            self.gbdx_connection.mount(self.root_url, HTTPAdapter(max_retries=retries))
+
         self.gbdx_futures_session = FuturesSession(session=self.gbdx_connection, max_workers=64)
+
         if 'GBDX_USER' in os.environ:
             header = {'User-Agent': os.environ['GBDX_USER']}
             self.gbdx_futures_session.headers.update(header)
