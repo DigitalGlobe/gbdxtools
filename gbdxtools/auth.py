@@ -5,6 +5,7 @@ from gbdx_auth import gbdx_auth
 import logging
 
 from gbdxtools.ipe.graph import VIRTUAL_IPE_URL
+from urllib3.util.retry import Retry
 
 auth = None
 
@@ -43,7 +44,15 @@ class _Auth(object):
             print(err)
 
         if self.gbdx_connection is not None:
-            self.gbdx_connection.mount(VIRTUAL_IPE_URL, HTTPAdapter(max_retries=5)) #status_forcelist=[500, 502, 504]))
+            # validate token may respond with 401 in new auth after migration, need to re-try
+            retries = Retry(total=3,
+                            backoff_factor=0.1,
+                            status_forcelist=[401])
+
+            # status_forcelist=[500, 502, 504]))
+            self.gbdx_connection.mount(VIRTUAL_IPE_URL, HTTPAdapter(max_retries=5))
+            # status_forcelist=[401]))
+            self.gbdx_connection.mount(self.root_url, HTTPAdapter(max_retries=retries))
         self.gbdx_futures_session = FuturesSession(session=self.gbdx_connection, max_workers=64)
         if 'GBDX_USER' in os.environ:
             header = {'User-Agent': os.environ['GBDX_USER']}
