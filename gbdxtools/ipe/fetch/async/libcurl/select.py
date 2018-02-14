@@ -46,9 +46,9 @@ def _setup_curl(url, token, index, NOSIGNAL=1, CONNECTTIMEOUT=120, TIMEOUT=300):
     return (_curl, fp)
 
 def load_urls(collection, shape=(8,256,256), max_retries=MAX_RETRIES):
+    print(collection)
     print("doing mc fetch")
     mc = pycurl.CurlMulti()
-    mc.setopt(pycurl.M_PIPELINING, True)
     nhandles = len(collection)
     results, cmap = {}, {}
     for url, token, index in collection:
