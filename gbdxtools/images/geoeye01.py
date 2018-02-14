@@ -85,7 +85,7 @@ class GE01(WVImage):
         else: 
             _op = ipe.TOAReflectance
         _ops = [ipe.Format(ipe.MultiplyConst(_op(dn), constants=json.dumps([10000])), dataType="1") for dn in dn_ops]
-        acomp_op = ipe.GeospatialMosaic(*_ops, **mosaic_params)
+        acomp_op = ipe.Format(ipe.GeospatialMosaic(*_ops, **mosaic_params), dataType="4")
 
         return {"ortho": ortho_op, "acomp": acomp_op}
 
