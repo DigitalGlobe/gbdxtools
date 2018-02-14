@@ -8,11 +8,6 @@ from collections import OrderedDict
 
 import operator
 from functools import partial
-try:
-    from functools import lru_cache # python 3
-except ImportError:
-    from cachetools.func import lru_cache
-
 import numpy as np
 
 import gbdxtools as gbdx
@@ -36,7 +31,6 @@ except NameError:
     xrange = range
 
 NAMESPACE_UUID = uuid.NAMESPACE_DNS
-load_url = lru_cache(load_url, maxsize=128)
 
 class ContentHashedDict(dict):
     @property
