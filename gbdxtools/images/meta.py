@@ -49,6 +49,7 @@ try:
 except NameError:
     xrange = range
 
+num_workers = int(os.environ.get("GBDX_THREADS", 8))
 
 @add_metaclass(abc.ABCMeta)
 class DaskMeta(object):
@@ -163,8 +164,7 @@ class DaskImage(da.Array):
         arr = self
         if bands is not None:
             arr = self[bands, ...]
-        with dask.set_options(get=dask.get):
-            return arr.compute()
+        return arr.compute(num_workers=num_workers)
 
     def randwindow(self, window_shape):
         """
