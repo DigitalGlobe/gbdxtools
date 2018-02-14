@@ -36,52 +36,8 @@ except NameError:
     xrange = range
 
 NAMESPACE_UUID = uuid.NAMESPACE_DNS
+load_url = lru_cache(load_url, maxsize=128)
 
-<<<<<<< HEAD
-=======
-
-@lru_cache(maxsize=128)
-def load_url(url, token, shape=(8, 256, 256)):
-    """ Loads a geotiff url inside a thread and returns as an ndarray """
-    # print("calling load_url ({})".format(url))
-    _, ext = os.path.splitext(urlparse(url).path)
-    success = False
-    for i in xrange(MAX_RETRIES):
-        thread_id = threading.current_thread().ident
-        _curl = _curl_pool[thread_id]
-        _curl.setopt(_curl.URL, url)
-        _curl.setopt(pycurl.NOSIGNAL, 1)
-        _curl.setopt(pycurl.HTTPHEADER, ['Authorization: Bearer {}'.format(token)])
-        with NamedTemporaryFile(prefix="gbdxtools", suffix=ext, delete=False) as temp: # TODO: apply correct file extension
-            _curl.setopt(_curl.WRITEDATA, temp.file)
-            _curl.perform()
-            code = _curl.getinfo(pycurl.HTTP_CODE)
-            try:
-                if(code != 200):
-                    raise TypeError("Request for {} returned unexpected error code: {}".format(url, code))
-                temp.file.flush()
-                temp.close()
-                arr = imread(temp.name)
-                if len(arr.shape) == 3:
-                    arr = np.rollaxis(arr, 2, 0)
-                else:
-                    arr = np.expand_dims(arr, axis=0)
-                success = True
-                return arr
-            except Exception as e:
-                print(e)
-                _curl.close()
-                del _curl_pool[thread_id]
-            finally:
-                temp.close()
-                os.remove(temp.name)
-
-    if success is False:
-        arr = np.zeros(shape, dtype=np.float32)
-    return arr
-
-
->>>>>>> dev
 class ContentHashedDict(dict):
     @property
     def _id(self):
@@ -220,66 +176,6 @@ class Op(DaskProps, DaskMeta):
             return self._ipe_graph
 
         return graph
-
-<<<<<<< HEAD
-    @property
-    def metadata(self):
-        assert self.graph() is not None
-        if self._ipe_meta is not None:
-            return self._ipe_meta
-        if self._interface is not None:
-            self._ipe_meta = get_ipe_metadata(self._interface.gbdx_futures_session, self._ipe_id, self._id)
-        return self._ipe_meta
-
-    @property
-    def dask(self):
-        token = self._interface.gbdx_connection.access_token
-        _chunks = self.chunks
-        _name = self.name
-        img_md = self.metadata["image"]
-#        dsk = {(_name, 0, y - img_md['minTileY'], x - img_md['minTileX']): [url, token, [0, y - img_md['minTileY'], x - img_md['minTileX']]]
-#                for (y, x), url in self._collect_urls().items()}
-        dsk = {(_name, 0, y - img_md['minTileY'], x - img_md['minTileX']): (load_url, url, token, _chunks)
-               for (y, x), url in self._collect_urls().items()}
-        return dsk
-
-    @property
-    def name(self):
-        return "image-{}".format(self._id)
-
-    @property
-    def chunks(self):
-        img_md = self.metadata["image"]
-        return (img_md["numBands"], img_md["tileYSize"], img_md["tileXSize"])
-
-    @property
-    def dtype(self):
-        try:
-            data_type = self.metadata["image"]["dataType"]
-            return IPE_TO_DTYPE[data_type]
-        except KeyError:
-            raise TypeError("Metadata indicates an unrecognized data type: {}".format(data_type))
-
-    @property
-    def shape(self):
-        img_md = self.metadata["image"]
-        return (img_md["numBands"],
-                (img_md["maxTileY"] - img_md["minTileY"] + 1)*img_md["tileYSize"],
-                (img_md["maxTileX"] - img_md["minTileX"] + 1)*img_md["tileXSize"])
-
-    def _ipe_tile(self, x, y, ipe_id, _id):
-        return "{}/tile/{}/{}/{}/{}/{}.tif".format(VIRTUAL_IPE_URL, "idaho-virtual", ipe_id, _id, x, y)
-
-    def _collect_urls(self):
-        img_md = self.metadata["image"]
-        ipe_id = self._ipe_id
-        _id = self._id
-        return {(y, x): self._ipe_tile(x, y, ipe_id, _id)
-                for y in xrange(img_md['minTileY'], img_md["maxTileY"]+1)
-                for x in xrange(img_md['minTileX'], img_md["maxTileX"]+1)}
-
-=======
->>>>>>> dev
 
 class Ipe(object):
     def __getattr__(self, name):

@@ -21,8 +21,6 @@ try:
 except NameError:
     xrange = range
 
-<<<<<<< HEAD
-=======
 class GraphMeta(DaskProps, DaskMeta):
     def __init__(self, graph_id, node_id=None, **kwargs):
         assert graph_id is not None
@@ -50,22 +48,16 @@ class GraphMeta(DaskProps, DaskMeta):
 def GraphImage(graph, node):
     assert graph is not None
     return IpeImage(None, graph_id=graph, node_id=node)
->>>>>>> dev
 
 class IpeImage(DaskImage, GeoImage, PlotMixin):
     _default_proj = "EPSG:4326"
 
     def __new__(cls, op, **kwargs):
-<<<<<<< HEAD
-        assert isinstance(op, DaskMeta)
-        self = super(IpeImage, cls).create(op, **kwargs)
-=======
         if op is not None:
             assert isinstance(op, DaskMeta)
         elif "graph_id" in kwargs:
             op = GraphMeta(**kwargs)
         self = super(IpeImage, cls).create(op)
->>>>>>> dev
         self._ipe_op = op
         if self.ipe.metadata["georef"] is None:
             tfm = RatPolyTransform.from_rpcs(self.ipe.metadata["rpcs"])
