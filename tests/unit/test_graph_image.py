@@ -41,9 +41,9 @@ class IpeImageTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        #mock_gbdx_session = get_mock_gbdx_session(token='dymmytoken')
-        #cls.gbdx = Interface(gbdx_connection=mock_gbdx_session)
-        cls.gbdx = Interface()
+        mock_gbdx_session = get_mock_gbdx_session(token='dymmytoken')
+        cls.gbdx = Interface(gbdx_connection=mock_gbdx_session)
+        #cls.gbdx = Interface()
         cls._temp_path = tempfile.mkdtemp()
         print("Created: {}".format(cls._temp_path))
 
