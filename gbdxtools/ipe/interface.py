@@ -13,7 +13,6 @@ import numpy as np
 import gbdxtools as gbdx
 from gbdxtools.ipe.util import IPE_TO_DTYPE
 from gbdxtools.ipe.graph import VIRTUAL_IPE_URL, register_ipe_graph, get_ipe_metadata
-from gbdxtools.images.meta import DaskMeta
 from gbdxtools.auth import Auth
 from gbdxtools.ipe.fetch import easyfetch as load_url
 
@@ -105,7 +104,7 @@ class DaskProps(object):
                 for x in xrange(img_md['minTileX'], img_md["maxTileX"]+1)}
 
 
-class Op(DaskProps, DaskMeta):
+class Op(DaskProps):
     def __init__(self, name, interface=None):
         self._operator = name
         self._edges = []

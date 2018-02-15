@@ -21,7 +21,7 @@ try:
 except NameError:
     xrange = range
 
-class GraphMeta(DaskProps, DaskMeta):
+class GraphMeta(DaskProps):
     def __init__(self, graph_id, node_id=None, **kwargs):
         assert graph_id is not None
         self._ipe_id = graph_id
@@ -52,12 +52,7 @@ def GraphImage(graph, node):
 class IpeImage(DaskImage, GeoImage, PlotMixin):
     _default_proj = "EPSG:4326"
 
-    def __new__(cls, op, **kwargs):
-        if op is not None:
-            assert isinstance(op, DaskMeta)
-        elif "graph_id" in kwargs:
-            op = GraphMeta(**kwargs)
-        self = super(IpeImage, cls).create(op)
+    def __init__(self, op, **kwargs):
         self._ipe_op = op
         if self.ipe.metadata["georef"] is None:
             tfm = RatPolyTransform.from_rpcs(self.ipe.metadata["rpcs"])
@@ -94,34 +89,6 @@ class IpeImage(DaskImage, GeoImage, PlotMixin):
     def ntiles(self):
         size = float(self.ipe.metadata['image']['tileXSize'])
         return math.ceil((float(self.shape[-1]) / size)) * math.ceil(float(self.shape[1]) / size)
-
-    def __getitem__(self, geometry):
-        if isinstance(geometry, BaseGeometry) or getattr(geometry, "__geo_interface__", None) is not None:
-            image = GeoImage.__getitem__(self, geometry)
-            image._ipe_op = self._ipe_op
-            return image
-        else:
-            result = super(IpeImage, self).__getitem__(geometry)
-            dsk = self._cull(result.dask, result.__dask_keys__())
-            image = super(IpeImage, self.__class__).__new__(self.__class__,
-                                                            dsk, result.name, result.chunks,
-                                                            result.dtype, result.shape)
-
-            if all([isinstance(e, slice) for e in geometry]) and len(geometry) == len(self.shape):
-                xmin, ymin, xmax, ymax = geometry[2].start, geometry[1].start, geometry[2].stop, geometry[1].stop
-                xmin = 0 if xmin is None else xmin
-                ymin = 0 if ymin is None else ymin
-                xmax = self.shape[2] if xmax is None else xmax
-                ymax = self.shape[1] if ymax is None else ymax
-
-                g = ops.transform(self.__geo_transform__.fwd, box(xmin, ymin, xmax, ymax))
-                image.__geo_interface__ = mapping(g)
-                image.__geo_transform__ = self.__geo_transform__ + (xmin, ymin)
-            else:
-                image.__geo_interface__ = self.__geo_interface__
-                image.__geo_transform__ = self.__geo_transform__
-            image._ipe_op = self._ipe_op
-            return image
 
     def read(self, bands=None, quiet=False, **kwargs):
         if not quiet:
