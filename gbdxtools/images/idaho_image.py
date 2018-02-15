@@ -47,8 +47,8 @@ class IdahoImage(IpeImage):
         graph = {
             "1b": dn_op,
             "ortho": ipe.Orthorectify(dn_op, **params),
-            "acomp": ipe.Orthorectify(ipe.Acomp(dn_op), **params),
-            "toa_reflectance": ipe.Orthorectify(ipe.TOAReflectance(dn_op), **params)
+            "acomp": ipe.Format(ipe.Orthorectify(ipe.Acomp(dn_op), **params), dataType="4"),
+            "toa_reflectance": ipe.Format(ipe.Orthorectify(ipe.TOAReflectance(dn_op), **params), dataType="4")
         }
 
         return graph

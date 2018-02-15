@@ -16,7 +16,7 @@ with open(req_path) as f:
 # long_description=readme,
 
 setup(name='gbdxtools',
-      version='0.14.3',
+      version='0.14.4',
       description='Additional s3 functionality.',
       classifiers=[],
       keywords='',

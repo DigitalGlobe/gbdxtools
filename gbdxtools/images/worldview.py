@@ -115,11 +115,11 @@ class WVImage(IpeImage):
         ortho_op = ipe.GeospatialMosaic(*dn_ops, **mosaic_params)
 
         toa = [ipe.Format(ipe.MultiplyConst(ipe.TOAReflectance(dn), constants=json.dumps([10000])), dataType="1") for dn in dn_ops]
-        toa_reflectance_op = ipe.GeospatialMosaic(*toa, **mosaic_params)
-
-        if acomp and _bucket != 'idaho-images':
+        toa_reflectance_op = ipe.Format(ipe.GeospatialMosaic(*toa, **mosaic_params), dataType="4")
+       
+        if acomp and _bucket != 'idaho-images': 
             _ops = [ipe.Format(ipe.MultiplyConst(ipe.Acomp(dn), constants=json.dumps([10000])), dataType="1") for dn in dn_ops]
-            acomp_op = ipe.GeospatialMosaic(*_ops, **mosaic_params)
+            acomp_op = ipe.Format(ipe.GeospatialMosaic(*_ops, **mosaic_params), dataType="4")
         else:
             acomp_op = toa_reflectance_op
 
