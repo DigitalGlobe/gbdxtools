@@ -117,30 +117,6 @@ class DaskImage(da.Array):
         dsk1, _ = optimize.cull(dsk, keys)
         return dsk1
 
-    def __getattribute__(self, name):
-        fn = object.__getattribute__(self, name)
-        if(isinstance(fn, types.MethodType) and
-           any(name in C.__dict__ for C in self.__class__.__mro__)):
-            @wraps(fn)
-            def wrapped(*args, **kwargs):
-                result = fn(*args, **kwargs)
-                if isinstance(result, da.Array) and len(result.shape) in [2,3]:
-                    dsk = self._cull(result.dask, result.__dask_keys__())
-                    copy = super(DaskImage, self.__class__).__new__(self.__class__,
-                                                                    dsk, result.name, result.chunks,
-                                                                    result.dtype, result.shape)
-                    copy.__dict__.update(self.__dict__)
-                    try:
-                        copy.__dict__.update(result.__dict__)
-                    except AttributeError:
-                        # this means result was an object with __slots__
-                        pass
-                    return copy
-                return result
-            return wrapped
-        else:
-            return fn
-
     @classmethod
     def create(cls, dm, **kwargs):
         """
