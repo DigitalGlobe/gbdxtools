@@ -45,7 +45,7 @@ class _Auth(object):
 
         def refresh_token(r, *args, **kwargs):
             """
-            Requests a new token if 401, mainly for auth v2 migration
+            Requests a new token if 401, retries request, mainly for auth v2 migration
             :param r:
             :param args:
             :param kwargs:
@@ -54,21 +54,17 @@ class _Auth(object):
             if r.status_code == 401:
                 try:
                     gbdx_auth.get_session(kwargs.get('config_file'))
+                    r.request.hooks = None
+                    return self.gbdx_connection.send(r.request, **kwargs)
                 except Exception as e:
                     print("Error creating session from config, Reason {}".format(e.message))
 
         if self.gbdx_connection is not None:
-            # retry after getting a new token
-            retries = Retry(total=2,
-                            backoff_factor=0.1,
-                            status_forcelist=[401])
 
             self.gbdx_connection.hooks['response'].append(refresh_token)
 
             # status_forcelist=[500, 502, 504]))
             self.gbdx_connection.mount(VIRTUAL_IPE_URL, HTTPAdapter(max_retries=5))
-            # status_forcelist=[401]))
-            self.gbdx_connection.mount(self.root_url, HTTPAdapter(max_retries=retries))
 
         self.gbdx_futures_session = FuturesSession(session=self.gbdx_connection, max_workers=64)
 
