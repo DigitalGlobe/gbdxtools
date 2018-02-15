@@ -5,7 +5,7 @@ Contact: chris.helm@digitalglobe.com
 """
 from __future__ import print_function
 from gbdxtools import WV01, WV02, WV03_SWIR, WV03_VNIR, LandsatImage, IkonosImage, GE01, QB02, Sentinel2
-from gbdxtools.images.ipe_image import IpeImage
+from gbdxtools.images.ipe_image import IpeImage, GraphMeta
 from gbdxtools.vectors import Vectors
 from gbdxtools.ipe.error import UnsupportedImageType
 
@@ -33,7 +33,7 @@ class CatalogImage(object):
         :bounds: Spatial bounds of the image
         :proj: The image projection
     '''
-    def __new__(cls, cat_id, **kwargs):
+    def __new__(cls, cat_id=None, **kwargs):
         inst = cls._image_by_type(cat_id, **kwargs)
         fplg = kwargs.get("fetch_plugin")
         if fplg:
@@ -44,6 +44,11 @@ class CatalogImage(object):
 
     @classmethod
     def _image_by_type(cls, cat_id, **kwargs):
+        if cat_id is None:
+            try:
+                return IpeImage(GraphMeta(kwargs["graph_id"], **kwargs))
+            except KeyError:
+                raise ValueError("Catalog Images must be initiated by a Catalog Id or an RDA Graph Id")
         vectors = Vectors()
         aoi = wkt.dumps(box(-180, -90, 180, 90))
         query = "item_type:GBDXCatalogRecord AND attributes.catalogID:{}".format(cat_id)
