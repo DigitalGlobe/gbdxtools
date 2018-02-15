@@ -5,7 +5,6 @@ from gbdx_auth import gbdx_auth
 import logging
 
 from gbdxtools.ipe.graph import VIRTUAL_IPE_URL
-from urllib3.util.retry import Retry
 
 auth = None
 
@@ -43,7 +42,7 @@ class _Auth(object):
         except Exception as err:
             print(err)
 
-        def refresh_token(r, *args, **kwargs):
+        def expire_token(r, *args, **kwargs):
             """
             Requests a new token if 401, retries request, mainly for auth v2 migration
             :param r:
@@ -53,15 +52,22 @@ class _Auth(object):
             """
             if r.status_code == 401:
                 try:
-                    gbdx_auth.get_session(kwargs.get('config_file'))
+                    # remove hooks so it doesn't get into infinite loop
                     r.request.hooks = None
-                    return self.gbdx_connection.send(r.request, **kwargs)
+                    # expire the token
+                    gbdx_auth.expire_token(token_to_expire=self.gbdx_connection.token)
+                    # re-init the session
+                    self.gbdx_connection = gbdx_auth.get_session(kwargs.get('config_file'))
+                    # make original request, triggers new token request first
+                    return self.gbdx_connection.request(method=r.request.method, url=r.request.url)
+
                 except Exception as e:
-                    print("Error creating session from config, Reason {}".format(e.message))
+                    r.request.hooks = None
+                    print("Error expiring token from session, Reason {}".format(e.message))
 
         if self.gbdx_connection is not None:
 
-            self.gbdx_connection.hooks['response'].append(refresh_token)
+            self.gbdx_connection.hooks['response'].append(expire_token)
 
             # status_forcelist=[500, 502, 504]))
             self.gbdx_connection.mount(VIRTUAL_IPE_URL, HTTPAdapter(max_retries=5))
