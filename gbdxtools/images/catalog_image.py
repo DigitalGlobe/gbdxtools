@@ -46,7 +46,7 @@ class CatalogImage(object):
     def _image_by_type(cls, cat_id, **kwargs):
         if cat_id is None:
             try:
-                return IpeImage(GraphMeta(kwargs["graph_id"], **kwargs))
+                return IpeImage(GraphMeta(**kwargs))
             except KeyError:
                 raise ValueError("Catalog Images must be initiated by a Catalog Id or an RDA Graph Id")
         vectors = Vectors()

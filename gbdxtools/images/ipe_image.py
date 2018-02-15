@@ -48,8 +48,9 @@ class GraphMeta(DaskProps, DaskMeta):
         return self._graph
 
 def GraphImage(graph, node):
+    from gbdxtools.images.catalog_image import CatalogImage
     assert graph is not None
-    return IpeImage(None, graph_id=graph, node_id=node)
+    return CatalogImage(None, graph_id=graph, node_id=node)
 
 class IpeImage(DaskImage, GeoImage, PlotMixin):
     _default_proj = "EPSG:4326"
