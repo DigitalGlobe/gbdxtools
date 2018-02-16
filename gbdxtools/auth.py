@@ -55,7 +55,8 @@ class _Auth(object):
                     # remove hooks so it doesn't get into infinite loop
                     r.request.hooks = None
                     # expire the token
-                    gbdx_auth.expire_token(token_to_expire=self.gbdx_connection.token)
+                    gbdx_auth.expire_token(token_to_expire=self.gbdx_connection.token,
+                                           config_file=kwargs.get('config_file'))
                     # re-init the session
                     self.gbdx_connection = gbdx_auth.get_session(kwargs.get('config_file'))
                     # make original request, triggers new token request first

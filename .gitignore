@@ -8,3 +8,4 @@ dist/
 /venv
 /.idea/
 chip.tif
+.pytest_cache
