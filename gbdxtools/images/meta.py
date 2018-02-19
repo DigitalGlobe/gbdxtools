@@ -49,7 +49,9 @@ try:
 except NameError:
     xrange = range
 
-num_workers = int(os.environ.get("GBDX_THREADS", 8))
+threads = int(os.environ.get('GBDX_THREADS', 8))
+threaded_get = partial(dask.threaded.get, num_workers=threads)
+
 
 @add_metaclass(abc.ABCMeta)
 class DaskMeta(object):
@@ -164,7 +166,7 @@ class DaskImage(da.Array):
         arr = self
         if bands is not None:
             arr = self[bands, ...]
-        return arr.compute(num_workers=num_workers)
+        return arr.compute(get=threaded_get)
 
     def randwindow(self, window_shape):
         """
@@ -587,7 +589,7 @@ class PlotMixin(object):
         if hasattr(data, 'read'):
             return data.read(**kwargs)
         else:
-            return data.compute()
+            return data.compute(get=threaded_get)
 
     def _single_band(self, **kwargs):
         return self._read(self[0,:,:], **kwargs)
