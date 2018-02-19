@@ -4,8 +4,45 @@ try:
 except:
     has_rasterio = False
 
+try:
+    from cytoolz import concatv
+except ImportError:
+    from toolz import concatv
+
+from functools import partial
+import os
+
+import dask
+from dask.array.core import insert_to_ooc, sharedict
+from dask.base import tokenize
+from dask.delayed import Delayed
+
 import numpy as np
-from dask.array import store
+
+threads = int(os.environ.get('GBDX_THREADS', 64))
+threaded_get = partial(dask.threaded.get, num_workers=threads)
+
+
+def store(source, target, compute=True, **kwargs):
+    """
+      Custom implementation of the Dask's `store`. 
+      Simplifies the logic and supports passing threaded_get to new dask's compute.
+    """
+    store_dsks = insert_to_ooc(source, target)
+    store_keys = store_dsks.keys()
+    store_dsks_mrg = sharedict.merge(*concatv(
+        [store_dsks], [source.dask]
+    ))
+
+    name = 'store-' + tokenize(*store_keys)
+    dsk = sharedict.merge({name: store_keys}, store_dsks_mrg)
+    result = Delayed(name, dsk)
+
+    if compute:
+        result.compute(get=threaded_get)
+        return None
+    else:
+        return result
 
 class rio_writer(object):
     def __init__(self, dst):
