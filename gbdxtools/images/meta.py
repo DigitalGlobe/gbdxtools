@@ -80,9 +80,15 @@ class DaskImage(da.Array):
             dm = DaskMeta(**dm)
         elif isinstance(dm, DaskMeta):
             pass
+        elif dm.__class__.__name__ == "Op":
+            itr = [dm.dask, dm.name, dm.chunks, dm.dtype, dm.shape]
+            dm = DaskMeta._make(itr)
         else:
             raise ValueError("{} must be initialized with a DaskMeta, a dask array, or a dict with DaskMeta fields".format(cls.__name__))
-        return da.Array(cls, *dm.values)
+        self = da.Array.__new__(cls, *dm.values)
+        self.__geo_transform__ = kwargs.get("__geo_transform__")
+        self.__geo_interface__ = kwargs.get("__get_interface__")
+        return self
 
     @property
     def __daskmeta__(self):
@@ -230,10 +236,8 @@ class PlotMixin(object):
 class GeoDaskImage(DaskImage, Container, PlotMixin):
     _default_proj = "EPSG:4326"
     def __init__(self, dm, **kwargs):
-        self.__geo_transform__ = kwargs.get("geo_transform")
-        self.__geo_interface__ = kwargs.get("get_interface")
+        pass
 
-    @property
     def asShape(self):
         return asShape(self)
 
