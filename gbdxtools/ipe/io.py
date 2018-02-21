@@ -34,11 +34,13 @@ def to_geotiff(arr, path='./output.tif', proj=None, bands=None, **kwargs):
     except:
         tfm = None
 
+    dtype = arr.dtype.name if arr.dtype.name != 'int8' else 'uint8' 
+
     meta = {
         'width': arr.shape[2],
         'height': arr.shape[1],
         'count': arr.shape[0],
-        'dtype': arr.dtype.name,
+        'dtype': dtype,
         'driver': 'GTiff',
         'transform': tfm
     }
