@@ -234,7 +234,7 @@ class GeoDaskImage(DaskImage, Container, PlotMixin):
         self.__geo_interface__ = kwargs.get("__get_interface__").
 
     @property
-    def polygon(self):
+    def asShape(self):
         return asShape(self)
 
     @property
