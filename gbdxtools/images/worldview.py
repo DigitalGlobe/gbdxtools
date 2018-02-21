@@ -1,6 +1,5 @@
 """
 GBDX Catalog Image Interface.
-
 Contact: chris.helm@digitalglobe.com
 """
 from __future__ import print_function
@@ -27,68 +26,25 @@ band_types = {
     'pan': 'PAN'
 }
 
-
-def rda_factory(klass, _id, **kwargs):
-    klass = (klassfactory(_id, **kwargs))
-    prod = klass._build_standard_products(_id, **options)
-    return klass(DaskMeta._make([prod.dask, prod.name, prod.chunks, prod.dtype, prod.shape]), **kwargs)
-
-rda_options = ["band_type",
-               "product",
-               "proj",
-               "pansharpen",
-               "gsd",
-               "acomp",
-               "bucket"
-               ]
-
-
-class BaseImageFactory(object):
-    defaults = {"band_type": "MS",
-                "product": "toa_reflectance",
-                "proj": "EPSG:4326",
-                "pansharpen": False,
-                "gsd": None,
-                "acomp": False,
-                "bucket": "idaho-images"
-                }
-    def __init__(self, _id, options):
-        for attrname in rda_options:
-            attrval = options.get(attrname, self.defaults[attrname])
-            setattr(self, attrname, attrval)
-        self._id = _id
-
-    @property
-    def options(self):
-        return {attrname: getattr(self, attrname) for attrname in rda_options}
-
-    def get_product(self, product):
-        return self.__class__(self._id, proj=self.proj, product=product)
-
-    def build_standard_products(self):
-        return self._build_standard_products(self._id, **self.options)
-
-
-class WVImageFactory(BaseImageFactory):
+class WVImage(IpeImage):
     _parts = None
 
-    def __init__(self, _id, options):
-        options = self._preprocess(options)
-        super(WVImageFactory, self).__init__(_id, options)
+    def __new__(cls, cat_id, **kwargs):
+        options = {
+            "band_type": kwargs.get("band_type", "MS"),
+            "product": kwargs.get("product", "toa_reflectance"),
+            "proj": kwargs.get("proj", "EPSG:4326"),
+            "pansharpen": kwargs.get("pansharpen", False),
+            "gsd": kwargs.get("gsd", None),
+            "acomp": kwargs.get("acomp", False)
+        }
 
-    @property
-    def cat_id(self):
-        return self._id
-
-    @classmethod
-    def _preprocess(cls, options):
-        if options.get("acomp"):
+        if options["acomp"]:
             options["product"] = "acomp"
-            if options["pansharpen"]:
-                options["band_type"] = "MS"
-                options["product"] = "pansharpened"
-        return options
 
+        if options["pansharpen"]:
+            options["band_type"] = "MS"
+            options["product"] = "pansharpened"
 
         standard_products = cls._build_standard_products(cat_id,
                                                          options["band_type"],
@@ -101,7 +57,7 @@ class WVImageFactory(BaseImageFactory):
         standard_products["pansharpened"] = ipe.LocallyProjectivePanSharpen(ms, pan)
 
         try:
-            self = super(WVImage, cls).__new__(cls, standard_products[options["product"]], **kwargs)
+            self = super(WVImage, cls).__new__(cls, standard_products[options["product"]])
         except KeyError as e:
             print(e)
             print("Specified product not implemented: {}".format(options["product"]))
@@ -123,6 +79,9 @@ class WVImageFactory(BaseImageFactory):
                                       acomp=self.options["acomp"])
                            for rec in self._find_parts(self.cat_id, self.options["band_type"])]
         return self._parts
+
+    def get_product(self, product):
+        return self.__class__(self.cat_id, proj=self.proj, product=product)
 
     @staticmethod
     def _find_parts(cat_id, band_type):
@@ -155,17 +114,20 @@ class WVImageFactory(BaseImageFactory):
         ortho_op = ipe.GeospatialMosaic(*dn_ops, **mosaic_params)
 
         toa = [ipe.Format(ipe.MultiplyConst(ipe.TOAReflectance(dn), constants=json.dumps([10000])), dataType="1") for dn in dn_ops]
-        toa_reflectance_op = ipe.GeospatialMosaic(*toa, **mosaic_params)
+        toa_reflectance_op = ipe.Format(ipe.GeospatialMosaic(*toa, **mosaic_params), dataType="4")
 
         if acomp and _bucket != 'idaho-images':
             _ops = [ipe.Format(ipe.MultiplyConst(ipe.Acomp(dn), constants=json.dumps([10000])), dataType="1") for dn in dn_ops]
-            acomp_op = ipe.GeospatialMosaic(*_ops, **mosaic_params)
+            acomp_op = ipe.Format(ipe.GeospatialMosaic(*_ops, **mosaic_params), dataType="4")
         else:
             acomp_op = toa_reflectance_op
 
         return {"ortho": ortho_op, "toa_reflectance": toa_reflectance_op, "acomp": acomp_op}
 
 class WV03_SWIR(WVImage):
+    def __new__(cls, cat_id, **kwargs):
+        return super(WV03_SWIR, cls).__new__(cls, cat_id, **kwargs)
+
     @staticmethod
     def _find_parts(cat_id, band_type):
         vectors = Vectors()
@@ -174,10 +136,13 @@ class WV03_SWIR(WVImage):
         return sorted(vectors.query(aoi, query=query), key=lambda x: x['properties']['id'])
 
 class WV03_VNIR(WVImage):
-    pass
+    def __new__(cls, cat_id, **kwargs):
+        return super(WV03_VNIR, cls).__new__(cls, cat_id, **kwargs)
+
 
 class WV02(WVImage):
-    pass
+    def __new__(cls, cat_id, **kwargs):
+        return super(WV02, cls).__new__(cls, cat_id, **kwargs)
 
 class WV01(WVImage):
     def __new__(cls, cat_id, **kwargs):
