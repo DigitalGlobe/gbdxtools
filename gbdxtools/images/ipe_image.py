@@ -1,7 +1,7 @@
 from __future__ import print_function
 import math
 
-from gbdxtools.images.meta import DaskMeta, DaskImage, GeoImage, PlotMixin
+from gbdxtools.images.meta import DaskMeta, GeoDaskImage
 from gbdxtools.ipe.util import RatPolyTransform, AffineTransform
 from gbdxtools.ipe.interface import DaskProps
 from gbdxtools.ipe.graph import get_ipe_graph
@@ -49,7 +49,7 @@ def GraphImage(graph, node):
     assert graph is not None
     return IpeImage(None, graph_id=graph, node_id=node)
 
-class IpeImage(DaskImage, GeoImage, PlotMixin):
+class IpeImage(GeoDaskImage):
     _default_proj = "EPSG:4326"
 
     def __init__(self, op, **kwargs):

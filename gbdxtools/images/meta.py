@@ -230,8 +230,8 @@ class PlotMixin(object):
 class GeoDaskImage(DaskImage, Container, PlotMixin):
     _default_proj = "EPSG:4326"
     def __init__(self, dm, **kwargs):
-        self.__geo_transform__ = kwargs.get("__geo_transform__")
-        self.__geo_interface__ = kwargs.get("__get_interface__").
+        self.__geo_transform__ = kwargs.get("geo_transform")
+        self.__geo_interface__ = kwargs.get("get_interface")
 
     @property
     def asShape(self):
@@ -385,7 +385,8 @@ class GeoDaskImage(DaskImage, Container, PlotMixin):
 
         gi = mapping(full_bounds)
         gt = AffineTransform(gtf, proj)
-        image = self.__class__(daskmeta, "__geo_interface__" = gi, "__geo_transform__" = gt)
+        print(self.__class__)
+        image = self.__class__(daskmeta, __geo_interface__ = gi, __geo_transform__ = gt)
         return image[box(*output_bounds)]
 
     def _warp(self, geometry, gsd, dem, proj, dtype, buf=0):
@@ -498,9 +499,8 @@ class GeoDaskImage(DaskImage, Container, PlotMixin):
                 assert g in self, "Image does not contain specified geometry {} not in {}".format(g.bounds, self.bounds)
             except AssertionError as ae:
                 warnings.warn(ae.args)
-
-           bounds = ops.transform(self.__geo_transform__.rev, g).bounds
-           result, xmin, ymin = self._slice_padded(bounds)
+            bounds = ops.transform(self.__geo_transform__.rev, g).bounds
+            result, xmin, ymin = self._slice_padded(bounds)
         else:
             nbands, ysize, xsize = self.shape
             if all([isinstance(e, slice) for e in geometry]) and len(geometry) == len(self.shape):
@@ -512,14 +512,14 @@ class GeoDaskImage(DaskImage, Container, PlotMixin):
                 if ymin > ysize and xmin > xsize:
                     raise IndexError("Index completely out of image bounds")
             else:
-                raise ValueError("Index arg must be {} slice objects or of type shapely.geometry.BaseGeometry".format(len(self.shape))).
+                raise ValueError("Index arg must be {} slice objects or of type shapely.geometry.BaseGeometry".format(len(self.shape)))
 
             g = ops.transform(self.__geo_transform__.fwd, box(xmin, ymin, xmax, ymax))
             result = super(GeoDaskImage, self).__getitem__(geometry)
 
         gi = mapping(g)
         gt = self.__geo_transform__ + (xmin, ymin)
-        image = self.__class__(result, "__geo_interface__" = gi, "__geo_transform__" = gt)
+        image = self.__class__(result, __geo_interface__ = gi, __geo_transform__ = gt)
         return image
 
 

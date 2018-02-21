@@ -21,7 +21,7 @@ from scipy.misc import imread
 
 import mercantile
 
-from gbdxtools.images.meta import DaskImage, DaskMeta, GeoImage, PlotMixin
+from gbdxtools.images.meta import GeoDaskImage
 from gbdxtools.ipe.util import AffineTransform
 
 from shapely.geometry import mapping, box
@@ -76,7 +76,7 @@ def raise_aoi_required():
     raise EphemeralImage("Image subset must be specified before it can be made concrete.")
 
 
-class TmsMeta(DaskMeta):
+class TmsMeta(GeoDaskImage):
     def __init__(self, access_token=os.environ.get("DG_MAPS_API_TOKEN"),
                  url="https://api.mapbox.com/v4/digitalglobe.nal0g75k/{z}/{x}/{y}.png",
                  zoom=22, bounds=None):
@@ -179,7 +179,7 @@ class TmsMeta(DaskMeta):
         return minx, miny, maxx, maxy
 
 
-class TmsImage(DaskImage, GeoImage, PlotMixin):
+class TmsImage(GeoDaskImage):
     _default_proj = "EPSG:3857"
 
     def __new__(cls, access_token=os.environ.get("DG_MAPS_API_TOKEN"),
