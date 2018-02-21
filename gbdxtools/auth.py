@@ -20,7 +20,7 @@ class _Auth(object):
     gbdx_connection = None
     root_url = 'https://geobigdata.io'
 
-    def __init__(self, **kw):
+    def __init__(self, **kwargs):
         self.logger = logging.getLogger('gbdxtools')
         self.logger.setLevel(logging.ERROR)
         self.console_handler = logging.StreamHandler()
@@ -30,26 +30,26 @@ class _Auth(object):
         self.logger.addHandler(self.console_handler)
         self.logger.info('Logger initialized')
 
-        if 'host' in kw:
-            self.root_url = 'https://%s' % kw.get('host')
+        if 'host' in kwargs:
+            self.root_url = 'https://%s' % kwargs.get('host')
         try:
-            if (kw.get('username') and kw.get('password') and
-                    kw.get('client_id') and kw.get('client_secret')):
-                self.gbdx_connection = gbdx_auth.session_from_kwargs(**kw)
-            elif kw.get('gbdx_connection'):
-                self.gbdx_connection = kw.get('gbdx_connection')
+            if (kwargs.get('username') and kwargs.get('password') and
+                    kwargs.get('client_id') and kwargs.get('client_secret')):
+                self.gbdx_connection = gbdx_auth.session_from_kwargs(**kwargs)
+            elif kwargs.get('gbdx_connection'):
+                self.gbdx_connection = kwargs.get('gbdx_connection')
             elif self.gbdx_connection is None:
                 # This will throw an exception if your .ini file is not set properly
-                self.gbdx_connection = gbdx_auth.get_session(kw.get('config_file'))
+                self.gbdx_connection = gbdx_auth.get_session(kwargs.get('config_file'))
         except Exception as err:
             print(err)
 
-        def expire_token(r, *args, **kwargs):
+        def expire_token(r, *args, **kw):
             """
             Requests a new token if 401, retries request, mainly for auth v2 migration
             :param r:
             :param args:
-            :param kwargs:
+            :param kw:
             :return:
             """
             if r.status_code == 401:
@@ -58,9 +58,9 @@ class _Auth(object):
                     r.request.hooks = None
                     # expire the token
                     gbdx_auth.expire_token(token_to_expire=self.gbdx_connection.token,
-                                           config_file=kw.get('config_file'))
+                                           config_file=kwargs.get('config_file'))
                     # re-init the session
-                    self.gbdx_connection = gbdx_auth.get_session(kw.get('config_file'))
+                    self.gbdx_connection = gbdx_auth.get_session(kwargs.get('config_file'))
                     # make original request, triggers new token request first
                     return self.gbdx_connection.request(method=r.request.method, url=r.request.url)
 
