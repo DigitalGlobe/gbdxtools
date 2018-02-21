@@ -1,5 +1,6 @@
 from gbdxtools import Interface
 from auth_mock import get_mock_gbdx_session
+import os
 import vcr
 import tempfile
 import unittest
@@ -32,7 +33,7 @@ user_password = your_password
 """
 
 # create temp gbdx-config file
-temp = tempfile.NamedTemporaryFile(suffix=".ini", mode="w+t")
+temp = tempfile.NamedTemporaryFile(dir=os.getcwd(), suffix=".ini", mode="w+t")
 # write the data
 temp.write(data)
 temp.seek(0)
