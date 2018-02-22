@@ -33,7 +33,7 @@ user_password = your_password
 """
 
 # create temp gbdx-config file
-temp = tempfile.NamedTemporaryFile(dir=os.getcwd(), suffix=".ini", mode="w+t", delete=False)
+temp = tempfile.NamedTemporaryFile(prefix="gbdx-auth", suffix=".ini", mode="w+t", delete=False)
 # write the data
 temp.write(data)
 temp.seek(0)
