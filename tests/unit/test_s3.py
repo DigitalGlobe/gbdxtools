@@ -47,9 +47,9 @@ class S3Tests(unittest.TestCase):
         assert "S3_access_key" in s.info.keys()
         assert "S3_session_token" in s.info.keys()
 
-    @vcr.use_cassette(cassette_name, filter_headers=['authorization'])
-    def test_download(self):
-        location = 'gbdxtools/ski_areas.geojson'
-        s = S3()
-        s.download(location, local_dir=self._temp_path)
-        assert os.path.isfile(os.path.join(self._temp_path, 'ski_areas.geojson'))
+    #@vcr.use_cassette(cassette_name, filter_headers=['authorization'])
+    #def test_download(self):
+    #    location = 'gbdxtools/ski_areas.geojson'
+    #    s = S3()
+    #    s.download(location, local_dir=self._temp_path)
+    #    assert os.path.isfile(os.path.join(self._temp_path, 'ski_areas.geojson'))
