@@ -178,12 +178,15 @@ class Idaho(object):
             for partnum, part in images['parts'].items():
                 if 'PAN' in part.keys():
                     pan_id = part['PAN']['id']
+                    bucket = part['PAN']['bucket']
                 if 'WORLDVIEW_8_BAND' in part.keys():
                     ms_id = part['WORLDVIEW_8_BAND']['id']
                     num_bands = 8
+                    bucket = part['WORLDVIEW_8_BAND']['bucket']
                 elif 'RGBN' in part.keys():
                     ms_id = part['RGBN']['id']
                     num_bands = 4
+                    bucket = part['RGBN']['bucket']
 
         # specify band information
         band_str = ''
@@ -200,7 +203,7 @@ class Idaho(object):
         # specify location information
         location_str = '&upperLeft={}&lowerRight={}'.format(t2s2((W, N)), t2s2((E, S)))
 
-        service_url = 'https://idaho.geobigdata.io/v1/chip/bbox/idaho-images/'
+        service_url = 'https://idaho.geobigdata.io/v1/chip/bbox/' + bucket + '/'
         url = service_url + band_str + location_str
         url += '&format=' + chip_format + '&token=' + self.gbdx_connection.access_token
         r = requests.get(url)
