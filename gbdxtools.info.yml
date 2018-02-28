@@ -14,6 +14,8 @@ documentation:
     url: http://gbdxtools.readthedocs.io/en/latest/
   - type: external
     url: https://github.com/DigitalGlobe/gbdxtools/tree/master/examples
+  - type: external
+    url: https://github.com/DigitalGlobe/gbdxtools/blob/master/README.rst
 
 dependencies: 
   - name: gbdx-auth
