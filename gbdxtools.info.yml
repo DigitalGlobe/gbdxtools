@@ -2,6 +2,7 @@ name: gbdxtools
 description: Open source python SDK for GBDX.  Discover & order imagery, operate GBDX workflows, create AnswerFactory recipes, access & manipulate pixels.
 source: https://github.com/digitalglobe/gbdxtools
 team: GBDX Team
+language: python
 
 poc:
   - Name: Chris Helm
