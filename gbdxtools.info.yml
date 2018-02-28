@@ -9,7 +9,6 @@ poc:
     email: nricklin@digitalglobe.com
   - name: Chris Helm
     email: chelm@digitalglobe.com
-  - pagerduty: asdf
 
 documentation:
   - type: external
