@@ -44,7 +44,7 @@ class TestAuthRetry(unittest.TestCase):
     def setUpClass(cls):
         token = {"token_type": "Bearer", "refresh_token": "dummyToken", "access_token": "dummytoken",
                  "scope": ["read", "write"],
-                 "expires_in": 604800, "expires_at": 1519399815.364629}
+                 "expires_in": 604800, "expires_at": 2529702305}
 
         mock_gbdx_session = get_mock_gbdx_session(token=token)
         cls.gbdx = Interface(gbdx_connection=mock_gbdx_session, config_file=temp.name)
