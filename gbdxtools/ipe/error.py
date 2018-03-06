@@ -29,3 +29,6 @@ class MissingMetadata(Exception):
 
 class MissingIdahoImages(Exception):
     pass
+
+class AcompUnavailable(Exception):
+    pass

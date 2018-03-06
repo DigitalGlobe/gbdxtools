@@ -42,7 +42,7 @@ def register_ipe_graph(conn, ipe_graph):
 def get_ipe_metadata(conn, ipe_id, node='toa_reflectance'):
     md_response = conn.get(VIRTUAL_IPE_URL + "/metadata/{}/{}/metadata.json".format(ipe_id, node)).result()
     if md_response.status_code != 200:
-        raise BadRequest("Problem fetching image metadata: status {} / {}".format(md_response.status_code, md_response.reason))
+        raise BadRequest("Problem fetching image metadata: status {} {}, graph_id: {}".format(md_response.status_code, md_response.reason, ipe_id))
     else:
         md_json = md_response.json()
         return {
