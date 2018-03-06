@@ -331,7 +331,6 @@ class GeoDaskImage(DaskImage, Container, PlotMixin):
             # NOTE: this only works on images that have IPE rpcs metadata
             center = wkt.loads(self.ipe.metadata["image"]["imageBoundsWGS84"]).centroid
             g = box(*(center.buffer(self.ipe.metadata["rpcs"]["gsd"] / 2).bounds))
-            # print "Input GSD (deg):", self.ipe.metadata["rpcs"]["gsd"]
             tfm = partial(pyproj.transform, pyproj.Proj(init="EPSG:4326"), pyproj.Proj(init=proj))
             gsd = kwargs.get("gsd", ops.transform(tfm, g).area ** 0.5)
             current_bounds = wkt.loads(self.ipe.metadata["image"]["imageBoundsWGS84"]).bounds
@@ -389,7 +388,6 @@ class GeoDaskImage(DaskImage, Container, PlotMixin):
 
         gi = mapping(full_bounds)
         gt = AffineTransform(gtf, proj)
-        print(self.__class__)
         image = self.__class__(daskmeta, __geo_interface__ = gi, __geo_transform__ = gt)
         return image[box(*output_bounds)]
 
@@ -470,8 +468,7 @@ class GeoDaskImage(DaskImage, Container, PlotMixin):
                   max(min(bounds[2], self.shape[2]), 0),
                   max(min(bounds[3], self.shape[1]), 0))
 
-        idx_slice = (slice(None, None, None), slice(None, bounds[1], bounds[3]), slice(None, bounds[0], bounds[2]))
-        result = super(GeoDaskImage, self).__getitem__(idx_slice)
+        result = self[:, bounds[1]:bounds[3], bounds[0]:bounds[2]]
         if pads[0] > 0:
             dims = (result.shape[0], result.shape[1], pads[0])
             result = da.concatenate([da.zeros(dims, chunks=dims, dtype=result.dtype),
@@ -506,24 +503,43 @@ class GeoDaskImage(DaskImage, Container, PlotMixin):
             bounds = ops.transform(self.__geo_transform__.rev, g).bounds
             result, xmin, ymin = self._slice_padded(bounds)
         else:
-            nbands, ysize, xsize = self.shape
-            if all([isinstance(e, slice) for e in geometry]) and len(geometry) == len(self.shape):
-                xmin, ymin, xmax, ymax = geometry[2].start, geometry[1].start, geometry[2].stop, geometry[1].stop
+            if len(geometry) == 1:
+                assert geometry[0] == Ellipsis
+                return self
+            elif len(geometry) == 2:
+                arg0, arg1 = geometry
+                if isinstance(arg1, slice):
+                    assert arg0 == Ellipsis
+                    return self[:, :, arg1.start:arg1.stop]
+                elif arg1 == Ellipsis:
+                    return self[arg0, :, :]
+            elif len(geometry) == 3:
+                nbands, ysize, xsize = self.shape
+                band_idx, y_idx, x_idx = geometry
+                if y_idx == Ellipsis:
+                    y_idx = slice(0, ysize)
+                if x_idx == Ellipsis:
+                    x_idx = slice(0, xsize)
+                if not(isinstance(y_idx, slice) and isinstance(x_idx, slice)):
+                    di = DaskImage(self)
+                    return di.__getitem__(geometry)
+                xmin, ymin, xmax, ymax = x_idx.start, y_idx.start, x_idx.stop, y_idx.stop
                 xmin = 0 if xmin is None else xmin
                 ymin = 0 if ymin is None else ymin
-                xmax = self.shape[2] if xmax is None else xmax
-                ymax = self.shape[1] if ymax is None else ymax
+                xmax = xsize if xmax is None else xmax
+                ymax = ysize if ymax is None else ymax
                 if ymin > ysize and xmin > xsize:
                     raise IndexError("Index completely out of image bounds")
-            else:
-                raise ValueError("Index arg must be {} slice objects or of type shapely.geometry.BaseGeometry".format(len(self.shape)))
 
-            g = ops.transform(self.__geo_transform__.fwd, box(xmin, ymin, xmax, ymax))
-            result = super(GeoDaskImage, self).__getitem__(geometry)
+                g = ops.transform(self.__geo_transform__.fwd, box(xmin, ymin, xmax, ymax))
+                result = super(GeoDaskImage, self).__getitem__(geometry)
+
+            else:
+                return super(GeoDaskImage, self).__getitem__(geometry)
 
         gi = mapping(g)
         gt = self.__geo_transform__ + (xmin, ymin)
-        image = self.__class__(result, __geo_interface__ = gi, __geo_transform__ = gt)
+        image = super(GeoDaskImage, self.__class__).__new__(self.__class__, result, __geo_interface__ = gi, __geo_transform__ = gt)
         return image
 
 

@@ -52,7 +52,8 @@ def GraphImage(graph, node):
 class IpeImage(GeoDaskImage):
     _default_proj = "EPSG:4326"
 
-    def __init__(self, op, **kwargs):
+    def __new__(cls, op, **kwargs):
+        self = super(IpeImage, cls).__new__(cls, op)
         self._ipe_op = op
         if self.ipe.metadata["georef"] is None:
             tfm = RatPolyTransform.from_rpcs(self.ipe.metadata["rpcs"])
@@ -68,6 +69,11 @@ class IpeImage(GeoDaskImage):
         miny = img_md["minY"] - yshift
         maxy = img_md["maxY"] - yshift
         return self[:, miny:maxy, minx:maxx]
+
+    def __getitem__(self, geometry):
+        im = super(IpeImage, self).__getitem__(geometry)
+        im._ipe_op = self._ipe_op
+        return im
 
     @property
     def __daskmeta__(self):
@@ -90,7 +96,7 @@ class IpeImage(GeoDaskImage):
         size = float(self.ipe.metadata['image']['tileXSize'])
         return math.ceil((float(self.shape[-1]) / size)) * math.ceil(float(self.shape[1]) / size)
 
-    def read(self, bands=None, quiet=False, **kwargs):
+    def read(self, bands=None, quiet=True, **kwargs):
         if not quiet:
             print('Fetching Image... {} {}'.format(self.ntiles, 'tiles' if self.ntiles > 1 else 'tile'))
         return super(IpeImage, self).read(bands=bands)
