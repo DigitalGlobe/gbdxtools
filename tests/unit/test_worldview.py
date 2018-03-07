@@ -7,6 +7,7 @@ Unit tests for the gbdxtools.Idaho class
 
 from gbdxtools import Interface
 from gbdxtools import CatalogImage, WV02, WV03_VNIR, WV03_SWIR
+from gbdxtools.ipe.error import AcompUnavailable
 from auth_mock import get_mock_gbdx_session
 import vcr
 from os.path import join, isfile, dirname, realpath
@@ -39,9 +40,9 @@ class CatalogImageTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        #mock_gbdx_session = get_mock_gbdx_session(token='dymmytoken')
-        #cls.gbdx = Interface(gbdx_connection=mock_gbdx_session)
-        cls.gbdx = Interface()
+        mock_gbdx_session = get_mock_gbdx_session(token='dymmytoken')
+        cls.gbdx = Interface(gbdx_connection=mock_gbdx_session)
+        #cls.gbdx = Interface()
         cls._temp_path = tempfile.mkdtemp()
         print("Created: {}".format(cls._temp_path))
 
@@ -56,12 +57,20 @@ class CatalogImageTest(unittest.TestCase):
 
     @my_vcr.use_cassette('tests/unit/cassettes/test_wv_image_acomp.yaml', filter_headers=['authorization'])
     def test_basic_catalog_acomp(self):
-        _id = '104001002838EC00'
+        _id = '1030010079016D00'
         img = self.gbdx.catalog_image(_id, acomp=True)
-        self.assertTrue(isinstance(img, WV03_VNIR))
+        self.assertTrue(isinstance(img, WV02))
         assert img.cat_id == _id
-        assert img.shape == (8, 79386, 10889)
+        assert img.shape == (8, 26331, 8741)
         assert img.proj == 'EPSG:4326'
+
+    @my_vcr.use_cassette('tests/unit/cassettes/test_wv_image_no_acomp.yaml', filter_headers=['authorization'])
+    def test_basic_catalog_no_acomp(self):
+        try:
+            _id = '104001002838EC00'
+            img = self.gbdx.catalog_image(_id, acomp=True)
+        except AcompUnavailable:
+            pass
 
     @my_vcr.use_cassette('tests/unit/cassettes/test_wv_image_default_aoi.yaml', filter_headers=['authorization'])
     def test_cat_image_with_aoi(self):
