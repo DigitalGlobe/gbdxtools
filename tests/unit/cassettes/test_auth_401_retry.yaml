@@ -1,0 +1,132 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      User-Agent: [python-requests/2.18.4]
+    method: GET
+    uri: https://geobigdata.io/workflows/v1/tasks/AOP_Strip_Processor
+  response:
+    body: {string: !!python/unicode '{"status": "401 Unauthorized", "message": "Authentication
+        Failed."}'}
+    headers:
+      access-control-allow-origin: ['*']
+      connection: [keep-alive]
+      content-length: ['67']
+      content-type: [text/html; charset=UTF-8]
+      date: ['Fri, 16 Feb 2018 17:48:29 GMT']
+      server: [nginx/1.12.1]
+      via: [kong/0.10.3]
+      x-kong-proxy-latency: ['0']
+      x-kong-upstream-latency: ['131']
+    status: {code: 401, message: Unauthorized}
+- request:
+    body: !!python/unicode 'client_secret=dwada&grant_type=refresh_token&refresh_token=dwadwaN&client_id=3%40%3Bc%3FU'
+    headers:
+      Accept: [!!python/unicode 'application/json']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      Content-Length: ['316']
+      Content-Type: [!!python/unicode 'application/x-www-form-urlencoded;charset=UTF-8']
+      User-Agent: [python-requests/2.18.4]
+    method: POST
+    uri: https://geobigdata.io/auth/v1/oauth/token/
+  response:
+    body: {string: !!python/unicode '{"access_token": "dummyToken",
+        "scope": "read write", "token_type": "Bearer", "expires_in": 604800, "refresh_token":
+        "dummyToken"}'}
+    headers:
+      access-control-allow-origin: ['*']
+      connection: [keep-alive]
+      content-length: ['486']
+      content-type: [application/json]
+      date: ['Fri, 16 Feb 2018 17:48:52 GMT']
+      p3p: [CP="ALL DSP COR PSAa PSDa OUR NOR ONL UNI COM NAV"]
+      server: [nginx/1.12.1]
+      via: [kong/0.10.3]
+      x-frame-options: [SAMEORIGIN]
+      x-kong-proxy-latency: ['0']
+      x-kong-upstream-latency: ['6']
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      User-Agent: [python-requests/2.18.4]
+    method: GET
+    uri: https://geobigdata.io/workflows/v1/tasks/AOP_Strip_Processor
+  response:
+    body: {string: !!python/unicode '{"containerDescriptors": [{"command": "/bin/bash
+        /dg/aws/apps/AOP-Processing/aws/gbdx/aop_strip_processor_task/aop_strip_processor_task_runner.sh",
+        "type": "DOCKER", "properties": {"image": "test", "domain": "raid"}}],
+        "description": "Processes a 1B strip using the AOP processing stack.", "inputPortDescriptors":
+        [{"required": true, "type": "directory", "description": "S3 location of 1B
+        input data", "name": "data"}, {"required": false, "type": "directory", "description":
+        "S3 location of Bundle Block Adjustment results", "name": "bba"}, {"required":
+        false, "type": "string", "description": "Enable/disable AComp. Choices are
+        ''true'' or ''false''. Default is ''true''.", "name": "enable_acomp"}, {"required":
+        false, "type": "string", "description": "Enable/disable pan sharpening. Choices
+        are ''true'' or ''false''. Default is ''true''.", "name": "enable_pansharpen"},
+        {"required": false, "type": "string", "description": "Enable/disable dynamic
+        range adjustment. Choices are ''true'' or ''false''. Default is ''true''.",
+        "name": "enable_dra"}, {"required": false, "type": "string", "description":
+        "Enable/disable output tiling. Choices are ''true'' or ''false''. Default
+        is ''false''. If ''true'', the ''ortho_tiling_scheme'' input must be set.",
+        "name": "enable_tiling"}, {"required": false, "type": "string", "description":
+        "Bands to process. Choices are ''PAN+MS'', ''PAN'', ''MS'', ''Auto''. Default
+        is ''Auto'', which searches for band IDs in IMD files.", "name": "bands"},
+        {"required": false, "type": "string", "description": "Comma-separated list
+        of numeric strip parts to process. Default is to process all strip parts.",
+        "name": "parts"}, {"required": false, "type": "string", "description": "Ortho
+        EPSG projection. String ''UTM'' is also allowed. Specify along with ortho_pixel_size.
+        Overridden by ortho_tiling_scheme if specified. Default is ''EPSG:4326''.",
+        "name": "ortho_epsg"}, {"required": false, "type": "string", "description":
+        "Ortho pixel size in meters. Specify along with ortho_epsg. Overridden by
+        ortho_tiling_scheme if specified. Default is ''Auto'', which uses the pixel
+        size of the input data.", "name": "ortho_pixel_size"}, {"required": false,
+        "type": "string", "description": "Ortho tiling scheme and zoom level, e.g.
+        ''DGHalfMeter:18''. Overrides ortho_epsg and ortho_pixel_size.", "name": "ortho_tiling_scheme"},
+        {"required": false, "type": "string", "description": "S3 URL of DEM for orthorectification.
+        Default is s3://dgdem/current.txt, which is a periodic snapshot of the DEMs
+        used in the factory.", "name": "ortho_dem_specifier"}, {"required": false,
+        "type": "string", "description": "Ortho pixel interpolation type. Options
+        are ''Nearest'', ''Bilinear'', ''Cubic''. Default is ''Cubic''.", "name":
+        "ortho_interpolation_type"}, {"required": false, "type": "string", "description":
+        "Dynamic range adjustment mode. Options are ''IntensityAdjust'', ''BaseLayerMatch''.
+        Default is ''IntensityAdjust''. ''BaseLayerMatch'' is currently only compatible
+        with EPSG:4326.", "name": "dra_mode"}, {"required": false, "type": "string",
+        "description": "Dynamic range adjustment low cutoff percentage. Range is from
+        0 to 100. Default is 0.5. Only used for ''IntensityAdjust'' mode.", "name":
+        "dra_low_cutoff"}, {"required": false, "type": "string", "description": "Dynamic
+        range adjustment high cutoff percentage. Range is from 0 to 100. Default is
+        99.95. Only used for ''IntensityAdjust'' mode.", "name": "dra_high_cutoff"},
+        {"required": false, "type": "string", "description": "Dynamic range adjustment
+        gamma value. Default is 1.25. Only used for ''IntensityAdjust'' mode.", "name":
+        "dra_gamma"}, {"required": false, "type": "string", "description": "Dynamic
+        range adjustment output bit depth. Choices are 8 or 16. Default is 8. Only
+        used for ''IntensityAdjust'' mode.", "name": "dra_bit_depth"}, {"required":
+        false, "type": "string", "description": "S3 prefix of base layer for DRA BaseLayerMatch
+        mode. Default is s3://dg-baselayer/v2/. Base layer should be tiled to DG tiling
+        scheme level 9.", "name": "dra_baselayer_prefix"}, {"required": false, "type":
+        "string", "description": "Zoom level (i.e. size) of output tiles if tiling
+        is enabled. Default is 12.", "name": "tiling_zoom_level"}], "version": "0.0.4",
+        "outputPortDescriptors": [{"required": true, "type": "directory", "description":
+        "The output data directory", "name": "data"}, {"required": true, "type": "directory",
+        "description": "The output log directory", "name": "log"}], "properties":
+        {"isPublic": true, "canPersist": true, "timeout": 36000}, "name": "AOP_Strip_Processor"}'}
+    headers:
+      access-control-allow-origin: ['*']
+      connection: [keep-alive]
+      content-length: ['4509']
+      content-type: [application/json]
+      date: ['Fri, 16 Feb 2018 17:48:31 GMT']
+      server: [nginx/1.12.1]
+      via: [kong/0.10.3]
+      x-kong-proxy-latency: ['0']
+      x-kong-upstream-latency: ['955']
+    status: {code: 200, message: OK}
+version: 1

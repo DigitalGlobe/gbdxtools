@@ -67,6 +67,13 @@ class IdahoTest(unittest.TestCase):
         result = i.get_chip([-105.00032901763916, 39.91207173503864, -104.99874114990234, 39.91310862390189], catid)
         assert result
 
+    @vcr.use_cassette('tests/unit/cassettes/test_idaho_get_chip2.yaml', filter_headers=['authorization'])
+    def test_idaho_get_chip2(self):
+        i = Idaho()
+        catid = '10400100384B1B00'
+        result = i.get_chip([120.45363429504926, 30.247785383721883, 120.45511487442548, 30.249008773017273], catid)
+        assert result
+
     @vcr.use_cassette('tests/unit/cassettes/test_idaho_get_tms_layer.yaml', filter_headers=['authorization'])
     def test_idaho_get_tms_layer(self):
         i = Idaho()

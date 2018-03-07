@@ -11,7 +11,7 @@ from gbdxtools.ipe.util import calc_toa_gain_offset
 from gbdxtools.images.ipe_image import IpeImage
 from gbdxtools.vectors import Vectors
 from gbdxtools.ipe.interface import Ipe
-from gbdxtools.ipe.error import MissingMetadata, MissingIdahoImages
+from gbdxtools.ipe.error import MissingIdahoImages, AcompUnavailable
 
 from shapely import wkt
 from shapely.geometry import box
@@ -116,14 +116,17 @@ class WVImage(IpeImage):
 
         toa = [ipe.Format(ipe.MultiplyConst(ipe.TOAReflectance(dn), constants=json.dumps([10000])), dataType="1") for dn in dn_ops]
         toa_reflectance_op = ipe.Format(ipe.GeospatialMosaic(*toa, **mosaic_params), dataType="4")
+        
+        graph = {"ortho": ortho_op, "toa_reflectance": toa_reflectance_op}
        
-        if acomp and _bucket != 'idaho-images': 
-            _ops = [ipe.Format(ipe.MultiplyConst(ipe.Acomp(dn), constants=json.dumps([10000])), dataType="1") for dn in dn_ops]
-            acomp_op = ipe.Format(ipe.GeospatialMosaic(*_ops, **mosaic_params), dataType="4")
-        else:
-            acomp_op = toa_reflectance_op
+        if acomp:
+            if _bucket != 'idaho-images': 
+                _ops = [ipe.Format(ipe.MultiplyConst(ipe.Acomp(dn), constants=json.dumps([10000])), dataType="1") for dn in dn_ops]
+                graph["acomp"] = ipe.Format(ipe.GeospatialMosaic(*_ops, **mosaic_params), dataType="4")
+            else:
+                raise AcompUnavailable("Cannot apply acomp to this image, data unavailable in bucket: {}".format(_bucket))
 
-        return {"ortho": ortho_op, "toa_reflectance": toa_reflectance_op, "acomp": acomp_op}
+        return graph
 
 class WV03_SWIR(WVImage):
     def __new__(cls, cat_id, **kwargs):

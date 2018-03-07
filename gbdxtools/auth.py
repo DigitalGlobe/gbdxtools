@@ -8,11 +8,13 @@ from gbdxtools.ipe.graph import VIRTUAL_IPE_URL
 
 auth = None
 
+
 def Auth(**kwargs):
     global auth
     if auth is None or len(kwargs) > 0:
         auth = _Auth(**kwargs)
     return auth
+
 
 class _Auth(object):
     gbdx_connection = None
@@ -42,9 +44,39 @@ class _Auth(object):
         except Exception as err:
             print(err)
 
+        def expire_token(r, *args, **kw):
+            """
+            Requests a new token if 401, retries request, mainly for auth v2 migration
+            :param r:
+            :param args:
+            :param kw:
+            :return:
+            """
+            if r.status_code == 401:
+                try:
+                    # remove hooks so it doesn't get into infinite loop
+                    r.request.hooks = None
+                    # expire the token
+                    gbdx_auth.expire_token(token_to_expire=self.gbdx_connection.token,
+                                           config_file=kwargs.get('config_file'))
+                    # re-init the session
+                    self.gbdx_connection = gbdx_auth.get_session(kwargs.get('config_file'))
+                    # make original request, triggers new token request first
+                    return self.gbdx_connection.request(method=r.request.method, url=r.request.url)
+
+                except Exception as e:
+                    r.request.hooks = None
+                    print("Error expiring token from session, Reason {}".format(e.message))
+
         if self.gbdx_connection is not None:
-            self.gbdx_connection.mount(VIRTUAL_IPE_URL, HTTPAdapter(max_retries=5)) #status_forcelist=[500, 502, 504]))
+
+            self.gbdx_connection.hooks['response'].append(expire_token)
+
+            # status_forcelist=[500, 502, 504]))
+            self.gbdx_connection.mount(VIRTUAL_IPE_URL, HTTPAdapter(max_retries=5))
+
         self.gbdx_futures_session = FuturesSession(session=self.gbdx_connection, max_workers=64)
+
         if 'GBDX_USER' in os.environ:
             header = {'User-Agent': os.environ['GBDX_USER']}
             self.gbdx_futures_session.headers.update(header)
