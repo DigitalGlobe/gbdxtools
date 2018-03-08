@@ -117,6 +117,8 @@ def load_urls(collection, max_workers=64, max_retries=MAX_RETRIES, shape=(8,256,
                 _curl.fd = None
                 if runcount[_curl.index] < max_retries:
                     taskq.append([_curl.url, _curl.token, _curl.index])
+                else:
+                    nprocessed += 1
                 cmulti.remove_handle(_curl)
                 curlq.append(_curl)
             if nq == 0:
