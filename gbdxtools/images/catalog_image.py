@@ -20,7 +20,7 @@ class CatalogImage(object):
     Args:
         catalogID (str): The source catalog ID from the platform catalog.
         proj (str): Optional EPSG projection string for the image in the form of "EPSG:4326"
-        product (str): One of "ortho" or "toa_reflectance"
+        product (str): One of "ortho", "toa_reflectance", or "acomp". Defaults to "toa_reflectance".
         band_type (str): The product spec / band type for the image returned (band_type='MS'|'Pan')
         pansharpen: Whether or not to return a pansharpened image (defaults to False)
         acomp: Perform atmos. compensation on the image
@@ -46,7 +46,7 @@ class CatalogImage(object):
     def _image_by_type(cls, cat_id, **kwargs):
         if cat_id is None:
             try:
-                return IpeImage(GraphMeta(kwargs["graph_id"], **kwargs))
+                return IpeImage(GraphMeta(**kwargs))
             except KeyError:
                 raise ValueError("Catalog Images must be initiated by a Catalog Id or an RDA Graph Id")
         vectors = Vectors()

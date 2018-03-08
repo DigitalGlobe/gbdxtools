@@ -49,7 +49,8 @@ try:
 except NameError:
     xrange = range
 
-num_workers = int(os.environ.get("GBDX_THREADS", 8))
+threads = int(os.environ.get('GBDX_THREADS', 8))
+threaded_get = partial(dask.threaded.get, num_workers=threads)
 
 class DaskMeta(namedtuple("DaskMeta", ["dask", "name", "chunks", "dtype", "shape"])):
     __slots__ = ()
@@ -117,7 +118,7 @@ class DaskImage(da.Array):
         arr = self
         if bands is not None:
             arr = self[bands, ...]
-        return arr.compute(num_workers=num_workers)
+        return arr.compute(get=threaded_get)
 
     def randwindow(self, window_shape):
         """
@@ -222,7 +223,7 @@ class PlotMixin(object):
         if hasattr(data, 'read'):
             return data.read(**kwargs)
         else:
-            return data.compute()
+            return data.compute(get=threaded_get)
 
     def _single_band(self, **kwargs):
         return self._read(self[0,:,:], **kwargs)
@@ -493,6 +494,7 @@ class GeoDaskImage(DaskImage, Container, PlotMixin):
         img_bounds = box(0, 0, *self.shape[2:0:-1])
         return img_bounds.contains(geometry)
 
+
     def __getitem__(self, geometry):
         if isinstance(geometry, BaseGeometry) or getattr(geometry, "__geo_interface__", None) is not None:
             g = shape(geometry)
@@ -541,6 +543,4 @@ class GeoDaskImage(DaskImage, Container, PlotMixin):
         gt = self.__geo_transform__ + (xmin, ymin)
         image = super(GeoDaskImage, self.__class__).__new__(self.__class__, result, __geo_interface__ = gi, __geo_transform__ = gt)
         return image
-
-
 

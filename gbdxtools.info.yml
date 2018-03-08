@@ -1,0 +1,21 @@
+name: gbdxtools
+description: Open source python SDK for GBDX.  Discover and order imagery, operate GBDX workflows, create AnswerFactory recipes, access & manipulate pixels.
+source: https://github.com/digitalglobe/gbdxtools
+team: GBDX Team
+language: python
+
+poc:
+  - name: Nate Ricklin
+    email: nricklin@digitalglobe.com
+  - name: Chris Helm
+    email: chelm@digitalglobe.com
+
+documentation:
+  - type: external
+    url: http://gbdxtools.readthedocs.io/en/latest/
+  - type: external
+    url: https://github.com/DigitalGlobe/gbdxtools/tree/master/examples
+
+dependencies: 
+  - name: gbdx-auth
+    source: https://github.com/TDG-Platform/gbdx-auth

@@ -33,7 +33,9 @@ class GraphMeta(DaskProps):
 
     @property
     def _id(self):
-        if self._node_id is not None and self._nid is None:
+        if self._nid is not None:
+            return self._nid
+        elif self._node_id is not None:
             self._nid = self._node_id
         else:
             graph = self.graph()
@@ -45,9 +47,6 @@ class GraphMeta(DaskProps):
             self._graph = get_ipe_graph(self._interface.gbdx_connection, self._ipe_id)
         return self._graph
 
-def GraphImage(graph, node):
-    assert graph is not None
-    return IpeImage(None, graph_id=graph, node_id=node)
 
 class IpeImage(GeoDaskImage):
     _default_proj = "EPSG:4326"

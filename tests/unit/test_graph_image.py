@@ -6,7 +6,7 @@ Unit tests for the gbdxtools.Idaho class
 '''
 
 from gbdxtools import Interface
-from gbdxtools import GraphImage
+from gbdxtools import CatalogImage
 from auth_mock import get_mock_gbdx_session
 import vcr
 from os.path import join, isfile, dirname, realpath
@@ -41,9 +41,9 @@ class IpeImageTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        #mock_gbdx_session = get_mock_gbdx_session(token='dymmytoken')
-        #cls.gbdx = Interface(gbdx_connection=mock_gbdx_session)
-        cls.gbdx = Interface()
+        mock_gbdx_session = get_mock_gbdx_session(token='dymmytoken')
+        cls.gbdx = Interface(gbdx_connection=mock_gbdx_session)
+        #cls.gbdx = Interface()
         cls._temp_path = tempfile.mkdtemp()
         print("Created: {}".format(cls._temp_path))
 
@@ -51,7 +51,7 @@ class IpeImageTest(unittest.TestCase):
     def test_graph_image(self):
         graph = "37397242be83610fe4923c866ab07d8aeb0044c206c5c39b4b9deb41629e9eae"
         node = "Orthorectify_ms_plain"
-        img = self.gbdx.graph_image(graph, node)
+        img = self.gbdx.catalog_image(None, graph_id=graph, node_id=node)
         assert img.shape == (8, 11163, 10974)
         assert img.proj == 'EPSG:4326'
 
