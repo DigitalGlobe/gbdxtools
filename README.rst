@@ -137,7 +137,7 @@ Install gbdxtools::
 
 **Python versions and conda-forge**
 
-A known issue exists, in certain environments, where conda will downgrade python from 3.x to 2.7x when installing gbdxtools. If conda does not keep your python version intact when installing gbdxtools, you need to:
+A known issue exists, in certain environments, where conda will downgrade python from 3.x to 2.7x when installing gbdxtools. If conda does not keep your python version intact when installing gbdxtools, you need to::
 
    conda install -y gbdxtools -c digitalglobe -c conda-forge
 
