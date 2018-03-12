@@ -56,7 +56,12 @@ DEFAULT_OPTIONS = {
 class ImageProductNotImplemented(KeyError):
     pass
 
-class RDAImageTemplate(object):
+class BaseImageTemplate(object):
+    @classmethod
+    def _configure(cls, *args, **kwargs):
+        raise NotImplementedError
+
+class RDAImageTemplate(BaseImageTemplate):
     __default_options__ = DEFAULT_OPTIONS
     __products = None
 
@@ -85,19 +90,28 @@ class RDAImageTemplate(object):
         raise NotImplementedError
 
     @classmethod
-    def _configure_options(cls, **kwargs):
+    def _set_options(cls, **kwargs):
         raise NotImplementedError
+
+    @classmethod
+    def _configure(cls, _id, **kwargs):
+        cls._rda_id = _id
+        cls._set_options(**kwargs)
+        cls._set_standard_products(rda_id, **kwargs)
+        return cls
 
 class RDABaseImage(IpeImage, RDAImageTemplate):
     def __new__(cls, rda_id, **kwargs):
-        cls._rda_id = rda_id
-        cls._configure_options(**kwargs)
-        cls._set_standard_products(rda_id, **kwargs)
+        cls = cls._configure(rda_id, **kwargs)
         self = super(RDABaseImage, cls).__new__(cls, cls._product)
         return self.aoi(**kwargs)
 
     @classmethod
-    def __post_create(cls, image, **kwargs):
-        return image.aoi(**kwargs)
+    def _set_standard_products(cls, _id, **kwargs):
+        return cls._build_standard_products(_id, **kwargs)
+
+    @classmethod
+    def _set_options(cls, **kwargs):
+        _options = cls._
 
 
