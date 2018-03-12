@@ -48,25 +48,68 @@ class GraphMeta(DaskProps):
         return self._graph
 
 
+class RDAGeoAdapter(object):
+    def __init__(self, metadata):
+        self.md = metadata
+
+    @property
+    def image(self):
+        return self.md["image"]
+
+    @property
+    def xshift(self):
+        return self.image["minTileX"] * self.image["tileXSize"]
+
+    @property
+    def yshift(self):
+        return self.image["minTileY"] * self.image["tileYSize"]
+
+    @property
+    def minx(self):
+        return self.image["minX"] - self.xshift
+
+    @property
+    def maxx(self):
+        return self.image["maxX"] - self.xshift
+
+    @property
+    def miny(self):
+        return self.image["minY"] - self.yshift
+
+    @property
+    def maxy(self):
+        return self.image["maxY"] - self.yshift
+
+    @property
+    def tfm(self):
+        if self.md["georef"] is None:
+            return RatPolyTransform._from_rpcs(self.md["rpcs"])
+        else:
+            return AffineTransform._from_georef(self.md["georef"])
+
+    @property
+    def __geo_transform__(self):
+        return self.tfm + (self.xshift, self.yshift)
+
+    @property
+    def __geo_interface__(self):
+        return mapping(GeoDaskImage._reproject(wkt.loads(self.image["imageBoundsWGS84"])))
+
+
 class IpeImage(GeoDaskImage):
     _default_proj = "EPSG:4326"
 
     def __new__(cls, op, **kwargs):
+        cls.__rda_geo__ = RDAGeoAdapter(op.metadata)
+        cls.__geo_transform__ = cls.__rda_geo__.__geo_transform__
+        cls.__geo_interface__ = cls.__rda_geo__.__geo_interface__
+        cls._ipe_op = op
         self = super(IpeImage, cls).__new__(cls, op)
-        self._ipe_op = op
-        if self.ipe.metadata["georef"] is None:
-            tfm = RatPolyTransform.from_rpcs(self.ipe.metadata["rpcs"])
-        else:
-            tfm = AffineTransform.from_georef(self.ipe.metadata["georef"])
-        img_md = self.ipe.metadata["image"]
-        xshift = img_md["minTileX"]*img_md["tileXSize"]
-        yshift = img_md["minTileY"]*img_md["tileYSize"]
-        self.__geo_transform__ = tfm + (xshift, yshift)
-        self.__geo_interface__ = mapping(self._reproject(wkt.loads(self.ipe.metadata["image"]["imageBoundsWGS84"])))
-        minx = img_md["minX"] - xshift
-        maxx = img_md["maxX"] - xshift
-        miny = img_md["minY"] - yshift
-        maxy = img_md["maxY"] - yshift
+        return self.__post_create()
+
+    def __post_create(self):
+        minx, maxx = self.__rda_geo__.minx, self.__rda_geo__.maxx
+        miny, maxy = self.__rda_geo__.miny, self.__rda_geo__.maxy
         return self[:, miny:maxy, minx:maxx]
 
     def __getitem__(self, geometry):

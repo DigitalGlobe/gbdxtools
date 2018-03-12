@@ -234,9 +234,21 @@ class PlotMixin(object):
             if scale > math.sqrt((b.north - b.south)*(b.east - b.west) / (256*256)):
                 return z
 
+
+class GeoDaskTemplate(object):
+    def __geo_transform__(self):
+        raise NotImplementedError
+
+    def __geo_interface__(self):
+        raise NotImplementedError
+
+    def __geo_meta__(self):
+        raise NotImplementedError
+
+
 class GeoDaskImage(DaskImage, Container, PlotMixin):
     _default_proj = "EPSG:4326"
-    def __init__(self, dm, **kwargs):
+    def __init__(self, dm, gt=None, gi=None, **kwargs):
         pass
 
     def asShape(self):
