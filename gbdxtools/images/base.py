@@ -1,18 +1,3 @@
-# BossTiles
-
-# A framework for distributed consumtion and processing of earth imagery
-# This framework was designed to provide a  source-agnostic geoimage
-# access pipeline driven by an api that provides highly parallel geoimage processing
-# methods driven by dask arrays.
-
-# Top level interface is defined by image source classes that define a core
-# standard access pattern for the various product types offered defined by the
-# source. The access pattern  was designed to be easy to create new data sources
-# via a plugin interface that generates source adaptors that take product
-# templates and  metadata access classes to generate instances of core
-# GeoDaskImage
-
-# To build source access pattern, create an image template that defines
 from __future__ import print_function
 import json
 
@@ -28,7 +13,7 @@ from shapely.geometry import box
 
 import requests
 
-
+import collections
 import abc
 
 ipe = Ipe()
@@ -40,78 +25,139 @@ band_types = {
     'pan': 'PAN'
 }
 
+RDA_DEFAULT_OPTIONS = {
+    "band_type": "MS",
+    "proj": "EPSG:4326",
+    "pansharpen": False,
+    "gsd": None,
+    "acomp": False,
+    "bucket": "idaho-images",
+    "product": "toa_reflectance"
+    }
+
+class ImageProductNotSupported(KeyError):
+    pass
+
 def vendor_id(rec):
     _id = rec['properties']['attributes']['vendorDatasetIdentifier']
     return _id.split(':')[1].split('_')[0]
 
-DEFAULT_OPTIONS = {
-    "band_type": "MS",
-    "proj": "EPG:4326",
-    "pansharpen": False,
-    "gsd": None,
-    "acomp": False,
-    "bucket": "idaho-images"
-    }
 
-class ImageProductNotImplemented(KeyError):
-    pass
+def find_parts(cat_id, band_type):
+    vectors = Vectors()
+    aoi = wkt.dumps(box(-180, -90, 180, 90))
+    query = "item_type:IDAHOImage AND attributes.catalogID:{} " \
+            "AND attributes.colorInterpretation:{}".format(cat_id, band_types[band_type])
+    _parts = sorted(vectors.query(aoi, query=query), key=lambda x: x['properties']['id'])
+    return _parts
 
-class BaseImageTemplate(object):
-    @classmethod
-    def _configure(cls, *args, **kwargs):
+
+def option_parser_factory(typename, field_names, default_values=()):
+    T = collections.namedtuple(typename, field_names)
+    T.__new__.__defaults__ = (None,) * len(T._fields)
+    if isinstance(default_values, collections.Mapping):
+        prototype = T(**{k: v for k, v in default_values.items() if k in T._fields})
+    else:
+        prototype = T(*default_values[:len(field_names)])
+    T.__new__.__defaults__ = tuple(prototype)
+    return T
+
+
+op = option_parser_factory
+
+
+class OptionParserFactory(type):
+    def __new__(cls, name, bases, attrs):
+        inst = type.__new__(cls, name, bases, attrs)
+        if hasattr(inst, "_type_options") and isinstance(inst._type_options, list):
+            if inst._type_options:
+                inst = install_parser(inst)
+        return inst
+
+    @staticmethod
+    def install_parser(inst):
+        p = op(c.__name__, inst._type_options, default_options=getattr(inst, "_default_options", []))
+        setattr(inst, "parser", p)
+        return inst
+
+
+@six.add_metaclass(abc.ABCMeta)
+class RDADriverInterface(object)
+    @abc.abstractmethod
+    def parse_options(self, inputs):
         raise NotImplementedError
 
-class RDAImageTemplate(BaseImageTemplate):
-    __default_options__ = DEFAULT_OPTIONS
-    __products = None
+    @abc.abstractmethod
+    def configure_options(self, options):
+        raise NotImplementedError
 
-    def get_product(self, product):
-        return self.__class__(self.__rda_id__, product)
+    @abc.abstractmethod
+    def run_build_meta(self):
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def drive(self, target):
+        raise NotImplementedError
+
+
+@six.add_metaclass(OptionParserFactory)
+class RDABaseDriver(RDADriverInterface):
+    _default_options = {}
+    _type_options = []
+    _type_defaults = {}
+
+    def __init__(self, rda_id, **kwargs):
+        self.rda_id = rda_id
+        _options = self.parse_options(kwargs)
+        _options = self.configure_options(_options)
+        self._options = options
+
+    def parse_options(self, inputs):
+        options = self.parser(**{opt: inputs[opt] for opt in self._type_options})
+        return options
+
+    @classmethod
+    def configure_options(cls, options):
+        return options
 
     @property
-    def _product(self):
+    def products(self):
+        return self._products
+
+    @property
+    def adaptor(self):
+        if not (self.products and self.options):
+            raise AttributeError("Configure Image products and Options to generator Dask Meta Adaptor")
         try:
-            return self._products[self.options["product"]]
+            return self.products[self.options["product"]]
         except KeyError as ke:
             raise ImageProductNotImplemented("Specified product not implemented: {}".format(self.options["product"]))
 
-    @property
-    def _products(self):
-        if not self.__products:
-            self.__products = self._set_standard_products(self._rda_id, **self.options)
-        return self.__products
+    def run_build_meta(self, target):
+        products = target._build_standard_products(self.rda_id, **self.options)
+        self._products = products
 
-    @classmethod
-    def _set_standard_products(cls, **kwargs):
-        raise NotImplementedError
+    def drive(self, target):
+        self.run_build_meta(target)
+        return cls
+
+
+class RDABaseImage(IpeImage):
+    def __new__(cls, rda_id, **kwargs):
+        cls = cls._Adapter(rda_id, **kwargs).drive(cls)
+        self = super(RDABaseImage, cls).__new__(cls, cls.adaptor, **kwargs)
+        self = self.aoi(**kwargs)
+        return self
+
+    def get_product(self, product):
+        pass
+
+class IdahoImage(RDABaseImage):
+    _Adapter = IdahoAdapter
 
     @classmethod
     def _build_standard_products(cls, **kwargs):
-        raise NotImplementedError
+        pass
 
-    @classmethod
-    def _set_options(cls, **kwargs):
-        raise NotImplementedError
-
-    @classmethod
-    def _configure(cls, _id, **kwargs):
-        cls._rda_id = _id
-        cls._set_options(**kwargs)
-        cls._set_standard_products(rda_id, **kwargs)
-        return cls
-
-class RDABaseImage(IpeImage, RDAImageTemplate):
-    def __new__(cls, rda_id, **kwargs):
-        cls = cls._configure(rda_id, **kwargs)
-        self = super(RDABaseImage, cls).__new__(cls, cls._product)
-        return self.aoi(**kwargs)
-
-    @classmethod
-    def _set_standard_products(cls, _id, **kwargs):
-        return cls._build_standard_products(_id, **kwargs)
-
-    @classmethod
-    def _set_options(cls, **kwargs):
-        _options = cls._
-
+class WVImage(RDABaseImage):
 
