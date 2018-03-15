@@ -56,6 +56,15 @@ def option_parser_factory(typename, field_names, default_values=()):
 
 opf = option_parser_factory
 
+def install_parser(inst):
+    default_options = getattr(inst, "__default_options__", {})
+    custom_options = getattr(inst, "__image_option_defaults__", {})
+    defaults = update_options(default_options, custom_options)
+    p = opf(c.__name__ + "Parser", inst.image_option_support, default_options=defaults)
+    setattr(inst, "parser", p)
+    setattr(inst, "default_options", defaults)
+    return inst
+
 
 class OptionParserFactory(type):
     def __new__(cls, name, bases, attrs):
@@ -63,16 +72,6 @@ class OptionParserFactory(type):
         if hasattr(inst, "image_option_support") and isinstance(inst.image_option_support, list):
             if inst.image_option_support:
                 inst = install_parser(inst)
-        return inst
-
-    @staticmethod
-    def install_parser(inst):
-        default_options = getattr(inst, "__default_options__", {})
-        custom_options = getattr(inst, "__image_option_defaults__", {})
-        defaults = update_options(default_options, custom_options)
-        p = opf(c.__name__ + "Parser", inst.image_option_support, default_options=defaults)
-        setattr(inst, "parser", p)
-        setattr(inst, "default_options", defaults)
         return inst
 
 @six.add_metaclass(abc.ABCMeta)
@@ -166,8 +165,8 @@ class RDADaskImageDriver(RDADriverInterface):
         return target
 
 
-class IdahoDriver(RDABaseDriver):
-    __image_option_defaults__ = IDAHO_DEFAULT_OPTIONS
+class IdahoDriver(RDADaskImageDriver):
+    __default_options__ = IDAHO_DEFAULT_OPTIONS
     image_option_support = ["proj", "product", "gsd", "bucket", "acomp"]
 
     @classmethod
@@ -178,12 +177,12 @@ class IdahoDriver(RDABaseDriver):
             options["product"] = "toa_reflectance"
         return options
 
-class WorldViewDriver(RDABaseDriver):
-    __image_option_defaults__ = WV_MODERN_OPTIONS
+class WorldViewDriver(RDADaskImagerDriver):
+    __default_options__ = WV_MODERN_OPTIONS
     image_option_support = WV_MODERN_OPTIONS.keys()
 
     @classmethod
-    def configure_options(self, options):
+    def configure_options(cls, options):
         if options["acomp"]:
             options["product"] = "acomp"
         if options["pansharpen"]:
