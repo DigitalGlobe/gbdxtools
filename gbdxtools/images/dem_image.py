@@ -1,41 +1,38 @@
 from __future__ import print_function
-from gbdxtools.images.ipe_image import IpeImage
+from gbdxtools.images import RDABaseImage
+from gbdxtools.images.drivers import RDADaskImageDriver
 from gbdxtools.ipe.util import reproject_params
 from gbdxtools.ipe.interface import Ipe
+
 ipe = Ipe()
 
 from shapely.geometry import box
 
-class DemImage(IpeImage):
+class DemDriver(RDADaskImageDriver):
+    image_option_support = ["proj", "bbox"]
+    @property
+    def payload(self):
+        p = self.products.get["dem"]
+        if not p:
+            raise AttributeError("DemImage initialized with bbox=None")
+        return p
+
+class DemImage(RDABaseImage):
     """
       Dask based access to IDAHO images via IPE.
     """
-    def __new__(cls, bbox, **kwargs):
-        idaho_id = "dgdem-2016-08-12-f-b193-7aa90f8d11f1"
-        options = {
-            "proj": kwargs.get("proj", "EPSG:4326")
-        }
 
-        standard_products = cls._build_standard_products(idaho_id, bbox, options["proj"])
-        try:
-            self = super(DemImage, cls).__new__(cls, standard_products.get("dem"))
-        except KeyError as e:
-            print(e)
-            print("Specified product not implemented: {}".format(options["product"]))
-            raise
-        self = self.aoi(bbox=bbox)
-        self.idaho_id = idaho_id
-        self._products = standard_products
-        if self.ipe.metadata['image']['minX'] == -1:
-            return self[:,:,1:-1]
-        else:
-            return self
+    __Driver__ = DemDriver
+    __rda_id__ = "dgdem-2016-08-12-f-b193-7aa90f8d11f1"
 
-    def get_product(self, product):
-        return self.__class__(self.idaho_id, proj=self.proj, product=product)
+    def __post_new_hook__(self, **kwargs):
+        self = self.aoi(**kwargs)
+        if self.ipe.metadata["image"]["minX"] == -1:
+            return self[:, :, 1:-1]
+        return self
 
-    @staticmethod
-    def _build_standard_products(idaho_id, bbox, proj):
+    @classmethod
+    def _build_standard_products(cls, idaho_id, **kwargs):
         wkt = box(*bbox).wkt
         dem = ipe.GeospatialCrop(ipe.IdahoRead(bucketName="idaho-dems", imageId=idaho_id, objectStore="S3"), geospatialWKT=str(wkt))
         if proj is not "EPSG:4326":

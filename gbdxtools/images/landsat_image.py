@@ -1,5 +1,6 @@
 from __future__ import print_function
-from gbdxtools.images.ipe_image import IpeImage
+from gbdxtools.images import RDABaseImage
+from gbdxtools.images.drivers import RDADaskImageDriver
 from gbdxtools.ipe.interface import Ipe
 ipe = Ipe()
 
@@ -12,28 +13,24 @@ def reproject_params(proj):
         _params["Dest pixel-to-world transform"] = None
     return _params
 
-class LandsatImage(IpeImage):
+class LandsatDriver(RDADaskImageDriver):
+    __default_options__ = {}
+    image_option_support = ["spec", "product"]
+    __image_option_defaults__ = {"spec": "multispectral", "product": "landsat"}
+
+class LandsatImage(RDABaseImage):
     """
       Dask based access to landsat image backed by IPE Graphs.
     """
-    def __new__(cls, _id, **kwargs):
-        options = {
-            "product": kwargs.get("product", "landsat"),
-            "spec": kwargs.get("spec", "multispectral")
-        }
+    __Driver__ = LandsatDriver
 
-        standard_products = cls._build_standard_products(_id, options["spec"], kwargs.get("proj", None))
-        try:
-            self = super(LandsatImage, cls).__new__(cls, standard_products[options["product"]])
-        except KeyError as e:
-            print(e)
-            print("Specified product not implemented: {}".format(options["product"]))
-            raise
-        self = self.aoi(**kwargs)
-        self._id = _id
-        self._spec = options["spec"]
-        self._products = standard_products
-        return self
+    @property
+    def _id(self):
+        return self.__rda_id__
+
+    @property
+    def _spec(self):
+        return self.options["spec"]
 
     @property
     def _rgb_bands(self):
@@ -42,9 +39,6 @@ class LandsatImage(IpeImage):
     @property
     def _ndvi_bands(self):
         return [4,3]
-
-    def get_product(self, product):
-        return self.__class__(self._id, proj=self.proj, product=product)
 
     @staticmethod
     def _build_standard_products(_id, spec, proj):

@@ -1,6 +1,7 @@
 from __future__ import print_function
 import json
-from gbdxtools.images.worldview import WVImage
+from gbdxtools.images.worldview import WorldViewImage
+from gbdxtools.images.drivers import WorldViewDriver
 from gbdxtools.ipe.interface import Ipe
 from gbdxtools.ipe.util import ortho_params
 from gbdxtools.ipe.error import AcompUnavailable
@@ -16,42 +17,21 @@ band_types = {
     'pan': 'PAN'
 }
 
-class GE01(WVImage):
-    def __new__(cls, cat_id, **kwargs):
-        options = {
-            "band_type": kwargs.get("band_type", "MS"),
-            "product": kwargs.get("product", "ortho"),
-            "proj": kwargs.get("proj", "EPSG:4326"),
-            "pansharpen": kwargs.get("pansharpen", False),
-            "gsd": kwargs.get("gsd", None),
-            "acomp": kwargs.get("acomp", False)
-        }
+class GeoEyeDriver(WorldViewDriver):
+    __image_option_defaults__ = {"product": "ortho"}
 
-        if options["acomp"]:
-            options["product"] = "acomp"
-
-        if options["pansharpen"]:
-            options["band_type"] = "MS"
-            options["product"] = "pansharpened"
-
-        standard_products = cls._build_standard_products(cat_id, options["band_type"], options["proj"], gsd=options["gsd"], acomp=options["acomp"])
-        pan_products = cls._build_standard_products(cat_id, "pan", options["proj"], gsd=options["gsd"], acomp=options["acomp"])
-        pan = pan_products['ortho']
-        ms = standard_products['ortho']
-        standard_products["pansharpened"] = ipe.LocallyProjectivePanSharpen(ms, pan)
-
-        try:
-            self = super(WVImage, cls).__new__(cls, standard_products[options["product"]])
-        except KeyError as e:
-            print(e)
-            print("Specified product not implemented: {}".format(options["product"]))
-            raise
-        self = self.aoi(**kwargs)
-        self.cat_id = cat_id
+    def build_payload(self, target):
+        standard_products = super(WorldViewDriver, self).build_payload(target, **self.options)
+        options = self.options.copy()
+        options["band_type"] = "pan"
+        pan_products = target._build_standard_products(self.rda_id, **options))
+        standard_products["pansharpened"] = ipe.LocallyProjectivePanSharpen(standard_products["ortho"],
+                                                                                pan_products["ortho"])
         self._products = standard_products
-        self.options = options
-        return self
+        return standard_products
 
+class GE01(WorlViewImage):
+    __Driver__ = GeoEyeDriver
     def plot(self, **kwargs):
         kwargs["blm"] = False
         super(GE01, self).plot(**kwargs)
@@ -59,38 +39,5 @@ class GE01(WVImage):
     @property
     def _rgb_bands(self):
         return [2,1,0]
-
-    @staticmethod
-    def _find_parts(cat_id, band_type):
-        vectors = Vectors()
-        aoi = wkt.dumps(box(-180, -90, 180, 90))
-        query = "item_type:IDAHOImage AND attributes.catalogID:{} " \
-                "AND attributes.colorInterpretation:{}".format(cat_id, band_types[band_type])
-        return sorted(vectors.query(aoi, query=query), key=lambda x: x['properties']['id']) 
-
-    @classmethod
-    def _build_standard_products(cls, cat_id, band_type, proj, gsd=None, acomp=False):
-        _parts = cls._find_parts(cat_id, band_type)
-        _bucket = _parts[0]['properties']['attributes']['bucketName'] 
-        _id = _parts[0]['properties']['attributes']['idahoImageId']
-        dn_ops = [ipe.IdahoRead(bucketName=p['properties']['attributes']['bucketName'], imageId=p['properties']['attributes']['idahoImageId'],
-                                objectStore="S3") for p in _parts]
-
-        mosaic_params = {"Dest SRS Code": proj}
-        if gsd is not None:
-            mosaic_params["Requested GSD"] = str(gsd)
-        ortho_op = ipe.GeospatialMosaic(*dn_ops, **mosaic_params)
-        
-        graph = {"ortho": ortho_op}
-
-        if acomp:
-            if _bucket != 'idaho-images':
-                _ops = [ipe.Format(ipe.MultiplyConst(ipe.Acomp(dn), constants=json.dumps([10000])), dataType="1") for dn in dn_ops]
-                acomp_op = ipe.Format(ipe.GeospatialMosaic(*_ops, **mosaic_params), dataType="4")
-                graph["acomp"] = acomp_op
-            else: 
-                raise AcompUnavailable("Cannot apply acomp to this image, data unavailable in bucket: {}".format(_bucket))
-
-        return graph
 
 

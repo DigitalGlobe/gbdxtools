@@ -1,46 +1,31 @@
 from __future__ import print_function
 import requests
-from gbdxtools.images.ipe_image import IpeImage
+from gbdxtools.images import RDABaseImage
+from gbdxtools.images.drivers import IdahoDriver
+from gbdxtools.images.util import vector_services_query
 from gbdxtools.ipe.util import calc_toa_gain_offset, ortho_params
 from gbdxtools.ipe.interface import Ipe
 
 ipe = Ipe()
 
-class IdahoImage(IpeImage):
+class IdahoImage(RDABaseImage):
     """
       Dask based access to IDAHO images via IPE.
     """
-    def __new__(cls, idaho_id, **kwargs):
-        options = {
-            "proj": kwargs.get("proj", "EPSG:4326"),
-            "product": kwargs.get("product", "toa_reflectance"),
-            "gsd": kwargs.get("gsd", None),
-            "bucket": kwargs.get("bucket", "idaho-images"),
-            "acomp": kwargs.get("acomp", False)
-        }
-        if options["acomp"] and options["bucket"] != "idaho-images":
-            options["product"] = "acomp"
-        else:
-            options["product"] = "toa_reflectance" 
+    __Driver__ = IdahoDriver
 
-        standard_products = cls._build_standard_products(idaho_id, options["proj"], bucket=options["bucket"], gsd=options["gsd"], acomp=options["acomp"])
-        try:
-            self = super(IdahoImage, cls).__new__(cls, standard_products.get(options["product"], "toa_reflectance"))
-        except KeyError as e:
-            print(e)
-            print("Specified product not implemented: {}".format(options["product"]))
-            raise
-        self = self.aoi(**kwargs)
-        self.options = options
-        self.idaho_id = idaho_id
-        self._products = standard_products
-        return self
+    @property
+    def idaho_id(self):
+        return self.__rda_id__
 
-    def get_product(self, product):
-        return self.__class__(self.idaho_id, proj=self.proj, product=product)
+    @classmethod
+    def _build_standard_products(cls, idaho_id, proj=None, bucket="idaho-images", gsd=None, acomp=False, **kwargs):
+        if bucket is None:
+            vq = "item_type:IDAHOImage AND id:{}".format(idaho_id)
+            result = vector_services_query(vq)
+            if result:
+                bucket = result[0]["properties"]["attributes"]["tileBucketName"]
 
-    @staticmethod
-    def _build_standard_products(idaho_id, proj, bucket="idaho-images", gsd=None, acomp=False):
         dn_op = ipe.IdahoRead(bucketName=bucket, imageId=idaho_id, objectStore="S3")
         params = ortho_params(proj, gsd=gsd)
 
@@ -52,3 +37,4 @@ class IdahoImage(IpeImage):
         }
 
         return graph
+
