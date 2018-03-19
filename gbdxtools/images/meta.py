@@ -440,13 +440,13 @@ class GeoImage(Container):
         return ops.transform(tfm, geometry)
 
 
-    def _slice_padded(self, bounds):
-        pads = (max(-bounds[0], 0), max(-bounds[1], 0),
-                max(bounds[2]-self.shape[2], 0), max(bounds[3]-self.shape[1], 0))
-        bounds = (max(bounds[0], 0),
-                  max(bounds[1], 0),
-                  max(min(bounds[2], self.shape[2]), 0),
-                  max(min(bounds[3], self.shape[1]), 0))
+    def _slice_padded(self, _bounds):
+        pads = (max(-_bounds[0], 0), max(-_bounds[1], 0),
+                max(_bounds[2]-self.shape[2], 0), max(_bounds[3]-self.shape[1], 0))
+        bounds = (max(_bounds[0], 0),
+                  max(_bounds[1], 0),
+                  max(min(_bounds[2], self.shape[2]), 0),
+                  max(min(_bounds[3], self.shape[1]), 0))
 
         # NOTE: image is a dask array that implements daskmeta interface (via op)
         result = self[:, bounds[1]:bounds[3], bounds[0]:bounds[2]]
@@ -471,7 +471,7 @@ class GeoImage(Container):
                                                          result.dask, result.name, result.chunks,
                                                          result.dtype, result.shape)
 
-        image.__geo_transform__ = self.__geo_transform__ + (bounds[0], bounds[1])
+        image.__geo_transform__ = self.__geo_transform__ + (_bounds[0], _bounds[1])
         return image
 
     def __getitem__(self, geometry):
