@@ -59,7 +59,8 @@ def load_url(url, token, shape=(8, 256, 256)):
                 success = True
                 return arr
             except Exception as e:
-                print(e)
+                if "GBDX_DEBUG" in os.environ:
+                    print(e)
                 _curl.close()
                 del _curl_pool[thread_id]
             finally:
