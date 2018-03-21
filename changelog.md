@@ -1,3 +1,7 @@
+0.14.7
+* fixes geotransform shift when padding indexes images
+* fixes affine geotransform rev off-by-one rounding error
+
 0.14.3
 * Removing calls to idaho.timbr.io for metadata
 * Using the ipe.TOAReflectance Op
