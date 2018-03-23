@@ -88,7 +88,7 @@ class DaskImage(da.Array):
             raise ValueError("{} must be initialized with a DaskMeta, a dask array, or a dict with DaskMeta fields".format(cls.__name__))
         self = da.Array.__new__(cls, *dm.values)
         self.__geo_transform__ = kwargs.get("__geo_transform__")
-        self.__geo_interface__ = kwargs.get("__get_interface__")
+        self.__geo_interface__ = kwargs.get("__geo_interface__")
         return self
 
     @property
