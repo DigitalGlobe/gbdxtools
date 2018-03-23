@@ -389,7 +389,7 @@ class GeoDaskImage(DaskImage, Container, PlotMixin):
 
         gi = mapping(full_bounds)
         gt = AffineTransform(gtf, proj)
-        image = self.__class__(daskmeta, __geo_interface__ = gi, __geo_transform__ = gt)
+        image = GeoDaskImage(daskmeta, __geo_interface__ = gi, __geo_transform__ = gt)
         return image[box(*output_bounds)]
 
     def _warp(self, geometry, gsd, dem, proj, dtype, buf=0):

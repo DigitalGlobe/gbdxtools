@@ -15,13 +15,13 @@ class IdahoImage(IpeImage):
             "proj": kwargs.get("proj", "EPSG:4326"),
             "product": kwargs.get("product", "toa_reflectance"),
             "gsd": kwargs.get("gsd", None),
-            "bucket": kwargs.get("bucket", "idaho-images"),
+            "bucket": kwargs.get("bucket", "rda-images-1"),
             "acomp": kwargs.get("acomp", False)
         }
         if options["acomp"] and options["bucket"] != "idaho-images":
             options["product"] = "acomp"
         else:
-            options["product"] = "toa_reflectance" 
+            options["product"] = "toa_reflectance"
 
         standard_products = cls._build_standard_products(idaho_id, options["proj"], bucket=options["bucket"], gsd=options["gsd"], acomp=options["acomp"])
         try:

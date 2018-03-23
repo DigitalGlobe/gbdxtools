@@ -52,7 +52,7 @@ class IpeImage(GeoDaskImage):
     _default_proj = "EPSG:4326"
 
     def __new__(cls, op, **kwargs):
-        self = super(IpeImage, cls).__new__(cls, op)
+        self = super(IpeImage, cls).__new__(cls, op, **kwargs)
         self._ipe_op = op
         if self.ipe.metadata["georef"] is None:
             tfm = RatPolyTransform.from_rpcs(self.ipe.metadata["rpcs"])
