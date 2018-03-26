@@ -81,7 +81,7 @@ class DaskImage(da.Array):
             dm = DaskMeta(**dm)
         elif isinstance(dm, DaskMeta):
             pass
-        elif dm.__class__.__name__ == "Op":
+        elif dm.__class__.__name__ in ("Op", "GraphMeta"):
             itr = [dm.dask, dm.name, dm.chunks, dm.dtype, dm.shape]
             dm = DaskMeta._make(itr)
         else:
