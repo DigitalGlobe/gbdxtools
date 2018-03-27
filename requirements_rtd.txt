@@ -19,4 +19,4 @@ configparser==3.5.0
 mercantile>=0.10.0
 scikit-image==0.13.1
 cachetools >=2.0.0
-affine
+affine==2.2.0
