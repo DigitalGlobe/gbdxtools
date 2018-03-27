@@ -17,6 +17,14 @@ gbdxtools: Python tools for using GBDX
     
 .. image:: https://codecov.io/gh/DigitalGlobe/gbdxtools/branch/master/graph/badge.svg
     :target: https://codecov.io/gh/DigitalGlobe/gbdxtools
+    
+.. image:: https://pyup.io/repos/github/DigitalGlobe/gbdxtools/shield.svg
+     :target: https://pyup.io/repos/github/DigitalGlobe/gbdxtools/
+     :alt: Updates
+     
+.. image:: https://pyup.io/repos/github/DigitalGlobe/gbdxtools/python-3-shield.svg
+     :target: https://pyup.io/repos/github/DigitalGlobe/gbdxtools/
+     :alt: Python 3
 
 
 
