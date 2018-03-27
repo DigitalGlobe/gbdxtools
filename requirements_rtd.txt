@@ -10,7 +10,7 @@ mock==2.0.0
 bumpversion==0.5.3
 shapely==1.6.4.post1
 ephem==3.7.6.0
-toolz
+toolz==0.9.0
 cloudpickle
 dask >= 0.16.0
 numpy
