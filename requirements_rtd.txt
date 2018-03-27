@@ -6,7 +6,7 @@ gbdx-auth==0.3.0
 pytest==3.5.0
 pytest-runner==4.2
 vcrpy==1.11.1
-mock
+mock==2.0.0
 bumpversion
 shapely
 ephem
