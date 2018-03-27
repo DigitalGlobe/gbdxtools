@@ -8,7 +8,7 @@ pytest-runner==4.2
 vcrpy==1.11.1
 mock==2.0.0
 bumpversion==0.5.3
-shapely
+shapely==1.6.4.post1
 ephem
 toolz
 cloudpickle
