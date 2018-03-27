@@ -4,7 +4,7 @@ requests>=2.12.1
 boto3==1.6.18
 gbdx-auth==0.3.0
 pytest==3.5.0
-pytest-runner
+pytest-runner==4.2
 vcrpy
 mock
 bumpversion
