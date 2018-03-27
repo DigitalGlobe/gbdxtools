@@ -17,6 +17,6 @@ numpy==1.14.2
 requests_futures==0.9.7
 configparser==3.5.0
 mercantile>=0.10.0
-scikit-image
+scikit-image==0.13.1
 cachetools >=2.0.0
 affine
