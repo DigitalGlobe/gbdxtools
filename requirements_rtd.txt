@@ -11,7 +11,7 @@ bumpversion==0.5.3
 shapely==1.6.4.post1
 ephem==3.7.6.0
 toolz==0.9.0
-cloudpickle
+cloudpickle==0.5.2
 dask >= 0.16.0
 numpy
 requests_futures
