@@ -7,7 +7,7 @@ pytest
 pytest-runner
 vcrpy
 mock
-bumpversion
+bumpversion==0.5.3
 shapely
 ephem
 toolz
