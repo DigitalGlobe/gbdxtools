@@ -10,7 +10,7 @@ mock
 bumpversion
 shapely
 ephem
-toolz
+toolz==0.9.0
 cloudpickle
 dask >= 0.16.0
 numpy
