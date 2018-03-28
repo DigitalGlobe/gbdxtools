@@ -13,7 +13,7 @@ ephem
 toolz
 cloudpickle
 dask >= 0.16.0
-numpy
+numpy==1.14.2
 requests_futures
 configparser
 mercantile>=0.10.0
