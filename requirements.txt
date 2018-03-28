@@ -9,7 +9,7 @@ vcrpy
 mock
 bumpversion
 shapely
-ephem
+ephem==3.7.6.0
 toolz
 cloudpickle
 dask >= 0.16.0
