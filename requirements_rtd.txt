@@ -5,7 +5,7 @@ boto3
 gbdx-auth==0.2.4
 pytest
 pytest-runner
-vcrpy
+vcrpy==1.11.1
 mock
 bumpversion
 shapely
