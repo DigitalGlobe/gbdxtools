@@ -81,7 +81,7 @@ class DaskImage(da.Array):
             dm = DaskMeta(**dm)
         elif isinstance(dm, DaskMeta):
             pass
-        elif dm.__class__.__name__ in ("Op", "GraphMeta"):
+        elif dm.__class__.__name__ in ("Op", "GraphMeta", "TmsMeta"):
             itr = [dm.dask, dm.name, dm.chunks, dm.dtype, dm.shape]
             dm = DaskMeta._make(itr)
         else:
@@ -236,8 +236,6 @@ class PlotMixin(object):
 
 class GeoDaskImage(DaskImage, Container, PlotMixin):
     _default_proj = "EPSG:4326"
-    def __init__(self, dm, **kwargs):
-        pass
 
     def asShape(self):
         return asShape(self)
