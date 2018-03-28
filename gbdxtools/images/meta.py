@@ -5,7 +5,7 @@ import os
 import random
 from functools import wraps, partial
 from itertools import chain
-from collections import Container
+from collections import Container, namedtuple
 from six import add_metaclass
 import warnings
 import math
@@ -14,7 +14,7 @@ from gbdxtools.ipe.io import to_geotiff
 from gbdxtools.ipe.util import RatPolyTransform, AffineTransform, pad_safe_positive, pad_safe_negative, IPE_TO_DTYPE, preview
 
 from shapely import ops, wkt
-from shapely.geometry import box, shape, mapping
+from shapely.geometry import box, shape, mapping, asShape
 from shapely.geometry.base import BaseGeometry
 try:
     from rio_hist.match import histogram_match
@@ -52,31 +52,17 @@ except NameError:
 threads = int(os.environ.get('GBDX_THREADS', 8))
 threaded_get = partial(dask.threaded.get, num_workers=threads)
 
+class DaskMeta(namedtuple("DaskMeta", ["dask", "name", "chunks", "dtype", "shape"])):
+    __slots__ = ()
+    @classmethod
+    def from_darray(cls, darr, new=tuple.__new__, len=len):
+        dsk, _ = optimize.cull(darr.dask, darr.__dask_keys__())
+        itr = [dsk, darr.name, darr.chunks, darr.dtype, darr.shape]
+        return cls._make(itr)
 
-@add_metaclass(abc.ABCMeta)
-class DaskMeta(object):
-    """
-    A DaskMeta is an interface for the required attributes for initializing a dask Array
-    """
-    @abc.abstractproperty
-    def dask(self):
-        pass
-
-    @abc.abstractproperty
-    def name(self):
-        pass
-
-    @abc.abstractproperty
-    def chunks(self):
-        pass
-
-    @abc.abstractproperty
-    def dtype(self):
-        pass
-
-    @abc.abstractproperty
-    def shape(self):
-        pass
+    @property
+    def values(self):
+        return self._asdict().values()
 
     def infect(self, target):
         assert isinstance(target, da.Array), "DaskMeta can only be attached to Dask Arrays"
@@ -84,64 +70,30 @@ class DaskMeta(object):
         target.__dict__["__daskmeta__"] = property(lambda s: self, DaskImage.__set_daskmeta__)
         return target
 
-@add_metaclass(abc.ABCMeta)
 class DaskImage(da.Array):
     """
     A DaskImage is a 2 or 3 dimension dask array that contains implements the `__daskmeta__` interface.
     """
+    def __new__(cls, dm, **kwargs):
+        if isinstance(dm, da.Array):
+            dm = DaskMeta.from_darray(dm)
+        elif isinstance(dm, dict):
+            dm = DaskMeta(**dm)
+        elif isinstance(dm, DaskMeta):
+            pass
+        elif dm.__class__.__name__ in ("Op", "GraphMeta", "TmsMeta"):
+            itr = [dm.dask, dm.name, dm.chunks, dm.dtype, dm.shape]
+            dm = DaskMeta._make(itr)
+        else:
+            raise ValueError("{} must be initialized with a DaskMeta, a dask array, or a dict with DaskMeta fields".format(cls.__name__))
+        self = da.Array.__new__(cls, *dm.values)
+        self.__geo_transform__ = kwargs.get("__geo_transform__")
+        self.__geo_interface__ = kwargs.get("__geo_interface__")
+        return self
+
     @property
     def __daskmeta__(self):
-        """ Should return a DaskMeta """
-        pass
-
-    @__daskmeta__.setter
-    def __set_daskmeta__(self, obj):
-        self.__dict__["__daskmeta__"] = property(lambda s: obj, self.__set_daskmeta__)
-
-    @classmethod
-    def __subclasshook__(cls, C):
-        if cls is DaskImage:
-            try:
-                if(is_dask_collection(C) and any("__daskmeta__" in B.__dict__ for B in C.__mro__)):
-                    return True
-            except AttributeError:
-                pass
-        return NotImplemented
-
-    @staticmethod
-    def _cull(dsk, keys=None):
-        if not keys:
-            return dsk
-        elif "token" not in dsk:
-            return dsk
-        if "token" not in keys:
-            keys.append("token")
-        dsk1, _ = optimize.cull(dsk, keys)
-        return dsk1
-
-    def __getattribute__(self, name):
-        fn = object.__getattribute__(self, name)
-        if(isinstance(fn, types.MethodType) and
-           any(name in C.__dict__ for C in self.__class__.__mro__)):
-            @wraps(fn)
-            def wrapped(*args, **kwargs):
-                result = fn(*args, **kwargs)
-                if isinstance(result, da.Array) and len(result.shape) in [2,3]:
-                    dsk = self._cull(result.dask, result.__dask_keys__())
-                    copy = super(DaskImage, self.__class__).__new__(self.__class__,
-                                                                    dsk, result.name, result.chunks,
-                                                                    result.dtype, result.shape)
-                    copy.__dict__.update(self.__dict__)
-                    try:
-                        copy.__dict__.update(result.__dict__)
-                    except AttributeError:
-                        # this means result was an object with __slots__
-                        pass
-                    return copy
-                return result
-            return wrapped
-        else:
-            return fn
+        return DaskMeta(self)
 
     @classmethod
     def create(cls, dm, **kwargs):
@@ -200,25 +152,93 @@ class DaskImage(da.Array):
             for i in xrange(count):
                 yield self.randwindow(window_shape)
 
+# Mixin class that defines plotting methods and rgb/ndvi methods
+# used as a mixin to provide access to the plot method on
+# GeoDaskWrapper images and ipe images
+class PlotMixin(object):
+    @property
+    def _rgb_bands(self):
+        return [4, 2, 1]
 
-@add_metaclass(abc.ABCMeta)
-class GeoImage(Container):
+    @property
+    def _ndvi_bands(self):
+        return [6, 4]
+
+    def base_layer_match(self, blm=False, **kwargs):
+        rgb = self.rgb(**kwargs)
+        if not blm:
+            return rgb
+        from gbdxtools.images.tms_image import TmsImage
+        bounds = self._reproject(box(*self.bounds), from_proj=self.proj, to_proj="EPSG:4326").bounds
+        tms = TmsImage(zoom=self._calc_tms_zoom(self.affine[0]), bbox=bounds, **kwargs)
+        ref = np.rollaxis(tms.read(), 0, 3)
+        out = np.dstack([histogram_match(rgb[:,:,idx], ref[:,:,idx].astype(np.double)/255.0)
+                        for idx in xrange(rgb.shape[-1])])
+        return out
+
+    def rgb(self, **kwargs):
+        data = self._read(self[kwargs.get("bands", self._rgb_bands),...], **kwargs)
+        data = np.rollaxis(data.astype(np.float32), 0, 3)
+        lims = np.percentile(data, kwargs.get("stretch", [2, 98]), axis=(0, 1))
+        for x in xrange(len(data[0,0,:])):
+            top = lims[:,x][1]
+            bottom = lims[:,x][0]
+            data[:,:,x] = (data[:,:,x] - bottom) / float(top - bottom)
+        return np.clip(data, 0, 1)
+
+    def ndvi(self, **kwargs):
+        data = self._read(self[self._ndvi_bands,...]).astype(np.float32)
+        return (data[0,:,:] - data[1,:,:]) / (data[0,:,:] + data[1,:,:])
+
+    def plot(self, spec="rgb", **kwargs):
+        if self.shape[0] == 1 or ("bands" in kwargs and len(kwargs["bands"]) == 1):
+            if "cmap" in kwargs:
+                cmap = kwargs["cmap"]
+                del kwargs["cmap"]
+            else:
+                cmap = "Greys_r"
+            self._plot(tfm=self._single_band, cmap=cmap, **kwargs)
+        else:
+            if spec == "rgb" and self._has_token(**kwargs):
+                self._plot(tfm=self.base_layer_match, **kwargs)
+            else:
+                self._plot(tfm=getattr(self, spec), **kwargs)
+
+    def _has_token(self, **kwargs):
+        if "access_token" in kwargs or "MAPBOX_API_KEY" in os.environ:
+            return True
+        else:
+            return False
+
+    def _plot(self, tfm=lambda x: x, **kwargs):
+        assert has_pyplot, "To plot images please install matplotlib"
+        assert self.shape[1] and self.shape[-1], "No data to plot, dimensions are invalid {}".format(str(self.shape))
+
+        f, ax1 = plt.subplots(1, figsize=(kwargs.get("w", 10), kwargs.get("h", 10)))
+        ax1.axis('off')
+        plt.imshow(tfm(**kwargs), interpolation='nearest', cmap=kwargs.get("cmap", None))
+        plt.show(block=False)
+
+    def _read(self, data, **kwargs):
+        if hasattr(data, 'read'):
+            return data.read(**kwargs)
+        else:
+            return data.compute(get=threaded_get)
+
+    def _single_band(self, **kwargs):
+        return self._read(self[0,:,:], **kwargs)
+
+    def _calc_tms_zoom(self, scale):
+        for z in range(15,20):
+            b = mercantile.bounds(0,0,z)
+            if scale > math.sqrt((b.north - b.south)*(b.east - b.west) / (256*256)):
+                return z
+
+class GeoDaskImage(DaskImage, Container, PlotMixin):
     _default_proj = "EPSG:4326"
 
-    # def __geo_interface__(self):
-    #     pass
-
-    # def __geo_transform__(self):
-    #     pass
-
-    @classmethod
-    def __subclasshook__(cls, C):
-        # Must be a numpy-like, with __geo_transform__, and __geo_interface__
-        if(issubclass(C, DaskImage) or issubclass(C, np.ndarray) and
-           any("__geo_transform__" in B.__dict__ for B in C.__mro__) and
-           any("__geo_interface__" in B.__dict__ for B in C.__mro__)):
-            return True
-        return NotImplemented
+    def asShape(self):
+        return asShape(self)
 
     @property
     def affine(self):
@@ -310,7 +330,6 @@ class GeoImage(Container):
             # NOTE: this only works on images that have IPE rpcs metadata
             center = wkt.loads(self.ipe.metadata["image"]["imageBoundsWGS84"]).centroid
             g = box(*(center.buffer(self.ipe.metadata["rpcs"]["gsd"] / 2).bounds))
-            # print "Input GSD (deg):", self.ipe.metadata["rpcs"]["gsd"]
             tfm = partial(pyproj.transform, pyproj.Proj(init="EPSG:4326"), pyproj.Proj(init=proj))
             gsd = kwargs.get("gsd", ops.transform(tfm, g).area ** 0.5)
             current_bounds = wkt.loads(self.ipe.metadata["image"]["imageBoundsWGS84"]).bounds
@@ -353,7 +372,7 @@ class GeoImage(Container):
         full_bounds = box(*output_bounds)
 
         dasks = []
-        if isinstance(dem, GeoImage):
+        if isinstance(dem, GeoDaskImage):
             if dem.proj != proj:
                 dem = dem.warp(proj=proj, dem=dem)
             dasks.append(dem.dask)
@@ -366,10 +385,10 @@ class GeoImage(Container):
                 daskmeta["dask"][(daskmeta["name"], 0, y, x)] = (self._warp, geometry, gsd, dem, proj, dtype, 5)
         daskmeta["dask"], _ = optimize.cull(sharedict.merge(daskmeta["dask"], *dasks), list(daskmeta["dask"].keys()))
 
-        result = GeoDaskWrapper(daskmeta, self)
-        result.__geo_interface__ = mapping(full_bounds)
-        result.__geo_transform__ = AffineTransform(gtf, proj)
-        return GeoImage.__getitem__(result, box(*output_bounds))
+        gi = mapping(full_bounds)
+        gt = AffineTransform(gtf, proj)
+        image = GeoDaskImage(daskmeta, __geo_interface__ = gi, __geo_transform__ = gt)
+        return image[box(*output_bounds)]
 
     def _warp(self, geometry, gsd, dem, proj, dtype, buf=0):
         transpix = self._transpix(geometry, gsd, dem, proj)
@@ -401,7 +420,7 @@ class GeoImage(Container):
 
         xv, yv = itfm(xv, yv) # if that works
 
-        if isinstance(dem, GeoImage):
+        if isinstance(dem, GeoDaskImage):
             g = box(xv.min(), yv.min(), xv.max(), yv.max())
             try:
                 dem = dem[g].compute(get=dask.get) # read(quiet=True)
@@ -448,7 +467,6 @@ class GeoImage(Container):
                   max(min(_bounds[2], self.shape[2]), 0),
                   max(min(_bounds[3], self.shape[1]), 0))
 
-        # NOTE: image is a dask array that implements daskmeta interface (via op)
         result = self[:, bounds[1]:bounds[3], bounds[0]:bounds[2]]
         if pads[0] > 0:
             dims = (result.shape[0], result.shape[1], pads[0])
@@ -467,25 +485,7 @@ class GeoImage(Container):
             result = da.concatenate([result,
                                      da.zeros(dims, chunks=dims, dtype=result.dtype)], axis=1)
 
-        image = super(DaskImage, self.__class__).__new__(self.__class__,
-                                                         result.dask, result.name, result.chunks,
-                                                         result.dtype, result.shape)
-
-        image.__geo_transform__ = self.__geo_transform__ + (_bounds[0], _bounds[1])
-        return image
-
-    def __getitem__(self, geometry):
-        g = shape(geometry)
-
-        bounds = ops.transform(self.__geo_transform__.rev, g).bounds
-        try:
-            assert g in self, "Image does not contain specified geometry {} not in {}".format(g.bounds, self.bounds)
-        except AssertionError as ae:
-            warnings.warn(ae.args)
-
-        image = self._slice_padded(bounds)
-        image.__geo_interface__ = mapping(g)
-        return image
+        return (result, bounds[0], bounds[1])
 
     def __contains__(self, g):
         geometry = ops.transform(self.__geo_transform__.rev, g)
@@ -493,148 +493,52 @@ class GeoImage(Container):
         return img_bounds.contains(geometry)
 
 
-class DaskMetaWrapper(DaskMeta):
-    def __init__(self, dask):
-        self.da = dask
-
-    @property
-    def dask(self):
-        return self.da["dask"]
-
-    @property
-    def name(self):
-        return self.da["name"]
-
-    @property
-    def chunks(self):
-        return self.da["chunks"]
-
-    @property
-    def dtype(self):
-        return self.da["dtype"]
-
-    @property
-    def shape(self):
-        return self.da["shape"]
-
-
-# Mixin class that defines plotting methods and rgb/ndvi methods
-# used as a mixin to provide access to the plot method on
-# GeoDaskWrapper images and ipe images
-class PlotMixin(object):
-    @property
-    def _rgb_bands(self):
-        return [4, 2, 1]
-
-    @property
-    def _ndvi_bands(self):
-        return [6, 4]
-
-    def base_layer_match(self, blm=False, **kwargs):
-        rgb = self.rgb(**kwargs)
-        if not blm:
-            return rgb
-        from gbdxtools.images.tms_image import TmsImage
-        bounds = self._reproject(box(*self.bounds), from_proj=self.proj, to_proj="EPSG:4326").bounds
-        tms = TmsImage(zoom=self._calc_tms_zoom(self.affine[0]), bbox=bounds, **kwargs)
-        ref = np.rollaxis(tms.read(), 0, 3)
-        out = np.dstack([histogram_match(rgb[:,:,idx], ref[:,:,idx].astype(np.double)/255.0)
-                        for idx in xrange(rgb.shape[-1])])
-        return out
-
-    def rgb(self, **kwargs):
-        data = self._read(self[kwargs.get("bands", self._rgb_bands),...], **kwargs)
-        data = np.rollaxis(data.astype(np.float32), 0, 3)
-        lims = np.percentile(data, kwargs.get("stretch", [2, 98]), axis=(0, 1))
-        for x in xrange(len(data[0,0,:])):
-            top = lims[:,x][1]
-            bottom = lims[:,x][0]
-            data[:,:,x] = (data[:,:,x] - bottom) / float(top - bottom)
-        return np.clip(data, 0, 1)
-
-    def ndvi(self, **kwargs):
-        data = self._read(self[self._ndvi_bands,...]).astype(np.float32)
-        return (data[0,:,:] - data[1,:,:]) / (data[0,:,:] + data[1,:,:])
-
-    def plot(self, spec="rgb", **kwargs):
-        if self.shape[0] == 1 or ("bands" in kwargs and len(kwargs["bands"]) == 1):
-            if "cmap" in kwargs:
-                cmap = kwargs["cmap"]
-                del kwargs["cmap"]
-            else:
-                cmap = "Greys_r"
-            self._plot(tfm=self._single_band, cmap=cmap, **kwargs)
-        else:
-            if spec == "rgb" and self._has_token(**kwargs):
-                self._plot(tfm=self.base_layer_match, **kwargs)
-            else:
-                self._plot(tfm=getattr(self, spec), **kwargs)
-
-    def _has_token(self, **kwargs):
-        if "access_token" in kwargs or "MAPBOX_API_KEY" in os.environ:
-            return True
-        else:
-            return False
-
-    def _plot(self, tfm=lambda x: x, **kwargs):
-        assert has_pyplot, "To plot images please install matplotlib"
-        assert self.shape[1] and self.shape[-1], "No data to plot, dimensions are invalid {}".format(str(self.shape))
-
-        f, ax1 = plt.subplots(1, figsize=(kwargs.get("w", 10), kwargs.get("h", 10)))
-        ax1.axis('off')
-        plt.imshow(tfm(**kwargs), interpolation='nearest', cmap=kwargs.get("cmap", None))
-        plt.show(block=False)
-
-    def _read(self, data, **kwargs):
-        if hasattr(data, 'read'):
-            return data.read(**kwargs)
-        else:
-            return data.compute(get=threaded_get)
-
-    def _single_band(self, **kwargs):
-        return self._read(self[0,:,:], **kwargs)
-
-    def _calc_tms_zoom(self, scale):
-        for z in range(15,20):
-            b = mercantile.bounds(0,0,z)
-            if scale > math.sqrt((b.north - b.south)*(b.east - b.west) / (256*256)):
-                return z
-
-
-class GeoDaskWrapper(DaskImage, GeoImage, PlotMixin):
-    def __new__(cls, daskmeta, img):
-        dm = DaskMetaWrapper(daskmeta)
-        self = super(GeoDaskWrapper, cls).create(dm)
-        self._dm = dm
-        self.__geo_interface__ = img.__geo_interface__
-        self.__geo_transform__ = img.__geo_transform__
-        return self
-
-    @property
-    def __daskmeta__(self):
-        return self._dm
-
     def __getitem__(self, geometry):
         if isinstance(geometry, BaseGeometry) or getattr(geometry, "__geo_interface__", None) is not None:
-            image = GeoImage.__getitem__(self, geometry)
-            return image
+            g = shape(geometry)
+            try:
+                assert g in self, "Image does not contain specified geometry {} not in {}".format(g.bounds, self.bounds)
+            except AssertionError as ae:
+                warnings.warn(ae.args)
+            bounds = ops.transform(self.__geo_transform__.rev, g).bounds
+            result, xmin, ymin = self._slice_padded(bounds)
         else:
-            result = DaskImage.__getitem__(self, geometry)
-            image = super(GeoDaskWrapper, self.__class__).__new__(self.__class__,
-                                                            result.dask, result.name, result.chunks,
-                                                            result.dtype, result.shape)
-
-            if all([isinstance(e, slice) for e in geometry]) and len(geometry) == len(self.shape):
-                xmin, ymin, xmax, ymax = geometry[2].start, geometry[1].start, geometry[2].stop, geometry[1].stop
+            if len(geometry) == 1:
+                assert geometry[0] == Ellipsis
+                return self
+            elif len(geometry) == 2:
+                arg0, arg1 = geometry
+                if isinstance(arg1, slice):
+                    assert arg0 == Ellipsis
+                    return self[:, :, arg1.start:arg1.stop]
+                elif arg1 == Ellipsis:
+                    return self[arg0, :, :]
+            elif len(geometry) == 3:
+                nbands, ysize, xsize = self.shape
+                band_idx, y_idx, x_idx = geometry
+                if y_idx == Ellipsis:
+                    y_idx = slice(0, ysize)
+                if x_idx == Ellipsis:
+                    x_idx = slice(0, xsize)
+                if not(isinstance(y_idx, slice) and isinstance(x_idx, slice)):
+                    di = DaskImage(self)
+                    return di.__getitem__(geometry)
+                xmin, ymin, xmax, ymax = x_idx.start, y_idx.start, x_idx.stop, y_idx.stop
                 xmin = 0 if xmin is None else xmin
                 ymin = 0 if ymin is None else ymin
-                xmax = self.shape[2] if xmax is None else xmax
-                ymax = self.shape[1] if ymax is None else ymax
+                xmax = xsize if xmax is None else xmax
+                ymax = ysize if ymax is None else ymax
+                if ymin > ysize and xmin > xsize:
+                    raise IndexError("Index completely out of image bounds")
 
                 g = ops.transform(self.__geo_transform__.fwd, box(xmin, ymin, xmax, ymax))
-                image.__geo_interface__ = mapping(g)
-                image.__geo_transform__ = self.__geo_transform__ + (xmin, ymin)
+                result = super(GeoDaskImage, self).__getitem__(geometry)
+
             else:
-                image.__geo_interface__ = self.__geo_interface__
-                image.__geo_transform__ = self.__geo_transform__
-            return image
+                return super(GeoDaskImage, self).__getitem__(geometry)
+
+        gi = mapping(g)
+        gt = self.__geo_transform__ + (xmin, ymin)
+        image = super(GeoDaskImage, self.__class__).__new__(self.__class__, result, __geo_interface__ = gi, __geo_transform__ = gt)
+        return image
+

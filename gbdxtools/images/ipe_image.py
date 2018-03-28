@@ -1,7 +1,7 @@
 from __future__ import print_function
 import math
 
-from gbdxtools.images.meta import DaskMeta, DaskImage, GeoImage, PlotMixin
+from gbdxtools.images.meta import DaskMeta, GeoDaskImage
 from gbdxtools.ipe.util import RatPolyTransform, AffineTransform
 from gbdxtools.ipe.interface import DaskProps
 from gbdxtools.ipe.graph import get_ipe_graph
@@ -21,7 +21,7 @@ try:
 except NameError:
     xrange = range
 
-class GraphMeta(DaskProps, DaskMeta):
+class GraphMeta(DaskProps):
     def __init__(self, graph_id, node_id=None, **kwargs):
         assert graph_id is not None
         self._ipe_id = graph_id
@@ -48,15 +48,13 @@ class GraphMeta(DaskProps, DaskMeta):
         return self._graph
 
 
-class IpeImage(DaskImage, GeoImage, PlotMixin):
+class IpeImage(GeoDaskImage):
     _default_proj = "EPSG:4326"
 
     def __new__(cls, op, **kwargs):
-        if op is not None:
-            assert isinstance(op, DaskMeta)
-        elif "graph_id" in kwargs:
+        if "graph_id" in kwargs:
             op = GraphMeta(**kwargs)
-        self = super(IpeImage, cls).create(op)
+        self = super(IpeImage, cls).__new__(cls, op, **kwargs)
         self._ipe_op = op
         if self.ipe.metadata["georef"] is None:
             tfm = RatPolyTransform.from_rpcs(self.ipe.metadata["rpcs"])
@@ -72,6 +70,11 @@ class IpeImage(DaskImage, GeoImage, PlotMixin):
         miny = img_md["minY"] - yshift
         maxy = img_md["maxY"] - yshift
         return self[:, miny:maxy, minx:maxx]
+
+    def __getitem__(self, geometry):
+        im = super(IpeImage, self).__getitem__(geometry)
+        im._ipe_op = self._ipe_op
+        return im
 
     @property
     def __daskmeta__(self):
@@ -94,35 +97,7 @@ class IpeImage(DaskImage, GeoImage, PlotMixin):
         size = float(self.ipe.metadata['image']['tileXSize'])
         return math.ceil((float(self.shape[-1]) / size)) * math.ceil(float(self.shape[1]) / size)
 
-    def __getitem__(self, geometry):
-        if isinstance(geometry, BaseGeometry) or getattr(geometry, "__geo_interface__", None) is not None:
-            image = GeoImage.__getitem__(self, geometry)
-            image._ipe_op = self._ipe_op
-            return image
-        else:
-            result = super(IpeImage, self).__getitem__(geometry)
-            dsk = self._cull(result.dask, result.__dask_keys__())
-            image = super(IpeImage, self.__class__).__new__(self.__class__,
-                                                            dsk, result.name, result.chunks,
-                                                            result.dtype, result.shape)
-
-            if all([isinstance(e, slice) for e in geometry]) and len(geometry) == len(self.shape):
-                xmin, ymin, xmax, ymax = geometry[2].start, geometry[1].start, geometry[2].stop, geometry[1].stop
-                xmin = 0 if xmin is None else xmin
-                ymin = 0 if ymin is None else ymin
-                xmax = self.shape[2] if xmax is None else xmax
-                ymax = self.shape[1] if ymax is None else ymax
-
-                g = ops.transform(self.__geo_transform__.fwd, box(xmin, ymin, xmax, ymax))
-                image.__geo_interface__ = mapping(g)
-                image.__geo_transform__ = self.__geo_transform__ + (xmin, ymin)
-            else:
-                image.__geo_interface__ = self.__geo_interface__
-                image.__geo_transform__ = self.__geo_transform__
-            image._ipe_op = self._ipe_op
-            return image
-
-    def read(self, bands=None, quiet=False, **kwargs):
+    def read(self, bands=None, quiet=True, **kwargs):
         if not quiet:
             print('Fetching Image... {} {}'.format(self.ntiles, 'tiles' if self.ntiles > 1 else 'tile'))
         return super(IpeImage, self).read(bands=bands)

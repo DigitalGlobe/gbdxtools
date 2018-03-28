@@ -1,6 +1,5 @@
 """
 GBDX Catalog Image Interface.
-
 Contact: chris.helm@digitalglobe.com
 """
 from __future__ import print_function
@@ -58,7 +57,7 @@ class WVImage(IpeImage):
         standard_products["pansharpened"] = ipe.LocallyProjectivePanSharpen(ms, pan)
 
         try:
-            self = super(WVImage, cls).__new__(cls, standard_products[options["product"]], **kwargs)
+            self = super(WVImage, cls).__new__(cls, standard_products[options["product"]])
         except KeyError as e:
             print(e)
             print("Specified product not implemented: {}".format(options["product"]))
@@ -116,11 +115,11 @@ class WVImage(IpeImage):
 
         toa = [ipe.Format(ipe.MultiplyConst(ipe.TOAReflectance(dn), constants=json.dumps([10000])), dataType="1") for dn in dn_ops]
         toa_reflectance_op = ipe.Format(ipe.GeospatialMosaic(*toa, **mosaic_params), dataType="4")
-        
+
         graph = {"ortho": ortho_op, "toa_reflectance": toa_reflectance_op}
-       
+
         if acomp:
-            if _bucket != 'idaho-images': 
+            if _bucket != 'idaho-images':
                 _ops = [ipe.Format(ipe.MultiplyConst(ipe.Acomp(dn), constants=json.dumps([10000])), dataType="1") for dn in dn_ops]
                 graph["acomp"] = ipe.Format(ipe.GeospatialMosaic(*_ops, **mosaic_params), dataType="4")
             else:

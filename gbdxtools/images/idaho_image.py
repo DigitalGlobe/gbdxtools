@@ -25,7 +25,7 @@ class IdahoImage(IpeImage):
         if options["acomp"] and options["bucket"] != "idaho-images":
             options["product"] = "acomp"
         else:
-            options["product"] = "toa_reflectance" 
+            options["product"] = "toa_reflectance"
 
         standard_products = cls._build_standard_products(idaho_id, options["proj"], bucket=options["bucket"], gsd=options["gsd"], acomp=options["acomp"])
         try:
