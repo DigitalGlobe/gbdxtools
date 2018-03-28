@@ -77,7 +77,7 @@ class CatalogImageTest(unittest.TestCase):
         _id = '104001002838EC00'
         img = self.gbdx.catalog_image(_id, bbox=[-85.81455230712892,10.416235163695223,-85.77163696289064,10.457089934231618])
         assert img.cat_id == _id
-        assert img.shape == (8, 3036, 3189)
+        assert img.shape == (8, 3037, 3190)
         assert img.proj == 'EPSG:4326'
 
     @my_vcr.use_cassette('tests/unit/cassettes/test_wv_image_proj.yaml', filter_headers=['authorization'])
@@ -94,7 +94,7 @@ class CatalogImageTest(unittest.TestCase):
         img = CatalogImage(_id)
         assert img.cat_id == _id
         aoi = img.aoi(bbox=[-85.81455230712892,10.416235163695223,-85.77163696289064,10.457089934231618])
-        assert aoi.shape == (8, 3036, 3189)
+        assert aoi.shape == (8, 3037, 3190)
 
     @my_vcr.use_cassette('tests/unit/cassettes/test_wv_image_pan_band.yaml', filter_headers=['authorization'])
     def test_catalog_image_panchromatic(self):

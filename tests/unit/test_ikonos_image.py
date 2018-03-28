@@ -47,7 +47,7 @@ class GE01ImageTest(unittest.TestCase):
         _id = '2001110218231680000010116110'
         img = self.gbdx.catalog_image(_id, bbox=[-111.96084176146779, 36.627666371883, -111.91772282506821, 36.670785308282575])
         self.assertTrue(isinstance(img, IkonosImage))
-        assert img.shape == (4, 1501, 1500)
+        assert img.shape == (4, 1500, 1500)
         assert img.proj == 'EPSG:4326'
 
     @my_vcr.use_cassette('tests/unit/cassettes/test_ikonos_image_proj.yaml', filter_headers=['authorization'])

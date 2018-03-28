@@ -21,7 +21,7 @@ from scipy.misc import imread
 
 import mercantile
 
-from gbdxtools.images.meta import GeoDaskImage
+from gbdxtools.images.meta import GeoDaskImage, DaskMeta
 from gbdxtools.ipe.util import AffineTransform
 
 from shapely.geometry import mapping, box
@@ -76,7 +76,7 @@ def raise_aoi_required():
     raise EphemeralImage("Image subset must be specified before it can be made concrete.")
 
 
-class TmsMeta(GeoDaskImage):
+class TmsMeta(object):
     def __init__(self, access_token=os.environ.get("DG_MAPS_API_TOKEN"),
                  url="https://api.mapbox.com/v4/digitalglobe.nal0g75k/{z}/{x}/{y}.png",
                  zoom=22, bounds=None):
@@ -186,11 +186,11 @@ class TmsImage(GeoDaskImage):
                 url="https://api.mapbox.com/v4/digitalglobe.nal0g75k/{z}/{x}/{y}.png",
                 zoom=22, **kwargs):
         _tms_meta = TmsMeta(access_token=access_token, url=url, zoom=zoom, bounds=kwargs.get("bounds"))
-        self = super(TmsImage, cls).create(_tms_meta)
+        gi = mapping(box(*_tms_meta.bounds))
+        gt = _tms_meta.__geo_transform__
+        self =  super(TmsImage, cls).__new__(cls, _tms_meta, __geo_transform__ = gt, __geo_interface__ = gi)
         self._base_args = {"access_token": access_token, "url": url, "zoom": zoom}
         self._tms_meta = _tms_meta
-        self.__geo_interface__ = mapping(box(*_tms_meta.bounds))
-        self.__geo_transform__ = _tms_meta.__geo_transform__
         g = self._parse_geoms(**kwargs)
         if g is not None:
             return self[g]
@@ -212,15 +212,12 @@ class TmsImage(GeoDaskImage):
         if isinstance(geometry, BaseGeometry) or getattr(geometry, "__geo_interface__", None) is not None:
             if self._tms_meta._bounds is None:
                 return self.aoi(geojson=mapping(geometry), from_proj=self.proj)
-            image = GeoImage.__getitem__(self, geometry)
+            image = GeoDaskImage.__getitem__(self, geometry)
             image._tms_meta = self._tms_meta
             return image
         else:
             result = super(TmsImage, self).__getitem__(geometry)
-            image = super(TmsImage, self.__class__).__new__(self.__class__,
-                                                            result.dask, result.name, result.chunks,
-                                                            result.dtype, result.shape)
-
+            image = super(TmsImage, self.__class__).__new__(self.__class__, result)
             if all([isinstance(e, slice) for e in geometry]) and len(geometry) == len(self.shape):
                 xmin, ymin, xmax, ymax = geometry[2].start, geometry[1].start, geometry[2].stop, geometry[1].stop
                 xmin = 0 if xmin is None else xmin

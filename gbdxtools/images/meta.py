@@ -81,14 +81,14 @@ class DaskImage(da.Array):
             dm = DaskMeta(**dm)
         elif isinstance(dm, DaskMeta):
             pass
-        elif dm.__class__.__name__ == "Op":
+        elif dm.__class__.__name__ in ("Op", "GraphMeta", "TmsMeta"):
             itr = [dm.dask, dm.name, dm.chunks, dm.dtype, dm.shape]
             dm = DaskMeta._make(itr)
         else:
             raise ValueError("{} must be initialized with a DaskMeta, a dask array, or a dict with DaskMeta fields".format(cls.__name__))
         self = da.Array.__new__(cls, *dm.values)
         self.__geo_transform__ = kwargs.get("__geo_transform__")
-        self.__geo_interface__ = kwargs.get("__get_interface__")
+        self.__geo_interface__ = kwargs.get("__geo_interface__")
         return self
 
     @property
@@ -248,8 +248,6 @@ class GeoDaskTemplate(object):
 
 class GeoDaskImage(DaskImage, Container, PlotMixin):
     _default_proj = "EPSG:4326"
-    def __init__(self, dm, gt=None, gi=None, **kwargs):
-        pass
 
     def asShape(self):
         return asShape(self)
@@ -401,7 +399,7 @@ class GeoDaskImage(DaskImage, Container, PlotMixin):
 
         gi = mapping(full_bounds)
         gt = AffineTransform(gtf, proj)
-        image = self.__class__(daskmeta, __geo_interface__ = gi, __geo_transform__ = gt)
+        image = GeoDaskImage(daskmeta, __geo_interface__ = gi, __geo_transform__ = gt)
         return image[box(*output_bounds)]
 
     def _warp(self, geometry, gsd, dem, proj, dtype, buf=0):
@@ -473,13 +471,13 @@ class GeoDaskImage(DaskImage, Container, PlotMixin):
         return ops.transform(tfm, geometry)
 
 
-    def _slice_padded(self, bounds):
-        pads = (max(-bounds[0], 0), max(-bounds[1], 0),
-                max(bounds[2]-self.shape[2], 0), max(bounds[3]-self.shape[1], 0))
-        bounds = (max(bounds[0], 0),
-                  max(bounds[1], 0),
-                  max(min(bounds[2], self.shape[2]), 0),
-                  max(min(bounds[3], self.shape[1]), 0))
+    def _slice_padded(self, _bounds):
+        pads = (max(-_bounds[0], 0), max(-_bounds[1], 0),
+                max(_bounds[2]-self.shape[2], 0), max(_bounds[3]-self.shape[1], 0))
+        bounds = (max(_bounds[0], 0),
+                  max(_bounds[1], 0),
+                  max(min(_bounds[2], self.shape[2]), 0),
+                  max(min(_bounds[3], self.shape[1]), 0))
 
         result = self[:, bounds[1]:bounds[3], bounds[0]:bounds[2]]
         if pads[0] > 0:

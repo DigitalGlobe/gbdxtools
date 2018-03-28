@@ -299,7 +299,7 @@ class RatPolyTransform(GeometricTransform):
         result = np.rollaxis(np.inner(self._A, X) / np.inner(self._B, X), 0, 3)
         rev_offset, rev_scale = np.vsplit(self._px_offscl_rev, 2)
         # needs to return x/y
-        return  np.rollaxis(result * rev_scale + rev_offset, 2).squeeze().astype(_type)[::-1]
+        return  np.rint(np.rollaxis(result * rev_scale + rev_offset, 2)).squeeze().astype(_type)[::-1]
 
     def fwd(self, x, y, z=None):
         if isinstance(x, (Sequence, np.ndarray)):
@@ -387,7 +387,7 @@ class AffineTransform(GeometricTransform):
     def rev(self, lng, lat, z=0, _type=np.int32):
         if self._iaffine is None:
             self._iaffine = ~self._affine
-        return np.asarray(self._iaffine * (lng, lat)).astype(_type)
+        return np.rint(np.asarray(self._iaffine * (lng, lat))).astype(_type)
 
     def fwd(self, x, y, z=0):
         return self._affine * (x, y)

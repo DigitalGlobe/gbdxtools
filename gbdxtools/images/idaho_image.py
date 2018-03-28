@@ -5,6 +5,10 @@ from gbdxtools.images.drivers import IdahoDriver
 from gbdxtools.images.util import vector_services_query
 from gbdxtools.ipe.util import calc_toa_gain_offset, ortho_params
 from gbdxtools.ipe.interface import Ipe
+from gbdxtools.vectors import Vectors
+
+from shapely import wkt
+from shapely.geometry import box
 
 ipe = Ipe()
 
@@ -24,7 +28,7 @@ class IdahoImage(RDABaseImage):
             vq = "item_type:IDAHOImage AND id:{}".format(idaho_id)
             result = vector_services_query(vq)
             if result:
-                bucket = result[0]["properties"]["attributes"]["tileBucketName"]
+               bucket = result[0]["properties"]["attributes"]["tileBucketName"]
 
         dn_op = ipe.IdahoRead(bucketName=bucket, imageId=idaho_id, objectStore="S3")
         params = ortho_params(proj, gsd=gsd)

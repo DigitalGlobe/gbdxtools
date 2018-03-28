@@ -52,7 +52,7 @@ class IpeImageTest(unittest.TestCase):
         bbox = [-109.72, 43.19, -109.49, 43.34]
         img = self.gbdx.dem_image(bbox=bbox)
         self.assertTrue(isinstance(img, DemImage))
-        assert img.shape == (1, 554, 851)
+        assert img.shape == (1, 555, 850)
         assert img.proj == 'EPSG:4326'
 
     @my_vcr.use_cassette('tests/unit/cassettes/test_dem_image_proj.yaml', filter_headers=['authorization'])

@@ -32,17 +32,15 @@ class _Auth(object):
 
         if 'host' in kwargs:
             self.root_url = 'https://%s' % kwargs.get('host')
-        try:
-            if (kwargs.get('username') and kwargs.get('password') and
-                    kwargs.get('client_id') and kwargs.get('client_secret')):
-                self.gbdx_connection = gbdx_auth.session_from_kwargs(**kwargs)
-            elif kwargs.get('gbdx_connection'):
-                self.gbdx_connection = kwargs.get('gbdx_connection')
-            elif self.gbdx_connection is None:
-                # This will throw an exception if your .ini file is not set properly
-                self.gbdx_connection = gbdx_auth.get_session(kwargs.get('config_file'))
-        except Exception as err:
-            print(err)
+
+        if (kwargs.get('username') and kwargs.get('password') and
+                kwargs.get('client_id') and kwargs.get('client_secret')):
+            self.gbdx_connection = gbdx_auth.session_from_kwargs(**kwargs)
+        elif kwargs.get('gbdx_connection'):
+            self.gbdx_connection = kwargs.get('gbdx_connection')
+        elif self.gbdx_connection is None:
+            # This will throw an exception if your .ini file is not set properly
+            self.gbdx_connection = gbdx_auth.get_session(kwargs.get('config_file'))
 
         def expire_token(r, *args, **kw):
             """
