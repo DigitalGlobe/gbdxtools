@@ -32,6 +32,7 @@ except NameError:
 MAX_RETRIES = 5
 _curl_pool = defaultdict(pycurl.Curl)
 
+@lru_cache(maxsize=128)
 def load_url(url, token, shape=(8, 256, 256)):
     """ Loads a geotiff url inside a thread and returns as an ndarray """
     _, ext = os.path.splitext(urlparse(url).path)
@@ -59,7 +60,8 @@ def load_url(url, token, shape=(8, 256, 256)):
                 success = True
                 return arr
             except Exception as e:
-                print(e)
+                if "GBDX_DEBUG" in os.environ:
+                    print(e)
                 _curl.close()
                 del _curl_pool[thread_id]
             finally:

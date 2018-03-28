@@ -459,13 +459,13 @@ class GeoDaskImage(DaskImage, Container, PlotMixin):
         return ops.transform(tfm, geometry)
 
 
-    def _slice_padded(self, bounds):
-        pads = (max(-bounds[0], 0), max(-bounds[1], 0),
-                max(bounds[2]-self.shape[2], 0), max(bounds[3]-self.shape[1], 0))
-        bounds = (max(bounds[0], 0),
-                  max(bounds[1], 0),
-                  max(min(bounds[2], self.shape[2]), 0),
-                  max(min(bounds[3], self.shape[1]), 0))
+    def _slice_padded(self, _bounds):
+        pads = (max(-_bounds[0], 0), max(-_bounds[1], 0),
+                max(_bounds[2]-self.shape[2], 0), max(_bounds[3]-self.shape[1], 0))
+        bounds = (max(_bounds[0], 0),
+                  max(_bounds[1], 0),
+                  max(min(_bounds[2], self.shape[2]), 0),
+                  max(min(_bounds[3], self.shape[1]), 0))
 
         result = self[:, bounds[1]:bounds[3], bounds[0]:bounds[2]]
         if pads[0] > 0:

@@ -72,11 +72,11 @@ class GE01ImageTest(unittest.TestCase):
         _id = '1010010002B93F00'
         img = self.gbdx.catalog_image(_id, band_type="pan", bbox=[125.259159043295, 40.43603914103845, 125.27301998472511, 40.44990008246856])
         self.assertTrue(isinstance(img, QB02))
-        assert img.shape == (1, 1998, 1999)
+        assert img.shape == (1, 1999, 1998)
 
     @my_vcr.use_cassette('tests/unit/cassettes/test_quickbird_image_pansharpen.yaml', filter_headers=['authorization'])
     def test_quickbird_image_pansharpen(self):
         _id = '1010010002B93F00'
         img = self.gbdx.catalog_image(_id, pansharpen=True, bbox=[125.259159043295, 40.43603914103845, 125.27301998472511, 40.44990008246856])
         self.assertTrue(isinstance(img, QB02))
-        assert img.shape == (4, 1998, 1999)
+        assert img.shape == (4, 1999, 1998)

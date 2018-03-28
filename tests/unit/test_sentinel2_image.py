@@ -47,7 +47,7 @@ class IpeImageTest(unittest.TestCase):
         _id = 'tiles/21/U/VQ/2016/5/23/0'
         img = self.gbdx.sentinel2(_id, bbox=[-58.37816710149235, 48.65691074156554, -56.86087022688015, 49.65456221177575])
         self.assertTrue(isinstance(img, Sentinel2))
-        assert img.shape == (4, 11180, 11173)
+        assert img.shape == (4, 11181, 11174)
         assert img.proj == 'EPSG:32621'
 
     @my_vcr.use_cassette('tests/unit/cassettes/test_sentinel_image_proj.yaml', filter_headers=['authorization'])

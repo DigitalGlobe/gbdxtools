@@ -3,6 +3,10 @@ import requests
 from gbdxtools.images.ipe_image import IpeImage
 from gbdxtools.ipe.util import calc_toa_gain_offset, ortho_params
 from gbdxtools.ipe.interface import Ipe
+from gbdxtools.vectors import Vectors
+
+from shapely import wkt
+from shapely.geometry import box
 
 ipe = Ipe()
 
@@ -15,7 +19,7 @@ class IdahoImage(IpeImage):
             "proj": kwargs.get("proj", "EPSG:4326"),
             "product": kwargs.get("product", "toa_reflectance"),
             "gsd": kwargs.get("gsd", None),
-            "bucket": kwargs.get("bucket", "rda-images-1"),
+            "bucket": kwargs.get("bucket", None),
             "acomp": kwargs.get("acomp", False)
         }
         if options["acomp"] and options["bucket"] != "idaho-images":
@@ -40,7 +44,15 @@ class IdahoImage(IpeImage):
         return self.__class__(self.idaho_id, proj=self.proj, product=product)
 
     @staticmethod
-    def _build_standard_products(idaho_id, proj, bucket="idaho-images", gsd=None, acomp=False):
+    def _build_standard_products(idaho_id, proj, bucket=None, gsd=None, acomp=False):
+        if bucket is None:
+            vectors = Vectors()
+            aoi = wkt.dumps(box(-180, -90, 180, 90))
+            query = "item_type:IDAHOImage AND id:{}".format(idaho_id)
+            result = vectors.query(aoi, query=query)
+            if len(result):
+                bucket = result[0]["properties"]["attributes"]["tileBucketName"]
+
         dn_op = ipe.IdahoRead(bucketName=bucket, imageId=idaho_id, objectStore="S3")
         params = ortho_params(proj, gsd=gsd)
 
