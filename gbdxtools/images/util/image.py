@@ -1,6 +1,7 @@
 from gbdxtools.vectors import Vectors
 
 from shapely import wkt
+from shapely.geometry import box
 
 band_types = {
     'MS': 'WORLDVIEW_8_BAND',
