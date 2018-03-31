@@ -13,9 +13,6 @@ class RDABaseImage(IpeImage):
     def __post_new_hook__(self, **kwargs):
         return self.aoi(**kwargs)
 
-    def __default_options__(self):
-        return self.__driver__.default_options
-
     @property
     def options(self):
         return self.__driver__.options

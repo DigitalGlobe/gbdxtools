@@ -1,8 +1,11 @@
-from gbdxtools.images.exceptions import DriverConfigurationError, UnsupportedImageProduct
+from gbdxtools.ipe.interface import Ipe
+from gbdxtools.images.exceptions import *
+
 import collections
 import abc
 import six
 
+ipe = Ipe()
 
 RDA_DEFAULT_OPTIONS = {
     "proj": "ESPG:4326",
@@ -155,10 +158,10 @@ class RDADaskImageDriver(RDADriverInterface):
             if not rda_id:
                 raise AttributeError("RDA Image ID not provided")
             self.rda_id = rda_id
-        self.build_payload(target)
         target.__driver__ = self
         target.__supported_options__ = self.image_option_support
         target.__default_options__ = self.default_options
+        self.build_payload(target)
         return target
 
 
