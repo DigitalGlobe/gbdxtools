@@ -1,5 +1,5 @@
 from __future__ import print_function
-from gbdxtools.images.ipe_image import RDABaseImage
+from gbdxtools.images.base import RDABaseImage
 from gbdxtools.images.drivers import RDADaskImageDriver
 from gbdxtools.ipe.interface import Ipe
 from gbdxtools.ipe.util import ortho_params

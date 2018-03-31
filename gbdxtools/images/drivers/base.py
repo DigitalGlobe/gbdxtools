@@ -71,7 +71,7 @@ class OptionParserFactory(type):
         default_options = getattr(inst, "__default_options__", {})
         custom_options = getattr(inst, "__image_option_defaults__", {})
         defaults = update_options(default_options, custom_options)
-        p = opf(inst.__name__ + "Parser", inst.image_option_support, default_options=defaults)
+        p = opf(inst.__name__ + "Parser", inst.image_option_support, default_values=defaults)
         setattr(inst, "parser", p)
         setattr(inst, "default_options", defaults)
         return inst
@@ -101,14 +101,14 @@ class RDADaskImageDriver(RDADriverInterface):
 
     def __init__(self, rda_id=None, **kwargs):
         self.rda_id = rda_id
-        options = kwagrs.get("rda_options")
+        options = kwargs.get("rda_options")
         if not options:
             options = self.parse_options(kwargs)
-            options = self.configure_options(options)
+            options = self.configure_options(options._asdict())
         self._options = options
 
     def parse_options(self, inputs):
-        options = self.parser(**{opt: inputs[opt] for opt in self.image_option_support})
+        options = self.parser(**{opt: inputs[opt] for opt in self.image_option_support if opt in inputs})
         return options
 
     @property
@@ -174,7 +174,7 @@ class IdahoDriver(RDADaskImageDriver):
             options["product"] = "toa_reflectance"
         return options
 
-class WorldViewDriver(RDADaskImagerDriver):
+class WorldViewDriver(RDADaskImageDriver):
     __default_options__ = WV_MODERN_OPTIONS
     image_option_support = WV_MODERN_OPTIONS.keys()
 
@@ -188,7 +188,7 @@ class WorldViewDriver(RDADaskImagerDriver):
         return options
 
     def build_payload(self, target):
-        standard_products = super(WorldViewDriver, self).build_payload(target, **self.options)
+        standard_products = super(WorldViewDriver, self).build_payload(target)
         if "pansharpen" in self.image_option_support:
             options = self.options.copy()
             options["band_type"] = "pan"

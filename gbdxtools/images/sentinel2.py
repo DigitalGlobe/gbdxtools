@@ -1,4 +1,4 @@
-from gbdxtools.images import RDABaseImage
+from gbdxtools.images.base import RDABaseImage
 from gbdxtools.images.drivers import RDADaskImageDriver
 from gbdxtools.ipe.interface import Ipe
 ipe = Ipe()

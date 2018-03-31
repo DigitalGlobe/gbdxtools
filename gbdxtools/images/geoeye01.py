@@ -24,13 +24,13 @@ class GeoEyeDriver(WorldViewDriver):
         standard_products = super(WorldViewDriver, self).build_payload(target, **self.options)
         options = self.options.copy()
         options["band_type"] = "pan"
-        pan_products = target._build_standard_products(self.rda_id, **options))
+        pan_products = target._build_standard_products(self.rda_id, **options)
         standard_products["pansharpened"] = ipe.LocallyProjectivePanSharpen(standard_products["ortho"],
                                                                                 pan_products["ortho"])
         self._products = standard_products
         return standard_products
 
-class GE01(WorlViewImage):
+class GE01(WorldViewImage):
     __Driver__ = GeoEyeDriver
     def plot(self, **kwargs):
         kwargs["blm"] = False

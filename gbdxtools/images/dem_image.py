@@ -1,5 +1,5 @@
 from __future__ import print_function
-from gbdxtools.images import RDABaseImage
+from gbdxtools.images.base import RDABaseImage
 from gbdxtools.images.drivers import RDADaskImageDriver
 from gbdxtools.ipe.util import reproject_params
 from gbdxtools.ipe.interface import Ipe

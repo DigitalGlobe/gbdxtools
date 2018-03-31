@@ -1,5 +1,5 @@
 from gbdxtools.images.worldview import WorldViewImage
-from gdbxtools.images.geoeye01 import GeoEyeDriver
+from gbdxtools.images.geoeye01 import GeoEyeDriver
 from gbdxtools.images.util import vector_services_query
 
 band_types = {
