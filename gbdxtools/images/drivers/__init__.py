@@ -1,1 +1,1 @@
-from gbdxtools.images.driver.base import RDABaseDriver, IdahoDriver, WorldViewDriver
+from gbdxtools.images.drivers.base import RDABaseDriver, IdahoDriver, WorldViewDriver

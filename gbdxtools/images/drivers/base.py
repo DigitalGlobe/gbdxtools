@@ -1,10 +1,11 @@
 from gbdxtools.images.exceptions import DriverConfigurationError, UnsupportedImageProduct
 import collections
 import abc
+import six
 
 
 RDA_DEFAULT_OPTIONS = {
-    "proj": "ESPG:4326"
+    "proj": "ESPG:4326",
     "gsd": None
     }
 
@@ -75,7 +76,7 @@ class OptionParserFactory(type):
         return inst
 
 @six.add_metaclass(abc.ABCMeta)
-class RDADriverInterface(object)
+class RDADriverInterface(object):
     @abc.abstractmethod
     def parse_options(self, inputs):
         raise NotImplementedError
@@ -132,13 +133,6 @@ class RDADaskImageDriver(RDADriverInterface):
     def configure_options(cls, options):
         return options
 
-    @payload.setter
-    def payload(self, payload):
-        if not isinstance(payload, DaskMeta):
-            raise DriverPayloadError("To adapt GeoDaskImage, payload must be DaskMeta instance")
-        else:
-            self._payload = payload
-
     @property
     def payload(self):
         product = self.options["product"]
@@ -146,6 +140,13 @@ class RDADaskImageDriver(RDADriverInterface):
             raise UnsupportedImageProduct("Specified product not supported by {}: {}".format(self.target.__name__,
                                                                                                 self.options["product"]))
         return self.products[self.options["product"]]
+
+    @payload.setter
+    def payload(self, payload):
+        if not isinstance(payload, DaskMeta):
+            raise DriverPayloadError("To adapt GeoDaskImage, payload must be DaskMeta instance")
+        else:
+            self._payload = payload
 
     def build_payload(self, target):
         products = target._build_standard_products(self.rda_id, **self.options)
@@ -195,7 +196,7 @@ class WorldViewDriver(RDADaskImagerDriver):
         if "pansharpen" in self.image_option_support:
             options = self.options.copy()
             options["band_type"] = "pan"
-            pan_products = target._build_standard_products(self.rda_id, **options))
+            pan_products = target._build_standard_products(self.rda_id, **options)
             pan = pan_products['acomp'] if options["acomp"] else pan_products['toa_reflectance']
             ms = standard_products['acomp'] if options["acomp"] else standard_products['toa_reflectance']
             standard_products["pansharpened"] = ipe.LocallyProjectivePanSharpen(ms, pan)

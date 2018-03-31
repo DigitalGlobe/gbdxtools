@@ -1,6 +1,6 @@
 from __future__ import print_function
 
-from gbdxtools.images import IpeImage
+from gbdxtools.images.ipe_image import IpeImage
 
 
 class RDABaseImage(IpeImage):
