@@ -57,23 +57,25 @@ def option_parser_factory(typename, field_names, default_values=()):
 
 opf = option_parser_factory
 
-def install_parser(inst):
-    default_options = getattr(inst, "__default_options__", {})
-    custom_options = getattr(inst, "__image_option_defaults__", {})
-    defaults = update_options(default_options, custom_options)
-    p = opf(c.__name__ + "Parser", inst.image_option_support, default_options=defaults)
-    setattr(inst, "parser", p)
-    setattr(inst, "default_options", defaults)
-    return inst
-
 
 class OptionParserFactory(type):
     def __new__(cls, name, bases, attrs):
         inst = type.__new__(cls, name, bases, attrs)
         if hasattr(inst, "image_option_support") and isinstance(inst.image_option_support, list):
             if inst.image_option_support:
-                inst = install_parser(inst)
+                inst = cls.install_parser(inst)
         return inst
+
+    @staticmethod
+    def install_parser(inst):
+        default_options = getattr(inst, "__default_options__", {})
+        custom_options = getattr(inst, "__image_option_defaults__", {})
+        defaults = update_options(default_options, custom_options)
+        p = opf(inst.__name__ + "Parser", inst.image_option_support, default_options=defaults)
+        setattr(inst, "parser", p)
+        setattr(inst, "default_options", defaults)
+        return inst
+
 
 class RDADriverInterface(object):
     def parse_options(self, inputs):
