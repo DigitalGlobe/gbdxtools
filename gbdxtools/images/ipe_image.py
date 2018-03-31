@@ -51,6 +51,8 @@ class GraphMeta(DaskProps):
 class RDAGeoAdapter(object):
     def __init__(self, metadata):
         self.md = metadata
+        self.gt = None
+        self.gi = None
 
     @property
     def image(self):
@@ -88,29 +90,32 @@ class RDAGeoAdapter(object):
             return AffineTransform._from_georef(self.md["georef"])
 
     @property
-    def __geo_transform__(self):
-        return self.tfm + (self.xshift, self.yshift)
+    def geo_transform(self):
+        if not self.gt:
+            self.gt =  self.tfm + (self.xshift, self.yshift)
+        return self.gt
 
     @property
-    def __geo_interface__(self):
-        return mapping(GeoDaskImage._reproject(wkt.loads(self.image["imageBoundsWGS84"])))
+    def geo_interface(self):
+        if not self.gi:
+            self.gi =  mapping(GeoDaskImage._reproject(wkt.loads(self.image["imageBoundsWGS84"])))
+        return self.gi
 
+def rda_image_shift(image):
+    minx, maxx = image.__geo__.minx, image.__geo__.maxx
+    miny, maxy = image.__geo__.miny, image.__geo__.maxy
+    return image[:, miny:maxy, minx:maxx]
 
 class IpeImage(GeoDaskImage):
     _default_proj = "EPSG:4326"
 
     def __new__(cls, op, **kwargs):
-        cls.__rda_geo__ = RDAGeoAdapter(op.metadata)
-        cls.__geo_transform__ = cls.__rda_geo__.__geo_transform__
-        cls.__geo_interface__ = cls.__rda_geo__.__geo_interface__
+        cls.__geo__ = RDAGeoAdapter(op.metadata)
+        cls.__geo_transform__ = cls.__geo__.geo_transform
+        cls.__geo_interface__ = cls.__geo__.geo_interface
         cls._ipe_op = op
         self = super(IpeImage, cls).__new__(cls, op)
-        return self.__post_create()
-
-    def __post_create(self):
-        minx, maxx = self.__rda_geo__.minx, self.__rda_geo__.maxx
-        miny, maxy = self.__rda_geo__.miny, self.__rda_geo__.maxy
-        return self[:, miny:maxy, minx:maxx]
+        return rda_image_shift(self)
 
     def __getitem__(self, geometry):
         im = super(IpeImage, self).__getitem__(geometry)
