@@ -6,7 +6,7 @@ from __future__ import print_function
 import json
 
 from gbdxtools.images.drivers import WorldViewDriver
-from gbdxtools.images import RDABaseImage
+from gbdxtools.images.base import RDABaseImage
 from gbdxtools import IdahoImage
 from gbdxtools.images.util import vector_services_query, vendor_id, band_types
 from gbdxtools.ipe.interface import Ipe
@@ -46,7 +46,7 @@ class WorldViewImage(RDABaseImage):
         return [p for p in _parts if vendor_id(p) == _id]
 
     @classmethod
-    def _build_standard_products(cls, cat_id, **options):
+    def _build_standard_products(cls, cat_id, band_type="MS", proj="EPSG:4326", gsd=None, acomp=False, **kwargs):
         graph = {}
         _parts = cls._find_parts(cat_id, band_type)
         _bucket = _parts[0]['properties']['attributes']['bucketName']
@@ -59,7 +59,7 @@ class WorldViewImage(RDABaseImage):
             mosaic_params["Requested GSD"] = str(gsd)
 
         ortho_op = ipe.GeospatialMosaic(*dn_ops, **mosaic_params)
-        graph.update{"ortho": ortho_op}
+        graph.update({"ortho": ortho_op})
 
         if cls.__default_options__.get("product") is "toa_reflectance":
             toa = [ipe.Format(ipe.MultiplyConst(ipe.TOAReflectance(dn), constants=json.dumps([10000])), dataType="1") for dn in dn_ops]
@@ -88,7 +88,7 @@ class WV02(WorldViewImage):
     pass
 
 class WV01(WorldViewImage):
-    class WVO1Driver(WorldViewDriver):
+    class WV01Driver(WorldViewDriver):
         image_option_support = ["proj", "gsd", "band_type", "product"]
         __image_option_defaults__ = {"band_type": "pan", "product": "ortho"}
 
