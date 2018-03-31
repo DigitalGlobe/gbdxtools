@@ -75,25 +75,19 @@ class OptionParserFactory(type):
                 inst = install_parser(inst)
         return inst
 
-@six.add_metaclass(abc.ABCMeta)
 class RDADriverInterface(object):
-    @abc.abstractmethod
     def parse_options(self, inputs):
         raise NotImplementedError
 
-    @abc.abstractmethod
     def configure_options(self, options):
         raise NotImplementedError
 
-    @abc.abstractmethod
     def build_payload(self):
         raise NotImplementedError
 
-    @abc.abstractmethod
     def drive(self, target):
         raise NotImplementedError
 
-    @abc.abstractproperty
     def payload(self):
         raise NotImplementedError
 
