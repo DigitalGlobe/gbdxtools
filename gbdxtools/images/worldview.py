@@ -47,6 +47,7 @@ class WorldViewImage(RDABaseImage):
 
     @classmethod
     def _build_standard_products(cls, cat_id, band_type="MS", proj="EPSG:4326", gsd=None, acomp=False, **kwargs):
+        print(cat_id)
         graph = {}
         _parts = cls._find_parts(cat_id, band_type)
         _bucket = _parts[0]['properties']['attributes']['bucketName']

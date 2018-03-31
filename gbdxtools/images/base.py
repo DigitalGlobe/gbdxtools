@@ -4,8 +4,9 @@ from gbdxtools.images.ipe_image import IpeImage
 
 
 class RDABaseImage(IpeImage):
-    def __new__(cls, rda_id, **kwargs):
-        cls = cls.__Driver__(rda_id=None, **kwargs).drive(cls)
+    __rda_id__ = None
+    def __new__(cls, rda_id=None, **kwargs):
+        cls = cls.__Driver__(rda_id=rda_id, **kwargs).drive(cls)
         self = super(RDABaseImage, cls).__new__(cls, cls._driver.payload, **kwargs)
         return self.__post_new_hook__(**kwargs)
 
@@ -14,10 +15,6 @@ class RDABaseImage(IpeImage):
 
     def __default_options__(self):
         return self.__driver__.default_options
-
-    @property
-    def __rda_id__(self):
-        return self.__driver__.rda_id
 
     @property
     def options(self):
