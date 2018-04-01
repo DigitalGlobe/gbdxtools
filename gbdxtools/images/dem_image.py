@@ -1,4 +1,3 @@
-from __future__ import print_function
 from gbdxtools.images.base import RDABaseImage
 from gbdxtools.images.drivers import RDADaskImageDriver
 from gbdxtools.ipe.util import reproject_params
@@ -9,13 +8,8 @@ ipe = Ipe()
 from shapely.geometry import box
 
 class DemDriver(RDADaskImageDriver):
-    image_option_support = ["proj", "bbox"]
-    @property
-    def payload(self):
-        p = self.products.get["dem"]
-        if not p:
-            raise AttributeError("DemImage initialized with bbox=None")
-        return p
+    image_option_support = ["proj", "bbox", "product"]
+    __image_option_defaults__ = {"bbox": None, "product": "dem"}
 
 class DemImage(RDABaseImage):
     __Driver__ = DemDriver
