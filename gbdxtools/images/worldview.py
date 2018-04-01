@@ -5,7 +5,7 @@ Contact: chris.helm@digitalglobe.com
 from __future__ import print_function
 import json
 
-from gbdxtools.images.drivers import WorldViewDriver
+from gbdxtools.images.drivers import WorldViewDriver, RDADaskImageDriver
 from gbdxtools.images.base import RDABaseImage
 from gbdxtools import IdahoImage
 from gbdxtools.images.util import vector_services_query, vendor_id, band_types
@@ -88,7 +88,7 @@ class WV02(WorldViewImage):
     pass
 
 class WV01(WorldViewImage):
-    class WV01Driver(WorldViewDriver):
+    class WV01Driver(RDADaskImageDriver):
         image_option_support = ["proj", "gsd", "band_type", "product"]
         __image_option_defaults__ = {"band_type": "pan", "product": "ortho"}
 
