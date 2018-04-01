@@ -159,6 +159,7 @@ class RDADaskImageDriver(RDADriverInterface):
                 raise AttributeError("RDA Image ID not provided")
             self.rda_id = rda_id
         target.__driver__ = self
+        target.__rda_id__ = self.rda_id
         target.__supported_options__ = self.image_option_support
         target.__default_options__ = self.default_options
         self.build_payload(target)
