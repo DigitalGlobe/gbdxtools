@@ -91,16 +91,6 @@ class DaskImage(da.Array):
     def __daskmeta__(self):
         return DaskMeta(self)
 
-    @classmethod
-    def create(cls, dm, **kwargs):
-        """
-        Given a dask meta object, construct a dask array, attach dask meta object.
-        """
-        assert isinstance(dm, DaskMeta), "argument must be an instance of a DaskMeta subclass"
-        with dask.set_options(array_plugins=[dm.infect]):
-
-            return da.Array.__new__(cls, dm.dask, dm.name, dm.chunks, dm.dtype, dm.shape)
-
     def read(self, bands=None, **kwargs):
         """
         Reads data from a dask array and returns the computed ndarray matching the given bands
