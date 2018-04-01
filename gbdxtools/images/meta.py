@@ -87,8 +87,12 @@ class DaskImage(da.Array):
         else:
             raise ValueError("{} must be initialized with a DaskMeta, a dask array, or a dict with DaskMeta fields".format(cls.__name__))
         self = da.Array.__new__(cls, *dm.values)
-        self.__geo_transform__ = kwargs.get("__geo_transform__")
-        self.__geo_interface__ = kwargs.get("__geo_interface__")
+        if "__geo_transform__" in kwargs:
+            self.__geo_transform__ = kwargs["__geo_transform__"]
+        if "__geo_interface__" in kwargs:
+            self.__geo_interface__ = kwargs["__geo_interface__"]
+#        self.__geo_transform__ = kwargs.get("__geo_transform__")
+#        self.__geo_interface__ = kwargs.get("__geo_interface__")
         return self
 
     @property
@@ -233,17 +237,6 @@ class PlotMixin(object):
             b = mercantile.bounds(0,0,z)
             if scale > math.sqrt((b.north - b.south)*(b.east - b.west) / (256*256)):
                 return z
-
-
-class GeoDaskTemplate(object):
-    def __geo_transform__(self):
-        raise NotImplementedError
-
-    def __geo_interface__(self):
-        raise NotImplementedError
-
-    def __geo_meta__(self):
-        raise NotImplementedError
 
 
 class GeoDaskImage(DaskImage, Container, PlotMixin):
@@ -469,7 +462,6 @@ class GeoDaskImage(DaskImage, Container, PlotMixin):
             to_proj = self.proj if self.proj is not None else "EPSG:4326"
         tfm = partial(pyproj.transform, pyproj.Proj(init=from_proj), pyproj.Proj(init=to_proj))
         return ops.transform(tfm, geometry)
-
 
     def _slice_padded(self, _bounds):
         pads = (max(-_bounds[0], 0), max(-_bounds[1], 0),
