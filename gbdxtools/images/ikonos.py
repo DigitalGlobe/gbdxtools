@@ -31,8 +31,8 @@ class IkonosImage(RDABaseImage):
     def _rgb_bands(self):
         return [2,1,0]
 
-    @staticmethod
-    def _build_standard_products(record, spec, proj, gsd=None):
+    @classmethod
+    def _build_standard_products(cls, record, spec="multispectral", proj="EPSG:4326", gsd=None, **kwargs):
         prefix = record['properties']['attributes']['bucketPrefix']
         bucket = record['properties']['attributes']['bucketName']
         ikonos = ipe.IkonosRead(path="{}/{}/{}_0000000:{}".format(bucket, prefix, prefix, spec))

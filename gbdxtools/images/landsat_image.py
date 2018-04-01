@@ -41,7 +41,7 @@ class LandsatImage(RDABaseImage):
         return [4,3]
 
     @staticmethod
-    def _build_standard_products(_id, spec, proj):
+    def _build_standard_products(_id, spec="multispectral", proj="EPSG:4326", **kwargs):
         landsat = ipe.LandsatRead(landsatId=_id, productSpec=spec)
         if proj is not None:
             landsat = ipe.Reproject(landsat, **reproject_params(proj))

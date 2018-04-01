@@ -39,7 +39,7 @@ class Sentinel2(RDABaseImage):
         return [6,3]
 
     @classmethod
-    def _build_standard_products(cls, prefix, spec, proj):
+    def _build_standard_products(cls, prefix, spec="10m", proj="EPSG:4326", **kwargs):
         sentinel = ipe.SentinelRead(SentinelId=prefix, sentinelProductSpec=spec)
         if proj is not None:
             sentinel = ipe.Reproject(sentinel, **reproject_params(proj))
