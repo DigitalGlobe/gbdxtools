@@ -1,19 +1,11 @@
 from gbdxtools.images.base import RDABaseImage
 from gbdxtools.images.drivers import RDADaskImageDriver
+from gbdxtools.images.util import reproject_params
 from gbdxtools.ipe.interface import Ipe
 ipe = Ipe()
 
-def reproject_params(proj):
-    _params = {}
-    if proj is not None:
-        _params["Source SRS Code"] = "EPSG:4326"
-        _params["Source pixel-to-world transform"] = None
-        _params["Dest SRS Code"] = proj
-        _params["Dest pixel-to-world transform"] = None
-    return _params
-
 class Sentinel2Driver(RDADaskImageDriver):
-    image_support_options = ["spec", "product"]
+    image_option_support = ["spec", "product"]
     __image_default_options__ = {"spec": "10m", "product": "sentinel"}
 
 class Sentinel2(RDABaseImage):
