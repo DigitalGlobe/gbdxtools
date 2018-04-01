@@ -8,7 +8,7 @@ import six
 ipe = Ipe()
 
 RDA_DEFAULT_OPTIONS = {
-    "proj": "ESPG:4326",
+    "proj": "EPSG:4326",
     "gsd": None
     }
 
@@ -21,14 +21,14 @@ IDAHO_DEFAULT_OPTIONS = {
     }
 
 WV_DEFAULT_OPTIONS = {
-    "proj": "ESPG:4326",
+    "proj": "EPSG:4326",
     "gsd": None,
     "band_type": "pan",
     "product": "ortho"
     }
 
 WV_MODERN_OPTIONS = {
-    "proj": "ESPG:4326",
+    "proj": "EPSG:4326",
     "gsd": None,
     "band_type": "MS",
     "acomp": False,
