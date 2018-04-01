@@ -21,7 +21,7 @@ class GeoEyeDriver(WorldViewDriver):
     __image_option_defaults__ = {"product": "ortho"}
 
     def build_payload(self, target):
-        standard_products = super(WorldViewDriver, self).build_payload(target, **self.options)
+        standard_products = super(WorldViewDriver, self).build_payload(target)
         options = self.options.copy()
         options["band_type"] = "pan"
         pan_products = target._build_standard_products(self.rda_id, **options)
