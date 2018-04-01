@@ -56,12 +56,6 @@ class DaskMeta(namedtuple("DaskMeta", ["dask", "name", "chunks", "dtype", "shape
     def values(self):
         return self._asdict().values()
 
-    def infect(self, target):
-        assert isinstance(target, da.Array), "DaskMeta can only be attached to Dask Arrays"
-        assert len(target.shape) in [2, 3], "target must be a dask array with 2 or 3 dimensions"
-        target.__dict__["__daskmeta__"] = property(lambda s: self, DaskImage.__set_daskmeta__)
-        return target
-
 class DaskImage(da.Array):
     """
     A DaskImage is a 2 or 3 dimension dask array that contains implements the `__daskmeta__` interface.
