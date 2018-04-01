@@ -6,7 +6,7 @@ ipe = Ipe()
 
 class Sentinel2Driver(RDADaskImageDriver):
     image_option_support = ["spec", "product"]
-    __image_default_options__ = {"spec": "10m", "product": "sentinel"}
+    __image_option_defaults__ = {"spec": "10m", "product": "sentinel"}
 
 class Sentinel2(RDABaseImage):
     """

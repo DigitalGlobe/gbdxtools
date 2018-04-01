@@ -1,17 +1,9 @@
 from __future__ import print_function
 from gbdxtools.images.base import RDABaseImage
 from gbdxtools.images.drivers import RDADaskImageDriver
+from gbdxtools.images.util.image import reproject_params
 from gbdxtools.ipe.interface import Ipe
 ipe = Ipe()
-
-def reproject_params(proj):
-    _params = {}
-    if proj is not None:
-        _params["Source SRS Code"] = "EPSG:4326"
-        _params["Source pixel-to-world transform"] = None
-        _params["Dest SRS Code"] = proj
-        _params["Dest pixel-to-world transform"] = None
-    return _params
 
 class LandsatDriver(RDADaskImageDriver):
     __default_options__ = {}
@@ -40,8 +32,8 @@ class LandsatImage(RDABaseImage):
     def _ndvi_bands(self):
         return [4,3]
 
-    @staticmethod
-    def _build_standard_products(_id, spec="multispectral", proj="EPSG:4326", **kwargs):
+    @classmethod
+    def _build_standard_products(cls, _id, spec="multispectral", proj="EPSG:4326", **kwargs):
         landsat = ipe.LandsatRead(landsatId=_id, productSpec=spec)
         if proj is not None:
             landsat = ipe.Reproject(landsat, **reproject_params(proj))
