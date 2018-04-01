@@ -1,12 +1,8 @@
-from __future__ import print_function
-import abc
-import types
 import os
 import random
-from functools import wraps, partial
+from functools import partial
 from itertools import chain
 from collections import Container, namedtuple
-from six import add_metaclass
 import warnings
 import math
 
@@ -30,11 +26,7 @@ from dask import sharedict, optimize
 from dask.delayed import delayed
 import dask.array as da
 from dask.base import is_dask_collection
-from dask.rewrite import RewriteRule, RuleSet
 import numpy as np
-
-import operator
-from toolz import valmap
 
 from affine import Affine
 
