@@ -11,6 +11,8 @@ from shapely import wkt, ops
 from shapely.geometry import box, mapping
 from shapely.geometry.base import BaseGeometry
 
+import pyproj
+from functools import partial
 from dask import optimize
 import dask.array as da
 
@@ -20,6 +22,10 @@ try:
     xrange
 except NameError:
     xrange = range
+
+def _reproject(geo, from_proj, to_proj):
+    tfm = partial(pyproj.transform, pyproj.Proj(init=from_proj), pyproj.Proj(init=to_proj))
+    return ops.transform(tfm, geo)
 
 class GraphMeta(DaskProps):
     def __init__(self, graph_id, node_id=None, **kwargs):
@@ -49,8 +55,10 @@ class GraphMeta(DaskProps):
 
 
 class RDAGeoAdapter(object):
-    def __init__(self, metadata):
+    def __init__(self, metadata, dfp="EPSG:4326"):
         self.md = metadata
+        self.default_proj = dfp
+        self._srs = metadata['georef']['spatialReferenceSystemCode']
         self.gt = None
         self.gi = None
 
@@ -85,9 +93,9 @@ class RDAGeoAdapter(object):
     @property
     def tfm(self):
         if self.md["georef"] is None:
-            return RatPolyTransform._from_rpcs(self.md["rpcs"])
+            return RatPolyTransform.from_rpcs(self.md["rpcs"])
         else:
-            return AffineTransform._from_georef(self.md["georef"])
+            return AffineTransform.from_georef(self.md["georef"])
 
     @property
     def geo_transform(self):
@@ -98,8 +106,12 @@ class RDAGeoAdapter(object):
     @property
     def geo_interface(self):
         if not self.gi:
-            self.gi =  mapping(GeoDaskImage._reproject(wkt.loads(self.image["imageBoundsWGS84"])))
+            self.gi =  mapping(_reproject(wkt.loads(self.image["imageBoundsWGS84"]), self.srs, self.default_proj))
         return self.gi
+
+    @property
+    def srs(self):
+        return self._srs
 
 def rda_image_shift(image):
     minx, maxx = image.__geo__.minx, image.__geo__.maxx
@@ -110,7 +122,7 @@ class IpeImage(GeoDaskImage):
     _default_proj = "EPSG:4326"
 
     def __new__(cls, op, **kwargs):
-        cls.__geo__ = RDAGeoAdapter(op.metadata)
+        cls.__geo__ = RDAGeoAdapter(op.metadata, dfp=cls._default_proj)
         cls.__geo_transform__ = cls.__geo__.geo_transform
         cls.__geo_interface__ = cls.__geo__.geo_interface
         cls._ipe_op = op
