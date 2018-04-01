@@ -1,21 +1,7 @@
-from __future__ import print_function
-import json
 from gbdxtools.images.worldview import WorldViewImage
 from gbdxtools.images.drivers import WorldViewDriver
 from gbdxtools.ipe.interface import Ipe
-from gbdxtools.ipe.util import ortho_params
-from gbdxtools.ipe.error import AcompUnavailable
 ipe = Ipe()
-from gbdxtools.vectors import Vectors
-from shapely import wkt
-from shapely.geometry import box
-
-band_types = {
-    'MS': 'BGRN',
-    'Panchromatic': 'PAN',
-    'Pan': 'PAN',
-    'pan': 'PAN'
-}
 
 class GeoEyeDriver(WorldViewDriver):
     __image_option_defaults__ = {"product": "ortho"}
