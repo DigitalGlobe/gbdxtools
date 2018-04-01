@@ -7,7 +7,7 @@ ipe = Ipe()
 
 class IkonosDriver(RDADaskImageDriver):
     image_option_support = ["proj", "gsd", "spec", "product"]
-    __image_option_defauts__ = {"gsd": None, "spec": "multispectral", "product": "ikonos"}
+    __image_option_defaults__ = {"gsd": None, "spec": "multispectral", "product": "ikonos"}
 
 class IkonosImage(RDABaseImage):
     """
