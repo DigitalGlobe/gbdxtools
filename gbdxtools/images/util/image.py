@@ -23,11 +23,11 @@ def vendor_id(rec):
     _id = rec['properties']['attributes']['vendorDatasetIdentifier']
     return _id.split(':')[1].split('_')[0]
 
-def vector_services_query(query, aoi=None):
+def vector_services_query(query, aoi=None, **kwargs):
     vectors = Vectors()
     if not aoi:
         aoi = wkt.dumps(box(-180, -90, 180, 90))
-    _parts = sorted(vectors.query(aoi, query=query), key=lambda x: x['properties']['id'])
+    _parts = sorted(vectors.query(aoi, query=query, **kwargs), key=lambda x: x['properties']['id'])
     return _parts
 
 

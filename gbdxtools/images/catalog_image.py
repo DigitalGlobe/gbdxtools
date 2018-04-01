@@ -6,8 +6,8 @@ Contact: chris.helm@digitalglobe.com
 from __future__ import print_function
 from gbdxtools import WV01, WV02, WV03_SWIR, WV03_VNIR, LandsatImage, IkonosImage, GE01, QB02, Sentinel2
 from gbdxtools.images.ipe_image import IpeImage, GraphMeta
-from gbdxtools.vectors import Vectors
 from gbdxtools.ipe.error import UnsupportedImageType
+from gbdxtools.images.util.image import vector_services_query
 
 from shapely import wkt
 from shapely.geometry import box
@@ -49,11 +49,9 @@ class CatalogImage(object):
                 return IpeImage(GraphMeta(**kwargs))
             except KeyError:
                 raise ValueError("Catalog Images must be initiated by a Catalog Id or an RDA Graph Id")
-        vectors = Vectors()
-        aoi = wkt.dumps(box(-180, -90, 180, 90))
         query = "item_type:GBDXCatalogRecord AND attributes.catalogID:{}".format(cat_id)
         query += " AND NOT item_type:IDAHOImage AND NOT item_type:DigitalGlobeAcquisition"
-        result = vectors.query(aoi, query=query, count=1)
+        result = vector_services_query(query, count=1)
         if len(result) == 0:
             raise Exception('Could not find a catalog entry for the given id: {}'.format(cat_id))
         else:
