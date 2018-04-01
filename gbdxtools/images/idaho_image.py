@@ -1,11 +1,8 @@
-from __future__ import print_function
-import requests
 from gbdxtools.images.base import RDABaseImage
 from gbdxtools.images.drivers import IdahoDriver
 from gbdxtools.images.util import vector_services_query
 from gbdxtools.ipe.util import calc_toa_gain_offset, ortho_params
 from gbdxtools.ipe.interface import Ipe
-from gbdxtools.vectors import Vectors
 
 from shapely import wkt
 from shapely.geometry import box

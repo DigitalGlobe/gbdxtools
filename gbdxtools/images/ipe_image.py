@@ -1,4 +1,3 @@
-from __future__ import print_function
 import math
 
 from gbdxtools.images.meta import DaskMeta, GeoDaskImage
@@ -8,15 +7,10 @@ from gbdxtools.ipe.graph import get_ipe_graph
 from gbdxtools.auth import Auth
 
 from shapely import wkt, ops
-from shapely.geometry import box, mapping
-from shapely.geometry.base import BaseGeometry
+from shapely.geometry import mapping
 
 import pyproj
 from functools import partial
-from dask import optimize
-import dask.array as da
-
-import numpy as np
 
 try:
     xrange

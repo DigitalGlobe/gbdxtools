@@ -77,8 +77,6 @@ class DaskImage(da.Array):
             self.__geo_transform__ = kwargs["__geo_transform__"]
         if "__geo_interface__" in kwargs:
             self.__geo_interface__ = kwargs["__geo_interface__"]
-#        self.__geo_transform__ = kwargs.get("__geo_transform__")
-#        self.__geo_interface__ = kwargs.get("__geo_interface__")
         return self
 
     @property
@@ -472,7 +470,6 @@ class GeoDaskImage(DaskImage, Container, PlotMixin):
         img_bounds = box(0, 0, *self.shape[2:0:-1])
         return img_bounds.contains(geometry)
 
-
     def __getitem__(self, geometry):
         if isinstance(geometry, BaseGeometry) or getattr(geometry, "__geo_interface__", None) is not None:
             g = shape(geometry)
@@ -486,6 +483,7 @@ class GeoDaskImage(DaskImage, Container, PlotMixin):
             if len(geometry) == 1:
                 assert geometry[0] == Ellipsis
                 return self
+
             elif len(geometry) == 2:
                 arg0, arg1 = geometry
                 if isinstance(arg1, slice):
@@ -493,6 +491,7 @@ class GeoDaskImage(DaskImage, Container, PlotMixin):
                     return self[:, :, arg1.start:arg1.stop]
                 elif arg1 == Ellipsis:
                     return self[arg0, :, :]
+
             elif len(geometry) == 3:
                 nbands, ysize, xsize = self.shape
                 band_idx, y_idx, x_idx = geometry
