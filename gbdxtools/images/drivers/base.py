@@ -64,7 +64,7 @@ opf = option_parser_factory
 class OptionParserFactory(type):
     def __new__(cls, name, bases, attrs):
         inst = type.__new__(cls, name, bases, attrs)
-        if hasattr(inst, "image_option_support") and isinstance(inst.image_option_support, list):
+        if hasattr(inst, "image_option_support") and isinstance(inst.image_option_support, collections.Iterable):
             if inst.image_option_support:
                 inst = cls.install_parser(inst)
         return inst
