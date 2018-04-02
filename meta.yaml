@@ -31,7 +31,7 @@ requirements:
     - configparser
     - mercantile >=0.10.0
     - scikit-image
-    - gbdx-auth ==0.2.6
+    - gbdx-auth >=0.2.6
     - cachetools >=2.0.0 # py27
     - affine
 
@@ -54,7 +54,7 @@ requirements:
     - configparser
     - mercantile >=0.10.0
     - scikit-image
-    - gbdx-auth ==0.2.6
+    - gbdx-auth >=0.2.6
     - bumpversion
     - pytest
     - pytest-runner
