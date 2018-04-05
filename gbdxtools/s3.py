@@ -150,8 +150,7 @@ class S3(object):
             s3_path: a key (location) on s3 to upload the file to
         '''
         if not os.path.exists(local_file):
-            print local_file,'does not exists'
-            return
+            raise Exception(local_file + " does not exists.")
             
         bucket = self.info['bucket']
         prefix = self.info['prefix']
