@@ -1,12 +1,8 @@
-from __future__ import print_function
-import abc
-import types
 import os
 import random
-from functools import wraps, partial
+from functools import partial
 from itertools import chain
 from collections import Container, namedtuple
-from six import add_metaclass
 import warnings
 import math
 
@@ -30,11 +26,7 @@ from dask import sharedict, optimize
 from dask.delayed import delayed
 import dask.array as da
 from dask.base import is_dask_collection
-from dask.rewrite import RewriteRule, RuleSet
 import numpy as np
-
-import operator
-from toolz import valmap
 
 from affine import Affine
 
@@ -64,12 +56,6 @@ class DaskMeta(namedtuple("DaskMeta", ["dask", "name", "chunks", "dtype", "shape
     def values(self):
         return self._asdict().values()
 
-    def infect(self, target):
-        assert isinstance(target, da.Array), "DaskMeta can only be attached to Dask Arrays"
-        assert len(target.shape) in [2, 3], "target must be a dask array with 2 or 3 dimensions"
-        target.__dict__["__daskmeta__"] = property(lambda s: self, DaskImage.__set_daskmeta__)
-        return target
-
 class DaskImage(da.Array):
     """
     A DaskImage is a 2 or 3 dimension dask array that contains implements the `__daskmeta__` interface.
@@ -87,23 +73,15 @@ class DaskImage(da.Array):
         else:
             raise ValueError("{} must be initialized with a DaskMeta, a dask array, or a dict with DaskMeta fields".format(cls.__name__))
         self = da.Array.__new__(cls, *dm.values)
-        self.__geo_transform__ = kwargs.get("__geo_transform__")
-        self.__geo_interface__ = kwargs.get("__geo_interface__")
+        if "__geo_transform__" in kwargs:
+            self.__geo_transform__ = kwargs["__geo_transform__"]
+        if "__geo_interface__" in kwargs:
+            self.__geo_interface__ = kwargs["__geo_interface__"]
         return self
 
     @property
     def __daskmeta__(self):
         return DaskMeta(self)
-
-    @classmethod
-    def create(cls, dm, **kwargs):
-        """
-        Given a dask meta object, construct a dask array, attach dask meta object.
-        """
-        assert isinstance(dm, DaskMeta), "argument must be an instance of a DaskMeta subclass"
-        with dask.set_options(array_plugins=[dm.infect]):
-
-            return da.Array.__new__(cls, dm.dask, dm.name, dm.chunks, dm.dtype, dm.shape)
 
     def read(self, bands=None, **kwargs):
         """
@@ -233,6 +211,7 @@ class PlotMixin(object):
             b = mercantile.bounds(0,0,z)
             if scale > math.sqrt((b.north - b.south)*(b.east - b.west) / (256*256)):
                 return z
+
 
 class GeoDaskImage(DaskImage, Container, PlotMixin):
     _default_proj = "EPSG:4326"
@@ -458,7 +437,6 @@ class GeoDaskImage(DaskImage, Container, PlotMixin):
         tfm = partial(pyproj.transform, pyproj.Proj(init=from_proj), pyproj.Proj(init=to_proj))
         return ops.transform(tfm, geometry)
 
-
     def _slice_padded(self, _bounds):
         pads = (max(-_bounds[0], 0), max(-_bounds[1], 0),
                 max(_bounds[2]-self.shape[2], 0), max(_bounds[3]-self.shape[1], 0))
@@ -492,7 +470,6 @@ class GeoDaskImage(DaskImage, Container, PlotMixin):
         img_bounds = box(0, 0, *self.shape[2:0:-1])
         return img_bounds.contains(geometry)
 
-
     def __getitem__(self, geometry):
         if isinstance(geometry, BaseGeometry) or getattr(geometry, "__geo_interface__", None) is not None:
             g = shape(geometry)
@@ -506,6 +483,7 @@ class GeoDaskImage(DaskImage, Container, PlotMixin):
             if len(geometry) == 1:
                 assert geometry[0] == Ellipsis
                 return self
+
             elif len(geometry) == 2:
                 arg0, arg1 = geometry
                 if isinstance(arg1, slice):
@@ -513,6 +491,7 @@ class GeoDaskImage(DaskImage, Container, PlotMixin):
                     return self[:, :, arg1.start:arg1.stop]
                 elif arg1 == Ellipsis:
                     return self[arg0, :, :]
+
             elif len(geometry) == 3:
                 nbands, ysize, xsize = self.shape
                 band_idx, y_idx, x_idx = geometry
