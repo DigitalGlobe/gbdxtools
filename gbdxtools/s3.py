@@ -87,7 +87,7 @@ class S3(object):
         location = location.strip('/')
 
         self.logger.debug('Downloading contents')
-        for s3key in s3conn.list_objects(Bucket=bucket, Prefix=os.path.join(prefix, location))['Contents']:
+        for s3key in s3conn.list_objects(Bucket=bucket, Prefix=(prefix+'/'+location))['Contents']:
             key = s3key['Key']
     
             # skip directory keys
@@ -95,7 +95,7 @@ class S3(object):
                 continue
 
             # get path to each file
-            filepath = key.replace(os.path.join(prefix, location), '', 1).lstrip('/')
+            filepath = key.replace(prefix+'/'+location, '', 1).lstrip('/')
             filename = key.split('/')[-1]
             
             #self.logger.debug(filename)
@@ -136,7 +136,7 @@ class S3(object):
 
         self.logger.debug('Deleting contents')
 
-        for s3key in s3conn.list_objects(Bucket=bucket, Prefix=os.path.join(prefix, location))['Contents']:
+        for s3key in s3conn.list_objects(Bucket=bucket, Prefix=(prefix+'/'+location))['Contents']:
             s3conn.delete_object(Bucket=bucket, Key=s3key['Key'])
 
         self.logger.debug('Done!')
@@ -147,15 +147,18 @@ class S3(object):
 
         Args:
             local_file (str): a path to a local file to upload
-            s3_path: a location on s3 to upload the file to
+            s3_path: a key (location) on s3 to upload the file to
         '''
+        if not os.path.exists(local_file):
+            raise Exception(local_file + " does not exists.")
+            
         bucket = self.info['bucket']
         prefix = self.info['prefix']
 
         self.logger.debug('Connecting to S3')
         s3conn = self.client 
         self.logger.debug('Uploading file {}'.format(local_file))
-        s3conn.upload_file(local_file, bucket, os.path.join(prefix, s3_path))
+        s3conn.upload_file(local_file, bucket, prefix+'/'+s3_path)
         self.logger.debug('Done!')
 
 
