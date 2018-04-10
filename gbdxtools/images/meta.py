@@ -18,8 +18,9 @@ from shapely.geometry import box, shape, mapping
 from shapely.geometry.base import BaseGeometry
 try:
     from rio_hist.match import histogram_match
+    has_rio = True
 except ImportError:
-    pass
+    has_rio = False
 import mercantile
 
 import skimage.transform as tf
@@ -534,6 +535,7 @@ class PlotMixin(object):
         rgb = self.rgb(**kwargs)
         if not blm:
             return rgb
+        assert has_rio, "Have you installed the rio_hist library? If not, try pip install rio_hist and reload gbdxtools."
         from gbdxtools.images.tms_image import TmsImage
         bounds = self._reproject(box(*self.bounds), from_proj=self.proj, to_proj="EPSG:4326").bounds
         tms = TmsImage(zoom=self._calc_tms_zoom(self.affine[0]), bbox=bounds, **kwargs)

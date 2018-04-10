@@ -77,7 +77,7 @@ def raise_aoi_required():
 
 
 class TmsMeta(DaskMeta):
-    def __init__(self, access_token=os.environ.get("DG_MAPS_API_TOKEN"),
+    def __init__(self, access_token=os.environ.get("MAPBOX_API_KEY"),
                  url="https://api.mapbox.com/v4/digitalglobe.nal0g75k/{z}/{x}/{y}.png",
                  zoom=22, bounds=None):
         self.zoom_level = zoom
@@ -182,7 +182,7 @@ class TmsMeta(DaskMeta):
 class TmsImage(DaskImage, GeoImage, PlotMixin):
     _default_proj = "EPSG:3857"
 
-    def __new__(cls, access_token=os.environ.get("DG_MAPS_API_TOKEN"),
+    def __new__(cls, access_token=os.environ.get("MAPBOX_API_KEY"),
                 url="https://api.mapbox.com/v4/digitalglobe.nal0g75k/{z}/{x}/{y}.png",
                 zoom=22, **kwargs):
         _tms_meta = TmsMeta(access_token=access_token, url=url, zoom=zoom, bounds=kwargs.get("bounds"))
