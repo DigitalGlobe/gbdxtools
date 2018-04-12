@@ -19,10 +19,10 @@ interactions:
       content-encoding: [UTF-8]
       content-length: ['1851']
       content-type: [application/json;charset=UTF-8]
-      date: ['Wed, 07 Mar 2018 16:39:12 GMT']
+      date: ['Thu, 12 Apr 2018 14:44:59 GMT']
       server: [Apache-Coyote/1.1, Weblogic 12.2.1.1]
-      set-cookie: [JSESSIONID=B303B909D9CCF57661FD2F10AAFEA0E3.173.50.252.180; Path=/;
-          HttpOnly, AWSELB=07A771471E264EA5ADF82F0AA634B8F4B8E2289A699E4AD8C0425F1453C82DCD41047F4209C8BEFEB82C821E6A8E18A01EFE88B7AFFED3899E82B96997BB61A0AB34F055EC838263437ABBB61D081420BBDB1DCED6;PATH=/;HTTPONLY]
+      set-cookie: [JSESSIONID=969C1DB394591554524C587539753BED.173.50.252.222; Path=/;
+          HttpOnly, AWSELB=07A771471E264EA5ADF82F0AA634B8F4B8E2289A6950086DCD8476C8F0D9546C60E9A8FE7F904C07F24623F67A7229E996C33DA8A3AF1F6FCBC514BDDB528855627DF1DDB516929CF352C85F2AAE1C6840319A4AF1;PATH=/;HTTPONLY]
       strict-transport-security: [max-age=604800 ; includeSubDomains]
       x-content-type-options: [nosniff]
       x-frame-options: [SAMEORIGIN]
@@ -35,8 +35,8 @@ interactions:
       Accept: ['*/*']
       Accept-Encoding: ['gzip, deflate']
       Connection: [keep-alive]
-      Cookie: [AWSELB=07A771471E264EA5ADF82F0AA634B8F4B8E2289A699E4AD8C0425F1453C82DCD41047F4209C8BEFEB82C821E6A8E18A01EFE88B7AFFED3899E82B96997BB61A0AB34F055EC838263437ABBB61D081420BBDB1DCED6;
-          JSESSIONID=B303B909D9CCF57661FD2F10AAFEA0E3.173.50.252.180]
+      Cookie: [AWSELB=07A771471E264EA5ADF82F0AA634B8F4B8E2289A6950086DCD8476C8F0D9546C60E9A8FE7F904C07F24623F67A7229E996C33DA8A3AF1F6FCBC514BDDB528855627DF1DDB516929CF352C85F2AAE1C6840319A4AF1;
+          JSESSIONID=969C1DB394591554524C587539753BED.173.50.252.222]
       User-Agent: [python-requests/2.18.4]
     method: GET
     uri: https://vector.geobigdata.io/insight-vector/api/index/query/vector-gbdx-alpha-catalog-v2-*/items?count=100&upper=90.0&lower=-90.0&right=180.0&q=item_type%3AIDAHOImage+AND+attributes.catalogID%3A1030010079016D00+AND+attributes.colorInterpretation%3AWORLDVIEW_8_BAND&left=-180.0
@@ -61,7 +61,7 @@ interactions:
       content-encoding: [UTF-8]
       content-length: ['8725']
       content-type: [application/json;charset=UTF-8]
-      date: ['Wed, 07 Mar 2018 16:39:12 GMT']
+      date: ['Thu, 12 Apr 2018 14:45:00 GMT']
       server: [Apache-Coyote/1.1, Weblogic 12.2.1.1]
       strict-transport-security: [max-age=604800 ; includeSubDomains]
       x-content-type-options: [nosniff]
@@ -75,8 +75,8 @@ interactions:
       Accept: ['*/*']
       Accept-Encoding: ['gzip, deflate']
       Connection: [keep-alive]
-      Cookie: [AWSELB=07A771471E264EA5ADF82F0AA634B8F4B8E2289A699E4AD8C0425F1453C82DCD41047F4209C8BEFEB82C821E6A8E18A01EFE88B7AFFED3899E82B96997BB61A0AB34F055EC838263437ABBB61D081420BBDB1DCED6;
-          JSESSIONID=B303B909D9CCF57661FD2F10AAFEA0E3.173.50.252.180]
+      Cookie: [AWSELB=07A771471E264EA5ADF82F0AA634B8F4B8E2289A6950086DCD8476C8F0D9546C60E9A8FE7F904C07F24623F67A7229E996C33DA8A3AF1F6FCBC514BDDB528855627DF1DDB516929CF352C85F2AAE1C6840319A4AF1;
+          JSESSIONID=969C1DB394591554524C587539753BED.173.50.252.222]
       User-Agent: [python-requests/2.18.4]
     method: GET
     uri: https://vector.geobigdata.io/insight-vector/api/index/query/vector-gbdx-alpha-catalog-v2-*/items?count=100&upper=90.0&lower=-90.0&right=180.0&q=item_type%3AIDAHOImage+AND+attributes.catalogID%3A1030010079016D00+AND+attributes.colorInterpretation%3APAN&left=-180.0
@@ -96,7 +96,7 @@ interactions:
       content-encoding: [UTF-8]
       content-length: ['8337']
       content-type: [application/json;charset=UTF-8]
-      date: ['Wed, 07 Mar 2018 16:39:12 GMT']
+      date: ['Thu, 12 Apr 2018 14:45:00 GMT']
       server: [Apache-Coyote/1.1, Weblogic 12.2.1.1]
       strict-transport-security: [max-age=604800 ; includeSubDomains]
       x-content-type-options: [nosniff]
@@ -200,7 +200,7 @@ interactions:
       connection: [keep-alive]
       content-length: ['64']
       content-type: [text/plain;charset=UTF-8]
-      date: ['Wed, 07 Mar 2018 16:39:14 GMT']
+      date: ['Thu, 12 Apr 2018 14:45:01 GMT']
     status: {code: 200, message: ''}
 - request:
     body: null
@@ -212,7 +212,7 @@ interactions:
     method: GET
     uri: https://rda.geobigdata.io/v1/metadata/c08f4b14e8b16354c5be028cce838720cb68d834f9c804ce5a306da01e61f868/301a8fb1-2482-5ef2-9452-548436de13f6/metadata.json
   response:
-    body: {string: !!python/unicode '{"imageMetadata":{"imageId":"4f0bcb52-da50-4b42-836d-806dbe713eeb","version":1.0,"profileName":"georectified_image","tilePartition":"0000","tileXOffset":0,"tileYOffset":0,"numXTiles":35,"numYTiles":103,"tileXSize":256,"tileYSize":256,"numBands":8,"dataType":"FLOAT","imageHeight":26332,"imageWidth":8742,"sensorPlatformName":"WV02","sensorName":"8-band
+    body: {string: !!python/unicode '{"imageMetadata":{"imageId":"4f0bcb52-da50-4b42-836d-806dbe713eeb","version":1.0,"profileName":"georectified_image","tileBucketName":"rda-images-1","tilePartition":"0000","nativeTileFileFormat":"TIF","tileXOffset":0,"tileYOffset":0,"numXTiles":35,"numYTiles":103,"tileXSize":256,"tileYSize":256,"numBands":8,"dataType":"FLOAT","imageHeight":26332,"imageWidth":8742,"sensorPlatformName":"WV02","sensorName":"8-band
         (Coastal, Blue, Green, Yellow, Red, Red-edge, NIR1, NIR2) Multispectral","vendorName":"DigitalGlobe,
         Inc.","vendorDatasetIdentifier":"LV1B:057575530010_01_P001:1030010079016D00:A010010348061D00","acquisitionDate":"2018-02-15T03:48:45.078Z","colorInterpretation":"WORLDVIEW_8_BAND","imageBoundsWGS84":"POLYGON
         ((103.50012962 1.52037173, 103.66221628906216 1.52037173, 103.66221628906216
@@ -225,6 +225,6 @@ interactions:
       access-control-max-age: ['3600']
       connection: [keep-alive]
       content-type: [application/json;charset=UTF-8]
-      date: ['Wed, 07 Mar 2018 16:39:17 GMT']
+      date: ['Thu, 12 Apr 2018 14:45:03 GMT']
     status: {code: 200, message: ''}
 version: 1

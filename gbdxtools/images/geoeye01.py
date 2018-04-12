@@ -1,7 +1,15 @@
 from gbdxtools.images.worldview import WorldViewImage
 from gbdxtools.images.drivers import WorldViewDriver
+from gbdxtools.images.util import vector_services_query
 from gbdxtools.ipe.interface import Ipe
 ipe = Ipe()
+
+band_types = {
+    'MS': 'BGRN',
+    'Panchromatic': 'PAN',
+    'Pan': 'PAN',
+    'pan': 'PAN'
+}
 
 class GeoEyeDriver(WorldViewDriver):
     __image_option_defaults__ = {"product": "ortho"}
@@ -23,4 +31,9 @@ class GE01(WorldViewImage):
     def _rgb_bands(self):
         return [2,1,0]
 
+    @staticmethod
+    def _find_parts(cat_id, band_type):
+        query = "item_type:IDAHOImage AND attributes.catalogID:{} " \
+                "AND attributes.colorInterpretation:{}".format(cat_id, band_types[band_type])
+        return vector_services_query(query)
 
