@@ -18,9 +18,6 @@ class GeoEyeDriver(WorldViewDriver):
 
 class GE01(WorldViewImage):
     __Driver__ = GeoEyeDriver
-    def plot(self, **kwargs):
-        kwargs["blm"] = False
-        super(GE01, self).plot(**kwargs)
 
     @property
     def _rgb_bands(self):

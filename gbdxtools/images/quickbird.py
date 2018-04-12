@@ -15,10 +15,6 @@ class QB02Driver(GeoEyeDriver):
 class QB02(WorldViewImage):
     __Driver__ = QB02Driver
 
-    def plot(self, **kwargs):
-        kwargs["blm"] = False
-        super(QB02, self).plot(**kwargs)
-
     @property
     def _rgb_bands(self):
         return [2,1,0]
