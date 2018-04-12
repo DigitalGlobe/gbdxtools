@@ -52,10 +52,6 @@ class QB02(WVImage):
         self.options = options
         return self
 
-    def plot(self, **kwargs):
-        kwargs["blm"] = False
-        super(QB02, self).plot(**kwargs)
-
     @property
     def _rgb_bands(self):
         return [2,1,0]
