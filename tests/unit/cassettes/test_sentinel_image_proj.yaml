@@ -1,19 +1,23 @@
 interactions:
 - request:
-    body: !!python/unicode '{"edges": [], "nodes": [{"id": "dfef4280-02bf-54d5-aa42-f56dc1d5e7fd",
-      "operator": "SentinelRead", "parameters": {"SentinelId": "tiles/21/U/VQ/2016/5/23/0",
-      "sentinelProductSpec": "10m"}}]}'
+    body: !!python/unicode '{"edges": [{"destination": "bb2de7ff-567f-527c-b2d9-ddf27cce21d9",
+      "id": "bb2b647a-0278-5855-9c28-082a2ee828bd", "index": 1, "source": "dfef4280-02bf-54d5-aa42-f56dc1d5e7fd"}],
+      "nodes": [{"id": "bb2de7ff-567f-527c-b2d9-ddf27cce21d9", "operator": "Reproject",
+      "parameters": {"Dest SRS Code": "EPSG:4326", "Dest pixel-to-world transform":
+      "null", "Source SRS Code": "EPSG:4326", "Source pixel-to-world transform": "null"}},
+      {"id": "dfef4280-02bf-54d5-aa42-f56dc1d5e7fd", "operator": "SentinelRead", "parameters":
+      {"SentinelId": "tiles/21/U/VQ/2016/5/23/0", "sentinelProductSpec": "10m"}}]}'
     headers:
       Accept: ['*/*']
       Accept-Encoding: ['gzip, deflate']
       Connection: [keep-alive]
-      Content-Length: ['189']
+      Content-Length: ['587']
       Content-Type: [application/json]
       User-Agent: [python-requests/2.18.4]
     method: POST
     uri: https://rda.geobigdata.io/v1/graph
   response:
-    body: {string: !!python/unicode 3d938e9f94c77b55106858283579768e9272233a9e0d78093d35309c766f8e12}
+    body: {string: !!python/unicode ac486cbbf99535e8272be67120859baa3607366c78ccbc3127df1d2ed14f2ae9}
     headers:
       access-control-allow-headers: ['x-requested-with, X-Auth-Token, Content-Type,
           Authorization']
@@ -23,7 +27,7 @@ interactions:
       connection: [keep-alive]
       content-length: ['64']
       content-type: [text/plain;charset=UTF-8]
-      date: ['Thu, 12 Apr 2018 14:34:28 GMT']
+      date: ['Thu, 12 Apr 2018 22:33:05 GMT']
     status: {code: 200, message: ''}
 - request:
     body: null
@@ -33,13 +37,13 @@ interactions:
       Connection: [keep-alive]
       User-Agent: [python-requests/2.18.4]
     method: GET
-    uri: https://rda.geobigdata.io/v1/metadata/3d938e9f94c77b55106858283579768e9272233a9e0d78093d35309c766f8e12/dfef4280-02bf-54d5-aa42-f56dc1d5e7fd/metadata.json
+    uri: https://rda.geobigdata.io/v1/metadata/ac486cbbf99535e8272be67120859baa3607366c78ccbc3127df1d2ed14f2ae9/bb2de7ff-567f-527c-b2d9-ddf27cce21d9/metadata.json
   response:
-    body: {string: !!python/unicode '{"imageMetadata":{"imageId":"S2A_OPER_MSI_L1C_DS_MTI__20160523T195155_S20160523T145721_N02.02","version":1.1,"profileName":"georectified_image","tilePartition":"0000","tileXOffset":0,"tileYOffset":0,"numXTiles":43,"numYTiles":43,"tileXSize":256,"tileYSize":256,"numBands":4,"dataType":"UNSIGNED_SHORT","imageHeight":10980,"imageWidth":10980,"sensorPlatformName":"Sentinel2","sensorName":"Sentinel
+    body: {string: !!python/unicode '{"imageMetadata":{"imageId":"S2A_OPER_MSI_L1C_DS_MTI__20160523T195155_S20160523T145721_N02.02","version":1.1,"profileName":"georectified_image","tilePartition":"0000","tileXOffset":0,"tileYOffset":0,"numXTiles":53,"numYTiles":36,"tileXSize":256,"tileYSize":256,"numBands":4,"dataType":"UNSIGNED_SHORT","imageHeight":8842,"imageWidth":13447,"sensorPlatformName":"Sentinel2","sensorName":"Sentinel
         2 Scheme (10M): Blue (B02), Green (B03), Red (B04), NIR (B08)","vendorName":"ESA","vendorDatasetIdentifier":"S2A_OPER_PRD_MSIL1C_PDMC_20160523T204441_R082_V20160523T145721_20160523T145721:S2A_OPER_MSI_L1C_DS_MTI__20160523T195155_S20160523T145721_N02.02","acquisitionDate":"2016-05-23T14:57:21.462Z","colorInterpretation":"SENTINEL_2_10M","imageBoundsWGS84":"POLYGON
-        ((-58.38572763180613 49.644430072971986, -56.86478640421985 49.6526438682633,
-        -56.86744867287709 48.664955151350924, -58.358453774912164 48.657020774572565,
-        -58.38572763180613 49.644430072971986))","groundSampleDistanceMeters":10.0,"minX":0,"minY":0,"maxX":10979,"maxY":10979,"minTileX":0,"minTileY":0,"maxTileX":42,"maxTileY":42,"cloudCover":1.17},"imageGeoreferencing":{"spatialReferenceSystemCode":"EPSG:32621","scaleX":10.0,"scaleY":-10.0,"translateX":399960.0,"translateY":5500020.0,"shearX":0.0,"shearY":0.0},"rpcSensorModel":null,"histogram":null,"sensorMetadata":null,"imageAssociations":null,"rrdMetadata":null}'}
+        ((-58.37816710149235 49.65456221177575, -56.860757383144126 49.65456221177575,
+        -56.860757383144126 48.65679789782951, -58.37816710149235 48.65679789782951,
+        -58.37816710149235 49.65456221177575))","groundSampleDistanceMeters":10.0,"minX":67,"minY":-17,"maxX":13513,"maxY":8824,"minTileX":0,"minTileY":-1,"maxTileX":52,"maxTileY":34,"cloudCover":1.17},"imageGeoreferencing":{"spatialReferenceSystemCode":"EPSG:4326","scaleX":1.1284373602649111E-4,"scaleY":-1.1284373602649111E-4,"translateX":-58.38572763180613,"translateY":49.6526438682633,"shearX":0.0,"shearY":0.0},"rpcSensorModel":null,"histogram":null,"sensorMetadata":null,"imageAssociations":null,"rrdMetadata":null}'}
     headers:
       access-control-allow-headers: ['x-requested-with, X-Auth-Token, Content-Type,
           Authorization']
@@ -47,8 +51,8 @@ interactions:
       access-control-allow-origin: ['*']
       access-control-max-age: ['3600']
       connection: [keep-alive]
-      content-length: ['1383']
+      content-length: ['1433']
       content-type: [application/json;charset=UTF-8]
-      date: ['Thu, 12 Apr 2018 14:34:33 GMT']
+      date: ['Thu, 12 Apr 2018 22:33:05 GMT']
     status: {code: 200, message: ''}
 version: 1
