@@ -33,8 +33,7 @@ class _Auth(object):
         if 'host' in kwargs:
             self.root_url = 'https://%s' % kwargs.get('host')
 
-        if (kwargs.get('username') and kwargs.get('password') and
-                kwargs.get('client_id') and kwargs.get('client_secret')):
+        if (kwargs.get('username') and kwargs.get('password')):
             self.gbdx_connection = gbdx_auth.session_from_kwargs(**kwargs)
         elif kwargs.get('gbdx_connection'):
             self.gbdx_connection = kwargs.get('gbdx_connection')
