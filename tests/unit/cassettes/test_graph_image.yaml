@@ -5,7 +5,7 @@ interactions:
       Accept: ['*/*']
       Accept-Encoding: ['gzip, deflate']
       Connection: [keep-alive]
-      User-Agent: [python-requests/2.14.2]
+      User-Agent: [python-requests/2.18.4]
     method: GET
     uri: https://rda.geobigdata.io/v1/graph/37397242be83610fe4923c866ab07d8aeb0044c206c5c39b4b9deb41629e9eae
   response:
@@ -36,7 +36,7 @@ interactions:
       connection: [keep-alive]
       content-length: ['5242']
       content-type: [application/json;charset=UTF-8]
-      date: ['Tue, 13 Feb 2018 17:34:45 GMT']
+      date: ['Mon, 23 Apr 2018 18:06:57 GMT']
     status: {code: 200, message: ''}
 - request:
     body: null
@@ -44,11 +44,11 @@ interactions:
       Accept: ['*/*']
       Accept-Encoding: ['gzip, deflate']
       Connection: [keep-alive]
-      User-Agent: [python-requests/2.14.2]
+      User-Agent: [python-requests/2.18.4]
     method: GET
     uri: https://rda.geobigdata.io/v1/metadata/37397242be83610fe4923c866ab07d8aeb0044c206c5c39b4b9deb41629e9eae/Orthorectify_ms_plain/metadata.json
   response:
-    body: {string: !!python/unicode '{"imageMetadata":{"imageId":"59106228-0f17-4836-b9f2-8160b92b881a","version":1.0,"profileName":"georectified_image","tilePartition":"0000","tileXOffset":0,"tileYOffset":0,"numXTiles":43,"numYTiles":45,"tileXSize":256,"tileYSize":256,"numBands":8,"dataType":"UNSIGNED_SHORT","imageHeight":11164,"imageWidth":10975,"sensorPlatformName":"WV03","sensorName":"8-band
+    body: {string: !!python/unicode '{"imageMetadata":{"imageId":"59106228-0f17-4836-b9f2-8160b92b881a","version":1.0,"profileName":"georectified_image","tileBucketName":"rda-images-1","tilePartition":"0000","nativeTileFileFormat":"TIF","tileXOffset":0,"tileYOffset":0,"numXTiles":43,"numYTiles":45,"tileXSize":256,"tileYSize":256,"numBands":8,"dataType":"UNSIGNED_SHORT","imageHeight":11164,"imageWidth":10975,"sensorPlatformName":"WV03","sensorName":"8-band
         (Coastal, Blue, Green, Yellow, Red, Red-edge, NIR1, NIR2) Multispectral","vendorName":"DigitalGlobe,
         Inc.","vendorDatasetIdentifier":"LV1B:057428522010_01_P003:104001003766BD00:A0100103336D2100","acquisitionDate":"2018-01-09T16:40:59.959Z","colorInterpretation":"WORLDVIEW_8_BAND","imageBoundsWGS84":"POLYGON
         ((-84.38857790774703 9.950845863359683, -84.2595240539921 9.950845863359683,
@@ -62,6 +62,6 @@ interactions:
       access-control-max-age: ['3600']
       connection: [keep-alive]
       content-type: [application/json;charset=UTF-8]
-      date: ['Tue, 13 Feb 2018 17:34:46 GMT']
+      date: ['Mon, 23 Apr 2018 18:06:58 GMT']
     status: {code: 200, message: ''}
 version: 1

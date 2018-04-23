@@ -27,7 +27,7 @@ interactions:
       connection: [keep-alive]
       content-length: ['64']
       content-type: [text/plain;charset=UTF-8]
-      date: ['Thu, 12 Apr 2018 22:33:05 GMT']
+      date: ['Mon, 23 Apr 2018 19:57:20 GMT']
     status: {code: 200, message: ''}
 - request:
     body: null
@@ -53,6 +53,6 @@ interactions:
       connection: [keep-alive]
       content-length: ['1433']
       content-type: [application/json;charset=UTF-8]
-      date: ['Thu, 12 Apr 2018 22:33:05 GMT']
+      date: ['Mon, 23 Apr 2018 19:57:25 GMT']
     status: {code: 200, message: ''}
 version: 1

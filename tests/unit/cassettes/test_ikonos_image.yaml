@@ -19,10 +19,10 @@ interactions:
       content-encoding: [UTF-8]
       content-length: ['2149']
       content-type: [application/json;charset=UTF-8]
-      date: ['Mon, 16 Apr 2018 15:22:06 GMT']
+      date: ['Mon, 23 Apr 2018 18:08:02 GMT']
       server: [Apache-Coyote/1.1, Weblogic 12.2.1.1]
-      set-cookie: [JSESSIONID=1D7DF8D2BB4E78D75DCB3DAEB9EE75C9.173.50.254.94; Path=/;
-          HttpOnly, AWSELB=07A771471E264EA5ADF82F0AA634B8F4B8E2289A694ABC198B3CE77026B8F6FF79ECFD2DCC2D323D87F45C5C11BB8B0A29268850E3FED3899E82B96997BB61A0AB34F055EC838263437ABBB61D081420BBDB1DCED6;PATH=/;HTTPONLY]
+      set-cookie: [JSESSIONID=9A6FA5D331166100D95BD6C0FC2A7427.173.50.248.174; Path=/;
+          HttpOnly, AWSELB=07A771471E264EA5ADF82F0AA634B8F4B8E2289A69F7C1613DC43BE7D139210B7D2E7B4956E4C64D01482635B917EEF19D7DFEABE1FED3899E82B96997BB61A0AB34F055EC4EC6ACCA25B03A1FD21A1F94E400AD10;PATH=/;HTTPONLY]
       strict-transport-security: [max-age=604800 ; includeSubDomains]
       x-content-type-options: [nosniff]
       x-frame-options: [SAMEORIGIN]
@@ -57,7 +57,7 @@ interactions:
       connection: [keep-alive]
       content-length: ['64']
       content-type: [text/plain;charset=UTF-8]
-      date: ['Mon, 16 Apr 2018 15:22:07 GMT']
+      date: ['Mon, 23 Apr 2018 18:08:02 GMT']
     status: {code: 200, message: ''}
 - request:
     body: null
@@ -83,6 +83,6 @@ interactions:
       connection: [keep-alive]
       content-length: ['4960']
       content-type: [application/json;charset=UTF-8]
-      date: ['Mon, 16 Apr 2018 15:22:09 GMT']
+      date: ['Mon, 23 Apr 2018 18:08:04 GMT']
     status: {code: 200, message: ''}
 version: 1

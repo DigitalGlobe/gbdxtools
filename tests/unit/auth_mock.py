@@ -11,6 +11,7 @@ from future import standard_library
 standard_library.install_aliases()
 from configparser import ConfigParser
 from datetime import datetime
+from gbdxtools import Interface
 
 from oauthlib.oauth2 import LegacyApplicationClient
 from requests_oauthlib import OAuth2Session
@@ -26,3 +27,11 @@ def get_mock_gbdx_session(token='dummytoken'):
 	s.token = token
 	s.access_token = token
 	return s
+
+
+if 'GBDX_MOCK' not in os.environ:
+    mock_gbdx_session = get_mock_gbdx_session(token='dummytoken')
+    gbdx = Interface(gbdx_connection=mock_gbdx_session)
+else:
+    print('NOT MOCKING')
+    gbdx = Interface()

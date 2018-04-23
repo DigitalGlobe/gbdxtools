@@ -21,8 +21,10 @@ interactions:
       content-encoding: [UTF-8]
       content-length: ['1839']
       content-type: [application/json;charset=UTF-8]
-      date: ['Mon, 16 Apr 2018 15:20:35 GMT']
+      date: ['Mon, 23 Apr 2018 18:03:36 GMT']
       server: [Apache-Coyote/1.1, Weblogic 12.2.1.1]
+      set-cookie: [JSESSIONID=28BE3E42975B60A2CE977B311EFE0A20.173.50.252.105; Path=/;
+          HttpOnly, AWSELB=07A771471E264EA5ADF82F0AA634B8F4B8E2289A693E8C96AE76BB5FFB7E32A357DB7C1A277FFA75533AE5D63C3DEC4BA13CC3F266FED3899E82B96997BB61A0AB34F055EC4EC6ACCA25B03A1FD21A1F94E400AD10;PATH=/;HTTPONLY]
       strict-transport-security: [max-age=604800 ; includeSubDomains]
       x-content-type-options: [nosniff]
       x-frame-options: [SAMEORIGIN]
@@ -35,8 +37,8 @@ interactions:
       Accept: ['*/*']
       Accept-Encoding: ['gzip, deflate']
       Connection: [keep-alive]
-      Cookie: [AWSELB=07A771471E264EA5ADF82F0AA634B8F4B8E2289A69943AC8A03B2FF907ABF83033EE101A9753EEE7A535ABC4143EEA2ADAF3DF799EFED3899E82B96997BB61A0AB34F055EC4EC6ACCA25B03A1FD21A1F94E400AD10;
-          JSESSIONID=D6A0B302E9EDEE1A75451D033BC5AFCE.173.50.248.165]
+      Cookie: [AWSELB=07A771471E264EA5ADF82F0AA634B8F4B8E2289A693E8C96AE76BB5FFB7E32A357DB7C1A277FFA75533AE5D63C3DEC4BA13CC3F266FED3899E82B96997BB61A0AB34F055EC4EC6ACCA25B03A1FD21A1F94E400AD10;
+          JSESSIONID=28BE3E42975B60A2CE977B311EFE0A20.173.50.252.105]
       User-Agent: [python-requests/2.18.4]
     method: GET
     uri: https://vector.geobigdata.io/insight-vector/api/index/query/vector-gbdx-alpha-catalog-v2-*/items?count=100&upper=90.0&lower=-90.0&right=180.0&q=item_type%3AIDAHOImage+AND+attributes.catalogID%3A1050010009569E00+AND+attributes.colorInterpretation%3ABGRN&left=-180.0
@@ -61,7 +63,7 @@ interactions:
       content-encoding: [UTF-8]
       content-length: ['17163']
       content-type: [application/json;charset=UTF-8]
-      date: ['Mon, 16 Apr 2018 15:20:35 GMT']
+      date: ['Mon, 23 Apr 2018 18:03:37 GMT']
       server: [Apache-Coyote/1.1, Weblogic 12.2.1.1]
       strict-transport-security: [max-age=604800 ; includeSubDomains]
       x-content-type-options: [nosniff]
@@ -75,8 +77,8 @@ interactions:
       Accept: ['*/*']
       Accept-Encoding: ['gzip, deflate']
       Connection: [keep-alive]
-      Cookie: [AWSELB=07A771471E264EA5ADF82F0AA634B8F4B8E2289A69943AC8A03B2FF907ABF83033EE101A9753EEE7A535ABC4143EEA2ADAF3DF799EFED3899E82B96997BB61A0AB34F055EC4EC6ACCA25B03A1FD21A1F94E400AD10;
-          JSESSIONID=D6A0B302E9EDEE1A75451D033BC5AFCE.173.50.248.165]
+      Cookie: [AWSELB=07A771471E264EA5ADF82F0AA634B8F4B8E2289A693E8C96AE76BB5FFB7E32A357DB7C1A277FFA75533AE5D63C3DEC4BA13CC3F266FED3899E82B96997BB61A0AB34F055EC4EC6ACCA25B03A1FD21A1F94E400AD10;
+          JSESSIONID=28BE3E42975B60A2CE977B311EFE0A20.173.50.252.105]
       User-Agent: [python-requests/2.18.4]
     method: GET
     uri: https://vector.geobigdata.io/insight-vector/api/index/query/vector-gbdx-alpha-catalog-v2-*/items?count=100&upper=90.0&lower=-90.0&right=180.0&q=item_type%3AIDAHOImage+AND+attributes.catalogID%3A1050010009569E00+AND+attributes.colorInterpretation%3APAN&left=-180.0
@@ -91,7 +93,7 @@ interactions:
       content-encoding: [UTF-8]
       content-length: ['16881']
       content-type: [application/json;charset=UTF-8]
-      date: ['Mon, 16 Apr 2018 15:20:35 GMT']
+      date: ['Mon, 23 Apr 2018 18:03:37 GMT']
       server: [Apache-Coyote/1.1, Weblogic 12.2.1.1]
       strict-transport-security: [max-age=604800 ; includeSubDomains]
       x-content-type-options: [nosniff]
@@ -162,7 +164,7 @@ interactions:
       connection: [keep-alive]
       content-length: ['64']
       content-type: [text/plain;charset=UTF-8]
-      date: ['Mon, 16 Apr 2018 15:20:37 GMT']
+      date: ['Mon, 23 Apr 2018 18:03:38 GMT']
     status: {code: 200, message: ''}
 - request:
     body: null
@@ -186,6 +188,6 @@ interactions:
       access-control-max-age: ['3600']
       connection: [keep-alive]
       content-type: [application/json;charset=UTF-8]
-      date: ['Mon, 16 Apr 2018 15:20:38 GMT']
+      date: ['Mon, 23 Apr 2018 18:03:40 GMT']
     status: {code: 200, message: ''}
 version: 1

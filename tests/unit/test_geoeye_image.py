@@ -8,7 +8,7 @@ Unit tests for the gbdxtools.Idaho class
 from gbdxtools import Interface
 from gbdxtools import GE01, CatalogImage
 from gbdxtools.ipe.error import AcompUnavailable
-from auth_mock import get_mock_gbdx_session
+from auth_mock import gbdx
 import vcr
 from os.path import join, isfile, dirname, realpath
 import tempfile
@@ -37,9 +37,7 @@ class GE01ImageTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        mock_gbdx_session = get_mock_gbdx_session(token='dymmytoken')
-        cls.gbdx = Interface(gbdx_connection=mock_gbdx_session)
-        #cls.gbdx = Interface()
+        cls.gbdx = gbdx
         cls._temp_path = tempfile.mkdtemp()
         print("Created: {}".format(cls._temp_path))
 
