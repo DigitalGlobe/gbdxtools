@@ -24,12 +24,9 @@ class GeoEyeDriver(WorldViewDriver):
         self._products = standard_products
         return standard_products
 
-<<<<<<< HEAD
-=======
 class GE01(WorldViewImage):
     __Driver__ = GeoEyeDriver
 
->>>>>>> dev
     @property
     def _rgb_bands(self):
         return [2,1,0]
