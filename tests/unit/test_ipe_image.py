@@ -9,7 +9,7 @@ from gbdxtools import Interface
 from gbdxtools import IdahoImage
 from gbdxtools.ipe.graph import get_ipe_graph
 from gbdxtools.images.meta import DaskImage
-from auth_mock import gbdx
+from auth_mock import get_mock_gbdx_session
 import vcr
 import tempfile
 import unittest
@@ -43,7 +43,9 @@ class IpeImageTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.gbdx = gbdx
+        mock_gbdx_session = get_mock_gbdx_session(token='dummytoken')
+        cls.gbdx = Interface(gbdx_connection=mock_gbdx_session)
+        #cls.gbdx = Interface()
         cls._temp_path = tempfile.mkdtemp()
         print("Created: {}".format(cls._temp_path))
 

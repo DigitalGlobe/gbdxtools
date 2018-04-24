@@ -33,5 +33,4 @@ if 'GBDX_MOCK' not in os.environ:
     mock_gbdx_session = get_mock_gbdx_session(token='dummytoken')
     gbdx = Interface(gbdx_connection=mock_gbdx_session)
 else:
-    print('NOT MOCKING')
     gbdx = Interface()
