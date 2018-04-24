@@ -5,8 +5,8 @@ interactions:
       Accept: ['*/*']
       Accept-Encoding: ['gzip, deflate']
       Connection: [keep-alive]
-      Cookie: [AWSELB=07A771471E264EA5ADF82F0AA634B8F4B8E2289A697E9F54B3FB311F96695FE678FF3AFC37711A8AAF856110552285D571F2E82701FED3899E82B96997BB61A0AB34F055EC838263437ABBB61D081420BBDB1DCED6;
-          JSESSIONID=E652B8D1948EE56953A96E1309CE8711.173.50.248.102]
+      Cookie: [AWSELB=07A771471E264EA5ADF82F0AA634B8F4B8E2289A699C66788732FD3147FEB9FC448C98B720B2BC8B830E71680C22BB1526DE412357C62A00528399710D25D49174062B908816929CF352C85F2AAE1C6840319A4AF1;
+          JSESSIONID=37D68AF3137EA69ED8E8047DE89255A9.173.50.248.174]
       User-Agent: [python-requests/2.18.4]
     method: GET
     uri: https://vector.geobigdata.io/insight-vector/api/index/query/vector-gbdx-alpha-catalog-v2-*/items?count=100&upper=90.0&lower=-90.0&right=180.0&q=item_type%3AIDAHOImage+AND+id%3A09d5acaf-12d4-4c67-adbb-cda26cbd2187&left=-180.0
@@ -22,7 +22,7 @@ interactions:
       content-encoding: [UTF-8]
       content-length: ['1780']
       content-type: [application/json;charset=UTF-8]
-      date: ['Mon, 12 Mar 2018 15:00:28 GMT']
+      date: ['Mon, 23 Apr 2018 18:10:41 GMT']
       server: [Apache-Coyote/1.1, Weblogic 12.2.1.1]
       strict-transport-security: [max-age=604800 ; includeSubDomains]
       x-content-type-options: [nosniff]
@@ -65,7 +65,7 @@ interactions:
       connection: [keep-alive]
       content-length: ['64']
       content-type: [text/plain;charset=UTF-8]
-      date: ['Mon, 12 Mar 2018 15:00:28 GMT']
+      date: ['Mon, 23 Apr 2018 18:10:42 GMT']
     status: {code: 200, message: ''}
 - request:
     body: null
@@ -77,7 +77,7 @@ interactions:
     method: GET
     uri: https://rda.geobigdata.io/v1/metadata/8aecb0cabde54d6167ae4c401189bc6ea5eb22e08c13c133230b1bf3e4457e30/ec07845b-1b42-5b1d-abba-ae0f876a289e/metadata.json
   response:
-    body: {string: !!python/unicode '{"imageMetadata":{"imageId":"09d5acaf-12d4-4c67-adbb-cda26cbd2187","version":1.0,"profileName":"georectified_image","tilePartition":"0000","tileXOffset":0,"tileYOffset":0,"numXTiles":43,"numYTiles":44,"tileXSize":256,"tileYSize":256,"numBands":8,"dataType":"FLOAT","imageHeight":11120,"imageWidth":10736,"sensorPlatformName":"WV03","sensorName":"8-band
+    body: {string: !!python/unicode '{"imageMetadata":{"imageId":"09d5acaf-12d4-4c67-adbb-cda26cbd2187","version":1.0,"profileName":"georectified_image","tileBucketName":"idaho-images","tilePartition":"0000","nativeTileFileFormat":"TIF","tileXOffset":0,"tileYOffset":0,"numXTiles":43,"numYTiles":44,"tileXSize":256,"tileYSize":256,"numBands":8,"dataType":"FLOAT","imageHeight":11120,"imageWidth":10736,"sensorPlatformName":"WV03","sensorName":"8-band
         (Coastal, Blue, Green, Yellow, Red, Red-edge, NIR1, NIR2) Multispectral","vendorName":"DigitalGlobe,
         Inc.","vendorDatasetIdentifier":"LV1B:056165420010_01_P002:104001002838EC00:A01001025E723D00","acquisitionDate":"2017-02-07T16:45:04.409Z","colorInterpretation":"WORLDVIEW_8_BAND","imageBoundsWGS84":"POLYGON
         ((-85.82934634842256 10.941095616101329, -85.68477875948976 10.941095616101329,
@@ -91,7 +91,7 @@ interactions:
       access-control-max-age: ['3600']
       connection: [keep-alive]
       content-type: [application/json;charset=UTF-8]
-      date: ['Mon, 12 Mar 2018 15:00:29 GMT']
+      date: ['Mon, 23 Apr 2018 18:10:43 GMT']
     status: {code: 200, message: ''}
 - request:
     body: null
@@ -99,8 +99,8 @@ interactions:
       Accept: ['*/*']
       Accept-Encoding: ['gzip, deflate']
       Connection: [keep-alive]
-      Cookie: [AWSELB=07A771471E264EA5ADF82F0AA634B8F4B8E2289A697E9F54B3FB311F96695FE678FF3AFC37711A8AAF856110552285D571F2E82701FED3899E82B96997BB61A0AB34F055EC838263437ABBB61D081420BBDB1DCED6;
-          JSESSIONID=E652B8D1948EE56953A96E1309CE8711.173.50.248.102]
+      Cookie: [AWSELB=07A771471E264EA5ADF82F0AA634B8F4B8E2289A699C66788732FD3147FEB9FC448C98B720B2BC8B830E71680C22BB1526DE412357C62A00528399710D25D49174062B908816929CF352C85F2AAE1C6840319A4AF1;
+          JSESSIONID=37D68AF3137EA69ED8E8047DE89255A9.173.50.248.174]
       User-Agent: [python-requests/2.18.4]
     method: GET
     uri: https://vector.geobigdata.io/insight-vector/api/index/query/vector-gbdx-alpha-catalog-v2-*/items?count=100&upper=90.0&lower=-90.0&right=180.0&q=item_type%3AIDAHOImage+AND+id%3A09d5acaf-12d4-4c67-adbb-cda26cbd2187&left=-180.0
@@ -116,7 +116,7 @@ interactions:
       content-encoding: [UTF-8]
       content-length: ['1780']
       content-type: [application/json;charset=UTF-8]
-      date: ['Mon, 12 Mar 2018 15:00:30 GMT']
+      date: ['Mon, 23 Apr 2018 18:10:44 GMT']
       server: [Apache-Coyote/1.1, Weblogic 12.2.1.1]
       strict-transport-security: [max-age=604800 ; includeSubDomains]
       x-content-type-options: [nosniff]
@@ -125,14 +125,14 @@ interactions:
       x-xss-protection: [1; mode=block]
     status: {code: 200, message: OK}
 - request:
-    body: !!python/unicode '{"edges": [{"destination": "ff7dc340-9a5c-5c82-88b3-492610c39146",
-      "id": "87012eda-4e2f-54a8-9a87-61e88964b36d", "index": 1, "source": "564da4a1-6d65-5a19-9dea-094463531dc1"},
-      {"destination": "564da4a1-6d65-5a19-9dea-094463531dc1", "id": "c0c4ebd5-5837-5ca7-a766-90ebc9aaa1ce",
+    body: !!python/unicode '{"edges": [{"destination": "ec07845b-1b42-5b1d-abba-ae0f876a289e",
+      "id": "50cbdc6f-2967-5757-aad0-ea6e7bf20df2", "index": 1, "source": "318c579f-d72c-5a54-89c2-49dcd205924d"},
+      {"destination": "318c579f-d72c-5a54-89c2-49dcd205924d", "id": "85a43fa8-91a2-57e8-a08c-e19c13a5315f",
       "index": 1, "source": "98810056-dcbf-5b28-bc66-1070f4016055"}, {"destination":
       "98810056-dcbf-5b28-bc66-1070f4016055", "id": "caadf2f2-d3ce-5bd3-8572-77361207a4c2",
       "index": 1, "source": "5ff7fc08-d942-51b1-a345-9ef3017d160b"}], "nodes": [{"id":
-      "ff7dc340-9a5c-5c82-88b3-492610c39146", "operator": "Format", "parameters":
-      {"dataType": "4"}}, {"id": "564da4a1-6d65-5a19-9dea-094463531dc1", "operator":
+      "ec07845b-1b42-5b1d-abba-ae0f876a289e", "operator": "Format", "parameters":
+      {"dataType": "4"}}, {"id": "318c579f-d72c-5a54-89c2-49dcd205924d", "operator":
       "Orthorectify", "parameters": {"Elevation Source": "", "Output Coordinate Reference
       System": "EPSG:4326", "Output Pixel to World Transform": "", "Sensor Model":
       "null"}}, {"id": "98810056-dcbf-5b28-bc66-1070f4016055", "operator": "TOAReflectance",
@@ -149,7 +149,7 @@ interactions:
     method: POST
     uri: https://rda.geobigdata.io/v1/graph
   response:
-    body: {string: !!python/unicode 1ca4c6488850dc467c79a79f92ca101bece833393f21ca2d784251ec448d4da8}
+    body: {string: !!python/unicode 8aecb0cabde54d6167ae4c401189bc6ea5eb22e08c13c133230b1bf3e4457e30}
     headers:
       access-control-allow-headers: ['x-requested-with, X-Auth-Token, Content-Type,
           Authorization']
@@ -159,7 +159,7 @@ interactions:
       connection: [keep-alive]
       content-length: ['64']
       content-type: [text/plain;charset=UTF-8]
-      date: ['Mon, 12 Mar 2018 15:00:30 GMT']
+      date: ['Mon, 23 Apr 2018 18:10:45 GMT']
     status: {code: 200, message: ''}
 - request:
     body: null
@@ -169,9 +169,9 @@ interactions:
       Connection: [keep-alive]
       User-Agent: [python-requests/2.18.4]
     method: GET
-    uri: https://rda.geobigdata.io/v1/metadata/1ca4c6488850dc467c79a79f92ca101bece833393f21ca2d784251ec448d4da8/ff7dc340-9a5c-5c82-88b3-492610c39146/metadata.json
+    uri: https://rda.geobigdata.io/v1/metadata/8aecb0cabde54d6167ae4c401189bc6ea5eb22e08c13c133230b1bf3e4457e30/ec07845b-1b42-5b1d-abba-ae0f876a289e/metadata.json
   response:
-    body: {string: !!python/unicode '{"imageMetadata":{"imageId":"09d5acaf-12d4-4c67-adbb-cda26cbd2187","version":1.0,"profileName":"georectified_image","tilePartition":"0000","tileXOffset":0,"tileYOffset":0,"numXTiles":43,"numYTiles":44,"tileXSize":256,"tileYSize":256,"numBands":8,"dataType":"FLOAT","imageHeight":11120,"imageWidth":10736,"sensorPlatformName":"WV03","sensorName":"8-band
+    body: {string: !!python/unicode '{"imageMetadata":{"imageId":"09d5acaf-12d4-4c67-adbb-cda26cbd2187","version":1.0,"profileName":"georectified_image","tileBucketName":"idaho-images","tilePartition":"0000","nativeTileFileFormat":"TIF","tileXOffset":0,"tileYOffset":0,"numXTiles":43,"numYTiles":44,"tileXSize":256,"tileYSize":256,"numBands":8,"dataType":"FLOAT","imageHeight":11120,"imageWidth":10736,"sensorPlatformName":"WV03","sensorName":"8-band
         (Coastal, Blue, Green, Yellow, Red, Red-edge, NIR1, NIR2) Multispectral","vendorName":"DigitalGlobe,
         Inc.","vendorDatasetIdentifier":"LV1B:056165420010_01_P002:104001002838EC00:A01001025E723D00","acquisitionDate":"2017-02-07T16:45:04.409Z","colorInterpretation":"WORLDVIEW_8_BAND","imageBoundsWGS84":"POLYGON
         ((-85.82934634842256 10.941095616101329, -85.68477875948976 10.941095616101329,
@@ -185,6 +185,6 @@ interactions:
       access-control-max-age: ['3600']
       connection: [keep-alive]
       content-type: [application/json;charset=UTF-8]
-      date: ['Mon, 12 Mar 2018 15:00:31 GMT']
+      date: ['Mon, 23 Apr 2018 18:10:45 GMT']
     status: {code: 200, message: ''}
 version: 1

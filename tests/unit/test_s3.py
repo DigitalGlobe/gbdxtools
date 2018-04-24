@@ -1,6 +1,6 @@
 from gbdxtools import Interface
 from gbdxtools.s3 import S3
-from auth_mock import get_mock_gbdx_session
+from auth_mock import gbdx
 import vcr
 import os
 import tempfile
@@ -26,10 +26,7 @@ class S3Tests(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        # create mock session, replace dummytoken with real token to create cassette
-        mock_gbdx_session = get_mock_gbdx_session(token="dummytoken")
-        cls.gbdx = Interface(gbdx_connection=mock_gbdx_session)
-        #cls.gbdx = Interface()
+        cls.gbdx = gbdx
         cls._temp_path = tempfile.mkdtemp()
         print("Created: {}".format(cls._temp_path))
 

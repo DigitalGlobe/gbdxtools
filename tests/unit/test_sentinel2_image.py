@@ -7,7 +7,7 @@ Unit tests for the gbdxtools.Idaho class
 
 from gbdxtools import Interface
 from gbdxtools import Sentinel2
-from auth_mock import get_mock_gbdx_session
+from auth_mock import gbdx
 import vcr
 from os.path import join, isfile, dirname, realpath
 import tempfile
@@ -36,9 +36,7 @@ class IpeImageTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        #mock_gbdx_session = get_mock_gbdx_session(token='dymmytoken')
-        #cls.gbdx = Interface(gbdx_connection=mock_gbdx_session)
-        cls.gbdx = Interface()
+        cls.gbdx = gbdx
         cls._temp_path = tempfile.mkdtemp()
         print("Created: {}".format(cls._temp_path))
 

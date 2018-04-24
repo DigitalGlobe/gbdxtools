@@ -9,11 +9,11 @@ interactions:
       Connection: [keep-alive]
       Content-Length: ['185']
       Content-Type: [application/json]
-      User-Agent: [python-requests/2.13.0]
+      User-Agent: [python-requests/2.18.4]
     method: POST
-    uri: https://idahoapi.geobigdata.io/v1/graph
+    uri: https://rda.geobigdata.io/v1/graph
   response:
-    body: {string: !!python/unicode ac85624c065bd431f8f29e69dbfd5bcf4351ab1f2bd1e5c978c7c72f1cd28556}
+    body: {string: !!python/unicode 4ca6ca968937f8e87001b3b78b2bf4930a8312e2cd4ac61844970e83d91c6789}
     headers:
       access-control-allow-headers: ['x-requested-with, X-Auth-Token, Content-Type,
           Authorization']
@@ -23,7 +23,7 @@ interactions:
       connection: [keep-alive]
       content-length: ['64']
       content-type: [text/plain;charset=UTF-8]
-      date: ['Wed, 01 Nov 2017 16:55:16 GMT']
+      date: ['Mon, 23 Apr 2018 19:26:44 GMT']
     status: {code: 200, message: ''}
 - request:
     body: null
@@ -31,11 +31,11 @@ interactions:
       Accept: ['*/*']
       Accept-Encoding: ['gzip, deflate']
       Connection: [keep-alive]
-      User-Agent: [python-requests/2.13.0]
+      User-Agent: [python-requests/2.18.4]
     method: GET
-    uri: https://idahoapi.geobigdata.io/v1/metadata/ac85624c065bd431f8f29e69dbfd5bcf4351ab1f2bd1e5c978c7c72f1cd28556/79c59ebf-a95d-5084-a5d6-66e8ed69096f/metadata.json
+    uri: https://rda.geobigdata.io/v1/metadata/4ca6ca968937f8e87001b3b78b2bf4930a8312e2cd4ac61844970e83d91c6789/79c59ebf-a95d-5084-a5d6-66e8ed69096f/metadata.json
   response:
-    body: {string: !!python/unicode '{"imageMetadata":{"imageId":"LC80370302014268LGN00","version":"1.0","tilePartition":"0000","tileXOffset":0,"tileYOffset":0,"numXTiles":31,"numYTiles":31,"tileXSize":256,"tileYSize":256,"numBands":8,"dataType":"UNSIGNED_SHORT","imageHeight":7831,"imageWidth":7701,"sensorPlatformName":"LANDSAT8","sensorName":"Operational
+    body: {string: !!python/unicode '{"imageMetadata":{"imageId":"LC80370302014268LGN00","version":1.1,"profileName":"georectified_image","tilePartition":"0000","tileXOffset":0,"tileYOffset":0,"numXTiles":31,"numYTiles":31,"tileXSize":256,"tileYSize":256,"numBands":8,"dataType":"UNSIGNED_SHORT","imageHeight":7831,"imageWidth":7701,"sensorPlatformName":"LANDSAT8","sensorName":"Operational
         Land Imager","vendorName":"NASA/USGS","vendorDatasetIdentifier":"Path=37:Row=30","acquisitionDate":"2014-09-25T18:01:18.581Z","colorInterpretation":"LANDSAT_8_30M","imageBoundsWGS84":"POLYGON
         ((-110.86347858369699 44.246853761678445, -107.97194650786913 44.20678493060979,
         -108.0745769190652 42.09413339961017, -110.86811390707854 42.13136397851653,
@@ -47,8 +47,8 @@ interactions:
       access-control-allow-origin: ['*']
       access-control-max-age: ['3600']
       connection: [keep-alive]
-      content-length: ['1186']
+      content-length: ['1219']
       content-type: [application/json;charset=UTF-8]
-      date: ['Wed, 01 Nov 2017 16:55:32 GMT']
+      date: ['Mon, 23 Apr 2018 19:27:00 GMT']
     status: {code: 200, message: ''}
 version: 1

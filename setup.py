@@ -16,8 +16,13 @@ with open(req_path) as f:
 # long_description=readme,
 
 setup(name='gbdxtools',
+<<<<<<< HEAD
       version='0.14.10',
       description='Additional s3 functionality.',
+=======
+      version='0.15.0',
+      description='API wrapper and imagery access for the GBDX Platform',
+>>>>>>> dev
       classifiers=[],
       keywords='',
       author='DigitalGlobe',
