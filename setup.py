@@ -17,7 +17,7 @@ with open(req_path) as f:
 
 setup(name='gbdxtools',
       version='0.15.0',
-      description='Additional s3 functionality.',
+      description='API wrapper and imagery access for the GBDX Platform',
       classifiers=[],
       keywords='',
       author='DigitalGlobe',
