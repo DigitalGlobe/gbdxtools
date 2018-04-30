@@ -55,6 +55,11 @@ class CatalogImageTest(unittest.TestCase):
     def test_landsat_image(self):
         lsat = CatalogImage('LC80380302013160LGN00')
         self.assertTrue(isinstance(lsat, LandsatImage))
+
+    @my_vcr.use_cassette('tests/unit/cassettes/test_cat_image_wv4.yaml', filter_headers=['authorization'])
+    def test_wv4_image(self):
+        wv4 = CatalogImage('03f4955d-c7da-45a8-8289-ba73bec5e127-inv')
+        self.assertTrue(isinstance(wv4, WV04))
     
     def test_catalog_image_err(self):
         try:

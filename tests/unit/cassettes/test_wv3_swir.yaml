@@ -5,11 +5,11 @@ interactions:
       Accept: ['*/*']
       Accept-Encoding: ['gzip, deflate']
       Connection: [keep-alive]
-      Cookie: [AWSELB=07A771471E264EA5ADF82F0AA634B8F4B8E2289A6913D2D2F71F953A7A800132257E603229A17AEF13F26A83A62509F2C7593E7E1BAF1F6FCBC514BDDB528855627DF1DDB573A5F8D6273C709B847C5E89C56A48C8;
-          JSESSIONID=E25CA7D9E363FCB6692C4526A3949466.173.50.254.85]
+      Cookie: [AWSELB=07A771471E264EA5ADF82F0AA634B8F4B8E2289A69D983ACCB2C0AAA0456C8C3A72FEB8F4C5666329BB3E0DD3C55FB60A732CAE6E2F76AB945B1770B781DD1DD6A9A9AC1444EC6ACCA25B03A1FD21A1F94E400AD10;
+          JSESSIONID=CA9C05D32478C86D929CD638CC8A3FD4.173.50.252.118]
       User-Agent: [python-requests/2.18.4]
     method: GET
-    uri: https://vector.geobigdata.io/insight-vector/api/index/query/vector-gbdx-alpha-catalog-v2-*/items?count=1&upper=90.0&lower=-90.0&right=180.0&q=item_type%3AGBDXCatalogRecord+AND+attributes.catalogID%3A104A010010C29F00+AND+NOT+item_type%3AIDAHOImage+AND+NOT+item_type%3ADigitalGlobeAcquisition&left=-180.0
+    uri: https://vector.geobigdata.io/insight-vector/api/index/query/vector-gbdx-alpha-catalog-v2-*/items?count=1&upper=90.0&lower=-90.0&right=180.0&q=item_type%3AGBDXCatalogRecord+AND+attributes.catalogID%3A104A010010C29F00&left=-180.0
   response:
     body: {string: !!python/unicode '[{"type":"Feature","geometry":{"type":"MultiPolygon","coordinates":[[[[36.94581726853743,-1.343952898657514],[37.0454021237113,-1.348801289534644],[37.04535290200555,-1.478212097393773],[36.94582723153286,-1.473618633948015],[36.94581726853743,-1.343952898657514]]]]},"properties":{"ingest_source":"GBDX_INGEST_ALPHA","item_date":"2015-09-17T08:11:39.000Z","original_crs":"EPSG:4326","item_type":["GBDXCatalogRecord","WV03_SWIR","DigitalGlobeProduct","1BProduct"],"name":null,"format":null,"ingest_date":"2017-11-09T19:29:13.787Z","attributes":{"bucketName":"receiving-dgcs-tdgplatform-com","sunAzimuth_dbl":78.8,"bands":"All-S","xmlFile":"15SEP17081139-A1BS-057199891010_01_P001.XML","browseJpgFile":"15SEP17081139-A1BS-057199891010_01_P001-BROWSE.JPG","cloudCover_int":0,"imdFile":"15SEP17081139-A1BS-057199891010_01_P001.IMD","attFile":"15SEP17081139-A1BS-057199891010_01_P001.ATT","resolution_dbl":7.662,"bandsList":"BAND_S1,BAND_S2,BAND_S3,BAND_S4,BAND_S5,BAND_S6,BAND_S7,BAND_S8","geoFile":"15SEP17081139-A1BS-057199891010_01_P001.GEO","imageFile":"15SEP17081139-A1BS-057199891010_01_P001.TIF","vendor":"DigitalGlobe","sunElevation_dbl":70.9,"platformName":"WORLDVIEW03_SWIR","tilFile":"15SEP17081139-A1BS-057199891010_01_P001.TIL","sensorPlatformName":"WORLDVIEW03_SWIR","readmeTxtFile":"15SEP17081139-A1BS-057199891010_01_P001_README.TXT","rpbFile":"15SEP17081139-A1BS-057199891010_01_P001.RPB","offNadirAngle_dbl":16.6,"soli":"057199891","catalogID":"104A010010C29F00","productLevel":"LV1B","part_int":1,"ephFile":"15SEP17081139-A1BS-057199891010_01_P001.EPH","bucketPrefix":"057199891010_01_003/057199891010_01/057199891010_01_P001_SWR"},"ingest_attributes":{"_rest_user":"acquisitionsvc","_rest_url":"http://vector.geobigdata.io/api/vectors/gbdx-alpha-catalog-v2-%257Bitem_date%253Ayyyy%257D"},"id":"104A010010C29F00_P001_SWR_057199891010","source":null,"text":""}}]'}
     headers:
@@ -21,7 +21,7 @@ interactions:
       content-encoding: [UTF-8]
       content-length: ['1877']
       content-type: [application/json;charset=UTF-8]
-      date: ['Mon, 23 Apr 2018 20:01:42 GMT']
+      date: ['Mon, 30 Apr 2018 16:58:56 GMT']
       server: [Apache-Coyote/1.1, Weblogic 12.2.1.1]
       strict-transport-security: [max-age=604800 ; includeSubDomains]
       x-content-type-options: [nosniff]
@@ -35,8 +35,8 @@ interactions:
       Accept: ['*/*']
       Accept-Encoding: ['gzip, deflate']
       Connection: [keep-alive]
-      Cookie: [AWSELB=07A771471E264EA5ADF82F0AA634B8F4B8E2289A6913D2D2F71F953A7A800132257E603229A17AEF13F26A83A62509F2C7593E7E1BAF1F6FCBC514BDDB528855627DF1DDB573A5F8D6273C709B847C5E89C56A48C8;
-          JSESSIONID=E25CA7D9E363FCB6692C4526A3949466.173.50.254.85]
+      Cookie: [AWSELB=07A771471E264EA5ADF82F0AA634B8F4B8E2289A69D983ACCB2C0AAA0456C8C3A72FEB8F4C5666329BB3E0DD3C55FB60A732CAE6E2F76AB945B1770B781DD1DD6A9A9AC1444EC6ACCA25B03A1FD21A1F94E400AD10;
+          JSESSIONID=CA9C05D32478C86D929CD638CC8A3FD4.173.50.252.118]
       User-Agent: [python-requests/2.18.4]
     method: GET
     uri: https://vector.geobigdata.io/insight-vector/api/index/query/vector-gbdx-alpha-catalog-v2-*/items?count=100&upper=90.0&lower=-90.0&right=180.0&q=item_type%3AIDAHOImage+AND+attributes.catalogID%3A104A010010C29F00&left=-180.0
@@ -51,7 +51,7 @@ interactions:
       content-encoding: [UTF-8]
       content-length: ['1676']
       content-type: [application/json;charset=UTF-8]
-      date: ['Mon, 23 Apr 2018 20:01:42 GMT']
+      date: ['Mon, 30 Apr 2018 16:58:56 GMT']
       server: [Apache-Coyote/1.1, Weblogic 12.2.1.1]
       strict-transport-security: [max-age=604800 ; includeSubDomains]
       x-content-type-options: [nosniff]
@@ -65,8 +65,8 @@ interactions:
       Accept: ['*/*']
       Accept-Encoding: ['gzip, deflate']
       Connection: [keep-alive]
-      Cookie: [AWSELB=07A771471E264EA5ADF82F0AA634B8F4B8E2289A6913D2D2F71F953A7A800132257E603229A17AEF13F26A83A62509F2C7593E7E1BAF1F6FCBC514BDDB528855627DF1DDB573A5F8D6273C709B847C5E89C56A48C8;
-          JSESSIONID=E25CA7D9E363FCB6692C4526A3949466.173.50.254.85]
+      Cookie: [AWSELB=07A771471E264EA5ADF82F0AA634B8F4B8E2289A69D983ACCB2C0AAA0456C8C3A72FEB8F4C5666329BB3E0DD3C55FB60A732CAE6E2F76AB945B1770B781DD1DD6A9A9AC1444EC6ACCA25B03A1FD21A1F94E400AD10;
+          JSESSIONID=CA9C05D32478C86D929CD638CC8A3FD4.173.50.252.118]
       User-Agent: [python-requests/2.18.4]
     method: GET
     uri: https://vector.geobigdata.io/insight-vector/api/index/query/vector-gbdx-alpha-catalog-v2-*/items?count=100&upper=90.0&lower=-90.0&right=180.0&q=item_type%3AIDAHOImage+AND+attributes.catalogID%3A104A010010C29F00&left=-180.0
@@ -81,7 +81,7 @@ interactions:
       content-encoding: [UTF-8]
       content-length: ['1676']
       content-type: [application/json;charset=UTF-8]
-      date: ['Mon, 23 Apr 2018 20:01:43 GMT']
+      date: ['Mon, 30 Apr 2018 16:58:56 GMT']
       server: [Apache-Coyote/1.1, Weblogic 12.2.1.1]
       strict-transport-security: [max-age=604800 ; includeSubDomains]
       x-content-type-options: [nosniff]
@@ -129,7 +129,7 @@ interactions:
       connection: [keep-alive]
       content-length: ['64']
       content-type: [text/plain;charset=UTF-8]
-      date: ['Mon, 23 Apr 2018 20:01:43 GMT']
+      date: ['Mon, 30 Apr 2018 16:58:57 GMT']
     status: {code: 200, message: ''}
 - request:
     body: null
@@ -153,6 +153,6 @@ interactions:
       access-control-max-age: ['3600']
       connection: [keep-alive]
       content-type: [application/json;charset=UTF-8]
-      date: ['Mon, 23 Apr 2018 20:01:44 GMT']
+      date: ['Mon, 30 Apr 2018 16:58:57 GMT']
     status: {code: 200, message: ''}
 version: 1

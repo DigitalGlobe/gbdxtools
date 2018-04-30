@@ -5,11 +5,11 @@ interactions:
       Accept: ['*/*']
       Accept-Encoding: ['gzip, deflate']
       Connection: [keep-alive]
-      Cookie: [AWSELB=07A771471E264EA5ADF82F0AA634B8F4B8E2289A6959EF39BC098B319DF02379454B9C2DE43AC2D55868D3E05667E24F5E9FD27F5BF76AB945B1770B781DD1DD6A9A9AC144838263437ABBB61D081420BBDB1DCED6;
-          JSESSIONID=C1C01ED8D1692001325C8E33B795378C.173.50.252.105]
+      Cookie: [AWSELB=07A771471E264EA5ADF82F0AA634B8F4B8E2289A69AFCFEA68DFE7A2B13C3A98E80BDF0880A6C4B5E90D5DC1CEF07C37C91EE179D5C62A00528399710D25D49174062B908816929CF352C85F2AAE1C6840319A4AF1;
+          JSESSIONID=4327233DC1889AAF16F92131B8E48611.173.50.248.100]
       User-Agent: [python-requests/2.18.4]
     method: GET
-    uri: https://vector.geobigdata.io/insight-vector/api/index/query/vector-gbdx-alpha-catalog-v2-*/items?count=1&upper=90.0&lower=-90.0&right=180.0&q=item_type%3AGBDXCatalogRecord+AND+attributes.catalogID%3ALC80380302013160LGN00+AND+NOT+item_type%3AIDAHOImage+AND+NOT+item_type%3ADigitalGlobeAcquisition&left=-180.0
+    uri: https://vector.geobigdata.io/insight-vector/api/index/query/vector-gbdx-alpha-catalog-v2-*/items?count=1&upper=90.0&lower=-90.0&right=180.0&q=item_type%3AGBDXCatalogRecord+AND+attributes.catalogID%3ALC80380302013160LGN00&left=-180.0
   response:
     body: {string: !!python/unicode '[{"type":"Feature","geometry":{"type":"MultiPolygon","coordinates":[[[[-112.47753,42.16063],[-112.47753,44.18066],[-109.64058,44.18066],[-109.64058,42.16063],[-112.47753,42.16063]]]]},"properties":{"ingest_source":"GBDX_INGEST_ALPHA","item_date":"2013-06-09T18:09:25.351Z","original_crs":"EPSG:4326","item_type":["GBDXCatalogRecord","Acquisition","Landsat8","LandsatAcquisition"],"name":null,"format":null,"ingest_date":"2018-04-13T14:14:16.778Z","attributes":{"row_int":30,"bucketName":"landsat-pds","productID":"LC80380302013160LGN00","sensorPlatformName":"LANDSAT08","browseURL":"https://s3-us-west-2.amazonaws.com/landsat-pds/L8/038/030/LC80380302013160LGN00/LC80380302013160LGN00_thumb_large.jpg","cloudCover_int":0,"path_int":38,"catalogID":"LC80380302013160LGN00","panResolution_dbl":15.0,"vendor":"Landsat","bucketPrefix":"L8/038/030/LC80380302013160LGN00","platformName":"LANDSAT08","multiResolution_dbl":30.0},"ingest_attributes":{"_rest_user":"acquisition-gbdx-support@digitalglobe.com","_rest_url":"http://vector.geobigdata.io/api/vectors/gbdx-alpha-catalog-v2-%257Bitem_date%253Ayyyy%257D"},"id":"LC80380302013160LGN00","source":null,"text":""}}]'}
     headers:
@@ -21,7 +21,7 @@ interactions:
       content-encoding: [UTF-8]
       content-length: ['1159']
       content-type: [application/json;charset=UTF-8]
-      date: ['Mon, 23 Apr 2018 16:35:42 GMT']
+      date: ['Mon, 30 Apr 2018 16:52:55 GMT']
       server: [Apache-Coyote/1.1, Weblogic 12.2.1.1]
       strict-transport-security: [max-age=604800 ; includeSubDomains]
       x-content-type-options: [nosniff]
@@ -30,7 +30,7 @@ interactions:
       x-xss-protection: [1; mode=block]
     status: {code: 200, message: OK}
 - request:
-    body: !!python/unicode '{"edges": [], "nodes": [{"id": "54cbcc0d-c872-58c0-bed3-09d18b7a7f95",
+    body: !!python/unicode '{"edges": [], "nodes": [{"id": "def4ecb5-c566-59e1-900d-7551cf98dd9c",
       "operator": "LandsatRead", "parameters": {"landsatId": "LC80380302013160LGN00",
       "productSpec": "multispectral"}}]}'
     headers:
@@ -43,7 +43,7 @@ interactions:
     method: POST
     uri: https://rda.geobigdata.io/v1/graph
   response:
-    body: {string: !!python/unicode d2c99f57f9fc9bec8dbe5df81bcdfc85c1c10238976356045734a513d1f5de05}
+    body: {string: !!python/unicode a62ef2e7c23a3cfb2e4ae9d3845792620adda44abd9880ba6636e3abb632edad}
     headers:
       access-control-allow-headers: ['x-requested-with, X-Auth-Token, Content-Type,
           Authorization']
@@ -53,7 +53,7 @@ interactions:
       connection: [keep-alive]
       content-length: ['64']
       content-type: [text/plain;charset=UTF-8]
-      date: ['Mon, 23 Apr 2018 16:35:43 GMT']
+      date: ['Mon, 30 Apr 2018 16:52:56 GMT']
     status: {code: 200, message: ''}
 - request:
     body: null
@@ -63,7 +63,7 @@ interactions:
       Connection: [keep-alive]
       User-Agent: [python-requests/2.18.4]
     method: GET
-    uri: https://rda.geobigdata.io/v1/metadata/d2c99f57f9fc9bec8dbe5df81bcdfc85c1c10238976356045734a513d1f5de05/54cbcc0d-c872-58c0-bed3-09d18b7a7f95/metadata.json
+    uri: https://rda.geobigdata.io/v1/metadata/a62ef2e7c23a3cfb2e4ae9d3845792620adda44abd9880ba6636e3abb632edad/def4ecb5-c566-59e1-900d-7551cf98dd9c/metadata.json
   response:
     body: {string: !!python/unicode '{"imageMetadata":{"imageId":"LC80380302013160LGN00","version":1.1,"profileName":"georectified_image","tilePartition":"0000","tileXOffset":0,"tileYOffset":0,"numXTiles":31,"numYTiles":30,"tileXSize":256,"tileYSize":256,"numBands":8,"dataType":"UNSIGNED_SHORT","imageHeight":7481,"imageWidth":7681,"sensorPlatformName":"LANDSAT8","sensorName":"Operational
         Land Imager","vendorName":"NASA/USGS","vendorDatasetIdentifier":"Path=38:Row=30","acquisitionDate":"2013-06-09T18:09:25.351Z","colorInterpretation":"LANDSAT_8_30M","imageBoundsWGS84":"POLYGON
@@ -79,6 +79,6 @@ interactions:
       connection: [keep-alive]
       content-length: ['1217']
       content-type: [application/json;charset=UTF-8]
-      date: ['Mon, 23 Apr 2018 16:35:58 GMT']
+      date: ['Mon, 30 Apr 2018 16:53:14 GMT']
     status: {code: 200, message: ''}
 version: 1

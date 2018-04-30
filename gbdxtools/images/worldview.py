@@ -93,3 +93,25 @@ class WV01(WorldViewImage):
         __image_option_defaults__ = {"band_type": "pan", "product": "ortho"}
 
     __Driver__ = WV01Driver
+
+class WV04(WorldViewImage):
+    @property
+    def _rgb_bands(self):
+        return [2,1,0]
+
+    @classmethod
+    def _build_standard_products(cls, cat_id, band_type="MS", proj="EPSG:4326", gsd=None, acomp=False, **kwargs):
+        types = {
+            'MS': 'MS',
+            'Panchromatic': 'PAN',
+            'Pan': 'PAN',
+            'pan': 'PAN'
+        }
+        bands = types[band_type]
+        gsd = gsd if not None else ""
+        graph = {}
+        graph["ortho"] = ipe.DigitalGlobeStrip(catId=cat_id, CRS=proj, GSD=gsd, correctionType="DN", bands=bands, fallbackToTOA=True)
+        graph["toa_reflectance"] = ipe.DigitalGlobeStrip(catId=cat_id, CRS=proj, GSD=gsd, correctionType="TOAREFLECTANCE", bands=bands, fallbackToTOA=True)
+        graph["acomp"] = ipe.DigitalGlobeStrip(catId=cat_id, CRS=proj, GSD=gsd, correctionType="ACOMP", bands=bands, fallbackToTOA=True)
+        #  raise AcompUnavailable("Cannot apply acomp to this image, data unavailable in bucket: {}".format(_bucket))
+        return graph

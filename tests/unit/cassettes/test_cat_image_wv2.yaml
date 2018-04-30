@@ -5,13 +5,13 @@ interactions:
       Accept: ['*/*']
       Accept-Encoding: ['gzip, deflate']
       Connection: [keep-alive]
-      Cookie: [AWSELB=07A771471E264EA5ADF82F0AA634B8F4B8E2289A6959EF39BC098B319DF02379454B9C2DE43AC2D55868D3E05667E24F5E9FD27F5BF76AB945B1770B781DD1DD6A9A9AC144838263437ABBB61D081420BBDB1DCED6;
-          JSESSIONID=C1C01ED8D1692001325C8E33B795378C.173.50.252.105]
+      Cookie: [AWSELB=07A771471E264EA5ADF82F0AA634B8F4B8E2289A69AFCFEA68DFE7A2B13C3A98E80BDF0880A6C4B5E90D5DC1CEF07C37C91EE179D5C62A00528399710D25D49174062B908816929CF352C85F2AAE1C6840319A4AF1;
+          JSESSIONID=4327233DC1889AAF16F92131B8E48611.173.50.248.100]
       User-Agent: [python-requests/2.18.4]
     method: GET
-    uri: https://vector.geobigdata.io/insight-vector/api/index/query/vector-gbdx-alpha-catalog-v2-*/items?count=1&upper=90.0&lower=-90.0&right=180.0&q=item_type%3AGBDXCatalogRecord+AND+attributes.catalogID%3A1030010076B8F500+AND+NOT+item_type%3AIDAHOImage+AND+NOT+item_type%3ADigitalGlobeAcquisition&left=-180.0
+    uri: https://vector.geobigdata.io/insight-vector/api/index/query/vector-gbdx-alpha-catalog-v2-*/items?count=1&upper=90.0&lower=-90.0&right=180.0&q=item_type%3AGBDXCatalogRecord+AND+attributes.catalogID%3A1030010076B8F500&left=-180.0
   response:
-    body: {string: !!python/unicode '[{"type":"Feature","geometry":{"type":"MultiPolygon","coordinates":[[[[-105.0940403607103,39.76545050633882],[-104.8671507659262,39.78142313642779],[-104.8670590026835,39.66453712684333],[-105.0938051077258,39.64804554864559],[-105.0940403607103,39.76545050633882]]]]},"properties":{"ingest_source":"GBDX_INGEST_ALPHA","item_date":"2018-01-20T17:54:28.000Z","original_crs":"EPSG:4326","item_type":["GBDXCatalogRecord","WV02","DigitalGlobeProduct","1BProduct"],"name":null,"format":null,"ingest_date":"2018-01-21T00:03:13.275Z","attributes":{"bucketName":"receiving-dgcs-tdgplatform-com","sunAzimuth_dbl":159.6,"bands":"Multi","xmlFile":"18JAN20175428-M1BS-057475420010_01_P001.XML","browseJpgFile":"18JAN20175428-M1BS-057475420010_01_P001-BROWSE.JPG","cloudCover_int":0,"imdFile":"18JAN20175428-M1BS-057475420010_01_P001.IMD","attFile":"18JAN20175428-M1BS-057475420010_01_P001.ATT","resolution_dbl":2.164,"bandsList":"BAND_C,BAND_B,BAND_G,BAND_Y,BAND_R,BAND_RE,BAND_N,BAND_N2","geoFile":"18JAN20175428-M1BS-057475420010_01_P001.GEO","imageFile":"18JAN20175428-M1BS-057475420010_01_P001.TIF","vendor":"DigitalGlobe","sunElevation_dbl":27.8,"platformName":"WORLDVIEW02","tilFile":"18JAN20175428-M1BS-057475420010_01_P001.TIL","sensorPlatformName":"WORLDVIEW02","readmeTxtFile":"18JAN20175428-M1BS-057475420010_01_P001_README.TXT","rpbFile":"18JAN20175428-M1BS-057475420010_01_P001.RPB","offNadirAngle_dbl":23.1,"soli":"057475420","catalogID":"1030010076B8F500","productLevel":"LV1B","part_int":1,"ephFile":"18JAN20175428-M1BS-057475420010_01_P001.EPH","bucketPrefix":"057475420010_01_003/057475420010_01/057475420010_01_P001_MUL"},"ingest_attributes":{"_rest_user":"acquisitionsvc","_rest_url":"http://vector.geobigdata.io/api/vectors/gbdx-alpha-catalog-v2-%257Bitem_date%253Ayyyy%257D"},"id":"1030010076B8F500_P001_MUL_057475420010","source":null,"text":""}}]'}
+    body: {string: !!python/unicode '[{"type":"Feature","geometry":{"type":"MultiPolygon","coordinates":[[[[-105.0939731999999,39.76564299000006],[-104.8670753,39.78167645000008],[-104.8670274999999,39.73471968000007],[-104.8669297,39.68776285000007],[-104.8669837,39.64454098000004],[-105.0935975,39.62813151000006],[-105.0938422999999,39.67124636000005],[-105.0938743999999,39.71847433000005],[-105.0939731999999,39.76564299000006]]]]},"properties":{"ingest_source":"GBDX_INGEST_ALPHA","item_date":"2018-01-20T17:54:28.000Z","original_crs":"EPSG:4326","item_type":["GBDXCatalogRecord","Acquisition","DigitalGlobeAcquisition","WV02"],"name":null,"format":null,"ingest_date":"2018-01-20T21:42:11.749Z","attributes":{"sunAzimuth_dbl":159.616,"targetAzimuth_start_dbl":239.48776,"stereoPair":null,"cloudCover_int":0,"offNadirAngle_end_dbl":23.20365,"scanDirection":"Forward","vendor":"DigitalGlobe","panResolution_end_dbl":0.5398698,"sunElevation_dbl":27.856,"imageBands":"PAN_MS1_MS2","platformName":"WORLDVIEW02","targetAzimuth_end_dbl":238.22418,"multiResolution_max_dbl":2.1641476,"offNadirAngle_min_dbl":23.098803,"offNadirAngle_start_dbl":23.098803,"sensorPlatformName":"WORLDVIEW02","browseURL":"https://geobigdata.io/thumbnails/v1/browse/1030010076B8F500.large.png","multiResolution_min_dbl":2.160981,"offNadirAngle_max_dbl":23.20365,"multiResolution_start_dbl":2.160981,"offNadirAngle_dbl":23.159195,"targetAzimuth_min_dbl":238.22418,"sunElevation_max_dbl":27.923243,"panResolution_min_dbl":0.53909206,"catalogID":"1030010076B8F500","sunAzimuth_max_dbl":159.62927,"panResolution_dbl":0.53953975,"panResolution_start_dbl":0.53909206,"sunAzimuth_min_dbl":159.6063,"targetAzimuth_max_dbl":239.48776,"multiResolution_end_dbl":2.1641476,"sunElevation_min_dbl":27.763222,"multiResolution_dbl":2.162804,"panResolution_max_dbl":0.5398698,"targetAzimuth_dbl":238.75273},"ingest_attributes":{"_rest_user":"acquisitionsvc","_rest_url":"http://vector.geobigdata.io/api/vectors/gbdx-alpha-catalog-v2-%257Bitem_date%253Ayyyy%257D"},"id":"1030010076B8F500","source":null,"text":""}}]'}
     headers:
       access-control-allow-credentials: ['true']
       access-control-allow-headers: ['origin, content-type, accept, authorization']
@@ -19,9 +19,9 @@ interactions:
       access-control-allow-origin: ['*']
       connection: [keep-alive]
       content-encoding: [UTF-8]
-      content-length: ['1858']
+      content-length: ['2038']
       content-type: [application/json;charset=UTF-8]
-      date: ['Mon, 23 Apr 2018 16:36:07 GMT']
+      date: ['Mon, 30 Apr 2018 16:53:19 GMT']
       server: [Apache-Coyote/1.1, Weblogic 12.2.1.1]
       strict-transport-security: [max-age=604800 ; includeSubDomains]
       x-content-type-options: [nosniff]
@@ -35,8 +35,8 @@ interactions:
       Accept: ['*/*']
       Accept-Encoding: ['gzip, deflate']
       Connection: [keep-alive]
-      Cookie: [AWSELB=07A771471E264EA5ADF82F0AA634B8F4B8E2289A6959EF39BC098B319DF02379454B9C2DE43AC2D55868D3E05667E24F5E9FD27F5BF76AB945B1770B781DD1DD6A9A9AC144838263437ABBB61D081420BBDB1DCED6;
-          JSESSIONID=C1C01ED8D1692001325C8E33B795378C.173.50.252.105]
+      Cookie: [AWSELB=07A771471E264EA5ADF82F0AA634B8F4B8E2289A69AFCFEA68DFE7A2B13C3A98E80BDF0880A6C4B5E90D5DC1CEF07C37C91EE179D5C62A00528399710D25D49174062B908816929CF352C85F2AAE1C6840319A4AF1;
+          JSESSIONID=4327233DC1889AAF16F92131B8E48611.173.50.248.100]
       User-Agent: [python-requests/2.18.4]
     method: GET
     uri: https://vector.geobigdata.io/insight-vector/api/index/query/vector-gbdx-alpha-catalog-v2-*/items?count=100&upper=90.0&lower=-90.0&right=180.0&q=item_type%3AIDAHOImage+AND+attributes.catalogID%3A1030010076B8F500+AND+attributes.colorInterpretation%3AWORLDVIEW_8_BAND&left=-180.0
@@ -55,7 +55,7 @@ interactions:
       content-encoding: [UTF-8]
       content-length: ['3507']
       content-type: [application/json;charset=UTF-8]
-      date: ['Mon, 23 Apr 2018 16:36:07 GMT']
+      date: ['Mon, 30 Apr 2018 16:53:20 GMT']
       server: [Apache-Coyote/1.1, Weblogic 12.2.1.1]
       strict-transport-security: [max-age=604800 ; includeSubDomains]
       x-content-type-options: [nosniff]
@@ -69,8 +69,8 @@ interactions:
       Accept: ['*/*']
       Accept-Encoding: ['gzip, deflate']
       Connection: [keep-alive]
-      Cookie: [AWSELB=07A771471E264EA5ADF82F0AA634B8F4B8E2289A6959EF39BC098B319DF02379454B9C2DE43AC2D55868D3E05667E24F5E9FD27F5BF76AB945B1770B781DD1DD6A9A9AC144838263437ABBB61D081420BBDB1DCED6;
-          JSESSIONID=C1C01ED8D1692001325C8E33B795378C.173.50.252.105]
+      Cookie: [AWSELB=07A771471E264EA5ADF82F0AA634B8F4B8E2289A69AFCFEA68DFE7A2B13C3A98E80BDF0880A6C4B5E90D5DC1CEF07C37C91EE179D5C62A00528399710D25D49174062B908816929CF352C85F2AAE1C6840319A4AF1;
+          JSESSIONID=4327233DC1889AAF16F92131B8E48611.173.50.248.100]
       User-Agent: [python-requests/2.18.4]
     method: GET
     uri: https://vector.geobigdata.io/insight-vector/api/index/query/vector-gbdx-alpha-catalog-v2-*/items?count=100&upper=90.0&lower=-90.0&right=180.0&q=item_type%3AIDAHOImage+AND+attributes.catalogID%3A1030010076B8F500+AND+attributes.colorInterpretation%3APAN&left=-180.0
@@ -87,7 +87,7 @@ interactions:
       content-encoding: [UTF-8]
       content-length: ['3352']
       content-type: [application/json;charset=UTF-8]
-      date: ['Mon, 23 Apr 2018 16:36:07 GMT']
+      date: ['Mon, 30 Apr 2018 16:53:20 GMT']
       server: [Apache-Coyote/1.1, Weblogic 12.2.1.1]
       strict-transport-security: [max-age=604800 ; includeSubDomains]
       x-content-type-options: [nosniff]
@@ -149,7 +149,7 @@ interactions:
       connection: [keep-alive]
       content-length: ['64']
       content-type: [text/plain;charset=UTF-8]
-      date: ['Mon, 23 Apr 2018 16:36:10 GMT']
+      date: ['Mon, 30 Apr 2018 16:53:20 GMT']
     status: {code: 200, message: ''}
 - request:
     body: null
@@ -175,6 +175,6 @@ interactions:
       access-control-max-age: ['3600']
       connection: [keep-alive]
       content-type: [application/json;charset=UTF-8]
-      date: ['Mon, 23 Apr 2018 16:36:12 GMT']
+      date: ['Mon, 30 Apr 2018 16:53:21 GMT']
     status: {code: 200, message: ''}
 version: 1

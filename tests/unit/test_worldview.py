@@ -6,7 +6,7 @@ Unit tests for the gbdxtools.Idaho class
 '''
 
 from gbdxtools import Interface
-from gbdxtools import CatalogImage, WV02, WV03_VNIR, WV03_SWIR
+from gbdxtools import CatalogImage, WV02, WV03_VNIR, WV03_SWIR, WV04
 from gbdxtools.ipe.error import AcompUnavailable
 from auth_mock import gbdx
 import vcr
@@ -119,5 +119,33 @@ class CatalogImageTest(unittest.TestCase):
         self.assertTrue(isinstance(img, WV03_SWIR))
         assert img.cat_id == _id
         assert img.shape == (8, 1950, 1446)
+        assert img.proj == 'EPSG:4326'
+
+    @my_vcr.use_cassette('tests/unit/cassettes/test_wv4_image.yaml', filter_headers=['authorization'])
+    def test_catalog_image_wv4(self):
+        _id = '03f4955d-c7da-45a8-8289-ba73bec5e127-inv'
+        img = self.gbdx.catalog_image(_id)
+        self.assertTrue(isinstance(img, WV04))
+        assert img.cat_id == _id
+        assert img.shape == (4, 45443, 10758)
+        assert img.proj == 'EPSG:4326'
+
+    @my_vcr.use_cassette('tests/unit/cassettes/test_wv4_proj.yaml', filter_headers=['authorization'])
+    def test_catalog_image_wv4_proj(self):
+        _id = '03f4955d-c7da-45a8-8289-ba73bec5e127-inv'
+        img = self.gbdx.catalog_image(_id, proj="EPSG:3857")
+        self.assertTrue(isinstance(img, WV04))
+        assert img.cat_id == _id
+        assert img.shape == (4, 45486, 10744)
+        assert img.proj == 'EPSG:3857'
+
+
+    @my_vcr.use_cassette('tests/unit/cassettes/test_wv4_pan.yaml', filter_headers=['authorization'])
+    def test_catalog_image_wv4_pan(self):
+        _id = '03f4955d-c7da-45a8-8289-ba73bec5e127-inv'
+        img = self.gbdx.catalog_image(_id, band_type="pan")
+        self.assertTrue(isinstance(img, WV04))
+        assert img.cat_id == _id
+        assert img.shape == (1, 181500, 42867)
         assert img.proj == 'EPSG:4326'
 

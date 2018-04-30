@@ -3,7 +3,7 @@ GBDX Catalog Image Interface.
 
 Contact: chris.helm@digitalglobe.com
 """
-from gbdxtools import WV01, WV02, WV03_SWIR, WV03_VNIR, LandsatImage, IkonosImage, GE01, QB02, Sentinel2
+from gbdxtools import WV01, WV02, WV03_SWIR, WV03_VNIR, WV04, LandsatImage, IkonosImage, GE01, QB02, Sentinel2
 from gbdxtools.images.ipe_image import IpeImage, GraphMeta
 from gbdxtools.ipe.error import UnsupportedImageType
 from gbdxtools.images.util.image import vector_services_query
@@ -49,7 +49,7 @@ class CatalogImage(object):
             except KeyError:
                 raise ValueError("Catalog Images must be initiated by a Catalog Id or an RDA Graph Id")
         query = "item_type:GBDXCatalogRecord AND attributes.catalogID:{}".format(cat_id)
-        query += " AND NOT item_type:IDAHOImage AND NOT item_type:DigitalGlobeAcquisition"
+        #query += " AND NOT item_type:IDAHOImage AND NOT item_type:DigitalGlobeAcquisition"
         result = vector_services_query(query, count=1)
         if len(result) == 0:
             raise Exception('Could not find a catalog entry for the given id: {}'.format(cat_id))
@@ -67,6 +67,8 @@ class CatalogImage(object):
             return WV03_VNIR(cat_id, **kwargs)
         elif 'WV03_SWIR' in types:
             return WV03_SWIR(cat_id, **kwargs)
+        elif 'WV04' in types:
+            return WV04(cat_id, **kwargs)
         elif 'Landsat8' in types:
             return LandsatImage(rec['properties']['attributes']['productID'], **kwargs)
         elif 'GE01' in types:
