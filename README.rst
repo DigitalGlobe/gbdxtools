@@ -188,6 +188,12 @@ If you want only the unit or integration tests do either of::
     py.test tests/integration
     py.test tests/unit
 
+To create new tests and new VCR cassettes you can use an environment variable `GBDX_MOCK` to create the cassettes the first time: 
+
+    GBDX_MOCK=true py.test tests/unit/the_tests_file.py 
+
+This will generate the VCR using valid credentials.
+
 Note: you may have to issue the following in your virtualenv for the tests to find gbdxtools properly::
 
     pip install -e .
