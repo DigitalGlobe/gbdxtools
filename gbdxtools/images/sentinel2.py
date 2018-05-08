@@ -5,8 +5,8 @@ from gbdxtools.ipe.interface import Ipe
 ipe = Ipe()
 
 class Sentinel2Driver(RDADaskImageDriver):
-    image_option_support = ["spec", "product", "proj"]
-    __image_option_defaults__ = {"spec": "10m", "product": "sentinel", "proj": None}
+    image_option_support = ["spec", "proj"]
+    __image_option_defaults__ = {"spec": "10m", "proj": None}
 
 class Sentinel2(RDABaseImage):
     """
@@ -31,10 +31,8 @@ class Sentinel2(RDABaseImage):
         return [6,3]
 
     @classmethod
-    def _build_standard_products(cls, prefix, spec="10m", proj=None, **kwargs):
+    def _build_graph(cls, prefix, spec="10m", proj=None, **kwargs):
         sentinel = ipe.SentinelRead(SentinelId=prefix, sentinelProductSpec=spec)
         if proj is not None:
             sentinel = ipe.Reproject(sentinel, **reproject_params(proj))
-        return {
-            "sentinel": sentinel
-        }
+        return sentinel

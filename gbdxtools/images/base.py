@@ -18,9 +18,5 @@ class RDABaseImage(IpeImage):
         return self.__driver__.options
 
     @property
-    def _products(self):
-        return self.__driver__.products
-
-    def get_product(self, product):
-        return self.__class__(self.__rda_id__, proj=self.options["proj"], product=product)
-
+    def _graph(self):
+        return self.__driver__.graph

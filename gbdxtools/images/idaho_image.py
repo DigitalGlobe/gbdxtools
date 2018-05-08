@@ -20,22 +20,19 @@ class IdahoImage(RDABaseImage):
         return self.__rda_id__
 
     @classmethod
-    def _build_standard_products(cls, idaho_id, proj=None, bucket="idaho-images", gsd=None, acomp=False, **kwargs):
+    def _build_graph(cls, idaho_id, proj=None, bucket="idaho-images", gsd=None, acomp=False, bands="MS", spec=None, **kwargs):
         if bucket is None:
             vq = "item_type:IDAHOImage AND id:{}".format(idaho_id)
             result = vector_services_query(vq)
             if result:
                bucket = result[0]["properties"]["attributes"]["tileBucketName"]
 
-        dn_op = ipe.IdahoRead(bucketName=bucket, imageId=idaho_id, objectStore="S3")
-        params = ortho_params(proj, gsd=gsd)
-
-        graph = {
-            "1b": dn_op,
-            "ortho": ipe.Orthorectify(dn_op, **params),
-            "acomp": ipe.Format(ipe.Orthorectify(ipe.Acomp(dn_op), **params), dataType="4"),
-            "toa_reflectance": ipe.Format(ipe.Orthorectify(ipe.TOAReflectance(dn_op), **params), dataType="4")
-        }
+        gsd = gsd if gsd is not None else ""
+        correction = "ACOMP" if acomp else kwargs.get("correctionType")
+        if spec == "1b":
+            graph = ipe.IdahoRead(bucketName=bucket, imageId=idaho_id, objectStore="S3", GSD=gsd)
+        else:
+            graph = ipe.DigitalGlobeImage(bucketName=bucket, imageId=idaho_id, bands=bands, CRS=proj, correctionType=correction, GSD=gsd)
 
         return graph
 
