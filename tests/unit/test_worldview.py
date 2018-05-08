@@ -105,11 +105,11 @@ class CatalogImageTest(unittest.TestCase):
 
     @my_vcr.use_cassette('tests/unit/cassettes/test_wv_image_pansharpen.yaml', filter_headers=['authorization'])
     def test_catalog_image_pansharpen(self):
-        _id = '104001002838EC00'
+        _id = '1040010039545B00'
         img = self.gbdx.catalog_image(_id, pansharpen=True)
         self.assertTrue(isinstance(img, WV03_VNIR))
         assert img.cat_id == _id
-        assert img.shape == (8, 317959, 43511)
+        assert img.shape == (8, 331239, 45390)
         assert img.proj == 'EPSG:4326' 
 
     @my_vcr.use_cassette('tests/unit/cassettes/test_wv3_swir.yaml', filter_headers=['authorization'])

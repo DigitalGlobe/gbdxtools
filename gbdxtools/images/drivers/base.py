@@ -17,14 +17,14 @@ IDAHO_DEFAULT_OPTIONS = {
     "gsd": None,
     "acomp": False,
     "bucket": None,
-    "product": "toa_reflectance"
+    "correctionType": "TOAREFLECTANCE"
     }
 
 WV_DEFAULT_OPTIONS = {
     "proj": "EPSG:4326",
     "gsd": None,
     "band_type": "pan",
-    "product": "ortho"
+    "correctionType": "DN"
     }
 
 WV_MODERN_OPTIONS = {
@@ -33,7 +33,7 @@ WV_MODERN_OPTIONS = {
     "band_type": "MS",
     "acomp": False,
     "pansharpen": False,
-    "product": "toa_reflectance"
+    "correctionType": "TOAREFLECTANCE"
     }
 
 
@@ -117,16 +117,16 @@ class RDADaskImageDriver(RDADriverInterface):
     @property
     def options(self):
         if not self._options:
-            raise DriverConfigurationError("Image product option not provided")
+            raise DriverConfigurationError("Image options not provided")
         if isinstance(self._options, dict):
             return self._options
         return self._options._asdict()
 
     @property
-    def products(self):
-        if not self._products:
-            raise DriverConfigurationError("Image products not configured")
-        return self._products
+    def graph(self):
+        if not self._graph:
+            raise DriverConfigurationError("Image graph not configured")
+        return self._graph
 
     @classmethod
     def configure_options(cls, options):
@@ -134,11 +134,7 @@ class RDADaskImageDriver(RDADriverInterface):
 
     @property
     def payload(self):
-        product = self.options["product"]
-        if product not in self.products:
-            raise UnsupportedImageProduct("Specified product not supported by {}: {}".format(self.target.__name__,
-                                                                                                self.options["product"]))
-        return self.products[self.options["product"]]
+        return self.graph
 
     @payload.setter
     def payload(self, payload):
@@ -148,9 +144,10 @@ class RDADaskImageDriver(RDADriverInterface):
             self._payload = payload
 
     def build_payload(self, target):
-        products = target._build_standard_products(self.rda_id, **self.options)
-        self._products = products
-        return products
+        # build_graph should always return an rda graph / dask meta
+        graph = target._build_graph(self.rda_id, **self.options)
+        self._graph = graph
+        return graph
 
     def drive(self, target):
         if not self.rda_id:
@@ -168,14 +165,14 @@ class RDADaskImageDriver(RDADriverInterface):
 
 class IdahoDriver(RDADaskImageDriver):
     __default_options__ = IDAHO_DEFAULT_OPTIONS
-    image_option_support = ["proj", "product", "gsd", "bucket", "acomp"]
+    image_option_support = ["proj", "correctionType", "gsd", "bucket", "acomp"]
 
     @classmethod
     def configure_options(cls, options):
         if options["acomp"] and options["bucket"] != "idaho-images":
-            options["product"] = "acomp"
+            options["correctionType"] = "ACOMP"
         else:
-            options["product"] = "toa_reflectance"
+            options["correctionType"] = "TOAREFLECTANCE"
         return options
 
 class WorldViewDriver(RDADaskImageDriver):
@@ -185,22 +182,7 @@ class WorldViewDriver(RDADaskImageDriver):
     @classmethod
     def configure_options(cls, options):
         if options["acomp"]:
-            options["product"] = "acomp"
+            options["correctionType"] = "ACOMP"
         if options["pansharpen"]:
-            options["band_type"] = "MS"
-            options["product"] = "pansharpened"
+            options["band_type"] = "PANSHARP"
         return options
-
-    def build_payload(self, target):
-        standard_products = super(WorldViewDriver, self).build_payload(target)
-        if "pansharpen" in self.image_option_support:
-            options = self.options.copy()
-            options["band_type"] = "pan"
-            pan_products = target._build_standard_products(self.rda_id, **options)
-            pan = pan_products['acomp'] if options["acomp"] else pan_products['toa_reflectance']
-            ms = standard_products['acomp'] if options["acomp"] else standard_products['toa_reflectance']
-            standard_products["pansharpened"] = ipe.LocallyProjectivePanSharpen(ms, pan)
-        self._products = standard_products
-        return standard_products
-
-

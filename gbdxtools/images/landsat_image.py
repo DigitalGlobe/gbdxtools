@@ -6,8 +6,8 @@ ipe = Ipe()
 
 class LandsatDriver(RDADaskImageDriver):
     __default_options__ = {}
-    image_option_support = ["spec", "product", "proj"]
-    __image_option_defaults__ = {"spec": "multispectral", "product": "landsat", "proj": None}
+    image_option_support = ["spec", "proj"]
+    __image_option_defaults__ = {"spec": "multispectral", "proj": None}
 
 class LandsatImage(RDABaseImage):
     """
@@ -32,10 +32,8 @@ class LandsatImage(RDABaseImage):
         return [4,3]
 
     @classmethod
-    def _build_standard_products(cls, _id, spec="multispectral", proj=None, **kwargs):
+    def _build_graph(cls, _id, spec="multispectral", proj=None, **kwargs):
         landsat = ipe.LandsatRead(landsatId=_id, productSpec=spec)
         if proj is not None:
             landsat = ipe.Reproject(landsat, **reproject_params(proj))
-        return {
-            "landsat": landsat
-        }
+        return landsat

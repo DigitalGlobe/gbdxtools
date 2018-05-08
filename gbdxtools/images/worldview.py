@@ -27,7 +27,6 @@ class WorldViewImage(RDABaseImage):
     def parts(self):
         if self._parts is None:
             self._parts = [IdahoImage(rec['properties']['attributes']['idahoImageId'],
-                                      product=self.options["product"],
                                       proj=self.options["proj"],
                                       bucket=rec['properties']['attributes']['bucketName'],
                                       gsd=self.options["gsd"],
@@ -46,32 +45,12 @@ class WorldViewImage(RDABaseImage):
         return [p for p in _parts if vendor_id(p) == _id]
 
     @classmethod
-    def _build_standard_products(cls, cat_id, band_type="MS", proj="EPSG:4326", gsd=None, acomp=False, **kwargs):
-        graph = {}
-        _parts = cls._find_parts(cat_id, band_type)
-        _bucket = _parts[0]['properties']['attributes']['bucketName']
-        dn_ops = [ipe.IdahoRead(bucketName=p['properties']['attributes']['bucketName'],
-                                imageId=p['properties']['attributes']['idahoImageId'],
-                                objectStore="S3") for p in _parts]
-
-        mosaic_params = {"Dest SRS Code": proj}
-        if gsd is not None:
-            mosaic_params["Requested GSD"] = str(gsd)
-
-        ortho_op = ipe.GeospatialMosaic(*dn_ops, **mosaic_params)
-        graph.update({"ortho": ortho_op})
-
-        if cls.__default_options__.get("product") is "toa_reflectance":
-            toa = [ipe.Format(ipe.MultiplyConst(ipe.TOAReflectance(dn), constants=json.dumps([10000])), dataType="1") for dn in dn_ops]
-            toa_reflectance_op = ipe.Format(ipe.GeospatialMosaic(*toa, **mosaic_params), dataType="4")
-            graph.update({"toa_reflectance": toa_reflectance_op})
-        if "acomp" in cls.__supported_options__ and acomp:
-            if _bucket != 'idaho-images':
-                _ops = [ipe.Format(ipe.MultiplyConst(ipe.Acomp(dn), constants=json.dumps([10000])), dataType="1") for dn in dn_ops]
-                graph["acomp"] = ipe.Format(ipe.GeospatialMosaic(*_ops, **mosaic_params), dataType="4")
-            else:
-                raise AcompUnavailable("Cannot apply acomp to this image, data unavailable in bucket: {}".format(_bucket))
-
+    def _build_graph(cls, cat_id, band_type="MS", proj="EPSG:4326", gsd=None, acomp=False, **kwargs):
+        bands = band_types[band_type]
+        gsd = gsd if not None else ""
+        correction = "ACOMP" if acomp else kwargs.get("correctionType", "TOAREFLECTANCE") 
+        graph = ipe.Format(ipe.DigitalGlobeStrip(catId=cat_id, CRS=proj, GSD=gsd, correctionType=correction, bands=bands, fallbackToTOA=True), dataType="4")
+        #raise AcompUnavailable("Cannot apply acomp to this image, data unavailable in bucket: {}".format(_bucket))
         return graph
 
 
@@ -81,6 +60,15 @@ class WV03_SWIR(WorldViewImage):
         query = "item_type:IDAHOImage AND attributes.catalogID:{}".format(cat_id)
         return vector_services_query(query)
 
+    @classmethod
+    def _build_graph(cls, cat_id, proj="EPSG:4326", gsd=None, acomp=False, **kwargs):
+        bands = "SWIR"
+        gsd = gsd if not None else ""
+        correction = "ACOMP" if acomp else kwargs.get("correctionType", "TOAREFLECTANCE")
+        graph = ipe.Format(ipe.DigitalGlobeStrip(catId=cat_id, CRS=proj, GSD=gsd, correctionType=correction, bands=bands, fallbackToTOA=True), dataType="4")
+        return graph
+
+
 class WV03_VNIR(WorldViewImage):
     pass
 
@@ -89,8 +77,8 @@ class WV02(WorldViewImage):
 
 class WV01(WorldViewImage):
     class WV01Driver(RDADaskImageDriver):
-        image_option_support = ["proj", "gsd", "band_type", "product"]
-        __image_option_defaults__ = {"band_type": "pan", "product": "ortho"}
+        image_option_support = ["proj", "gsd", "band_type", "correctionType"]
+        __image_option_defaults__ = {"band_type": "pan", "correctionType": "DN"}
 
     __Driver__ = WV01Driver
 
@@ -98,20 +86,3 @@ class WV04(WorldViewImage):
     @property
     def _rgb_bands(self):
         return [2,1,0]
-
-    @classmethod
-    def _build_standard_products(cls, cat_id, band_type="MS", proj="EPSG:4326", gsd=None, acomp=False, **kwargs):
-        types = {
-            'MS': 'MS',
-            'Panchromatic': 'PAN',
-            'Pan': 'PAN',
-            'pan': 'PAN'
-        }
-        bands = types[band_type]
-        gsd = gsd if not None else ""
-        graph = {}
-        graph["ortho"] = ipe.DigitalGlobeStrip(catId=cat_id, CRS=proj, GSD=gsd, correctionType="DN", bands=bands, fallbackToTOA=True)
-        graph["toa_reflectance"] = ipe.DigitalGlobeStrip(catId=cat_id, CRS=proj, GSD=gsd, correctionType="TOAREFLECTANCE", bands=bands, fallbackToTOA=True)
-        graph["acomp"] = ipe.DigitalGlobeStrip(catId=cat_id, CRS=proj, GSD=gsd, correctionType="ACOMP", bands=bands, fallbackToTOA=True)
-        #  raise AcompUnavailable("Cannot apply acomp to this image, data unavailable in bucket: {}".format(_bucket))
-        return graph

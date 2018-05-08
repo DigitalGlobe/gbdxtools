@@ -8,8 +8,8 @@ ipe = Ipe()
 from shapely.geometry import box
 
 class DemDriver(RDADaskImageDriver):
-    image_option_support = ["proj", "bbox", "product"]
-    __image_option_defaults__ = {"bbox": None, "product": "dem"}
+    image_option_support = ["proj", "bbox"]
+    __image_option_defaults__ = {"bbox": None}
 
 class DemImage(RDABaseImage):
     __Driver__ = DemDriver
@@ -22,11 +22,9 @@ class DemImage(RDABaseImage):
         return self
 
     @classmethod
-    def _build_standard_products(cls, idaho_id, bbox=None, proj="EPSG:4326", **kwargs):
+    def _build_graph(cls, idaho_id, bbox=None, proj="EPSG:4326", **kwargs):
         wkt = box(*bbox).wkt
         dem = ipe.GeospatialCrop(ipe.IdahoRead(bucketName="idaho-dems", imageId=idaho_id, objectStore="S3"), geospatialWKT=str(wkt))
         if proj is not "EPSG:4326":
             dem = ipe.Reproject(dem, **reproject_params(proj))
-        return {
-            "dem": dem
-        }
+        return dem

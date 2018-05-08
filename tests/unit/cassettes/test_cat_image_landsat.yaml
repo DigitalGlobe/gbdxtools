@@ -5,8 +5,8 @@ interactions:
       Accept: ['*/*']
       Accept-Encoding: ['gzip, deflate']
       Connection: [keep-alive]
-      Cookie: [AWSELB=07A771471E264EA5ADF82F0AA634B8F4B8E2289A69AFCFEA68DFE7A2B13C3A98E80BDF0880A6C4B5E90D5DC1CEF07C37C91EE179D5C62A00528399710D25D49174062B908816929CF352C85F2AAE1C6840319A4AF1;
-          JSESSIONID=4327233DC1889AAF16F92131B8E48611.173.50.248.100]
+      Cookie: [AWSELB=07A771471E264EA5ADF82F0AA634B8F4B8E2289A69CA12DFBD0367E4DD9EBA9878A2B6279F0A92F3C846DDCF2C1C23243839B1BEB1F76AB945B1770B781DD1DD6A9A9AC144838263437ABBB61D081420BBDB1DCED6;
+          JSESSIONID=FE202C3A17859CAC44E309B2DA6560AB.173.50.254.15]
       User-Agent: [python-requests/2.18.4]
     method: GET
     uri: https://vector.geobigdata.io/insight-vector/api/index/query/vector-gbdx-alpha-catalog-v2-*/items?count=1&upper=90.0&lower=-90.0&right=180.0&q=item_type%3AGBDXCatalogRecord+AND+attributes.catalogID%3ALC80380302013160LGN00&left=-180.0
@@ -21,7 +21,7 @@ interactions:
       content-encoding: [UTF-8]
       content-length: ['1159']
       content-type: [application/json;charset=UTF-8]
-      date: ['Mon, 30 Apr 2018 16:52:55 GMT']
+      date: ['Mon, 07 May 2018 18:55:59 GMT']
       server: [Apache-Coyote/1.1, Weblogic 12.2.1.1]
       strict-transport-security: [max-age=604800 ; includeSubDomains]
       x-content-type-options: [nosniff]
@@ -53,7 +53,7 @@ interactions:
       connection: [keep-alive]
       content-length: ['64']
       content-type: [text/plain;charset=UTF-8]
-      date: ['Mon, 30 Apr 2018 16:52:56 GMT']
+      date: ['Mon, 07 May 2018 18:56:00 GMT']
     status: {code: 200, message: ''}
 - request:
     body: null
@@ -79,6 +79,6 @@ interactions:
       connection: [keep-alive]
       content-length: ['1217']
       content-type: [application/json;charset=UTF-8]
-      date: ['Mon, 30 Apr 2018 16:53:14 GMT']
+      date: ['Mon, 07 May 2018 18:56:16 GMT']
     status: {code: 200, message: ''}
 version: 1

@@ -5,8 +5,8 @@ from gbdxtools.ipe.util import ortho_params
 ipe = Ipe()
 
 class IkonosDriver(RDADaskImageDriver):
-    image_option_support = ["proj", "gsd", "spec", "product"]
-    __image_option_defaults__ = {"gsd": None, "spec": "multispectral", "product": "ikonos"}
+    image_option_support = ["proj", "gsd", "spec"]
+    __image_option_defaults__ = {"gsd": None, "spec": "multispectral"}
 
 class IkonosImage(RDABaseImage):
     """
@@ -31,12 +31,10 @@ class IkonosImage(RDABaseImage):
         return [2,1,0]
 
     @classmethod
-    def _build_standard_products(cls, record, spec="multispectral", proj="EPSG:4326", gsd=None, **kwargs):
+    def _build_graph(cls, record, spec="multispectral", proj="EPSG:4326", gsd=None, **kwargs):
         prefix = record['properties']['attributes']['bucketPrefix']
         bucket = record['properties']['attributes']['bucketName']
         ikonos = ipe.IkonosRead(path="{}/{}/{}_0000000:{}".format(bucket, prefix, prefix, spec))
         params = ortho_params(proj, gsd=gsd)
         ikonos = ipe.Orthorectify(ikonos, **params)
-        return {
-            "ikonos": ikonos
-        }
+        return ikonos

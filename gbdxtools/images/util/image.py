@@ -4,10 +4,11 @@ from shapely import wkt
 from shapely.geometry import box
 
 band_types = {
-    'MS': 'WORLDVIEW_8_BAND',
+    'MS': 'MS',
     'Panchromatic': 'PAN',
     'Pan': 'PAN',
-    'pan': 'PAN'
+    'pan': 'PAN',
+    'PANSHARP': 'PANSHARP'
 }
 
 def reproject_params(proj):
