@@ -17,7 +17,9 @@ IDAHO_DEFAULT_OPTIONS = {
     "gsd": None,
     "acomp": False,
     "bucket": None,
-    "correctionType": "TOAREFLECTANCE"
+    "correctionType": "TOAREFLECTANCE",
+    "bands": "MS",
+    "spec": None
     }
 
 WV_DEFAULT_OPTIONS = {
