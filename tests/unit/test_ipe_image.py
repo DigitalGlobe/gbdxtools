@@ -4,12 +4,12 @@ Contact: dmarino@digitalglobe.com
 
 Unit tests for the gbdxtools.Idaho class
 """
-
+import os
 from gbdxtools import Interface
 from gbdxtools import IdahoImage
 from gbdxtools.ipe.graph import get_ipe_graph
 from gbdxtools.images.meta import DaskImage
-from auth_mock import get_mock_gbdx_session
+from auth_mock import get_mock_gbdx_session, gbdx
 import vcr
 import tempfile
 import unittest
@@ -43,9 +43,7 @@ class IpeImageTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        mock_gbdx_session = get_mock_gbdx_session(token='dummytoken')
-        cls.gbdx = Interface(gbdx_connection=mock_gbdx_session)
-        #cls.gbdx = Interface()
+        cls.gbdx = gbdx
         cls._temp_path = tempfile.mkdtemp()
         print("Created: {}".format(cls._temp_path))
 
@@ -60,7 +58,7 @@ class IpeImageTest(unittest.TestCase):
         idahoid = '09d5acaf-12d4-4c67-adbb-cda26cbd2187'
         img = self.gbdx.idaho_image(idahoid)
         self.assertTrue(isinstance(img, IdahoImage))
-        assert img.shape == (8, 11119, 10735)
+        assert img.shape == (8, 11120, 10735)
         assert img.proj == 'EPSG:4326'
 
     @my_vcr.use_cassette('tests/unit/cassettes/test_ipe_image_missing_product.yaml', filter_headers=['authorization'])
@@ -70,15 +68,6 @@ class IpeImageTest(unittest.TestCase):
             img = self.gbdx.idaho_image(idahoid, product="no_product")
         except:
             pass
-
-    @my_vcr.use_cassette('tests/unit/cassettes/test_ipe_image_get_product.yaml', filter_headers=['authorization'])
-    def test_ipe_image_get_product(self):
-        idahoid = '09d5acaf-12d4-4c67-adbb-cda26cbd2187'
-        img = self.gbdx.idaho_image(idahoid)
-        ortho = img.get_product('ortho')
-        self.assertTrue(isinstance(ortho, IdahoImage))
-        assert img.shape == (8, 11119, 10735)
-        assert img.proj == 'EPSG:4326'
 
     @my_vcr.use_cassette('tests/unit/cassettes/test_ipe_image_init_with_aoi2.yaml', filter_headers=['authorization'])
     def test_ipe_image_with_aoi(self):

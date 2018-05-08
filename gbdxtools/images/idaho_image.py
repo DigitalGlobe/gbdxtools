@@ -20,7 +20,7 @@ class IdahoImage(RDABaseImage):
         return self.__rda_id__
 
     @classmethod
-    def _build_graph(cls, idaho_id, proj=None, bucket="idaho-images", gsd=None, acomp=False, **kwargs):
+    def _build_graph(cls, idaho_id, proj=None, bucket="idaho-images", gsd=None, acomp=False, bands="MS", **kwargs):
         if bucket is None:
             vq = "item_type:IDAHOImage AND id:{}".format(idaho_id)
             result = vector_services_query(vq)
@@ -30,6 +30,6 @@ class IdahoImage(RDABaseImage):
         gsd = gsd if gsd is not None else ""
         correction = "ACOMP" if acomp else kwargs.get("correctionType")
 
-        graph = ipe.DigitalGlobeImage(bucketName=bucket, imageId=idaho_id, CRS=proj, correctionType=correction, GSD=gsd)
+        graph = ipe.DigitalGlobeImage(bucketName=bucket, imageId=idaho_id, bands=bands, CRS=proj, correctionType=correction, GSD=gsd)
         return graph
 
