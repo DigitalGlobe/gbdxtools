@@ -1,4 +1,4 @@
-0.15.10
+0.15.0
 * Refactored the image class core dask pattern
 * No longer building complex graphs for Worldview, using DigitalGlobeStrip RDA operator
 * Dropped support for passing in "product" to various image classes
