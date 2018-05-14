@@ -167,7 +167,7 @@ class RDADaskImageDriver(RDADriverInterface):
 
 class IdahoDriver(RDADaskImageDriver):
     __default_options__ = IDAHO_DEFAULT_OPTIONS
-    image_option_support = ["proj", "correctionType", "gsd", "bucket", "acomp"]
+    image_option_support = ["proj", "correctionType", "gsd", "bucket", "acomp", "spec"]
 
     @classmethod
     def configure_options(cls, options):

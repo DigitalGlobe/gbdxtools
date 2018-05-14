@@ -52,7 +52,10 @@ class RDAGeoAdapter(object):
     def __init__(self, metadata, dfp="EPSG:4326"):
         self.md = metadata
         self.default_proj = dfp
-        self._srs = metadata['georef']['spatialReferenceSystemCode']
+        if 'georef' in metadata and metadata['georef'] is not None:
+            self._srs = metadata['georef']['spatialReferenceSystemCode']
+        else:
+            self._srs = dfp
         self.gt = None
         self.gi = None
 
