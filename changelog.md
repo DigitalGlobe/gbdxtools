@@ -1,3 +1,6 @@
+Unreleased
+* Fixed IdahoImage spec="1b" and protecting RDAGeoAdapter from missing georef metadata (for 1b access)
+
 0.15.0
 * Refactored the image class core dask pattern
 * No longer building complex graphs for Worldview, using DigitalGlobeStrip RDA operator

@@ -24,7 +24,7 @@ interactions:
       connection: [keep-alive]
       content-length: ['64']
       content-type: [text/plain;charset=UTF-8]
-      date: ['Mon, 14 May 2018 18:42:20 GMT']
+      date: ['Mon, 14 May 2018 19:06:25 GMT']
     status: {code: 200, message: ''}
 - request:
     body: null
@@ -50,6 +50,6 @@ interactions:
       access-control-max-age: ['3600']
       connection: [keep-alive]
       content-type: [application/json;charset=UTF-8]
-      date: ['Mon, 14 May 2018 18:42:21 GMT']
+      date: ['Mon, 14 May 2018 19:06:26 GMT']
     status: {code: 200, message: ''}
 version: 1
