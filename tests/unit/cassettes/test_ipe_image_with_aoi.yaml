@@ -1,37 +1,6 @@
 interactions:
 - request:
-    body: null
-    headers:
-      Accept: ['*/*']
-      Accept-Encoding: ['gzip, deflate']
-      Connection: [keep-alive]
-      Cookie: [AWSELB=07A771471E264EA5ADF82F0AA634B8F4B8E2289A69E1D2C67F67F5A33CC342486DB7EE75C92CF27A6A2583A24A33FF55E5151F854CF76AB945B1770B781DD1DD6A9A9AC1444EC6ACCA25B03A1FD21A1F94E400AD10;
-          JSESSIONID=2B249016F132A518B140C64FC1A078D3.173.50.250.253]
-      User-Agent: [python-requests/2.18.4]
-    method: GET
-    uri: https://vector.geobigdata.io/insight-vector/api/index/query/vector-gbdx-alpha-catalog-v2-*/items?count=100&upper=90.0&lower=-90.0&right=180.0&q=item_type%3AIDAHOImage+AND+id%3A09d5acaf-12d4-4c67-adbb-cda26cbd2187&left=-180.0
-  response:
-    body: {string: !!python/unicode '[{"type":"Feature","geometry":{"type":"MultiPolygon","coordinates":[[[[-85.82927902,10.92158374],[-85.68464761,10.94127067],[-85.68470768,10.8109348],[-85.82914034,10.79162983],[-85.82927902,10.92158374]]]]},"properties":{"ingest_source":"GBDX_INGEST_ALPHA","item_date":"2017-02-07T16:45:04.409Z","original_crs":"EPSG:4326","item_type":["GBDXCatalogRecord","IDAHOImage","DigitalGlobeProduct","WV03_VNIR"],"name":null,"format":null,"ingest_date":"2017-06-18T17:38:34.465Z","attributes":{"profileName":"dg_1b","tilePartition":"0000","acquisitionDate":"2017-02-07T16:45:04.409Z","bucketName":"idaho-images","numBands_int":8,"sunAzimuth_dbl":145.1,"nativeTileFileFormat":"TIF","colorInterpretation":"WORLDVIEW_8_BAND","cloudCover_int":0,"idahoImageId":"09d5acaf-12d4-4c67-adbb-cda26cbd2187","satAzimuth_dbl":220.9,"satElevation_dbl":60.7,"pniirs_dbl":3.4,"numYTiles_int":38,"tileXOffset_int":0,"epsgCode":"4326","vendor":"DigitalGlobe","sunElevation_dbl":58.6,"platformName":"WORLDVIEW03_VNIR","imageHeight_int":9602,"numXTiles_int":42,"sensorPlatformName":"WORLDVIEW03_VNIR","sensorName":"8-band
-        (Coastal, Blue, Green, Yellow, Red, Red-edge, NIR1, NIR2) Multispectral","dataType":"UNSIGNED_SHORT","imageWidth_int":10651,"tileXSize_int":256,"tileYSize_int":256,"offNadirAngle_dbl":26.4,"tileBucketName":"idaho-images","vendorName":"DigitalGlobe","version":"1.0","tileYOffset_int":0,"catalogID":"104001002838EC00","vendorDatasetIdentifier":"LV1B:056165420010_01_P002:104001002838EC00:A01001025E723D00","groundSampleDistanceMeters_dbl":1.499},"ingest_attributes":{"_rest_user":"acquisitionsvc","_rest_url":"https://vector.geobigdata.io/insight-vector/api/vectors/gbdx-alpha-catalog-v2-%257Bitem_date%253Ayyyy%257D"},"id":"09d5acaf-12d4-4c67-adbb-cda26cbd2187","source":null,"text":""}}]'}
-    headers:
-      access-control-allow-credentials: ['true']
-      access-control-allow-headers: ['origin, content-type, accept, authorization']
-      access-control-allow-methods: ['GET, POST, PUT, DELETE, OPTIONS, HEAD']
-      access-control-allow-origin: ['*']
-      connection: [keep-alive]
-      content-encoding: [UTF-8]
-      content-length: ['1780']
-      content-type: [application/json;charset=UTF-8]
-      date: ['Tue, 08 May 2018 14:47:57 GMT']
-      server: [Apache-Coyote/1.1, Weblogic 12.2.1.1]
-      strict-transport-security: [max-age=604800 ; includeSubDomains]
-      x-content-type-options: [nosniff]
-      x-frame-options: [SAMEORIGIN]
-      x-permitted-cross-domain-policies: [none]
-      x-xss-protection: [1; mode=block]
-    status: {code: 200, message: OK}
-- request:
-    body: !!python/unicode '{"edges": [], "nodes": [{"id": "0818b8f9-0272-5912-85ed-a643a9a6eef2",
+    body: !!python/unicode '{"edges": [], "nodes": [{"id": "9de61ef8-ad91-5644-a7ae-11f9a095e5df",
       "operator": "DigitalGlobeImage", "parameters": {"CRS": "EPSG:4326", "GSD": "",
       "bands": "MS", "bucketName": "idaho-images", "correctionType": "TOAREFLECTANCE",
       "imageId": "09d5acaf-12d4-4c67-adbb-cda26cbd2187"}}]}'
@@ -45,7 +14,7 @@ interactions:
     method: POST
     uri: https://rda.geobigdata.io/v1/graph
   response:
-    body: {string: !!python/unicode ff4fbf6f0858bdc297576ccf4fffd2689da73fc0be494e620c05f6ce874fd894}
+    body: {string: !!python/unicode b1ab38c5987038e66acecb18d03cf26bfbac19ead792569bc1108a0d6d7d29cc}
     headers:
       access-control-allow-headers: ['x-requested-with, X-Auth-Token, Content-Type,
           Authorization']
@@ -55,7 +24,7 @@ interactions:
       connection: [keep-alive]
       content-length: ['64']
       content-type: [text/plain;charset=UTF-8]
-      date: ['Tue, 08 May 2018 14:47:58 GMT']
+      date: ['Mon, 14 May 2018 18:43:40 GMT']
     status: {code: 200, message: ''}
 - request:
     body: null
@@ -65,7 +34,7 @@ interactions:
       Connection: [keep-alive]
       User-Agent: [python-requests/2.18.4]
     method: GET
-    uri: https://rda.geobigdata.io/v1/metadata/ff4fbf6f0858bdc297576ccf4fffd2689da73fc0be494e620c05f6ce874fd894/0818b8f9-0272-5912-85ed-a643a9a6eef2/metadata.json
+    uri: https://rda.geobigdata.io/v1/metadata/b1ab38c5987038e66acecb18d03cf26bfbac19ead792569bc1108a0d6d7d29cc/9de61ef8-ad91-5644-a7ae-11f9a095e5df/metadata.json
   response:
     body: {string: !!python/unicode '{"imageMetadata":{"imageId":"09d5acaf-12d4-4c67-adbb-cda26cbd2187","version":1.0,"profileName":"georectified_image","tileBucketName":"idaho-images","tilePartition":"0000","nativeTileFileFormat":"TIF","tileXOffset":0,"tileYOffset":0,"numXTiles":43,"numYTiles":44,"tileXSize":256,"tileYSize":256,"numBands":8,"dataType":"SHORT","imageHeight":11121,"imageWidth":10736,"sensorPlatformName":"WV03","sensorName":"8-band
         (Coastal, Blue, Green, Yellow, Red, Red-edge, NIR1, NIR2) Multispectral","vendorName":"DigitalGlobe,
@@ -81,6 +50,6 @@ interactions:
       access-control-max-age: ['3600']
       connection: [keep-alive]
       content-type: [application/json;charset=UTF-8]
-      date: ['Tue, 08 May 2018 14:47:58 GMT']
+      date: ['Mon, 14 May 2018 18:43:41 GMT']
     status: {code: 200, message: ''}
 version: 1

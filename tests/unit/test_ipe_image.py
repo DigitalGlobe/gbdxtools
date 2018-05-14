@@ -43,9 +43,7 @@ class IpeImageTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        mock_gbdx_session = get_mock_gbdx_session(token='dummytoken')
-        cls.gbdx = Interface(gbdx_connection=mock_gbdx_session)
-        #cls.gbdx = Interface()
+        cls.gbdx = gbdx
         cls._temp_path = tempfile.mkdtemp()
         print("Created: {}".format(cls._temp_path))
 
@@ -58,24 +56,17 @@ class IpeImageTest(unittest.TestCase):
     @my_vcr.use_cassette('tests/unit/cassettes/test_ipe_image_default.yaml', filter_headers=['authorization'])
     def test_basic_ipe_image(self):
         idahoid = '09d5acaf-12d4-4c67-adbb-cda26cbd2187'
-        img = self.gbdx.idaho_image(idahoid)
+        img = self.gbdx.idaho_image(idahoid, bucket='idaho-images')
         self.assertTrue(isinstance(img, IdahoImage))
         assert img.shape == (8, 11120, 10735)
         assert img.proj == 'EPSG:4326'
 
-    @my_vcr.use_cassette('tests/unit/cassettes/test_ipe_image_missing_product.yaml', filter_headers=['authorization'])
-    def test_ipe_image_unsupported(self):
-        try:
-            idahoid = '09d5acaf-12d4-4c67-adbb-cda26cbd2187'
-            img = self.gbdx.idaho_image(idahoid, product="no_product")
-        except:
-            pass
 
     @my_vcr.use_cassette('tests/unit/cassettes/test_ipe_image_init_with_aoi2.yaml', filter_headers=['authorization'])
     def test_ipe_image_with_aoi(self):
         idahoid = '09d5acaf-12d4-4c67-adbb-cda26cbd2187'
         img = self.gbdx.idaho_image(idahoid, bbox=[-85.79713384556237, 10.859474119490333, 
-                                                   -85.79366000529654, 10.86341028280643])
+                                                   -85.79366000529654, 10.86341028280643], bucket='idaho-images')
         assert img.shape == (8, 292, 258)
         assert img.proj == 'EPSG:4326'
 
@@ -136,9 +127,9 @@ class IpeImageTest(unittest.TestCase):
     @my_vcr.use_cassette('tests/unit/cassettes/test_ipe_image_ortho.yaml', filter_headers=['authorization'])
     def test_ipe_image_ortho(self):
         idahoid = '09d5acaf-12d4-4c67-adbb-cda26cbd2187'
-        img = self.gbdx.idaho_image(idahoid, product='1b')
+        img = self.gbdx.idaho_image(idahoid, spec='1b')
         aoi = img.aoi(bbox=[-85.79713384556237, 10.859474119490333, -85.79366000529654, 10.86341028280643])
-        assert aoi.shape == (8, 292, 258)
+        assert aoi.shape == (8, 325, 257)
         aoi.ortho = read_mock
         ortho = aoi.warp()
         assert isinstance(ortho, DaskImage)
