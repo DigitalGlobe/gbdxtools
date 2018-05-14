@@ -1,3 +1,8 @@
+0.15.0
+* Refactored the image class core dask pattern
+* No longer building complex graphs for Worldview, using DigitalGlobeStrip RDA operator
+* Dropped support for passing in "product" to various image classes
+
 0.14.7
 * fixes geotransform shift when padding indexes images
 * fixes affine geotransform rev off-by-one rounding error
