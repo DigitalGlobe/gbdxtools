@@ -36,8 +36,7 @@ class WorldViewImage(RDABaseImage):
 
     @staticmethod
     def _find_parts(cat_id, band_type):
-        query = "item_type:IDAHOImage AND attributes.catalogID:{} " \
-                "AND attributes.colorInterpretation:{}".format(cat_id, band_types[band_type])
+        query = "item_type:IDAHOImage AND attributes.catalogID:{}".format(cat_id)
         _parts = vector_services_query(query)
         if not len(_parts):
             raise MissingIdahoImages('Unable to find IDAHO imagery in the catalog: {}'.format(query))
