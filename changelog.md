@@ -1,5 +1,7 @@
-Unreleased
+0.15.1
 * Fixed IdahoImage spec="1b" and protecting RDAGeoAdapter from missing georef metadata (for 1b access)
+* WV04 Image support
+* Sentinel data supprt via CatalogImage, but must pass a recordID. 
 
 0.15.0
 * Refactored the image class core dask pattern
