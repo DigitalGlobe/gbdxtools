@@ -47,16 +47,20 @@ class CatalogImage(object):
                 return IpeImage(GraphMeta(**kwargs))
             except KeyError:
                 raise ValueError("Catalog Images must be initiated by a Catalog Id or an RDA Graph Id")
-        query = "item_type:GBDXCatalogRecord AND attributes.catalogID:{}".format(cat_id)
-        #query += " AND NOT item_type:IDAHOImage AND NOT item_type:DigitalGlobeAcquisition"
+        query = "item_type:GBDXCatalogRecord AND (attributes.catalogID:{} OR id:{})".format(cat_id, cat_id)
+        query += " AND NOT item_type:DigitalGlobeAcquisition"
         result = vector_services_query(query, count=1)
         if len(result) == 0:
             raise Exception('Could not find a catalog entry for the given id: {}'.format(cat_id))
         else:
-            return cls._image_class(cat_id, result[0], **kwargs)
+            return cls._image_class(result[0], **kwargs)
 
     @classmethod
-    def _image_class(cls, cat_id, rec, **kwargs):
+    def _image_class(cls, rec, **kwargs):
+        try:
+            cat_id = rec['properties']['attributes']['catalogID']
+        except:
+            cat_id = None
         types = rec['properties']['item_type']
         if 'WV02' in types:
             return WV02(cat_id, **kwargs)
@@ -67,7 +71,7 @@ class CatalogImage(object):
         elif 'WV03_SWIR' in types:
             return WV03_SWIR(cat_id, **kwargs)
         elif 'WV04' in types:
-            return WV04(cat_id, **kwargs)
+            return WV04(rec['properties']['attributes']['idahoImageId'], **kwargs)
         elif 'Landsat8' in types:
             return LandsatImage(rec['properties']['attributes']['productID'], **kwargs)
         elif 'GE01' in types:
