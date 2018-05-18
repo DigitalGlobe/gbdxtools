@@ -137,8 +137,8 @@ class TaskEnv(object):
 
     def definition(self, task={}):
         assert self.is_valid(task), "Task is not valid.  Correct it before generating definition"
-        rec = {"inputPortDescriptors": self.inputs.ports.values(),
-               "outputPortDescriptors": self.outputs.ports.values()}
+        rec = {"inputPortDescriptors": list(self.inputs.ports.values()),
+               "outputPortDescriptors": list(self.outputs.ports.values())}
         rec.update(task)
         return rec
 

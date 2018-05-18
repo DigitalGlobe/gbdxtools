@@ -1,3 +1,6 @@
+0.15.2
+* Casting task env ports to lists so they can be serialized in gbdx notebooks.
+
 0.15.1
 * Fixed IdahoImage spec="1b" and protecting RDAGeoAdapter from missing georef metadata (for 1b access)
 * WV04 Image support
