@@ -71,7 +71,7 @@ class CatalogImage(object):
         elif 'WV03_SWIR' in types:
             return WV03_SWIR(cat_id, **kwargs)
         elif 'WV04' in types:
-            return WV04(rec['properties']['attributes']['idahoImageId'], **kwargs)
+            return WV04(cat_id, **kwargs)
         elif 'Landsat8' in types:
             return LandsatImage(rec['properties']['attributes']['productID'], **kwargs)
         elif 'GE01' in types:

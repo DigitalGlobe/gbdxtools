@@ -126,7 +126,6 @@ class CatalogImageTest(unittest.TestCase):
         _id = '03f4955d-c7da-45a8-8289-ba73bec5e127-inv'
         img = self.gbdx.catalog_image(_id)
         self.assertTrue(isinstance(img, WV04))
-        assert img.cat_id == _id
         assert img.shape == (4, 45443, 10758)
         assert img.proj == 'EPSG:4326'
 
@@ -135,7 +134,6 @@ class CatalogImageTest(unittest.TestCase):
         _id = '03f4955d-c7da-45a8-8289-ba73bec5e127-inv'
         img = self.gbdx.catalog_image(_id, proj="EPSG:3857")
         self.assertTrue(isinstance(img, WV04))
-        assert img.cat_id == _id
         assert img.shape == (4, 45486, 10744)
         assert img.proj == 'EPSG:3857'
 
@@ -145,7 +143,6 @@ class CatalogImageTest(unittest.TestCase):
         _id = '03f4955d-c7da-45a8-8289-ba73bec5e127-inv'
         img = self.gbdx.catalog_image(_id, band_type="pan")
         self.assertTrue(isinstance(img, WV04))
-        assert img.cat_id == _id
         assert img.shape == (1, 181500, 42867)
         assert img.proj == 'EPSG:4326'
 

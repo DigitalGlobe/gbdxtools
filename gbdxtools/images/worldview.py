@@ -86,11 +86,3 @@ class WV04(WorldViewImage):
     @property
     def _rgb_bands(self):
         return [2,1,0]
-
-    @classmethod
-    def _build_graph(cls, idaho_id, band_type="MS", proj="EPSG:4326", gsd=None, acomp=False, bucket="rda-images-1", **kwargs):
-        bands = band_types[band_type]
-        gsd = gsd if not None else ""
-        correction = "ACOMP" if acomp else kwargs.get("correctionType", "TOAREFLECTANCE")
-        graph = ipe.DigitalGlobeImage(bucketName=bucket, imageId=idaho_id, bands=bands, CRS=proj, correctionType=correction, GSD=gsd, fallbackToTOA=True)
-        return graph
