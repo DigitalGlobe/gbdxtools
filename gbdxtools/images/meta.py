@@ -217,6 +217,11 @@ class PlotMixin(object):
 class GeoDaskImage(DaskImage, Container, PlotMixin):
     _default_proj = "EPSG:4326"
 
+    def map_blocks(self, *args, **kwargs):
+        darr = super(GeoDaskImage, self).map_blocks(*args, **kwargs)
+        return GeoDaskImage(darr, __geo_interface__ = self.__geo_interface__,
+                            __geo_transform__ = self.__geo_transform__)
+
     def asShape(self):
         return asShape(self)
 
@@ -287,9 +292,8 @@ class GeoDaskImage(DaskImage, Container, PlotMixin):
         # if geometry doesn't overlap the image, return an error
         if geom.disjoint(shape(self)):
             raise ValueError("Geometry outside of image bounds")
-        
         # clip to pixels within the image
-        (xmin, ymin, xmax, ymax) = ops.transform(self.__geo_transform__.rev, geom).bounds 
+        (xmin, ymin, xmax, ymax) = ops.transform(self.__geo_transform__.rev, geom).bounds
         _nbands, ysize, xsize = self.shape
         xmin = max(xmin, 0)
         ymin = max(ymin, 0)
