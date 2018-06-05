@@ -36,7 +36,7 @@ class MetaImageTest(unittest.TestCase):
         print("Created: {}".format(cls._temp_path))
 
     @my_vcr.use_cassette('tests/unit/cassettes/test_meta_pxbounds_overlap.yaml', filter_headers=['authorization'])
-    def test_image_pxbounds_overlapping(self):
+    def test_image_pxbounds_overlapping(self, clip=True):
         wv2 = CatalogImage('1030010076B8F500')
         _bands, ysize, xsize = wv2.shape
         image_shape = shape(wv2)
