@@ -1,3 +1,8 @@
+0.15.3
+* Wrapping map_blocks to return geodaskimages instead of a dask array
+* Fixing the calls to tiles inside the preview method so preview will work again
+
+
 0.15.2
 * Casting task env ports to lists so they can be serialized in gbdx notebooks.
 

@@ -486,7 +486,7 @@ class GeoDaskImage(DaskImage, Container, PlotMixin):
                   max(_bounds[1], 0),
                   max(min(_bounds[2], self.shape[2]), 0),
                   max(min(_bounds[3], self.shape[1]), 0))
-
+        print(pads, _bounds, bounds)
         result = self[:, bounds[1]:bounds[3], bounds[0]:bounds[2]]
         if pads[0] > 0:
             dims = (result.shape[0], result.shape[1], pads[0])
@@ -505,7 +505,7 @@ class GeoDaskImage(DaskImage, Container, PlotMixin):
             result = da.concatenate([result,
                                      da.zeros(dims, chunks=dims, dtype=result.dtype)], axis=1)
 
-        return (result, bounds[0], bounds[1])
+        return (result, _bounds[0], _bounds[1])
 
     def __contains__(self, g):
         geometry = ops.transform(self.__geo_transform__.rev, g)
