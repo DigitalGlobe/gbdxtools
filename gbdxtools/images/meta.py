@@ -266,11 +266,12 @@ class GeoDaskImage(DaskImage, Container, PlotMixin):
         else:
             return self[g]
 
-    def pxbounds(self, geom):
+    def pxbounds(self, geom, clip=False):
         """ Returns the bounds of a geometry object in pixel coordinates
 
         args:
             geom: Shapely geometry object or GeoJSON as Python dictionary or WKT string
+            clip (bool): Clip the bounds to the min/max extent of the image
 
         Returns:
             list of bounds in pixels [min x, min y, max x, max y] clipped to image bounds
@@ -295,10 +296,11 @@ class GeoDaskImage(DaskImage, Container, PlotMixin):
         # clip to pixels within the image
         (xmin, ymin, xmax, ymax) = ops.transform(self.__geo_transform__.rev, geom).bounds
         _nbands, ysize, xsize = self.shape
-        xmin = max(xmin, 0)
-        ymin = max(ymin, 0)
-        xmax = min(xmax, xsize)
-        ymax = min(ymax, ysize)
+        if clip:
+            xmin = max(xmin, 0)
+            ymin = max(ymin, 0)
+            xmax = min(xmax, xsize)
+            ymax = min(ymax, ysize)
 
         return (xmin, ymin, xmax, ymax)
 
@@ -486,7 +488,6 @@ class GeoDaskImage(DaskImage, Container, PlotMixin):
                   max(_bounds[1], 0),
                   max(min(_bounds[2], self.shape[2]), 0),
                   max(min(_bounds[3], self.shape[1]), 0))
-        print(pads, _bounds, bounds)
         result = self[:, bounds[1]:bounds[3], bounds[0]:bounds[2]]
         if pads[0] > 0:
             dims = (result.shape[0], result.shape[1], pads[0])
@@ -559,6 +560,7 @@ class GeoDaskImage(DaskImage, Container, PlotMixin):
                 return super(GeoDaskImage, self).__getitem__(geometry)
 
         gi = mapping(g)
+        print('xymin', xmin, ymin)
         gt = self.__geo_transform__ + (xmin, ymin)
         image = super(GeoDaskImage, self.__class__).__new__(self.__class__, result, __geo_interface__ = gi, __geo_transform__ = gt)
         return image
