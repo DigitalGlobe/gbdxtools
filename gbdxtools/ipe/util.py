@@ -115,7 +115,7 @@ def preview(image, **kwargs):
 
             var url = '$url' + '/tile/';
             url += graphId + '/' + nodeId;
-            url += "/{x}/{y}.png?token=$token&bands=$bands&scales=$scales&offsets=$offsets";
+            url += "/{x}/{y}.png?token=$token&display_bands=$bands&display_scales=$scales&display_offsets=$offsets";
 
             var proj = '$proj';
             var projInfo = $projInfo;
