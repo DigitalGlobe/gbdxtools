@@ -560,7 +560,6 @@ class GeoDaskImage(DaskImage, Container, PlotMixin):
                 return super(GeoDaskImage, self).__getitem__(geometry)
 
         gi = mapping(g)
-        print('xymin', xmin, ymin)
         gt = self.__geo_transform__ + (xmin, ymin)
         image = super(GeoDaskImage, self.__class__).__new__(self.__class__, result, __geo_interface__ = gi, __geo_transform__ = gt)
         return image
