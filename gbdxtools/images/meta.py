@@ -23,7 +23,7 @@ import skimage.transform as tf
 
 import pyproj
 import dask
-from dask import sharedict, optimize
+from dask import sharedict, optimization
 from dask.delayed import delayed
 import dask.array as da
 from dask.base import is_dask_collection
@@ -406,7 +406,7 @@ class GeoDaskImage(DaskImage, Container, PlotMixin):
                 ymin = y * y_size
                 geometry = px_to_geom(xmin, ymin)
                 daskmeta["dask"][(daskmeta["name"], 0, y, x)] = (self._warp, geometry, gsd, dem, proj, dtype, 5)
-        daskmeta["dask"], _ = optimize.cull(sharedict.merge(daskmeta["dask"], *dasks), list(daskmeta["dask"].keys()))
+        daskmeta["dask"], _ = optimization.cull(sharedict.merge(daskmeta["dask"], *dasks), list(daskmeta["dask"].keys()))
 
         gi = mapping(full_bounds)
         gt = AffineTransform(gtf, proj)
