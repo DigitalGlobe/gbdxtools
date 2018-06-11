@@ -49,7 +49,7 @@ class DaskMeta(namedtuple("DaskMeta", ["dask", "name", "chunks", "dtype", "shape
     __slots__ = ()
     @classmethod
     def from_darray(cls, darr, new=tuple.__new__, len=len):
-        dsk, _ = optimize.cull(darr.dask, darr.__dask_keys__())
+        dsk, _ = optimization.cull(darr.dask, darr.__dask_keys__())
         itr = [dsk, darr.name, darr.chunks, darr.dtype, darr.shape]
         return cls._make(itr)
 
