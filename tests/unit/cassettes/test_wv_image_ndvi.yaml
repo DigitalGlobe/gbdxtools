@@ -1,0 +1,32 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      User-Agent: [python-requests/2.18.4]
+    method: GET
+    uri: https://vector.geobigdata.io/insight-vector/api/index/query/vector-gbdx-alpha-catalog-v2-*/items?q=item_type%3AGBDXCatalogRecord+AND+%28attributes.catalogID%3A103001006F31E000+OR+id%3A103001006F31E000%29+AND+NOT+item_type%3ADigitalGlobeAcquisition&count=1&left=-180.0&right=180.0&lower=-90.0&upper=90.0
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA6pWSi0qyi9SslLKzCtLzMlMiS/Jz07NU9KBiMenpBYnF2UWlGTm5wHVgOUUMosV
+        oIqVagEAAAD//wMAnkwanUAAAAA=
+    headers:
+      Cache-Control: [no-store]
+      Connection: [keep-alive]
+      Content-Encoding: [gzip]
+      Content-Length: ['77']
+      Content-Type: [application/json;charset=UTF-8]
+      Date: ['Mon, 11 Jun 2018 19:56:08 GMT']
+      Pragma: [no-cache]
+      Server: [Apache-Coyote/1.1]
+      Vary: [Accept-Encoding]
+      WWW-Authenticate: ['Bearer realm="oauth", error="invalid_token", error_description="token
+          is invalid"']
+      X-Content-Type-Options: [nosniff]
+      X-Frame-Options: [DENY]
+      X-XSS-Protection: [1; mode=block]
+    status: {code: 401, message: Unauthorized}
+version: 1

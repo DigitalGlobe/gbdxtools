@@ -143,6 +143,19 @@ class PlotMixin(object):
     def _ndvi_bands(self):
         return [6, 4]
 
+    @property
+    def _ndwi_bands(self):
+        return [7, 0]
+
+    def ndwi(self, **kwargs):
+        """
+        Calculates Normalized Difference Water Index using bands 1 (Coastal) and 8 (NIR2) of a WV2, or WV3 image.
+
+        Returns: numpy array of ndwi values
+        """
+        data = self._read(self[self._ndwi_bands,...]).astype(np.float32)
+        return (data[0,:,:] - data[1,:,:]) / (data[0,:,:] + data[1,:,:])
+
     def base_layer_match(self, blm=False, **kwargs):
         rgb = self.rgb(**kwargs)
         if not blm:
@@ -166,6 +179,11 @@ class PlotMixin(object):
         return np.clip(data, 0, 1)
 
     def ndvi(self, **kwargs):
+        """
+        Calculates Normalized Difference Vegetation Index using bands 7 (NIR) and 5(Red) of a WV2 or WV3 image.
+
+        Returns: numpy array with ndvi values
+        """
         data = self._read(self[self._ndvi_bands,...]).astype(np.float32)
         return (data[0,:,:] - data[1,:,:]) / (data[0,:,:] + data[1,:,:])
 
@@ -563,4 +581,3 @@ class GeoDaskImage(DaskImage, Container, PlotMixin):
         gt = self.__geo_transform__ + (xmin, ymin)
         image = super(GeoDaskImage, self.__class__).__new__(self.__class__, result, __geo_interface__ = gi, __geo_transform__ = gt)
         return image
-
