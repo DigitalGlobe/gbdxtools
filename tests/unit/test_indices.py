@@ -43,18 +43,21 @@ class TestIndices(unittest.TestCase):
         _id = '103001006F31E000'
         img = self.gbdx.catalog_image(_id, bbox= [-95.527024269104, 29.200273324360754, -95.50655364990236, 29.2170547703652])
         self.assertEqual(img._ndvi_bands, [6, 4])
-    
 
-
-
-    @my_vcr.use_cassette('tests/unit/cassettes/test_wv_image_default.yaml', filter_headers=['authorization'])
+    @my_vcr.use_cassette('tests/unit/cassettes/test_wv_image_ndvi.yaml', filter_headers=['authorization'])
     def test_ndwi_bands(self):
-        _id = '104001002838EC00' #this id is depricated
-        img = self.gbdx.catalog_image(_id, bbox=[-85.81455230712892,10.416235163695223,-85.77163696289064,10.457089934231618])
+        _id = '103001006F31E000'
+        img = self.gbdx.catalog_image(_id, bbox=[-95.527024269104, 29.200273324360754, -95.50655364990236, 29.2170547703652])
         self.assertEqual(img._ndwi_bands, [7, 0])
 
-    # @my_vcr.use_cassette('tests/unit/cassettes/test_wv_image_default_aoi.yaml', filter_headers=['authorization'])
-    # def test_ndwi_vals(self):
-    #     _id = '104001002838EC00'
-    #     img = self.gbdx.catalog_image(_id, bbox=[-85.81455230712892,10.416235163695223,-85.77163696289064,10.457089934231618])
-    #     self.assertTrue(not(np.isnan(img.ndwi()).any()))
+    @my_vcr.use_cassette('tests/unit/cassettes/test_wv_image_ndvi.yaml', filter_headers=['authorization'])
+    def test_ndvi_vals(self):
+        _id = '103001006F31E000'
+        img = self.gbdx.catalog_image(_id, bbox=[-95.527024269104, 29.200273324360754, -95.50655364990236, 29.2170547703652])
+        self.assertTrue(not(np.isnan(img.ndvi()).any()))
+
+    @my_vcr.use_cassette('tests/unit/cassettes/test_wv_image_ndvi.yaml', filter_headers=['authorization'])
+    def test_ndwi_vals(self):
+        _id = '103001006F31E000'
+        img = self.gbdx.catalog_image(_id, bbox=[-95.527024269104, 29.200273324360754, -95.50655364990236, 29.2170547703652])
+        self.assertTrue(not(np.isnan(img.ndwi()).any()))
