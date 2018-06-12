@@ -141,15 +141,26 @@ class PlotMixin(object):
 
     @property
     def _ndvi_bands(self):
-        return [6, 4]
+        if self.__class__.__name__ == 'Landsat8':
+            return [4,3]
+        elif self.__class__.__name__ == 'SENTINEL2':
+            return [6,3]
+        else:
+            return [6, 4]
 
     @property
     def _ndwi_bands(self):
-        return [7, 0]
+        if self.__class__.__name__ == 'Landsat8':
+            return [2, 4]
+        elif self.__class__.name__ = 'SENTINEL2':
+            return [2, 7]
+        else:
+            return [7, 0]
 
     def ndwi(self, **kwargs):
         """
-        Calculates Normalized Difference Water Index using bands 1 (Coastal) and 8 (NIR2) of a WV2, or WV3 image.
+        Calculates Normalized Difference Water Index using Coastal and NIR2 bands for WV02, WV03.
+        For Landsat8 and sentinel2 calculated by using Green and NIR bands. 
 
         Returns: numpy array of ndwi values
         """
@@ -180,7 +191,7 @@ class PlotMixin(object):
 
     def ndvi(self, **kwargs):
         """
-        Calculates Normalized Difference Vegetation Index using bands 7 (NIR) and 5(Red) of a WV2 or WV3 image.
+        Calculates Normalized Difference Vegetation Index using NIR and Red of an image.
 
         Returns: numpy array with ndvi values
         """

@@ -45,15 +45,3 @@ class TestIndices(unittest.TestCase):
         _id = '103001006F31E000'
         img = self.gbdx.catalog_image(_id, bbox=[-95.527024269104, 29.200273324360754, -95.50655364990236, 29.2170547703652])
         self.assertEqual(img._ndwi_bands, [7, 0])
-
-    #@my_vcr.use_cassette('tests/unit/cassettes/test_wv_image_ndvi.yaml', filter_headers=['authorization'])
-    #def test_ndvi_vals(self):
-    #    img = self.gbdx.catalog_image(_id, bbox=[-95.527024269104, 29.200273324360754, -95.50655364990236, 29.2170547703652])
-    #    img = np.zeros(())
-    #    self.assertTrue(not(np.isnan(img.ndvi()).any()))
-
-    #@my_vcr.use_cassette('tests/unit/cassettes/test_wv_image_ndvi.yaml', filter_headers=['authorization'])
-    #def test_ndwi_vals(self):
-    #    _id = '103001006F31E000'
-    #    img = self.gbdx.catalog_image(_id, bbox=[-95.527024269104, 29.200273324360754, -95.50655364990236, 29.2170547703652])
-    #    self.assertTrue(not(np.isnan(img.ndwi()).any()))
