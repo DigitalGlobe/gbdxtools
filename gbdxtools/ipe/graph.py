@@ -12,7 +12,7 @@ def resolve_if_future(future):
         return future
 
 def get_graph_stats(conn, graph_id, node_id):
-    url = "{}/metadata/{}/{}/display_stats.json?token={}".format(VIRTUAL_IPE_URL, graph_id, node_id, conn.access_token)
+    url = "{}/metadata/{}/{}/display_stats.json".format(VIRTUAL_IPE_URL, graph_id, node_id) #, conn.access_token)
     req = resolve_if_future(conn.get(url))
     if req.status_code == 200:
         return req.json()
