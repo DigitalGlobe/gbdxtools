@@ -52,14 +52,6 @@ class WorldViewImage(RDABaseImage):
         #raise AcompUnavailable("Cannot apply acomp to this image, data unavailable in bucket: {}".format(_bucket))
         return graph
 
-    @property
-    def _rgb_bands(self):
-        return [4, 2, 1]
-
-    @property
-    def _ndvi_bands(self):
-        return [6, 4]
-
 
 class WV03_SWIR(WorldViewImage):
     @staticmethod
@@ -74,14 +66,6 @@ class WV03_SWIR(WorldViewImage):
         correction = "ACOMP" if acomp else kwargs.get("correctionType", "TOAREFLECTANCE")
         graph = ipe.Format(ipe.DigitalGlobeStrip(catId=cat_id, CRS=proj, GSD=gsd, correctionType=correction, bands=bands, fallbackToTOA=True), dataType="4")
         return graph
-
-    @property
-    def _rgb_bands(self):
-        raise NotImplementedError("RGB bands not available in SWIR spectrum")
-
-    @property
-    def _ndvi_bands(self):
-        raise NotImplementedError("NDVI bands not available in SWIR spectrum")
 
 
 class WV03_VNIR(WorldViewImage):
