@@ -23,7 +23,7 @@ import skimage.transform as tf
 
 import pyproj
 import dask
-from dask import sharedict, optimize
+from dask import sharedict, optimization
 from dask.delayed import delayed
 import dask.array as da
 from dask.base import is_dask_collection
@@ -49,7 +49,7 @@ class DaskMeta(namedtuple("DaskMeta", ["dask", "name", "chunks", "dtype", "shape
     __slots__ = ()
     @classmethod
     def from_darray(cls, darr, new=tuple.__new__, len=len):
-        dsk, _ = optimize.cull(darr.dask, darr.__dask_keys__())
+        dsk, _ = optimization.cull(darr.dask, darr.__dask_keys__())
         itr = [dsk, darr.name, darr.chunks, darr.dtype, darr.shape]
         return cls._make(itr)
 
@@ -87,10 +87,8 @@ class DaskImage(da.Array):
     def read(self, bands=None, **kwargs):
         """
         Reads data from a dask array and returns the computed ndarray matching the given bands
-
         kwargs:
             bands (list): band indices to read from the image. Returns bands in the order specified in the list of bands.
-
         Returns:
             array (ndarray): a numpy array of image data
         """
@@ -102,10 +100,8 @@ class DaskImage(da.Array):
     def randwindow(self, window_shape):
         """
         Get a random window of a given shape from withing an image
-
         kwargs:
             window_shape (tuple): The desired shape of the returned image as (height, width) in pixels.
-
         Returns:
             image (dask): a new image object of the specified shape
         """
@@ -116,11 +112,9 @@ class DaskImage(da.Array):
     def iterwindows(self, count=64, window_shape=(256, 256)):
         """
         Iterate over random windows of an image
-
         kwargs:
             count (int): the number of the windows to generate. Defaults to 64, if `None` with continue to iterate over random windows until stopped.
             window_shape (tuple): The desired shape of each image as (height, width) in pixels.
-
         Returns:
             windows (generator): a generator of windows of the given shape
         """
@@ -228,7 +222,6 @@ class GeoDaskImage(DaskImage, Container, PlotMixin):
     @property
     def affine(self):
         """ The geo transform of the image
-
         Returns:
             affine (dict): The image's affine transform
         """
@@ -238,7 +231,6 @@ class GeoDaskImage(DaskImage, Container, PlotMixin):
     @property
     def bounds(self):
         """ Access the spatial bounding box of the image
-
         Returns:
             bounds (list): list of bounds in image projected coordinates (minx, miny, maxx, maxy)
         """
@@ -251,12 +243,10 @@ class GeoDaskImage(DaskImage, Container, PlotMixin):
 
     def aoi(self, **kwargs):
         """ Subsets the Image by the given bounds
-
         kwargs:
             bbox: optional. A bounding box array [minx, miny, maxx, maxy]
             wkt: optional. A WKT geometry string
             geojson: optional. A GeoJSON geometry dictionary
-
         Returns:
             image (ndarray): an image instance
         """
@@ -268,11 +258,9 @@ class GeoDaskImage(DaskImage, Container, PlotMixin):
 
     def pxbounds(self, geom, clip=False):
         """ Returns the bounds of a geometry object in pixel coordinates
-
         args:
             geom: Shapely geometry object or GeoJSON as Python dictionary or WKT string
             clip (bool): Clip the bounds to the min/max extent of the image
-
         Returns:
             list of bounds in pixels [min x, min y, max x, max y] clipped to image bounds
         """
@@ -306,13 +294,11 @@ class GeoDaskImage(DaskImage, Container, PlotMixin):
 
     def geotiff(self, **kwargs):
         """ Creates a geotiff on the filesystem
-
         kwargs:
             path (str): optional. The path to save the geotiff to.
             bands (list): optional. A list of band indices to save to the output geotiff ([4,2,1])
             dtype (str): optional. The data type to assign the geotiff to ("float32", "uint16", etc)
             proj (str): optional. An EPSG proj string to project the image data into ("EPSG:32612")
-
         Returns:
             path (str): the path to created geotiff
         """
@@ -327,11 +313,9 @@ class GeoDaskImage(DaskImage, Container, PlotMixin):
         """
         Delayed warp across an entire AOI or Image
         creates a new dask image by deferring calls to the warp_geometry on chunks
-
         kwargs:
             dem (ndarray): optional. A DEM for warping to specific elevation planes
             proj (str): optional. An EPSG proj string to project the image data into ("EPSG:32612")
-
         Returns:
             image (dask): a warped image as deferred image array (a dask)
         """
@@ -406,7 +390,7 @@ class GeoDaskImage(DaskImage, Container, PlotMixin):
                 ymin = y * y_size
                 geometry = px_to_geom(xmin, ymin)
                 daskmeta["dask"][(daskmeta["name"], 0, y, x)] = (self._warp, geometry, gsd, dem, proj, dtype, 5)
-        daskmeta["dask"], _ = optimize.cull(sharedict.merge(daskmeta["dask"], *dasks), list(daskmeta["dask"].keys()))
+        daskmeta["dask"], _ = optimization.cull(sharedict.merge(daskmeta["dask"], *dasks), list(daskmeta["dask"].keys()))
 
         gi = mapping(full_bounds)
         gt = AffineTransform(gtf, proj)

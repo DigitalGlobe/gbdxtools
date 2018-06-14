@@ -47,7 +47,7 @@ class WorldViewImage(RDABaseImage):
     def _build_graph(cls, cat_id, band_type="MS", proj="EPSG:4326", gsd=None, acomp=False, **kwargs):
         bands = band_types[band_type]
         gsd = gsd if not None else ""
-        correction = "ACOMP" if acomp else kwargs.get("correctionType", "TOAREFLECTANCE") 
+        correction = "ACOMP" if acomp else kwargs.get("correctionType", "TOAREFLECTANCE")
         graph = ipe.Format(ipe.DigitalGlobeStrip(catId=cat_id, CRS=proj, GSD=gsd, correctionType=correction, bands=bands, fallbackToTOA=True), dataType="4")
         #raise AcompUnavailable("Cannot apply acomp to this image, data unavailable in bucket: {}".format(_bucket))
         return graph
