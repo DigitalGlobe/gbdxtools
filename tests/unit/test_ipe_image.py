@@ -67,7 +67,7 @@ class IpeImageTest(unittest.TestCase):
     @my_vcr.use_cassette('tests/unit/cassettes/test_ipe_image_init_with_aoi2.yaml', filter_headers=['authorization'])
     def test_ipe_image_with_aoi(self):
         idahoid = '09d5acaf-12d4-4c67-adbb-cda26cbd2187'
-        img = self.gbdx.idaho_image(idahoid, bbox=[-85.79713384556237, 10.859474119490333, 
+        img = self.gbdx.idaho_image(idahoid, bbox=[-85.79713384556237, 10.859474119490333,
                                                    -85.79366000529654, 10.86341028280643], bucket='idaho-images')
         assert img.shape == (8, 292, 258)
         assert img.proj == 'EPSG:4326'
@@ -75,7 +75,7 @@ class IpeImageTest(unittest.TestCase):
     @my_vcr.use_cassette('tests/unit/cassettes/test_ipe_image_with_proj.yaml', filter_headers=['authorization'])
     def test_ipe_image_with_proj(self):
         idahoid = '09d5acaf-12d4-4c67-adbb-cda26cbd2187'
-        img = self.gbdx.idaho_image(idahoid, bbox=[-85.79713384556237, 10.859474119490333, 
+        img = self.gbdx.idaho_image(idahoid, bbox=[-85.79713384556237, 10.859474119490333,
                                                    -85.79366000529654, 10.86341028280643], proj='EPSG:3857', bucket='idaho-images')
         assert img.shape == (8, 298, 258)
         assert img.proj == 'EPSG:3857'
@@ -104,7 +104,8 @@ class IpeImageTest(unittest.TestCase):
         idahoid = '09d5acaf-12d4-4c67-adbb-cda26cbd2187'
         img = self.gbdx.idaho_image(idahoid, product="1b", bbox=[-85.79713384556237, 10.859474119490333, -85.79366000529654, 10.86341028280643], bucket='idaho-images')
         assert isinstance(img.ipe_metadata, dict)
-        assert img._ndvi_bands == [6, 4]
+        with self.assertRaises(NotImplementedError):
+            img._ndvi_bands
         assert img.shape == (8, 292, 258)
         assert isinstance(img, da.Array)
 
@@ -125,7 +126,7 @@ class IpeImageTest(unittest.TestCase):
     #    aoi.rgb = read_mock
     #    rgb = aoi.rgb()
     #    assert isinstance(rgb, np.ndarray)
-    
+
     @my_vcr.use_cassette('tests/unit/cassettes/test_ipe_image_ortho.yaml', filter_headers=['authorization'])
     def test_ipe_image_ortho(self):
         idahoid = '09d5acaf-12d4-4c67-adbb-cda26cbd2187'
