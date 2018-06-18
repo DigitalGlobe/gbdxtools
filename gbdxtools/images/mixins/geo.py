@@ -91,12 +91,12 @@ class PlotMixin(object):
 class BandMethodsTemplate(object):
     @property
     def _rgb_bands(self):
-        raise NotImplementedError
+        raise NotImplementedError("RGB bands undefined for image type {}".format(self.__class__.__name__))
 
     @property
     def _ndvi_bands(self):
-        raise NotImplementedError
+        raise NotImplementedError("NDVI bands undefined for image type {}".format(self.__class__.__name__))
 
     @property
     def _ndwi_bands(self):
-        raise NotImplementedError
+        raise NotImplementedError("NDWI bands undefined for image type {}".format(self.__class__.__name__))
