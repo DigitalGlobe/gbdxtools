@@ -1,3 +1,14 @@
+0.15.4 
+* Fixed preview map scales and offset for better colors
+* Refactored geo/plot mixin to support better band index calcs
+* fixed passing bands to plot method for 3 band and 1 band plots
+
+0.15.3
+* Wrapping map_blocks to return geodaskimages instead of a dask array
+* Fixing the calls to tiles inside the preview method so preview will work again
+* Fixes the return xmin/ymin in slice_padded, was lost in the refactor. Edge case padding of image collars.
+* added support for controlling the clipping of pixel bounds to the image extent
+
 0.15.2
 * Casting task env ports to lists so they can be serialized in gbdx notebooks.
 

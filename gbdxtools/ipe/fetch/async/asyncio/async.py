@@ -66,8 +66,7 @@ async def produce_reqs(qreq, reqs):
     for req in reqs:
         await qreq.put(req)
 
-async def process(qres):
-    results = {}
+async def process(qres, results):
     while True:
         try:
             index, payload = await qres.get()
@@ -79,26 +78,27 @@ async def process(qres):
             qres.task_done()
         except CancelledError as ce:
             break
-    return results
+    return True
 
 async def fetch(reqs, session, nconn, batch_size=2000, nprocs=10):
     results = {}
     qreq, qres = asyncio.Queue(maxsize=batch_size), asyncio.Queue()
     consumers = [asyncio.ensure_future(consume_reqs(qreq, qres, session)) for _ in range(nconn)]
     producer = await produce_reqs(qreq, reqs)
-    processors = [asyncio.ensure_future(process(qres)) for _ in range(nprocs)]
+    processors = [asyncio.ensure_future(process(qres, results)) for _ in range(nprocs)]
     await qreq.join()
     await qres.join()
     for fut in consumers:
         fut.cancel()
     for fut in processors:
         fut.cancel()
-        results.update(fut.result)
+    done, pending = await asyncio.wait(processors)
     return results
 
 async def run_fetch(reqs, nconn, headers, loop):
-    with aiohttp.ClientSession(loop=loop, connector=aiohttp.TCPConnector(limit=nconn), headers=headers) as session:
+    async with aiohttp.ClientSession(loop=loop, connector=aiohttp.TCPConnector(limit=nconn), headers=headers) as session:
         results = await fetch(reqs, session, nconn)
+        return results
 
 def load_urls(collection, shape=(8,256,256), max_retries=MAX_RETRIES, loop=None):
     reqs = []

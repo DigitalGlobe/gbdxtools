@@ -63,14 +63,9 @@ def preview(image, **kwargs):
     graph_id = image.ipe_id
     node_id = image.ipe.graph()['nodes'][0]['id']
 
-    # fetch a tile in order to calc stats and do a simple stretch
-    y = image.shape[1] / 2
-    x = image.shape[2] / 2
-    aoi = image[:, y:y+256, x:x+256].read(quiet=True)
-    means, stds = aoi.mean(axis=(1,2)), aoi.std(axis=(1,2))
-    scales = (255.0 / (4.0 * stds))
-    offsets = map(list(((means - (2.0 * stds)) * scales * -1.0)).__getitem__, bands)
-    scales = map(list(scales).__getitem__, bands)
+    stats = image.display_stats
+    offsets = stats['offset']
+    scales = stats['scale']
 
     if image.proj != 'EPSG:4326':
         code = image.proj.split(':')[1]
@@ -115,7 +110,7 @@ def preview(image, **kwargs):
 
             var url = '$url' + '/tile/';
             url += graphId + '/' + nodeId;
-            url += "/{x}/{y}.png?token=$token&bands=$bands&scales=$scales&offsets=$offsets";
+            url += "/{x}/{y}.png?token=$token&display_bands=$bands&display_scales=$scales&display_offsets=$offsets";
 
             var proj = '$proj';
             var projInfo = $projInfo;
