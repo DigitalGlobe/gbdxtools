@@ -1,5 +1,5 @@
 import dask.array as da
-from dask import optimize
+from dask import optimization
 import operator
 
 from gbdxtools.images.meta import DaskMeta
@@ -26,7 +26,7 @@ class AsyncBaseFetch(BaseFetch):
     __fetch_type__ = "async"
     @classmethod
     def __dask_optimize__(cls, dsk, keys):
-        dsk1, _ = optimize.cull(dsk, keys)
+        dsk1, _ = optimization.cull(dsk, keys)
         dsk2 = {}
         coll = []
         for key, val in dsk1.items():

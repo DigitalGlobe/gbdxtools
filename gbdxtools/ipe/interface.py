@@ -12,7 +12,7 @@ import numpy as np
 
 import gbdxtools as gbdx
 from gbdxtools.ipe.util import IPE_TO_DTYPE
-from gbdxtools.ipe.graph import VIRTUAL_IPE_URL, register_ipe_graph, get_ipe_metadata
+from gbdxtools.ipe.graph import VIRTUAL_IPE_URL, register_ipe_graph, get_ipe_metadata, get_graph_stats
 from gbdxtools.auth import Auth
 from gbdxtools.ipe.fetch import easyfetch as load_url
 from gbdxtools.images.meta import DaskMeta
@@ -59,6 +59,13 @@ class DaskProps(object):
         if self._interface is not None:
             self._ipe_meta = get_ipe_metadata(self._interface.gbdx_futures_session, self._ipe_id, self._id)
         return self._ipe_meta
+
+    @property
+    def display_stats(self):
+        assert self.graph() is not None
+        if self._ipe_stats is None:
+            self._ipe_stats = get_graph_stats(self._interface.gbdx_futures_session, self._ipe_id, self._id)
+        return self._ipe_stats
 
     @property
     def dask(self):
@@ -110,9 +117,10 @@ class Op(DaskProps):
         self._edges = []
         self._nodes = []
 
-        self._ipe_id = None
-        self._ipe_graph = None
-        self._ipe_meta = None
+        self._ipe_id = None    # The graph ID
+        self._ipe_graph = None # the RDA graph
+        self._ipe_meta = None  # Image metadata 
+        self._ipe_stats = None # Display Stats  
 
         self._interface = interface
 

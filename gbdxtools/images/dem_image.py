@@ -13,7 +13,7 @@ class DemDriver(RDADaskImageDriver):
 
 class DemImage(RDABaseImage):
     __Driver__ = DemDriver
-    __rda_id__ = "dgdem-2016-08-12-f-b193-7aa90f8d11f1"
+    __rda_id__ = "dgdem-v20180406-DEFLATED-ca4649c5acb"
 
     def __post_new_hook__(self, **kwargs):
         self = self.aoi(**kwargs)
@@ -22,9 +22,9 @@ class DemImage(RDABaseImage):
         return self
 
     @classmethod
-    def _build_graph(cls, idaho_id, bbox=None, proj="EPSG:4326", **kwargs):
-        wkt = box(*bbox).wkt
-        dem = ipe.GeospatialCrop(ipe.IdahoRead(bucketName="idaho-dems", imageId=idaho_id, objectStore="S3"), geospatialWKT=str(wkt))
+    def _build_graph(cls, aoi, proj="EPSG:4326", **kwargs):
+        wkt = box(*aoi).wkt
+        dem = ipe.GeospatialCrop(ipe.IdahoRead(bucketName="idaho-dems-2018", imageId="dgdem-v20180406-DEFLATED-ca4649c5acb", objectStore="S3"), geospatialWKT=str(wkt))
         if proj is not "EPSG:4326":
             dem = ipe.Reproject(dem, **reproject_params(proj))
         return dem

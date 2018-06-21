@@ -48,15 +48,15 @@ class IpeImageTest(unittest.TestCase):
     @my_vcr.use_cassette('tests/unit/cassettes/test_dem_image.yaml', filter_headers=['authorization'])
     def test_dem_image(self):
         bbox = [-109.72, 43.19, -109.49, 43.34]
-        img = self.gbdx.dem_image(bbox=bbox)
+        img = self.gbdx.dem_image(bbox)
         self.assertTrue(isinstance(img, DemImage))
-        assert img.shape == (1, 555, 850)
+        assert img.shape == (1, 555, 849)
         assert img.proj == 'EPSG:4326'
 
     @my_vcr.use_cassette('tests/unit/cassettes/test_dem_image_proj.yaml', filter_headers=['authorization'])
     def test_dem_image_proj(self):
         bbox = [-109.72, 43.19, -109.49, 43.34]
-        img = self.gbdx.dem_image(bbox=bbox, proj="EPSG:3857")
+        img = self.gbdx.dem_image(bbox, proj="EPSG:3857")
         self.assertTrue(isinstance(img, DemImage))
         assert img.proj == 'EPSG:3857'
 
