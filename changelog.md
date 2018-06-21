@@ -1,3 +1,8 @@
+0.15.4 
+* Fixed preview map scales and offset for better colors
+* Refactored geo/plot mixin to support better band index calcs
+* fixed passing bands to plot method for 3 band and 1 band plots
+
 0.15.3
 * Wrapping map_blocks to return geodaskimages instead of a dask array
 * Fixing the calls to tiles inside the preview method so preview will work again
