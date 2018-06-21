@@ -30,13 +30,12 @@ class PlotMixin(object):
         return out
 
     def rgb(self, **kwargs):
-        data = self._read(self[kwargs.get("bands", self._rgb_bands),...], **kwargs)
         if "bands" in kwargs:
             use_bands = kwargs["bands"]
             assert len(use_bands) == 3, 'Plot method only supports single or 3-band outputs'
             del kwargs["bands"]
         else:
-            use_bands = self.rgb_bands
+            use_bands = self._rgb_bands
         data = self._read(self[use_bands,...], **kwargs)
         data = np.rollaxis(data.astype(np.float32), 0, 3)
         lims = np.percentile(data, kwargs.get("stretch", [2, 98]), axis=(0, 1))
@@ -86,7 +85,8 @@ class PlotMixin(object):
             return data.compute(get=threaded_get)
 
     def _single_band(self, **kwargs):
-        return self._read(self[0,:,:], **kwargs)
+        arr = self._read(self, **kwargs)
+        return arr[0,:,:]
 
     def _calc_tms_zoom(self, scale):
         for z in range(15,20):

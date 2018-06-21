@@ -426,7 +426,10 @@ class GeoDaskImage(DaskImage, Container, PlotMixin, BandMethodsTemplate):
                     return self[arg0, :, :]
 
             elif len(geometry) == 3:
-                nbands, ysize, xsize = self.shape
+                try:
+                    nbands, ysize, xsize = self.shape
+                except:
+                    ysize, xsize = self.shape
                 band_idx, y_idx, x_idx = geometry
                 if y_idx == Ellipsis:
                     y_idx = slice(0, ysize)
