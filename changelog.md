@@ -1,3 +1,6 @@
+0.15.5 
+* fix for missing import in geo mixin
+
 0.15.4 
 * Fixed preview map scales and offset for better colors
 * Refactored geo/plot mixin to support better band index calcs
