@@ -57,7 +57,9 @@ def preview(image, **kwargs):
         return
 
     zoom = kwargs.get("zoom", 16)
-    bands = kwargs.get("bands", image._rgb_bands)
+    bands = kwargs.get("bands")
+    if bands is None:
+        bands = image._rgb_bands
     wgs84_bounds = kwargs.get("bounds", list(loads(image.ipe_metadata["image"]["imageBoundsWGS84"]).bounds))
     center = kwargs.get("center", list(shape(image).centroid.bounds[0:2]))
     graph_id = image.ipe_id
