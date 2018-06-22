@@ -1,4 +1,5 @@
 import os
+import math
 try:
     from rio_hist.match import histogram_match
     has_rio = True
