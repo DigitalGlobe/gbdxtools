@@ -123,6 +123,13 @@ Currently every catalog image fetches data as Top of Atmosphere (TOA) Reflectanc
     aoi = img_acomp.randwindow((500,500))
     aoi.plot()
 
+To request the image as raw Digital Numbers (DN) with no compensation, you can pass `correctionType=DN` to the image constructor.
+
+.. code-block:: python
+
+    from gbdxtools import CatalogImage
+    
+    img_dn = CatalogImage('104001001BA7C400', correctionType='DN') 
 
 Idaho Images
 -----------------------
