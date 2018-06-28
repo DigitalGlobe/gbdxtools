@@ -1,3 +1,4 @@
+import os
 import unittest
 import numpy as np
 from gbdxtools.images.mixins.geo import PlotMixin
@@ -19,6 +20,9 @@ class PlotMock(np.ndarray, PlotMixin):
 
 class PlotTest(unittest.TestCase):
 
+    def setUp(self):
+        if 'TRAVIS' in os.environ:
+            self.skipTest("Travis can't test plots - no display")
 
     @classmethod
     def setUpClass(cls):
