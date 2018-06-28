@@ -50,7 +50,7 @@ To order the image with DG factory catalog id 10400100143FC900:
 .. code-block:: pycon
 
    >>> order_id = gbdx.ordering.order('10400100143FC900')
-   >>> print order_id
+   >>> print(order_id)
    04aa8df5-8ac8-4b86-8b58-aa55d7353987
 
 The order_id is unique to your image order and can be used to track the progress of your order.

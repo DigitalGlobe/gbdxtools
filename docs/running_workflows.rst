@@ -28,7 +28,7 @@ You can also get workflow events:
 .. code-block:: pycon
 
    >>> for event in workflow.events:
-   >>>     print event['task'], event['event']
+   >>>     print(event['task'], event['event'])
 
    >>> gdal-task submitted
    >>> Stage-data submitted

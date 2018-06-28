@@ -28,8 +28,8 @@ The following snippet will initialize a CatalogImage from a catalog id for a Wor
     from gbdxtools import CatalogImage, WV03_VNIR
 
     img = CatalogImage('104001001BA7C400')
-    print img.shape, img.bounds
-    print isinstance(img, WV03_VNIR)
+    print(img.shape, img.bounds)
+    print(isinstance(img, WV03_VNIR))
 
 It's worth noting that a CatalogImage represents a mosaic of tiles stored on the server and no pixel data
 is fetched until you call the `read()` method (which will cause the entire image to be fetched from the server).
@@ -39,7 +39,7 @@ To prevent massive amounts of data from being transferred, it is recommended to 
 .. code-block:: python
 
     aoi = img.aoi(bbox=[2.2889757156372075,48.87067123176554,2.301077842712403,48.87705036103764])
-    print aoi
+    print(aoi)
 
 The AOI is now a cropped portion of the larger CatalogImage, and still no data has been fetched. We use Dask Arrays (http://dask.pydata.org/en/latest/array.html) to coordinate
 the retrieval of data from the server. You can work with Dask arrays very similarly to numpy arrays except that
@@ -59,7 +59,7 @@ called when `plot()` is called for visualizing an image:
 
     # or call read directly to get a numpy array:
     nd_array = img.read()
-    print nd_array.shape
+    print(nd_array.shape)
 
 By default, CatalogImage returns a multispectral image. CatalogImage can be configured to return the panchromatic using the `band_type=MS|Pan|pan` parameter:
 
@@ -68,7 +68,7 @@ By default, CatalogImage returns a multispectral image. CatalogImage can be conf
     from gbdxtools import CatalogImage
 
     img = CatalogImage('104001001BA7C400', band_type='Pan', bbox=[2.2889757156372075,48.87067123176554,2.301077842712403,48.87705036103764])
-    print img.shape, img.bounds
+    print(img.shape, img.bounds)
 
 To fetch 8-band pan-sharpened imagery you can pass the `pansharpen=True|False` flag:
 
@@ -86,7 +86,7 @@ You can also specify projections in the image constructor:
     from gbdxtools import CatalogImage
 
     img = CatalogImage('104001001BA7C400', band_type='Pan', bbox=[2.2889757156372075,48.87067123176554,2.301077842712403,48.87705036103764], proj='EPSG:3857')
-    print img.shape
+    print(img.shape)
 
 The `proj='PROJ4 String'` parameter will project imagery into the given projection.
 
@@ -134,7 +134,7 @@ The IdahoImage class behaves in a similar manner as CatalogImage except it accep
     from gbdxtools import IdahoImage
 
     img = IdahoImage('cfa89bc1-6115-4db1-9f43-03f060b52286')
-    print img.shape
+    print(img.shape)
 
 The methods of CatalogImage are also available in IdahoImage. However, the band_type and pansharpen parameters are not available.
 (IDAHO multispectral and panchromatic images are stored separately on the server.)
@@ -150,9 +150,9 @@ GBDX also indexes all Landsat8 images and are served up by AWS. The LandsatImage
     from gbdxtools import LandsatImage
 
     img = LandsatImage('LC80370302014268LGN00')
-    print img.shape
+    print(img.shape)
     aoi = img.aoi(bbox=[-109.84, 43.19, -109.59, 43.34])
-    print aoi.shape
+    print(aoi.shape)
     aoi.plot(bands=[3,2,1])
 
 
@@ -167,7 +167,7 @@ Both the DemImage and TmsImage (below) classes behave in a bit different fashion
 
     aoi = [5.279273986816407, 60.35854536321686, 5.402183532714844, 60.419106714507116]
     dem = DemImage(aoi)
-    print dem.shape
+    print(dem.shape)
 
 Beyond replacing catalog ids for AOIs the DemImage class share all the same methods as the above image classes.
 
@@ -181,9 +181,9 @@ The TmsImage class is used to access imagery available from the Maps API. These 
     from gbdxtools import TmsImage
 
     img = TmsImage('LC80370302014268LGN00')
-    print img.shape
+    print(img.shape)
     aoi = img.aoi(bbox=[-109.84, 43.19, -109.59, 43.34])
-    print aoi.shape
+    print(aoi.shape)
     aoi.plot(bands=[3,2,1])
 
 
@@ -197,6 +197,6 @@ Sometimes it's necessary to access data directly from an Amazon S3 bucket (for i
     from gbdxtools import S3Image
 
     img = S3Image('landsat-pds/c1/L8/139/045/LC08_L1TP_139045_20170304_20170316_01_T1/LC08_L1TP_139045_20170304_20170316_01_T1_B3.TIF', proj="EPSG:4326")
-    print img.shape
+    print(img.shape)
 
 Because images living in S3 are not always catalog'd the `S3Image` class accepts an "s3 path". This path is constructed from a `bucket` and `prefix`. In the example above, the bucket is 'landsat-pds' and the prefix is `c1/L8/139/045/LC08_L1TP_139045_20170304_20170316_01_T1/LC08_L1TP_139045_20170304_20170316_01_T1_B3.TIF`. 
