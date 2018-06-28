@@ -58,14 +58,15 @@ def preview(image, **kwargs):
 
     zoom = kwargs.get("zoom", 16)
     bands = kwargs.get("bands", image._rgb_bands)
+    print(bands)
     wgs84_bounds = kwargs.get("bounds", list(loads(image.ipe_metadata["image"]["imageBoundsWGS84"]).bounds))
     center = kwargs.get("center", list(shape(image).centroid.bounds[0:2]))
     graph_id = image.ipe_id
     node_id = image.ipe.graph()['nodes'][0]['id']
 
     stats = image.display_stats
-    offsets = stats['offset']
-    scales = stats['scale']
+    offsets = [stats['offset'][b] for b in bands]
+    scales = [stats['scale'][b] for b in bands]
 
     if image.proj != 'EPSG:4326':
         code = image.proj.split(':')[1]

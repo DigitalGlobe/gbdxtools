@@ -1,3 +1,6 @@
+0.15.6 
+* Fixed a band selection issue in image previews
+
 0.15.5 
 * fix for missing import in geo mixin
 
