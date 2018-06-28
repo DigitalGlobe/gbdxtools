@@ -1,6 +1,8 @@
 0.15.6 
 * Fixed a band selection issue in image previews
 * changed the way we talked to the Openlayers objects in preview
+* Added a BrowseImage class for fetching and indexing browse imagery by catalogIDs
+* rgb and plot methods support base layer matching via browse imagery via the `blm_source="browse"` flag 
 
 0.15.5 
 * fix for missing import in geo mixin

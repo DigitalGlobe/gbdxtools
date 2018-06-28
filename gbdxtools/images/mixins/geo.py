@@ -18,14 +18,20 @@ except:
 
 
 class PlotMixin(object):
-    def base_layer_match(self, blm=False, **kwargs):
+    def base_layer_match(self, blm=False, blm_source=None, **kwargs):
+        if blm and "stretch" not in kwargs:
+            kwargs["stretch"] = [0,100]
         rgb = self.rgb(**kwargs)
         if not blm:
             return rgb
-        from gbdxtools.images.tms_image import TmsImage
         bounds = self._reproject(box(*self.bounds), from_proj=self.proj, to_proj="EPSG:4326").bounds
-        tms = TmsImage(zoom=self._calc_tms_zoom(self.affine[0]), bbox=bounds, **kwargs)
-        ref = np.rollaxis(tms.read(), 0, 3)
+        if blm_source == 'browse':
+            from gbdxtools.images.browse_image import BrowseImage
+            ref = BrowseImage(self.cat_id, bbox=bounds).read()
+        else:
+            from gbdxtools.images.tms_image import TmsImage
+            tms = TmsImage(zoom=self._calc_tms_zoom(self.affine[0]), bbox=bounds, **kwargs)
+            ref = np.rollaxis(tms.read(), 0, 3)
         out = np.dstack([histogram_match(rgb[:,:,idx], ref[:,:,idx].astype(np.double)/255.0)
                         for idx in range(rgb.shape[-1])])
         return out
@@ -76,6 +82,7 @@ class PlotMixin(object):
 
         f, ax1 = plt.subplots(1, figsize=(kwargs.get("w", 10), kwargs.get("h", 10)))
         ax1.axis('off')
+        ax1.set_title(kwargs.get('title', ''), fontsize=kwargs.get('fontsize', 22))
         plt.imshow(tfm(**kwargs), interpolation='nearest', cmap=kwargs.get("cmap", None))
         plt.show(block=False)
 
