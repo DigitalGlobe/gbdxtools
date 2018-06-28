@@ -1,5 +1,6 @@
 0.15.6 
 * Fixed a band selection issue in image previews
+* changed the way we talked to the Openlayers objects in preview
 
 0.15.5 
 * fix for missing import in geo mixin
