@@ -91,13 +91,13 @@ def preview(image, **kwargs):
     js = Template("""
         require.config({
             paths: {
-                ol: 'https://openlayers.org/en/v4.6.4/build/ol',
+                oljs: 'https://cdnjs.cloudflare.com/ajax/libs/openlayers/4.6.4/ol',
                 proj4: 'https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.4.4/proj4'
             }
         });
 
-        require(['ol', 'proj4'], function(ol, proj4) {
-            ol.proj.setProj4(proj4);
+        require(['oljs', 'proj4'], function(oljs, proj4) {
+            oljs.proj.setProj4(proj4)
             var md = $md;
             var georef = $georef;
             var graphId = '$graphId';
@@ -123,25 +123,25 @@ def preview(image, **kwargs):
                 var area = projInfo["area_of_use"];
                 var bbox = [area["area_west_bound_lon"], area["area_south_bound_lat"], 
                             area["area_east_bound_lon"], area["area_north_bound_lat"]]
-                var projection = ol.proj.get(proj);
-                var fromLonLat = ol.proj.getTransform('EPSG:4326', projection);
-                var extent = ol.extent.applyTransform(
+                var projection = oljs.proj.get(proj);
+                var fromLonLat = oljs.proj.getTransform('EPSG:4326', projection);
+                var extent = oljs.extent.applyTransform(
                     [bbox[0], bbox[1], bbox[2], bbox[3]], fromLonLat);
                 projection.setExtent(extent);
             } else {
-                var projection = ol.proj.get(proj);
+                var projection = oljs.proj.get(proj);
             }
 
-            var rda = new ol.layer.Tile({
+            var rda = new oljs.layer.Tile({
               title: 'RDA',
               opacity: 1,
               extent: extents,
-              source: new ol.source.TileImage({
+              source: new oljs.source.TileImage({
                       crossOrigin: null,
                       projection: projection,
                       extent: extents,
 
-                      tileGrid: new ol.tilegrid.TileGrid({
+                      tileGrid: new oljs.tilegrid.TileGrid({
                           extent: extents,
                           origin: [extents[0], extents[3]],
                           resolutions: tileLayerResolutions,
@@ -158,10 +158,10 @@ def preview(image, **kwargs):
                   })
             });
 
-            var map = new ol.Map({
+            var map = new oljs.Map({
               layers: [ rda ],
               target: '$map_id',
-              view: new ol.View({
+              view: new oljs.View({
                 projection: projection,
                 center: $center,
                 zoom: $zoom
