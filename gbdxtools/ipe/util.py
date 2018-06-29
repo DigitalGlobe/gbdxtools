@@ -89,7 +89,7 @@ def preview(image, **kwargs):
     js = Template("""
         require.config({
             paths: {
-                ol: 'https://openlayers.org/en/v4.6.4/build/ol',
+                ol: 'https://cdnjs.cloudflare.com/ajax/libs/openlayers/4.6.4/ol',
                 proj4: 'https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.4.4/proj4'
             }
         });
