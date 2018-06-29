@@ -82,6 +82,23 @@ class WV03_SWIR(WorldViewImage):
     def _ndvi_bands(self):
         raise NotImplementedError("NDVI bands not available in SWIR spectrum")
 
+    def plot(self, **kwargs):
+        bands = kwargs.get("bands")
+        if bands is not None:
+            assert len(bands) == 1, "SWIR supports plotting only a single band at a time"
+        if "cmap" in kwargs:
+            cmap = kwargs["cmap"]
+            del kwargs["cmap"]
+        else:
+            cmap = "Greys_r"
+        self._plot(tfm=self._single_band, cmap=cmap, **kwargs)
+
+    def _single_band(self, **kwargs):
+        if "bands" not in kwargs:
+            kwargs["bands"] = [0]
+        arr = self._read(self, **kwargs)
+        return arr[0,:,:]
+
 
 class WV03_VNIR(WorldViewImage):
     pass
