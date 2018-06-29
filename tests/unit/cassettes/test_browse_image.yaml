@@ -1,0 +1,58 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      User-Agent: [python-requests/2.18.4]
+    method: GET
+    uri: https://geobigdata.io/thumbnails/v1/metadata/104001003589D300.json
+  response:
+    body: {string: !!python/unicode 'This resource has permanently moved to <a href="http://alpha-thumbnail-cache.s3.amazonaws.com/104001003589D300/metadata.json">http://alpha-thumbnail-cache.s3.amazonaws.com/104001003589D300/metadata.json</a>.'}
+    headers:
+      access-control-allow-origin: ['*']
+      connection: [keep-alive]
+      content-length: ['207']
+      content-type: [text/html;charset=utf-8]
+      date: ['Fri, 29 Jun 2018 15:25:29 GMT']
+      location: ['http://alpha-thumbnail-cache.s3.amazonaws.com/104001003589D300/metadata.json']
+      server: [nginx/1.12.1]
+      via: [kong/0.10.3]
+      x-kong-proxy-latency: ['1']
+      x-kong-upstream-latency: ['97']
+    status: {code: 301, message: Moved Permanently}
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      User-Agent: [python-requests/2.18.4]
+    method: GET
+    uri: http://alpha-thumbnail-cache.s3.amazonaws.com/104001003589D300/metadata.json
+  response:
+    body: {string: !!python/unicode '{"geometry": {"type": "Polygon", "coordinates":
+        [[[[130.9588139000001, -25.28573596999996], [131.0990379000001, -25.27952515],
+        [131.0990312, -25.3099790699999], [131.0990478000001, -25.34040544], [131.0990693000001,
+        -25.37081922999994], [131.0990825, -25.40124019999996], [131.0990878, -25.41570166999998],
+        [130.9590063000001, -25.42175692999996], [130.9589851000001, -25.40737636999995],
+        [130.9589374000001, -25.37697848999994], [130.9588946, -25.34656978999993],
+        [130.9588479, -25.31615954999995], [130.9588139000001, -25.28573596999996]]]]},
+        "crs": {"type": "name", "properties": {"name": "urn:ogc:def:crs:OGC:1.3:CRS84"}},
+        "type": "Feature", "properties": {"id": "104001003589D300", "name": "footprint"},
+        "bbox": {"type": "Polygon", "coordinates": [[[130.9588139000001, -25.28573596999996],
+        [130.9590063000001, -25.42175692999996], [131.0990878, -25.41570166999998],
+        [131.0990379000001, -25.27952515], [130.9588139000001, -25.28573596999996]]]}}'}
+    headers:
+      accept-ranges: [bytes]
+      content-length: ['949']
+      content-type: [application/octet-stream]
+      date: ['Fri, 29 Jun 2018 15:25:26 GMT']
+      etag: ['"ef6f089be23d6fe06f16c72cd384341b"']
+      last-modified: ['Thu, 08 Feb 2018 16:23:55 GMT']
+      server: [AmazonS3]
+      x-amz-id-2: [JOiNxd0k3IxfMFm68EKhYrl1IkI/OoHI4OcswlWabkhKnLrMJ7pZ0AFGQIs1ivjmv2+lAENtnrk=]
+      x-amz-request-id: [B3D642BC7ADF6A56]
+    status: {code: 200, message: OK}
+version: 1
