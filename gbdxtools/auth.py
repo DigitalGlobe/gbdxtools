@@ -4,7 +4,7 @@ from requests.adapters import HTTPAdapter
 from gbdx_auth import gbdx_auth
 import logging
 
-from gbdxtools.ipe.graph import VIRTUAL_IPE_URL
+from gbdxtools.rda.graph import VIRTUAL_RDA_URL
 
 auth = None
 
@@ -70,7 +70,7 @@ class _Auth(object):
             self.gbdx_connection.hooks['response'].append(expire_token)
 
             # status_forcelist=[500, 502, 504]))
-            self.gbdx_connection.mount(VIRTUAL_IPE_URL, HTTPAdapter(max_retries=5))
+            self.gbdx_connection.mount(VIRTUAL_RDA_URL, HTTPAdapter(max_retries=5))
 
         self.gbdx_futures_session = FuturesSession(session=self.gbdx_connection, max_workers=64)
 

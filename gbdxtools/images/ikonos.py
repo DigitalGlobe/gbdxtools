@@ -1,8 +1,8 @@
 from gbdxtools.images.base import RDABaseImage
 from gbdxtools.images.drivers import RDADaskImageDriver
-from gbdxtools.ipe.interface import Ipe
-from gbdxtools.ipe.util import ortho_params
-ipe = Ipe()
+from gbdxtools.rda.interface import RDA
+from gbdxtools.rda.util import ortho_params
+rda = RDA()
 
 class IkonosDriver(RDADaskImageDriver):
     image_option_support = ["proj", "gsd", "spec"]
@@ -10,7 +10,7 @@ class IkonosDriver(RDADaskImageDriver):
 
 class IkonosImage(RDABaseImage):
     """
-      Dask based access to ikonos images backed by IPE Graphs.
+      Dask based access to ikonos images backed by RDA Graphs.
     """
     __Driver__ = IkonosDriver
 
@@ -34,7 +34,7 @@ class IkonosImage(RDABaseImage):
     def _build_graph(cls, record, spec="multispectral", proj="EPSG:4326", gsd=None, **kwargs):
         prefix = record['properties']['attributes']['bucketPrefix']
         bucket = record['properties']['attributes']['bucketName']
-        ikonos = ipe.IkonosRead(path="{}/{}/{}_0000000:{}".format(bucket, prefix, prefix, spec))
+        ikonos = rda.IkonosRead(path="{}/{}/{}_0000000:{}".format(bucket, prefix, prefix, spec))
         params = ortho_params(proj, gsd=gsd)
-        ikonos = ipe.Orthorectify(ikonos, **params)
+        ikonos = rda.Orthorectify(ikonos, **params)
         return ikonos
