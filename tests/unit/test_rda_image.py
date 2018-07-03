@@ -7,7 +7,7 @@ Unit tests for the gbdxtools.Idaho class
 import os
 from gbdxtools import Interface
 from gbdxtools import IdahoImage
-from gbdxtools.ipe.graph import get_ipe_graph
+from gbdxtools.rda.graph import get_rda_graph
 from gbdxtools.images.meta import DaskImage
 from auth_mock import get_mock_gbdx_session
 import vcr
@@ -38,7 +38,7 @@ def read_mock(**kwargs):
 # 6. Edit the cassette to remove any possibly sensitive information (s3 creds for example)
 
 
-class IpeImageTest(unittest.TestCase):
+class RdaImageTest(unittest.TestCase):
     _temp_path = None
 
     @classmethod
@@ -52,7 +52,7 @@ class IpeImageTest(unittest.TestCase):
     @my_vcr.use_cassette('tests/unit/cassettes/test_ipe_get_graph.yaml', filter_headers=['authorization'])
     def test_get_graph(self):
         graphid = 'ba79f76782438c70087765c35f413def88f92b73627227830a531cddbfa2ed1a'
-        json = get_ipe_graph(self.gbdx.gbdx_connection, graphid)
+        json = get_rda_graph(self.gbdx.gbdx_connection, graphid)
         assert json['id'] == graphid
 
     @my_vcr.use_cassette('tests/unit/cassettes/test_ipe_image_default.yaml', filter_headers=['authorization'])
@@ -103,7 +103,7 @@ class IpeImageTest(unittest.TestCase):
     def test_ipe_image_1b(self):
         idahoid = '09d5acaf-12d4-4c67-adbb-cda26cbd2187'
         img = self.gbdx.idaho_image(idahoid, product="1b", bbox=[-85.79713384556237, 10.859474119490333, -85.79366000529654, 10.86341028280643], bucket='idaho-images')
-        assert isinstance(img.ipe_metadata, dict)
+        assert isinstance(img.rda_metadata, dict)
         with self.assertRaises(NotImplementedError):
             img._ndvi_bands
         assert img.shape == (8, 292, 258)
