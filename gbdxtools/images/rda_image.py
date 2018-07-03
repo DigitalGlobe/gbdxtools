@@ -144,7 +144,7 @@ class RDAImage(GeoDaskImage):
         return self.rda._rda_id
 
     @property
-    def rda_metadata(self):
+    def metadata(self):
         return self.rda.metadata
 
     @property

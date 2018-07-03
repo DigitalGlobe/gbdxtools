@@ -63,7 +63,7 @@ def preview(image, **kwargs):
     bands = kwargs.get("bands")
     if bands is None:
         bands = image._rgb_bands
-    wgs84_bounds = kwargs.get("bounds", list(loads(image.rda_metadata["image"]["imageBoundsWGS84"]).bounds))
+    wgs84_bounds = kwargs.get("bounds", list(loads(image.metadata["image"]["imageBoundsWGS84"]).bounds))
     center = kwargs.get("center", list(shape(image).centroid.bounds[0:2]))
     graph_id = image.rda_id
     node_id = image.rda.graph()['nodes'][0]['id']
@@ -179,8 +179,8 @@ def preview(image, **kwargs):
         "bounds": bounds,
         "bands": ",".join(map(str, bands)),
         "nodeId": node_id,
-        "md": json.dumps(image.rda_metadata["image"]),
-        "georef": json.dumps(image.rda_metadata["georef"]),
+        "md": json.dumps(image.metadata["image"]),
+        "georef": json.dumps(image.metadata["georef"]),
         "center": center,
         "zoom": zoom,
         "token": gbdx.gbdx_connection.access_token,

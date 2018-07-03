@@ -103,7 +103,7 @@ class RdaImageTest(unittest.TestCase):
     def test_ipe_image_1b(self):
         idahoid = '09d5acaf-12d4-4c67-adbb-cda26cbd2187'
         img = self.gbdx.idaho_image(idahoid, product="1b", bbox=[-85.79713384556237, 10.859474119490333, -85.79366000529654, 10.86341028280643], bucket='idaho-images')
-        assert isinstance(img.rda_metadata, dict)
+        assert isinstance(img.metadata, dict)
         with self.assertRaises(NotImplementedError):
             img._ndvi_bands
         assert img.shape == (8, 292, 258)
