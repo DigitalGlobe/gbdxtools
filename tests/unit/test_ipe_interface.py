@@ -1,19 +1,19 @@
 """
-Unit tests for the gbdxtools.ipe.interface module
+Unit tests for the gbdxtools.rda.interface module
 """
 
 import unittest
 import types
 
 from gbdxtools import Interface
-from gbdxtools.ipe.interface import Ipe, Op, ContentHashedDict
+from gbdxtools.rda.interface import RDA, Op, ContentHashedDict
 
 from auth_mock import get_mock_gbdx_session
 
-class IpeInterfaceTest(unittest.TestCase):
+class RdaInterfaceTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.ipe = Ipe()
+        cls.rda = RDA()
         mock_gbdx_session = get_mock_gbdx_session(token='dummytoken')
         cls.gbdx = Interface(gbdx_connection=mock_gbdx_session)
 
@@ -43,7 +43,7 @@ class IpeInterfaceTest(unittest.TestCase):
         ca.populate_id()
         self.assertIn("id", ca)
 
-    def test_ipe_produces_ops(self):
+    def test_rda_produces_ops(self):
         op = Op("TestOperator")(param1="one", param2="two")
         self.assertIsInstance(op, Op)
         self.assertEqual(op._operator, "TestOperator")

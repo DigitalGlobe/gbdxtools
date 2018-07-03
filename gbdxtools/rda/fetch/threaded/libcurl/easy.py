@@ -16,8 +16,8 @@ from skimage.io import imread
 import pycurl
 import numpy as np
 
-import warnings
-warnings.filterwarnings('ignore')
+#import warnings
+#warnings.filterwarnings('ignore')
 
 try:
     basestring

@@ -22,7 +22,7 @@ from scipy.misc import imread
 import mercantile
 
 from gbdxtools.images.meta import GeoDaskImage, DaskMeta
-from gbdxtools.ipe.util import AffineTransform
+from gbdxtools.rda.util import AffineTransform
 
 from shapely.geometry import mapping, box
 from shapely.geometry.base import BaseGeometry

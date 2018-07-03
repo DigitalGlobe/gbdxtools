@@ -1,17 +1,17 @@
 from gbdxtools.images.base import RDABaseImage
 from gbdxtools.images.drivers import IdahoDriver
 from gbdxtools.images.util import vector_services_query
-from gbdxtools.ipe.util import calc_toa_gain_offset, ortho_params
-from gbdxtools.ipe.interface import Ipe
+from gbdxtools.rda.util import calc_toa_gain_offset, ortho_params
+from gbdxtools.rda.interface import RDA
 
 from shapely import wkt
 from shapely.geometry import box
 
-ipe = Ipe()
+rda = RDA()
 
 class IdahoImage(RDABaseImage):
     """
-      Dask based access to IDAHO images via IPE.
+      Dask based access to IDAHO images via RDA.
     """
     __Driver__ = IdahoDriver
 
@@ -31,9 +31,9 @@ class IdahoImage(RDABaseImage):
         correction = "ACOMP" if acomp else kwargs.get("correctionType")
         spec = kwargs.get('spec')
         if spec == "1b":
-            graph = ipe.IdahoRead(bucketName=bucket, imageId=idaho_id, objectStore="S3", targetGSD=gsd)
+            graph = rda.IdahoRead(bucketName=bucket, imageId=idaho_id, objectStore="S3", targetGSD=gsd)
         else:
-            graph = ipe.DigitalGlobeImage(bucketName=bucket, imageId=idaho_id, bands=bands, CRS=proj, correctionType=correction, GSD=gsd)
+            graph = rda.DigitalGlobeImage(bucketName=bucket, imageId=idaho_id, bands=bands, CRS=proj, correctionType=correction, GSD=gsd)
 
         return graph
 

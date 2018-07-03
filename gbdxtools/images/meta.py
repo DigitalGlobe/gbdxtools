@@ -6,9 +6,9 @@ from collections import Container, namedtuple
 import warnings
 import math
 
-from gbdxtools.ipe.io import to_geotiff
-from gbdxtools.ipe.util import RatPolyTransform, AffineTransform, pad_safe_positive, pad_safe_negative, IPE_TO_DTYPE, preview
-from gbdxtools.images.mixins import PlotMixin, BandMethodsTemplate
+from gbdxtools.rda.io import to_geotiff
+from gbdxtools.rda.util import RatPolyTransform, AffineTransform, pad_safe_positive, pad_safe_negative, RDA_TO_DTYPE, preview
+from gbdxtools.images.mixins import PlotMixin, BandMethodsTemplate, Deprecations 
 
 from shapely import ops, wkt
 from shapely.geometry import box, shape, mapping, asShape
@@ -114,7 +114,7 @@ class DaskImage(da.Array):
             for i in xrange(count):
                 yield self.randwindow(window_shape)
 
-class GeoDaskImage(DaskImage, Container, PlotMixin, BandMethodsTemplate):
+class GeoDaskImage(DaskImage, Container, PlotMixin, BandMethodsTemplate, Deprecations):
     _default_proj = "EPSG:4326"
 
     def map_blocks(self, *args, **kwargs):
@@ -226,7 +226,7 @@ class GeoDaskImage(DaskImage, Container, PlotMixin, BandMethodsTemplate):
             image (dask): a warped image as deferred image array (a dask)
         """
         try:
-            img_md = self.ipe.metadata["image"]
+            img_md = self.rda.metadata["image"]
             x_size = img_md["tileXSize"]
             y_size = img_md["tileYSize"]
         except (AttributeError, KeyError):
@@ -240,12 +240,12 @@ class GeoDaskImage(DaskImage, Container, PlotMixin, BandMethodsTemplate):
             from_proj = self.proj
 
         try:
-            # NOTE: this only works on images that have IPE rpcs metadata
-            center = wkt.loads(self.ipe.metadata["image"]["imageBoundsWGS84"]).centroid
-            g = box(*(center.buffer(self.ipe.metadata["rpcs"]["gsd"] / 2).bounds))
+            # NOTE: this only works on images that have rda rpcs metadata
+            center = wkt.loads(self.rda.metadata["image"]["imageBoundsWGS84"]).centroid
+            g = box(*(center.buffer(self.rda.metadata["rpcs"]["gsd"] / 2).bounds))
             tfm = partial(pyproj.transform, pyproj.Proj(init="EPSG:4326"), pyproj.Proj(init=proj))
             gsd = kwargs.get("gsd", ops.transform(tfm, g).area ** 0.5)
-            current_bounds = wkt.loads(self.ipe.metadata["image"]["imageBoundsWGS84"]).bounds
+            current_bounds = wkt.loads(self.rda.metadata["image"]["imageBoundsWGS84"]).bounds
         except (AttributeError, KeyError, TypeError):
             tfm = partial(pyproj.transform, pyproj.Proj(init=self.proj), pyproj.Proj(init=proj))
             gsd = kwargs.get("gsd", (ops.transform(tfm, shape(self)).area / (self.shape[1] * self.shape[2])) ** 0.5 )
@@ -264,7 +264,7 @@ class GeoDaskImage(DaskImage, Container, PlotMixin, BandMethodsTemplate):
         num_bands = self.shape[0]
 
         try:
-            dtype = IPE_TO_DTYPE[img_md["dataType"]]
+            dtype = RDA_TO_DTYPE[img_md["dataType"]]
         except:
             dtype = 'uint8'
 

@@ -27,13 +27,16 @@ from shapely import ops
 from affine import Affine
 import pyproj
 
-from gbdxtools.ipe.graph import VIRTUAL_IPE_URL 
-import gbdxtools.ipe.constants as constants
+from gbdxtools.rda.error import PendingDeprecation
+from gbdxtools.rda.graph import VIRTUAL_RDA_URL 
+import gbdxtools.rda.constants as constants
 
-with warnings.catch_warnings():
-    warnings.simplefilter("ignore")
+warnings.simplefilter("always", PendingDeprecation)
 
-IPE_TO_DTYPE = {
+def deprecation(message):
+    warnings.warn(message, PendingDeprecation)
+
+RDA_TO_DTYPE = {
     "BINARY": "bool",
     "BYTE": "byte",
     "SHORT": "short",
@@ -60,10 +63,10 @@ def preview(image, **kwargs):
     bands = kwargs.get("bands")
     if bands is None:
         bands = image._rgb_bands
-    wgs84_bounds = kwargs.get("bounds", list(loads(image.ipe_metadata["image"]["imageBoundsWGS84"]).bounds))
+    wgs84_bounds = kwargs.get("bounds", list(loads(image.metadata["image"]["imageBoundsWGS84"]).bounds))
     center = kwargs.get("center", list(shape(image).centroid.bounds[0:2]))
-    graph_id = image.ipe_id
-    node_id = image.ipe.graph()['nodes'][0]['id']
+    graph_id = image.rda_id
+    node_id = image.rda.graph()['nodes'][0]['id']
 
     stats = image.display_stats
     offsets = [stats['offset'][b] for b in bands]
@@ -176,14 +179,14 @@ def preview(image, **kwargs):
         "bounds": bounds,
         "bands": ",".join(map(str, bands)),
         "nodeId": node_id,
-        "md": json.dumps(image.ipe_metadata["image"]),
-        "georef": json.dumps(image.ipe_metadata["georef"]),
+        "md": json.dumps(image.metadata["image"]),
+        "georef": json.dumps(image.metadata["georef"]),
         "center": center,
         "zoom": zoom,
         "token": gbdx.gbdx_connection.access_token,
         "scales": ",".join(map(str, scales)),
         "offsets": ",".join(map(str, offsets)),
-        "url": VIRTUAL_IPE_URL
+        "url": VIRTUAL_RDA_URL
     })
     display(Javascript(js))
 

@@ -1,12 +1,12 @@
 from __future__ import print_function
-from gbdxtools.images.ipe_image import IpeImage
-from gbdxtools.ipe.interface import Ipe
-from gbdxtools.ipe.util import reproject_params
-ipe = Ipe()
+from gbdxtools.images.rda_image import RDAImage
+from gbdxtools.rda.interface import RDA
+from gbdxtools.rda.util import reproject_params
+rda = RDA()
 
-class S3Image(IpeImage):
+class S3Image(RDAImage):
     """
-      Dask based access to geotiffs on s3 backed by IPE Graphs.
+      Dask based access to geotiffs on s3 backed by RDA Graphs.
     """
     def __new__(cls, path, **kwargs):
         path = '/vsis3/{}'.format(path)
@@ -23,7 +23,7 @@ class S3Image(IpeImage):
 
     @staticmethod
     def _build_graph(path, proj):
-        s3 = ipe.GdalImageRead(path=path)
+        s3 = rda.GdalImageRead(path=path)
         if proj is not None:
-            s3 = ipe.Reproject(s3, **reproject_params(proj))
+            s3 = rda.Reproject(s3, **reproject_params(proj))
         return s3

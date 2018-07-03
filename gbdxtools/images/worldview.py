@@ -9,10 +9,10 @@ from gbdxtools.images.drivers import WorldViewDriver, RDADaskImageDriver
 from gbdxtools.images.base import RDABaseImage
 from gbdxtools import IdahoImage
 from gbdxtools.images.util import vector_services_query, vendor_id, band_types
-from gbdxtools.ipe.interface import Ipe
-from gbdxtools.ipe.error import MissingIdahoImages, AcompUnavailable
+from gbdxtools.rda.interface import RDA
+from gbdxtools.rda.error import MissingIdahoImages, AcompUnavailable
 
-ipe = Ipe()
+rda = RDA()
 
 
 class WorldViewImage(RDABaseImage):
@@ -48,7 +48,7 @@ class WorldViewImage(RDABaseImage):
         bands = band_types[band_type]
         gsd = gsd if not None else ""
         correction = "ACOMP" if acomp else kwargs.get("correctionType", "TOAREFLECTANCE")
-        graph = ipe.Format(ipe.DigitalGlobeStrip(catId=cat_id, CRS=proj, GSD=gsd, correctionType=correction, bands=bands, fallbackToTOA=True), dataType="4")
+        graph = rda.Format(rda.DigitalGlobeStrip(catId=cat_id, CRS=proj, GSD=gsd, correctionType=correction, bands=bands, fallbackToTOA=True), dataType="4")
         #raise AcompUnavailable("Cannot apply acomp to this image, data unavailable in bucket: {}".format(_bucket))
         return graph
 
@@ -71,7 +71,7 @@ class WV03_SWIR(WorldViewImage):
         bands = "SWIR"
         gsd = gsd if not None else ""
         correction = "ACOMP" if acomp else kwargs.get("correctionType", "TOAREFLECTANCE")
-        graph = ipe.Format(ipe.DigitalGlobeStrip(catId=cat_id, CRS=proj, GSD=gsd, correctionType=correction, bands=bands, fallbackToTOA=True), dataType="4")
+        graph = rda.Format(rda.DigitalGlobeStrip(catId=cat_id, CRS=proj, GSD=gsd, correctionType=correction, bands=bands, fallbackToTOA=True), dataType="4")
         return graph
 
     @property

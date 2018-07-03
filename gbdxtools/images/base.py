@@ -1,9 +1,9 @@
 from __future__ import print_function
 
-from gbdxtools.images.ipe_image import IpeImage
+from gbdxtools.images.rda_image import RDAImage
 
 
-class RDABaseImage(IpeImage):
+class RDABaseImage(RDAImage):
     __rda_id__ = None
     def __new__(cls, rda_id=None, **kwargs):
         cls = cls.__Driver__(rda_id=rda_id, **kwargs).drive(cls)
