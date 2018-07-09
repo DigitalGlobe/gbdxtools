@@ -122,6 +122,11 @@ class GeoDaskImage(DaskImage, Container, PlotMixin, BandMethodsTemplate, Depreca
         return GeoDaskImage(darr, __geo_interface__ = self.__geo_interface__,
                             __geo_transform__ = self.__geo_transform__)
 
+    def rechunk(self, *args, **kwargs):
+        darr = super(GeoDaskImage, self).rechunk(*args, **kwargs)
+        return GeoDaskImage(darr, __geo_interface__ = self.__geo_interface__,
+                            __geo_transform__ = self.__geo_transform__)
+
     def asShape(self):
         return asShape(self)
 
