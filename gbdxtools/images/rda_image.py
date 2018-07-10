@@ -128,7 +128,8 @@ class RDAImage(GeoDaskImage):
 
     def __getitem__(self, geometry):
         im = super(RDAImage, self).__getitem__(geometry)
-        im._rda_op = self._rda_op
+        if isinstance(im, GeoDaskImage):
+            im._rda_op = self._rda_op
         return im
 
     @property
