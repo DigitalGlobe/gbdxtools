@@ -3,7 +3,7 @@ GBDX Catalog Image Interface.
 
 Contact: chris.helm@digitalglobe.com
 """
-from gbdxtools import WV01, WV02, WV03_SWIR, WV03_VNIR, WV04, LandsatImage, IkonosImage, GE01, QB02, Sentinel2
+from gbdxtools import WV01, WV02, WV03_SWIR, WV03_VNIR, WV04, LandsatImage, IkonosImage, GE01, QB02, Sentinel2, Radarsat
 from gbdxtools.images.rda_image import RDAImage, GraphMeta
 from gbdxtools.rda.error import UnsupportedImageType
 from gbdxtools.images.util.image import vector_services_query
@@ -82,5 +82,7 @@ class CatalogImage(object):
             return QB02(cat_id, **kwargs)
         elif 'SENTINEL2' in types:
             return Sentinel2(rec['properties']['attributes']['bucketPrefix'], **kwargs)
+        elif 'RADARSAT2':
+            return Radarsat(rec, **kwargs)
         else:
             raise UnsupportedImageType('Unsupported image type: {}'.format(str(types)))

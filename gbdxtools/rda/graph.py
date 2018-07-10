@@ -44,7 +44,7 @@ def get_rda_metadata(conn, rda_id, node='toa_reflectance'):
     if md_response.status_code != 200:
         md_json = md_response.json()
         if 'error' in md_json:
-            raise BadRequest("RDA error: {}".format(md_json['error']))
+            raise BadRequest("RDA error: {}. RDA Graph: {}".format(md_json['error'], rda_id))
         raise BadRequest("Problem fetching image metadata: status {} {}, graph_id: {}".format(md_response.status_code, md_response.reason, rda_id))
     else:
         md_json = md_response.json()

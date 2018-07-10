@@ -1,0 +1,92 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      User-Agent: [python-requests/2.18.4]
+    method: GET
+    uri: https://vector.geobigdata.io/insight-vector/api/index/query/vector-gbdx-alpha-catalog-v2-*/items?count=1&upper=90.0&lower=-90.0&right=180.0&q=item_type%3AGBDXCatalogRecord+AND+%28attributes.catalogID%3A610476+OR+id%3A610476%29+AND+NOT+item_type%3ADigitalGlobeAcquisition&left=-180.0
+  response:
+    body: {string: !!python/unicode '[{"type":"Feature","geometry":{"type":"MultiPolygon","coordinates":[[[[36.03444961843232,36.23559348474151],[37.35396466906381,36.42232714810685],[37.59807301864135,35.25515878769237],[36.29844685863831,35.06740834246651],[36.03444961843232,36.23559348474151]]]]},"properties":{"ingest_source":"GBDX_INGEST_ALPHA","item_date":"2018-01-09T15:34:50.187Z","original_crs":"EPSG:4326","item_type":["GBDXCatalogRecord","RADARSAT2","SGFProduct","MDAProduct"],"name":null,"format":null,"ingest_date":"2018-06-21T01:27:06.976Z","attributes":{"passDirection":"Ascending","beamMode":"Extra
+        Fine","bucketName":"gbdx-receiving-radarsat","productID":"PDS_06433170","sensorPlatformName":"RADARSAT-2","imageFiles":["imagery_HH.tif"],"lutApplied":"Point
+        Target","metadataFiles":["product.xml"],"processingFacility":"GSS","processingTime":"2018-03-24T17:25:29.000000Z","beams":"XF0W3","catalogID":"610476","productLevel":"SGF","vendor":"MacDonald,
+        Dettwiler and Associates Ltd.","bucketPrefix":"RS2_OK96607_PK848296_DK779550_XF0W3_20180109_153450_HH_SGF","lutFiles":["lutBeta.xml","lutSigma.xml","lutGamma.xml"],"incidenceAngleNearRange_dbl":38.0534782,"lookDirection":"Right","platformName":"RADARSAT-2","polarizations":["HH"],"incidenceAngleFarRange_dbl":44.2327919,"softwareVersion":"CAPPS
+        SAR 1.3"},"ingest_attributes":{"_rest_user":"mdaproductsvc@digitalglobe.com","_rest_url":"http://vector.geobigdata.io/api/vectors/vector-gbdx-alpha-catalog-v2-mda-%257Bitem_date%253Ayyyy%257D"},"id":"PDS_06433170","source":null,"text":""}}]'}
+    headers:
+      access-control-allow-credentials: ['true']
+      access-control-allow-headers: ['origin, content-type, accept, authorization']
+      access-control-allow-methods: ['GET, POST, PUT, DELETE, OPTIONS, HEAD']
+      access-control-allow-origin: ['*']
+      cache-control: ['no-cache, no-store, max-age=0, must-revalidate']
+      connection: [keep-alive]
+      content-encoding: [UTF-8]
+      content-length: ['1515']
+      content-type: [application/json;charset=UTF-8]
+      date: ['Tue, 10 Jul 2018 03:53:01 GMT']
+      expires: ['0']
+      pragma: [no-cache]
+      server: [Apache-Coyote/1.1, Weblogic 12.2.1.1]
+      strict-transport-security: [max-age=604800 ; includeSubDomains]
+      x-content-type-options: [nosniff, nosniff]
+      x-frame-options: [DENY, SAMEORIGIN]
+      x-permitted-cross-domain-policies: [none]
+      x-xss-protection: [1; mode=block, 1; mode=block]
+    status: {code: 200, message: OK}
+- request:
+    body: !!python/unicode '{"edges": [{"destination": "bc725e24-3fc8-5701-a598-4883f6cf35c7",
+      "id": "6930ca82-c617-5a8a-945e-e69c0d665752", "index": 1, "source": "f9f4abfa-b66d-5e7c-bf3b-4759bed71416"}],
+      "nodes": [{"id": "bc725e24-3fc8-5701-a598-4883f6cf35c7", "operator": "Orthorectify",
+      "parameters": {"Elevation Source": "", "Output Coordinate Reference System":
+      "EPSG:3857", "Output Pixel to World Transform": "", "Sensor Model": "null"}},
+      {"id": "f9f4abfa-b66d-5e7c-bf3b-4759bed71416", "operator": "RadarsatRead", "parameters":
+      {"path": "gbdx-receiving-radarsat/RS2_OK96607_PK848296_DK779550_XF0W3_20180109_153450_HH_SGF"}}]}'
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      Content-Length: ['603']
+      Content-Type: [application/json]
+      User-Agent: [python-requests/2.18.4]
+    method: POST
+    uri: https://rda.geobigdata.io/v1/graph
+  response:
+    body: {string: !!python/unicode 824be37519f21722ecb42a0818cd4b2fa3f1d8e1f765ebc476b6a8fd4f482415}
+    headers:
+      access-control-allow-headers: ['x-requested-with, X-Auth-Token, Content-Type,
+          Authorization']
+      access-control-allow-methods: ['GET, OPTIONS, HEAD, PUT, POST, DELETE']
+      access-control-allow-origin: ['*']
+      access-control-max-age: ['3600']
+      connection: [keep-alive]
+      content-length: ['64']
+      content-type: [text/plain;charset=UTF-8]
+      date: ['Tue, 10 Jul 2018 03:53:01 GMT']
+    status: {code: 200, message: ''}
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      User-Agent: [python-requests/2.18.4]
+    method: GET
+    uri: https://rda.geobigdata.io/v1/metadata/824be37519f21722ecb42a0818cd4b2fa3f1d8e1f765ebc476b6a8fd4f482415/bc725e24-3fc8-5701-a598-4883f6cf35c7/metadata.json
+  response:
+    body: {string: !!python/unicode '{"imageMetadata":{"imageId":"/vsis3/gbdx-receiving-radarsat/RS2_OK96607_PK848296_DK779550_XF0W3_20180109_153450_HH_SGF/imagery_HH.tif","version":1.1,"profileName":"georectified_image","tilePartition":"0000","tileXOffset":0,"tileYOffset":0,"numXTiles":220,"numYTiles":235,"tileXSize":256,"tileYSize":256,"numBands":1,"dataType":"UNSIGNED_SHORT","imageHeight":59726,"imageWidth":56017,"sensorPlatformName":"RADARSAT-2","sensorName":"SAR","vendorDatasetIdentifier":"PDS_06433170:SGF:GSS:610476","acquisitionDate":"2018-01-09T15:34:50.187622Z","colorInterpretation":"PAN","imageBoundsWGS84":"POLYGON
+        ((36.03509509632446 36.424488808024535, 37.607624073528314 36.424488808024535,
+        37.607624073528314 35.06372823378024, 36.03509509632446 35.06372823378024,
+        36.03509509632446 36.424488808024535))","groundSampleDistanceMeters":3.125,"minX":-144,"minY":-31,"maxX":55872,"maxY":59694,"minTileX":-1,"minTileY":-1,"maxTileX":218,"maxTileY":233},"imageGeoreferencing":{"spatialReferenceSystemCode":"EPSG:3857","scaleX":3.125,"scaleY":-3.125,"translateX":4011858.4368100287,"translateY":4359091.807461009,"shearX":0.0,"shearY":0.0},"rpcSensorModel":{"spatialReferenceSystem":"EPSG:4326","upperLeftCorner":{"x":36.293200953760724,"y":35.068786577293956},"upperRightCorner":{"x":37.60272107474765,"y":35.25603148904905},"lowerRightCorner":{"x":37.34865763608989,"y":36.423788572515946},"lowerLeftCorner":{"x":36.039137515102965,"y":36.23654366076085},"gsd":4.0630464232514425E-5,"postScaleFactorX":1.0,"postScaleFactorY":1.0,"lineOffset":21052.0,"sampleOffset":19241.0,"latOffset":35.7446,"lonOffset":36.8152,"heightOffset":417.7615966796875,"lineScale":21052.0,"sampleScale":19242.0,"latScale":0.6788,"lonScale":0.7907,"heightScale":701.0,"lineNumCoefs":[0.002576971329089246,0.1878656774454233,-1.127460351720379,-1.76523885659377E-5,-0.001669869516587197,-7.185832288303056E-8,-1.860111628244163E-7,-0.004243597784650573,-0.001842129783662099,0.0,-7.619068133560849E-8,1.212552647860821E-6,-1.281525432149169E-5,3.450033325922637E-7,-2.200529210537903E-5,-7.379521163091201E-6,-2.071443619519814E-6,1.378020412623447E-8,0.0,0.0],"lineDenCoefs":[1.0,-0.001569674028102935,0.001141923162833794,-1.517166352687141E-7,-7.330789300181714E-6,6.898786027303798E-8,0.0,-1.686241876935953E-5,4.260351604079004E-6,1.8372121481481E-6,0.0,-4.172437302015363E-8,4.449722245880586E-7,0.0,8.755753887363781E-7,-2.069110569117742E-7,0.0,0.0,0.0,0.0],"sampleNumCoefs":[-0.008971877578762095,1.171170205545842,0.2187725259424827,-0.0132969541552626,-0.002752775407117667,6.321693540605201E-4,5.688833923880202E-5,0.005848036313974415,-1.205544030108826E-4,8.852196246444499E-6,-2.99879381919401E-5,-3.469802683444279E-6,-6.274182717567382E-5,-2.937002001289745E-5,-4.828681857589788E-6,-2.333312905404786E-6,-5.67820481302717E-6,-1.243237559225127E-4,-1.67303127681032E-6,3.005359595783613E-7],"sampleDenCoefs":[1.0,0.004269343838772798,0.005210729928009765,-8.592424603571073E-4,2.160454560810318E-6,5.361324436951323E-5,2.264850686085895E-5,9.67021968462884E-6,5.597309241889111E-5,-2.550245202505895E-5,-8.5948480738696E-6,-7.973715164220907E-7,1.813799596812622E-6,1.425281822879047E-7,3.162267944742912E-6,6.751756208433102E-7,-2.157348419250184E-7,-1.877505342798909E-5,-6.836527159236433E-7,1.088750919584977E-7]},"histogram":null,"sensorMetadata":null,"imageAssociations":null,"rrdMetadata":{"reducedResolutionDataset":null}}'}
+    headers:
+      access-control-allow-headers: ['x-requested-with, X-Auth-Token, Content-Type,
+          Authorization']
+      access-control-allow-methods: ['GET, OPTIONS, HEAD, PUT, POST, DELETE']
+      access-control-allow-origin: ['*']
+      access-control-max-age: ['3600']
+      connection: [keep-alive]
+      content-length: ['3402']
+      content-type: [application/json;charset=UTF-8]
+      date: ['Tue, 10 Jul 2018 03:53:03 GMT']
+    status: {code: 200, message: ''}
+version: 1
