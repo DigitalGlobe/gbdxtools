@@ -1,7 +1,7 @@
 import os
 import math
 try:
-    from rio_hist.match import histogram_match
+    from rio_hist.match import histogram_match as rio_match
     has_rio = True
 except ImportError:
     has_rio = False
@@ -18,23 +18,6 @@ except:
 
 
 class PlotMixin(object):
-    def base_layer_match(self, blm=False, blm_source=None, **kwargs):
-        if blm and "stretch" not in kwargs:
-            kwargs["stretch"] = [0,100]
-        rgb = self.rgb(**kwargs)
-        if not blm:
-            return rgb
-        bounds = self._reproject(box(*self.bounds), from_proj=self.proj, to_proj="EPSG:4326").bounds
-        if blm_source == 'browse':
-            from gbdxtools.images.browse_image import BrowseImage
-            ref = BrowseImage(self.cat_id, bbox=bounds).read()
-        else:
-            from gbdxtools.images.tms_image import TmsImage
-            tms = TmsImage(zoom=self._calc_tms_zoom(self.affine[0]), bbox=bounds, **kwargs)
-            ref = np.rollaxis(tms.read(), 0, 3)
-        out = np.dstack([histogram_match(rgb[:,:,idx], ref[:,:,idx].astype(np.double)/255.0)
-                        for idx in range(rgb.shape[-1])])
-        return out
 
     def rgb(self, **kwargs):
         if "bands" in kwargs:
@@ -43,12 +26,67 @@ class PlotMixin(object):
             del kwargs["bands"]
         else:
             use_bands = self._rgb_bands
+        if kwargs.get('blm') == True:
+            return self.histogram_match(use_bands, **kwargs)
+        if "histogram" not in kwargs:
+            return self.histogram_stretch(use_bands, **kwargs)
+        elif kwargs["histogram"] == "equalize":
+            return self.histogram_equalize(use_bands, **kwargs)
+        elif kwargs["histogram"] == "match":
+            return self.histogram_match(use_bands, **kwargs)
+        elif kwargs["histogram"] == "minmax":
+            return self.histogram_stretch(use_bands, stretch=[0, 100], **kwargs)
+        else:
+            raise KeyError('Unknown histogram parameter, use "equalize", "match", or "minmax"')
+
+    def histogram_equalize(self, use_bands, **kwargs):
+        ''' Equalize and the histogram and normalize value range
+            Equalization is on all three bands, not per-band'''
         data = self._read(self[use_bands,...], **kwargs)
         data = np.rollaxis(data.astype(np.float32), 0, 3)
-        lims = np.percentile(data, kwargs.get("stretch", [2, 98]), axis=(0, 1))
+        flattened = data.flatten()
+        if 0 in data:
+            masked = np.ma.masked_values(data, 0).compressed()
+            image_histogram, bin_edges = np.histogram(masked, 256)
+        else:
+            image_histogram, bin_edges = np.histogram(flattened, 256)
+        bins = (bin_edges[:-1] + bin_edges[1:]) / 2.0
+        cdf = image_histogram.cumsum() 
+        cdf = cdf / float(cdf[-1])
+        image_equalized = np.interp(flattened, bins, cdf)
+        return image_equalized.reshape(data.shape)
+
+    def histogram_match(self, use_bands, blm_source=None, **kwargs):
+        ''' Match the histogram to existing imagery '''
+        assert has_rio, "To match image histograms please install rio_hist"
+        data = self._read(self[use_bands,...], **kwargs)
+        data = np.rollaxis(data.astype(np.float32), 0, 3)
+        if 0 in data:
+            data = np.ma.masked_values(data, 0)
+        bounds = self._reproject(box(*self.bounds), from_proj=self.proj, to_proj="EPSG:4326").bounds
+        if blm_source == 'browse':
+            from gbdxtools.images.browse_image import BrowseImage
+            ref = BrowseImage(self.cat_id, bbox=bounds).read()
+        else:
+            from gbdxtools.images.tms_image import TmsImage
+            tms = TmsImage(zoom=self._calc_tms_zoom(self.affine[0]), bbox=bounds, **kwargs)
+            ref = np.rollaxis(tms.read(), 0, 3)
+        out = np.dstack([rio_match(data[:,:,idx], ref[:,:,idx].astype(np.double)/255.0)
+                        for idx in range(data.shape[-1])])
+        return out
+
+    def histogram_stretch(self, use_bands, **kwargs):
+        ''' perform a contrast stretch
+            Defaults to a 0-100 min/max stretch '''
+        data = self._read(self[use_bands,...], **kwargs)
+        data = np.rollaxis(data.astype(np.float32), 0, 3)
         for x in range(len(data[0,0,:])):
-            top = lims[:,x][1]
-            bottom = lims[:,x][0]
+            band = data[:,:,x]
+            if 0 in band:
+                band = np.ma.masked_values(band, 0).compressed()
+            lims = np.percentile(band, kwargs.get("stretch", [2, 98]))
+            top = lims[1]
+            bottom = lims[0]
             data[:,:,x] = (data[:,:,x] - bottom) / float(top - bottom)
         return np.clip(data, 0, 1)
 
@@ -66,7 +104,7 @@ class PlotMixin(object):
             self._plot(tfm=self._single_band, cmap=cmap, **kwargs)
         else:
             if spec == "rgb" and self._has_token(**kwargs):
-                self._plot(tfm=self.base_layer_match, **kwargs)
+                self._plot(tfm=self.rgb, **kwargs)
             else:
                 self._plot(tfm=getattr(self, spec), **kwargs)
 
