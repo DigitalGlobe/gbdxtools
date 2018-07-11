@@ -87,8 +87,14 @@ class PlotMixin(object):
             lims = np.percentile(band, kwargs.get("stretch", [2, 98]))
             top = lims[1]
             bottom = lims[0]
-            data[:,:,x] = (data[:,:,x] - bottom) / float(top - bottom)
-        return np.clip(data, 0, 1)
+            data[:,:,x] = (data[:,:,x] - bottom) / float(top - bottom) * 255.0
+        clipped = np.clip(data, 0, 255).astype("uint8")
+        if "gamma" in kwargs:
+            invGamma = 1.0 / kwargs['gamma']
+            lut = np.array([((i / 255.0) ** invGamma) * 255
+		            for i in np.arange(0, 256)]).astype("uint8")
+            clipped = np.take(lut, clipped)
+        return clipped
 
     def ndvi(self, **kwargs):
         data = self._read(self[self._ndvi_bands,...]).astype(np.float32)
