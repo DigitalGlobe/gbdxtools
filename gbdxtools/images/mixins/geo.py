@@ -29,6 +29,8 @@ class PlotMixin(object):
         if kwargs.get('blm') == True:
             return self.histogram_match(use_bands, **kwargs)
         if "histogram" not in kwargs:
+            if "stretch" not in kwargs:
+                kwargs['stretch'] = [2,98]
             return self.histogram_stretch(use_bands, **kwargs)
         elif kwargs["histogram"] == "equalize":
             return self.histogram_equalize(use_bands, **kwargs)
@@ -53,8 +55,11 @@ class PlotMixin(object):
         bins = (bin_edges[:-1] + bin_edges[1:]) / 2.0
         cdf = image_histogram.cumsum() 
         cdf = cdf / float(cdf[-1])
-        image_equalized = np.interp(flattened, bins, cdf)
-        return image_equalized.reshape(data.shape)
+        image_equalized = np.interp(flattened, bins, cdf).reshape(data.shape)
+        if 'stretch' in kwargs or 'gamma' in kwargs:
+            return self._histogram_stretch(image_equalized, **kwargs)
+        else:
+            return image_equalized
 
     def histogram_match(self, use_bands, blm_source=None, **kwargs):
         ''' Match the histogram to existing imagery '''
@@ -73,28 +78,34 @@ class PlotMixin(object):
             ref = np.rollaxis(tms.read(), 0, 3)
         out = np.dstack([rio_match(data[:,:,idx], ref[:,:,idx].astype(np.double)/255.0)
                         for idx in range(data.shape[-1])])
-        return out
+        if 'stretch' in kwargs or 'gamma' in kwargs:
+            return self._histogram_stretch(out, **kwargs)
+        else:
+            return out
 
     def histogram_stretch(self, use_bands, **kwargs):
-        ''' perform a contrast stretch
-            Defaults to a 0-100 min/max stretch '''
+        ''' entry point for contrast stretching '''
         data = self._read(self[use_bands,...], **kwargs)
         data = np.rollaxis(data.astype(np.float32), 0, 3)
+        return self._histogram_stretch(data, **kwargs)
+
+    def _histogram_stretch(self, data, **kwargs):
+        ''' perform a contrast stretch and/or gamma adjustment '''
         for x in range(len(data[0,0,:])):
             band = data[:,:,x]
             if 0 in band:
                 band = np.ma.masked_values(band, 0).compressed()
-            lims = np.percentile(band, kwargs.get("stretch", [2, 98]))
+            lims = np.percentile(band, kwargs.get("stretch", [0,100]))
             top = lims[1]
             bottom = lims[0]
             data[:,:,x] = (data[:,:,x] - bottom) / float(top - bottom) * 255.0
-        clipped = np.clip(data, 0, 255).astype("uint8")
+        data = np.clip(data, 0, 255).astype("uint8")
         if "gamma" in kwargs:
             invGamma = 1.0 / kwargs['gamma']
             lut = np.array([((i / 255.0) ** invGamma) * 255
 		            for i in np.arange(0, 256)]).astype("uint8")
-            clipped = np.take(lut, clipped)
-        return clipped
+            data = np.take(lut, data)
+        return data
 
     def ndvi(self, **kwargs):
         data = self._read(self[self._ndvi_bands,...]).astype(np.float32)
