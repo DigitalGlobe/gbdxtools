@@ -8,7 +8,7 @@ pytest-runner
 vcrpy
 mock
 bumpversion
-shapely
+shapely==1.6.4.post2
 ephem
 toolz
 cloudpickle
