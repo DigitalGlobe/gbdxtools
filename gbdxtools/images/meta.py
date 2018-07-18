@@ -114,6 +114,28 @@ class DaskImage(da.Array):
             for i in xrange(count):
                 yield self.randwindow(window_shape)
 
+    def window_at(self, geom, x_size, y_size, no_padding=False):
+        """
+        Return a subsetted window of a given size, centered on a geometry object
+        Useful for generating training sets from vector training data
+        Will throw a ValueError if the window is not within the image bounds
+        args:
+            geom (Shapely geometry object): Geometry to center the image on
+            x_size (int): Size of subset in pixels in the x direction
+            y_size (int): Size of subset in pixels in the y direction
+        """
+        # Centroids of the input geometry may not be centered on the object.
+        # For a covering image we use the bounds instead.
+        # This is also a workaround for issue 387.
+        bounds = box(*geom.bounds)
+        px = ops.transform(self.__geo_transform__.rev, bounds).centroid
+        miny, maxy = int(px.y - y_size/2), int(px.y + y_size/2)
+        minx, maxx = int(px.x - x_size/2), int(px.x + x_size/2)
+        _, y_max, x_max = self.shape
+        if minx < 0 or miny < 0 or maxx > x_max or maxy > y_max:
+            raise ValueError("Input geometry resulted in a window outside of the image")
+        return self[:, miny:maxy, minx:maxx]
+        
 class GeoDaskImage(DaskImage, Container, PlotMixin, BandMethodsTemplate, Deprecations):
     _default_proj = "EPSG:4326"
 
