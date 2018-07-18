@@ -384,10 +384,12 @@ class AffineTransform(GeometricTransform):
         self._iaffine = None
         self.proj = proj
 
-    def rev(self, lng, lat, z=0, _type=np.int32):
+    def rev(self, lng, lat, z=0):
         if self._iaffine is None:
             self._iaffine = ~self._affine
-        return np.rint(np.asarray(self._iaffine * (lng, lat))).astype(_type)
+        #return np.rint(np.asarray(self._iaffine * (lng, lat))).astype(_type)
+        px, py = (self._iaffine * (lng, lat))
+        return int(round(px)), int(round(py)) 
 
     def fwd(self, x, y, z=0):
         return self._affine * (x, y)

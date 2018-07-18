@@ -348,7 +348,8 @@ class GeoDaskImage(DaskImage, Container, PlotMixin, BandMethodsTemplate, Depreca
         if isinstance(dem, np.ndarray):
             dem = tf.resize(np.squeeze(dem), xv.shape, preserve_range=True, order=1, mode="edge")
 
-        return self.__geo_transform__.rev(xv, yv, z=dem, _type=np.float32)[::-1]
+        coords = self.__geo_transform__.rev(xv, yv, z=dem)[::-1]
+        return np.asarray(coords, dtype=np.int32) 
 
     def _parse_geoms(self, **kwargs):
         """ Finds supported geometry types, parses them and returns the bbox """
