@@ -1,7 +1,7 @@
 from __future__ import print_function
 from gbdxtools.images.rda_image import RDAImage
 from gbdxtools.rda.interface import RDA
-from gbdxtools.rda.util import reproject_params
+from gbdxtools.rda.util import ortho_params
 rda = RDA()
 
 class S3Image(RDAImage):
@@ -22,8 +22,9 @@ class S3Image(RDAImage):
         return self
 
     @staticmethod
-    def _build_graph(path, proj):
+    def _build_graph(path, proj, gsd=None):
         s3 = rda.GdalImageRead(path=path)
         if proj is not None:
-            s3 = rda.Reproject(s3, **reproject_params(proj))
+            params = ortho_params(proj, gsd=gsd)
+            s3 = rda.Orthorectify(s3, **params)
         return s3

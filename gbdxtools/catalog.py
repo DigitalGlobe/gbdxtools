@@ -120,7 +120,7 @@ class Catalog(object):
         Args:
             address: any address string
             filters: Array of filters.  Optional.  Example:
-            [  
+            [
                 "(sensorPlatformName = 'WORLDVIEW01' OR sensorPlatformName ='QUICKBIRD02')",
                 "cloudCover < 10",
                 "offNadirAngle < 10"
@@ -143,7 +143,7 @@ class Catalog(object):
             lat: latitude
             lng: longitude
             filters: Array of filters.  Optional.  Example:
-            [  
+            [
                 "(sensorPlatformName = 'WORLDVIEW01' OR sensorPlatformName ='QUICKBIRD02')",
                 "cloudCover < 10",
                 "offNadirAngle < 10"
@@ -195,7 +195,7 @@ class Catalog(object):
         Args:
             searchAreaWkt: WKT Polygon of area to search.  Optional.
             filters: Array of filters.  Optional.  Example:
-            [  
+            [
                 "(sensorPlatformName = 'WORLDVIEW01' OR sensorPlatformName ='QUICKBIRD02')",
                 "cloudCover < 10",
                 "offNadirAngle < 10"
@@ -223,9 +223,9 @@ class Catalog(object):
             if diff.days < 0:
                 raise Exception("startDate must come before endDate.")
 
-        postdata = {  
+        postdata = {
             "searchAreaWkt": searchAreaWkt,
-            "types": types, 
+            "types": types,
             "startDate": startDate,
             "endDate": endDate,
         }
@@ -243,11 +243,11 @@ class Catalog(object):
         r = self.gbdx_connection.post(url, headers=headers, data=json.dumps(postdata))
         r.raise_for_status()
         results = r.json()['results']
-        
+
         return results
 
     def get_most_recent_images(self, results, types=[], sensors=[], N=1):
-        ''' Return the most recent image 
+        ''' Return the most recent image
 
         Args:
             results: a catalog resultset, as returned from a search
@@ -273,13 +273,5 @@ class Catalog(object):
 
         # sort by date:
         #sorted(results, key=results.__getitem__('properties').get('timestamp'))
-        newlist = sorted(results, key=lambda k: k['properties'].get('timestamp'), reverse=True) 
+        newlist = sorted(results, key=lambda k: k['properties'].get('timestamp'), reverse=True)
         return newlist[:N]
-        
-
-
-
-
-
-
-

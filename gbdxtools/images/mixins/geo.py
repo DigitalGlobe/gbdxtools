@@ -1,7 +1,7 @@
 import os
 import math
 try:
-    from rio_hist.match import histogram_match
+    from rio_hist.match import histogram_match as rio_match
     has_rio = True
 except ImportError:
     has_rio = False
@@ -18,23 +18,6 @@ except:
 
 
 class PlotMixin(object):
-    def base_layer_match(self, blm=False, blm_source=None, **kwargs):
-        if blm and "stretch" not in kwargs:
-            kwargs["stretch"] = [0,100]
-        rgb = self.rgb(**kwargs)
-        if not blm:
-            return rgb
-        bounds = self._reproject(box(*self.bounds), from_proj=self.proj, to_proj="EPSG:4326").bounds
-        if blm_source == 'browse':
-            from gbdxtools.images.browse_image import BrowseImage
-            ref = BrowseImage(self.cat_id, bbox=bounds).read()
-        else:
-            from gbdxtools.images.tms_image import TmsImage
-            tms = TmsImage(zoom=self._calc_tms_zoom(self.affine[0]), bbox=bounds, **kwargs)
-            ref = np.rollaxis(tms.read(), 0, 3)
-        out = np.dstack([histogram_match(rgb[:,:,idx], ref[:,:,idx].astype(np.double)/255.0)
-                        for idx in range(rgb.shape[-1])])
-        return out
 
     def rgb(self, **kwargs):
         if "bands" in kwargs:
@@ -43,18 +26,105 @@ class PlotMixin(object):
             del kwargs["bands"]
         else:
             use_bands = self._rgb_bands
+        if kwargs.get('blm') == True:
+            return self.histogram_match(use_bands, **kwargs)
+        if "histogram" not in kwargs:
+            if "stretch" not in kwargs:
+                kwargs['stretch'] = [2,98]
+            return self.histogram_stretch(use_bands, **kwargs)
+        elif kwargs["histogram"] == "equalize":
+            return self.histogram_equalize(use_bands, **kwargs)
+        elif kwargs["histogram"] == "match":
+            return self.histogram_match(use_bands, **kwargs)
+        elif kwargs["histogram"] == "minmax":
+            return self.histogram_stretch(use_bands, stretch=[0, 100], **kwargs)
+        else:
+            raise KeyError('Unknown histogram parameter, use "equalize", "match", or "minmax"')
+
+    def histogram_equalize(self, use_bands, **kwargs):
+        ''' Equalize and the histogram and normalize value range
+            Equalization is on all three bands, not per-band'''
         data = self._read(self[use_bands,...], **kwargs)
         data = np.rollaxis(data.astype(np.float32), 0, 3)
-        lims = np.percentile(data, kwargs.get("stretch", [2, 98]), axis=(0, 1))
+        flattened = data.flatten()
+        if 0 in data:
+            masked = np.ma.masked_values(data, 0).compressed()
+            image_histogram, bin_edges = np.histogram(masked, 256)
+        else:
+            image_histogram, bin_edges = np.histogram(flattened, 256)
+        bins = (bin_edges[:-1] + bin_edges[1:]) / 2.0
+        cdf = image_histogram.cumsum() 
+        cdf = cdf / float(cdf[-1])
+        image_equalized = np.interp(flattened, bins, cdf).reshape(data.shape)
+        if 'stretch' in kwargs or 'gamma' in kwargs:
+            return self._histogram_stretch(image_equalized, **kwargs)
+        else:
+            return image_equalized
+
+    def histogram_match(self, use_bands, blm_source=None, **kwargs):
+        ''' Match the histogram to existing imagery '''
+        assert has_rio, "To match image histograms please install rio_hist"
+        data = self._read(self[use_bands,...], **kwargs)
+        data = np.rollaxis(data.astype(np.float32), 0, 3)
+        if 0 in data:
+            data = np.ma.masked_values(data, 0)
+        bounds = self._reproject(box(*self.bounds), from_proj=self.proj, to_proj="EPSG:4326").bounds
+        if blm_source == 'browse':
+            from gbdxtools.images.browse_image import BrowseImage
+            ref = BrowseImage(self.cat_id, bbox=bounds).read()
+        else:
+            from gbdxtools.images.tms_image import TmsImage
+            tms = TmsImage(zoom=self._calc_tms_zoom(self.affine[0]), bbox=bounds, **kwargs)
+            ref = np.rollaxis(tms.read(), 0, 3)
+        out = np.dstack([rio_match(data[:,:,idx], ref[:,:,idx].astype(np.double)/255.0)
+                        for idx in range(data.shape[-1])])
+        if 'stretch' in kwargs or 'gamma' in kwargs:
+            return self._histogram_stretch(out, **kwargs)
+        else:
+            return out
+
+    def histogram_stretch(self, use_bands, **kwargs):
+        ''' entry point for contrast stretching '''
+        data = self._read(self[use_bands,...], **kwargs)
+        data = np.rollaxis(data.astype(np.float32), 0, 3)
+        return self._histogram_stretch(data, **kwargs)
+
+    def _histogram_stretch(self, data, **kwargs):
+        ''' perform a contrast stretch and/or gamma adjustment '''
         for x in range(len(data[0,0,:])):
-            top = lims[:,x][1]
-            bottom = lims[:,x][0]
-            data[:,:,x] = (data[:,:,x] - bottom) / float(top - bottom)
-        return np.clip(data, 0, 1)
+            band = data[:,:,x]
+            if 0 in band:
+                band = np.ma.masked_values(band, 0).compressed()
+            lims = np.percentile(band, kwargs.get("stretch", [0,100]))
+            top = lims[1]
+            bottom = lims[0]
+            data[:,:,x] = (data[:,:,x] - bottom) / float(top - bottom) * 255.0
+        data = np.clip(data, 0, 255).astype("uint8")
+        if "gamma" in kwargs:
+            invGamma = 1.0 / kwargs['gamma']
+            lut = np.array([((i / 255.0) ** invGamma) * 255
+		            for i in np.arange(0, 256)]).astype("uint8")
+            data = np.take(lut, data)
+        return data
 
     def ndvi(self, **kwargs):
+        """
+        Calculates Normalized Difference Vegetation Index using NIR and Red of an image.
+
+        Returns: numpy array with ndvi values
+        """
         data = self._read(self[self._ndvi_bands,...]).astype(np.float32)
         return (data[0,:,:] - data[1,:,:]) / (data[0,:,:] + data[1,:,:])
+
+    def ndwi(self):
+        """
+        Calculates Normalized Difference Water Index using Coastal and NIR2 bands for WV02, WV03.
+        For Landsat8 and sentinel2 calculated by using Green and NIR bands.
+
+        Returns: numpy array of ndwi values
+        """
+        data = self._read(self[self._ndwi_bands,...]).astype(np.float32)
+        return (data[1,:,:] - data[0,:,:]) / (data[0,:,:] + data[1,:,:])
 
     def plot(self, spec="rgb", **kwargs):
         if self.shape[0] == 1 or ("bands" in kwargs and len(kwargs["bands"]) == 1):
@@ -66,7 +136,7 @@ class PlotMixin(object):
             self._plot(tfm=self._single_band, cmap=cmap, **kwargs)
         else:
             if spec == "rgb" and self._has_token(**kwargs):
-                self._plot(tfm=self.base_layer_match, **kwargs)
+                self._plot(tfm=self.rgb, **kwargs)
             else:
                 self._plot(tfm=getattr(self, spec), **kwargs)
 

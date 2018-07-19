@@ -21,12 +21,12 @@ class PlotMock(np.ndarray, PlotMixin):
 class PlotTest(unittest.TestCase):
 
     def setUp(self):
-        if 'TRAVIS' in os.environ:
+        if any(x in os.environ for x in ['TRAVIS', 'APPVEYOR']):
             self.skipTest("Travis can't test plots - no display")
 
     @classmethod
     def setUpClass(cls):
-        cls.zero = np.zeros((8,8,8))
+        cls.zero = np.random.rand(8,8,8) * 100.0
         cls.plotmock = cls.zero.view(PlotMock) 
 
     def test_plot_rgb(self):

@@ -28,7 +28,7 @@ class Sentinel2(RDABaseImage):
 
     @property
     def _ndvi_bands(self):
-        return [6,3]
+         return [1,3]
 
     @classmethod
     def _build_graph(cls, prefix, spec="10m", proj=None, **kwargs):

@@ -1,3 +1,13 @@
+0.15.7
+* Deprecated the use of ipe and IPE and replaced with rda/RDA
+* wrapped the dask method rechunk to return an instance of GeoDaskArray
+* fixed bug with single value indexing of imagery
+* Added support for radarsat imagery.
+* fixed a bug in how we return results from `__geotransform__.rev` - now returns tuples instead of ndarrays
+* added method `window_at` to return windows centered on a location of a given pixel x/y size
+* searching catalogIDs with keywords in CatalogImages
+
+
 0.15.6 
 * Fixed a band selection issue in image previews
 * changed the way we talked to the Openlayers objects in preview
