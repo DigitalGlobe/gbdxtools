@@ -144,28 +144,30 @@ class PlotMixin(object):
         if self.__class__.__name__ == 'Landsat8':
             return [4,3]
         elif self.__class__.__name__ == 'SENTINEL2':
-            return [6,3]
+            return [1,3]
+        # elif self.__class__.__name__ == 'Sentinel2':
+        #     return [1, 3]
         else:
-            return [6, 4]
+            return [1, 3]
 
     @property
     def _ndwi_bands(self):
         if self.__class__.__name__ == 'Landsat8':
             return [2, 4]
-        elif self.__class__.name__ = 'SENTINEL2':
-            return [2, 7]
+        # elif self.__class__.__name__ == 'SENTINEL2':
+        #     return [2, 7]
         else:
             return [7, 0]
 
-    def ndwi(self, **kwargs):
+    def ndwi(self):
         """
         Calculates Normalized Difference Water Index using Coastal and NIR2 bands for WV02, WV03.
-        For Landsat8 and sentinel2 calculated by using Green and NIR bands. 
+        For Landsat8 and sentinel2 calculated by using Green and NIR bands.
 
         Returns: numpy array of ndwi values
         """
         data = self._read(self[self._ndwi_bands,...]).astype(np.float32)
-        return (data[0,:,:] - data[1,:,:]) / (data[0,:,:] + data[1,:,:])
+        return (data[1,:,:] - data[0,:,:]) / (data[0,:,:] + data[1,:,:])
 
     def base_layer_match(self, blm=False, **kwargs):
         rgb = self.rgb(**kwargs)
@@ -189,7 +191,7 @@ class PlotMixin(object):
             data[:,:,x] = (data[:,:,x] - bottom) / float(top - bottom)
         return np.clip(data, 0, 1)
 
-    def ndvi(self, **kwargs):
+    def ndvi(self):
         """
         Calculates Normalized Difference Vegetation Index using NIR and Red of an image.
 
