@@ -31,6 +31,10 @@ class LandsatImage(RDABaseImage):
     def _ndvi_bands(self):
         return [4,3]
 
+    @property
+    def _ndwi_bands(self):
+        return[2,4]
+
     @classmethod
     def _build_graph(cls, _id, spec="multispectral", proj=None, **kwargs):
         landsat = rda.LandsatRead(landsatId=_id, productSpec=spec)

@@ -64,6 +64,10 @@ class WorldViewImage(RDABaseImage):
     def _ndvi_bands(self):
         return [6, 4]
 
+    @property
+    def _nwdi_bands(self):
+        return [7, 0]
+
 class WV03_SWIR(WorldViewImage):
     @staticmethod
     def _find_parts(cat_id, band_type):
