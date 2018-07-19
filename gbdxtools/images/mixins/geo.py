@@ -116,6 +116,16 @@ class PlotMixin(object):
         data = self._read(self[self._ndvi_bands,...]).astype(np.float32)
         return (data[0,:,:] - data[1,:,:]) / (data[0,:,:] + data[1,:,:])
 
+    def ndwi(self):
+        """
+        Calculates Normalized Difference Water Index using Coastal and NIR2 bands for WV02, WV03.
+        For Landsat8 and sentinel2 calculated by using Green and NIR bands.
+
+        Returns: numpy array of ndwi values
+        """
+        data = self._read(self[self._ndwi_bands,...]).astype(np.float32)
+        return (data[1,:,:] - data[0,:,:]) / (data[0,:,:] + data[1,:,:])
+
     def plot(self, spec="rgb", **kwargs):
         if self.shape[0] == 1 or ("bands" in kwargs and len(kwargs["bands"]) == 1):
             if "cmap" in kwargs:
