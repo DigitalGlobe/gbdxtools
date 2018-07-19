@@ -47,7 +47,7 @@ class CatalogImage(object):
                 return RDAImage(GraphMeta(**kwargs))
             except KeyError:
                 raise ValueError("Catalog Images must be initiated by a Catalog Id or an RDA Graph Id")
-        query = "item_type:GBDXCatalogRecord AND (attributes.catalogID:{} OR id:{})".format(cat_id, cat_id)
+        query = "item_type:GBDXCatalogRecord AND (attributes.catalogID.keyword:{} OR id:{})".format(cat_id, cat_id)
         query += " AND NOT item_type:DigitalGlobeAcquisition"
         result = vector_services_query(query, count=1)
         if len(result) == 0:
