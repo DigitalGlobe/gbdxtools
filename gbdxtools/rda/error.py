@@ -32,3 +32,6 @@ class MissingIdahoImages(Exception):
 
 class AcompUnavailable(Exception):
     pass
+
+class PendingDeprecation(PendingDeprecationWarning):
+    pass

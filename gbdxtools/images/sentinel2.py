@@ -1,8 +1,8 @@
 from gbdxtools.images.base import RDABaseImage
 from gbdxtools.images.drivers import RDADaskImageDriver
 from gbdxtools.images.util import reproject_params
-from gbdxtools.ipe.interface import Ipe
-ipe = Ipe()
+from gbdxtools.rda.interface import RDA
+rda = RDA()
 
 class Sentinel2Driver(RDADaskImageDriver):
     image_option_support = ["spec", "proj"]
@@ -10,7 +10,7 @@ class Sentinel2Driver(RDADaskImageDriver):
 
 class Sentinel2(RDABaseImage):
     """
-      Dask based access to sentinel2 images backed by IPE Graphs.
+      Dask based access to sentinel2 images backed by rda Graphs.
     """
     __Driver__ = Sentinel2Driver
 
@@ -32,7 +32,7 @@ class Sentinel2(RDABaseImage):
 
     @classmethod
     def _build_graph(cls, prefix, spec="10m", proj=None, **kwargs):
-        sentinel = ipe.SentinelRead(SentinelId=prefix, sentinelProductSpec=spec)
+        sentinel = rda.SentinelRead(SentinelId=prefix, sentinelProductSpec=spec)
         if proj is not None:
-            sentinel = ipe.Reproject(sentinel, **reproject_params(proj))
+            sentinel = rda.Reproject(sentinel, **reproject_params(proj))
         return sentinel

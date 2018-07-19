@@ -9,10 +9,10 @@ from gbdxtools.images.drivers import WorldViewDriver, RDADaskImageDriver
 from gbdxtools.images.base import RDABaseImage
 from gbdxtools import IdahoImage
 from gbdxtools.images.util import vector_services_query, vendor_id, band_types
-from gbdxtools.ipe.interface import Ipe
-from gbdxtools.ipe.error import MissingIdahoImages, AcompUnavailable
+from gbdxtools.rda.interface import RDA
+from gbdxtools.rda.error import MissingIdahoImages, AcompUnavailable
 
-ipe = Ipe()
+rda = RDA()
 
 
 class WorldViewImage(RDABaseImage):
@@ -47,11 +47,18 @@ class WorldViewImage(RDABaseImage):
     def _build_graph(cls, cat_id, band_type="MS", proj="EPSG:4326", gsd=None, acomp=False, **kwargs):
         bands = band_types[band_type]
         gsd = gsd if not None else ""
-        correction = "ACOMP" if acomp else kwargs.get("correctionType", "TOAREFLECTANCE") 
-        graph = ipe.Format(ipe.DigitalGlobeStrip(catId=cat_id, CRS=proj, GSD=gsd, correctionType=correction, bands=bands, fallbackToTOA=True), dataType="4")
+        correction = "ACOMP" if acomp else kwargs.get("correctionType", "TOAREFLECTANCE")
+        graph = rda.Format(rda.DigitalGlobeStrip(catId=cat_id, CRS=proj, GSD=gsd, correctionType=correction, bands=bands, fallbackToTOA=True), dataType="4")
         #raise AcompUnavailable("Cannot apply acomp to this image, data unavailable in bucket: {}".format(_bucket))
         return graph
 
+    @property
+    def _rgb_bands(self):
+        return [4, 2, 1]
+
+    @property
+    def _ndvi_bands(self):
+        return [6, 4]
 
 class WV03_SWIR(WorldViewImage):
     @staticmethod
@@ -64,8 +71,33 @@ class WV03_SWIR(WorldViewImage):
         bands = "SWIR"
         gsd = gsd if not None else ""
         correction = "ACOMP" if acomp else kwargs.get("correctionType", "TOAREFLECTANCE")
-        graph = ipe.Format(ipe.DigitalGlobeStrip(catId=cat_id, CRS=proj, GSD=gsd, correctionType=correction, bands=bands, fallbackToTOA=True), dataType="4")
+        graph = rda.Format(rda.DigitalGlobeStrip(catId=cat_id, CRS=proj, GSD=gsd, correctionType=correction, bands=bands, fallbackToTOA=True), dataType="4")
         return graph
+
+    @property
+    def _rgb_bands(self):
+        raise NotImplementedError("RGB bands not available in SWIR spectrum")
+
+    @property
+    def _ndvi_bands(self):
+        raise NotImplementedError("NDVI bands not available in SWIR spectrum")
+
+    def plot(self, **kwargs):
+        bands = kwargs.get("bands")
+        if bands is not None:
+            assert len(bands) == 1, "SWIR supports plotting only a single band at a time"
+        if "cmap" in kwargs:
+            cmap = kwargs["cmap"]
+            del kwargs["cmap"]
+        else:
+            cmap = "Greys_r"
+        self._plot(tfm=self._single_band, cmap=cmap, **kwargs)
+
+    def _single_band(self, **kwargs):
+        if "bands" not in kwargs:
+            kwargs["bands"] = [0]
+        arr = self._read(self, **kwargs)
+        return arr[0,:,:]
 
 
 class WV03_VNIR(WorldViewImage):

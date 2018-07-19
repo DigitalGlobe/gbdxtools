@@ -4,8 +4,8 @@ GBDX Catalog Image Interface.
 Contact: chris.helm@digitalglobe.com
 """
 from gbdxtools import WV01, WV02, WV03_SWIR, WV03_VNIR, WV04, LandsatImage, IkonosImage, GE01, QB02, Sentinel2
-from gbdxtools.images.ipe_image import IpeImage, GraphMeta
-from gbdxtools.ipe.error import UnsupportedImageType
+from gbdxtools.images.rda_image import RDAImage, GraphMeta
+from gbdxtools.rda.error import UnsupportedImageType
 from gbdxtools.images.util.image import vector_services_query
 
 from shapely import wkt
@@ -44,7 +44,7 @@ class CatalogImage(object):
     def _image_by_type(cls, cat_id, **kwargs):
         if cat_id is None:
             try:
-                return IpeImage(GraphMeta(**kwargs))
+                return RDAImage(GraphMeta(**kwargs))
             except KeyError:
                 raise ValueError("Catalog Images must be initiated by a Catalog Id or an RDA Graph Id")
         query = "item_type:GBDXCatalogRecord AND (attributes.catalogID:{} OR id:{})".format(cat_id, cat_id)

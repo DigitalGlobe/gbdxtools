@@ -1,8 +1,8 @@
 from gbdxtools.images.worldview import WorldViewImage
 from gbdxtools.images.drivers import WorldViewDriver
 from gbdxtools.images.util import vector_services_query
-from gbdxtools.ipe.interface import Ipe
-ipe = Ipe()
+from gbdxtools.rda.interface import RDA
+rda = RDA()
 
 band_types = {
     'MS': 'BGRN',

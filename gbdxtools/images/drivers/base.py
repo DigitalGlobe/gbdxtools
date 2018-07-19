@@ -1,11 +1,11 @@
-from gbdxtools.ipe.interface import Ipe
+from gbdxtools.rda.interface import RDA
 from gbdxtools.images.exceptions import *
 
 import collections
 import abc
 import six
 
-ipe = Ipe()
+rda = RDA()
 
 RDA_DEFAULT_OPTIONS = {
     "proj": "EPSG:4326",

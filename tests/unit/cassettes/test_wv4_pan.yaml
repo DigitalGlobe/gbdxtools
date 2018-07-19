@@ -5,30 +5,32 @@ interactions:
       Accept: ['*/*']
       Accept-Encoding: ['gzip, deflate']
       Connection: [keep-alive]
-      Cookie: [AWSELB=07A771471E264EA5ADF82F0AA634B8F4B8E2289A69B10EAF55E272A7D617F44A7E3CBE8C0F34B7B358814BB2243BE1AA2A95D86B12FED3899E82B96997BB61A0AB34F055EC4EC6ACCA25B03A1FD21A1F94E400AD10;
-          JSESSIONID=CDB3DEC0B0245CD0BF65C5C667634BBB.173.50.250.89]
       User-Agent: [python-requests/2.18.4]
     method: GET
     uri: https://vector.geobigdata.io/insight-vector/api/index/query/vector-gbdx-alpha-catalog-v2-*/items?count=1&upper=90.0&lower=-90.0&right=180.0&q=item_type%3AGBDXCatalogRecord+AND+%28attributes.catalogID%3A03f4955d-c7da-45a8-8289-ba73bec5e127-inv+OR+id%3A03f4955d-c7da-45a8-8289-ba73bec5e127-inv%29+AND+NOT+item_type%3ADigitalGlobeAcquisition&left=-180.0
   response:
-    body: {string: !!python/unicode '[{"type":"Feature","geometry":{"type":"MultiPolygon","coordinates":[[[[-73.50374537,-3.64680909],[-73.37784988,-3.64894879],[-73.37794553,-3.73924315],[-73.5036181,-3.73710012],[-73.50374537,-3.64680909]]]]},"properties":{"ingest_source":"GBDX_INGEST_ALPHA","item_date":"2018-03-23T15:23:20.609Z","original_crs":"EPSG:4326","item_type":["GBDXCatalogRecord","IDAHOImage","DigitalGlobeProduct","WV04"],"name":null,"format":null,"ingest_date":"2018-03-29T03:23:09.487Z","attributes":{"profileName":"dg_1b","tilePartition":"0000","acquisitionDate":"2018-03-23T15:23:20.609Z","bucketName":"rda-images-1","numBands_int":1,"sunAzimuth_dbl":79.1,"nativeTileFileFormat":"PNG","colorInterpretation":"PAN","cloudCover_int":99,"idahoImageId":"88239a1a-aa65-4584-a1f1-8f4eb30c03bc","satAzimuth_dbl":104.4,"satElevation_dbl":74.6,"pniirs_dbl":5.6,"numYTiles_int":31,"tileXOffset_int":0,"epsgCode":"4326","vendor":"DigitalGlobe","sunElevation_dbl":65.3,"platformName":null,"imageHeight_int":30800,"numXTiles_int":41,"sensorPlatformName":null,"sensorName":"Panchromatic","dataType":"UNSIGNED_SHORT","imageWidth_int":41888,"tileXSize_int":0,"tileYSize_int":0,"offNadirAngle_dbl":14.0,"tileBucketName":"rda-images-1","vendorName":"DigitalGlobe,
-        Inc.","version":"1.1","tileYOffset_int":0,"catalogID":"03f4955d-c7da-45a8-8289-ba73bec5e127-inv","vendorDatasetIdentifier":"LV1B:I00000049224_01_P001:03f4955d-c7da-45a8-8289-ba73bec5e127-inv:None","groundSampleDistanceMeters_dbl":0.329},"ingest_attributes":{"_rest_user":"acquisition-gbdx-support@digitalglobe.com","_rest_url":"http://vector.geobigdata.io/api/vectors/gbdx-alpha-catalog-v2-%257Bitem_date%253Ayyyy%257D"},"id":"88239a1a-aa65-4584-a1f1-8f4eb30c03bc","source":null,"text":""}}]'}
+    body: {string: !!python/unicode '[{"type":"Feature","geometry":{"type":"MultiPolygon","coordinates":[[[[-73.50352057,-3.97155153],[-73.37807167,-3.97371656],[-73.3781641,-4.01888064],[-73.50344951,-4.01673252],[-73.50352057,-3.97155153]]]]},"properties":{"ingest_source":"GBDX_INGEST_ALPHA","item_date":"2018-03-23T15:23:26.234Z","original_crs":"EPSG:4326","item_type":["GBDXCatalogRecord","IDAHOImage","DigitalGlobeProduct","WV04"],"name":null,"format":null,"ingest_date":"2018-03-28T20:39:09.316Z","attributes":{"profileName":"dg_1b","tilePartition":"0000","acquisitionDate":"2018-03-23T15:23:26.234Z","bucketName":"rda-images-1","numBands_int":4,"sunAzimuth_dbl":78.5,"nativeTileFileFormat":"TIF","colorInterpretation":"BGRN","cloudCover_int":99,"idahoImageId":"44c7d7a0-a4c9-4bd6-be6c-eaecd758f39a","satAzimuth_dbl":105.9,"satElevation_dbl":75.2,"pniirs_dbl":3.6,"numYTiles_int":16,"tileXOffset_int":0,"epsgCode":"4326","vendor":"DigitalGlobe","sunElevation_dbl":65.3,"platformName":null,"imageHeight_int":3863,"numXTiles_int":42,"sensorPlatformName":null,"sensorName":"4-band
+        (Blue, Green, Red, NIR) Multispectral","dataType":"UNSIGNED_SHORT","imageWidth_int":10497,"tileXSize_int":0,"tileYSize_int":0,"offNadirAngle_dbl":13.4,"tileBucketName":"rda-images-1","vendorName":"DigitalGlobe,
+        Inc.","version":"1.1","tileYOffset_int":0,"catalogID":"03f4955d-c7da-45a8-8289-ba73bec5e127-inv","vendorDatasetIdentifier":"LV1B:I00000049224_01_P001:03f4955d-c7da-45a8-8289-ba73bec5e127-inv:None","groundSampleDistanceMeters_dbl":1.31},"ingest_attributes":{"_rest_user":"acquisition-gbdx-support@digitalglobe.com","_rest_url":"http://vector.geobigdata.io/api/vectors/gbdx-alpha-catalog-v2-%257Bitem_date%253Ayyyy%257D"},"id":"44c7d7a0-a4c9-4bd6-be6c-eaecd758f39a","source":null,"text":""}}]'}
     headers:
       access-control-allow-credentials: ['true']
       access-control-allow-headers: ['origin, content-type, accept, authorization']
       access-control-allow-methods: ['GET, POST, PUT, DELETE, OPTIONS, HEAD']
       access-control-allow-origin: ['*']
+      cache-control: ['no-cache, no-store, max-age=0, must-revalidate']
       connection: [keep-alive]
       content-encoding: [UTF-8]
-      content-length: ['1718']
+      content-length: ['1749']
       content-type: [application/json;charset=UTF-8]
-      date: ['Fri, 18 May 2018 16:28:41 GMT']
+      date: ['Fri, 29 Jun 2018 15:15:51 GMT']
+      expires: ['0']
+      pragma: [no-cache]
       server: [Apache-Coyote/1.1, Weblogic 12.2.1.1]
       strict-transport-security: [max-age=604800 ; includeSubDomains]
-      x-content-type-options: [nosniff]
-      x-frame-options: [SAMEORIGIN]
+      x-content-type-options: [nosniff, nosniff]
+      x-frame-options: [DENY, SAMEORIGIN]
       x-permitted-cross-domain-policies: [none]
-      x-xss-protection: [1; mode=block]
+      x-xss-protection: [1; mode=block, 1; mode=block]
     status: {code: 200, message: OK}
 - request:
     body: !!python/unicode '{"edges": [{"destination": "f3b56c2a-129b-5964-a5b1-0d1c6461f1e8",
@@ -58,7 +60,7 @@ interactions:
       connection: [keep-alive]
       content-length: ['64']
       content-type: [text/plain;charset=UTF-8]
-      date: ['Fri, 18 May 2018 16:28:41 GMT']
+      date: ['Fri, 29 Jun 2018 15:15:51 GMT']
     status: {code: 200, message: ''}
 - request:
     body: null
@@ -82,6 +84,6 @@ interactions:
       access-control-max-age: ['3600']
       connection: [keep-alive]
       content-type: [application/json;charset=UTF-8]
-      date: ['Fri, 18 May 2018 16:28:43 GMT']
+      date: ['Fri, 29 Jun 2018 15:15:57 GMT']
     status: {code: 200, message: ''}
 version: 1

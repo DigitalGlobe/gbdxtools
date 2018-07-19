@@ -1,9 +1,9 @@
 import math
 
 from gbdxtools.images.meta import DaskMeta, GeoDaskImage
-from gbdxtools.ipe.util import RatPolyTransform, AffineTransform
-from gbdxtools.ipe.interface import DaskProps
-from gbdxtools.ipe.graph import get_ipe_graph
+from gbdxtools.rda.util import RatPolyTransform, AffineTransform
+from gbdxtools.rda.interface import DaskProps
+from gbdxtools.rda.graph import get_rda_graph
 from gbdxtools.auth import Auth
 
 from shapely import wkt, ops
@@ -24,10 +24,10 @@ def _reproject(geo, from_proj, to_proj):
 class GraphMeta(DaskProps):
     def __init__(self, graph_id, node_id=None, **kwargs):
         assert graph_id is not None
-        self._ipe_id = graph_id
+        self._rda_id = graph_id
         self._node_id = node_id
         self._interface = Auth()
-        self._ipe_meta = None
+        self._rda_meta = None
         self._graph = None
         self._nid = None
 
@@ -44,7 +44,7 @@ class GraphMeta(DaskProps):
 
     def graph(self):
         if self._graph is None:
-            self._graph = get_ipe_graph(self._interface.gbdx_connection, self._ipe_id)
+            self._graph = get_rda_graph(self._interface.gbdx_connection, self._rda_id)
         return self._graph
 
 
@@ -115,44 +115,49 @@ def rda_image_shift(image):
     miny, maxy = image.__geo__.miny, image.__geo__.maxy
     return image[:, miny:maxy, minx:maxx]
 
-class IpeImage(GeoDaskImage):
+class RDAImage(GeoDaskImage):
     _default_proj = "EPSG:4326"
 
     def __new__(cls, op, **kwargs):
         cls.__geo__ = RDAGeoAdapter(op.metadata, dfp=cls._default_proj)
         cls.__geo_transform__ = cls.__geo__.geo_transform
         cls.__geo_interface__ = cls.__geo__.geo_interface
-        cls._ipe_op = op
-        self = super(IpeImage, cls).__new__(cls, op)
+        cls._rda_op = op
+        self = super(RDAImage, cls).__new__(cls, op)
         return rda_image_shift(self)
 
     def __getitem__(self, geometry):
-        im = super(IpeImage, self).__getitem__(geometry)
-        im._ipe_op = self._ipe_op
+        im = super(RDAImage, self).__getitem__(geometry)
+        if isinstance(im, GeoDaskImage):
+            im._rda_op = self._rda_op
         return im
 
     @property
     def __daskmeta__(self):
-        return self.ipe
+        return self.rda
 
     @property
-    def ipe(self):
-        return self._ipe_op
+    def rda(self):
+        return self._rda_op
 
     @property
-    def ipe_id(self):
-        return self.ipe._ipe_id
+    def rda_id(self):
+        return self.rda._rda_id
 
     @property
-    def ipe_metadata(self):
-        return self.ipe.metadata
+    def metadata(self):
+        return self.rda.metadata
+
+    @property
+    def display_stats(self):
+        return self.rda.display_stats
 
     @property
     def ntiles(self):
-        size = float(self.ipe.metadata['image']['tileXSize'])
+        size = float(self.rda.metadata['image']['tileXSize'])
         return math.ceil((float(self.shape[-1]) / size)) * math.ceil(float(self.shape[1]) / size)
 
     def read(self, bands=None, quiet=True, **kwargs):
         if not quiet:
             print('Fetching Image... {} {}'.format(self.ntiles, 'tiles' if self.ntiles > 1 else 'tile'))
-        return super(IpeImage, self).read(bands=bands)
+        return super(RDAImage, self).read(bands=bands)

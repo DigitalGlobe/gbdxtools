@@ -7,33 +7,36 @@ interactions:
       Connection: [keep-alive]
       User-Agent: [python-requests/2.18.4]
     method: GET
-    uri: https://vector.geobigdata.io/insight-vector/api/index/query/vector-gbdx-alpha-catalog-v2-*/items?count=1&upper=90.0&lower=-90.0&right=180.0&q=item_type%3AGBDXCatalogRecord+AND+attributes.catalogID%3A1030010079016D00&left=-180.0
+    uri: https://vector.geobigdata.io/insight-vector/api/index/query/vector-gbdx-alpha-catalog-v2-*/items?count=1&upper=90.0&lower=-90.0&right=180.0&q=item_type%3AGBDXCatalogRecord+AND+%28attributes.catalogID%3A1030010079016D00+OR+id%3A1030010079016D00%29+AND+NOT+item_type%3ADigitalGlobeAcquisition&left=-180.0
   response:
-    body: {string: !!python/unicode '[{"type":"Feature","geometry":{"type":"MultiPolygon","coordinates":[[[[103.500184,1.508475876000034],[103.6622982000001,1.520470408000051],[103.6622864000001,1.473025407000023],[103.6622413000001,1.425641290000044],[103.662244,1.378314732000035],[103.6622029000001,1.331020724000041],[103.6622067000001,1.283859394000046],[103.6621791000001,1.236703610000063],[103.6621486000001,1.189620572000024],[103.6621312,1.142605356000047],[103.6621213000001,1.095650543000033],[103.6621108000001,1.048759428000039],[103.6621102000001,1.043337609000048],[103.5004940000001,1.031720432000043],[103.5004893000001,1.037252899000066],[103.5004544000001,1.084087672000067],[103.5004172000001,1.130986764000056],[103.5003856000001,1.177946160000033],[103.5003653000001,1.224974222000071],[103.5003326,1.272062817000062],[103.5002907000001,1.319190452000043],[103.5002653000001,1.366415705000065],[103.5002213000001,1.413712738000072],[103.5002039000001,1.461038317000032],[103.500184,1.508475876000034]]]]},"properties":{"ingest_source":"GBDX_INGEST_ALPHA","item_date":"2018-02-15T03:48:44.000Z","original_crs":"EPSG:4326","item_type":["GBDXCatalogRecord","Acquisition","DigitalGlobeAcquisition","WV02"],"name":null,"format":null,"ingest_date":"2018-02-15T06:42:12.172Z","attributes":{"sunAzimuth_dbl":122.416,"targetAzimuth_start_dbl":32.170414,"stereoPair":null,"cloudCover_int":4,"offNadirAngle_end_dbl":19.215862,"scanDirection":"Forward","vendor":"DigitalGlobe","panResolution_end_dbl":0.51332927,"sunElevation_dbl":63.452,"imageBands":"PAN_MS1_MS2","platformName":"WORLDVIEW02","targetAzimuth_end_dbl":35.909332,"multiResolution_max_dbl":2.07536,"offNadirAngle_min_dbl":19.215862,"offNadirAngle_start_dbl":20.039413,"sensorPlatformName":"WORLDVIEW02","browseURL":"https://geobigdata.io/thumbnails/v1/browse/1030010079016D00.large.png","multiResolution_min_dbl":2.0562677,"offNadirAngle_max_dbl":20.039413,"multiResolution_start_dbl":2.07536,"offNadirAngle_dbl":19.589478,"targetAzimuth_min_dbl":32.170414,"sunElevation_max_dbl":63.585575,"panResolution_min_dbl":0.51332927,"catalogID":"1030010079016D00","sunAzimuth_max_dbl":122.86038,"panResolution_dbl":0.51551956,"panResolution_start_dbl":0.5181782,"sunAzimuth_min_dbl":122.03259,"targetAzimuth_max_dbl":35.909332,"multiResolution_end_dbl":2.0562677,"sunElevation_min_dbl":63.29562,"multiResolution_dbl":2.064853,"panResolution_max_dbl":0.5181782,"targetAzimuth_dbl":34.161835},"ingest_attributes":{"_rest_user":"acquisitionsvc","_rest_url":"http://vector.geobigdata.io/api/vectors/gbdx-alpha-catalog-v2-%257Bitem_date%253Ayyyy%257D"},"id":"1030010079016D00","source":null,"text":""}}]'}
+    body: {string: !!python/unicode '[{"type":"Feature","geometry":{"type":"MultiPolygon","coordinates":[[[[103.50012962,1.50829476],[103.66221622,1.52037173],[103.66216526,1.40202985],[103.50018814,1.39002548],[103.50012962,1.50829476]]]]},"properties":{"ingest_source":"GBDX_INGEST_ALPHA","item_date":"2018-02-15T03:48:45.078Z","original_crs":"EPSG:4326","item_type":["GBDXCatalogRecord","IDAHOImage","DigitalGlobeProduct","WV02"],"name":null,"format":null,"ingest_date":"2018-02-15T09:21:11.208Z","attributes":{"profileName":"dg_1b","tilePartition":"0000","acquisitionDate":"2018-02-15T03:48:45.078Z","bucketName":"rda-images-1","numBands_int":8,"sunAzimuth_dbl":122.7,"nativeTileFileFormat":"TIF","colorInterpretation":"WORLDVIEW_8_BAND","cloudCover_int":11,"idahoImageId":"4f0bcb52-da50-4b42-836d-806dbe713eeb","satAzimuth_dbl":212.7,"satElevation_dbl":67.5,"pniirs_dbl":2.9,"numYTiles_int":25,"tileXOffset_int":0,"epsgCode":"4326","vendor":"DigitalGlobe","sunElevation_dbl":63.3,"platformName":"WORLDVIEW02","imageHeight_int":6243,"numXTiles_int":35,"sensorPlatformName":"WORLDVIEW02","sensorName":"8-band
+        (Coastal, Blue, Green, Yellow, Red, Red-edge, NIR1, NIR2) Multispectral","dataType":"UNSIGNED_SHORT","imageWidth_int":8820,"tileXSize_int":0,"tileYSize_int":0,"offNadirAngle_dbl":19.9,"tileBucketName":"rda-images-1","vendorName":"DigitalGlobe,
+        Inc.","version":"1.0","tileYOffset_int":0,"catalogID":"1030010079016D00","vendorDatasetIdentifier":"LV1B:057575530010_01_P001:1030010079016D00:A010010348061D00","groundSampleDistanceMeters_dbl":2.079},"ingest_attributes":{"_rest_user":"acquisition-gbdx-support@digitalglobe.com","_rest_url":"http://vector.geobigdata.io/api/vectors/gbdx-alpha-catalog-v2-%257Bitem_date%253Ayyyy%257D"},"id":"4f0bcb52-da50-4b42-836d-806dbe713eeb","source":null,"text":""}}]'}
     headers:
       access-control-allow-credentials: ['true']
       access-control-allow-headers: ['origin, content-type, accept, authorization']
       access-control-allow-methods: ['GET, POST, PUT, DELETE, OPTIONS, HEAD']
       access-control-allow-origin: ['*']
+      cache-control: ['no-cache, no-store, max-age=0, must-revalidate']
       connection: [keep-alive]
       content-encoding: [UTF-8]
-      content-length: ['2628']
+      content-length: ['1774']
       content-type: [application/json;charset=UTF-8]
-      date: ['Mon, 07 May 2018 21:48:40 GMT']
+      date: ['Fri, 29 Jun 2018 15:14:11 GMT']
+      expires: ['0']
+      pragma: [no-cache]
       server: [Apache-Coyote/1.1, Weblogic 12.2.1.1]
-      set-cookie: [JSESSIONID=048969D71D74AF5226E952E460FD5A2A.173.50.250.253; Path=/;
-          HttpOnly, AWSELB=07A771471E264EA5ADF82F0AA634B8F4B8E2289A695CD8450547A9D1138E37B6599597BDA9DAB2A9FD9ACB661995EC8A1AD8347EC7F76AB945B1770B781DD1DD6A9A9AC1444EC6ACCA25B03A1FD21A1F94E400AD10;PATH=/;HTTPONLY]
       strict-transport-security: [max-age=604800 ; includeSubDomains]
-      x-content-type-options: [nosniff]
-      x-frame-options: [SAMEORIGIN]
+      x-content-type-options: [nosniff, nosniff]
+      x-frame-options: [DENY, SAMEORIGIN]
       x-permitted-cross-domain-policies: [none]
-      x-xss-protection: [1; mode=block]
+      x-xss-protection: [1; mode=block, 1; mode=block]
     status: {code: 200, message: OK}
 - request:
-    body: !!python/unicode '{"edges": [{"destination": "13b51c41-b05a-55d4-bc4d-e94c4789313a",
-      "id": "5bdf4b69-74f0-5a86-a254-e5fafe9b951e", "index": 1, "source": "d2bfea57-09bc-5465-89ec-8c6c4344d3cb"}],
-      "nodes": [{"id": "13b51c41-b05a-55d4-bc4d-e94c4789313a", "operator": "Format",
-      "parameters": {"dataType": "4"}}, {"id": "d2bfea57-09bc-5465-89ec-8c6c4344d3cb",
+    body: !!python/unicode '{"edges": [{"destination": "edd414fd-9767-50e7-acbe-9483954aa962",
+      "id": "9b24d1b9-85be-55b7-9561-83314aa47037", "index": 1, "source": "a0971156-8150-5fbe-8169-29c1b0f0c9cf"}],
+      "nodes": [{"id": "edd414fd-9767-50e7-acbe-9483954aa962", "operator": "Format",
+      "parameters": {"dataType": "4"}}, {"id": "a0971156-8150-5fbe-8169-29c1b0f0c9cf",
       "operator": "DigitalGlobeStrip", "parameters": {"CRS": "EPSG:4326", "GSD": "null",
       "bands": "MS", "catId": "1030010079016D00", "correctionType": "ACOMP", "fallbackToTOA":
       "true"}}]}'
@@ -47,7 +50,7 @@ interactions:
     method: POST
     uri: https://rda.geobigdata.io/v1/graph
   response:
-    body: {string: !!python/unicode 46fee3334598afc68f827ee6205e12fb33339585561c790032a87135c7222525}
+    body: {string: !!python/unicode 12c3350a7994099c69754aea5f947dcdfcda2cde29b66f6d897a7e8b12ccefa2}
     headers:
       access-control-allow-headers: ['x-requested-with, X-Auth-Token, Content-Type,
           Authorization']
@@ -57,7 +60,7 @@ interactions:
       connection: [keep-alive]
       content-length: ['64']
       content-type: [text/plain;charset=UTF-8]
-      date: ['Mon, 07 May 2018 21:48:40 GMT']
+      date: ['Fri, 29 Jun 2018 15:14:14 GMT']
     status: {code: 200, message: ''}
 - request:
     body: null
@@ -67,7 +70,7 @@ interactions:
       Connection: [keep-alive]
       User-Agent: [python-requests/2.18.4]
     method: GET
-    uri: https://rda.geobigdata.io/v1/metadata/46fee3334598afc68f827ee6205e12fb33339585561c790032a87135c7222525/13b51c41-b05a-55d4-bc4d-e94c4789313a/metadata.json
+    uri: https://rda.geobigdata.io/v1/metadata/12c3350a7994099c69754aea5f947dcdfcda2cde29b66f6d897a7e8b12ccefa2/edd414fd-9767-50e7-acbe-9483954aa962/metadata.json
   response:
     body: {string: !!python/unicode '{"imageMetadata":{"imageId":"4f0bcb52-da50-4b42-836d-806dbe713eeb","version":1.0,"profileName":"georectified_image","tileBucketName":"rda-images-1","tilePartition":"0000","nativeTileFileFormat":"TIF","tileXOffset":0,"tileYOffset":0,"numXTiles":35,"numYTiles":103,"tileXSize":256,"tileYSize":256,"numBands":8,"dataType":"FLOAT","imageHeight":26332,"imageWidth":8742,"sensorPlatformName":"WV02","sensorName":"8-band
         (Coastal, Blue, Green, Yellow, Red, Red-edge, NIR1, NIR2) Multispectral","vendorName":"DigitalGlobe,
@@ -82,6 +85,6 @@ interactions:
       access-control-max-age: ['3600']
       connection: [keep-alive]
       content-type: [application/json;charset=UTF-8]
-      date: ['Mon, 07 May 2018 21:48:43 GMT']
+      date: ['Fri, 29 Jun 2018 15:14:21 GMT']
     status: {code: 200, message: ''}
 version: 1

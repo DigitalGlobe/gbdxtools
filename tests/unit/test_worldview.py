@@ -7,7 +7,7 @@ Unit tests for the gbdxtools.Idaho class
 
 from gbdxtools import Interface
 from gbdxtools import CatalogImage, WV02, WV03_VNIR, WV03_SWIR, WV04
-from gbdxtools.ipe.error import AcompUnavailable
+from gbdxtools.rda.error import AcompUnavailable
 from auth_mock import gbdx
 import vcr
 from os.path import join, isfile, dirname, realpath

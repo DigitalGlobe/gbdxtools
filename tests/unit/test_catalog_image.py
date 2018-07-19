@@ -4,7 +4,7 @@ Unit tests for the gbdxtools.CatalogImage class
 
 from gbdxtools import Interface
 from gbdxtools import *
-from gbdxtools.ipe.error import UnsupportedImageType
+from gbdxtools.rda.error import UnsupportedImageType
 from auth_mock import gbdx 
 import vcr
 from os.path import join, isfile, dirname, realpath

@@ -1,11 +1,11 @@
 import dask.array as da
-from dask import optimize
+from dask import optimization
 import operator
 
 from gbdxtools.images.meta import DaskMeta
-from gbdxtools.ipe.fetch.async.libcurl.select import load_urls as mcfetch
-#from gbdxtools.ipe.fetch.async.asyncio.async import load_urls as aiofetch
-from gbdxtools.ipe.fetch.threaded.libcurl.easy import load_url as easyfetch
+from gbdxtools.rda.fetch.async.libcurl.select import load_urls as mcfetch
+#from gbdxtools.rda.fetch.async.asyncio.async import load_urls as aiofetch
+from gbdxtools.rda.fetch.threaded.libcurl.easy import load_url as easyfetch
 
 class BaseFetch(object):
     @staticmethod
@@ -26,7 +26,7 @@ class AsyncBaseFetch(BaseFetch):
     __fetch_type__ = "async"
     @classmethod
     def __dask_optimize__(cls, dsk, keys):
-        dsk1, _ = optimize.cull(dsk, keys)
+        dsk1, _ = optimization.cull(dsk, keys)
         dsk2 = {}
         coll = []
         for key, val in dsk1.items():

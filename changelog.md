@@ -1,3 +1,17 @@
+0.15.6 
+* Fixed a band selection issue in image previews
+* changed the way we talked to the Openlayers objects in preview
+* Added a BrowseImage class for fetching and indexing browse imagery by catalogIDs
+* rgb and plot methods support base layer matching via browse imagery via the `blm_source="browse"` flag 
+
+0.15.5 
+* fix for missing import in geo mixin
+
+0.15.4 
+* Fixed preview map scales and offset for better colors
+* Refactored geo/plot mixin to support better band index calcs
+* fixed passing bands to plot method for 3 band and 1 band plots
+
 0.15.3
 * Wrapping map_blocks to return geodaskimages instead of a dask array
 * Fixing the calls to tiles inside the preview method so preview will work again

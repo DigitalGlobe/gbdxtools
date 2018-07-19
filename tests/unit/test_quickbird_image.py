@@ -7,7 +7,7 @@ Unit tests for the gbdxtools.Idaho class
 
 from gbdxtools import Interface
 from gbdxtools import QB02, CatalogImage
-from gbdxtools.ipe.error import AcompUnavailable
+from gbdxtools.rda.error import AcompUnavailable
 from auth_mock import gbdx
 import vcr
 from os.path import join, isfile, dirname, realpath

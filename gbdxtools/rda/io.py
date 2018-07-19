@@ -30,7 +30,7 @@ def to_geotiff(arr, path='./output.tif', proj=None, bands=None, **kwargs):
         arr = arr[bands,...]
 
     try:
-        img_md = arr.ipe.metadata["image"]
+        img_md = arr.rda.metadata["image"]
         x_size = img_md["tileXSize"]
         y_size = img_md["tileYSize"]
     except (AttributeError, KeyError):

@@ -27,13 +27,16 @@ from shapely import ops
 from affine import Affine
 import pyproj
 
-from gbdxtools.ipe.graph import VIRTUAL_IPE_URL 
-import gbdxtools.ipe.constants as constants
+from gbdxtools.rda.error import PendingDeprecation
+from gbdxtools.rda.graph import VIRTUAL_RDA_URL 
+import gbdxtools.rda.constants as constants
 
-with warnings.catch_warnings():
-    warnings.simplefilter("ignore")
+warnings.simplefilter("always", PendingDeprecation)
 
-IPE_TO_DTYPE = {
+def deprecation(message):
+    warnings.warn(message, PendingDeprecation)
+
+RDA_TO_DTYPE = {
     "BINARY": "bool",
     "BYTE": "byte",
     "SHORT": "short",
@@ -57,20 +60,17 @@ def preview(image, **kwargs):
         return
 
     zoom = kwargs.get("zoom", 16)
-    bands = kwargs.get("bands", image._rgb_bands)
-    wgs84_bounds = kwargs.get("bounds", list(loads(image.ipe_metadata["image"]["imageBoundsWGS84"]).bounds))
+    bands = kwargs.get("bands")
+    if bands is None:
+        bands = image._rgb_bands
+    wgs84_bounds = kwargs.get("bounds", list(loads(image.metadata["image"]["imageBoundsWGS84"]).bounds))
     center = kwargs.get("center", list(shape(image).centroid.bounds[0:2]))
-    graph_id = image.ipe_id
-    node_id = image.ipe.graph()['nodes'][0]['id']
+    graph_id = image.rda_id
+    node_id = image.rda.graph()['nodes'][0]['id']
 
-    # fetch a tile in order to calc stats and do a simple stretch
-    y = image.shape[1] / 2
-    x = image.shape[2] / 2
-    aoi = image[:, y:y+256, x:x+256].read(quiet=True)
-    means, stds = aoi.mean(axis=(1,2)), aoi.std(axis=(1,2))
-    scales = (255.0 / (4.0 * stds))
-    offsets = map(list(((means - (2.0 * stds)) * scales * -1.0)).__getitem__, bands)
-    scales = map(list(scales).__getitem__, bands)
+    stats = image.display_stats
+    offsets = [stats['offset'][b] for b in bands]
+    scales = [stats['scale'][b] for b in bands]
 
     if image.proj != 'EPSG:4326':
         code = image.proj.split(':')[1]
@@ -94,13 +94,13 @@ def preview(image, **kwargs):
     js = Template("""
         require.config({
             paths: {
-                ol: 'https://openlayers.org/en/v4.6.4/build/ol',
+                oljs: 'https://cdnjs.cloudflare.com/ajax/libs/openlayers/4.6.4/ol',
                 proj4: 'https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.4.4/proj4'
             }
         });
 
-        require(['ol', 'proj4'], function(ol, proj4) {
-            ol.proj.setProj4(proj4);
+        require(['oljs', 'proj4'], function(oljs, proj4) {
+            oljs.proj.setProj4(proj4)
             var md = $md;
             var georef = $georef;
             var graphId = '$graphId';
@@ -126,25 +126,25 @@ def preview(image, **kwargs):
                 var area = projInfo["area_of_use"];
                 var bbox = [area["area_west_bound_lon"], area["area_south_bound_lat"], 
                             area["area_east_bound_lon"], area["area_north_bound_lat"]]
-                var projection = ol.proj.get(proj);
-                var fromLonLat = ol.proj.getTransform('EPSG:4326', projection);
-                var extent = ol.extent.applyTransform(
+                var projection = oljs.proj.get(proj);
+                var fromLonLat = oljs.proj.getTransform('EPSG:4326', projection);
+                var extent = oljs.extent.applyTransform(
                     [bbox[0], bbox[1], bbox[2], bbox[3]], fromLonLat);
                 projection.setExtent(extent);
             } else {
-                var projection = ol.proj.get(proj);
+                var projection = oljs.proj.get(proj);
             }
 
-            var rda = new ol.layer.Tile({
+            var rda = new oljs.layer.Tile({
               title: 'RDA',
               opacity: 1,
               extent: extents,
-              source: new ol.source.TileImage({
+              source: new oljs.source.TileImage({
                       crossOrigin: null,
                       projection: projection,
                       extent: extents,
 
-                      tileGrid: new ol.tilegrid.TileGrid({
+                      tileGrid: new oljs.tilegrid.TileGrid({
                           extent: extents,
                           origin: [extents[0], extents[3]],
                           resolutions: tileLayerResolutions,
@@ -161,10 +161,10 @@ def preview(image, **kwargs):
                   })
             });
 
-            var map = new ol.Map({
+            var map = new oljs.Map({
               layers: [ rda ],
               target: '$map_id',
-              view: new ol.View({
+              view: new oljs.View({
                 projection: projection,
                 center: $center,
                 zoom: $zoom
@@ -179,14 +179,14 @@ def preview(image, **kwargs):
         "bounds": bounds,
         "bands": ",".join(map(str, bands)),
         "nodeId": node_id,
-        "md": json.dumps(image.ipe_metadata["image"]),
-        "georef": json.dumps(image.ipe_metadata["georef"]),
+        "md": json.dumps(image.metadata["image"]),
+        "georef": json.dumps(image.metadata["georef"]),
         "center": center,
         "zoom": zoom,
         "token": gbdx.gbdx_connection.access_token,
         "scales": ",".join(map(str, scales)),
         "offsets": ",".join(map(str, offsets)),
-        "url": VIRTUAL_IPE_URL
+        "url": VIRTUAL_RDA_URL
     })
     display(Javascript(js))
 

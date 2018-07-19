@@ -1,8 +1,8 @@
 from gbdxtools.images.base import RDABaseImage
 from gbdxtools.images.drivers import RDADaskImageDriver
 from gbdxtools.images.util.image import reproject_params
-from gbdxtools.ipe.interface import Ipe
-ipe = Ipe()
+from gbdxtools.rda.interface import RDA
+rda = RDA()
 
 class LandsatDriver(RDADaskImageDriver):
     __default_options__ = {}
@@ -11,7 +11,7 @@ class LandsatDriver(RDADaskImageDriver):
 
 class LandsatImage(RDABaseImage):
     """
-      Dask based access to landsat image backed by IPE Graphs.
+      Dask based access to landsat image backed by rda Graphs.
     """
     __Driver__ = LandsatDriver
 
@@ -33,7 +33,7 @@ class LandsatImage(RDABaseImage):
 
     @classmethod
     def _build_graph(cls, _id, spec="multispectral", proj=None, **kwargs):
-        landsat = ipe.LandsatRead(landsatId=_id, productSpec=spec)
+        landsat = rda.LandsatRead(landsatId=_id, productSpec=spec)
         if proj is not None:
-            landsat = ipe.Reproject(landsat, **reproject_params(proj))
+            landsat = rda.Reproject(landsat, **reproject_params(proj))
         return landsat
