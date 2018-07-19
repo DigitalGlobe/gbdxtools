@@ -56,3 +56,18 @@ class MetaImageTest(unittest.TestCase):
         clip = translate(bounds, xoff=5, yoff=5)
         with self.assertRaises(ValueError):
             clipped = wv2.pxbounds(clip)
+
+
+    @my_vcr.use_cassette('tests/unit/cassettes/test_meta_window_at.yaml', filter_headers=['authorization'])
+    def test_image_window_at(self):
+        wv2 = CatalogImage('1030010076B8F500')
+        c1 = shape(wv2).centroid
+        window = wv2.window_at(c1, 256, 256)
+        c2 = shape(window).centroid
+        bands, x, y = window.shape
+        # check the window is the correct shape
+        self.assertEquals(x, 256)
+        self.assertEquals(y, 256)
+        # make sure the center of the window is within 1 pixel
+        # of where it should be
+        self.assertTrue(c1.distance(c2) < wv2.metadata['georef']['scaleX'])

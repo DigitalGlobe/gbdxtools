@@ -30,6 +30,7 @@ WV_DEFAULT_OPTIONS = {
     }
 
 WV_MODERN_OPTIONS = {
+    "dra": False,
     "proj": "EPSG:4326",
     "gsd": None,
     "band_type": "MS",
