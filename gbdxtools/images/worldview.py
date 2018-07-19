@@ -65,7 +65,7 @@ class WorldViewImage(RDABaseImage):
         return [6, 4]
 
     @property
-    def _nwdi_bands(self):
+    def _ndwi_bands(self):
         return [7, 0]
 
 class WV03_SWIR(WorldViewImage):
