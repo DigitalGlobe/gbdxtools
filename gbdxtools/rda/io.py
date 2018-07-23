@@ -24,7 +24,7 @@ class rio_writer(object):
                   (location[2].start, location[2].stop))
         self.dst.write(chunk, window=window)
 
-def to_geotiff(arr, path='./output.tif', proj=None, bands=None, **kwargs):
+def to_geotiff(arr, path='./output.tif', proj=None, spec=None, bands=None, **kwargs):
     assert has_rasterio, "To create geotiff images please install rasterio" 
     if bands is not None:
         arr = arr[bands,...]
@@ -43,6 +43,26 @@ def to_geotiff(arr, path='./output.tif', proj=None, bands=None, **kwargs):
         tfm = None
 
     dtype = arr.dtype.name if arr.dtype.name != 'int8' else 'uint8' 
+
+    if spec.lower() == 'rgb':
+
+        def stretchblock(mins, maxs, bands, block):
+            if len(block[:,0,0]) != 3:
+                return block
+            for x in range(3):
+                top = maxs[bands[x]] 
+                bottom = mins[bands[x]] 
+                prange = top - bottom
+                block[x,:,:] = (block[x,:,:] - bottom) / float(prange) * 255.0
+            return np.clip(block, 0, 255)
+                
+        arr = arr[arr._rgb_bands,...]
+        mins = arr.display_stats['min']
+        maxs = arr.display_stats['max']
+        stretch = partial(stretchblock, mins, maxs, arr._rgb_bands)
+        arr = arr.map_blocks(stretch)
+        arr = arr.astype(np.uint8)
+        dtype = 'uint8'
 
     meta = {
         'width': arr.shape[2],
