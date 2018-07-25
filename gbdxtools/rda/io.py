@@ -46,20 +46,20 @@ def to_geotiff(arr, path='./output.tif', proj=None, spec=None, bands=None, **kwa
 
     if spec.lower() == 'rgb':
 
-        def stretchblock(mins, maxs, bands, block):
+        def stretchblock(offsets, scales, bands, block):
             if len(block[:,0,0]) != 3:
                 return block
             for x in range(3):
-                top = maxs[bands[x]] 
-                bottom = mins[bands[x]] 
-                prange = top - bottom
-                block[x,:,:] = (block[x,:,:] - bottom) / float(prange) * 255.0
+                offset = offsets[bands[x]] 
+                scale = scales[bands[x]] 
+                block[x,:,:] = block[x,:,:] * scale + offset 
+            # clipping may not be needed if the RDA transform is 100% safe
             return np.clip(block, 0, 255)
                 
         arr = arr[arr._rgb_bands,...]
-        mins = arr.display_stats['min']
-        maxs = arr.display_stats['max']
-        stretch = partial(stretchblock, mins, maxs, arr._rgb_bands)
+        offsets = arr.display_stats['offset']
+        scales = arr.display_stats['scale']
+        stretch = partial(stretchblock, offsets, scales, arr._rgb_bands)
         arr = arr.map_blocks(stretch)
         arr = arr.astype(np.uint8)
         dtype = 'uint8'
