@@ -53,7 +53,6 @@ def to_geotiff(arr, path='./output.tif', proj=None, spec=None, bands=None, **kwa
                 offset = offsets[bands[x]] 
                 scale = scales[bands[x]] 
                 block[x,:,:] = block[x,:,:] * scale + offset 
-            # clipping may not be needed if the RDA transform is 100% safe
             return np.clip(block, 0, 255)
                 
         arr = arr[arr._rgb_bands,...]
