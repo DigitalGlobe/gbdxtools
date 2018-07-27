@@ -1,5 +1,6 @@
 import os
 import math
+from gbdxtools.rda.util import deprecation
 try:
     from rio_hist.match import histogram_match as rio_match
     has_rio = True
@@ -27,6 +28,7 @@ class PlotMixin(object):
         else:
             use_bands = self._rgb_bands
         if kwargs.get('blm') == True:
+            deprecation("blm=True has been deprecated. Please use histogram='match' instead.")
             return self.histogram_match(use_bands, **kwargs)
         if "histogram" not in kwargs:
             if "stretch" not in kwargs:
@@ -60,6 +62,10 @@ class PlotMixin(object):
             return self._histogram_stretch(image_equalized, **kwargs)
         else:
             return image_equalized
+
+    def blm_match(self, **kwargs):
+        deprecation('.blm_match() has been deprecated. Please use .histogram_match() instead.')
+        return self.rgb(**kwargs)
 
     def histogram_match(self, use_bands, blm_source=None, **kwargs):
         ''' Match the histogram to existing imagery '''
