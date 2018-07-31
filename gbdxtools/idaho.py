@@ -293,7 +293,7 @@ class Idaho(object):
 
         return urls, bboxes
 
-    def create_leaflet_viewer(self, idaho_image_results, filename):
+    def create_leaflet_viewer(self, idaho_image_results, filename, api_key=os.environ.get('MAPBOX_API_KEY', None)):
         """Create a leaflet viewer html file for viewing idaho images.
 
         Args:
@@ -301,6 +301,8 @@ class Idaho(object):
                                         the catalog.
             filename (str): Where to save output html file.
         """
+        
+        assert api_key is not None, "No Mapbox API Key found. You can either pass in a token or set the MAPBOX_API_KEY environment variable."
 
         description = self.describe_images(idaho_image_results)
         if len(description) > 0:
@@ -352,6 +354,7 @@ class Idaho(object):
             data = data.replace('CENTERLON', str(W))
             data = data.replace('BANDS', bandstr)
             data = data.replace('TOKEN', self.gbdx_connection.access_token)
+            data = data.replace('API_KEY', api_key)
 
             with codecs.open(filename, 'w', 'utf8') as outputfile:
                 self.logger.debug("Saving %s" % filename)
