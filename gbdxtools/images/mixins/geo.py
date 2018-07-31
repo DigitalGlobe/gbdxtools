@@ -64,8 +64,8 @@ class PlotMixin(object):
             return image_equalized
 
     def blm_match(self, **kwargs):
-        deprecation('.blm_match() has been deprecated. Please use .histogram_match() instead.')
-        return self.rgb(**kwargs)
+        deprecation('.blm_match() has been deprecated. Please use .rgb(histogram="match")) instead.')
+        return self.rgb(histogram='match', **kwargs)
 
     def histogram_match(self, use_bands, blm_source=None, **kwargs):
         ''' Match the histogram to existing imagery '''
