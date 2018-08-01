@@ -1,7 +1,7 @@
 import math
 
 from gbdxtools.images.meta import DaskMeta, GeoDaskImage
-from gbdxtools.rda.util import RatPolyTransform, AffineTransform
+from gbdxtools.rda.util import RatPolyTransform, AffineTransform, deprecation
 from gbdxtools.rda.interface import DaskProps
 from gbdxtools.rda.graph import get_rda_graph
 from gbdxtools.auth import Auth
@@ -138,6 +138,11 @@ class RDAImage(GeoDaskImage):
 
     @property
     def rda(self):
+        return self._rda_op
+
+    @property
+    def ipe(self):
+        deprecation('The use of ipe/IPE has been deprecated. Please use rda/RDA.')
         return self._rda_op
 
     @property
