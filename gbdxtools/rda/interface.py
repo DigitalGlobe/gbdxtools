@@ -1,5 +1,5 @@
-import os
 import sys
+import os
 import uuid
 import json
 from hashlib import sha256
@@ -119,8 +119,8 @@ class Op(DaskProps):
 
         self._rda_id = None    # The graph ID
         self._rda_graph = None # the RDA graph
-        self._rda_meta = None  # Image metadata 
-        self._rda_stats = None # Display Stats  
+        self._rda_meta = None  # Image metadata
+        self._rda_stats = None # Display Stats
 
         self._interface = interface
 
@@ -181,3 +181,10 @@ class Op(DaskProps):
 class RDA(object):
     def __getattr__(self, name):
         return Op(name=name, interface=Auth())
+
+# Warn on deprecated module attribute access
+from gbdxtools.deprecate import WrapMod
+sys.modules[__name__] = WrapMod(sys.modules[__name__], deprecated=["Ipe"])
+Ipe = RDA
+
+
