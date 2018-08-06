@@ -1,4 +1,4 @@
-import math
+import sys
 
 from gbdxtools.images.meta import DaskMeta, GeoDaskImage
 from gbdxtools.rda.util import RatPolyTransform, AffineTransform, deprecation
@@ -11,6 +11,7 @@ from shapely.geometry import mapping
 
 import pyproj
 from functools import partial
+import math
 
 try:
     xrange
@@ -166,3 +167,10 @@ class RDAImage(GeoDaskImage):
         if not quiet:
             print('Fetching Image... {} {}'.format(self.ntiles, 'tiles' if self.ntiles > 1 else 'tile'))
         return super(RDAImage, self).read(bands=bands)
+
+# Warn on deprecated module attribute access
+from gbdxtools.deprecate import deprecate_module_attr
+import warnings
+warnings.simplefilter("always", DeprecationWarning)
+sys.modules[__name__] = deprecate_module_attr(sys.modules[__name__], deprecated=["IpeImage"])
+IpeImage = RDAImage

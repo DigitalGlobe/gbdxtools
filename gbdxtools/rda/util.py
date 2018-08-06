@@ -27,14 +27,13 @@ from shapely import ops
 from affine import Affine
 import pyproj
 
-from gbdxtools.rda.error import PendingDeprecation
-from gbdxtools.rda.graph import VIRTUAL_RDA_URL 
+from gbdxtools.rda.graph import VIRTUAL_RDA_URL
 import gbdxtools.rda.constants as constants
 
-warnings.simplefilter("always", PendingDeprecation)
+warnings.simplefilter("always", DeprecationWarning)
 
 def deprecation(message):
-    warnings.warn(message, PendingDeprecation)
+    warnings.warn(message, DeprecationWarning)
 
 RDA_TO_DTYPE = {
     "BINARY": "bool",
@@ -81,7 +80,7 @@ def preview(image, **kwargs):
     else:
         proj_info = {}
         bounds = wgs84_bounds
-    
+
     map_id = "map_{}".format(str(int(time.time())))
     display(HTML(Template('''
        <div id="$map_id"/>
@@ -89,7 +88,7 @@ def preview(image, **kwargs):
        <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=requestAnimationFrame,Element.prototype.classList,URL"></script>
        <style>body{margin:0;padding:0;}#$map_id{position:relative;top:0;bottom:0;width:100%;height:400px;}</style>
        <style></style>
-    ''').substitute({"map_id": map_id}))) 
+    ''').substitute({"map_id": map_id})))
 
     js = Template("""
         require.config({
@@ -105,7 +104,7 @@ def preview(image, **kwargs):
             var georef = $georef;
             var graphId = '$graphId';
             var nodeId = '$nodeId';
-            var extents = $bounds; 
+            var extents = $bounds;
 
             var x1 = md.minTileX * md.tileXSize;
             var y1 = ((md.minTileY + md.numYTiles) * md.tileYSize + md.tileYSize);
@@ -119,12 +118,12 @@ def preview(image, **kwargs):
 
             var proj = '$proj';
             var projInfo = $projInfo;
-    
+
             if ( proj !== 'EPSG:4326' ) {
                 var proj4def = projInfo["proj4"];
                 proj4.defs(proj, proj4def);
                 var area = projInfo["area_of_use"];
-                var bbox = [area["area_west_bound_lon"], area["area_south_bound_lat"], 
+                var bbox = [area["area_west_bound_lon"], area["area_south_bound_lat"],
                             area["area_east_bound_lon"], area["area_north_bound_lat"]]
                 var projection = oljs.proj.get(proj);
                 var fromLonLat = oljs.proj.getTransform('EPSG:4326', projection);
@@ -391,7 +390,7 @@ class AffineTransform(GeometricTransform):
         if type(px).__name__ == 'ndarray' and type(py).__name__ == 'ndarray':
             return np.rint(np.asarray(px)), np.rint(np.asarray(py))
         else:
-            return int(round(px)), int(round(py)) 
+            return int(round(px)), int(round(py))
 
     def fwd(self, x, y, z=0):
         return self._affine * (x, y)

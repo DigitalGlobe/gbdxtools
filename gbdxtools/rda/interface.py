@@ -183,8 +183,8 @@ class RDA(object):
         return Op(name=name, interface=Auth())
 
 # Warn on deprecated module attribute access
-from gbdxtools.deprecate import WrapMod
-sys.modules[__name__] = WrapMod(sys.modules[__name__], deprecated=["Ipe"])
+from gbdxtools.deprecate import deprecate_module_attr
+sys.modules[__name__] = deprecate_module_attr(sys.modules[__name__], deprecated=["Ipe"])
 Ipe = RDA
 
 
