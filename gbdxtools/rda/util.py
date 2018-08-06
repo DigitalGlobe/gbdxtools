@@ -387,9 +387,11 @@ class AffineTransform(GeometricTransform):
     def rev(self, lng, lat, z=0):
         if self._iaffine is None:
             self._iaffine = ~self._affine
-        #return np.rint(np.asarray(self._iaffine * (lng, lat))).astype(_type)
         px, py = (self._iaffine * (lng, lat))
-        return int(round(px)), int(round(py)) 
+        if type(px).__name__ == 'ndarray' and type(py).__name__ == 'ndarray':
+            return np.rint(np.asarray(px)), np.rint(np.asarray(py))
+        else:
+            return int(round(px)), int(round(py)) 
 
     def fwd(self, x, y, z=0):
         return self._affine * (x, y)

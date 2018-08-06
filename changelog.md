@@ -1,3 +1,7 @@
+0.15.9
+* changing `spec` to `band_type` for landsat imagery
+* fix for calling geotransform.rev from inside warp with a numpy array 
+ 
 0.15.8 
 * plot fixes for histogram='ignore'
 * ipe deprecation fixes  

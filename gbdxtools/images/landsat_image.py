@@ -4,10 +4,19 @@ from gbdxtools.images.util.image import reproject_params
 from gbdxtools.rda.interface import RDA
 rda = RDA()
 
+band_types = {
+    'MS': 'multispectral',
+    'ms': 'multispectral',
+    'Panchromatic': 'panchromatic',
+    'Pan': 'panchromatic',
+    'pan': 'panchromatic',
+    'thermal': 'thermal'
+}
+
 class LandsatDriver(RDADaskImageDriver):
     __default_options__ = {}
-    image_option_support = ["spec", "proj"]
-    __image_option_defaults__ = {"spec": "multispectral", "proj": None}
+    image_option_support = ["band_type", "proj"]
+    __image_option_defaults__ = {"band_type": "MS", "proj": None}
 
 class LandsatImage(RDABaseImage):
     """
@@ -21,7 +30,7 @@ class LandsatImage(RDABaseImage):
 
     @property
     def _spec(self):
-        return self.options["spec"]
+        return self.options["band_type"]
 
     @property
     def _rgb_bands(self):
@@ -36,7 +45,8 @@ class LandsatImage(RDABaseImage):
         return[2,4]
 
     @classmethod
-    def _build_graph(cls, _id, spec="multispectral", proj=None, **kwargs):
+    def _build_graph(cls, _id, band_type="MS", proj=None, **kwargs):
+        spec = band_types[band_type]
         landsat = rda.LandsatRead(landsatId=_id, productSpec=spec)
         if proj is not None:
             landsat = rda.Reproject(landsat, **reproject_params(proj))
