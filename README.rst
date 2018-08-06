@@ -50,7 +50,7 @@ Installation
 
 Conda is the recommended way to install gbdxtools::
 
-    conda install -c digitalglobe gbdxtools
+    conda install -c conda-forge -c digitalglobe gbdxtools
 
 Troubleshooting
 ~~~~~~~~~~~~~~~

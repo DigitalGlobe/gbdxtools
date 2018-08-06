@@ -4,9 +4,18 @@ from gbdxtools.rda.interface import RDA
 from gbdxtools.rda.util import ortho_params
 rda = RDA()
 
+band_types = {
+    'MS': 'multispectral',
+    'ms': 'multispectral',
+    'Panchromatic': 'panchromatic',
+    'Pan': 'panchromatic',
+    'pan': 'panchromatic',
+    'thermal': 'thermal'
+}
+
 class IkonosDriver(RDADaskImageDriver):
-    image_option_support = ["proj", "gsd", "spec"]
-    __image_option_defaults__ = {"gsd": None, "spec": "multispectral"}
+    image_option_support = ["proj", "gsd", "band_type"]
+    __image_option_defaults__ = {"gsd": None, "band_type": "MS"}
 
 class IkonosImage(RDABaseImage):
     """
@@ -20,7 +29,7 @@ class IkonosImage(RDABaseImage):
 
     @property
     def _spec(self):
-        return self.options["spec"]
+        return self.options["band_type"]
 
     @property
     def _gsd(self):
@@ -31,7 +40,8 @@ class IkonosImage(RDABaseImage):
         return [2,1,0]
 
     @classmethod
-    def _build_graph(cls, record, spec="multispectral", proj="EPSG:4326", gsd=None, **kwargs):
+    def _build_graph(cls, record, band_type="MS", proj="EPSG:4326", gsd=None, **kwargs):
+        spec = band_types[band_type]
         prefix = record['properties']['attributes']['bucketPrefix']
         bucket = record['properties']['attributes']['bucketName']
         ikonos = rda.IkonosRead(path="{}/{}/{}_0000000:{}".format(bucket, prefix, prefix, spec))
