@@ -14,3 +14,7 @@ from gbdxtools.images.s3Image import S3Image
 from gbdxtools.images.catalog_image import CatalogImage
 from gbdxtools.answerfactory import Recipe, Project
 from .interface import Interface
+
+# Legacy support:
+from gbdxtools.deprecate import deprecate_class
+IpeImage = deprecate_class(RDAImage, "IpeImage")
