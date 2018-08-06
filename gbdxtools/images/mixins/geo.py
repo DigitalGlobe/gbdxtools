@@ -20,6 +20,9 @@ except:
 class PlotMixin(object):
 
     def rgb(self, **kwargs):
+        ''' convert the image to a 3 band RGB, adjusted to a visually
+            pleasing value range, and reshaped for matplotlib'''
+
         if "bands" in kwargs:
             use_bands = kwargs["bands"]
             assert len(use_bands) == 3, 'Plot method only supports single or 3-band outputs'
@@ -38,8 +41,11 @@ class PlotMixin(object):
             return self.histogram_match(use_bands, **kwargs)
         elif kwargs["histogram"] == "minmax":
             return self.histogram_stretch(use_bands, stretch=[0, 100], **kwargs)
+        elif kwargs["histogram"] == "ignore":
+            data = self._read(self[use_bands,...], **kwargs)
+            return np.rollaxis(data, 0, 3)
         else:
-            raise KeyError('Unknown histogram parameter, use "equalize", "match", or "minmax"')
+            raise KeyError('Unknown histogram parameter, use "equalize", "match", "minmax", or "ignore"')
 
     def histogram_equalize(self, use_bands, **kwargs):
         ''' Equalize and the histogram and normalize value range
@@ -91,15 +97,26 @@ class PlotMixin(object):
 
     def _histogram_stretch(self, data, **kwargs):
         ''' perform a contrast stretch and/or gamma adjustment '''
-        for x in range(len(data[0,0,:])):
+        limits = {}
+        # get the image min-max statistics
+        for x in range(3):
+            band = data[:,:,x]
+            try:
+                limits[x] = np.percentile(band, kwargs.get("stretch", [0,100]))
+            except IndexError:
+                # this band has no dynamic range and cannot be stretched
+                return data
+        # compute the stretch
+        for x in range(3):
             band = data[:,:,x]
             if 0 in band:
                 band = np.ma.masked_values(band, 0).compressed()
-            lims = np.percentile(band, kwargs.get("stretch", [0,100]))
-            top = lims[1]
-            bottom = lims[0]
-            data[:,:,x] = (data[:,:,x] - bottom) / float(top - bottom) * 255.0
+            top = limits[x][1]
+            bottom = limits[x][0]
+            if top != bottom: # catch divide by zero
+                data[:,:,x] = (data[:,:,x] - bottom) / float(top - bottom) * 255.0
         data = np.clip(data, 0, 255).astype("uint8")
+        # gamma adjust
         if "gamma" in kwargs:
             invGamma = 1.0 / kwargs['gamma']
             lut = np.array([((i / 255.0) ** invGamma) * 255
