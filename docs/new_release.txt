@@ -8,8 +8,8 @@ Steps to make a new release:
 6. uninstall again
 7. rm egginfo
 8. git status (make sure clean)
-9. python setup sdist 
+9. python setup.py sdist 
 10. twine upload to pypy
 11. conda clean --all
-12. conda build -c digitalglobe .
+12. conda build -c conda-forge -c digitalglobe .
 13. anaconda upload --user digitalglobe PATH_TO_FILE_FROMBUILD
