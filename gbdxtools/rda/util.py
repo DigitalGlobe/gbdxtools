@@ -30,10 +30,7 @@ import pyproj
 from gbdxtools.rda.graph import VIRTUAL_RDA_URL
 import gbdxtools.rda.constants as constants
 
-warnings.simplefilter("always", DeprecationWarning)
-
-def deprecation(message):
-    warnings.warn(message, DeprecationWarning)
+from gbdxtools.deprecate import GBDXDeprecation, deprecation
 
 RDA_TO_DTYPE = {
     "BINARY": "bool",

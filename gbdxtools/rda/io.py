@@ -44,7 +44,7 @@ def to_geotiff(arr, path='./output.tif', proj=None, spec=None, bands=None, **kwa
 
     dtype = arr.dtype.name if arr.dtype.name != 'int8' else 'uint8' 
 
-    if spec.lower() == 'rgb':
+    if spec is not None and spec.lower() == 'rgb':
 
         def stretchblock(offsets, scales, bands, block):
             if len(block[:,0,0]) != 3:

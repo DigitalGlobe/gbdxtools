@@ -170,7 +170,5 @@ class RDAImage(GeoDaskImage):
 
 # Warn on deprecated module attribute access
 from gbdxtools.deprecate import deprecate_module_attr
-import warnings
-warnings.simplefilter("always", DeprecationWarning)
 sys.modules[__name__] = deprecate_module_attr(sys.modules[__name__], deprecated=["IpeImage"])
 IpeImage = RDAImage
