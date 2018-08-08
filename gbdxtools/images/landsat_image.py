@@ -1,6 +1,7 @@
 from gbdxtools.images.base import RDABaseImage
 from gbdxtools.images.drivers import RDADaskImageDriver
 from gbdxtools.images.util.image import reproject_params
+from gbdxtools.rda.error import IncompatibleOptions
 from gbdxtools.rda.interface import RDA
 rda = RDA()
 
@@ -47,11 +48,16 @@ class LandsatImage(RDABaseImage):
     @classmethod
     def _build_graph(cls, _id, band_type="MS", proj=None, **kwargs):
         spec = band_types[band_type]
-        landsat = rda.LandsatRead(landsatId=_id, productSpec=spec)
-        if kwargs.get('pansharpen') == True:
-            if spec == 'multispectral':
-                landsat_pan = rda.LandsatRead(landsatId=_id, productSpec='panchromatic')
-                landsat = rda.LocallyProjectivePanSharpen(landsat, landsat_pan)
+        pansharpen = kwargs.get('pansharpen', False)
+        if spec == "thermal" and pansharpen:
+            raise IncompatibleOptions('Cannot generate a pansharpened thermal Landsat image')
+
+        if pansharpen == True:
+            landsat_ms = rda.LandsatRead(landsatId=_id, productSpec='multispectral')
+            landsat_pan = rda.LandsatRead(landsatId=_id, productSpec='panchromatic')
+            landsat = rda.LocallyProjectivePanSharpen(landsat_ms, landsat_pan)
+        else:
+            landsat = rda.LandsatRead(landsatId=_id, productSpec=spec)
         if proj is not None:
             landsat = rda.Reproject(landsat, **reproject_params(proj))
         return landsat

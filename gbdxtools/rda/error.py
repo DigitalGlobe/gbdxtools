@@ -35,3 +35,6 @@ class AcompUnavailable(Exception):
 
 class PendingDeprecation(PendingDeprecationWarning):
     pass
+
+class IncompatibleOptions(Exception):
+    pass
