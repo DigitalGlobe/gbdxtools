@@ -1,3 +1,10 @@
+0.15.11 
+* Added the ability to pansharpen landsat and ikonos imagery
+
+0.15.10 
+* fixed bug with geotiff method on imagery requiring spec
+* cleaned up deprecation code to ignore deprecations from other dependencies 
+
 0.15.9
 * changing `spec` to `band_type` for landsat imagery
 * fix for calling geotransform.rev from inside warp with a numpy array 
