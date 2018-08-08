@@ -14,8 +14,8 @@ band_types = {
 }
 
 class IkonosDriver(RDADaskImageDriver):
-    image_option_support = ["proj", "gsd", "band_type"]
-    __image_option_defaults__ = {"gsd": None, "band_type": "MS"}
+    image_option_support = ["proj", "gsd", "band_type", "pansharpen"]
+    __image_option_defaults__ = {"gsd": None, "band_type": "MS", "pansharpen": False}
 
 class IkonosImage(RDABaseImage):
     """
@@ -47,4 +47,9 @@ class IkonosImage(RDABaseImage):
         ikonos = rda.IkonosRead(path="{}/{}/{}_0000000:{}".format(bucket, prefix, prefix, spec))
         params = ortho_params(proj, gsd=gsd)
         ikonos = rda.Orthorectify(ikonos, **params)
+        if kwargs.get("pansharpen") == True:
+            if spec == "multispectral":
+                ikonos_pan = rda.IkonosRead(path="{}/{}/{}_0000000:{}".format(bucket, prefix, prefix, 'panchromatic'), productSpec='panchromatic') 
+                ikonos_pan = rda.Orthorectify(ikonos_pan, **params)
+                ikonos = rda.LocallyProjectivePanSharpen(ikonos, ikonos_pan)
         return ikonos
