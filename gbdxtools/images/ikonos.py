@@ -1,6 +1,7 @@
 from gbdxtools.images.base import RDABaseImage
 from gbdxtools.images.drivers import RDADaskImageDriver
 from gbdxtools.rda.interface import RDA
+from gbdxtools.rda.error import IncompatibleOptions
 from gbdxtools.rda.util import ortho_params
 rda = RDA()
 
@@ -44,12 +45,16 @@ class IkonosImage(RDABaseImage):
         spec = band_types[band_type]
         prefix = record['properties']['attributes']['bucketPrefix']
         bucket = record['properties']['attributes']['bucketName']
-        ikonos = rda.IkonosRead(path="{}/{}/{}_0000000:{}".format(bucket, prefix, prefix, spec))
+        pansharpen = kwargs.get('pansharpen', False)
+        if spec == "thermal" and pansharpen:
+            raise IncompatibleOptions('Cannot generate a pansharpened thermal Ikonos image')
+
         params = ortho_params(proj, gsd=gsd)
-        ikonos = rda.Orthorectify(ikonos, **params)
-        if kwargs.get("pansharpen") == True:
-            if spec == "multispectral":
-                ikonos_pan = rda.IkonosRead(path="{}/{}/{}_0000000:{}".format(bucket, prefix, prefix, 'panchromatic'), productSpec='panchromatic') 
-                ikonos_pan = rda.Orthorectify(ikonos_pan, **params)
-                ikonos = rda.LocallyProjectivePanSharpen(ikonos, ikonos_pan)
+        if pansharpen == True:
+            ms = rda.Orthorectify(rda.IkonosRead(path="{}/{}/{}_0000000:{}".format(bucket, prefix, prefix, 'multispectral')), **params)
+            pan = rda.Orthorectify(rda.IkonosRead(path="{}/{}/{}_0000000:{}".format(bucket, prefix, prefix, 'panchromatic')), **params)
+            ikonos = rda.LocallyProjectivePanSharpen(ms, pan)
+        else:
+            ikonos = rda.IkonosRead(path="{}/{}/{}_0000000:{}".format(bucket, prefix, prefix, spec))
+            ikonos = rda.Orthorectify(ikonos, **params)
         return ikonos
