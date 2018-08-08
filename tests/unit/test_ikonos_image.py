@@ -48,6 +48,14 @@ class GE01ImageTest(unittest.TestCase):
         assert img.shape == (4, 1500, 1500)
         assert img.proj == 'EPSG:4326'
 
+    @my_vcr.use_cassette('tests/unit/cassettes/test_ikonos_image_pansharpen.yaml', filter_headers=['authorization'])
+    def test_ikonos_image_pansharpen(self):
+        _id = '2013052717574940000011621174'
+        img = self.gbdx.catalog_image(_id, pansharpen=True, bbox=[-104.89514954388144, 39.59212288111695, -104.87939038753511, 39.60903377365575])
+        self.assertTrue(isinstance(img, IkonosImage))
+        assert img.shape == (4, 2353, 2193)
+        assert img.proj == 'EPSG:4326'
+
     @my_vcr.use_cassette('tests/unit/cassettes/test_ikonos_image_proj.yaml', filter_headers=['authorization'])
     def test_ikonos_image_proj(self):
         _id = '2001110218231680000010116110'
