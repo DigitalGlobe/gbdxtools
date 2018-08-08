@@ -48,6 +48,14 @@ class IpeImageTest(unittest.TestCase):
         assert img.shape == (8, 566, 685)
         assert img.proj == 'EPSG:32612'
 
+    @my_vcr.use_cassette('tests/unit/cassettes/test_landsat_image_pansharp.yaml', filter_headers=['authorization'])
+    def test_landsat_image_pansharpen(self):
+        _id = 'LC80370302014268LGN00'
+        img = self.gbdx.landsat_image(_id, bbox=[-109.84, 43.19, -109.59, 43.34], pansharpen=True)
+        self.assertTrue(isinstance(img, LandsatImage))
+        assert img.shape == (8, 1131, 1370)
+        assert img.proj == 'EPSG:32612'
+
     @my_vcr.use_cassette('tests/unit/cassettes/test_landsat_image_proj.yaml', filter_headers=['authorization'])
     def test_landsat_image_proj(self):
         _id = 'LC80370302014268LGN00'
