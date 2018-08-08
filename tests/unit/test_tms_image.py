@@ -46,9 +46,13 @@ class TmsImageTest(unittest.TestCase):
         print("Created: {}".format(cls._temp_path))
 
     def test_tms_image(self):
-        img = self.gbdx.tms_image(zoom=18, bbox=[-105.00444889068605, 39.75399710099606, -104.9962091445923, 39.75431683540881])
+        # tms tiles 77230-77332,163523-163524
+        # a 3 x 2 chunk of tiles, so 768 x 512 pixels
+
+        bbox = [-73.94073486328125, 40.650429376113706, -73.93661499023438, 40.65251317049883]
+        img = self.gbdx.tms_image(zoom=18, bbox=bbox)
         self.assertTrue(isinstance(img, TmsImage))
-        assert img.shape == (3, 78, 1316)
+        assert img.shape == (3, 512, 768)
         assert img.proj == 'EPSG:3857'
 
     def test_tms_image_global(self):
@@ -58,8 +62,13 @@ class TmsImageTest(unittest.TestCase):
         assert img.proj == 'EPSG:3857'
 
     def test_tms_image_aoi(self):
+        # tms tiles 76669, 98727-98730
+        # a 1 x 4 chunk of tiles, so 256 x 1024 pixels
+        # [74.71115112304688, 40.53572049118792, -74.70977783203125, 40.539895170893]
+        # shift slightly so it's not right on the tile bounds
+        bbox = [-74.81115112304688, 40.63572049118792, -74.80977783203125, 40.639895170893]
         img = self.gbdx.tms_image(zoom=18)
-        aoi = img.aoi(bbox=[-105.00444889068605, 39.75299710099606, -104.9962091445923, 39.75431683540881])
+        aoi = img.aoi(bbox=bbox)
         self.assertTrue(isinstance(aoi, TmsImage))
-        assert aoi.shape == (3, 320, 1316)
+        assert aoi.shape == (3, 1024, 256)
         assert aoi.proj == 'EPSG:3857'

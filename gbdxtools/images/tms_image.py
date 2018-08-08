@@ -109,7 +109,9 @@ class TmsMeta(object):
         # TODO: set bounds via shapely or bbox, validation
         self._bounds = obj
         if obj is not None:
+            print('bounding', self.bounds)
             self._urls, self._shape = self._collect_urls(self.bounds)
+            print(self._shape)
 
     @property
     def name(self):
@@ -149,9 +151,11 @@ class TmsMeta(object):
 
     def _collect_urls(self, bounds):
         minx, miny, maxx, maxy = self._tile_coords(bounds)
+        #bounds change when we build the dask
+        self.bounds = self._expand_bounds(bounds)
         urls = {(y - miny, x - minx): self._url_template.format(z=self.zoom_level, x=x, y=y, token=self._token)
                 for y in xrange(miny, maxy + 1) for x in xrange(minx, maxx + 1)}
-        return urls, (3, self._tile_size * (maxy - miny), self._tile_size * (maxx - minx))
+        return urls, (3, self._tile_size * (maxy - miny + 1), self._tile_size * (maxx - minx + 1))
 
     def _expand_bounds(self, bounds):
         if bounds is None:
@@ -164,7 +168,7 @@ class TmsMeta(object):
         return ul.union(lr).bounds
 
     def _tile_coords(self, bounds):
-        """ Convert tile coords mins/maxs to lng/lat bounds """
+        """ convert mercator bbox to tile index limits """
         tfm = partial(pyproj.transform,
                       pyproj.Proj(init="epsg:3857"),
                       pyproj.Proj(init="epsg:4326"))
@@ -176,6 +180,7 @@ class TmsMeta(object):
         maxx = max(xtiles)
         miny = min(ytiles)
         maxy = max(ytiles)
+        print(minx, miny, maxx, maxy)
         return minx, miny, maxx, maxy
 
 
