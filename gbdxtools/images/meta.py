@@ -8,7 +8,7 @@ import math
 
 from gbdxtools.rda.io import to_geotiff
 from gbdxtools.rda.util import RatPolyTransform, AffineTransform, pad_safe_positive, pad_safe_negative, RDA_TO_DTYPE, preview
-from gbdxtools.images.mixins import PlotMixin, BandMethodsTemplate, Deprecations 
+from gbdxtools.images.mixins import PlotMixin, BandMethodsTemplate, Deprecations
 
 from shapely import ops, wkt
 from shapely.geometry import box, shape, mapping, asShape
@@ -135,7 +135,47 @@ class DaskImage(da.Array):
         if minx < 0 or miny < 0 or maxx > x_max or maxy > y_max:
             raise ValueError("Input geometry resulted in a window outside of the image")
         return self[:, miny:maxy, minx:maxx]
-        
+
+    def window_cover(self, window_shape):
+        """
+        Returns a list of windows of a specified shape over an entire AOI.
+        args:
+            window_shape (tuple): The desired shape of each image as (height, width) in pixels.
+        returns:
+            imageWindow: a list of image tiles covering the entirety of the AOI
+        """
+        height,width=window_shape[0],window_shape[1]
+        _ndepth,_nheight,_nwidth = self.shape
+        nheight, _m = divmod(_nheight, height)
+        nwidth, _n = divmod(_nwidth, width)
+        if _m != 0 or _n != 0:
+            raise ValueError("Window dimensions invalid. Window dimensions must be divisible by the width and height of the image AOI.")
+
+        numTiles=nheight*nwidth
+        xmin,ymin=self.bounds[0],self.bounds[1]
+        xmax,ymax=self.bounds[2],self.bounds[3]
+        xDiff,yDiff=xmax-xmin,ymax-ymin
+        xTile,yTile=xDiff/nwidth,yDiff/nheight
+        shapelyX=[xmin+(i*xTile) for i in range(0,nwidth)]
+        shapelyY=[ymin+(j*yTile) for j in range(0,nheight)]
+        window=[]
+        for j in  reversed(range(0,nheight)):
+            for i in range(0,nwidth):
+                if j+1==nheight and i+1!=nwidth:
+                    imageBox=[shapelyX[i],shapelyY[j],shapelyX[i+1],ymax]
+                elif i+1!=nwidth and j+1!=nheight:
+                    imageBox=[shapelyX[i],shapelyY[j],shapelyX[i+1],shapelyY[j+1]]
+                elif i+1==nwidth and j+1!=nheight:
+                    imageBox=[shapelyX[i],shapelyY[j],xmax,shapelyY[j+1]]
+                elif i+1==nwidth and j+1==nheight:
+                    imageBox=[shapelyX[i],shapelyY[j],xmax,ymax]
+                window.append(imageBox)
+        imageWindow=[]
+        for b in window:
+            bounds = self.aoi(bbox=b)
+            imageWindow.append(bounds)
+        return(imageWindow)
+
 class GeoDaskImage(DaskImage, Container, PlotMixin, BandMethodsTemplate, Deprecations):
     _default_proj = "EPSG:4326"
 
@@ -371,7 +411,7 @@ class GeoDaskImage(DaskImage, Container, PlotMixin, BandMethodsTemplate, Depreca
             dem = tf.resize(np.squeeze(dem), xv.shape, preserve_range=True, order=1, mode="edge")
 
         coords = self.__geo_transform__.rev(xv, yv, z=dem)[::-1]
-        return np.asarray(coords, dtype=np.int32) 
+        return np.asarray(coords, dtype=np.int32)
 
     def _parse_geoms(self, **kwargs):
         """ Finds supported geometry types, parses them and returns the bbox """
