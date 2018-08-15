@@ -108,7 +108,16 @@ The above code generates a geotiff on the filesystem with the name `output.tif` 
     img = CatalogImage('104001001BA7C400', bbox=[2.2889757156372075,48.87067123176554,2.301077842712403,48.87705036103764], proj='EPSG:3857')
     tif = img.geotiff(path="./output.tif", proj="EPSG:4326", bands=[4,2,1])
 
-This will create geotiff on the the filesystem with only the bands `4,2,1`.
+This will create a geotiff on the the filesystem with only the bands `4,2,1`.
+
+.. code-block:: python
+
+    from gbdxtools import CatalogImage
+
+    img = CatalogImage('104001001BA7C400', bbox=[2.2889757156372075,48.87067123176554,2.301077842712403,48.87705036103764], proj='EPSG:3857')
+    tif = img.geotiff(path="./output.tif", proj="EPSG:4326", spec='rgb')
+
+This will create a geotiff of the RGB bands, dynamically adjusted to an 8 bit range.
 
 Atmospheric Compensation
 -----------------------
@@ -130,6 +139,7 @@ To request the image as raw Digital Numbers (DN) with no compensation, you can p
     from gbdxtools import CatalogImage
     
     img_dn = CatalogImage('104001001BA7C400', correctionType='DN') 
+    print(image_dn.shape)
 
 Idaho Images
 -----------------------
@@ -140,7 +150,7 @@ The IdahoImage class behaves in a similar manner as CatalogImage except it accep
 
     from gbdxtools import IdahoImage
 
-    img = IdahoImage('cfa89bc1-6115-4db1-9f43-03f060b52286')
+    img = IdahoImage('87a5b5a7-5438-44bf-926a-c8c7bc153713')
     print(img.shape)
 
 The methods of CatalogImage are also available in IdahoImage. However, the band_type and pansharpen parameters are not available.
@@ -160,7 +170,7 @@ GBDX also indexes all Landsat8 images and are served up by AWS. The LandsatImage
     print(img.shape)
     aoi = img.aoi(bbox=[-109.84, 43.19, -109.59, 43.34])
     print(aoi.shape)
-    aoi.plot(bands=[3,2,1])
+    aoi.plot()
 
 
 DEM Images
@@ -187,11 +197,11 @@ The TmsImage class is used to access imagery available from the Maps API. These 
 
     from gbdxtools import TmsImage
 
-    img = TmsImage('LC80370302014268LGN00')
+    img = TmsImage(zoom=13)
     print(img.shape)
     aoi = img.aoi(bbox=[-109.84, 43.19, -109.59, 43.34])
     print(aoi.shape)
-    aoi.plot(bands=[3,2,1])
+    aoi.plot()
 
 
 S3 Images
@@ -203,7 +213,7 @@ Sometimes it's necessary to access data directly from an Amazon S3 bucket (for i
 
     from gbdxtools import S3Image
 
-    img = S3Image('landsat-pds/c1/L8/139/045/LC08_L1TP_139045_20170304_20170316_01_T1/LC08_L1TP_139045_20170304_20170316_01_T1_B3.TIF', proj="EPSG:4326")
+    img = S3Image('landsat-pds/c1/L8/139/045/LC08_L1TP_139045_20170304_20170316_01_T1/LC08_L1TP_139045_20170304_20170316_01_T1_B3.TIF')
     print(img.shape)
 
 Because images living in S3 are not always catalog'd the `S3Image` class accepts an "s3 path". This path is constructed from a `bucket` and `prefix`. In the example above, the bucket is 'landsat-pds' and the prefix is `c1/L8/139/045/LC08_L1TP_139045_20170304_20170316_01_T1/LC08_L1TP_139045_20170304_20170316_01_T1_B3.TIF`. 
