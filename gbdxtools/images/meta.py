@@ -176,6 +176,26 @@ class DaskImage(da.Array):
             imageWindow.append(bounds)
         return(imageWindow)
 
+    def adjust_bounds(self, new_dimensions):
+        """
+        Returns an image with an adjusted bbox so an AOI can be windowed evenly.
+        args:
+            new_dimensions (tuple): the desired height and width of the adjusted AOI
+        """
+        width=new_dimensions[1]
+        height=new_dimensions[0]
+        _nheight, _nwidth, _ndepth = self.shape[1],self.shape[2],self.shape[0]
+        xmin,ymin=self.bounds[0],self.bounds[1]
+        xmax,ymax=self.bounds[2],self.bounds[3]
+        xdiff=xmax-xmin
+        ydiff=ymax-ymin
+        scaleRows=ydiff/_nheight
+        scaleCols=xdiff/_nwidth
+        ymax_new=ymin+(height*scaleRows)
+        xmax_new=xmin+(width*scaleCols)
+        bounds=[xmin,ymin,xmax_new,ymax_new]
+        return(self.aoi(bbox=bounds))
+
 class GeoDaskImage(DaskImage, Container, PlotMixin, BandMethodsTemplate, Deprecations):
     _default_proj = "EPSG:4326"
 
