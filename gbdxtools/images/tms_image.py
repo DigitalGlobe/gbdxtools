@@ -109,9 +109,7 @@ class TmsMeta(object):
         # TODO: set bounds via shapely or bbox, validation
         self._bounds = obj
         if obj is not None:
-            print('bounding', self.bounds)
             self._urls, self._shape = self._collect_urls(self.bounds)
-            print(self._shape)
 
     @property
     def name(self):
@@ -151,8 +149,6 @@ class TmsMeta(object):
 
     def _collect_urls(self, bounds):
         minx, miny, maxx, maxy = self._tile_coords(bounds)
-        #bounds change when we build the dask
-        self.bounds = self._expand_bounds(bounds)
         urls = {(y - miny, x - minx): self._url_template.format(z=self.zoom_level, x=x, y=y, token=self._token)
                 for y in xrange(miny, maxy + 1) for x in xrange(minx, maxx + 1)}
         return urls, (3, self._tile_size * (maxy - miny + 1), self._tile_size * (maxx - minx + 1))
@@ -173,14 +169,29 @@ class TmsMeta(object):
                       pyproj.Proj(init="epsg:3857"),
                       pyproj.Proj(init="epsg:4326"))
         bounds = ops.transform(tfm, box(*bounds)).bounds
-        params = list(bounds) + [[self.zoom_level]]
+
+        # because tiles have a common corner, the tiles that cover a
+        # given tile includes the adjacent neighbors.
+        # https://github.com/mapbox/mercantile/issues/84#issuecomment-413113791
+
+        west, south, east, north = bounds
+        epsilon = 1.0e-10
+        if east != west and north != south:
+            # 2D bbox
+            # shrink the bounds a small amount so that
+            # shapes/tiles round trip.
+            west += epsilon
+            south += epsilon
+            east -= epsilon
+            north -= epsilon
+
+        params = [west, south, east, north, [self.zoom_level]]
         tile_coords = [(tile.x, tile.y) for tile in mercantile.tiles(*params)]
         xtiles, ytiles = zip(*tile_coords)
         minx = min(xtiles)
-        maxx = max(xtiles)
         miny = min(ytiles)
+        maxx = max(xtiles) 
         maxy = max(ytiles)
-        print(minx, miny, maxx, maxy)
         return minx, miny, maxx, maxy
 
 
