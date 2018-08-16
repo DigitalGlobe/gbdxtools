@@ -87,7 +87,10 @@ class S3(object):
         location = location.strip('/')
 
         self.logger.debug('Downloading contents')
-        for s3key in s3conn.list_objects(Bucket=bucket, Prefix=(prefix+'/'+location))['Contents']:
+        objects = s3conn.list_objects(Bucket=bucket, Prefix=(prefix+'/'+location))
+        if 'Contents' not in objects:
+            raise ValueError('Download target {}/{}/{} was not found or inaccessible.'.format(bucket, prefix, location))
+        for s3key in objects['Contents']:
             key = s3key['Key']
     
             # skip directory keys
