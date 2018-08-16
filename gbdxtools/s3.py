@@ -89,7 +89,7 @@ class S3(object):
         self.logger.debug('Downloading contents')
         objects = s3conn.list_objects(Bucket=bucket, Prefix=(prefix+'/'+location))
         if 'Contents' not in objects:
-            raise ValueError('Download target {}/{}/{} was not found.'.format(bucket, prefix, location))
+            raise ValueError('Download target {}/{}/{} was not found or inaccessible.'.format(bucket, prefix, location))
         for s3key in objects['Contents']:
             key = s3key['Key']
     
