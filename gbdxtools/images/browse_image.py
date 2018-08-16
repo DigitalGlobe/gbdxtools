@@ -2,6 +2,9 @@ import requests
 import numpy as np
 from skimage import io
 from shapely.geometry import shape
+from shapely.wkt import loads
+from gbdxtools.auth import Auth 
+import matplotlib.pyplot as plt
 
 class BrowseImage(object):
     """
@@ -14,7 +17,7 @@ class BrowseImage(object):
           BrowseImage (object)
     """    
     def __init__(self, catalog_id, bbox=None):
-        
+        self._interface = Auth() 
         self.catalog_id = catalog_id
         self._get_image()
         self.metadata = self._get_metadata()
@@ -45,13 +48,13 @@ class BrowseImage(object):
         return self.read()
     
     def _get_metadata(self):
-        url = 'https://geobigdata.io/thumbnails/v1/metadata/{}.json'.format(self.catalog_id)
-        response = requests.get(url)
+        url = 'https://geobigdata.io/catalog/v2/record/{}'.format(self.catalog_id)
+        response = self._interface.gbdx_connection.get(url)
         return response.json()
         
     def _get_geometry(self):
-        if 'bbox' in self.metadata.keys():
-            geom = shape(self.metadata['bbox'])
+        if 'footprintWkt' in self.metadata['properties'].keys():
+            geom = loads(self.metadata['properties']['footprintWkt'])
         elif 'geometry' in self.metadata.keys():
             geom = shape(self.metadata['geometry'])
         else:
@@ -71,3 +74,4 @@ class BrowseImage(object):
         plt.axis('off')
         sp.set_title(title, fontsize=fontsize)
         plt.imshow(self.rgb())
+        plt.show()
