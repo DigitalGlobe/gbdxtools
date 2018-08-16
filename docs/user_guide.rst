@@ -22,18 +22,29 @@ For questions or troubleshooting email GBDX-Support@digitalglobe.com.
 Getting your S3 information
 ---------------------------
 
-Use the s3 member of the Interface:
+gbdxtools automatically handles your GBDX account S3 bucket and prefix for you. Note that this bucket will be shared by all users under the GBDX account.
+
+Should you need to know your S3 information for troubleshooting, use the s3 member of the Interface:
 
 .. code-block:: pycon
 
    >>> gbdx.s3.info
-   >>> {u'S3_access_key': u'blah',
- u'S3_secret_key': u'blah',
- u'S3_session_token': u'blah',
- u'bucket': u'gbd-customer-data',
- u'prefix': u'58600248-2927-4523-b44b-5fec3d278c09'}
-   >>> item = 'testdata/test1.tif'
-   >>> gbdx.s3.download(item)
+    
+    {u'S3_access_key': u'blah',
+    'S3_secret_key': u'blah',
+    'S3_session_token': u'blah',
+    'bucket': u'gbd-customer-data',
+    'prefix': u'58600248-2927-4523-b44b-5fec3d278c09'}
+
+
+To download a file from your S3 bucket, use the s3.download() method:
+
+.. code-block:: pycon
+
+  >>> item = 'testdata/test1.tif'
+  >>> gbdx.s3.download(item)
+
+The file path does not need the account bucket or prefix. 
 
 You can see the contents of your bucket/prefix using this link: http://s3browser.geobigdata.io/login.html.
 
