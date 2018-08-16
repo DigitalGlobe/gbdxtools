@@ -114,7 +114,7 @@ class DaskImage(da.Array):
             for i in xrange(count):
                 yield self.randwindow(window_shape)
 
-    def window_at(self, geom, x_size, y_size, no_padding=False):
+    def window_at(self, geom, x_size, y_size):
         """
         Return a subsetted window of a given size, centered on a geometry object
         Useful for generating training sets from vector training data
@@ -142,7 +142,7 @@ class DaskImage(da.Array):
         args:
             window_shape (tuple): The desired shape of each image as (height,
             width) in pixels.
-            pad: Whether or not to pad edge cells. If False, cells that do not 
+            pad: Whether or not to pad edge cells. If False, cells that do not
             have the desired shape will not be returned. Defaults to True.
         returns:
             imageWindow: a list of image tiles covering the image.
