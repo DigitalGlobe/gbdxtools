@@ -151,7 +151,7 @@ class TmsMeta(object):
         minx, miny, maxx, maxy = self._tile_coords(bounds)
         urls = {(y - miny, x - minx): self._url_template.format(z=self.zoom_level, x=x, y=y, token=self._token)
                 for y in xrange(miny, maxy + 1) for x in xrange(minx, maxx + 1)}
-        return urls, (3, self._tile_size * (maxy - miny), self._tile_size * (maxx - minx))
+        return urls, (3, self._tile_size * (maxy - miny + 1), self._tile_size * (maxx - minx + 1))
 
     def _expand_bounds(self, bounds):
         if bounds is None:
@@ -164,17 +164,33 @@ class TmsMeta(object):
         return ul.union(lr).bounds
 
     def _tile_coords(self, bounds):
-        """ Convert tile coords mins/maxs to lng/lat bounds """
+        """ convert mercator bbox to tile index limits """
         tfm = partial(pyproj.transform,
                       pyproj.Proj(init="epsg:3857"),
                       pyproj.Proj(init="epsg:4326"))
         bounds = ops.transform(tfm, box(*bounds)).bounds
-        params = list(bounds) + [[self.zoom_level]]
+
+        # because tiles have a common corner, the tiles that cover a
+        # given tile includes the adjacent neighbors.
+        # https://github.com/mapbox/mercantile/issues/84#issuecomment-413113791
+
+        west, south, east, north = bounds
+        epsilon = 1.0e-10
+        if east != west and north != south:
+            # 2D bbox
+            # shrink the bounds a small amount so that
+            # shapes/tiles round trip.
+            west += epsilon
+            south += epsilon
+            east -= epsilon
+            north -= epsilon
+
+        params = [west, south, east, north, [self.zoom_level]]
         tile_coords = [(tile.x, tile.y) for tile in mercantile.tiles(*params)]
         xtiles, ytiles = zip(*tile_coords)
         minx = min(xtiles)
-        maxx = max(xtiles)
         miny = min(ytiles)
+        maxx = max(xtiles) 
         maxy = max(ytiles)
         return minx, miny, maxx, maxy
 
