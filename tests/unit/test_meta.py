@@ -71,3 +71,10 @@ class MetaImageTest(unittest.TestCase):
         # make sure the center of the window is within 1 pixel
         # of where it should be
         self.assertTrue(c1.distance(c2) < wv2.metadata['georef']['scaleX'])
+
+    @my_vcr.use_cassette('tests/unit/cassettes/test_meta_window_cover.yaml', filter_headers=['authorization'])
+    def test_image_window_cover(self):
+        wv2 = CatalogImage('1030010076B8F500')
+        aoi = wv2.randwindow((300,300))
+        coverage = [dsk for dsk in aoi.window_cover((100,100), pad=True)]
+        self.assertEquals(len(coverage), 9)

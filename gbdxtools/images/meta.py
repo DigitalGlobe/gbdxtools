@@ -1,7 +1,7 @@
 import os
 import random
 from functools import partial
-from itertools import chain
+from itertools import chain, product
 from collections import Container, namedtuple
 import warnings
 import math
@@ -141,70 +141,76 @@ class DaskImage(da.Array):
         Returns a list of windows of a specified shape over an entire AOI.
         args:
             window_shape (tuple): The desired shape of each image as (height,
-            width) in pixels.
+                width) in pixels.
             pad: Whether or not to pad edge cells. If False, cells that do not
-            have the desired shape will not be returned. Defaults to True.
+                have the desired shape will not be returned. Defaults to True.
         returns:
-            imageWindow: a list of image tiles covering the image.
+            windows: a generator of image tiles covering the image.
         """
-        height, width = window_shape[0], window_shape[1]
+        size_y, size_x = window_shape[0], window_shape[1]
         _ndepth, _nheight, _nwidth = self.shape
-        nheight, _m = divmod(_nheight, height)
-        nwidth, _n = divmod(_nwidth, width)
+        nheight, _m = divmod(_nheight, size_y)
+        nwidth, _n = divmod(_nwidth, size_x)
 
+        #if pad is False:
+        #    if _m != 0 or _n != 0:
+        #        new_dimensions = (nheight * size_y, nwidth * size_x)
+        #        img = self.adjust_bounds(new_dimensions)
+        #    else:
+        img = self
         if pad is True:
-            new_dimensions = ((nheight+1) * height, (nwidth+1) * width)
-            image_boundaries = adjust_bounds(self, new_dimensions)
-
-        if pad is False:
             if _m != 0 or _n != 0:
-            new_dimensions = (nheight * height, nwidth * width)
-            image_boundaries = adjust_bounds(self, new_dimensions)
+                new_dimensions = ((nheight+1) * size_y, (nwidth+1) * size_x)
+                img = self.adjust_bounds(new_dimensions)
 
-        numTiles = nheight*nwidth
-        xmin, ymin = image_boundaries.bounds[0], image_boundaries.bounds[1]
-        xmax, ymax = image_boundaries.bounds[2], image_boundaries.bounds[3]
-        xDiff, yDiff = xmax-xmin, ymax-ymin
-        xTile, yTile = xDiff/nwidth, yDiff/nheight
-        shapelyX = [xmin + (i * xTile) for i in range(0, nwidth)]
-        shapelyY = [ymin + (j * yTile) for j in range(0, nheight)]
-        window = []
-        for j in reversed(range(0, nheight)):
-            for i in range(0, nwidth):
-                if j+1 == nheight and i+1 != nwidth:
-                    imageBox = [shapelyX[i], shapelyY[j], shapelyX[i+1], ymax]
-                elif i+1 != nwidth and j+1 != nheight:
-                    imageBox = [shapelyX[i], shapelyY[j], shapelyX[i+1], shapelyY[j+1]]
-                elif i+1 == nwidth and j+1 != nheight:
-                    imageBox = [shapelyX[i], shapelyY[j], xmax, shapelyY[j+1]]
-                elif i+1 == nwidth and j+1 == nheight:
-                    imageBox = [shapelyX[i], shapelyY[j], xmax, ymax]
-                window.append(imageBox)
-        imageWindow = []
-        for b in window:
-            bounds = self.aoi(bbox=b)
-            imageWindow.append(bounds)
-        return(imageWindow)
+        row_lims = range(0, img.shape[1], size_y)
+        col_lims = range(0, img.shape[2], size_x)
+        for maxy, maxx in product(row_lims, col_lims):
+            yield img[:, maxy:(maxy + size_y), maxx:(maxx + size_x)]
 
-    def adjust_bounds(self, new_dimensions):
+
+        #numTiles = nheight * nwidth
+        #xmin, ymin = image_boundaries.bounds[0], image_boundaries.bounds[1]
+        #xmax, ymax = image_boundaries.bounds[2], image_boundaries.bounds[3]
+        #xDiff, yDiff = xmax-xmin, ymax-ymin
+        #xTile, yTile = xDiff/nwidth, yDiff/nheight
+        #shapelyX = [xmin + (i * xTile) for i in range(0, nwidth)]
+        #shapelyY = [ymin + (j * yTile) for j in range(0, nheight)]
+        #print(shapelyX, shapelyY)
+        #window = []
+        #for j in reversed(range(0, nheight)):
+        #    for i in range(0, nwidth):
+        #        print(j,i)
+        #        if j+1 == nheight and i+1 != nwidth:
+        #            imageBox = [shapelyX[i], shapelyY[j], shapelyX[i+1], ymax]
+        #        elif i+1 != nwidth and j+1 != nheight:
+        #            imageBox = [shapelyX[i], shapelyY[j], shapelyX[i+1], shapelyY[j+1]]
+        #        elif i+1 == nwidth and j+1 != nheight:
+        #            imageBox = [shapelyX[i], shapelyY[j], xmax, shapelyY[j+1]]
+        #        elif i+1 == nwidth and j+1 == nheight:
+        #            imageBox = [shapelyX[i], shapelyY[j], xmax, ymax]
+        #        window.append(imageBox)
+        #imageWindow = []
+        #for b in window:
+        #    bounds = self.aoi(bbox=b)
+        #    imageWindow.append(bounds)
+        #return(imageWindow)
+
+    def adjust_bounds(self, window_shape):
         """
         Returns an image with an adjusted bbox so an AOI can be windowed evenly.
         args:
             new_dimensions (tuple): the desired height and width of the adjusted
             AOI
         """
-        width = new_dimensions[1]
-        height = new_dimensions[0]
-        _nheight, _nwidth, _ndepth = self.shape[1], self.shape[2], self.shape[0]
-        xmin, ymin = self.bounds[0], self.bounds[1]
-        xmax, ymax = self.bounds[2], self.bounds[3]
-        xdiff = xmax - xmin
-        ydiff = ymax - ymin
-        scaleRows = ydiff / _nheight
-        scaleCols = xdiff / _nwidth
-        ymax_new = ymin + (height * scaleRows)
+        height, width = window_shape
+        _ndepth, _nheight, _nwidth = self.shape
+        xmin, ymin, xmax, ymax = self.bounds
+        scaleRows = (ymax - ymin) / _nheight
+        scaleCols = (xmax - xmin) / _nwidth
+        ymin_new = ymin - (height * scaleRows)
         xmax_new = xmin + (width * scaleCols)
-        bounds = [xmin, ymin, xmax_new, ymax_new]
+        bounds = [xmin, ymin_new, xmax_new, ymax]
         return(self.aoi(bbox=bounds))
 
 
