@@ -56,3 +56,11 @@ class S3ImageTest(unittest.TestCase):
         assert img.shape == (1, 7541, 7901)
         assert img.proj == 'EPSG:4326'
 
+
+    @my_vcr.use_cassette('tests/unit/cassettes/test_s3_image_proj_src.yaml', filter_headers=['authorization'])
+    def test_s3_image_proj_src(self):
+        _path = 'landsat-pds/c1/L8/139/045/LC08_L1TP_139045_20170304_20170316_01_T1/LC08_L1TP_139045_20170304_20170316_01_T1_B3.TIF'
+        img = self.gbdx.s3_image(_path, proj="EPSG:4326", src_proj="EPSG:32645")
+        self.assertTrue(isinstance(img, S3Image))
+        assert img.shape == (1, 7541, 7901)
+        assert img.proj == 'EPSG:4326'
