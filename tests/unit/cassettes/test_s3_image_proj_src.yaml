@@ -1,23 +1,23 @@
 interactions:
 - request:
-    body: '{"edges": [{"destination": "55590b2f-a70d-50a4-a6c1-33f1c25ac9ce", "id":
-      "732c49a4-ec5a-5377-92f1-00cc4343fabd", "index": 1, "source": "eedff459-696c-59e0-9f03-4cdbea81566b"}],
-      "nodes": [{"id": "55590b2f-a70d-50a4-a6c1-33f1c25ac9ce", "operator": "Reproject",
+    body: '{"edges": [{"destination": "169fca94-f62e-5be8-b428-94c127b5af51", "id":
+      "0f8ae0d5-4d3c-5a78-a62d-3524ac58c277", "index": 1, "source": "eedff459-696c-59e0-9f03-4cdbea81566b"}],
+      "nodes": [{"id": "169fca94-f62e-5be8-b428-94c127b5af51", "operator": "Reproject",
       "parameters": {"Background Values": "[0]", "Dest SRS Code": "EPSG:4326", "Dest
       pixel-to-world transform": "", "Resampling Kernel": "INTERP_BILINEAR", "Source
-      SRS Code": "", "Source pixel-to-world transform": ""}}, {"id": "eedff459-696c-59e0-9f03-4cdbea81566b",
+      SRS Code": "EPSG:32645", "Source pixel-to-world transform": ""}}, {"id": "eedff459-696c-59e0-9f03-4cdbea81566b",
       "operator": "GdalImageRead", "parameters": {"path": "/vsis3/landsat-pds/c1/L8/139/045/LC08_L1TP_139045_20170304_20170316_01_T1/LC08_L1TP_139045_20170304_20170316_01_T1_B3.TIF"}}]}'
     headers:
       Accept: ['*/*']
       Accept-Encoding: ['gzip, deflate']
       Connection: [keep-alive]
-      Content-Length: ['699']
+      Content-Length: ['709']
       Content-Type: [application/json]
       User-Agent: [python-requests/2.18.4]
     method: POST
     uri: https://rda.geobigdata.io/v1/graph
   response:
-    body: {string: 79b15dc0c601baea32264b285356e1c4a58455051181436d97cf8c0ac9e91cc8}
+    body: {string: 3d731eb78e1da4dccbaff5279d50bf472210a7c209a7de57bc4af1b728cf7bf2}
     headers:
       Access-Control-Allow-Headers: ['x-requested-with, X-Auth-Token, Content-Type,
           Authorization']
@@ -27,7 +27,7 @@ interactions:
       Connection: [keep-alive]
       Content-Length: ['64']
       Content-Type: [text/plain;charset=UTF-8]
-      Date: ['Mon, 20 Aug 2018 19:27:32 GMT']
+      Date: ['Mon, 20 Aug 2018 19:27:33 GMT']
     status: {code: 200, message: ''}
 - request:
     body: null
@@ -37,7 +37,7 @@ interactions:
       Connection: [keep-alive]
       User-Agent: [python-requests/2.18.4]
     method: GET
-    uri: https://rda.geobigdata.io/v1/metadata/79b15dc0c601baea32264b285356e1c4a58455051181436d97cf8c0ac9e91cc8/55590b2f-a70d-50a4-a6c1-33f1c25ac9ce/metadata.json
+    uri: https://rda.geobigdata.io/v1/metadata/3d731eb78e1da4dccbaff5279d50bf472210a7c209a7de57bc4af1b728cf7bf2/169fca94-f62e-5be8-b428-94c127b5af51/metadata.json
   response:
     body: {string: '{"imageMetadata":{"imageId":"/vsis3/landsat-pds/c1/L8/139/045/LC08_L1TP_139045_20170304_20170316_01_T1/LC08_L1TP_139045_20170304_20170316_01_T1_B3.TIF","version":1.1,"profileName":"georectified_image","tilePartition":"0000","tileXOffset":0,"tileYOffset":0,"numXTiles":31,"numYTiles":31,"tileXSize":256,"tileYSize":256,"numBands":1,"dataType":"UNSIGNED_SHORT","imageHeight":7542,"imageWidth":7902,"colorInterpretation":"PAN","imageBoundsWGS84":"POLYGON
         ((85.860644486845 22.71713269863519, 88.0688191715636 22.71713269863519, 88.0688191715636
@@ -51,6 +51,6 @@ interactions:
       Connection: [keep-alive]
       Content-Length: ['2324']
       Content-Type: [application/json;charset=UTF-8]
-      Date: ['Mon, 20 Aug 2018 19:27:32 GMT']
+      Date: ['Mon, 20 Aug 2018 19:27:33 GMT']
     status: {code: 200, message: ''}
 version: 1
