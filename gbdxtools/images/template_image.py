@@ -13,6 +13,11 @@ try:
 except ImportError:
     from urllib.parse import urlencode
 
+try:
+    xrange
+except NameError:
+    xrange = range
+
 class TemplateMeta(GraphMeta):
     def __init__(self, template_id, node_id=None, **kwargs):
         assert template_id is not None
