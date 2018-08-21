@@ -11,6 +11,7 @@ from gbdxtools.images.tms_image import TmsImage
 from gbdxtools.images.radarsat import Radarsat
 from gbdxtools.images.sentinel2 import Sentinel2
 from gbdxtools.images.s3Image import S3Image
+from gbdxtools.images.template_image import RDATemplateImage
 from gbdxtools.images.catalog_image import CatalogImage
 from gbdxtools.answerfactory import Recipe, Project
 from .interface import Interface
