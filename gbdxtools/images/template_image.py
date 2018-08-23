@@ -5,7 +5,7 @@ Contact: chris.helm@digitalglobe.com
 """
 from gbdxtools.images.rda_image import RDAImage, GraphMeta
 from gbdxtools.rda.interface import DaskProps
-from gbdxtools.rda.graph import get_rda_graph_template, get_rda_template_metadata, VIRTUAL_RDA_URL
+from gbdxtools.rda.graph import get_rda_graph_template, get_rda_template_metadata, VIRTUAL_RDA_URL, get_template_stats
 from gbdxtools.auth import Auth
 
 try:
@@ -27,6 +27,7 @@ class TemplateMeta(GraphMeta):
         self._node_id = node_id
         self._interface = Auth()
         self._rda_meta = None
+        self._rda_stats = None
         self._graph = None
         self._nid = None
 
@@ -38,6 +39,13 @@ class TemplateMeta(GraphMeta):
         if self._interface is not None:
             self._rda_meta = get_rda_template_metadata(self._interface.gbdx_futures_session, self._template_id, nodeId=self._id, **self._params)
         return self._rda_meta
+
+    @property
+    def display_stats(self):
+        assert self.graph() is not None
+        if self._rda_stats is None:
+            self._rda_stats = get_template_stats(self._interface.gbdx_futures_session, self._rda_id, self._id, **self._params)
+        return self._rda_stats
 
     def graph(self):
         if self._graph is None:

@@ -17,7 +17,16 @@ def resolve_if_future(future):
         return future
 
 def get_graph_stats(conn, graph_id, node_id):
-    url = "{}/metadata/{}/{}/display_stats.json".format(VIRTUAL_RDA_URL, graph_id, node_id) #, conn.access_token)
+    url = "{}/metadata/{}/{}/display_stats.json".format(VIRTUAL_RDA_URL, graph_id, node_id)
+    req = resolve_if_future(conn.get(url))
+    if req.status_code == 200:
+        return req.json()
+    else:
+        raise NotFound("Could not fetch stats for graph/node: {} / {}".format(graph_id, node_id))
+
+def get_template_stats(conn, graph_id, node_id, **kwargs):
+    qs = urlencode(kwargs)
+    url = "{}/template/{}/display_stats.json?nodeId={}&{}".format(VIRTUAL_RDA_URL, graph_id, node_id, qs)
     req = resolve_if_future(conn.get(url))
     if req.status_code == 200:
         return req.json()

@@ -54,11 +54,15 @@ def to_geotiff(arr, path='./output.tif', proj=None, spec=None, bands=None, **kwa
                 scale = scales[bands[x]] 
                 block[x,:,:] = block[x,:,:] * scale + offset 
             return np.clip(block, 0, 255)
-                
-        arr = arr[arr._rgb_bands,...]
+
+        try:
+            bands = arr._rgb_bands
+        except: 
+            pass
+        arr = arr[bands,...]
         offsets = arr.display_stats['offset']
         scales = arr.display_stats['scale']
-        stretch = partial(stretchblock, offsets, scales, arr._rgb_bands)
+        stretch = partial(stretchblock, offsets, scales, bands)
         arr = arr.map_blocks(stretch)
         arr = arr.astype(np.uint8)
         dtype = 'uint8'
