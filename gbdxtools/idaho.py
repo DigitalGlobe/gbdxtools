@@ -234,10 +234,10 @@ class Idaho(object):
            lowcutoff (float): Low cut off coefficient (0.0 to 1.0). This is for on-the-fly pansharpening.
            brightness (float): Brightness coefficient (0.0 to 1.0). This is for on-the-fly pansharpening.
            contrast (float): Contrast coefficient (0.0 to 1.0). This is for on-the-fly pansharpening.
+
         Returns:
            urls (list): TMS urls.
-           bboxes (list of tuples): Each tuple is (W, S, E, N) where (W,S,E,N) are the bounds of the
-                                    corresponding idaho part.
+           bboxes (list of tuples): Each tuple is (W, S, E, N) where (W,S,E,N) are the bounds of the corresponding idaho part.
         """
 
         description = self.describe_images(self.get_images_by_catid(catid))

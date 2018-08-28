@@ -43,34 +43,36 @@ class Vectors(object):
         self.aggregations_by_index_url = 'https://vector.geobigdata.io/insight-vector/api/index/aggregation/%s'
 
     def create(self,vectors):
-        """
-        Create a vectors in the vector service.
+        """ Create a vectors in the vector service.
 
         Args:
-            vectors: A single geojson vector or a list of geojson vectors.  Each looks like:
-              {
-                "type": "Feature",
-                "geometry": {
-                    "type": "Point",
-                    "coordinates": [1.0,1.0]
-                },
-                "properties": {
-                    "text" : "item text",
-                    "name" : "item name",
-                    "item_type" : "type",
-                    "ingest_source" : "source",
-                    "attributes" : {
-                       "latitude" : 1,
-                       "institute_founded" : "2015-07-17",
-                       "mascot" : "moth"
-                    }
-                }
-              }
-
-            item_type and ingest_source are required.
+            vectors: A single geojson vector or a list of geojson vectors. Item_type and ingest_source are required.
 
         Returns:
-            a list of IDs of the vectors created
+            (list): IDs of the vectors created
+
+        Example:
+            >>> vectors.create(
+            ...     {
+            ...         "type": "Feature",
+            ...         "geometry": {
+            ...             "type": "Point",
+            ...             "coordinates": [1.0,1.0]
+            ...         },
+            ...         "properties": {
+            ...             "text" : "item text",
+            ...             "name" : "item name",
+            ...             "item_type" : "type",
+            ...             "ingest_source" : "source",
+            ...             "attributes" : {
+            ...                 "latitude" : 1,
+            ...                 "institute_founded" : "2015-07-17",
+            ...                 "mascot" : "moth"
+            ...             }
+            ...         }
+            ...     }
+            ... )
+
         """
         if type(vectors) is dict:
             vectors = [vectors]

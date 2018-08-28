@@ -10,8 +10,16 @@ from shapely.geometry import box
 rda = RDA()
 
 class IdahoImage(RDABaseImage):
-    """
-      Dask based access to IDAHO images via RDA.
+    """ Image based on IDAHO virtual tiles
+
+        Like a CatalogImage, but takes an IDAHO ID when initialized.
+        Band_type and pansharpen arguments are not supported because IDAHO multispectral and panchromatic images are stored separately.
+
+        Args:
+            (str): IDAHO ID
+
+        Example:
+            >>> img = IdahoImage('87a5b5a7-5438-44bf-926a-c8c7bc153713')
     """
     __Driver__ = IdahoDriver
 

@@ -724,14 +724,13 @@ class Workflow(object):
 
     @property
     def stdout(self):
-        '''
-        Get stdout from all the tasks of a workflow.
-
-        Args:
-            None
+        ''' Get stdout from all the tasks of a workflow.
 
         Returns:
-            List of tasks with their stdout, formatted like this:
+            (list): tasks with their stdout
+        
+        Example:
+            >>> workflow.stdout
             [
                 {
                     "id": "4488895771403082552",
@@ -740,6 +739,7 @@ class Workflow(object):
                     "stdout": "............"
                 }
             ]
+
         '''
         if not self.id:
             raise WorkflowError('Workflow is not running.  Cannot get stdout.')
@@ -767,14 +767,13 @@ class Workflow(object):
 
     @property
     def stderr(self):
-        '''
-        Get stderr from all the tasks of a workflow.
-
-        Args:
-            None
+        '''Get stderr from all the tasks of a workflow.
 
         Returns:
-            List of tasks with their stderr, formatted like this:
+            (list): tasks with their stderr
+
+        Example:
+            >>> workflow.stderr
             [
                 {
                     "id": "4488895771403082552",
@@ -783,7 +782,9 @@ class Workflow(object):
                     "stderr": "............"
                 }
             ]
+
         '''
+
         if not self.id:
             raise WorkflowError('Workflow is not running.  Cannot get stderr.')
         if self.batch_values:

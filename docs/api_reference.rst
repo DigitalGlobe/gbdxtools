@@ -10,73 +10,66 @@ Catalog
 CatalogImage
 -----------------------
 
+CatalogImage is a wrapper class that returns the appropriate image class for the catalog ID. This description applies to all of the other RDA-based classes.
+
+CatalogImages are also Dask arrays and support all of their properties and methods. The most commonly used ones are listed here. Some methods are overridden to preserve geospatial information but other work identically.
+
 .. autoclass:: gbdxtools.images.catalog_image.CatalogImage
-   :members:
+    :members:
 
-.. function:: aoi([bbox=None, wkt=None, geojson=None])
-   
-    Subsets the image with an Area of Interest
+    .. autocatmeta:: gbdxtools.images.meta.GeoDaskImage.aoi
+    .. autocatmeta:: gbdxtools.images.meta.GeoDaskImage.geotiff
+    .. autocatmeta:: gbdxtools.images.meta.DaskImage.iterwindows
+    .. autocatmeta:: gbdxtools.images.meta.GeoDaskImage.map_blocks
+    .. autocatmeta:: gbdxtools.images.mixins.geo.PlotMixin.ndvi
+    .. autocatmeta:: gbdxtools.images.mixins.geo.PlotMixin.ndwi
+    .. autocatmeta:: gbdxtools.images.mixins.geo.PlotMixin.plot
+    .. autocatmeta:: gbdxtools.rda.util.preview
+    .. autocatmeta:: gbdxtools.images.meta.GeoDaskImage.pxbounds
+    .. autocatmeta:: gbdxtools.images.meta.DaskImage.randwindow
+    .. autocatmeta:: gbdxtools.images.meta.DaskImage.read
+    .. autocatmeta:: gbdxtools.images.mixins.geo.PlotMixin.rgb
+    .. autocatmeta:: gbdxtools.images.meta.GeoDaskImage.warp
+    .. autocatmeta:: gbdxtools.images.meta.DaskImage.window_at
+    .. autocatmeta:: gbdxtools.images.meta.DaskImage.window_cover
 
-    :param bbox (list): a bounding box list (minx, miny, maxx, maxy)
-    :param wkt (str): a well-known-text geometry
-    :param geojson (dict): a geojson geometry
-    :returns image: an image class clipped to the given AOI
 
-.. function:: geotiff([path='output.tif', dtype=None, bands=None, proj=None, transform=None, spec=None])
+Base Image classes
+--------------------
 
-    Creates a geotiff from the image data. To get an 8 bit color balanced image, pass spec='rgb'
+IdahoImage
+^^^^^^^^^^^^^^
 
-    :param path (str): a path to write the geotiff to
-    :param dtype (str): a datatype to use for the geotiff ('float32', 'uint16', 'uint8', 'etc')
-    :param bands (list): a list of bands to save to the geotiff
-    :param proj (str): an EPSG proj string 
-    :param transform (dict): an affine transformation to use for the new geotiff
-    :param spec (str): spec to use for export - 'rgb' will export rgb bands as uint8 
+.. autoclass:: gbdxtools.images.idaho_image.IdahoImage
+    :undoc-members:
 
-    :returns path (str): the path to the created geotiff file on disk
 
-.. py:function:: plot([w=10, h=10, bands=None, cmap="Greys_r"], histogram=None, stretch=[2,98], gamma=1.0, blm_source=None)
+LandsatImage
+^^^^^^^^^^^^^^^^
 
-    Plot the image via matplotlib. Defaults to plotting an RGB image unless the image only has one band.
-    Plot width and height refer to the total area of the plot, including margins. Dimensions are 
-    specified in inches. The plot will be generated at 72 pixels per inch. In Jupyter extra whitespace
-    will be removed so the final plot size will be smaller than the expected dimensions.
+.. autoclass:: gbdxtools.images.landsat_image.LandsatImage
+    :undoc-members:
 
-    :param w: plot width 
-    :param h: plot height
-    :param bands (list): A list of bands to plot
-    :param cmap (str or cmap): the matplotlib colormap to use in single band plots
-    :param histogram (str): see rgb()
-    :param stretch (list of numbers): see rgb()
-    :param gamma (number): see rgb()
 
-.. py:function:: rgb(histogram=None, stretch=[2,98], gamma=1.0, blm_source=None)
+TmsImage
+^^^^^^^^^^
 
-    Returns a uint8 Numpy array of the RGB bands for an image suitable for plotting with libraries like Matplotlib
+.. autoclass:: gbdxtools.images.tms_image.TmsImage
+    :undoc-members:
 
-    Several adjustment methods are available to tune the image appearance.
 
-    Without any parameters, rgb() and plot() will use a contrast stretch over the 2nd and 98th percentil pixel values on each band.
+DemImage
+^^^^^^^^^^^^
 
-    The parameter histogram='match' will contrast stretch over the minimum and maximum pixel values.
-    The parameter histogram='equalize' will perform histogram equalization on the image.
-    The parameter histogram='match' will match the image histogram to the same image bounds in the TMS base. Adding the parameter blm_source='browse' will use the Browse imagery instead.
-    The parameter 'stretch'=[low, high] will contrast stretch between the low and high values. histogram='minmax' is equivalent to stretch=[0,100].
-    The parameter 'gamma'=x will adjust the image gamma. Values of x greater than one will make the midtones brighter, values less than one make the midtones darker.
-    If the stretch and gamma parameters are included with a histogram parameter, the stretch and gamma will be applied after the histogram adjustments.
+.. autoclass:: gbdxtools.images.dem_image.DemImage
+    :undoc-members:
 
-    :param histogram (str): either 'minmax', 'equalize', or 'match'
-    :param stretch (list of numbers): a list of low and high cutoffs for contrast stretching
-    :param gamma (number): a value for the gamma adjustment
-    :param blm_source (str): if set to 'browse' use the Browse service for histogram matching
 
-    :returns array (ndarray): A Numpy array of the RGB data 
+S3Image
+^^^^^^^^^^^^^
 
-.. py:function:: ndvi()
-
-    Returns a uint8 Numpy array of the NDVI data values from an image suitable for plotting with libraries like Matplotlib
-
-    :returns array (ndarray): A Numpy array of the NDVI data
+.. autoclass:: gbdxtools.images.s3Image.S3Image
+    :undoc-members:
 
 
 Idaho

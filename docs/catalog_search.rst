@@ -1,16 +1,16 @@
-Catalog Searches
+Catalog Service
 ==========
 
 Catalog Search Overview
 -----------------------
 
-The catalog can be searched various ways, generally like this:
+The catalog can be searched various ways. The general pattern is:
 
 .. code-block:: python
 
    results = gbdx.catalog.search( ... args ... )
 
-The results will be a list of items, each of which contains quite a lot of metadata and looks something like this:
+Running a search returns a list of metadata items. An example of item metadata is:
 
 .. code-block:: json
 
@@ -36,14 +36,17 @@ The results will be a list of items, each of which contains quite a lot of metad
 		}
 	}
 
-You could get a list of catalog IDs by doing this, for example:
+To reduce the list of results to just Catalog IDs:
 
 .. code-block:: python
 	
 	catalog_ids = [r['identifier'] for r in results]
 
+Running Searches
+------------------------
+
 Search by AOI
------------------------
+^^^^^^^^^^^^^^^
 Search the catalog by AOI, as defined by a WKT polygon.  All imagery that intersects the polygon will be returned.
 
 .. code-block:: python
@@ -53,9 +56,9 @@ Search the catalog by AOI, as defined by a WKT polygon.  All imagery that inters
 
 
 Search by Dates
------------------------
+^^^^^^^^^^^^^^^^
 The catalog can also be searched by date.  Note that if no search-polygon is supplied, the catalog only supports 
-date searches of of one week intervals at a time.
+date searches of one-week intervals at a time.
 
 
 .. code-block:: python
@@ -66,8 +69,8 @@ date searches of of one week intervals at a time.
                                   endDate="2012-01-01T00:00:00.000Z")
 
 Search with Filters
------------------------
-You can add filters for any properties in the catalog items you are searching for.  For example, here's how you return only Quickbird 2 
+^^^^^^^^^^^^^^^^^^^^^^^
+You can add filters for any of the properties in the catalog items.  For example, to return only Quickbird 2 
 images:
 
 .. code-block:: python
@@ -81,7 +84,7 @@ images:
                                   endDate="2012-01-01T00:00:00.000Z",
                                   filters=filters)
 
-Here's a more complicated set of filters that can be applied:
+Multiple filters can be combined in the query:
 
 .. code-block:: python
 
@@ -92,9 +95,9 @@ Here's a more complicated set of filters that can be applied:
 	]
 
 Search by Types
------------------------
-You can search by type as well.  The usual type for Digital Globe Imagery is "DigitalGlobeAcquisition".  
-To search only Landsat imagery for example:
+^^^^^^^^^^^^^^^^^^
+You can search by item type as well.  The usual type for Digital Globe imagery is "DigitalGlobeAcquisition".  
+To limit the search to only Landsat imagery:
 
 .. code-block:: python
 
@@ -107,9 +110,9 @@ To search only Landsat imagery for example:
                                   endDate="2012-01-01T00:00:00.000Z",
                                   types=types)
 
-Get Metadata Info about a given Catalog ID
------------------------
-If you have a catalog ID and simply want to get the record out of the catalog:
+Getting Metadata Info by Catalog ID
+---------------------------------------------
+To access the metadata record from the catalog for a given Catalog ID:
 
 .. code-block:: pycon
 
@@ -175,9 +178,9 @@ You can also include relationship information to find associated data and produc
     >>>                    u'vendorName': u'DigitalGlobe'},
     >>> u'type': u'DigitalGlobeAcquisition'}
 
-Find Data Location given a Catalog ID
------------------------
-Once you've found a catalog ID of an image you want, you can get the location of the physical data for further processing like this:
+Finding Data Location by Catalog ID
+---------------------------------------
+The location of the physical data for a given Catalog ID can be found using:
 
 .. code-block:: pycon
 
