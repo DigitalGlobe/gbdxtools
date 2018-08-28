@@ -47,6 +47,15 @@ RDA_TO_DTYPE = {
 
 # TODO need to handle diff projections: project WGS84 bounds into image proj
 def preview(image, **kwargs):
+    ''' Show a slippy map preview of the image. Requires iPython.
+
+    Args:
+        image (image): image object to display
+        zoom (int): zoom level to intialize the map, default is 16
+        center (list): center coordinates to initialize the map, defaults to center of image
+        bands (list): bands of image to display, defaults to the image's default RGB bands
+    '''
+    
     try:
         from IPython.display import Javascript, HTML, display
         from gbdxtools import Interface

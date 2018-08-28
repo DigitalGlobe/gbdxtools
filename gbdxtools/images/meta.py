@@ -74,12 +74,13 @@ class DaskImage(da.Array):
         return DaskMeta(self)
 
     def read(self, bands=None, **kwargs):
-        """
-        Reads data from a dask array and returns the computed ndarray matching the given bands
-        kwargs:
+        """Reads data from a dask array and returns the computed ndarray matching the given bands
+
+        Args:
             bands (list): band indices to read from the image. Returns bands in the order specified in the list of bands.
+
         Returns:
-            array (ndarray): a numpy array of image data
+            ndarray: a numpy array of image data
         """
         arr = self
         if bands is not None:
@@ -87,25 +88,27 @@ class DaskImage(da.Array):
         return arr.compute(get=threaded_get)
 
     def randwindow(self, window_shape):
-        """
-        Get a random window of a given shape from withing an image
-        kwargs:
+        """Get a random window of a given shape from within an image
+
+        Args:
             window_shape (tuple): The desired shape of the returned image as (height, width) in pixels.
+
         Returns:
-            image (dask): a new image object of the specified shape
+            image: a new image object of the specified shape and same type
         """
         row = random.randrange(window_shape[0], self.shape[1])
         col = random.randrange(window_shape[1], self.shape[2])
         return self[:, row-window_shape[0]:row, col-window_shape[1]:col]
 
     def iterwindows(self, count=64, window_shape=(256, 256)):
-        """
-        Iterate over random windows of an image
-        kwargs:
-            count (int): the number of the windows to generate. Defaults to 64, if `None` with continue to iterate over random windows until stopped.
+        """ Iterate over random windows of an image
+
+        Args:
+            count (int): the number of the windows to generate. Defaults to 64, if `None` will continue to iterate over random windows until stopped.
             window_shape (tuple): The desired shape of each image as (height, width) in pixels.
-        Returns:
-            windows (generator): a generator of windows of the given shape
+
+        Yields:
+            image: an image of the given shape and same type.
         """
         if count is None:
             while True:
@@ -115,14 +118,18 @@ class DaskImage(da.Array):
                 yield self.randwindow(window_shape)
 
     def window_at(self, geom, x_size, y_size):
-        """
-        Return a subsetted window of a given size, centered on a geometry object
+        """Return a subsetted window of a given size, centered on a geometry object
+
         Useful for generating training sets from vector training data
         Will throw a ValueError if the window is not within the image bounds
-        args:
-            geom (Shapely geometry object): Geometry to center the image on
+
+        Args:
+            geom (shapely,geometry): Geometry to center the image on
             x_size (int): Size of subset in pixels in the x direction
             y_size (int): Size of subset in pixels in the y direction
+
+        Returns:
+            image: image object of same type
         """
         # Centroids of the input geometry may not be centered on the object.
         # For a covering image we use the bounds instead.
@@ -137,15 +144,20 @@ class DaskImage(da.Array):
         return self[:, miny:maxy, minx:maxx]
 
     def window_cover(self, window_shape, pad=True):
-        """
-        Returns a list of windows of a specified shape over an entire AOI.
-        args:
+        """ Iterate over a grid of windows of a specified shape covering an image.
+
+        The image is divided into a grid of tiles of size window_shape. Each iteration returns
+        the next window.
+        
+
+        Args:
             window_shape (tuple): The desired shape of each image as (height,
                 width) in pixels.
-            pad: Whether or not to pad edge cells. If False, cells that do not
+            pad: (bool): Whether or not to pad edge cells. If False, cells that do not
                 have the desired shape will not be returned. Defaults to True.
-        returns:
-            windows: a generator of image tiles covering the image.
+
+        Yields:
+            image: image object of same type.
         """
         size_y, size_x = window_shape[0], window_shape[1]
         _ndepth, _nheight, _nwidth = self.shape
@@ -180,6 +192,17 @@ class GeoDaskImage(DaskImage, Container, PlotMixin, BandMethodsTemplate, Depreca
     _default_proj = "EPSG:4326"
 
     def map_blocks(self, *args, **kwargs):
+        ''' Queue a deferred function to run on each block of image
+
+        This is identical to Dask's map_block functinos, but returns a GeoDaskImage to preserve
+        the geospatial information.
+
+        Args: see dask.Array.map_blocks
+
+        Returns:
+            GeoDaskImage: a dask array with the function queued up to run when the image is read
+        '''
+        
         darr = super(GeoDaskImage, self).map_blocks(*args, **kwargs)
         return GeoDaskImage(darr, __geo_interface__ = self.__geo_interface__,
                             __geo_transform__ = self.__geo_transform__)
@@ -195,8 +218,9 @@ class GeoDaskImage(DaskImage, Container, PlotMixin, BandMethodsTemplate, Depreca
     @property
     def affine(self):
         """ The geo transform of the image
+
         Returns:
-            affine (dict): The image's affine transform
+            dict: The image's affine transform
         """
         # TODO add check for Ratpoly or whatevs
         return self.__geo_transform__._affine
@@ -204,8 +228,9 @@ class GeoDaskImage(DaskImage, Container, PlotMixin, BandMethodsTemplate, Depreca
     @property
     def bounds(self):
         """ Access the spatial bounding box of the image
+
         Returns:
-            bounds (list): list of bounds in image projected coordinates (minx, miny, maxx, maxy)
+            list: list of bounds in image projected coordinates (minx, miny, maxx, maxy)
         """
         return shape(self).bounds
 
@@ -216,12 +241,14 @@ class GeoDaskImage(DaskImage, Container, PlotMixin, BandMethodsTemplate, Depreca
 
     def aoi(self, **kwargs):
         """ Subsets the Image by the given bounds
-        kwargs:
-            bbox: optional. A bounding box array [minx, miny, maxx, maxy]
-            wkt: optional. A WKT geometry string
-            geojson: optional. A GeoJSON geometry dictionary
+
+        Args:
+            bbox (list): optional. A bounding box array [minx, miny, maxx, maxy]
+            wkt (str): optional. A WKT geometry string
+            geojson (str): optional. A GeoJSON geometry dictionary
+        
         Returns:
-            image (ndarray): an image instance
+            image: an image instance of the same type
         """
         g = self._parse_geoms(**kwargs)
         if g is None:
@@ -231,11 +258,13 @@ class GeoDaskImage(DaskImage, Container, PlotMixin, BandMethodsTemplate, Depreca
 
     def pxbounds(self, geom, clip=False):
         """ Returns the bounds of a geometry object in pixel coordinates
-        args:
+
+        Args:
             geom: Shapely geometry object or GeoJSON as Python dictionary or WKT string
             clip (bool): Clip the bounds to the min/max extent of the image
+
         Returns:
-            list of bounds in pixels [min x, min y, max x, max y] clipped to image bounds
+            list: bounds in pixels [min x, min y, max x, max y] clipped to image bounds
         """
 
         try:
@@ -267,13 +296,15 @@ class GeoDaskImage(DaskImage, Container, PlotMixin, BandMethodsTemplate, Depreca
 
     def geotiff(self, **kwargs):
         """ Creates a geotiff on the filesystem
-        kwargs:
+
+        Args:
             path (str): optional. The path to save the geotiff to.
             bands (list): optional. A list of band indices to save to the output geotiff ([4,2,1])
             dtype (str): optional. The data type to assign the geotiff to ("float32", "uint16", etc)
             proj (str): optional. An EPSG proj string to project the image data into ("EPSG:32612")
+
         Returns:
-            path (str): the path to created geotiff
+            str: the path to created geotiff
         """
         if 'proj' not in kwargs:
             kwargs['proj'] = self.proj
@@ -283,14 +314,16 @@ class GeoDaskImage(DaskImage, Container, PlotMixin, BandMethodsTemplate, Depreca
         preview(self, **kwargs)
 
     def warp(self, dem=None, proj="EPSG:4326", **kwargs):
-        """
-        Delayed warp across an entire AOI or Image
-        creates a new dask image by deferring calls to the warp_geometry on chunks
-        kwargs:
+        """Delayed warp across an entire AOI or Image
+
+        Creates a new dask image by deferring calls to the warp_geometry on chunks
+
+        Args:
             dem (ndarray): optional. A DEM for warping to specific elevation planes
             proj (str): optional. An EPSG proj string to project the image data into ("EPSG:32612")
+
         Returns:
-            image (dask): a warped image as deferred image array (a dask)
+            daskarray: a warped image as deferred image array
         """
         try:
             img_md = self.rda.metadata["image"]

@@ -1,75 +1,146 @@
 Getting started
 ===============
 
-Getting access to GBDX
+Getting Access to GBDX
 -----------------------
 
-All operations on GBDX require credentials. You can sign up for a GBDX account at https://gbdx.geobigdata.io.
-Your GBDX credentials are found under your account profile.
+All operations on GBDX require credentials. You can sign up for a GBDX account at https://gbdx.geobigdata.io. Your GBDX credentials are found under your account profile.
 
-gbdxtools expects a config file to exist at ~/.gbdx-config with your credentials.
-(See formatting for this file here:  https://github.com/tdg-platform/gbdx-auth#ini-file.)
+`Gbdxtools` expects a config file to exist at ~/.gbdx-config with your credentials. Instead of a file your credentials can also be stored as the environmental variables GBDX_USERNAME and GBDX_PASSWORD. For more information on the credential file and other ways to manage authorization, see https://github.com/tdg-platform/gbdx-auth#ini-file.
 
-Instantiating an Interface object automatically logs you in:
+`Gbdxtools` automatically handles authentication and authorization. It is not required to manually log in or start a session.
 
-.. code-block:: pycon
-
-   >>> from gbdxtools import Interface
-   >>> gbdx = Interface()
 
 For questions or troubleshooting email GBDX-Support@digitalglobe.com.
 
-Getting your S3 information
----------------------------
 
-gbdxtools automatically handles your GBDX account S3 bucket and prefix for you. Note that this bucket will be shared by all users under the GBDX account.
+Using Gbdxtools 
+-----------------
 
-Should you need to know your S3 information for troubleshooting, use the s3 member of the Interface:
+Local Python Environment
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. code-block:: pycon
+As an access library to GBDX APIs, `gbdxtools` can be run locally. See `Installation`_ below.
 
-   >>> gbdx.s3.info
+
+Jupyter Notebooks
+^^^^^^^^^^^^^^^^^^^^^
+
+`Gbdxtools` has additional features for visualization and mapping in IPython and Jupyter Notebooks. This is the recommended development environment for analysis.
+
+
+GBDX Notebooks
+^^^^^^^^^^^^^^^^^
+
+DigitalGlobe also offers GBDX Notebooks, a hosted instance of Jupyter Notebooks that provides a ready-to-go development environment. The platform also features sharing of notebooks, map-based image searching, and other features. For more information, see https://notebooks.geobigdata.io/.
+
+Installation
+-----------------
+
+Conda is the recommended way to install `gbdxtools`::
+
+    conda install -c conda-forge -c digitalglobe gbdxtools
+
+Pip can also be used::
+
+    pip install gbdxtools
+
+Troubleshooting
+^^^^^^^^^^^^^^^^^
+
+These are various tips to follow if your installation fails.
+
+**Dependencies**
+
+As of `gbdxtools` version 0.11.3 libcurl and GDAL (>=2.1.0) are required. To install these packages use::
+
+  # Ubuntu users:
+  sudo add-apt-repository -y ppa:ubuntugis/ubuntugis-unstable
+  sudo apt update 
+  sudo apt-get install gdal-bin python-gdal python3-gdal libcurl4-openssl-dev
+
+  # Mac Users:
+  xcode-select --install # to install libcurl
+  brew install https://raw.githubusercontent.com/OSGeo/homebrew-osgeo4mac/master/Formula/gdal2.rb
+
+**Windows Users**
+
+Conda installation should work fine on windows for python version 2.7.  If you are using python 3, you can install with pip, first install some dependencies with conda::
+
+  conda install -c conda-forge scipy
+  conda install -c conda-forge scikit-image
+  pip install gbdxtools
+
+**pip**
+
+Make sure you have the latest pip version::
+
+   pip install pip --upgrade
+
+**Ubuntu users**
+
+If you run into trouble with the installation of `cryptography`, make sure that the following dependencies are installed::
+
+   sudo apt-get install build-essential libssl-dev libffi-dev python-dev libcurl4-openssl-dev
+
+**Mac OSX Users**
+
+If you run into trouble with the installation of cryptography and see a message that <ffi.h> could not be found, you can run::
+
+	xcode-select --install
+
+Then run "pip install gbdxtools" again. See stackoverflow for discussion on what is going wrong and why this fixes it (http://stackoverflow.com/questions/27328049/missing-usr-include-after-yosemite-and-xcode-install)
+
+If you are running in a virtualenv and run into issues you may need upgrade pip in the virtualenv::
+
+	cd <your_project_folder>
+	. venv/bin/activate
+	pip install --upgrade pip
+	pip install --upgrade gbdxtools
+	# you might also need to remove token from your .gbdx-config file
+	nano -w ~.gbdx-config
+	# then, remove the [gbdx_token] section and json= part
     
-    {u'S3_access_key': u'blah',
-    'S3_secret_key': u'blah',
-    'S3_session_token': u'blah',
-    'bucket': u'gbd-customer-data',
-    'prefix': u'58600248-2927-4523-b44b-5fec3d278c09'}
+
+**GDAL**
+
+Versions of `gbdxtools` >= 0.11.3 require the GDAL library (>= 2.1.0) to be installed. 
+
+**conda**
+
+If your installation with pip keeps failing, try creating a conda environment and installing `gbdxtools` within this environment. 
+
+For Ubuntu, install conda with the following commands (choose default options at prompt)::
+
+   wget https://repo.continuum.io/miniconda/Miniconda2-latest-Linux-x86_64.sh
+   bash Miniconda2-latest-Linux-x86_64.sh
+
+For OS X, install conda with the following commands (choose default options at prompt)::
+
+   wget https://repo.continuum.io/miniconda/Miniconda2-latest-MacOSX-x86_64.sh
+   bash Miniconda2-latest-MacOSX-x86_64.sh
+
+Make sure that conda is in your path. Then create a conda environment::
+
+   conda create -n env python ipython   
+   
+Activate the environment::
+
+   source activate env
+
+Upgrade pip (if required)::
+
+   pip install pip --upgrade
+
+Install `gbdxtools`::
+
+   conda install -c digitalglobe  gbdxtools
+
+**Python versions and conda-forge**
+
+A known issue exists, in certain environments, where conda will downgrade python from 3.x to 2.7x when installing `gbdxtools`. If conda does not keep your python version intact when installing `gbdxtools`, you need to::
+
+   conda install -y gbdxtools -c digitalglobe -c conda-forge
 
 
-To download a file from your S3 bucket, use the s3.download() method:
 
-.. code-block:: pycon
-
-  >>> item = 'testdata/test1.tif'
-  >>> gbdx.s3.download(item)
-
-The file path does not need the account bucket or prefix. 
-
-You can see the contents of your bucket/prefix using this link: http://s3browser.geobigdata.io/login.html.
-
-
-Ordering imagery
-----------------
-
-This guide uses v2 of the GBDX ordering API. Ordering API v1 was deprecated on 02/25/2016.
-
-Use the ordering member of the Interface to order imagery and check the status of your order.
-
-To order the image with DG factory catalog id 10400100143FC900:
-
-.. code-block:: pycon
-
-   >>> order_id = gbdx.ordering.order('10400100143FC900')
-   >>> print(order_id)
-   04aa8df5-8ac8-4b86-8b58-aa55d7353987
-
-The order_id is unique to your image order and can be used to track the progress of your order.
-The ordered image sits in a directory on S3. The output of the following describes where:
-
-.. code-block:: pycon
-
-   >>> gbdx.ordering.status(order_id)
-   >>> [{u'acquisition_id': u'10400100143FC900',
-         u'location': u's3://receiving-dgcs-tdgplatform-com/055093431010_01_003',
-         u'state': u'delivered'}]
