@@ -17,7 +17,8 @@ The following snippet will look for all Worldview 3 footprints over Colorado:
 
 .. code-block:: python
 
-    import json, gbdxtools
+    import json
+    from gbdxtools import Interface
     gbdx = gbdxtools.Interface()
 
     # Let's find all the Worldview 3 vector footprints in colorado
