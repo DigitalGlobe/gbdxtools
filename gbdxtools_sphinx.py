@@ -5,7 +5,7 @@ class MetaCatDocumenter(MethodDocumenter):
     directivetype = 'method'
 
     def format_name(self):
-        name = super().format_name()
+        name = super(MethodDocumenter, self).format_name()
         name = name.replace('GeoDaskImage', 'CatalogImage')
         name = name.replace('DaskImage', 'CatalogImage')
         name = name.replace('PlotMixin', 'CatalogImage')
