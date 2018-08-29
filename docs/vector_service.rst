@@ -19,7 +19,7 @@ The following snippet will look for all Worldview 3 footprints over Colorado:
 
     import json
     from gbdxtools import Interface
-    gbdx = gbdxtools.Interface()
+    gbdx = Interface()
 
     # Let's find all the Worldview 3 vector footprints in colorado
     colorado_aoi = "POLYGON((-108.89 40.87,-102.19 40.87,-102.19 37.03,-108.89 37.03,-108.89 40.87))"
