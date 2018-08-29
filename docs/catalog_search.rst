@@ -1,5 +1,5 @@
 Catalog Service
-==========
+==================
 
 Catalog Search Overview
 -----------------------
