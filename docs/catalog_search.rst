@@ -11,7 +11,7 @@ The catalog can be searched various ways. The general pattern is:
     from gbdxtools import Interface
     gbdx = Interface()
 
-   results = gbdx.catalog.search( ... args ... )
+    results = gbdx.catalog.search( ... args ... )
 
 Running a search returns a list of metadata items. An example of item metadata is:
 
