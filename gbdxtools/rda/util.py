@@ -49,6 +49,7 @@ RDA_TO_DTYPE = {
 def preview(image, **kwargs):
     try:
         from IPython.display import Javascript, HTML, display
+        from gbdxtools.rda.interface import RDA
         from gbdxtools import Interface
         gbdx = Interface()
     except:
@@ -61,13 +62,7 @@ def preview(image, **kwargs):
         bands = image._rgb_bands
     wgs84_bounds = kwargs.get("bounds", list(loads(image.metadata["image"]["imageBoundsWGS84"]).bounds))
     center = kwargs.get("center", list(shape(image).centroid.bounds[0:2]))
-    graph_id = image.rda_id
-    node_id = image.rda.graph()['nodes'][0]['id']
-
-    stats = image.display_stats
-    offsets = [stats['offset'][b] for b in bands]
-    scales = [stats['scale'][b] for b in bands]
-
+    
     if image.proj != 'EPSG:4326':
         code = image.proj.split(':')[1]
         conn = gbdx.gbdx_connection
@@ -78,7 +73,15 @@ def preview(image, **kwargs):
         proj_info = {}
         bounds = wgs84_bounds
 
+    rda = RDA()
+    dra = rda.HistogramDRA(image)
+    image = dra.aoi(bbox=image.bounds)
+    graph_id = image.rda_id
+    node_id = image.rda.graph()['nodes'][0]['id']
     map_id = "map_{}".format(str(int(time.time())))
+    scales = ','.join(['1'] * len(bands))
+    offsets = ','.join(['0'] * len(bands))
+
     display(HTML(Template('''
        <div id="$map_id"/>
        <link href='https://openlayers.org/en/v4.6.4/css/ol.css' rel='stylesheet' />
@@ -180,8 +183,8 @@ def preview(image, **kwargs):
         "center": center,
         "zoom": zoom,
         "token": gbdx.gbdx_connection.access_token,
-        "scales": ",".join(map(str, scales)),
-        "offsets": ",".join(map(str, offsets)),
+        "scales": scales,
+        "offsets": offsets,
         "url": VIRTUAL_RDA_URL
     })
     display(Javascript(js))
