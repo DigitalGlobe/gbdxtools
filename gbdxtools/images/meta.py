@@ -474,10 +474,8 @@ class GeoDaskImage(DaskImage, Container, PlotMixin, BandMethodsTemplate, Depreca
     def __getitem__(self, geometry):
         if isinstance(geometry, BaseGeometry) or getattr(geometry, "__geo_interface__", None) is not None:
             g = shape(geometry)
-            try:
-                assert g in self, "Image does not contain specified geometry {} not in {}".format(g.bounds, self.bounds)
-            except AssertionError as ae:
-                warnings.warn(ae.args)
+            if g.disjoint(shape(self)):
+                raise ValueError("AOI does not intersect image: {} not in {}".format(g.bounds, self.bounds))
             bounds = ops.transform(self.__geo_transform__.rev, g).bounds
             result, xmin, ymin = self._slice_padded(bounds)
         else:
