@@ -267,14 +267,17 @@ class GeoDaskImage(DaskImage, Container, PlotMixin, BandMethodsTemplate, Depreca
 
     def geotiff(self, **kwargs):
         """ Creates a geotiff on the filesystem
-        kwargs:
-            path (str): optional. The path to save the geotiff to.
-            bands (list): optional. A list of band indices to save to the output geotiff ([4,2,1])
-            dtype (str): optional. The data type to assign the geotiff to ("float32", "uint16", etc)
-            proj (str): optional. An EPSG proj string to project the image data into ("EPSG:32612")
+
+        Args:
+            path (str): optional, path to write the geotiff file to, default is ./output.tif
+            proj (str): optional, EPSG string of projection to reproject to
+            spec (str): optional, if set to 'rgb', write out color-balanced 8-bit RGB tif
+            bands (list): optional, list of bands to export. If spec='rgb' will default to RGB bands,
+                otherwise will export all bands
+        
         Returns:
-            path (str): the path to created geotiff
-        """
+            str: path the geotiff was written to """
+
         if 'proj' not in kwargs:
             kwargs['proj'] = self.proj
         return to_geotiff(self, **kwargs)

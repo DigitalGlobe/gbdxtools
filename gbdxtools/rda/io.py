@@ -25,9 +25,18 @@ class rio_writer(object):
         self.dst.write(chunk, window=window)
 
 def to_geotiff(arr, path='./output.tif', proj=None, spec=None, bands=None, **kwargs):
+    ''' Write out a geotiff file of the image
+
+    Args:
+        path (str): path to write the geotiff file to, default is ./output.tif
+        proj (str): EPSG string of projection to reproject to
+        spec (str): if set to 'rgb', write out color-balanced 8-bit RGB tif
+        bands (list): list of bands to export. If spec='rgb' will default to RGB bands
+    
+    Returns:
+        str: path the geotiff was written to'''
+        
     assert has_rasterio, "To create geotiff images please install rasterio" 
-    if bands is not None:
-        arr = arr[bands,...]
 
     try:
         img_md = arr.rda.metadata["image"]
@@ -45,24 +54,21 @@ def to_geotiff(arr, path='./output.tif', proj=None, spec=None, bands=None, **kwa
     dtype = arr.dtype.name if arr.dtype.name != 'int8' else 'uint8' 
 
     if spec is not None and spec.lower() == 'rgb':
-
-        def stretchblock(offsets, scales, bands, block):
-            if len(block[:,0,0]) != 3:
-                return block
-            for x in range(3):
-                offset = offsets[bands[x]] 
-                scale = scales[bands[x]] 
-                block[x,:,:] = block[x,:,:] * scale + offset 
-            return np.clip(block, 0, 255)
-                
-        arr = arr[arr._rgb_bands,...]
-        offsets = arr.display_stats['offset']
-        scales = arr.display_stats['scale']
-        stretch = partial(stretchblock, offsets, scales, arr._rgb_bands)
-        arr = arr.map_blocks(stretch)
-        arr = arr.astype(np.uint8)
+        # add the RDA HistogramDRA op to get a RGB 8-bit image
+        from gbdxtools.rda.interface import RDA
+        rda = RDA()
+        dra = rda.HistogramDRA(arr)
+        # Reset the bounds and select the bands on the new Dask
+        dra_aoi = dra.aoi(bbox=arr.bounds)
+        if bands is not None:
+            dra_aoi_bands = dra_aoi[bands,...]
+        else:
+            dra_aoi_bands = dra_aoi[arr._rgb_bands,...]
+        arr = dra_aoi_bands.astype(np.uint8)
         dtype = 'uint8'
-
+    else:
+        if bands is not None:
+            arr = arr[bands,...]
     meta = {
         'width': arr.shape[2],
         'height': arr.shape[1],
