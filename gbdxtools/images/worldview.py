@@ -4,6 +4,7 @@ Contact: chris.helm@digitalglobe.com
 """
 from __future__ import print_function
 import json
+import warnings 
 
 from gbdxtools.images.drivers import WorldViewDriver, RDADaskImageDriver
 from gbdxtools.images.base import RDABaseImage
@@ -64,8 +65,9 @@ class WorldViewImage(RDABaseImage):
             try:
                 _dtype = RDA_DTYPES[dtype]
             except:
+                warnings.warn('Unknown dtype')
                 _dtype = "4"
-            graph = rda.Format(graph, dataType=RDA_DTYPES[_dtype])
+            graph = rda.Format(graph, dataType=_dtype)
         #raise AcompUnavailable("Cannot apply acomp to this image, data unavailable in bucket: {}".format(_bucket))
         return graph
 
@@ -96,9 +98,9 @@ class WV03_SWIR(WorldViewImage):
         try:
             _dtype = RDA_DTYPES[dtype]
         except:
-            # WARN
+            warnings.warn('Unknown dtype')
             _dtype = "4" 
-        graph = rda.Format(graph, dataType=RDA_DTYPES[_dtype])
+        graph = rda.Format(graph, dataType=_dtype)
         return graph
 
     @property
