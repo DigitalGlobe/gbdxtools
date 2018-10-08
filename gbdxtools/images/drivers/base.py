@@ -26,7 +26,8 @@ WV_DEFAULT_OPTIONS = {
     "proj": "EPSG:4326",
     "gsd": None,
     "band_type": "pan",
-    "correctionType": "DN"
+    "correctionType": "DN",
+    "dtype": "float32"
     }
 
 WV_MODERN_OPTIONS = {
@@ -36,7 +37,8 @@ WV_MODERN_OPTIONS = {
     "band_type": "MS",
     "acomp": False,
     "pansharpen": False,
-    "correctionType": "TOAREFLECTANCE"
+    "correctionType": "TOAREFLECTANCE",
+    "dtype": "float32"
     }
 
 

@@ -14,6 +14,14 @@ from gbdxtools.rda.error import MissingIdahoImages, AcompUnavailable
 
 rda = RDA()
 
+RDA_DTYPES = {
+    'uint8': "0",
+    'uint16': "1",
+    'int16': "2",
+    'int32': "3",
+    'float32': "4",
+    'float64': "5"
+}
 
 class WorldViewImage(RDABaseImage):
     __Driver__ = WorldViewDriver
@@ -44,15 +52,20 @@ class WorldViewImage(RDABaseImage):
         return [p for p in _parts if vendor_id(p) == _id]
 
     @classmethod
-    def _build_graph(cls, cat_id, band_type="MS", proj="EPSG:4326", gsd=None, acomp=False, dra=False, **kwargs):
+    def _build_graph(cls, cat_id, band_type="MS", proj="EPSG:4326", gsd=None, acomp=False, dra=False, dtype="float32", **kwargs):
         bands = band_types[band_type]
         gsd = gsd if not None else ""
         correction = "ACOMP" if acomp else kwargs.get("correctionType", "TOAREFLECTANCE")
         if dra:
             strip = rda.DigitalGlobeStrip(catId=cat_id, CRS=proj, GSD=gsd, correctionType=correction, bands=bands, fallbackToTOA=True)
-            graph = rda.HistogramDRA(strip)
+            graph = rda.RadiometricDRA(strip)
         else:
-            graph = rda.Format(rda.DigitalGlobeStrip(catId=cat_id, CRS=proj, GSD=gsd, correctionType=correction, bands=bands, fallbackToTOA=True), dataType="4")
+            graph = rda.DigitalGlobeStrip(catId=cat_id, CRS=proj, GSD=gsd, correctionType=correction, bands=bands, fallbackToTOA=True)
+            try:
+                _dtype = RDA_DTYPES[dtype]
+            except:
+                _dtype = "4"
+            graph = rda.Format(graph, dataType=RDA_DTYPES[_dtype])
         #raise AcompUnavailable("Cannot apply acomp to this image, data unavailable in bucket: {}".format(_bucket))
         return graph
 
@@ -75,11 +88,17 @@ class WV03_SWIR(WorldViewImage):
         return vector_services_query(query)
 
     @classmethod
-    def _build_graph(cls, cat_id, proj="EPSG:4326", gsd=None, acomp=False, **kwargs):
+    def _build_graph(cls, cat_id, proj="EPSG:4326", gsd=None, acomp=False, dtype="float32", **kwargs):
         bands = "SWIR"
         gsd = gsd if not None else ""
         correction = "ACOMP" if acomp else kwargs.get("correctionType", "TOAREFLECTANCE")
-        graph = rda.Format(rda.DigitalGlobeStrip(catId=cat_id, CRS=proj, GSD=gsd, correctionType=correction, bands=bands, fallbackToTOA=True), dataType="4")
+        graph = rda.DigitalGlobeStrip(catId=cat_id, CRS=proj, GSD=gsd, correctionType=correction, bands=bands, fallbackToTOA=True)
+        try:
+            _dtype = RDA_DTYPES[dtype]
+        except:
+            # WARN
+            _dtype = "4" 
+        graph = rda.Format(graph, dataType=RDA_DTYPES[_dtype])
         return graph
 
     @property
@@ -116,8 +135,8 @@ class WV02(WorldViewImage):
 
 class WV01(WorldViewImage):
     class WV01Driver(RDADaskImageDriver):
-        image_option_support = ["proj", "gsd", "band_type", "correctionType"]
-        __image_option_defaults__ = {"band_type": "pan", "correctionType": "DN"}
+        image_option_support = ["proj", "gsd", "band_type", "correctionType", "dtype"]
+        __image_option_defaults__ = {"band_type": "pan", "correctionType": "DN", "dtype": None}
 
     __Driver__ = WV01Driver
 

@@ -1,3 +1,15 @@
+0.15.13 
+* Added TemplateImage for rendering template id with params from RDA
+* using RDA's DRA operator for image.preview()
+* removes overlap warning when an AOI is partially beyond image extent, replaced with warning for fully disjoin AOIs
+* use RadionmetricDRA instead of HistogramDRA 
+
+0.15.12 
+* Added window_cover method
+* Fixes for TmsImage bounds
+* Adding spec='rgb' to geotiff creation
+* Cleaned up image class examples with latest code
+
 0.15.11 
 * Added the ability to pansharpen landsat and ikonos imagery
 
