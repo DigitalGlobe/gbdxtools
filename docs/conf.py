@@ -29,7 +29,7 @@ class Mock(MagicMock):
     def __getattr__(cls, name):
             return Mock()
 
-MOCK_MODULES = ['pycurl', 'pyproj']
+MOCK_MODULES = ['pycurl', 'pyproj', 'gbdx_auth', 'future', 'boto3']
 sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
 
 #                'boto',
@@ -67,7 +67,7 @@ sys.path.insert(0, os.path.abspath('..'))
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 #extensions = ['sphinx.ext.autodoc', 'sphinxcontrib.napoleon']
-extensions = ['sphinx.ext.autodoc', 'sphinx.ext.napoleon']
+extensions = ['sphinx.ext.autodoc', 'gbdxtools_sphinx', 'sphinx.ext.napoleon']
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -85,7 +85,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'gbdxtools'
-copyright = u'2016, DigitalGlobe'
+copyright = u'2016-2018, DigitalGlobe'
 author = u'DigitalGlobe'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -123,7 +123,7 @@ exclude_patterns = ['_build']
 
 # If true, the current module name will be prepended to all description
 # unit titles (such as .. function::).
-#add_module_names = True
+add_module_names = False
 
 # If true, sectionauthor and moduleauthor directives will be shown in the
 # output. They are ignored by default.
@@ -320,3 +320,4 @@ texinfo_documents = [
 
 # If true, do not generate a @detailmenu in the "Top" node's menu.
 #texinfo_no_detailmenu = False
+

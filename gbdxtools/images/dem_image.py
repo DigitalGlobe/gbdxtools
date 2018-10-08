@@ -12,6 +12,17 @@ class DemDriver(RDADaskImageDriver):
     __image_option_defaults__ = {"bbox": None}
 
 class DemImage(RDABaseImage):
+    ''' Image class for Digital Elevation Model (DEM) data from the NED/SRTM dataset.
+
+        This class has no Catalog IDs and is created by passing an AOI. It shares most of the same methods as CatalogImage objects.
+
+        Args:
+            aoi (list): list of coordinate in BBOX format
+            proj (str): (optional) EPSG string of projection reproject to. Native projection is "EPSG:4326" (WGS84)
+
+        Example:
+            >>> dem = DemImage(aoi=[5.279, 60.358, 5.402, 60.419])'''
+
     __Driver__ = DemDriver
     __rda_id__ = "dgdem-v20180406-DEFLATED-ca4649c5acb"
 

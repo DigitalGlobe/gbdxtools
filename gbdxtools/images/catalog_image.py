@@ -21,16 +21,19 @@ class CatalogImage(object):
         proj (str): Optional EPSG projection string for the image in the form of "EPSG:4326"
         dtype (str): The dtype for the returned image (only valid for Worldview). One of: "int8", "int16", "uint16", "int32", "float32", "float64"
         band_type (str): The product spec / band type for the image returned (band_type='MS'|'Pan')
-        pansharpen: Whether or not to return a pansharpened image (defaults to False)
-        acomp: Perform atmos. compensation on the image
+        pansharpen (bool): Whether or not to return a pansharpened image (defaults to False)
+        acomp (bool): Perform atmospheric compensation on the image (defaults to False, i.e. Top of Atmosphere value)
+
+    Attributes:
+        affine (list): The image affine transformation
+        bounds (list): Spatial bounds of the image
+        metadata (dict): image metadata
+        ntiles (int): the number of tiles composing the image
+        nbytes (int): size of the image in bytes
+        proj (str): The image projection as EPSG string
 
     Returns:
         image (ndarray): An image instance - one of IdahoImage, WV02, WV03_VNIR, LandsatImage, IkonosImage
-
-    Properties:
-        :affine: The image affine transformation
-        :bounds: Spatial bounds of the image
-        :proj: The image projection
     '''
     def __new__(cls, cat_id=None, **kwargs):
         inst = cls._image_by_type(cat_id, **kwargs)

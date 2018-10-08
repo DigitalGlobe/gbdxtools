@@ -1,7 +1,7 @@
-Running Workflows
-==========
+Workflow Service
+====================
 
-Quick workflow example
+Quick Workflow Example
 -----------------------
 
 Here's a quick workflow that starts with a Worldview 2 image over San Francisco, runs it through
@@ -10,11 +10,14 @@ under s3://bucket/prefix.
 
 .. code-block:: python
 
-   data = "s3://receiving-dgcs-tdgplatform-com/054813633050_01_003" # WV02 Image over San Francisco
-   aoptask = gbdx.Task("AOP_Strip_Processor", data=data, enable_acomp=True, enable_pansharpen=True)
-   workflow = gbdx.Workflow([ aoptask ])
-   workflow.savedata(aoptask.outputs.data, location='some_folder_under_your_bucket_prefix')
-   workflow.execute()
+    from gbdxtools import Interface
+    gbdx = Interface()
+
+    data = "s3://receiving-dgcs-tdgplatform-com/054813633050_01_003" # WV02 Image over San Francisco
+    aoptask = gbdx.Task("AOP_Strip_Processor", data=data, enable_acomp=True, enable_pansharpen=True)
+    workflow = gbdx.Workflow([ aoptask ])
+    workflow.savedata(aoptask.outputs.data, location='some_folder_under_your_bucket_prefix')
+    workflow.execute()
 
 At this point the workflow is launched, and you can get status as follows:
 
@@ -42,17 +45,17 @@ You can also get workflow events:
 Tasks
 -----------------------
 
-A task is instantiated as follows:
+A task is instantiated with:
 
 .. code-block:: python
 
     task = gbdx.Task("Task_Name")
 
-The task name must be a valid gbdx task name.
+The task name must be a valid GBDX task name.
 
 
 Setting Task Inputs
------------------------
+^^^^^^^^^^^^^^^^^^^^^^
 
 The following are all equivalent ways of setting the input values on a task:
 
@@ -92,7 +95,7 @@ You can also interactively get more info on a particular input:
        Value: None
 
 Task Outputs
------------------------
+^^^^^^^^^^^^^^^^^
 
 Task outputs can be interactively explored the same way as task inputs:
 
@@ -109,10 +112,10 @@ Task outputs can be interactively explored the same way as task inputs:
        description: The output log directory
 
 
-Linking Outputs from one task into Inputs of Another Task
------------------------
+Linking Task Inputs and Outputs
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The whole point of the workflow system is to build complex workflows with
+The goal of the workflow system is to enable complex workflows with
 automagic data movement between tasks. This can be done as follows:
 
 .. code-block:: python
@@ -126,7 +129,7 @@ Running a Workflow
 -----------------------
 
 A GBDX workflow is a set of tasks with inputs and outputs linked appropriately.
-Note that in gbdxtools, a workflow object is instantiated with a list of tasks.
+Note that in `gbdxtools`, a workflow object is instantiated with a list of tasks.
 The tasks will get executed when their inputs are satisfied and ready to go.
 Here is an example of a workflow which consists of the AOP_Strip_Processor task followed by
 the SaveToS3 task.
@@ -146,7 +149,7 @@ the SaveToS3 task.
     workflow = gbdx.Workflow([ aoptask, s3task ])
     workflow.execute()
 
-Here is another example of a more complicated workflow.
+Here is an of a workflow with more processing tasks:
 
 .. code-block:: python
 
@@ -159,7 +162,7 @@ Here is another example of a more complicated workflow.
     workflow.execute()
 
 Workflow Callbacks
------------------------
+^^^^^^^^^^^^^^^^^^^^^^^
 The GBDX system can send a callback upon workflow completion.  Specify a callback url like this:
 
 .. code-block:: python
@@ -169,8 +172,7 @@ The GBDX system can send a callback upon workflow completion.  Specify a callbac
     
 
 Workflow Status
------------------------
-
+^^^^^^^^^^^^^^^^^
 There are a few ways to check the status of a running workflow.
 
 Checking the status directly:
@@ -252,8 +254,7 @@ Checking whether a workflow is complete (whether canceled, failed, or succeeded)
 
 
 Workflow Stdout and Stderr
------------------------
-
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 At any time after a workflow is launched, you can access the stderr and stdout of tasks all at once from the workflow object:
 
 .. code-block:: python
@@ -290,9 +291,8 @@ If you know the task_id, you can also just get the stdout or stderr from a parti
    <stdout string>
 
 
-Task Ids in a Running Workflow
------------------------
-
+Task IDs in a Running Workflow
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 After a workflow has been executed, you can get a list of all the task ids:
 
 .. code-block:: python
@@ -303,8 +303,7 @@ After a workflow has been executed, you can get a list of all the task ids:
 
 
 Cancel a Running Workflow
------------------------
-
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 To cancel a workflow:
 
 .. code-block:: python
@@ -319,11 +318,9 @@ If you need to cancel a workflow for which you have the id:
    workflow.id = <known_workflow_id>
    workflow.cancel()
 
-This works reasonably well for now, but we'll probably come up with a better way to deal with already running workflows in the future.
 
 Timeouts
------------------------
-
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Timeouts can be set on a task to ensure they don't run too long, causing a workflow failure if triggered.  Tasks come with default timeouts which can be overridden as follows:
 
 .. code-block:: python
@@ -333,13 +330,11 @@ Timeouts can be set on a task to ensure they don't run too long, causing a workf
 The integer value is number of seconds, with a maximum of 10 hours (36000 seconds).
 
 Using Batch Workflows
------------------------
-
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Coming soon...
 
 Multiplex Inputs
------------------------
-
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Some inputs are flagged as "multiplex", which means you can assign an arbitrary number of input sources or
 values to a task.  For example, if a task has a multiplex input port named "data", you can set extra inputs as follows:
 
@@ -353,15 +348,16 @@ As long as you use the original input port name as the prefix for your inputs, i
 
 
 Saving Output Data to S3
------------------------
-
-Here's a shortcut for saving data to S3.  Rather than creating a "SaveToS3" task, you can simply do:
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Workflow outputs can be saved to S3 by creating a "SaveToS3" task or with:
 
 .. code-block:: python
 
     workflow.savedata(aoptask.outputs.data, location='some_folder')
 
-This will end up saving the output to: s3://<gbdx-customer-data-bucket>/<your-account-id>/some_folder.
+This will save the output to: s3://<gbdx-customer-data-bucket>/<your-account-id>/some_folder.
+
+gbdxtools automatically handles your GBDX account location (bucket and account id) for you. Note that this bucket will be shared by all users under the GBDX account.
 
 You can omit the location parameter and the output location will be s3://bucket/prefix/<random-GUID>
 
@@ -372,14 +368,40 @@ To find out where workflow output data is getting saved, you can do:
     >>> workflow.list_workflow_outputs()
     {u'source:AOP_Strip_Processor_35cb77ea-ffa8-4565-8c31-7f7c2cabb3ce:data': u's3://dummybucket/7b216bd9-6523-4ca9-aa3b-1d8a5994f054/some_folder'}
 
+You can also see the contents of your bucket/prefix using this link: http://s3browser.geobigdata.io/login.html.
 
-Running workflows via the workflow module (advanced)
+To download a file from your S3 bucket, use the s3.download() method:
+
+.. code-block:: pycon
+
+  >>> item = 'testdata/test1.tif'
+  >>> gbdx.s3.download(item)
+
+The file path does not need the account bucket or prefix. 
+
+Getting Your S3 Information
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Should you need to know your S3 information for troubleshooting, use the s3 member of the Interface:
+
+.. code-block:: pycon
+
+   >>> gbdx.s3.info
+    
+    {u'S3_access_key': u'blah',
+    'S3_secret_key': u'blah',
+    'S3_session_token': u'blah',
+    'bucket': u'gbd-customer-data',
+    'prefix': u'58600248-2927-4523-b44b-5fec3d278c09'}
+
+
+Running Workflows via the Workflow Module (advanced)
 ----------------------------------------------------
 
 The workflow module is a low-level abstraction of the GBDX workflow API.
 Earlier in this section, you learned how to create Task objects and chain them together in Workflow objects
 which you can then execute. The workflow module allows you to launch workflows by directly passing the workflow dictionary as an argument to the launch() function (similarly to what you would do in POSTMAN).
-Here is a simple example of running a workflow that uses the tasks AOP_Strip_Processor and SaveToS3:
+Here is a basic example of running a workflow that uses the tasks AOP_Strip_Processor and SaveToS3:
 
 .. code-block:: pycon
 
