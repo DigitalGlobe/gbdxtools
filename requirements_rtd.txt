@@ -14,7 +14,7 @@ toolz
 cloudpickle
 dask >= 0.16.0
 numpy
-requests_futures
+requests_futures==0.9.8
 configparser
 mercantile>=0.10.0
 scikit-image
