@@ -23,6 +23,8 @@ class CatalogImage(object):
         band_type (str): The product spec / band type for the image returned (band_type='MS'|'Pan')
         pansharpen (bool): Whether or not to return a pansharpened image (defaults to False)
         acomp (bool): Perform atmospheric compensation on the image (defaults to False, i.e. Top of Atmosphere value)
+        gsd (float): The Ground Sample Distance (GSD) of the image. Must be defined in the same projected units as the image projection.
+        dra (bool): Perform Dynamic Range Adjustment (DRA) on the image. DRA will override the dtype and return int8 data.  
 
     Attributes:
         affine (list): The image affine transformation
