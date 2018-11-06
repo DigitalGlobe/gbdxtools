@@ -85,7 +85,7 @@ class DaskImage(da.Array):
         arr = self
         if bands is not None:
             arr = self[bands, ...]
-        return arr.compute(get=threaded_get)
+        return arr.compute(scheduler=threaded_get)
 
     def randwindow(self, window_shape):
         """Get a random window of a given shape from within an image

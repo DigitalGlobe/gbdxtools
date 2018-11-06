@@ -205,7 +205,7 @@ class PlotMixin(object):
         if hasattr(data, 'read'):
             return data.read(**kwargs)
         else:
-            return data.compute(get=threaded_get)
+            return data.compute(scheduler=threaded_get)
 
     def _single_band(self, **kwargs):
         arr = self._read(self, **kwargs)
