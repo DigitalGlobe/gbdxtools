@@ -1,8 +1,10 @@
 language: python
+sudo: required
+dist: xenial
 python:
   - "2.7"
   - "3.6"
-  - "3.7-dev"
+  - "3.7"
 env:
   global:
     - BOTO_CONFIG=/doesnotexist
