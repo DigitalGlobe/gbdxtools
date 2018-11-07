@@ -39,6 +39,17 @@ Python Gbdxtools
 * Simple visualization and analysis methods such as one-line plotting (using Matplotlib).
 
 
+Example
+---------------------
+
+To load a subset of an image using its catalog identifier, and view it in a Jupyter notebook:
+
+.. code-block:: python
+
+    from gbdxtools import CatalogImage
+    img = CatalogImage('104001001BA7C400', bbox=[2.28, 48.87, 2.30, 48.87])
+    img.plot()
+
 
 `gbdxtools` is MIT licenced.
 

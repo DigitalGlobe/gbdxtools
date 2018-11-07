@@ -169,8 +169,10 @@ class PlotMixin(object):
         Args:
             w (float or int): width of plot in inches at 72 dpi, default is 10
             h (float or int): height of plot in inches at 72 dpi, default is 10
+            title (str): Title to use on the plot
+            fontsize (int): Size of title font, default is 22. Size is measured in points.
             bands (list): bands to use for plotting, such as bands=[4,2,1]. Defaults to the image's natural RGB bands. This option is useful for generating pseudocolor images when passed a list of three bands. If only a single band is provided, a colormapped plot will be generated instead.
-            colormap (str): MatPlotLib colormap name to use for single band images. Default is colormap='Grey_R'.
+            cmap (str): MatPlotLib colormap name to use for single band images. Default is colormap='Grey_R'.
             histogram (str): either 'equalize', 'minmax', 'match', or ignore
             stretch (list): stretch the histogram between two percentile values, default is [2,98]
             gamma (float): adjust image gamma, default is 1.0
