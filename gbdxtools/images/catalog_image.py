@@ -19,9 +19,12 @@ class CatalogImage(object):
     Args:
         catalogID (str): The source catalog ID from the platform catalog.
         proj (str): Optional EPSG projection string for the image in the form of "EPSG:4326"
+        dtype (str): The dtype for the returned image (only valid for Worldview). One of: "int8", "int16", "uint16", "int32", "float32", "float64"
         band_type (str): The product spec / band type for the image returned (band_type='MS'|'Pan')
         pansharpen (bool): Whether or not to return a pansharpened image (defaults to False)
         acomp (bool): Perform atmospheric compensation on the image (defaults to False, i.e. Top of Atmosphere value)
+        gsd (float): The Ground Sample Distance (GSD) of the image. Must be defined in the same projected units as the image projection.
+        dra (bool): Perform Dynamic Range Adjustment (DRA) on the image. DRA will override the dtype and return int8 data.  
 
     Attributes:
         affine (list): The image affine transformation

@@ -71,6 +71,12 @@ S3Image
 .. autoclass:: gbdxtools.images.s3Image.S3Image
     :undoc-members:
 
+S3Image
+^^^^^^^^^^^^^
+
+.. autoclass:: gbdxtools.images.sentinel2.Sentinel2
+    :undoc-members:
+
 
 Idaho
 -----------------------
