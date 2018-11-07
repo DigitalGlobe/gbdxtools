@@ -1,7 +1,6 @@
 import warnings
 import contextlib
 import vcr
-
 import unittest
 
 
@@ -68,8 +67,13 @@ class TestLegacySupport(unittest.TestCase):
         from gbdxtools import IpeImage
         #TODO: instantiate an IpeImage and check it raises DeprecationWarning
 
-
-
+    @my_vcr.use_cassette('tests/unit/cassettes/test_cat_image_wv2.yaml', filter_headers=['authorization'])
+    def test_base_layer_match_dep(self):
+        # Test access raises warning
+        from gbdxtools import CatalogImage
+        wv2 = CatalogImage('1030010076B8F500')
+        with self.assertWarns(DeprecationWarning):
+            obj = wv2.base_layer_match()
 
 
 
