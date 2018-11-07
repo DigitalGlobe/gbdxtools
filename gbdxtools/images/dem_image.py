@@ -34,8 +34,10 @@ class DemImage(RDABaseImage):
 
     @classmethod
     def _build_graph(cls, aoi, proj="EPSG:4326", **kwargs):
+        bucket = kwargs.get("bucket", "idaho-dems-2018")
+        imageId = kwargs.get("imageId", "dgdem-v20180406-DEFLATED-ca4649c5acb")
         wkt = box(*aoi).wkt
-        dem = rda.GeospatialCrop(rda.IdahoRead(bucketName="idaho-dems-2018", imageId="dgdem-v20180406-DEFLATED-ca4649c5acb", objectStore="S3"), geospatialWKT=str(wkt))
+        dem = rda.GeospatialCrop(rda.IdahoRead(bucketName=bucket, imageId=imageId, objectStore="S3"), geospatialWKT=str(wkt))
         if proj is not "EPSG:4326":
             dem = rda.Reproject(dem, **reproject_params(proj))
         return dem

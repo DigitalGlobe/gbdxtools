@@ -62,7 +62,7 @@ class MetaImageTest(unittest.TestCase):
     def test_image_window_at(self):
         wv2 = CatalogImage('1030010076B8F500')
         c1 = shape(wv2).centroid
-        window = wv2.window_at(c1, 256, 256)
+        window = wv2.window_at(c1, (256, 256))
         c2 = shape(window).centroid
         bands, x, y = window.shape
         # check the window is the correct shape

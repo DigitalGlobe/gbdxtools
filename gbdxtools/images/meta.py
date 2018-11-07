@@ -117,7 +117,7 @@ class DaskImage(da.Array):
             for i in xrange(count):
                 yield self.randwindow(window_shape)
 
-    def window_at(self, geom, x_size, y_size):
+    def window_at(self, geom, window_shape):
         """Return a subsetted window of a given size, centered on a geometry object
 
         Useful for generating training sets from vector training data
@@ -125,8 +125,7 @@ class DaskImage(da.Array):
 
         Args:
             geom (shapely,geometry): Geometry to center the image on
-            x_size (int): Size of subset in pixels in the x direction
-            y_size (int): Size of subset in pixels in the y direction
+            window_shape (tuple): The desired shape of the image as (height, width) in pixels.
 
         Returns:
             image: image object of same type
@@ -134,6 +133,7 @@ class DaskImage(da.Array):
         # Centroids of the input geometry may not be centered on the object.
         # For a covering image we use the bounds instead.
         # This is also a workaround for issue 387.
+        size_y, size_x = window_shape[0], window_shape[1]
         bounds = box(*geom.bounds)
         px = ops.transform(self.__geo_transform__.rev, bounds).centroid
         miny, maxy = int(px.y - y_size/2), int(px.y + y_size/2)
