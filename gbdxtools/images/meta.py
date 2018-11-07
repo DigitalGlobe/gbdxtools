@@ -133,7 +133,7 @@ class DaskImage(da.Array):
         # Centroids of the input geometry may not be centered on the object.
         # For a covering image we use the bounds instead.
         # This is also a workaround for issue 387.
-        size_y, size_x = window_shape[0], window_shape[1]
+        y_size, x_size = window_shape[0], window_shape[1]
         bounds = box(*geom.bounds)
         px = ops.transform(self.__geo_transform__.rev, bounds).centroid
         miny, maxy = int(px.y - y_size/2), int(px.y + y_size/2)
