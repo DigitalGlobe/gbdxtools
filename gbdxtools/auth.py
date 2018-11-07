@@ -63,7 +63,7 @@ class _Auth(object):
 
                 except Exception as e:
                     r.request.hooks = None
-                    print("Error expiring token from session, Reason {}".format(e.message))
+                    print("Error expiring token from session, Reason {}".format(e))
 
         if self.gbdx_connection is not None:
 

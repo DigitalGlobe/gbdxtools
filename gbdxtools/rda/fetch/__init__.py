@@ -3,8 +3,7 @@ from dask import optimization
 import operator
 
 from gbdxtools.images.meta import DaskMeta
-from gbdxtools.rda.fetch.async.libcurl.select import load_urls as mcfetch
-#from gbdxtools.rda.fetch.async.asyncio.async import load_urls as aiofetch
+from gbdxtools.rda.fetch.conc.libcurl.select import load_urls as mcfetch
 from gbdxtools.rda.fetch.threaded.libcurl.easy import load_url as easyfetch
 
 class BaseFetch(object):
