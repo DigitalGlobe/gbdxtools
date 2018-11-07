@@ -60,8 +60,6 @@ def load_url(url, token, shape=(8, 256, 256)):
                 success = True
                 return arr
             except Exception as e:
-                if "GBDX_DEBUG" in os.environ:
-                    print(e)
                 _curl.close()
                 del _curl_pool[thread_id]
             finally:
@@ -69,5 +67,5 @@ def load_url(url, token, shape=(8, 256, 256)):
                 os.remove(temp.name)
 
     if success is False:
-        arr = np.zeros(shape, dtype=np.float32)
+        raise TypeError("Request for {} returned unexpected error code: {}".format(url, code))
     return arr
