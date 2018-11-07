@@ -1,3 +1,10 @@
+0.16.0
+* Depricated the base_layer_match method, now user .rgb(histogram="match")
+* Updated docs for image classes 
+* changed window_at to accept window_shape for parity with other windowing methods
+* When images fail to successfully fetch an image tile from RDA, an error is now thrown 
+
+
 0.15.13 
 * Added TemplateImage for rendering template id with params from RDA
 * using RDA's DRA operator for image.preview()
