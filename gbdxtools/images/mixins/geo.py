@@ -8,6 +8,7 @@ except ImportError:
 
 import mercantile
 from shapely.geometry import box, shape, mapping, asShape
+from gbdxtools.deprecate import deprecation
 
 import numpy as np
 try:
@@ -50,6 +51,9 @@ class PlotMixin(object):
             return np.rollaxis(data, 0, 3)
         else:
             raise KeyError('Unknown histogram parameter, use "equalize", "match", "minmax", or "ignore"')
+
+    def base_layer_match(self, *args, **kwargs):
+        deprecation('The use of base_layer_match has been deprecated. Please use image.rgb(histogram = "match")')
 
     def histogram_equalize(self, use_bands, **kwargs):
         ''' Equalize and the histogram and normalize value range
