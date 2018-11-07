@@ -13,7 +13,7 @@ class Sentinel2(RDABaseImage):
      Dask based access to Sentinel2 images backed by rda Graphs.
      
      Args:
-        prefix (str): The Sentinel ID 
+        prefix (str): The Sentinel data location from Catalog metadata item 'bucketPrefix'
         spec (str): Sensor group to use, values are '10m' (default), '20m', and '60m'
         proj (str): EPSG code for the resulting image, defaults to EPSG:4326 (WGS 84 Lat/Lon)
     """
