@@ -38,6 +38,10 @@ Python Gbdxtools
 
 * Simple visualization and analysis methods such as one-line plotting (using Matplotlib).
 
+CLI RdaTools
+----------------
+
+Some GBDX functionality is also available through the command line with https://github.com/DigitalGlobe/rdatools. The CLI tool is useful for building simple workflows with other command lines tools like gdal_translate or JQ. RdaTools is a statically linked Go executable and binaries should run on most systems.
 
 
 `gbdxtools` is MIT licenced.
