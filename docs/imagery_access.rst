@@ -92,6 +92,22 @@ You can also specify projections in the image constructor:
 
 The ``proj='PROJ4 String'`` parameter will reproject imagery into the given projection.
 
+The resolution of the image can be adjusted with the ``gsd`` (Ground Sample Distance) parameter. The value needs to be in the same units as the requested image projection. The image will be resampled using bilinear resampling.
+
+Downsampling is limited to 10 times the resolution of the lowest resolution overview. Upsampling is limited to 10 times the native resolution.
+
+.. warning:: Image resampling methods can change the pixel values depending on the method used. Please be sure that bilinear resampling is appropriate for your analysis. For other resampling methods, see `scikit-image <http://scikit-image.org/docs/dev/api/skimage.transform.html>`_ ``skimage.transform``.
+
+Resampling is commonly used to match resolutions between different images over the same area so they have the same array size for a given area of interest. 
+
+.. code-block:: python
+
+    from gbdxtools import CatalogImage
+    # native resolution of this image is 1.1372619475386275e-05
+    new_gsd = 1.138e-05
+    img = CatalogImage('104001001BA7C400', bbox=[2.28, 48.87, 2.30, 48.87], gsd=new_gsd)
+    print(img.shape)
+
 The primary format of the image classes is the NumPy array, but for interoperability we provide a helper method to create GeoTiff files directly from images:
 
 .. code-block:: python
@@ -198,7 +214,7 @@ Beyond replacing catalog ids for AOIs, the ``DemImage`` class shares all the sam
 TMS Images
 ^^^^^^^^^^^^^^^^^^^^^^^
 
-The ``TmsImage`` class is used to access imagery available from the `DigitalGlobe Maps API <https://platform.digitalglobe.com/maps-api/>`_. These are global mosiacs of imagery that can be an effective source for training Machine Learning algorithms or whenever high-resolution is needed. Since the Maps API is static, or changes less frequently, these images are best suited when there are no temporal requirements on an analysis. Instead of an ID the zoom level to use can be specified (default is 22). Changing the zoom level will change the resolution of the image. Note that different image sources are used at different zoom levels.
+The ``TmsImage`` class is used to access imagery available from the `DigitalGlobe Maps API <https://platform.digitalglobe.com/maps-api/>`_. These are global mosiacs of imagery that can be an effective source for training Machine Learning algorithms or whenever high-resolution is needed. Since the Maps API is static, or changes less frequently, these images are best suited when there are no temporal requirements on an analysis. The zoom level to use can be specified (default is 22). Changing the zoom level will change the resolution of the image. Note that different image sources are used at different zoom levels.
 
 .. code-block:: python
 
@@ -222,6 +238,24 @@ Use this class to access data directly from an Amazon S3 bucket, for instance wh
 
     img = S3Image('landsat-pds/c1/L8/139/045/LC08_L1TP_139045_20170304_20170316_01_T1/LC08_L1TP_139045_20170304_20170316_01_T1_B3.TIF')
     print(img.shape)
+
+
+Sentinel2 Images
+^^^^^^^^^^^^^^^^^^^^^
+
+Sentinel2 images are accessed through the CatalogImage class. The default behaviour is to access the 10m sensor bands. To access the other sensor groups, pass a ``spec`` parameter with the values ``10m``, ``20m``, or ``60m``.
+
+.. code-block:: python
+
+    from gbdxtools import CatalogImage
+    
+    img = CatalogImage('e89d5a29-1119-5c0a-a007-a03341d5bc48', spec='20m')
+    print(type(img))
+    print('Resolution: {}m'.format(img.metadata['georef']['scaleX']))
+
+For more information on the Sentinel2 sensor groups, see the `offical documentation <https://sentinel.esa.int/web/sentinel/user-guides/sentinel-2-msi/resolutions/spatial>`_.
+
+Sentinel2 images also support the ``proj`` parameter for reprojection.
 
 Defining AOIs
 --------------
@@ -298,7 +332,9 @@ Options available for plotting:
 
 * ``w,h`` : width and height of the plot, in inches at 72 dpi. This includes default borders and spacing. If the image is shown in Jupyter the outside whitespace will be automatically cropped to save size, resulting in a smaller sized image than expected. Default is ``w=10, h=10``.
 * ``bands``: list of bands to use for plotting, such as ``bands=[4,2,1]``. Defaults to the image's natural RGB bands. This option is useful for generating pseudocolor images when passed a list of three bands. If only a single band is provided, a colormapped plot will be generated instead.
-* ``colormap``: MatPlotLib colormap to use for single band images. Default is ``colormap='Grey_R'``.
+* ``title``: the title for the plot, if not specified no title is displayed.
+* ``fontsize``: the font size for the title, in points. Default is 22.
+* ``cmap``: MatPlotLib colormap to use for single band images. Default is ``cmap='Grey_R'``.
 * ``histogram``, ``stretch``, and ``gamma``: These options provides several options for dynamic range adjustment of the image to convert the source imagery to an appropriate range needed for plotting. The default if none of these three options are specified is ``stretch=[2,98]``.
 
     * ``histogram``: adjust the histogram of the image:

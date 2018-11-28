@@ -16,7 +16,7 @@ with open(req_path) as f:
 # long_description=readme,
 
 setup(name='gbdxtools',
-      version='0.15.13',
+      version='0.16.0',
       description='API wrapper and imagery access for the GBDX Platform',
       classifiers=[],
       keywords='',

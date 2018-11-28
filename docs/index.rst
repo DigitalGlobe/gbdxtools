@@ -43,6 +43,17 @@ CLI RdaTools
 
 Some GBDX functionality is also available through the command line with https://github.com/DigitalGlobe/rdatools. The CLI tool is useful for building simple workflows with other command lines tools like gdal_translate or JQ. RdaTools is a statically linked Go executable and binaries should run on most systems.
 
+Example
+---------------------
+
+To load a subset of an image using its catalog identifier, and view it in a Jupyter notebook:
+
+.. code-block:: python
+
+    from gbdxtools import CatalogImage
+    img = CatalogImage('104001001BA7C400', bbox=[2.28, 48.87, 2.30, 48.87])
+    img.plot()
+
 
 `gbdxtools` is MIT licenced.
 

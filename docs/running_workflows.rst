@@ -252,6 +252,15 @@ Checking whether a workflow is complete (whether canceled, failed, or succeeded)
    >>> workflow.complete
    True
 
+Loading an Existing Workflow
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+To load an existing workflow, create an empty ``Interface.Workflow`` object and set its ID.
+
+.. code-block:: python
+
+    workflow = gbdx.Workflow( [] )  # instantiate a blank workflow
+    workflow.id = <known_workflow_id>
+    workflow.cancel() 
 
 Workflow Stdout and Stderr
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -378,6 +387,13 @@ To download a file from your S3 bucket, use the s3.download() method:
   >>> gbdx.s3.download(item)
 
 The file path does not need the account bucket or prefix. 
+
+It is also possible to upload files to S3:
+
+.. code-block:: pycon
+
+  >>> item = 'testdata/test1.tif'
+  >>> gbdx.s3.upload(item)
 
 Getting Your S3 Information
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

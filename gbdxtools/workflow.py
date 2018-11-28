@@ -179,7 +179,7 @@ class Workflow(object):
             batch_workflow_id = r.json()['batch_workflow_id']
             return batch_workflow_id
         except TypeError as e:
-            self.logger.debug('Batch Workflow not launched, reason: {0}'.format(e.message))
+            self.logger.debug('Batch Workflow not launched, reason: {0}'.format(e))
 
     def batch_workflow_status(self, batch_workflow_id):
         """Checks GBDX batch workflow status.
@@ -234,7 +234,7 @@ class Workflow(object):
                 "running",
                 "complete",
                 "waiting",
-                "all"  
+                "all"
 
          Returns:
              Batch Workflow status (str).

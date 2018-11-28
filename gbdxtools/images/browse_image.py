@@ -50,6 +50,7 @@ class BrowseImage(object):
     def _get_metadata(self):
         url = 'https://geobigdata.io/catalog/v2/record/{}'.format(self.catalog_id)
         response = self._interface.gbdx_connection.get(url)
+        response.raise_for_status()
         return response.json()
         
     def _get_geometry(self):

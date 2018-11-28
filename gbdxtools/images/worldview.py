@@ -16,6 +16,7 @@ from gbdxtools.rda.error import MissingIdahoImages, AcompUnavailable
 rda = RDA()
 
 RDA_DTYPES = {
+    None: '4',
     'uint8': "0",
     'uint16': "1",
     'int16': "2",
@@ -65,7 +66,7 @@ class WorldViewImage(RDABaseImage):
             try:
                 _dtype = RDA_DTYPES[dtype]
             except:
-                warnings.warn('Unknown dtype')
+                warnings.warn('Unknown dtype {}'.format(dtype))
                 _dtype = "4"
             graph = rda.Format(graph, dataType=_dtype)
         #raise AcompUnavailable("Cannot apply acomp to this image, data unavailable in bucket: {}".format(_bucket))

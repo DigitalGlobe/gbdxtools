@@ -86,6 +86,6 @@ def to_geotiff(arr, path='./output.tif', proj=None, spec=None, bands=None, **kwa
     with rasterio.open(path, "w", **meta) as dst:
         writer = rio_writer(dst)
         result = store(arr, writer, compute=False)
-        result.compute(get=threaded_get)
+        result.compute(scheduler=threaded_get)
     
     return path
