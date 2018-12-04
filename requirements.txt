@@ -16,7 +16,7 @@ dask >= 0.20.0
 numpy
 pycurl
 pyproj
-requests_futures
+requests_futures==0.9.9
 configparser
 mercantile>=0.10.0
 scikit-image
