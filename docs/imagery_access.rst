@@ -32,14 +32,14 @@ To prevent massive amounts of data from being transferred, it is recommended to 
 
 .. code-block:: python
 
-    aoi = img.aoi(bbox=[2.28, 48.87, 2.30, 48.87])
+    aoi = img.aoi(bbox=[2.28, 48.87, 2.30, 48.89])
     print(aoi)
 
 The AOI is now a cropped portion of the larger catalog image, and still no data has been fetched. We use `Dask Arrays <http://dask.pydata.org/en/latest/array.html>`_ to coordinate the retrieval of data from the server. You can work with Dask arrays very similarly to NumPy arrays except that only when you need to access the underlying data will Dask fetch it in chunks from the server. The image bounding box can also be specified when instantiating the image by passing a ``bbox`` parameter. 
 
 .. code-block:: python
 
-    img = CatalogImage('104001001BA7C400', bbox=[2.28, 48.87, 2.30, 48.87])
+    img = CatalogImage('104001001BA7C400', bbox=[2.28, 48.87, 2.30, 48.89])
 
 `Gbdxtools` offers many different ways to specify the bounds of the image - see `Defining AOIs`_ below
 
@@ -56,7 +56,7 @@ To fetch data from the server for the purpose of display or analysis ``CatalogIm
 
 .. code-block:: python
 
-    img = CatalogImage('104001001BA7C400', bbox=[2.28, 48.87, 2.30, 48.87])
+    img = CatalogImage('104001001BA7C400', bbox=[2.28, 48.87, 2.30, 48.89])
     img.plot()
 
     # or call read directly to get a NumPy array:
@@ -69,7 +69,7 @@ By default, ``CatalogImage`` returns a multispectral image. ``CatalogImage`` can
 
     from gbdxtools import CatalogImage
 
-    img = CatalogImage('104001001BA7C400', band_type='Pan', bbox=[2.28, 48.87, 2.30, 48.87])
+    img = CatalogImage('104001001BA7C400', band_type='Pan', bbox=[2.28, 48.87, 2.30, 48.89])
     print(img.shape, img.bounds)
 
 To fetch 8-band pan-sharpened imagery you can pass the ``pansharpen=True|False`` flag:
@@ -78,7 +78,7 @@ To fetch 8-band pan-sharpened imagery you can pass the ``pansharpen=True|False``
 
     from gbdxtools import CatalogImage
 
-    img = CatalogImage('104001001BA7C400', pansharpen=True, bbox=[2.28, 48.87, 2.30, 48.87])
+    img = CatalogImage('104001001BA7C400', pansharpen=True, bbox=[2.28, 48.87, 2.30, 48.89])
     img.plot()
 
 You can also specify projections in the image constructor:
@@ -87,7 +87,7 @@ You can also specify projections in the image constructor:
 
     from gbdxtools import CatalogImage
 
-    img = CatalogImage('104001001BA7C400', band_type='Pan', bbox=[2.28, 48.87, 2.30, 48.87], proj='EPSG:3857')
+    img = CatalogImage('104001001BA7C400', band_type='Pan', bbox=[2.28, 48.87, 2.30, 48.89], proj='EPSG:3857')
     print(img.shape)
 
 The ``proj='PROJ4 String'`` parameter will reproject imagery into the given projection.
@@ -105,7 +105,7 @@ Resampling is commonly used to match resolutions between different images over t
     from gbdxtools import CatalogImage
     # native resolution of this image is 1.1372619475386275e-05
     new_gsd = 1.138e-05
-    img = CatalogImage('104001001BA7C400', bbox=[2.28, 48.87, 2.30, 48.87], gsd=new_gsd)
+    img = CatalogImage('104001001BA7C400', bbox=[2.28, 48.87, 2.30, 48.89], gsd=new_gsd)
     print(img.shape)
 
 The primary format of the image classes is the NumPy array, but for interoperability we provide a helper method to create GeoTiff files directly from images:
@@ -114,7 +114,7 @@ The primary format of the image classes is the NumPy array, but for interoperabi
 
     from gbdxtools import CatalogImage
 
-    img = CatalogImage('104001001BA7C400', band_type='Pan', bbox=[2.28, 48.87, 2.30, 48.87], proj='EPSG:3857')
+    img = CatalogImage('104001001BA7C400', band_type='Pan', bbox=[2.28, 48.87, 2.30, 48.89], proj='EPSG:3857')
     tif = img.geotiff(path="./output.tif", proj="EPSG:4326")
 
 The above code generates a geotiff on the filesystem with the name ``output.tif`` and the projection ``EPSG:4326``. You can also pass an array of band indices (``bands=[4,2,1]``) to the `geotiff` method: 
@@ -123,7 +123,7 @@ The above code generates a geotiff on the filesystem with the name ``output.tif`
 
     from gbdxtools import CatalogImage
 
-    img = CatalogImage('104001001BA7C400', bbox=[2.28, 48.87, 2.30, 48.87], proj='EPSG:3857')
+    img = CatalogImage('104001001BA7C400', bbox=[2.28, 48.87, 2.30, 48.89], proj='EPSG:3857')
     tif = img.geotiff(path="./output.tif", proj="EPSG:4326", bands=[4,2,1])
 
 This will create a geotiff on the the filesystem with only the bands `4,2,1` in that order.
@@ -264,7 +264,7 @@ In addition to using the ``.aoi()`` method, the image bounding box can be specif
 
 .. code-block:: python
 
-    img = CatalogImage('104001001BA7C400', bbox=[2.28, 48.87, 2.30, 48.87])
+    img = CatalogImage('104001001BA7C400', bbox=[2.28, 48.87, 2.30, 48.89])
 
 Image AOIs can also be defined by slicing with a geometry object. The image will be cropped to the bounds of the geometry.
 
@@ -273,7 +273,7 @@ Image AOIs can also be defined by slicing with a geometry object. The image will
     from shapely.geometry import box
     img = CatalogImage('104001001BA7C400')
     # create a polygon geometry object of the bounding box
-    bbox = box(2.28, 48.87, 2.30, 48.87)
+    bbox = box(2.28, 48.87, 2.30, 48.89)
     # slice the image using the polygon
     # this is equivalent to the img.aoi(...) example above
     aoi = img[bbox]
