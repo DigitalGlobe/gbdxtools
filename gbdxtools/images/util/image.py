@@ -45,7 +45,7 @@ def is_ordered(cat_id):
       Returns:
         ordered (bool): Whether or not the image has been ordered
     """
-    url = 'https://rda.geobigdata.io/v1/stripMetadata/{}/capabilities'.format(cat_id)
+    url = 'https://rda.geobigdata.io/v1/stripMetadata/{}'.format(cat_id)
     auth = Auth()
     r = auth.gbdx_connection.get(url)
     return r.status_code == 200
