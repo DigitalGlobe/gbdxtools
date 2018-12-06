@@ -1,5 +1,5 @@
 from gbdxtools.vectors import Vectors
-
+from gbdxtools.auth import Auth
 from shapely import wkt
 from shapely.geometry import box
 
@@ -35,5 +35,37 @@ def vector_services_query(query, aoi=None, **kwargs):
         aoi = wkt.dumps(box(-180, -90, 180, 90))
     _parts = sorted(vectors.query(aoi, query=query, **kwargs), key=lambda x: x['properties']['id'])
     return _parts
+
+def is_ordered(cat_id):
+    """
+      Checks to see if a CatalogID has been ordered or not.
+
+      Args:
+        catalogID (str): The catalog ID from the platform catalog.
+      Returns:
+        ordered (bool): Whether or not the image has been ordered
+    """
+    url = 'https://rda.geobigdata.io/v1/stripMetadata/{}/capabilities'.format(cat_id)
+    auth = Auth()
+    r = auth.gbdx_connection.get(url)
+    return r.status_code == 200
+
+def can_acomp(cat_id):
+    """
+      Checks to see if a CatalogID can be atmos. compensated or not.
+
+      Args:
+        catalogID (str): The catalog ID from the platform catalog.
+      Returns:
+        available (bool): Whether or not the image can be acomp'd
+    """
+    url = 'https://rda.geobigdata.io/v1/stripMetadata/{}/capabilities'.format(cat_id)
+    if not is_ordered(cat_id):
+        return False
+    auth = Auth()
+    r = auth.gbdx_connection.get(url)
+    r.raise_for_status()
+    data = r.json()
+    return data['acompVersion'] is not None
 
 
