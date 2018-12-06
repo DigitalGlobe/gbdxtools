@@ -36,6 +36,16 @@ def vector_services_query(query, aoi=None, **kwargs):
     _parts = sorted(vectors.query(aoi, query=query, **kwargs), key=lambda x: x['properties']['id'])
     return _parts
 
+def _req_with_retries(conn, url, retries=5):
+    for i in range(retries):
+        try:
+            res = conn.get(url)
+            if res.status_code != 502:
+                return res
+        except:
+            pass
+    return None
+
 def is_ordered(cat_id):
     """
       Checks to see if a CatalogID has been ordered or not.
@@ -47,8 +57,10 @@ def is_ordered(cat_id):
     """
     url = 'https://rda.geobigdata.io/v1/stripMetadata/{}'.format(cat_id)
     auth = Auth()
-    r = auth.gbdx_connection.get(url)
-    return r.status_code == 200
+    r = _req_with_retries(auth.gbdx_connection, url)
+    if r is not None:
+        return r.status_code == 200
+    return False
 
 def can_acomp(cat_id):
     """
@@ -61,7 +73,7 @@ def can_acomp(cat_id):
     """
     url = 'https://rda.geobigdata.io/v1/stripMetadata/{}/capabilities'.format(cat_id)
     auth = Auth()
-    r = auth.gbdx_connection.get(url)
+    r = _req_with_retries(auth.gbdx_connection, url)
     try: 
         data = r.json()
         return data['acompVersion'] is not None
