@@ -60,12 +60,12 @@ def can_acomp(cat_id):
         available (bool): Whether or not the image can be acomp'd
     """
     url = 'https://rda.geobigdata.io/v1/stripMetadata/{}/capabilities'.format(cat_id)
-    if not is_ordered(cat_id):
-        return False
     auth = Auth()
     r = auth.gbdx_connection.get(url)
-    r.raise_for_status()
-    data = r.json()
-    return data['acompVersion'] is not None
+    try: 
+        data = r.json()
+        return data['acompVersion'] is not None
+    except:
+        return False
 
 
