@@ -1,3 +1,7 @@
+0.16.1
+* Added method for checking if a catalog ID has been ordered (`CatalogImage.is_ordered(catid)`)
+* Added method for checking if a catalog ID can be acomp'd (`CatalogImage.acomp_available(catid)`)
+
 0.16.0
 * Depricated the base_layer_match method, now user .rgb(histogram="match")
 * Updated docs for image classes 

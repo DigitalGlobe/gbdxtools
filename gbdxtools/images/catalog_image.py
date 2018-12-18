@@ -6,12 +6,13 @@ Contact: chris.helm@digitalglobe.com
 from gbdxtools import WV01, WV02, WV03_SWIR, WV03_VNIR, WV04, LandsatImage, IkonosImage, GE01, QB02, Sentinel2, Radarsat
 from gbdxtools.images.rda_image import RDAImage, GraphMeta
 from gbdxtools.rda.error import UnsupportedImageType
-from gbdxtools.images.util.image import vector_services_query
+from gbdxtools.images.util.image import vector_services_query, can_acomp, is_ordered
 
 from shapely import wkt
 from shapely.geometry import box
 import json
 import types as pytypes
+
 
 class CatalogImage(object):
     '''Creates an image instance matching the type of the Catalog ID.
@@ -45,6 +46,30 @@ class CatalogImage(object):
                 if isinstance(getattr(fplg, attrname), pytypes.MethodType) and attrname in ("__dask_optimize__", "__fetch__"):
                     setattr(inst, attrname, getattr(fplg, attrname))
         return inst
+
+    @classmethod
+    def is_ordered(cls, cat_id):
+      """
+        Checks to see if a CatalogID has been ordered or not. 
+
+        Args:
+          catalogID (str): The catalog ID from the platform catalog.
+        Returns:
+          ordered (bool): Whether or not the image has been ordered
+      """
+      return is_ordered(cat_id)
+
+    @classmethod
+    def acomp_available(cls, cat_id):
+      """
+        Checks to see if a CatalogID can be atmos. compensated or not.
+
+        Args:
+          catalogID (str): The catalog ID from the platform catalog.
+        Returns:
+          available (bool): Whether or not the image can be acomp'd
+      """
+      return can_acomp(cat_id)
 
     @classmethod
     def _image_by_type(cls, cat_id, **kwargs):

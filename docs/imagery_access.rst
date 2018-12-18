@@ -140,7 +140,7 @@ This will create a geotiff of the RGB bands, dynamically adjusted to an 8 bit ra
 Atmospheric Compensation
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Currently every catalog image fetches data as Top of Atmosphere (TOA) Reflectance values. It is also possible to fetch data processed with Atmospheric Compensation (acomp). Acomp is a process used to remove haze and vapor particles and clarify imagery in a variety of atmospheric conditions. This can improve the image quality and provides more consistent imagery when comparing images over time. To use acomp on a ``CatalogImage`` you can pass ``acomp=True`` to the image constructor. Note: There are many images on the platform that do not yet support ``acomp=True``. These images will throw an error during initialization.
+Currently every catalog image fetches data as Top of Atmosphere (TOA) Reflectance values. It is also possible to fetch data processed with Atmospheric Compensation (acomp). Acomp is a process used to remove haze and vapor particles and clarify imagery in a variety of atmospheric conditions. This can improve the image quality and provides more consistent imagery when comparing images over time. To use acomp on a ``CatalogImage`` you can pass ``acomp=True`` to the image constructor. Note: There are many images on the platform that do not yet support ``acomp=True``. These images will throw an error during initialization. To check if a CatalogID can be acomp'd or not a method `CatalogImage.acomp_available(CatalogID)` is provided. This method will check metadata services to determine if acomp is possible or not. 
 
 .. code-block:: python
 
@@ -158,6 +158,15 @@ To request the image as raw Digital Numbers (DN) with no compensation, you can p
     
     img_dn = CatalogImage('104001001BA7C400', correctionType='DN') 
     print(image_dn.shape)
+
+To check if acomp is available for an image:
+
+.. code-block:: python 
+
+    from gbdxtools import CatalogImage
+
+    can_acomp = CatalogImage.acomp_available('104001001BA7C400')
+    print(can_acomp) 
 
 
 Base Image Classes
@@ -380,6 +389,15 @@ The ordered image sits in a directory on S3. The order status and output image l
    >>> [{u'acquisition_id': u'10400100143FC900',
          u'location': u's3://receiving-dgcs-tdgplatform-com/055093431010_01_003',
          u'state': u'delivered'}]
+
+Its possible to determine if an image has already been ordered by calling the `CatalogImage.is_ordered(CatalogID)` method:
+
+.. code-block:: python
+
+    from gbdxtools import CatalogImage
+
+    ordered = CatalogImage.is_ordered('104001001BA7C400')
+    print(ordered)
 
 
 Advanced Topics
