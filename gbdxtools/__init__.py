@@ -18,8 +18,8 @@ from gbdxtools.workflow import Workflow as Workflows
 from gbdxtools.ordering import Ordering
 from gbdxtools.catalog import Catalog
 from gbdxtools.vectors import Vectors
-from gbdxtools.vector_styles import VectorLayer, VectorFeatureLayer, VectorTileLayer, \
-                                    VectorStyle, CircleStyle, LineStyle, FillStyle
+from gbdxtools.vector_styles import VectorFeatureLayer, VectorTileLayer, \
+                                    CircleStyle, LineStyle, FillStyle
 from gbdxtools.idaho import Idaho
 from gbdxtools.simpleworkflows import Task, Workflow
 from gbdxtools.s3 import S3

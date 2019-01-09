@@ -17,7 +17,7 @@ from shapely.ops import cascaded_union
 from shapely.geometry import shape, box
 from shapely.wkt import loads as from_wkt
 
-from gbdxtools.vector_styles import VectorLayer
+from gbdxtools.vector_styles import VectorFeatureLayer
 from gbdxtools.map_templates import BaseTemplate
 from gbdxtools.auth import Auth
 
@@ -415,9 +415,20 @@ class Vectors(object):
         display(Javascript(js))
 
 
-    def map(self, features=None, query=None, style={}, style_type="fill", bbox=[-180,-90,180,90], zoom=10, center=None, api_key=os.environ.get('MAPBOX_API_KEY', None)):
+    def map(self, features=None, query=None, styles=None,
+                  bbox=[-180,-90,180,90], zoom=10, center=None, 
+                  api_key=os.environ.get('MAPBOX_API_KEY', None), **kwargs):
         """
-          Renders a mapbox gl map from a vector service query
+          Renders a mapbox gl map from a vector service query or a list of geojson features
+
+          Args:
+            features: a list of geojson features
+            query: a VectorServices query 
+            styles: a list of VectorStyles to apply to the features  
+            bbox:
+            zoom: 
+            center:
+            api_key: 
         """
         try:
             from IPython.display import Javascript, HTML, display
@@ -433,6 +444,9 @@ class Vectors(object):
             print('Must provide either a list of features or a query')
             return
 
+        if styles is not None and not isinstance(styles, list):
+            styles = [styles]
+
         geojson = {"type":"FeatureCollection", "features": features}
 
         if center is None:
@@ -445,29 +459,21 @@ class Vectors(object):
 
         display(HTML(Template('''
            <div id="$map_id"/>
-           <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.44.1/mapbox-gl.css' rel='stylesheet' />
+           <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.52.0/mapbox-gl.css' rel='stylesheet' />
            <style>body{margin:0;padding:0;}#$map_id{position:relative;top:0;bottom:0;width:100%;height:400px;}</style>
            <style>.mapboxgl-popup-content table tr{border: 1px solid #efefef;} .mapboxgl-popup-content table, td, tr{border: none;}
            .mapboxgl-popup-content table {width: 100%; table-layout: fixed; text-align: left;} .mapboxgl-popup-content td:first-of-type{width: 33%;}
            .mapboxgl-popup-content {width: 400px !important;} .mapboxgl-popup-content td:last-of-type{overflow-x: scroll;}<style>
         ''').substitute({"map_id": map_id})))
 
-        style = {
-            "fill-color": '#ff00ff',
-            "fill-outline-color": '#ffffff',
-            "fill-opacity": .25
-        }
-        layers = VectorLayer(source_def={"type": "geojson", "data": geojson})
+        layers = VectorFeatureLayer(geojson, styles=styles, **kwargs)
 
         js = BaseTemplate(**{
             "map_id": map_id, 
             "lat": lat, 
             "lon": lon, 
             "zoom": zoom, 
-            "geojson": json.dumps(geojson), 
-            "style": json.dumps(style),
-            "layers": layers.render_js(),
-            "type": style_type,
+            "layers": json.dumps(layers.render_js()),
             "mbkey": api_key
         })
         display(Javascript(js))
