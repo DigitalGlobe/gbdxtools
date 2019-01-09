@@ -17,6 +17,7 @@ from shapely.ops import cascaded_union
 from shapely.geometry import shape, box
 from shapely.wkt import loads as from_wkt
 
+from gbdxtools.map_templates import BaseTemplate
 from gbdxtools.auth import Auth
 
 
@@ -413,7 +414,7 @@ class Vectors(object):
         display(Javascript(js))
 
 
-    def map(self, features=None, query=None, style={}, bbox=[-180,-90,180,90], zoom=10, api_key=os.environ.get('MAPBOX_API_KEY', None)):
+    def map(self, features=None, query=None, style={}, style_type="fill", bbox=[-180,-90,180,90], zoom=10, center=None, api_key=os.environ.get('MAPBOX_API_KEY', None)):
         """
           Renders a mapbox gl map from a vector service query
         """
@@ -424,19 +425,23 @@ class Vectors(object):
             return
 
         assert api_key is not None, "No Mapbox API Key found. You can either pass in a token or set the MAPBOX_API_KEY environment variable."
-
         if features is None and query is not None:
             wkt = box(*bbox).wkt
             features = self.query(wkt, query, index=None)
         elif features is None and query is None:
             print('Must provide either a list of features or a query')
             return
-    
-        union = cascaded_union([shape(f['geometry']) for f in features])
-        lon, lat = union.centroid.coords[0]
+
         geojson = {"type":"FeatureCollection", "features": features}
-    
+
+        if center is None:
+            union = cascaded_union([shape(f['geometry']) for f in features])
+            lon, lat = union.centroid.coords[0]
+        else:
+            lat, lon = center
+
         map_id = "map_{}".format(str(int(time.time())))
+
         display(HTML(Template('''
            <div id="$map_id"/>
            <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.44.1/mapbox-gl.css' rel='stylesheet' />
@@ -446,105 +451,25 @@ class Vectors(object):
            .mapboxgl-popup-content {width: 400px !important;} .mapboxgl-popup-content td:last-of-type{overflow-x: scroll;}<style>
         ''').substitute({"map_id": map_id})))
 
-    
-        js = Template("""
-            require.config({
-              paths: {
-                  mapboxgl: 'https://api.tiles.mapbox.com/mapbox-gl-js/v0.44.1/mapbox-gl',
-              }
-            });
-    
-            require(['mapboxgl'], function(mapboxgl){
-                mapboxgl.accessToken = "$mbkey";
+        _style = {
+            "fill-color": '#ff00ff',
+            "fill-outline-color": '#ffffff',
+            "fill-opacity": .25
+        }
+        if style is None:
+            style = _style
+        else:
+            _style.update(style)
 
-                function html( json, id ) {
-                  var html = '<table><tbody>';
-                  html += '<tr><td>ID</td><td>' + id + '</td></tr>';
-                  for ( var i=0; i < Object.keys(json).length; i++) {
-                    var key = Object.keys( json )[ i ];
-                    var val = json[ key ];
-                    html += '<tr><td>' + key + '</td><td>' + val + '</td></tr>';
-                  }
-                  html += '</tbody></table>';
-                  return html;
-                }
 
-                window.map = new mapboxgl.Map({
-                    container: '$map_id',
-                    style: 'mapbox://styles/mapbox/satellite-v9',
-                    center: [$lon, $lat],
-                    zoom: $zoom,
-                    preserveDrawingBuffer: true
-                });
-                var map = window.map;
-                var geojson = $geojson;
-                var style = Object.keys($style).length
-                    ? $style
-                    : {
-                        "line-color": '#ff0000',
-                        "line-opacity": .75,
-                        "line-width": 2
-                    };
-
-                map.on("click", function(e){
-                  var features = map.queryRenderedFeatures(e.point);
-                  if ( features.length ) {
-                    var popup = new mapboxgl.Popup({closeOnClick: false})
-                      .setLngLat(e.lngLat)
-                      .setHTML(html(features[0].properties, features[0].properties['_item.id']))
-                      .addTo(map);
-                  }
-                });
-              
-                map.once('style.load', function(e) {
-                    function addLayer(mapid) {
-                        try {
-                            mapid.addSource('features',
-                            {
-                                type: "geojson",
-                                data: geojson
-                            });
-                            var layer =  {
-                                "id": "gbdx",
-                                "type": "line",
-                                "source": "features",
-                                "paint": style
-                            };
-                            mapid.addLayer(layer);
-                        } catch (err) {
-                            console.log(err);
-                        }
-                    }
-                    addLayer(map);
-                });
-
-                map.on('load', function(e){
-                    setTimeout( function() {
-                        var mapCanvas = map.getCanvas();
-                        var thumbCanvas=document.createElement('canvas');
-                        var thumbContext=thumbCanvas.getContext('2d');
-                        var height = mapCanvas.scrollHeight;
-                        var width = mapCanvas.scrollWidth;
-                        thumbCanvas.width=width/2.0;
-                        thumbCanvas.height=height/2.0;
-                        thumbContext.drawImage(mapCanvas, 0, 0, width*2, height*2, 0, 0, width/2, height/2)
-                        var dataURL = thumbCanvas.toDataURL();
-                        var imageData = dataURL.substring(dataURL.indexOf(',')+1)
-                        var cell = Jupyter.notebook.get_selected_cell();
-                        cell.metadata.GBDX = cell.metadata.GBDX || {};
-                        cell.metadata.GBDX.static_thumbnail = cell.metadata.GBDX.static_thumbnail || {};
-                        cell.metadata.GBDX.static_thumbnail.data = cell.metadata.GBDX.static_thumbnail.data || {};
-                        cell.metadata.GBDX.static_thumbnail.data["image/png"] = imageData;
-                    }, 5000);
-                })
-            });
-        """).substitute({
+        js = BaseTemplate(**{
             "map_id": map_id, 
             "lat": lat, 
             "lon": lon, 
             "zoom": zoom, 
             "geojson": json.dumps(geojson), 
-            "style": json.dumps(style),
+            "style": json.dumps(_style),
+            "type": style_type,
             "mbkey": api_key
         })
         display(Javascript(js))
