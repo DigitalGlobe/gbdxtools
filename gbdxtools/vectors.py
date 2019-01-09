@@ -17,6 +17,7 @@ from shapely.ops import cascaded_union
 from shapely.geometry import shape, box
 from shapely.wkt import loads as from_wkt
 
+from gbdxtools.vector_styles import VectorLayer
 from gbdxtools.map_templates import BaseTemplate
 from gbdxtools.auth import Auth
 
@@ -451,16 +452,12 @@ class Vectors(object):
            .mapboxgl-popup-content {width: 400px !important;} .mapboxgl-popup-content td:last-of-type{overflow-x: scroll;}<style>
         ''').substitute({"map_id": map_id})))
 
-        _style = {
+        style = {
             "fill-color": '#ff00ff',
             "fill-outline-color": '#ffffff',
             "fill-opacity": .25
         }
-        if style is None:
-            style = _style
-        else:
-            _style.update(style)
-
+        layers = VectorLayer(source_def={"type": "geojson", "data": geojson})
 
         js = BaseTemplate(**{
             "map_id": map_id, 
@@ -468,7 +465,8 @@ class Vectors(object):
             "lon": lon, 
             "zoom": zoom, 
             "geojson": json.dumps(geojson), 
-            "style": json.dumps(_style),
+            "style": json.dumps(style),
+            "layers": layers.render_js(),
             "type": style_type,
             "mbkey": api_key
         })

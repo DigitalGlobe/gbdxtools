@@ -3,7 +3,7 @@ class VectorLayer(object):
     to render itself as javascript.
     """
 
-    def __init__(self, styles=None, source_name="GBDX_Task_Output"):
+    def __init__(self, styles=None, source_name="GBDX_Task_Output", source_def=None):
         """ Abstract constructor for vector layers
 
         Args:
@@ -12,7 +12,7 @@ class VectorLayer(object):
         """
         self.styles = styles
         self.source_name = source_name
-        self.source_def = None
+        self.source_def = source_def
 
     def render_js(self):
         """
