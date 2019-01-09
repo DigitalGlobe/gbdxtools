@@ -66,11 +66,12 @@ class VectorTileLayer(VectorLayer):
     """ Represents a vector layer in a tile map, and knows how to render
     itself as javascript.
     """
-    def __init__(self, url=None, **kwargs):
+    def __init__(self, url=None, source_name='GBDX_Task_Output', **kwargs):
         """ Create a new VectorLayer
 
         Args:
-            source_def: a dict of geojson for the map source: {'g'}
+            url: a vector tile url template
+            source_name: the name of the source layer in the vector tiles
             styles: A list of style objects to be applied to the layer
 
         Returns:
@@ -78,11 +79,17 @@ class VectorTileLayer(VectorLayer):
         """
         super(VectorTileLayer, self).__init__(**kwargs)
         self.url = url
-        #'source-layer': self.source_name,  # TODO: this only applies to tile map
-        self.source_def = {
-            'type': 'vector',
-            'tiles': [self.url]
+        self.source_name = source_name
+
+    def _layer_def(self, style):
+        return {
+            'id': type(style).__name__, # TODO - make this unique in the various styles
+            'type': style.type,
+            'source': {'type': 'vector', 'tiles': [self.url]},
+            'source-layer':  self.source_name,
+            'paint': style.paint()
         }
+
 
 
 class VectorStyle(object):

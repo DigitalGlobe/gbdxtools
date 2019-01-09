@@ -20,7 +20,15 @@ class BaseTemplate(object):
                     style: 'mapbox://styles/mapbox/satellite-v9',
                     center: [$lon, $lat],
                     zoom: $zoom,
-                    preserveDrawingBuffer: true
+                    preserveDrawingBuffer: true,
+                    transformRequest: function( url, resourceType ) {
+                      if (resourceType == 'Tile' && url.startsWith('https://vector.geobigdata')) {
+                        return {
+                            url: url,
+                            headers: { 'Authorization': 'Bearer $token' }
+                        }
+                      }
+                    }
                 });
                 map.on('load', function(e) {
                     try {

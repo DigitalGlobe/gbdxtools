@@ -17,7 +17,7 @@ from shapely.ops import cascaded_union
 from shapely.geometry import shape, box
 from shapely.wkt import loads as from_wkt
 
-from gbdxtools.vector_styles import VectorFeatureLayer
+from gbdxtools.vector_styles import VectorFeatureLayer, VectorTileLayer
 from gbdxtools.map_templates import BaseTemplate
 from gbdxtools.auth import Auth
 
@@ -289,8 +289,24 @@ class Vectors(object):
 
         return r.json(object_pairs_hook=OrderedDict)['aggregations']
 
+    def _inject_map_div(self, map_id):
+        try:
+            from IPython.display import HTML, display
+        except:
+            print("IPython is required to produce maps.")
+            return
+        display(HTML(Template('''
+           <div id="$map_id"/>
+           <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.52.0/mapbox-gl.css' rel='stylesheet' />
+           <style>body{margin:0;padding:0;}#$map_id{position:relative;top:0;bottom:0;width:100%;height:400px;}</style>
+           <style>.mapboxgl-popup-content table tr{border: 1px solid #efefef;} .mapboxgl-popup-content table, td, tr{border: none;}
+           .mapboxgl-popup-content table {width: 100%; table-layout: fixed; text-align: left;} .mapboxgl-popup-content td:first-of-type{width: 33%;}
+           .mapboxgl-popup-content {width: 400px !important;} .mapboxgl-popup-content td:last-of-type{overflow-x: scroll;}<style>
+        ''').substitute({"map_id": map_id})))
 
-    def tilemap(self, query, style={}, bbox=[-180,-90,180,90], zoom=16, api_key=os.environ.get('MAPBOX_API_KEY', None), index="vector-user-provided", name="GBDX_Task_Output"):
+    def tilemap(self, query, styles={}, bbox=[-180,-90,180,90], zoom=16, 
+                      api_key=os.environ.get('MAPBOX_API_KEY', None), 
+                      index="vector-user-provided", name="GBDX_Task_Output", **kwargs):
         """
           Renders a mapbox gl map from a vector service query
         """
@@ -307,111 +323,26 @@ class Vectors(object):
 
         union = cascaded_union([shape(f['geometry']) for f in features])
         lon, lat = union.centroid.coords[0]
-
         map_id = "map_{}".format(str(int(time.time())))
-        display(HTML(Template('''
-           <div id="$map_id"/>
-           <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.44.1/mapbox-gl.css' rel='stylesheet' />
-           <style>body{margin:0;padding:0;}#$map_id{position:relative;top:0;bottom:0;width:100%;height:400px;}</style>
-           <style>.mapboxgl-popup-content table tr{border: 1px solid #efefef;} .mapboxgl-popup-content table, td, tr{border: none;}
-           .mapboxgl-popup-content table {width: 100%; table-layout: fixed; text-align: left;} .mapboxgl-popup-content td:first-of-type{width: 33%;}
-           .mapboxgl-popup-content {width: 400px !important;} .mapboxgl-popup-content td:last-of-type{overflow-x: scroll;}<style>
-        ''').substitute({"map_id": map_id})))
+        url = 'https://vector.geobigdata.io/insight-vector/api/mvt/{z}/{x}/{y}?';
+        url += 'q={}&index={}'.format(query, index);
 
-        js = Template("""
-            require.config({
-              paths: {
-                  mapboxgl: 'https://api.tiles.mapbox.com/mapbox-gl-js/v0.44.1/mapbox-gl',
-              }
-            });
+        if styles is not None and not isinstance(styles, list):
+            styles = [styles]
 
-            require(['mapboxgl'], function(mapboxgl){
-                mapboxgl.accessToken = "$mbkey";
+        layers = VectorTileLayer(url, source_name=name, styles=styles, **kwargs)
 
-                function html( attrs, id ) {
-                  var json = JSON.parse( attrs );
-                  var html = '<table><tbody>';
-                  html += '<tr><td>ID</td><td>' + id + '</td></tr>';
-                  for ( var i=0; i < Object.keys(json).length; i++) {
-                    var key = Object.keys( json )[ i ];
-                    var val = json[ key ];
-                    html += '<tr><td>' + key + '</td><td>' + val + '</td></tr>';
-                  }
-                  html += '</tbody></table>';
-                  return html;
-                }
-
-                window.map = new mapboxgl.Map({
-                    container: '$map_id',
-                    style: 'mapbox://styles/mapbox/satellite-v9',
-                    center: [$lon, $lat],
-                    zoom: $zoom,
-                    preserveDrawingBuffer: true,
-                    transformRequest: function( url, resourceType ) {
-                      if (resourceType == 'Tile' && url.startsWith('https://vector.geobigdata')) {
-                        return {
-                            url: url,
-                            headers: { 'Authorization': 'Bearer $token' }
-                        }
-                      }
-                    }
-                });
-                var map = window.map;
-                var style = Object.keys($style).length
-                    ? $style
-                    : {
-                        "line-color": '#ff0000',
-                        "line-opacity": .75,
-                        "line-width": 2
-                    };
-                var url = 'https://vector.geobigdata.io/insight-vector/api/mvt/{z}/{x}/{y}?';
-                url += 'q=$query&index=$index';
-                
-                map.once('style.load', function(e) {
-                    map.addLayer({
-                        "id": "user-data",
-                        "type": "line",
-                        "source": {
-                            type: 'vector',
-                            tiles: [url]
-                        },
-                        "source-layer": "$name",
-                        "paint": style
-                    });
-                });
-
-                map.on('load', function(e){
-                    setTimeout( function() {
-                        var mapCanvas = map.getCanvas();
-                        var thumbCanvas=document.createElement('canvas');
-                        var thumbContext=thumbCanvas.getContext('2d');
-                        var height = mapCanvas.scrollHeight;
-                        var width = mapCanvas.scrollWidth;
-                        thumbCanvas.width=width/2.0;
-                        thumbCanvas.height=height/2.0;
-                        thumbContext.drawImage(mapCanvas, 0, 0, width*2, height*2, 0, 0, width/2, height/2)
-                        var dataURL = thumbCanvas.toDataURL();
-                        var imageData = dataURL.substring(dataURL.indexOf(',')+1)
-                        var cell = Jupyter.notebook.get_selected_cell();
-                        cell.metadata.GBDX = cell.metadata.GBDX || {};
-                        cell.metadata.GBDX.static_thumbnail = cell.metadata.GBDX.static_thumbnail || {};
-                        cell.metadata.GBDX.static_thumbnail.data = cell.metadata.GBDX.static_thumbnail.data || {};
-                        cell.metadata.GBDX.static_thumbnail.data["image/png"] = imageData;
-                    }, 5000);
-                })
-            });
-        """).substitute({
+        js = BaseTemplate(**{
             "map_id": map_id,
-            "query": query,
             "lat": lat,
             "lon": lon,
             "zoom": zoom,
-            "style": json.dumps(style),
+            "layers": json.dumps(layers.render_js()),
             "mbkey": api_key,
-            "token": self.gbdx_connection.access_token,
-            "index": index,
-            "name": name
+            "token": self.gbdx_connection.access_token
         })
+        
+        self._inject_map_div(map_id)
         display(Javascript(js))
 
 
@@ -425,10 +356,10 @@ class Vectors(object):
             features: a list of geojson features
             query: a VectorServices query 
             styles: a list of VectorStyles to apply to the features  
-            bbox:
-            zoom: 
-            center:
-            api_key: 
+            bbox: a bounding box to query for features ([minx, miny, maxx, maxy])
+            zoom: the initial zoom level of the map
+            center: a list of [lat, lon] used to center the map
+            api_key: a valid Mapbox API key
         """
         try:
             from IPython.display import Javascript, HTML, display
@@ -457,15 +388,6 @@ class Vectors(object):
 
         map_id = "map_{}".format(str(int(time.time())))
 
-        display(HTML(Template('''
-           <div id="$map_id"/>
-           <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.52.0/mapbox-gl.css' rel='stylesheet' />
-           <style>body{margin:0;padding:0;}#$map_id{position:relative;top:0;bottom:0;width:100%;height:400px;}</style>
-           <style>.mapboxgl-popup-content table tr{border: 1px solid #efefef;} .mapboxgl-popup-content table, td, tr{border: none;}
-           .mapboxgl-popup-content table {width: 100%; table-layout: fixed; text-align: left;} .mapboxgl-popup-content td:first-of-type{width: 33%;}
-           .mapboxgl-popup-content {width: 400px !important;} .mapboxgl-popup-content td:last-of-type{overflow-x: scroll;}<style>
-        ''').substitute({"map_id": map_id})))
-
         layers = VectorFeatureLayer(geojson, styles=styles, **kwargs)
 
         js = BaseTemplate(**{
@@ -474,8 +396,11 @@ class Vectors(object):
             "lon": lon, 
             "zoom": zoom, 
             "layers": json.dumps(layers.render_js()),
-            "mbkey": api_key
+            "mbkey": api_key,
+            "token": 'dummy'
         })
+
+        self._inject_map_div(map_id)
         display(Javascript(js))
 
 
