@@ -1,19 +1,18 @@
 class VectorLayer(object):
-    """ Represents a vector layer in a tile map, and knows how to render
-    itself as javascript.
+    """ Represents a vector layer created from a geojson source, and knows how
+    to render itself as javascript.
     """
-    def __init__(self, styles=None, url=None, source_name="GBDX_Task_Output"):
-        """ Create a new VectorLayer
+
+    def __init__(self, styles=None, source_name="GBDX_Task_Output"):
+        """ Abstract constructor for vector layers
 
         Args:
-            styles: A list of style objects to be applied to the layer
-
-        Returns:
-            An instance of the VectorLayer
+            styles: list of styles for which to create layers
+            source_name: name of data source
         """
         self.styles = styles
-        self.url = url
-        self.name = source_name
+        self.source_name = source_name
+        self.source_def = None
 
     def render_js(self):
         """
@@ -32,16 +31,52 @@ class VectorLayer(object):
             layer = {
                 'id': type(style).__name__,
                 'type': style.type,
-                'source': {
-                    'type': 'vector',
-                    'tiles': [self.url]  # TODO: generate this URL here rather than in JS
-                },
-                'source-layer': self.name,
+                'source': self.source_def,
+                'source-layer': self.source_name,  # TODO: this only applies to tile map
                 'paint': style.paint()
             }
             layers.append(layer)
 
         return layers
+
+
+class VectorFeatureLayer(VectorLayer):
+    """ Represents a vector layer created from a geojson source, and knows how
+    to render itself as javascript.
+    """
+    def __init__(self, **kwargs):
+        """ Create a new VectorLayer
+
+        Args:
+            styles: A list of style objects to be applied to the layer
+
+        Returns:
+            An instance of the VectorLayer
+        """
+        super(VectorFeatureLayer, self).__init__(**kwargs)
+        self.source_def = 'features'
+        # TODO: do we want/need to define the features used by map.addSource()?
+
+
+class VectorTileLayer(VectorLayer):
+    """ Represents a vector layer in a tile map, and knows how to render
+    itself as javascript.
+    """
+    def __init__(self, url=None, **kwargs):
+        """ Create a new VectorLayer
+
+        Args:
+            styles: A list of style objects to be applied to the layer
+
+        Returns:
+            An instance of the VectorLayer
+        """
+        super(VectorTileLayer, self).__init__(**kwargs)
+        self.url = url
+        self.source_def = {
+            'type': 'vector',
+            'tiles': [self.url]
+        }
 
 
 class VectorStyle(object):
