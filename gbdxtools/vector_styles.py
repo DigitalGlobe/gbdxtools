@@ -1,3 +1,6 @@
+import uuid
+
+
 class VectorLayer(object):
     """ Represents a vector layer created from a geojson source, and knows how
     to render itself as javascript.
@@ -9,6 +12,7 @@ class VectorLayer(object):
         Args:
             styles: list of styles for which to create layers
         """
+        self.source_id = uuid.uuid4().hex
         if styles is not None:
             self.styles = styles
         else:
@@ -23,6 +27,25 @@ class VectorLayer(object):
             layer (dict): a layer json dict used for adding to maps 
         """
         raise NotImplementedError()
+
+    def _datasource_def(self):
+        """
+        Constructs a datasource def appropriate for the layer type
+            - implemented in subclasses
+        Returns
+            datasource (dict): a datasource json dict used for adding data to maps
+        """
+        raise NotImplementedError()
+
+    def render_datasource(self):
+        """
+        Renders the datasource to add to the map, referenced by the layers
+        created by this layer instance.
+
+        Returns:
+            datasource (dict): a datasource json dict used for adding data to maps
+        """
+        return {'id': self.source_id, 'data': self._datasource_def()}
 
     def render_layers(self):
         """
@@ -52,11 +75,14 @@ class VectorFeatureLayer(VectorLayer):
         super(VectorFeatureLayer, self).__init__(**kwargs)
         self.geojson = geojson
 
+    def _datasource_def(self):
+        return {'type': 'geojson', 'data': self.geojson}
+
     def _layer_def(self, style):
         return {
             'id': type(style).__name__, # TODO - make this unique in the various styles
             'type': style.type,
-            'source': {'type': 'geojson', 'data': self.geojson},
+            'source': self.source_id,
             'paint': style.paint()
         }
         
@@ -66,7 +92,7 @@ class VectorTileLayer(VectorLayer):
     """ Represents a vector layer in a tile map, and knows how to render
     itself as javascript.
     """
-    def __init__(self, url=None, source_name='GBDX_Task_Output', **kwargs):
+    def __init__(self, url=None, source_layer_name='GBDX_Task_Output', **kwargs):
         """ Create a new VectorLayer
 
         Args:
@@ -79,14 +105,17 @@ class VectorTileLayer(VectorLayer):
         """
         super(VectorTileLayer, self).__init__(**kwargs)
         self.url = url
-        self.source_name = source_name
+        self.source_layer_name = source_layer_name
+
+    def _datasource_def(self):
+        return {'type': 'vector', 'tiles': [self.url]}
 
     def _layer_def(self, style):
         return {
             'id': type(style).__name__, # TODO - make this unique in the various styles
             'type': style.type,
-            'source': {'type': 'vector', 'tiles': [self.url]},
-            'source-layer':  self.source_name,
+            'source': self.source_id,
+            'source-layer':  self.source_layer_name,
             'paint': style.paint()
         }
 

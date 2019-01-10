@@ -18,6 +18,9 @@ class BaseTemplate(object):
             require(['mapboxgl'], function(mapboxgl){
                 mapboxgl.accessToken = "$mbkey";
                 var layers = $layers;
+                
+                // will be an object with an 'id' field and a 'data' field
+                var datasource = $datasource;
 
                 var map = new mapboxgl.Map({
                     container: '$map_id',
@@ -36,6 +39,9 @@ class BaseTemplate(object):
                 });
                 map.on('load', function(e) {
                     try {
+                        console.log('DATASOURCE', datasource);
+                        map.addSource(datasource.id, datasource.data);
+                        
                         for (var i=0; i < layers.length; i++) {
                           console.log('LAYER', layers[i])
                           map.addLayer(layers[i]);
