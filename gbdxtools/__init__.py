@@ -18,9 +18,9 @@ from gbdxtools.workflow import Workflow as Workflows
 from gbdxtools.ordering import Ordering
 from gbdxtools.catalog import Catalog
 from gbdxtools.vectors import Vectors
-from gbdxtools.vector_styles import VectorFeatureLayer, VectorTileLayer, \
-                                    CircleStyle, LineStyle, FillStyle, \
-                                    StyleExpression, MatchExpression, InterpolateExpression
+from gbdxtools.vector_layers import VectorLayer, VectorTileLayer, VectorFeatureLayer, ImageLayer
+from gbdxtools.vector_styles import CircleStyle, LineStyle, FillStyle
+from gbdxtools.vector_style_expressions import StyleExpression, MatchExpression, InterpolateExpression, StepExpression
 from gbdxtools.idaho import Idaho
 from gbdxtools.simpleworkflows import Task, Workflow
 from gbdxtools.s3 import S3

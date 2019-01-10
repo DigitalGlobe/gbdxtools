@@ -22,7 +22,7 @@ from shapely.ops import cascaded_union
 from shapely.geometry import shape, box
 from shapely.wkt import loads as from_wkt
 
-from gbdxtools.vector_styles import VectorFeatureLayer, VectorTileLayer, \
+from gbdxtools.vector_layers import VectorFeatureLayer, VectorTileLayer, \
                                     ImageLayer
 from gbdxtools.map_templates import BaseTemplate
 from gbdxtools.auth import Auth
