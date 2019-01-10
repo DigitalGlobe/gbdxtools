@@ -134,7 +134,7 @@ class VectorStyle(object):
     @staticmethod
     def get_style_value(style_value):
         if isinstance(style_value, StyleExpression):
-            return style_value.conditional
+            return style_value.expression
         else:
             return style_value
 
@@ -295,7 +295,7 @@ class StyleExpression(object):
     styling a layer.
     """
 
-    def _conditional_def(self):
+    def _expression_def(self):
         """
         Creates the list values which will be passed as a mapbox-gl
         conditional expression.
@@ -306,8 +306,8 @@ class StyleExpression(object):
         raise NotImplementedError()
 
     @property
-    def conditional(self):
-        return self._conditional_def()
+    def expression(self):
+        return self._expression_def()
 
 
 class MatchExpression(StyleExpression):
@@ -332,7 +332,7 @@ class MatchExpression(StyleExpression):
         self.values = values
         self.default_value = default_value
 
-    def _conditional_def(self):
+    def _expression_def(self):
         cond = ['match', ['get', self.property_name]]
                 # TODO: fill in key, value entries
         for key in self.values:
