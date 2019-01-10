@@ -371,10 +371,9 @@ class InterpolateExpression(StyleExpression):
 
     def __init__(self, property_name=None, stops=None, type=None):
         """
-        Creates a match conditional expression, matching against the supplied property
-        name in a feature.  Values to match against and the styling to apply for those
-        matches are supplied in the 'values' dict.  If the feature property does not
-        match any of the values provided, it will be styled with the provided default.
+        Creates an interpolate expression, based on values in the supplied property
+        of a feature.  Values indicating range boundaries and the styling to apply to features
+        in those ranges are supplied in the 'stops' dict.
 
         The 'type' params must be a list whose values depend on the interpolation type
         (taken from the mapbox-gl documentation):
@@ -402,3 +401,4 @@ class InterpolateExpression(StyleExpression):
             cond.append(key)
             cond.append(self.stops[key])
         return cond
+
