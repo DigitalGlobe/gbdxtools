@@ -133,7 +133,7 @@ class VectorStyle(object):
 
     @staticmethod
     def get_style_value(style_value):
-        if isinstance(style_value, StyleConditional):
+        if isinstance(style_value, StyleExpression):
             return style_value.conditional
         else:
             return style_value
@@ -288,7 +288,7 @@ class FillStyle(VectorStyle):
         return snippet
 
 
-class StyleConditional(object):
+class StyleExpression(object):
     """
     Represents a mapbox-gl conditional for styling, knowing how
     to turn itself into the appropriate javascript for use in
@@ -310,7 +310,7 @@ class StyleConditional(object):
         return self._conditional_def()
 
 
-class MatchCondition(StyleConditional):
+class MatchExpression(StyleExpression):
     """
     Represents a mapbox-gl "match" conditional expression, where a set of values
     is matched against a property and styling applied based on the match.

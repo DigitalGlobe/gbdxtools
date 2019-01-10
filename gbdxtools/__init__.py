@@ -20,7 +20,7 @@ from gbdxtools.catalog import Catalog
 from gbdxtools.vectors import Vectors
 from gbdxtools.vector_styles import VectorFeatureLayer, VectorTileLayer, \
                                     CircleStyle, LineStyle, FillStyle, \
-                                    StyleConditional, MatchCondition
+                                    StyleExpression, MatchExpression
 from gbdxtools.idaho import Idaho
 from gbdxtools.simpleworkflows import Task, Workflow
 from gbdxtools.s3 import S3
