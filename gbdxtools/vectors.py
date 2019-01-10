@@ -323,7 +323,7 @@ class Vectors(object):
 
         map_id = "map_{}".format(str(int(time.time())))
         map_data = VectorTileLayer(url, source_name=name, styles=styles, **kwargs)
-        image_layer = _biuld_image_layer(image, image_bounds)
+        image_layer = self._build_image_layer(image, image_bounds)
 
         template = BaseTemplate(map_id, **{
             "lat": lat,
@@ -385,7 +385,7 @@ class Vectors(object):
 
         map_id = "map_{}".format(str(int(time.time())))
         map_data = VectorFeatureLayer(geojson, styles=styles, **kwargs)
-        image_layer = _biuld_image_layer(image, image_bounds)
+        image_layer = self._build_image_layer(image, image_bounds)
 
         template = BaseTemplate(map_id, **{
             "lat": lat, 
