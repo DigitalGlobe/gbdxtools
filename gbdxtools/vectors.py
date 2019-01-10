@@ -394,7 +394,8 @@ class Vectors(object):
             "map_id": map_id, 
             "lat": lat, 
             "lon": lon, 
-            "zoom": zoom, 
+            "zoom": zoom,
+            "datasource": json.dumps(layers.render_datasource()),
             "layers": json.dumps(layers.render_layers()),
             "mbkey": api_key,
             "token": 'dummy'
