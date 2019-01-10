@@ -1,9 +1,13 @@
 from string import Template
 
-
 class BaseTemplate(object): 
     
-    def __new__(self, **kwargs):
+    def __init__(self, map_id, **kwargs):
+        self.map_id = map_id 
+        self.params = **kwargs
+
+    @property
+    def template(self):
         return Template("""
             require.config({
               paths: {
@@ -61,4 +65,21 @@ class BaseTemplate(object):
                     }, 5000);
                 })
             });
-        """).substitute(kwargs)
+        """).substitute(self.params)
+
+    def inject(self):
+        try:
+            from IPython.display import HTML, display, Javascript
+        except:
+            print("IPython is required to produce maps.")
+            return
+        display(HTML(Template('''
+           <div id="$map_id"/>
+           <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.52.0/mapbox-gl.css' rel='stylesheet' />
+           <style>body{margin:0;padding:0;}#$map_id{position:relative;top:0;bottom:0;width:100%;height:400px;}</style>
+           <style>.mapboxgl-popup-content table tr{border: 1px solid #efefef;} .mapboxgl-popup-content table, td, tr{border: none;}
+           .mapboxgl-popup-content table {width: 100%; table-layout: fixed; text-align: left;} .mapboxgl-popup-content td:first-of-type{width: 33%;}
+           .mapboxgl-popup-content {width: 400px !important;} .mapboxgl-popup-content td:last-of-type{overflow-x: scroll;}<style>
+        ''').substitute({"map_id": self.map_id})))
+
+        display(Javascript(self.template))

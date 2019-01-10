@@ -289,21 +289,6 @@ class Vectors(object):
 
         return r.json(object_pairs_hook=OrderedDict)['aggregations']
 
-    def _inject_map_div(self, map_id):
-        try:
-            from IPython.display import HTML, display
-        except:
-            print("IPython is required to produce maps.")
-            return
-        display(HTML(Template('''
-           <div id="$map_id"/>
-           <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.52.0/mapbox-gl.css' rel='stylesheet' />
-           <style>body{margin:0;padding:0;}#$map_id{position:relative;top:0;bottom:0;width:100%;height:400px;}</style>
-           <style>.mapboxgl-popup-content table tr{border: 1px solid #efefef;} .mapboxgl-popup-content table, td, tr{border: none;}
-           .mapboxgl-popup-content table {width: 100%; table-layout: fixed; text-align: left;} .mapboxgl-popup-content td:first-of-type{width: 33%;}
-           .mapboxgl-popup-content {width: 400px !important;} .mapboxgl-popup-content td:last-of-type{overflow-x: scroll;}<style>
-        ''').substitute({"map_id": map_id})))
-
     def tilemap(self, query, styles={}, bbox=[-180,-90,180,90], zoom=16, 
                       api_key=os.environ.get('MAPBOX_API_KEY', None), 
                       index="vector-user-provided", name="GBDX_Task_Output", **kwargs):
@@ -311,7 +296,7 @@ class Vectors(object):
           Renders a mapbox gl map from a vector service query
         """
         try:
-            from IPython.display import Javascript, HTML, display
+            from IPython.display import display
         except:
             print("IPython is required to produce maps.")
             return
@@ -332,7 +317,7 @@ class Vectors(object):
 
         layers = VectorTileLayer(url, source_name=name, styles=styles, **kwargs)
 
-        js = BaseTemplate(**{
+        template = BaseTemplate(map_id, **{
             "map_id": map_id,
             "lat": lat,
             "lon": lon,
@@ -342,8 +327,7 @@ class Vectors(object):
             "token": self.gbdx_connection.access_token
         })
         
-        self._inject_map_div(map_id)
-        display(Javascript(js))
+        template.inject() 
 
 
     def map(self, features=None, query=None, styles=None,
@@ -362,7 +346,7 @@ class Vectors(object):
             api_key: a valid Mapbox API key
         """
         try:
-            from IPython.display import Javascript, HTML, display
+            from IPython.display import display
         except:
             print("IPython is required to produce maps.")
             return
@@ -390,7 +374,7 @@ class Vectors(object):
 
         layers = VectorFeatureLayer(geojson, styles=styles, **kwargs)
 
-        js = BaseTemplate(**{
+        template = BaseTemplate(map_id, **{
             "map_id": map_id, 
             "lat": lat, 
             "lon": lon, 
@@ -400,8 +384,7 @@ class Vectors(object):
             "token": 'dummy'
         })
 
-        self._inject_map_div(map_id)
-        display(Javascript(js))
+        template.inject()
 
 
 class AggregationDef(object):
