@@ -4,7 +4,7 @@ class BaseTemplate(object):
     
     def __init__(self, map_id, **kwargs):
         self.map_id = map_id 
-        self.params = **kwargs
+        self.params = kwargs
 
     @property
     def template(self):
@@ -49,9 +49,7 @@ class BaseTemplate(object):
                     } catch (err) {
                         console.log(err);
                     }
-                });
 
-                map.on('load', function(e){
                     setTimeout( function() {
                         var mapCanvas = map.getCanvas();
                         var thumbCanvas=document.createElement('canvas');
@@ -71,7 +69,7 @@ class BaseTemplate(object):
                     }, 5000);
                 })
             });
-        """).substitute(self.params)
+        """).substitute(dict(map_id=self.map_id, **self.params))
 
     def inject(self):
         try:

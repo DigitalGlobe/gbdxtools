@@ -318,7 +318,6 @@ class Vectors(object):
         layers = VectorTileLayer(url, source_name=name, styles=styles, **kwargs)
 
         template = BaseTemplate(map_id, **{
-            "map_id": map_id,
             "lat": lat,
             "lon": lon,
             "zoom": zoom,
@@ -376,7 +375,6 @@ class Vectors(object):
         layers = VectorFeatureLayer(geojson, styles=styles, **kwargs)
 
         template = BaseTemplate(map_id, **{
-            "map_id": map_id, 
             "lat": lat, 
             "lon": lon, 
             "zoom": zoom,
