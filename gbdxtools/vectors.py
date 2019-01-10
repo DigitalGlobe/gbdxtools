@@ -8,6 +8,11 @@ from string import Template
 from builtins import object
 import six
 
+from matplotlib.image import imsave
+import base64
+from io import BytesIO
+import dask.array as da
+
 import requests
 from shapely.wkt import loads as load_wkt
 from collections import OrderedDict
@@ -17,7 +22,8 @@ from shapely.ops import cascaded_union
 from shapely.geometry import shape, box
 from shapely.wkt import loads as from_wkt
 
-from gbdxtools.vector_styles import VectorFeatureLayer, VectorTileLayer
+from gbdxtools.vector_styles import VectorFeatureLayer, VectorTileLayer, \
+                                    ImageLayer
 from gbdxtools.map_templates import BaseTemplate
 from gbdxtools.auth import Auth
 
@@ -291,6 +297,7 @@ class Vectors(object):
 
     def tilemap(self, query, styles={}, bbox=[-180,-90,180,90], zoom=16, 
                       api_key=os.environ.get('MAPBOX_API_KEY', None), 
+                      image=None, image_bounds=None,
                       index="vector-user-provided", name="GBDX_Task_Output", **kwargs):
         """
           Renders a mapbox gl map from a vector service query
@@ -316,6 +323,7 @@ class Vectors(object):
 
         map_id = "map_{}".format(str(int(time.time())))
         map_data = VectorTileLayer(url, source_name=name, styles=styles, **kwargs)
+        image_layer = _biuld_image_layer(image, image_bounds)
 
         template = BaseTemplate(map_id, **{
             "lat": lat,
@@ -323,6 +331,7 @@ class Vectors(object):
             "zoom": zoom,
             "datasource": json.dumps(map_data.datasource),
             "layers": json.dumps(map_data.layers),
+            "image_layer": image_layer,
             "mbkey": api_key,
             "token": self.gbdx_connection.access_token
         })
@@ -332,18 +341,22 @@ class Vectors(object):
 
     def map(self, features=None, query=None, styles=None,
                   bbox=[-180,-90,180,90], zoom=10, center=None, 
+                  image=None, image_bounds=None,
                   api_key=os.environ.get('MAPBOX_API_KEY', None), **kwargs):
         """
           Renders a mapbox gl map from a vector service query or a list of geojson features
 
           Args:
-            features: a list of geojson features
-            query: a VectorServices query 
-            styles: a list of VectorStyles to apply to the features  
-            bbox: a bounding box to query for features ([minx, miny, maxx, maxy])
-            zoom: the initial zoom level of the map
-            center: a list of [lat, lon] used to center the map
-            api_key: a valid Mapbox API key
+            features (list): a list of geojson features
+            query (str): a VectorServices query 
+            styles (list): a list of VectorStyles to apply to the features  
+            bbox (list): a bounding box to query for features ([minx, miny, maxx, maxy])
+            zoom (int): the initial zoom level of the map
+            center (list): a list of [lat, lon] used to center the map
+            api_key (str): a valid Mapbox API key
+            image (dict): a CatalogImage or a ndarray
+            image_bounds (list): a list of bounds for image positioning 
+        
         """
         try:
             from IPython.display import display
@@ -372,6 +385,7 @@ class Vectors(object):
 
         map_id = "map_{}".format(str(int(time.time())))
         map_data = VectorFeatureLayer(geojson, styles=styles, **kwargs)
+        image_layer = _biuld_image_layer(image, image_bounds)
 
         template = BaseTemplate(map_id, **{
             "lat": lat, 
@@ -379,11 +393,37 @@ class Vectors(object):
             "zoom": zoom,
             "datasource": json.dumps(map_data.datasource),
             "layers": json.dumps(map_data.layers),
+            "image_layer": image_layer,
             "mbkey": api_key,
             "token": 'dummy'
         })
         template.inject()
 
+    def _build_image_layer(self, image, image_bounds):
+        if image is not None:
+            if isinstance(image, da.Array):
+                arr = image.rgb()
+                coords = self._polygon_coords(box(*image.bounds))
+            else:
+                assert image_bounds is not None, "Must pass image_bounds with ndarray images"
+                arr = image
+                coords = self.box(*image_bounds)
+            b64 = self._encode_image(arr)
+            return ImageLayer(b64, coords)
+        else:
+            return 'false';
+
+    def _polygon_coords(self, g):
+        c = map(list, list(g.exterior.coords))[:-1]
+        # UL, UR, LR, LL
+        return [c[2], c[1], c[0], c[3]]
+
+    def _encode_image(self, arr):
+        io = BytesIO()
+        imsave(io, arr)
+        io.seek(0)
+        img_str = base64.b64encode(io.getvalue()).decode()
+        return 'data:image/{};base64,{}'.format('png', img_str)
 
 class AggregationDef(object):
 

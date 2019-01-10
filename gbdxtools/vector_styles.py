@@ -1,5 +1,5 @@
 import uuid
-
+import json
 
 class VectorLayer(object):
     """ Represents a vector layer created from a geojson source, and knows how
@@ -10,7 +10,7 @@ class VectorLayer(object):
         """ Abstract constructor for vector layers
 
         Args:
-            styles: list of styles for which to create layers
+            styles (list): list of styles for which to create layers
         """
         self.source_id = uuid.uuid4().hex
         if styles is not None:
@@ -68,8 +68,8 @@ class VectorFeatureLayer(VectorLayer):
         """ Create a new VectorLayer
 
         Args:
-            geojson: a list of geojson features to render
-            styles: A list of style objects to be applied to the layer
+            geojson (dict): a list of geojson features to render
+            styles (list): A list of style objects to be applied to the layer
 
         Returns:
             An instance of the VectorLayer
@@ -98,9 +98,9 @@ class VectorTileLayer(VectorLayer):
         """ Create a new VectorLayer
 
         Args:
-            url: a vector tile url template
-            source_name: the name of the source layer in the vector tiles
-            styles: A list of style objects to be applied to the layer
+            url (str): a vector tile url template
+            source_name (str): the name of the source layer in the vector tiles
+            styles (list): A list of style objects to be applied to the layer
 
         Returns:
             An instance of the VectorLayer
@@ -121,6 +121,28 @@ class VectorTileLayer(VectorLayer):
             'paint': style.paint()
         }
 
+class ImageLayer(object):
+    """
+      A layer for rendering images and image arrays to slippy maps
+    """
+    def __new__(self, image, coordinates):
+        """ Create a new ImageLayer
+
+        Args:
+            image (str): a vector tile url template
+            coordinates: the coordinate bounds (list of polygon corners) for placing the image
+        Returns:
+            An string of the layer definition
+        """
+        return json.dumps({
+          "id": uuid.uuid4().hex,
+          "type": "raster",
+          "source": {
+              "type": "image", 
+              "url": image, 
+              "coordinates": coordinates
+          }
+        })
 
 
 class VectorStyle(object):
@@ -149,11 +171,11 @@ class CircleStyle(VectorStyle):
     def __init__(self, radius=1.0, **kwargs):
         """ Creates a style entry for a circle layer
         Args:
-            radius: the radius of the circles (will accept either a float value or
+            radius (int): the radius of the circles (will accept either a float value or
                     a list representing a mapbox-gl conditional expression)
-            opacity:  the opacity of the circles (will accept either a float value or
+            opacity (float):  the opacity of the circles (will accept either a float value or
                       a list representing a mapbox-gl conditional expression)
-            color: the color of the circles (will accept either an 'rgb' string, a hex
+            color (str): the color of the circles (will accept either an 'rgb' string, a hex
                    string, or a list representing a mapbox-gl conditional expression)
 
         Returns:

@@ -21,6 +21,7 @@ class BaseTemplate(object):
                 
                 // will be an object with an 'id' field and a 'data' field
                 var datasource = $datasource;
+                var imageLayer = $image_layer;
 
                 var map = new mapboxgl.Map({
                     container: '$map_id',
@@ -41,6 +42,11 @@ class BaseTemplate(object):
                     try {
                         console.log('DATASOURCE', datasource);
                         map.addSource(datasource.id, datasource.data);
+
+                        if (imageLayer) {
+                          console.log('IMAGELAYER', imageLayer)
+                          map.addLayer(imageLayer);
+                        }
                         
                         for (var i=0; i < layers.length; i++) {
                           console.log('LAYER', layers[i])
