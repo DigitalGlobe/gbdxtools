@@ -402,3 +402,32 @@ class InterpolateExpression(StyleExpression):
             cond.append(self.stops[key])
         return cond
 
+
+class StepExpression(StyleExpression):
+    """
+    Represents a mapbox-gl "step" expression, creating discrete stepped results
+    between provided stops for a given feature property.
+    """
+
+    def __init__(self, property_name=None, stops=None):
+        """
+        Creates a step expression, based on values in the supplied property
+        of a feature.  Values indicating range boundaries and the styling to apply to features
+        in those ranges are supplied in the 'stops' dict.
+
+
+        Parameters:
+            property_name (str): the name of the feature property to match values against
+            stops (dict): key/value pairs for range values and the style value to apply to values in that range
+        """
+        self.property_name = property_name
+        self.stops = stops
+
+    def _expression_def(self):
+        cond = ['step', ['get', self.property_name]]
+        keys = list(sorted(self.stops))
+        cond.append(self.stops[keys[0]])  # first entry must be the starting style value
+        for key in keys[1:]:
+            cond.append(key)
+            cond.append(self.stops[key])
+        return cond
