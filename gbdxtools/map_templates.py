@@ -11,11 +11,12 @@ class BaseTemplate(object):
         return Template("""
             require.config({
               paths: {
-                  mapboxgl: 'https://api.tiles.mapbox.com/mapbox-gl-js/v0.52.0/mapbox-gl'
+                  mapboxgl: 'https://api.tiles.mapbox.com/mapbox-gl-js/v0.52.0/mapbox-gl',
+                  html2canvas: 'https://github.com/niklasvh/html2canvas/releases/download/v1.0.0-alpha.12/html2canvas.min'
               }
             });
 
-            require(['mapboxgl'], function(mapboxgl){
+            require(['mapboxgl', 'html2canvas'], function(mapboxgl, html2canvas){
                 mapboxgl.accessToken = "$mbkey";
                 var layers = $layers;
                 
