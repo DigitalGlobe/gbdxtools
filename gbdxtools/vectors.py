@@ -308,21 +308,21 @@ class Vectors(object):
 
         union = cascaded_union([shape(f['geometry']) for f in features])
         lon, lat = union.centroid.coords[0]
-        map_id = "map_{}".format(str(int(time.time())))
         url = 'https://vector.geobigdata.io/insight-vector/api/mvt/{z}/{x}/{y}?';
         url += 'q={}&index={}'.format(query, index);
 
         if styles is not None and not isinstance(styles, list):
             styles = [styles]
 
-        layers = VectorTileLayer(url, source_name=name, styles=styles, **kwargs)
+        map_id = "map_{}".format(str(int(time.time())))
+        map_data = VectorTileLayer(url, source_name=name, styles=styles, **kwargs)
 
         template = BaseTemplate(map_id, **{
             "lat": lat,
             "lon": lon,
             "zoom": zoom,
-            "datasource": json.dumps(layers.render_datasource()),
-            "layers": json.dumps(layers.render_layers()),
+            "datasource": json.dumps(map_data.datasource),
+            "layers": json.dumps(map_data.layers),
             "mbkey": api_key,
             "token": self.gbdx_connection.access_token
         })
@@ -371,19 +371,17 @@ class Vectors(object):
             lat, lon = center
 
         map_id = "map_{}".format(str(int(time.time())))
-
-        layers = VectorFeatureLayer(geojson, styles=styles, **kwargs)
+        map_data = VectorFeatureLayer(geojson, styles=styles, **kwargs)
 
         template = BaseTemplate(map_id, **{
             "lat": lat, 
             "lon": lon, 
             "zoom": zoom,
-            "datasource": json.dumps(layers.render_datasource()),
-            "layers": json.dumps(layers.render_layers()),
+            "datasource": json.dumps(map_data.datasource),
+            "layers": json.dumps(map_data.layers),
             "mbkey": api_key,
             "token": 'dummy'
         })
-
         template.inject()
 
 

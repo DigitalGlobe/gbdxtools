@@ -37,7 +37,8 @@ class VectorLayer(object):
         """
         raise NotImplementedError()
 
-    def render_datasource(self):
+    @property
+    def datasource(self):
         """
         Renders the datasource to add to the map, referenced by the layers
         created by this layer instance.
@@ -47,7 +48,8 @@ class VectorLayer(object):
         """
         return {'id': self.source_id, 'data': self._datasource_def()}
 
-    def render_layers(self):
+    @property
+    def layers(self):
         """
         Renders the list of layers to add to the map
         Returns:
