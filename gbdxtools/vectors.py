@@ -403,13 +403,13 @@ class Vectors(object):
         if image is not None:
             if isinstance(image, da.Array):
                 arr = image.rgb()
-                coords = self._polygon_coords(box(*image.bounds))
+                coords = box(*image.bounds)
             else:
                 assert image_bounds is not None, "Must pass image_bounds with ndarray images"
                 arr = image
-                coords = self.box(*image_bounds)
+                coords = box(*image_bounds)
             b64 = self._encode_image(arr)
-            return ImageLayer(b64, coords)
+            return ImageLayer(b64, self._polygon_coords(coords))
         else:
             return 'false';
 

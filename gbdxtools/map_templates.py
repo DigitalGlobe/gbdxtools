@@ -11,12 +11,11 @@ class BaseTemplate(object):
         return Template("""
             require.config({
               paths: {
-                  mapboxgl: 'https://api.tiles.mapbox.com/mapbox-gl-js/v0.52.0/mapbox-gl',
-                  html2canvas: 'https://github.com/niklasvh/html2canvas/releases/download/v1.0.0-alpha.12/html2canvas.min'
+                  mapboxgl: 'https://api.tiles.mapbox.com/mapbox-gl-js/v0.52.0/mapbox-gl'
               }
             });
 
-            require(['mapboxgl', 'html2canvas'], function(mapboxgl, html2canvas){
+            require(['mapboxgl'], function(mapboxgl){
                 mapboxgl.accessToken = "$mbkey";
                 var layers = $layers;
                 
@@ -78,13 +77,13 @@ class BaseTemplate(object):
                     }, 5000);
                 })
 
-                var buttonContainer = document.getElementsByClassName('mapboxgl-ctrl-top-left')[0],
+                var buttonContainer = document.getElementById("$map_id").getElementsByClassName('mapboxgl-ctrl-top-left')[0],
                     downloadControl = document.createElement('div');
-                downloadControl.className = 'mapboxgl-ctrl mapboxgl-ctrl-group ctrl-group-horizontal'; 
+                downloadControl.className = 'map-dload mapboxgl-ctrl mapboxgl-ctrl-group ctrl-group-horizontal'; 
                 downloadControl.id = 'download-controls';
                 buttonContainer.appendChild(downloadControl);
-                document.getElementById('download-controls').innerHTML = '<button class="mapboxgl-ctrl-icon screencap-icon"></button><button><a class="download-btn" href="#" title="Download map as .png" id="btn-download-map" download="map.png">png</a></button>';
-                var mapButton = document.getElementById('btn-download-map');
+                document.getElementById("$map_id").getElementsByClassName('map-dload')[0].innerHTML = '<button class="mapboxgl-ctrl-icon screencap-icon"><a class="download-btn" href="#" title="Download map as .png" id="btn-download-map-$map_id" class="$map_id-dload-link" download="map.png">...</a></button>';
+                var mapButton = document.getElementById("btn-download-map-$map_id") //.getElementsByClassName('$map_id-dload-link')[0];
                 mapButton.addEventListener('click', function (e) {
                     var mapCanvas = map.getCanvas();
                     mapButton.href = mapCanvas.toDataURL('image/png');
@@ -103,16 +102,13 @@ class BaseTemplate(object):
            <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.52.0/mapbox-gl.css' rel='stylesheet' />
            <style>body{margin:0;padding:0;}#$map_id{position:relative;top:0;bottom:0;width:100%;height:400px;}</style>
            <style>
-            .mapboxgl-popup-content table tr{border: 1px solid #efefef;} .mapboxgl-popup-content table, td, tr{border: none;}
-            .mapboxgl-popup-content table {width: 100%; table-layout: fixed; text-align: left;} .mapboxgl-popup-content td:first-of-type{width: 33%;}
-            .mapboxgl-popup-content {width: 400px !important;} .mapboxgl-popup-content td:last-of-type{overflow-x: scroll;}
-            .mapboxgl-ctrl-icon.screencap-icon {background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB2ZXJzaW9uPSIxLjEi%0D%0AIGlkPSJhdHRyYWN0aW9uLTE1IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdp%0D%0AZHRoPSIxNXB4IiBoZWlnaHQ9IjE1cHgiIHZpZXdCb3g9IjAgMCAxNSAxNSI+CiAgPHBhdGggaWQ9%0D%0AInJlY3Q3MTQzIiBkPSJNNiwyQzUuNDQ2LDIsNS4yNDc4LDIuNTA0NSw1LDNMNC41LDRoLTJDMS42%0D%0ANjksNCwxLDQuNjY5LDEsNS41djVDMSwxMS4zMzEsMS42NjksMTIsMi41LDEyaDEwJiN4QTsmI3g5%0D%0AO2MwLjgzMSwwLDEuNS0wLjY2OSwxLjUtMS41di01QzE0LDQuNjY5LDEzLjMzMSw0LDEyLjUsNGgt%0D%0AMkwxMCwzQzkuNzUsMi41LDkuNTU0LDIsOSwySDZ6IE0yLjUsNUMyLjc3NjEsNSwzLDUuMjIzOSwz%0D%0ALDUuNSYjeEE7JiN4OTtTMi43NzYxLDYsMi41LDZTMiw1Ljc3NjEsMiw1LjVTMi4yMjM5LDUsMi41%0D%0ALDV6IE03LjUsNWMxLjY1NjksMCwzLDEuMzQzMSwzLDNzLTEuMzQzMSwzLTMsM3MtMy0xLjM0MzEt%0D%0AMy0zUzUuODQzMSw1LDcuNSw1eiYjeEE7JiN4OTsgTTcuNSw2LjVDNi42NzE2LDYuNSw2LDcuMTcx%0D%0ANiw2LDhsMCwwYzAsMC44Mjg0LDAuNjcxNiwxLjUsMS41LDEuNWwwLDBDOC4zMjg0LDkuNSw5LDgu%0D%0AODI4NCw5LDhsMCwwQzksNy4xNzE2LDguMzI4NCw2LjUsNy41LDYuNSYjeEE7JiN4OTtMNy41LDYu%0D%0ANXoiLz4KPC9zdmc+'); background-position: center;  background-repeat: no-repeat; cursor: default; background-color: rgba(0,0,0,0.05); }
-            .mapboxgl-ctrl.mapboxgl-ctrl-group.ctrl-group-horizontal { height: 30px; }
-            .mapboxgl-ctrl.mapboxgl-ctrl-group.ctrl-group-horizontal > button { min-width: 30px; width: auto; height: 30px; display: inline-block !important; box-sizing: none; border-top: none; border-left: 1px solid #ddd; border-right: 1px solid #ddd;     vertical-align: top; }
-            .mapboxgl-ctrl.mapboxgl-ctrl-group.ctrl-group-horizontal > button > a { color: #6e6e6e; text-decoration: none; font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif; }
-            .mapboxgl-ctrl.mapboxgl-ctrl-group.ctrl-group-horizontal > button:first-child,
-            .mapboxgl-ctrl.mapboxgl-ctrl-group.ctrl-group-horizontal > button:last-child { border: none; }
-            .mapboxgl-ctrl.mapboxgl-ctrl-group.ctrl-group-horizontal > button:not(:first-child) { padding: 0 4px 0 4px; }
+            #$map_id .mapboxgl-ctrl-icon.screencap-icon .download-btn {background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB2ZXJzaW9uPSIxLjEi%0D%0AIGlkPSJhdHRyYWN0aW9uLTE1IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdp%0D%0AZHRoPSIxNXB4IiBoZWlnaHQ9IjE1cHgiIHZpZXdCb3g9IjAgMCAxNSAxNSI+CiAgPHBhdGggaWQ9%0D%0AInJlY3Q3MTQzIiBkPSJNNiwyQzUuNDQ2LDIsNS4yNDc4LDIuNTA0NSw1LDNMNC41LDRoLTJDMS42%0D%0ANjksNCwxLDQuNjY5LDEsNS41djVDMSwxMS4zMzEsMS42NjksMTIsMi41LDEyaDEwJiN4QTsmI3g5%0D%0AO2MwLjgzMSwwLDEuNS0wLjY2OSwxLjUtMS41di01QzE0LDQuNjY5LDEzLjMzMSw0LDEyLjUsNGgt%0D%0AMkwxMCwzQzkuNzUsMi41LDkuNTU0LDIsOSwySDZ6IE0yLjUsNUMyLjc3NjEsNSwzLDUuMjIzOSwz%0D%0ALDUuNSYjeEE7JiN4OTtTMi43NzYxLDYsMi41LDZTMiw1Ljc3NjEsMiw1LjVTMi4yMjM5LDUsMi41%0D%0ALDV6IE03LjUsNWMxLjY1NjksMCwzLDEuMzQzMSwzLDNzLTEuMzQzMSwzLTMsM3MtMy0xLjM0MzEt%0D%0AMy0zUzUuODQzMSw1LDcuNSw1eiYjeEE7JiN4OTsgTTcuNSw2LjVDNi42NzE2LDYuNSw2LDcuMTcx%0D%0ANiw2LDhsMCwwYzAsMC44Mjg0LDAuNjcxNiwxLjUsMS41LDEuNWwwLDBDOC4zMjg0LDkuNSw5LDgu%0D%0AODI4NCw5LDhsMCwwQzksNy4xNzE2LDguMzI4NCw2LjUsNy41LDYuNSYjeEE7JiN4OTtMNy41LDYu%0D%0ANXoiLz4KPC9zdmc+'); background-position: center;  background-repeat: no-repeat; cursor: default; padding: 5px; }
+            #$map_id .mapboxgl-ctrl.mapboxgl-ctrl-group.ctrl-group-horizontal { height: 30px; }
+            #$map_id .mapboxgl-ctrl.mapboxgl-ctrl-group.ctrl-group-horizontal > button { min-width: 30px; width: auto; height: 30px; display: inline-block !important; box-sizing: none; border-top: none; border-left: 1px solid #ddd; border-right: 1px solid #ddd;     vertical-align: top; }
+            #$map_id .mapboxgl-ctrl.mapboxgl-ctrl-group.ctrl-group-horizontal > button > a { color: #6e6e6e; text-decoration: none; font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif; }
+            #$map_id .mapboxgl-ctrl.mapboxgl-ctrl-group.ctrl-group-horizontal > button:first-child,
+            #$map_id .mapboxgl-ctrl.mapboxgl-ctrl-group.ctrl-group-horizontal > button:last-child { border: none; }
+            #$map_id .mapboxgl-ctrl.mapboxgl-ctrl-group.ctrl-group-horizontal > button:not(:first-child) { padding: 0 4px 0 4px; }
            <style>
         ''').substitute({"map_id": self.map_id})))
 
