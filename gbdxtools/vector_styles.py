@@ -24,7 +24,7 @@ class VectorLayer(object):
         """
         raise NotImplementedError()
 
-    def render_js(self):
+    def render_layers(self):
         """
         Renders the list of layers to add to the map
         Returns:

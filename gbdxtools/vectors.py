@@ -395,7 +395,7 @@ class Vectors(object):
             "lat": lat, 
             "lon": lon, 
             "zoom": zoom, 
-            "layers": json.dumps(layers.render_js()),
+            "layers": json.dumps(layers.render_layers()),
             "mbkey": api_key,
             "token": 'dummy'
         })
