@@ -119,3 +119,51 @@ class StepExpression(StyleExpression):
             cond.append(key)
             cond.append(self.stops[key])
         return cond
+
+class HeatmapExpression(StyleExpression):
+    """
+    Represents a mapbox-gl "interpolate" expression, creating a smooth set of results
+    between provided stops for a given feature property.
+    """
+
+    def __init__(self, stops=None, type=None):
+        """
+        Creates an interpolate expression, based on values in the supplied property
+        of a feature.  Values indicating range boundaries and the styling to apply to features
+        in those ranges are supplied in the 'stops' dict.
+
+        Parameters:
+            stops (dict): key/value pairs for range values and the style value to apply to values in that range
+            type (list): interpolation type params
+        """
+        self.stops = stops
+        self.type = type
+
+    def _expression_def(self):
+        cond = ['interpolate', self.type, ['heatmap-density']]
+        for key in sorted(self.stops):
+            cond.append(key)
+            cond.append(self.stops[key])
+        return cond
+
+class ZoomExpression(StyleExpression):
+    """
+    Represents a mapbox-gl "interpolate" expression, creating a smooth set of results
+    between provided stops for a given feature property.
+    """
+
+    def __init__(self, stops=None, type=None):
+        """
+        Creates an interpolate expression, based on values in the supplied property
+        of a feature.  Values indicating range boundaries and the styling to apply to features
+        in those ranges are supplied in the 'stops' dict.
+
+        Parameters:
+            stops (list): zoom -> value list of zooms and values at specific zooms
+            type (list): interpolation type params
+        """
+        self.stops = stops
+        self.type = type
+
+    def _expression_def(self):
+        return ['interpolate', self.type, ['zoom']] + self.stops

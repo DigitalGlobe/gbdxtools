@@ -164,3 +164,99 @@ class FillStyle(VectorStyle):
             snippet['fill-translate'] = self.translate
 
         return snippet
+
+class FillExtrusionStyle(FillStyle):
+
+    def __init__(self, base=0, height=0, **kwargs):
+        """ Creates a style entry for extruded polygons (fills)
+        Args:
+            opacity (float/StyleConditional/list):  the opacity of the circles (will accept either a float value or
+                      a list representing a mapbox-gl conditional expression)
+            color (str/StyleConditional/list): the color of the circles (will accept either an 'rgb' string, a hex
+                   string, or a list representing a mapbox-gl conditional expression)
+            base (int/StyleConditional): the height at which to extrude the base of the features. 
+                                         must be less than or equal to the height.
+            height (int/StyleConditional): the height with which to extrude features. 
+
+        Returns:
+            A circle style which can be applied to a circle layer
+        """
+        super(FillExtrusionStyle, self).__init__(**kwargs)
+        self.base = base
+        self.height = height
+        self.type = 'fill-extrusion'
+
+    def paint(self):
+        """
+        Renders a javascript snippet suitable for use as a mapbox-gl circle paint entry
+
+        Returns:
+            A dict that can be converted to a mapbox-gl javascript paint snippet
+        """
+        snippet = {
+            'fill-extrusion-opacity': VectorStyle.get_style_value(self.opacity),
+            'fill-extrusion-color': VectorStyle.get_style_value(self.color),
+            'fill-extrusion-base': VectorStyle.get_style_value(self.base),
+            'fill-extrusion-height': VectorStyle.get_style_value(self.height)
+        }
+        if self.translate:
+            snippet['fill-extrusion-translate'] = self.translate
+
+        return snippet
+
+class HeatmapStyle(VectorStyle):
+
+    def __init__(self, intensity=1, weight=1, color=None, radius=1, **kwargs):
+        """ Creates a style entry for extruded polygons (fills)
+        Args:
+            opacity (float/StyleConditional/list):  the opacity of the circles (will accept either a float value or
+                      a list representing a mapbox-gl conditional expression)
+            radius (int): the radius of the circles (will accept either a float value or
+                    a list representing a mapbox-gl conditional expression)
+            color (str/StyleConditional/list): the color of the circles (will accept either an 'rgb' string, a hex
+                   string, or a list representing a mapbox-gl conditional expression)
+            intensity (int/StyleConditional): controls the intensity of the heatmap
+            weight (int/StyleConditional): how much an individual point contributes to the heatmap
+
+        Returns:
+            A circle style which can be applied to a circle layer
+        """
+        super(HeatmapStyle, self).__init__(**kwargs)
+        if color is None:
+            self.color = self.default_color
+        else:
+            self.color = color
+        self.intensity = intensity
+        self.weight = weight
+        self.radius = 1
+        self.type = 'heatmap'
+
+    @property
+    def default_color(self):
+        return [
+            "interpolate",
+            ["linear"], ["heatmap-density"],
+            0, "rgba(0, 0, 255, 0)",
+            0.1, "royalblue",
+            0.3, "cyan", 
+            0.5, "lime",
+            0.7, "yellow",
+            1, "red"
+        ]
+
+    def paint(self):
+        """
+        Renders a javascript snippet suitable for use as a mapbox-gl circle paint entry
+
+        Returns:
+            A dict that can be converted to a mapbox-gl javascript paint snippet
+        """
+        snippet = {
+            'heatmap-radius': VectorStyle.get_style_value(self.radius),
+            'heatmap-opacity': VectorStyle.get_style_value(self.opacity),
+            'heatmap-color': VectorStyle.get_style_value(self.color),
+            'heatmap-intensity': VectorStyle.get_style_value(self.intensity),
+            'heatmap-weight': VectorStyle.get_style_value(self.weight)
+        }
+
+        return snippet
