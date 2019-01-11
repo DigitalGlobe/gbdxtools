@@ -414,7 +414,7 @@ class Vectors(object):
             return 'false';
 
     def _polygon_coords(self, g):
-        c = map(list, list(g.exterior.coords))
+        c = list(map(list, list(g.exterior.coords)))
         return [c[2], c[1], c[0], c[3]]
 
     def _encode_image(self, arr):
