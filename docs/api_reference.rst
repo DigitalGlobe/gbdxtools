@@ -108,14 +108,14 @@ Vectors
 .. autoclass:: gbdxtools.vectors.Vectors
    :members:
 
-Vector Map Styles
------------------------
+Styles
+^^^^^^^^^^^^^^
 
 .. automodule:: gbdxtools.vector_styles
    :members:
 
-Vector Map Style Expressions
------------------------
+Style Expressions
+^^^^^^^^^^^^^^
 
 .. automodule:: gbdxtools.vector_styles
    :members:
