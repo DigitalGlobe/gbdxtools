@@ -4,6 +4,16 @@ from gbdxtools.vector_style_expressions import StyleExpression
 class VectorStyle(object):
 
     def __init__(self, opacity=1.0, color='rgb(255,0,0)', translate=None, **kwargs):
+        """
+        Allows setting parameters common to all layer styles
+
+        Args:
+            opacity (float/StyleExpression/list):  the opacity of the circles (will accept either a float value, a
+                    StyleExpression, or a list representing a mapbox-gl conditional expression)
+            color (str/StyleExpression/list): the color of the circles (will accept either an an rgb/hex/html-color-name
+                    string, a StyleExpression, or a list representing a mapbox-gl conditional expression)
+            translate: (float): the offset from the original vector location at which the vector will be rendered
+        """
         self.opacity = opacity
         self.color = color
         self.translate = translate
@@ -11,6 +21,15 @@ class VectorStyle(object):
 
     @staticmethod
     def get_style_value(style_value):
+        """
+        Decides which value will be added to a style's 'paint' configuration
+
+        Args:
+            style_value: the value set on the style instance
+
+        Returns:
+            a value suitable for inclusion in a 'paint' configuration
+        """
         if isinstance(style_value, StyleExpression):
             return style_value.expression
         else:
@@ -34,12 +53,12 @@ class CircleStyle(VectorStyle):
     def __init__(self, radius=1.0, **kwargs):
         """ Creates a style entry for a circle layer
         Args:
-            radius (int): the radius of the circles (will accept either a float value or
+            radius (float/StyleExpression/list): the radius of the circles (will accept either a float value, a StyleExpression, or
                     a list representing a mapbox-gl conditional expression)
-            opacity (float):  the opacity of the circles (will accept either a float value or
-                      a list representing a mapbox-gl conditional expression)
-            color (str): the color of the circles (will accept either an 'rgb' string, a hex
-                   string, or a list representing a mapbox-gl conditional expression)
+            opacity (float/StyleExpression/list):  the opacity of the circles (will accept either a float value, a StyleExpression, or
+                    a list representing a mapbox-gl conditional expression)
+            color (str/StyleExpression/list): the color of the circles (will accept either an an rgb/hex/html-color-name string,
+                    a StyleExpression, or a list representing a mapbox-gl conditional expression)
 
         Returns:
             A circle style which can be applied to a circle layer
@@ -74,21 +93,21 @@ class LineStyle(VectorStyle):
 
     def __init__(self, cap='butt', join='miter', width=1.0, gap_width=0,
                  blur=0, dasharray=None, **kwargs):
-        """ Creates a style entry for a circle layer
+        """ Creates a style entry for a line layer
         Args:
-            cap: the line-ending style ('butt' (default), 'round', or 'square')
-            join: the line-joining style ('miter' (default), 'bevel', or 'round')
-            width: the width of the line in pixels
-            gap_width: the width of the gap between the line and its casing in pixels
-            blur: blur value in pixels
-            dasharray: list of numbers indicating line widths for a dashed line
-            opacity:  the opacity of the circles (will accept either a float value or
+            cap (str): the line-ending style ('butt' (default), 'round', or 'square')
+            join (str): the line-joining style ('miter' (default), 'bevel', or 'round')
+            width (float/StyleExpression/list): the width of the line in pixels
+            gap_width (float/StyleExpression/list): the width of the gap between the line and its casing in pixels
+            blur (float): blur value in pixels
+            dasharray (list): list of numbers indicating line widths for a dashed line
+            opacity (float/StyleExpression/list):  the opacity of the circles (will accept either a float value or
                       a list representing a mapbox-gl conditional expression)
-            color: the color of the circles (will accept either an 'rgb' string, a hex
-                   string, or a list representing a mapbox-gl conditional expression)
+            color (str/StyleExpression/list): the color of the circles (will accept either an an rgb/hex/html-color-name
+                      string, a StyleExpression, or a list representing a mapbox-gl conditional expression)
 
         Returns:
-            A line style which can be applied to a circle layer
+            A line style which can be applied to a line layer
         """
         super(LineStyle, self).__init__(**kwargs)
         self.cap = cap
@@ -131,16 +150,18 @@ class FillStyle(VectorStyle):
                        opacity=.5, 
                        outline_color=None,
                        **kwargs):
-        """ Creates a style entry for a circle layer
+        """ Creates a style entry for a fill layer
         Args:
-            opacity (float/StyleConditional/list):  the opacity of the circles (will accept either a float value or
-                      a list representing a mapbox-gl conditional expression)
-            color (str/StyleConditional/list): the color of the circles (will accept either an 'rgb' string, a hex
-                   string, or a list representing a mapbox-gl conditional expression)
-            outline_color (str/StyleConditional/list): the color of the outline
+            opacity (float/StyleExpression/list):  the opacity of the circles (will accept either a float value, a
+                        StyleExpression, or a list representing a mapbox-gl conditional expression)
+            color (str/StyleExpression/list): the color of the fill (will accept either an an rgb/hex/html-color-name
+                        string, a StyleExpression, or a list representing a mapbox-gl conditional expression)
+            outline_color (str/StyleExpression/list): the color of the outline (will accept either an an
+                        rgb/hex/html-color-name string, a StyleExpression, or a list representing a mapbox-gl
+                        conditional expression)
 
         Returns:
-            A circle style which can be applied to a circle layer
+            A fill style which can be applied to a fill layer
         """
         super(FillStyle, self).__init__(**kwargs)
         self.outline_color = outline_color if outline_color is not None else color
@@ -150,7 +171,7 @@ class FillStyle(VectorStyle):
 
     def paint(self):
         """
-        Renders a javascript snippet suitable for use as a mapbox-gl circle paint entry
+        Renders a javascript snippet suitable for use as a mapbox-gl fill paint entry
 
         Returns:
             A dict that can be converted to a mapbox-gl javascript paint snippet
@@ -170,16 +191,16 @@ class FillExtrusionStyle(FillStyle):
     def __init__(self, base=0, height=0, **kwargs):
         """ Creates a style entry for extruded polygons (fills)
         Args:
-            opacity (float/StyleConditional/list):  the opacity of the circles (will accept either a float value or
-                      a list representing a mapbox-gl conditional expression)
-            color (str/StyleConditional/list): the color of the circles (will accept either an 'rgb' string, a hex
-                   string, or a list representing a mapbox-gl conditional expression)
-            base (int/StyleConditional): the height at which to extrude the base of the features. 
+            opacity (float/StyleExpression/list):  the opacity of the circles (will accept either a float value, a
+                        StyleExpression, or a list representing a mapbox-gl conditional expression)
+            color (str/StyleExpression/list): the color of the circles (will accept either an rgb/hex/html-color-name
+                   string, a StyleExpression, or a list representing a mapbox-gl conditional expression)
+            base (int/StyleExpression): the height at which to extrude the base of the features.
                                          must be less than or equal to the height.
-            height (int/StyleConditional): the height with which to extrude features. 
+            height (int/StyleExpression): the height with which to extrude features.
 
         Returns:
-            A circle style which can be applied to a circle layer
+            A fill-extrusion style which can be applied to a fill-extrusion layer
         """
         super(FillExtrusionStyle, self).__init__(**kwargs)
         self.base = base
@@ -188,7 +209,7 @@ class FillExtrusionStyle(FillStyle):
 
     def paint(self):
         """
-        Renders a javascript snippet suitable for use as a mapbox-gl circle paint entry
+        Renders a javascript snippet suitable for use as a mapbox-gl fill-extrusion paint entry
 
         Returns:
             A dict that can be converted to a mapbox-gl javascript paint snippet
@@ -207,19 +228,19 @@ class FillExtrusionStyle(FillStyle):
 class HeatmapStyle(VectorStyle):
 
     def __init__(self, intensity=1, weight=1, color=None, radius=1, **kwargs):
-        """ Creates a style entry for extruded polygons (fills)
+        """ Creates a style entry for heatmap layers
         Args:
-            opacity (float/StyleConditional/list):  the opacity of the circles (will accept either a float value or
-                      a list representing a mapbox-gl conditional expression)
-            radius (int): the radius of the circles (will accept either a float value or
-                    a list representing a mapbox-gl conditional expression)
-            color (str/StyleConditional/list): the color of the circles (will accept either an 'rgb' string, a hex
-                   string, or a list representing a mapbox-gl conditional expression)
-            intensity (int/StyleConditional): controls the intensity of the heatmap
-            weight (int/StyleConditional): how much an individual point contributes to the heatmap
+            opacity (float/StyleExpression/list):  the opacity of the circles (will accept either a float value,
+                        a StyleExpression, or a list representing a mapbox-gl conditional expression)
+            radius (int): the radius of the circles (will accept either a float value, a StyleExpression, or
+                        a list representing a mapbox-gl conditional expression)
+            color (str/StyleExpression/list): the color of the circles (will accept either an rgb/hex/html-color-name
+                        string, a StyleExpression, or a list representing a mapbox-gl conditional expression)
+            intensity (int/StyleExpression): controls the intensity of the heatmap
+            weight (int/StyleExpression): how much an individual point contributes to the heatmap
 
         Returns:
-            A circle style which can be applied to a circle layer
+            A heatmap style which can be applied to a heatmap layer
         """
         super(HeatmapStyle, self).__init__(**kwargs)
         if color is None:
@@ -228,7 +249,7 @@ class HeatmapStyle(VectorStyle):
             self.color = color
         self.intensity = intensity
         self.weight = weight
-        self.radius = 1
+        self.radius = radius
         self.type = 'heatmap'
 
     @property
@@ -246,7 +267,7 @@ class HeatmapStyle(VectorStyle):
 
     def paint(self):
         """
-        Renders a javascript snippet suitable for use as a mapbox-gl circle paint entry
+        Renders a javascript snippet suitable for use as a mapbox-gl heatmap paint entry
 
         Returns:
             A dict that can be converted to a mapbox-gl javascript paint snippet

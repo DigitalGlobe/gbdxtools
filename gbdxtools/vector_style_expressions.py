@@ -33,10 +33,10 @@ class MatchExpression(StyleExpression):
         matches are supplied in the 'values' dict.  If the feature property does not
         match any of the values provided, it will be styled with the provided default.
 
-        Parameters:
+        Args:
             property_name (str): the name of the feature property to match values against
             values (dict): key/value pairs for property values and the style value to apply
-            default_value (?): default value to apply when no value matches
+            default_value (str/float): default value to apply when no value matches
         """
         self.property_name = property_name
         self.values = values
@@ -74,7 +74,7 @@ class InterpolateExpression(StyleExpression):
             - ["cubic-bezier", x1, y1, x2, y2]: interpolates using the cubic bezier curve
                                                 defined by the given control points.
 
-        Parameters:
+        Args:
             property_name (str): the name of the feature property to match values against
             stops (dict): key/value pairs for range values and the style value to apply to values in that range
             type (list): interpolation type params
@@ -103,8 +103,7 @@ class StepExpression(StyleExpression):
         of a feature.  Values indicating range boundaries and the styling to apply to features
         in those ranges are supplied in the 'stops' dict.
 
-
-        Parameters:
+        Args:
             property_name (str): the name of the feature property to match values against
             stops (dict): key/value pairs for range values and the style value to apply to values in that range
         """
@@ -122,17 +121,17 @@ class StepExpression(StyleExpression):
 
 class HeatmapExpression(StyleExpression):
     """
-    Represents a mapbox-gl "interpolate" expression, creating a smooth set of results
-    between provided stops for a given feature property.
+    Represents a mapbox-gl "interpolation" expression using heatmap-density for a pixel rather than a feature property
+    in a heatmap layer.  Can only be used in a heatmap style's 'color' property.
     """
 
     def __init__(self, stops=None, type=None):
         """
-        Creates an interpolate expression, based on values in the supplied property
-        of a feature.  Values indicating range boundaries and the styling to apply to features
-        in those ranges are supplied in the 'stops' dict.
+        Creates an interpolation expression using heatmap-density for pixels in a heatmap layer.
+        Values indicating range boundaries and the styling to apply to features in those ranges are supplied in the
+        'stops' dict.
 
-        Parameters:
+        Args:
             stops (dict): key/value pairs for range values and the style value to apply to values in that range
             type (list): interpolation type params
         """
@@ -148,17 +147,16 @@ class HeatmapExpression(StyleExpression):
 
 class ZoomExpression(StyleExpression):
     """
-    Represents a mapbox-gl "interpolate" expression, creating a smooth set of results
-    between provided stops for a given feature property.
+    Represents a mapbox-gl "interpolate" expression, using the zoom level as input rather than a property
+    on a feature.
     """
 
     def __init__(self, stops=None, type=None):
         """
-        Creates an interpolate expression, based on values in the supplied property
-        of a feature.  Values indicating range boundaries and the styling to apply to features
-        in those ranges are supplied in the 'stops' dict.
+        Creates an interpolate expression, based on the map's current zoom level.  Values indicating range
+        boundaries and the styling to apply to features in those ranges are supplied in the 'stops' dict.
 
-        Parameters:
+        Args:
             stops (list): zoom -> value list of zooms and values at specific zooms
             type (list): interpolation type params
         """

@@ -5,8 +5,8 @@ from gbdxtools.vector_styles import CircleStyle, LineStyle, FillStyle
 
 
 class VectorLayer(object):
-    """ Represents a vector layer created from a geojson source, and knows how
-    to render itself as javascript.
+    """
+    Represents a vector layer knowing how to render itself as javascript.
     """
 
     def __init__(self, styles=None, **kwargs):
@@ -54,11 +54,10 @@ class VectorLayer(object):
     @property
     def layers(self):
         """
-        Renders the list of layers to add to the map
+        Renders the list of layers to add to the map.
         Returns:
-            list of layer entries suitable for use in mapbox-gl 'map.addLayer()' call
+            layers (list): list of layer entries suitable for use in mapbox-gl 'map.addLayer()' call
         """
-        layers = []
         layers = [self._layer_def(style) for style in self.styles]
         return layers
 
@@ -73,9 +72,6 @@ class VectorGeojsonLayer(VectorLayer):
         Args:
             geojson (dict): a list of geojson features to render
             styles (list): A list of style objects to be applied to the layer
-
-        Returns:
-            An instance of the VectorLayer
         """
         super(VectorGeojsonLayer, self).__init__(**kwargs)
         self.geojson = geojson
@@ -92,7 +88,6 @@ class VectorGeojsonLayer(VectorLayer):
         }
 
 
-
 class VectorTileLayer(VectorLayer):
     """ Represents a vector layer in a tile map, and knows how to render
     itself as javascript.
@@ -104,9 +99,6 @@ class VectorTileLayer(VectorLayer):
             url (str): a vector tile url template
             source_name (str): the name of the source layer in the vector tiles
             styles (list): A list of style objects to be applied to the layer
-
-        Returns:
-            An instance of the VectorLayer
         """
         super(VectorTileLayer, self).__init__(**kwargs)
         self.url = url
