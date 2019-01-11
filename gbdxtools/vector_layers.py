@@ -63,7 +63,7 @@ class VectorLayer(object):
         return layers
 
 
-class VectorFeatureLayer(VectorLayer):
+class VectorGeojsonLayer(VectorLayer):
     """ Represents a vector layer created from a geojson source, and knows how
     to render itself as javascript.
     """
@@ -77,7 +77,7 @@ class VectorFeatureLayer(VectorLayer):
         Returns:
             An instance of the VectorLayer
         """
-        super(VectorFeatureLayer, self).__init__(**kwargs)
+        super(VectorGeojsonLayer, self).__init__(**kwargs)
         self.geojson = geojson
 
     def _datasource_def(self):
