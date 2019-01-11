@@ -22,7 +22,7 @@ from shapely.ops import cascaded_union
 from shapely.geometry import shape, box
 from shapely.wkt import loads as from_wkt
 
-from gbdxtools.vector_layers import VectorFeatureLayer, VectorTileLayer, \
+from gbdxtools.vector_layers import VectorGeojsonLayer, VectorTileLayer, \
                                     ImageLayer
 from gbdxtools.map_templates import BaseTemplate
 from gbdxtools.auth import Auth
@@ -384,7 +384,7 @@ class Vectors(object):
             lat, lon = center
 
         map_id = "map_{}".format(str(int(time.time())))
-        map_data = VectorFeatureLayer(geojson, styles=styles, **kwargs)
+        map_data = VectorGeojsonLayer(geojson, styles=styles, **kwargs)
         image_layer = self._build_image_layer(image, image_bounds)
 
         template = BaseTemplate(map_id, **{
