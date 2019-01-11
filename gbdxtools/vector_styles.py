@@ -46,12 +46,12 @@ class VectorStyle(object):
 
 
 class CircleStyle(VectorStyle):
-    """
-    Applies styling to a circle layer
-    """
 
     def __init__(self, radius=1.0, **kwargs):
-        """ Creates a style entry for a circle layer
+        """ Creates a style entry for a circle layer.
+
+        See https://www.mapbox.com/mapbox-gl-js/style-spec/#layers-circle
+
         Args:
             radius (float/StyleExpression/list): the radius of the circles (will accept either a float value, a StyleExpression, or
                     a list representing a mapbox-gl conditional expression)
@@ -87,13 +87,12 @@ class CircleStyle(VectorStyle):
 
 class LineStyle(VectorStyle):
 
-    """
-    Applies styling to a circle layer
-    """
-
     def __init__(self, cap='butt', join='miter', width=1.0, gap_width=0,
                  blur=0, dasharray=None, **kwargs):
         """ Creates a style entry for a line layer
+
+        See https://www.mapbox.com/mapbox-gl-js/style-spec/#layers-line
+
         Args:
             cap (str): the line-ending style ('butt' (default), 'round', or 'square')
             join (str): the line-joining style ('miter' (default), 'bevel', or 'round')
@@ -150,7 +149,10 @@ class FillStyle(VectorStyle):
                        opacity=.5, 
                        outline_color=None,
                        **kwargs):
-        """ Creates a style entry for a fill layer
+        """ Creates a style entry for a fill layer.
+
+        See https://www.mapbox.com/mapbox-gl-js/style-spec/#layers-fill
+
         Args:
             opacity (float/StyleExpression/list):  the opacity of the circles (will accept either a float value, a
                         StyleExpression, or a list representing a mapbox-gl conditional expression)
@@ -190,6 +192,9 @@ class FillExtrusionStyle(FillStyle):
 
     def __init__(self, base=0, height=0, **kwargs):
         """ Creates a style entry for extruded polygons (fills)
+
+        See https://www.mapbox.com/mapbox-gl-js/style-spec/#layers-fill-extrusion
+
         Args:
             opacity (float/StyleExpression/list):  the opacity of the circles (will accept either a float value, a
                         StyleExpression, or a list representing a mapbox-gl conditional expression)
@@ -228,7 +233,10 @@ class FillExtrusionStyle(FillStyle):
 class HeatmapStyle(VectorStyle):
 
     def __init__(self, intensity=1, weight=1, color=None, radius=1, **kwargs):
-        """ Creates a style entry for heatmap layers
+        """ Creates a style entry for heatmap layers.
+
+        See https://www.mapbox.com/mapbox-gl-js/style-spec/#layers-heatmap
+
         Args:
             opacity (float/StyleExpression/list):  the opacity of the circles (will accept either a float value,
                         a StyleExpression, or a list representing a mapbox-gl conditional expression)

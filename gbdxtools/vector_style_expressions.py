@@ -24,6 +24,8 @@ class MatchExpression(StyleExpression):
     """
     Represents a mapbox-gl "match" conditional expression, where a set of values
     is matched against a property and styling applied based on the match.
+
+    See https://www.mapbox.com/mapbox-gl-js/style-spec/#expressions-match
     """
 
     def __init__(self, property_name=None, values=None, default_value=None):
@@ -55,6 +57,8 @@ class InterpolateExpression(StyleExpression):
     """
     Represents a mapbox-gl "interpolate" expression, creating a smooth set of results
     between provided stops for a given feature property.
+
+    See https://www.mapbox.com/mapbox-gl-js/style-spec/#expressions-interpolate
     """
 
     def __init__(self, property_name=None, stops=None, type=None):
@@ -95,6 +99,8 @@ class StepExpression(StyleExpression):
     """
     Represents a mapbox-gl "step" expression, creating discrete stepped results
     between provided stops for a given feature property.
+
+    See https://www.mapbox.com/mapbox-gl-js/style-spec/#expressions-step
     """
 
     def __init__(self, property_name=None, stops=None):
@@ -123,6 +129,8 @@ class HeatmapExpression(StyleExpression):
     """
     Represents a mapbox-gl "interpolation" expression using heatmap-density for a pixel rather than a feature property
     in a heatmap layer.  Can only be used in a heatmap style's 'color' property.
+
+    See https://www.mapbox.com/mapbox-gl-js/style-spec/#expressions-heatmap-density
     """
 
     def __init__(self, stops=None, type=None):
@@ -149,6 +157,8 @@ class ZoomExpression(StyleExpression):
     """
     Represents a mapbox-gl "interpolate" expression, using the zoom level as input rather than a property
     on a feature.
+
+    See https://www.mapbox.com/mapbox-gl-js/style-spec/#expressions-zoom
     """
 
     def __init__(self, stops=None, type=None):
