@@ -9,10 +9,14 @@ from collections import OrderedDict
 import operator
 from functools import partial
 import numpy as np
+from shapely.geometry import box
 
 import gbdxtools as gbdx
 from gbdxtools.rda.util import RDA_TO_DTYPE
-from gbdxtools.rda.graph import VIRTUAL_RDA_URL, register_rda_graph, get_rda_metadata, get_graph_stats
+from gbdxtools.rda.graph import VIRTUAL_RDA_URL, register_rda_graph, \
+                                get_rda_metadata, get_graph_stats, \
+                                rda_materialize, create_rda_template, \
+                                materialize_status
 from gbdxtools.auth import Auth
 from gbdxtools.rda.fetch import easyfetch as load_url
 from gbdxtools.images.meta import DaskMeta
@@ -99,6 +103,40 @@ class DaskProps(object):
         return (img_md["numBands"],
                 (img_md["maxTileY"] - img_md["minTileY"] + 1)*img_md["tileYSize"],
                 (img_md["maxTileX"] - img_md["minTileX"] + 1)*img_md["tileXSize"])
+
+    def materialize(self, node=None, bounds=None, callback=None, out_format='TILE_STREAM', **kwargs):
+        """
+          Materializes image to gbdx user buckets in s3
+
+          Args:
+            node (str): the node in the graph to materialize
+            bounds (list): optional bbox for cropping what gets materialized in s3
+            out_format (str): VECTOR_TILE, VECTOR, TIF, TILE_STREAM
+            callback (str): a callback url like an `sns://`
+        """
+        conn = self._interface.gbdx_futures_session
+        graph = self.graph()
+        templateId = create_rda_template(conn, graph)
+        if node is None:
+            node = graph['nodes'][0]['id']
+    
+        payload = {
+            "imageReference": {
+                "templateId": templateId,
+                "nodeId": node,
+                "parameters": kwargs
+            },
+            "outputFormat": out_format
+        }
+        if bounds is not None:
+            payload["cropGeometryWKT"] = box(*bounds).wkt
+        if callback is not None:
+            payload["callbackUrl"] = callback
+        
+        return rda_materialize(conn, payload)
+
+    def materialize_status(self, job_id):
+        return materialize_status(self._interface.gbdx_futures_session, job_id)
 
     def _rda_tile(self, x, y, rda_id, _id):
         return "{}/tile/{}/{}/{}/{}/{}.tif".format(VIRTUAL_RDA_URL, "idaho-virtual", rda_id, _id, x, y)
