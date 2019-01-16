@@ -207,10 +207,9 @@ class TmsImage(GeoDaskImage):
     Args:
         zoom (int): (optional) Zoom level to use as the source if the image, default is 22
         bbox (list): (optional) Bounding box of AOI, if aoi() method is not used.
-        proj (str): (optional) EPSG projection string to reproject to, native SRS is EPSG:3857
 
     Example:
-        >>> img = TmsImage(zoom=13, bbox=[-109.84, 43.19, -109.59, 43.34], proj='EPSG:4326')'''
+        >>> img = TmsImage(zoom=13, bbox=[-109.84, 43.19, -109.59, 43.34])'''
 
 
     _default_proj = "EPSG:3857"
