@@ -61,7 +61,7 @@ class InterpolateExpression(StyleExpression):
     See https://www.mapbox.com/mapbox-gl-js/style-spec/#expressions-interpolate
     """
 
-    def __init__(self, property_name=None, stops=None, type=None):
+    def __init__(self, property_name=None, stops=None, type=['linear']):
         """
         Creates an interpolate expression, based on values in the supplied property
         of a feature.  Values indicating range boundaries and the styling to apply to features
@@ -133,7 +133,7 @@ class HeatmapExpression(StyleExpression):
     See https://www.mapbox.com/mapbox-gl-js/style-spec/#expressions-heatmap-density
     """
 
-    def __init__(self, stops=None, type=None):
+    def __init__(self, stops=None, type=['linear']):
         """
         Creates an interpolation expression using heatmap-density for pixels in a heatmap layer.
         Values indicating range boundaries and the styling to apply to features in those ranges are supplied in the
@@ -161,7 +161,7 @@ class ZoomExpression(StyleExpression):
     See https://www.mapbox.com/mapbox-gl-js/style-spec/#expressions-zoom
     """
 
-    def __init__(self, stops=None, type=None):
+    def __init__(self, stops=None, type=['linear']):
         """
         Creates an interpolate expression, based on the map's current zoom level.  Values indicating range
         boundaries and the styling to apply to features in those ranges are supplied in the 'stops' dict.
