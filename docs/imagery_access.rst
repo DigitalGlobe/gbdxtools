@@ -208,7 +208,7 @@ GBDX also indexes all Landsat8 images. The images are served from Amazon Web Ser
 DEM Images
 ^^^^^^^^^^^^^^^^^^^^^^^
 
-Both the ``DemImage`` and ``TmsImage`` (below) classes behave in a different fashion than the other image classes. The ``DemImage`` class is used to fetch a NumPy array of Digital Elevation Model (DEM) data from the NED/SRTM dataset. Since the dataset is static this class uses an Area of Interest (AOI) in place of a catalog id. 
+Both the ``DemImage`` and ``TmsImage`` (below) classes behave in a different fashion than the other image classes. The ``DemImage`` class is used to fetch a NumPy array of Digital Elevation Model (DEM) data primarily from the NED/SRTM dataset. This dataset has a resolution of 30m and elevations are orthometric. Since the dataset is static this class uses an Area of Interest (AOI) in place of a catalog id. 
 
 .. code-block:: python
 
