@@ -437,7 +437,7 @@ class GeoDaskImage(DaskImage, Container, PlotMixin, BandMethodsTemplate, Depreca
         if isinstance(dem, GeoDaskImage):
             g = box(xv.min(), yv.min(), xv.max(), yv.max())
             try:
-                dem = dem[g].compute(get=dask.get) # read(quiet=True)
+                dem = dem[g].compute(scheduler=dask.get) # read(quiet=True)
             except AssertionError:
                 dem = 0 # guessing this is indexing by a 0 width geometry.
 
