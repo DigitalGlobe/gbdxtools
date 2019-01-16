@@ -97,7 +97,7 @@ def create_rda_template(conn, graph):
     r.raise_for_status()
     return r.json()['id']
 
-def rda_materialize(conn, payload):
+def materialize_template(conn, payload):
     r = conn.post("{}/template/materialize".format(VIRTUAL_RDA_URL), json=payload).result()
     r.raise_for_status()
     return r.json()['jobId']
