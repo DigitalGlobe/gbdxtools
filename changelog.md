@@ -1,3 +1,10 @@
+0.16.2
+* New vector styles and style expressions for mapping vectors via `gbdx.vectors.map()`
+* RDA based images can now be materialized to s3 via `image.materialize()`
+* added a materialize_status method for checking jobs
+* refactored the vector map methods to make use of a shared mapping template 
+
+
 0.16.0
 * Depricated the base_layer_match method, now user .rgb(histogram="match")
 * Updated docs for image classes 
