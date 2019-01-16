@@ -2,10 +2,7 @@ from gbdxtools.vector_style_expressions import StyleExpression
 
 
 class VectorStyle(object):
-
-    def __init__(self, opacity=1.0, color='rgb(255,0,0)', translate=None, **kwargs):
-        """
-        Allows setting parameters common to all layer styles
+    """ Allows setting parameters common to all layer styles
 
         Args:
             opacity (float/StyleExpression/list):  the opacity of the circles (will accept either a float value, a
@@ -13,7 +10,9 @@ class VectorStyle(object):
             color (str/StyleExpression/list): the color of the circles (will accept either an an rgb/hex/html-color-name
                     string, a StyleExpression, or a list representing a mapbox-gl conditional expression)
             translate: (float): the offset from the original vector location at which the vector will be rendered
-        """
+    """
+    def __init__(self, opacity=1.0, color='rgb(255,0,0)', translate=None, **kwargs):
+       
         self.opacity = opacity
         self.color = color
         self.translate = translate
@@ -46,9 +45,7 @@ class VectorStyle(object):
 
 
 class CircleStyle(VectorStyle):
-
-    def __init__(self, radius=1.0, **kwargs):
-        """ Creates a style entry for a circle layer.
+    """ Creates a style entry for a circle layer.
 
         See https://www.mapbox.com/mapbox-gl-js/style-spec/#layers-circle
 
@@ -62,7 +59,9 @@ class CircleStyle(VectorStyle):
 
         Returns:
             A circle style which can be applied to a circle layer
-        """
+    """
+    def __init__(self, radius=1.0, **kwargs):
+        
         super(CircleStyle, self).__init__(**kwargs)
         self.radius = radius
         self.type = 'circle'
@@ -86,10 +85,7 @@ class CircleStyle(VectorStyle):
 
 
 class LineStyle(VectorStyle):
-
-    def __init__(self, cap='butt', join='miter', width=1.0, gap_width=0,
-                 blur=0, dasharray=None, **kwargs):
-        """ Creates a style entry for a line layer
+    """ Creates a style entry for a line layer
 
         See https://www.mapbox.com/mapbox-gl-js/style-spec/#layers-line
 
@@ -107,7 +103,11 @@ class LineStyle(VectorStyle):
 
         Returns:
             A line style which can be applied to a line layer
-        """
+    """
+
+    def __init__(self, cap='butt', join='miter', width=1.0, gap_width=0,
+                 blur=0, dasharray=None, **kwargs):
+        
         super(LineStyle, self).__init__(**kwargs)
         self.cap = cap
         self.join = join
@@ -144,12 +144,7 @@ class LineStyle(VectorStyle):
 
 
 class FillStyle(VectorStyle):
-
-    def __init__(self, color="rgb(255,0,0)", 
-                       opacity=.5, 
-                       outline_color=None,
-                       **kwargs):
-        """ Creates a style entry for a fill layer.
+    """ Creates a style entry for a fill layer.
 
         See https://www.mapbox.com/mapbox-gl-js/style-spec/#layers-fill
 
@@ -164,7 +159,12 @@ class FillStyle(VectorStyle):
 
         Returns:
             A fill style which can be applied to a fill layer
-        """
+    """
+    def __init__(self, color="rgb(255,0,0)", 
+                       opacity=.5, 
+                       outline_color=None,
+                       **kwargs):
+        
         super(FillStyle, self).__init__(**kwargs)
         self.outline_color = outline_color if outline_color is not None else color
         self.opacity = opacity
@@ -189,9 +189,7 @@ class FillStyle(VectorStyle):
         return snippet
 
 class FillExtrusionStyle(FillStyle):
-
-    def __init__(self, base=0, height=0, **kwargs):
-        """ Creates a style entry for extruded polygons (fills)
+    """ Creates a style entry for extruded polygons (fills)
 
         See https://www.mapbox.com/mapbox-gl-js/style-spec/#layers-fill-extrusion
 
@@ -206,7 +204,10 @@ class FillExtrusionStyle(FillStyle):
 
         Returns:
             A fill-extrusion style which can be applied to a fill-extrusion layer
-        """
+    """
+
+    def __init__(self, base=0, height=0, **kwargs):
+        
         super(FillExtrusionStyle, self).__init__(**kwargs)
         self.base = base
         self.height = height
@@ -231,9 +232,7 @@ class FillExtrusionStyle(FillStyle):
         return snippet
 
 class HeatmapStyle(VectorStyle):
-
-    def __init__(self, intensity=1, weight=1, color=None, radius=1, **kwargs):
-        """ Creates a style entry for heatmap layers.
+    """ Creates a style entry for heatmap layers.
 
         See https://www.mapbox.com/mapbox-gl-js/style-spec/#layers-heatmap
 
@@ -249,7 +248,10 @@ class HeatmapStyle(VectorStyle):
 
         Returns:
             A heatmap style which can be applied to a heatmap layer
-        """
+    """
+
+    def __init__(self, intensity=1, weight=1, color=None, radius=1, **kwargs):
+        
         super(HeatmapStyle, self).__init__(**kwargs)
         if color is None:
             self.color = self.default_color
