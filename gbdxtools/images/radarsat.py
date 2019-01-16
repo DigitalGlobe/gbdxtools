@@ -7,7 +7,7 @@ rda = RDA()
 
 class RadarsatDriver(RDADaskImageDriver):
     image_option_support = ["proj"]
-    __image_option_defaults__ = {"proj": None}
+    __image_option_defaults__ = {"proj": "EPSG:4326"}
 
 class Radarsat(RDABaseImage):
     """

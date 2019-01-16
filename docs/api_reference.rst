@@ -68,7 +68,7 @@ DemImage
 S3Image
 ^^^^^^^^^^^^^
 
-.. autoclass:: gbdxtools.images.s3Image.S3Image
+.. autoclass:: gbdxtools.images.s3_image.S3Image
     :undoc-members:
 
 
@@ -106,6 +106,24 @@ Vectors
 -----------------------
 
 .. autoclass:: gbdxtools.vectors.Vectors
+   :members:
+
+Vector Layers
+^^^^^^^^^^^^^^
+
+.. automodule:: gbdxtools.vector_layers
+   :members:
+
+Vector Styles
+^^^^^^^^^^^^^^
+
+.. automodule:: gbdxtools.vector_styles
+   :members:
+
+Vector Style Expressions
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. automodule:: gbdxtools.vector_style_expressions
    :members:
 
 Workflows
