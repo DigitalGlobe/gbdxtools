@@ -6,7 +6,7 @@ Unit tests for the gbdxtools.Idaho class
 """
 import os
 from gbdxtools import Interface
-from gbdxtools import IdahoImage
+from gbdxtools import IdahoImage, CatalogImage
 from gbdxtools.rda.graph import get_rda_graph
 from gbdxtools.images.meta import DaskImage
 from auth_mock import get_mock_gbdx_session
@@ -15,7 +15,6 @@ import tempfile
 import unittest
 import dask.array as da
 import numpy as np
-
 
 def force(r1, r2):
     return True
@@ -136,3 +135,37 @@ class RdaImageTest(unittest.TestCase):
         aoi.ortho = read_mock
         ortho = aoi.warp()
         assert isinstance(ortho, DaskImage)
+
+    @my_vcr.use_cassette('tests/unit/cassettes/test_materialize.yaml', filter_headers=['authorization'])
+    def test_rda_materialize(self):
+        catid = '881e61e5-5c56-44bf-a0d0-c4f5260a8aff-inv'
+        img = CatalogImage(catid)
+        aoi = img.randwindow((1000, 1000))
+        assert aoi.shape == (4, 1000, 1000)
+        job_id = img.materialize(bounds=aoi.bounds)
+        status = img.materialize_status(job_id)
+        assert status['jobStatus'] == 'processing'
+
+    # Test the payload creation method 
+    @my_vcr.use_cassette('tests/unit/cassettes/test_materialize_payload.yaml', filter_headers=['authorization'])
+    def test_rda_materialize_payload(self):
+        catid = '881e61e5-5c56-44bf-a0d0-c4f5260a8aff-inv'
+        img = CatalogImage(catid)
+        pl = img.rda._create_materialize_payload('123', 'node', None, None, 'TILE_STREAM', sample='yes')
+        assert pl['outputFormat'] == 'TILE_STREAM'
+        assert 'callbackUrl' not in pl
+        assert 'cropGeometryWKT' not in pl
+        assert pl['imageReference']['nodeId'] == 'node'
+        assert pl['imageReference']['templateId'] == '123'
+        assert pl['imageReference']['parameters'] == {'sample': 'yes'}
+
+        pl = img.rda._create_materialize_payload('123', 'node', [1,2,3,4], 'sns://yes', 'TIF')
+        assert pl['outputFormat'] == 'TIF'
+        assert pl['callbackUrl'] == 'sns://yes'
+        assert pl['cropGeometryWKT'] == 'POLYGON ((3 2, 3 4, 1 4, 1 2, 3 2))'
+        assert pl['imageReference']['nodeId'] == 'node'
+        assert pl['imageReference']['templateId'] == '123'
+        assert pl['imageReference']['parameters'] == {}
+        
+
+

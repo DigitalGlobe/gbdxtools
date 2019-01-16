@@ -32,6 +32,8 @@ CatalogImages are also Dask arrays and support all of their properties and metho
     .. autocatmeta:: gbdxtools.images.meta.GeoDaskImage.warp
     .. autocatmeta:: gbdxtools.images.meta.DaskImage.window_at
     .. autocatmeta:: gbdxtools.images.meta.DaskImage.window_cover
+    .. autocatmeta:: gbdxtools.images.rda_image.RDAImage.materialize
+    .. autocatmeta:: gbdxtools.images.rda_image.RDAImage.materialize_status
 
 
 Base Image classes
@@ -106,6 +108,18 @@ Vectors
 -----------------------
 
 .. autoclass:: gbdxtools.vectors.Vectors
+   :members:
+
+Styles
+^^^^^^^^^^^^^^
+
+.. automodule:: gbdxtools.vector_styles
+   :members:
+
+Style Expressions
+^^^^^^^^^^^^^^
+
+.. automodule:: gbdxtools.vector_styles
    :members:
 
 Workflows

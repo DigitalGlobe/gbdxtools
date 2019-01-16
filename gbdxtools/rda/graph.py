@@ -91,3 +91,18 @@ def get_rda_template_metadata(conn, _id, **kwargs):
             "georef": md_json.get("imageGeoreferencing", None),
             "rpcs": md_json.get("rpcSensorModel", None)
         }
+
+def create_rda_template(conn, graph):
+    r = conn.post("{}/template".format(VIRTUAL_RDA_URL), json=graph).result()
+    r.raise_for_status()
+    return r.json()['id']
+
+def materialize_template(conn, payload):
+    r = conn.post("{}/template/materialize".format(VIRTUAL_RDA_URL), json=payload).result()
+    r.raise_for_status()
+    return r.json()['jobId']
+
+def materialize_status(conn, job_id):
+    r = conn.get("{}/template/materialize/status/{}".format(VIRTUAL_RDA_URL, job_id)).result()
+    r.raise_for_status()
+    return r.json()['status']
