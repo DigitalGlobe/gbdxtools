@@ -9,7 +9,7 @@ from gbdxtools import Interface
 from gbdxtools import IdahoImage, CatalogImage
 from gbdxtools.rda.graph import get_rda_graph
 from gbdxtools.images.meta import DaskImage
-#from auth_mock import get_mock_gbdx_session
+from auth_mock import get_mock_gbdx_session
 import vcr
 import tempfile
 import unittest
@@ -42,9 +42,9 @@ class RdaImageTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        #mock_gbdx_session = get_mock_gbdx_session(token='dummytoken')
-        #cls.gbdx = Interface(gbdx_connection=mock_gbdx_session)
-        cls.gbdx = Interface()
+        mock_gbdx_session = get_mock_gbdx_session(token='dummytoken')
+        cls.gbdx = Interface(gbdx_connection=mock_gbdx_session)
+        #cls.gbdx = Interface()
         cls._temp_path = tempfile.mkdtemp()
         print("Created: {}".format(cls._temp_path))
 
