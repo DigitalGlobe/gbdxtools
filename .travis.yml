@@ -12,7 +12,7 @@ before_install:
   #- sudo apt-get install -y libgdal-dev libgdal20 gdal-bin python-gdal python3-gdal libspatialite5 libspatialite-dev libgeos-c1v5
 # #command to install dependencies
 install:
-  - CPLUS_INCLUDE_PATH=/usr/include/gdal C_INCLUDE_PATH=/usr/include/gdal pip install GDAL==`gdal-config --version`
+  #- CPLUS_INCLUDE_PATH=/usr/include/gdal C_INCLUDE_PATH=/usr/include/gdal pip install GDAL==`gdal-config --version`
   - pip install -r requirements.txt coverage
 # command to run tests
 script: coverage run unit_tests.py
