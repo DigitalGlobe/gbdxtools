@@ -78,5 +78,6 @@ Contents
    imagery_access
    catalog_search
    vector_service
+   vector_maps
    running_workflows
    api_reference
