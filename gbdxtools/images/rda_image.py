@@ -156,6 +156,7 @@ class RDAImage(GeoDaskImage):
 
     @property
     def display_stats(self):
+        deprecation('The use of display_stats has been deprecated. For scaling imagery use histograms in the image metdata.')
         return self.rda.display_stats
 
     @property

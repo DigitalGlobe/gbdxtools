@@ -147,3 +147,6 @@ class WV04(WorldViewImage):
     @property
     def _rgb_bands(self):
         return [2,1,0]
+
+    def _ndvi_bands(self):
+        return [1,3]

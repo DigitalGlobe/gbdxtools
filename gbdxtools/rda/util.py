@@ -34,7 +34,7 @@ from gbdxtools.deprecate import GBDXDeprecation, deprecation
 
 RDA_TO_DTYPE = {
     "BINARY": "bool",
-    "BYTE": "byte",
+    "BYTE": "uint8",
     "SHORT": "short",
     "UNSIGNED_SHORT": "ushort",
     "INTEGER": "int32",

@@ -1,3 +1,11 @@
+0.16.3 
+* several small bug fixes. 
+* pinned numpy to < 1.16.0 for pip installs to work
+* deprecated image.display_stats
+* fixed wv4 ndvi_bands
+* fixes for s3 upload logic and documentation 
+* rda types of byte are now uint8 so the reported dtype matches data dtype when fetched
+
 0.16.2
 * New vector styles and style expressions for mapping vectors via `gbdx.vectors.map()`
 * RDA based images can now be materialized to s3 via `image.materialize()`
