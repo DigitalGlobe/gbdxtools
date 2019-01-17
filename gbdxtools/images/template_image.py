@@ -7,6 +7,7 @@ from gbdxtools.images.rda_image import RDAImage, GraphMeta
 from gbdxtools.rda.interface import DaskProps
 from gbdxtools.rda.graph import get_rda_graph_template, get_rda_template_metadata, VIRTUAL_RDA_URL, get_template_stats
 from gbdxtools.auth import Auth
+from gbdxtools.rda.util import deprecation
 
 try:
     from urllib import urlencode
@@ -42,6 +43,7 @@ class TemplateMeta(GraphMeta):
 
     @property
     def display_stats(self):
+        deprecation('The use of display_stats has been deprecated. For scaling imagery use histograms in the image metdata.')
         assert self.graph() is not None
         if self._rda_stats is None:
             self._rda_stats = get_template_stats(self._interface.gbdx_futures_session, self._rda_id, self._id, **self._params)
