@@ -388,12 +388,22 @@ To download a file from your S3 bucket, use the s3.download() method:
 
 The file path does not need the account bucket or prefix. 
 
-It is also possible to upload files to S3:
+It is also possible to upload files to your account bucket and prefix in S3. The source file directory structure is not mirrored. To save to a subdirectory in your bucket/prefix or change the name of the saved file, specify the new file path in the argument ``s3_path``.
 
 .. code-block:: pycon
 
   >>> item = 'testdata/test1.tif'
   >>> gbdx.s3.upload(item)
+  'mybucket/myprefix/image.tif'
+
+  >>> gbdx.s3.upload('./images/image.tif')
+  'mybucket/myprefix/image.tif'
+
+  >>> gbdx.s3.upload('./images/image.tif', s3_path='images/image.tif')
+  'mybucket/myprefix/images/image.tif'
+
+  >>> gbdx.s3.upload('./images/image.tif', s3_path='new_image.tif')
+  'mybucket/myprefix/new_image.tif'
 
 Getting Your S3 Information
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
