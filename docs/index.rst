@@ -46,14 +46,15 @@ Some GBDX functionality is also available through the command line with https://
 Example
 ---------------------
 
-To load a subset of an image using its catalog identifier, and view it in a Jupyter notebook:
+To load a subset of an image covering the Denver area using its catalog identifier, and view it in a Jupyter notebook:
 
 .. code-block:: python
 
     from gbdxtools import CatalogImage
-    img = CatalogImage('104001001BA7C400', bbox=[2.28, 48.87, 2.30, 48.87])
+    image = CatalogImage('103001007B9DD400', bbox=[-105.06, 39.67, -105.04, 39.68])
     img.plot()
 
+.. image:: ./images/getting_started.jpg
 
 `gbdxtools` is MIT licenced.
 

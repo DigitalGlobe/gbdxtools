@@ -2,14 +2,16 @@ Vector Maps
 ==============
 
 ``gbdxtools`` provides the ability to view MapBox GL interactive maps in IPython and Jupyter.
-These maps can include vector features and images. Vector features can be loaded from Vector Services queries, the geometry of images (via the __geo_interface) or could be the output of an analytical step.
+These maps can include vector features and images. Vector features can be loaded from Vector Services queries, external GeoJSON files, or any other output that follows the GeoJSON structure such as the `Python Geospatial Protocol <https://gist.github.com/sgillies/2217756>`_.
 
 The vector map styles mirror their matching Mapbox GL styles - for more information see the `MapBox GL Style Specification <https://www.mapbox.com/mapbox-gl-js/style-spec/>`_.
+
+For these examples we show screenshots of the map viewer.
 
 Vector Mapping Basics
 ------------------------
 
-This example shows the basic use of ``gbdx.vectors.map()`` to display 100 DigitalGlobe aquisition footprints. 
+This example shows the basic use of :meth:`gbdxtools.vectors.Vectors.map` to display 100 DigitalGlobe aquisition footprints. 
 
 By default, basic styles are already defined for points, lines, and polygons, so you can add mixed features to the map without having to define any styles.
 
@@ -47,11 +49,11 @@ names or hex strings for color properties).
 
 To apply different styling to different geometry types ``gbdxtools`` provides specific style classes: 
 
-- ``CircleStyle`` to style things as points
-- ``LineStyle`` to style things as lines, including polygon outlines
+- ``CircleStyle`` to style points
+- ``LineStyle`` to style lines, including polygon outlines
 - ``FillStyle`` to style polygons
 
-To see the styles types, lets apply them to OSM data that mixes points, lines, and
+To see the style types, let's apply them to OSM data that mixes points, lines, and
 polygons. First we'll create a map using the default styling:
 
 .. code-block:: python
@@ -64,7 +66,7 @@ polygons. First we'll create a map using the default styling:
 
 .. image :: ./images/vector_maps_radius_style.jpg
 
-To change the point feature styling to use circles, we can apply a ``CircleStyle`` to the map:
+To change the point feature styling to use circles, we can apply a ``CircleStyle`` to the map. With no other styles defined, only points are shown:
 
 .. code-block:: python
 
@@ -89,7 +91,7 @@ Next, we can add line styling and modify the colors:
 
 .. image :: ./images/vector_maps_circle_line_styles.jpg
 
-Finally, we can style the polygons by supplying a fill style:
+Finally, we can add and style the polygons by supplying a fill style:
 
 .. code-block:: python
 
@@ -108,7 +110,7 @@ Data-driven Styling
 
 For advanced visualization ``gbdxtools`` can style features based on
 their properties. For example, if you wanted to to style based on categorical 
-data, you could use a ``MatchExpression``:
+data, you could use a ``MatchExpression``. This example takes the acquisition footprints shown above, but colors them based on which satellite captured the image:
 
 .. code-block:: python
 
@@ -129,7 +131,7 @@ data, you could use a ``MatchExpression``:
 .. image :: ./images/vector_maps_match_expression.jpg
 
 To style data grouped into bins based on a numerical property you can use a ``StepExpression``
-that defines the breaks between groups.
+that defines the breaks between groups. This example colors the footprint of a machine learning training chip based on how many features labels are inside it:
 
 .. code-block:: python
 
@@ -165,7 +167,7 @@ that defines the breaks between groups.
 
 For a smooth transition between steps the ``InterpolateExpression`` works in
 a similar manner to the ``StepExpression`` and adds several methods for computing the 
-gradients (see the MapBox docs for more details).
+gradients. This example is identical to the one above but the color of each chip is interpolated from the stops.
 
 .. code-block:: python
 
@@ -175,15 +177,9 @@ gradients (see the MapBox docs for more details).
         property_name='count',
         type=['linear'],
         stops={
-            0: '#F2F12D',
-            5: '#EED322',
-            7: '#E6B71E',
-            10: '#DA9C20',
-            25: '#CA8323',
-            50: '#B86B25',
-            75: '#A25626',
-            100: '#8B4225',
-            250: '#723122'
+            0: '#EEEEEE',
+            10: '#F2F12D',      
+            150: '#FF0000' 
         })
     
     gbdx.vectors.map(features=veda_features, zoom=12, styles=FillStyle(color=fill_color))
@@ -194,7 +190,7 @@ Advanced Visualization
 ------------------------
 
 `gbdxtools` vector styles also supports 3-D styling with the ``FillExtrusionStyle`` that can
-be used in place of a regular ``FillStyle``.
+be used in place of a regular ``FillStyle``. This example displays the same training chips but extrudes the feature so the height also represents the label count.
 
 .. code-block:: python
 
@@ -206,7 +202,7 @@ be used in place of a regular ``FillStyle``.
 
 .. image :: ./images/vector_maps_extrusion.jpg
 
-The ``FillExtrusionStyle`` can be used for data-driven visualizations. This example loads building data
+The ``FillExtrusionStyle`` can be used for 3d object visualization. This example loads building data
 from OSM and uses their height to draw their elevations, and colors each building by how tall it is.
 
 .. code-block:: python
@@ -313,7 +309,7 @@ creating a map.
 
 .. image :: ./images/vector_maps_image.jpg
 
-You can apply bounds to the image:
+If the image is a simple array, you can supply its spatial bounds to position the image:
 
 .. code-block:: python
 
