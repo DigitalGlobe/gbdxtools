@@ -15,7 +15,7 @@ cloudpickle
 dask >= 0.16.0
 numpy < 1.16.0
 requests_futures
-configparser
+configparser==3.5.1
 mercantile>=0.10.0
 scikit-image
 cachetools >=2.0.0
