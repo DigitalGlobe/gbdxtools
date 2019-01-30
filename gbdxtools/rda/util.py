@@ -82,7 +82,7 @@ def preview(image, **kwargs):
         proj_info = {}
         bounds = wgs84_bounds
     # Applying DRA to a DRA'ed image looks bad, skip if already in graph
-    if 'RadiometricDRA' not in [node['operator'] for node in image.rda.graph()['nodes']]:
+    if not image.options['dra']:
         rda = RDA()
         # Need some simple DRA to get the image in range for display.
         dra = rda.HistogramDRA(image)
