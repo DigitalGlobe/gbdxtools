@@ -39,7 +39,7 @@ class PlotMixin(object):
         # if not specified or DRA'ed, default to a 2-98 stretch
         if "histogram" not in kwargs:
             if "stretch" not in kwargs:
-                if not self.options['dra']:
+                if not self.options.get('dra'):
                     kwargs['stretch'] = [2,98]
             return self.histogram_stretch(use_bands, **kwargs)
         elif kwargs["histogram"] == "equalize":
@@ -49,7 +49,7 @@ class PlotMixin(object):
         elif kwargs["histogram"] == "minmax":
             return self.histogram_stretch(use_bands, stretch=[0, 100], **kwargs)
         # DRA'ed images should be left alone if not explicitly adjusted
-        elif kwargs["histogram"] == "ignore" or self.options['dra']:
+        elif kwargs["histogram"] == "ignore" or self.options.get('dra'):
             print('DRA')
             data = self._read(self[use_bands,...], **kwargs)
             return np.rollaxis(data, 0, 3)

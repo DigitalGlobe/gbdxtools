@@ -57,7 +57,7 @@ def to_geotiff(arr, path='./output.tif', proj=None, spec=None, bands=None, **kwa
         if bands is None:
             bands = arr._rgb_bands
         # skip if already DRA'ed
-        if not arr.options['dra']:
+        if not arr.options.get('dra'):
             # add the RDA HistogramDRA op to get a RGB 8-bit image
             from gbdxtools.rda.interface import RDA
             rda = RDA()
