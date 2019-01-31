@@ -81,10 +81,12 @@ def preview(image, **kwargs):
     else:
         proj_info = {}
         bounds = wgs84_bounds
-
-    rda = RDA()
-    dra = rda.HistogramDRA(image)
-    image = dra.aoi(bbox=image.bounds)
+    # Applying DRA to a DRA'ed image looks bad, skip if already in graph
+    if not image.options.get('dra'):
+        rda = RDA()
+        # Need some simple DRA to get the image in range for display.
+        dra = rda.HistogramDRA(image)
+        image = dra.aoi(bbox=image.bounds)
     graph_id = image.rda_id
     node_id = image.rda.graph()['nodes'][0]['id']
     map_id = "map_{}".format(str(int(time.time())))

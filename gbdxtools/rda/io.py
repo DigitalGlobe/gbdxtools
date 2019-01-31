@@ -54,17 +54,17 @@ def to_geotiff(arr, path='./output.tif', proj=None, spec=None, bands=None, **kwa
     dtype = arr.dtype.name if arr.dtype.name != 'int8' else 'uint8' 
 
     if spec is not None and spec.lower() == 'rgb':
-        # add the RDA HistogramDRA op to get a RGB 8-bit image
-        from gbdxtools.rda.interface import RDA
-        rda = RDA()
-        dra = rda.HistogramDRA(arr)
-        # Reset the bounds and select the bands on the new Dask
-        dra_aoi = dra.aoi(bbox=arr.bounds)
-        if bands is not None:
-            dra_aoi_bands = dra_aoi[bands,...]
-        else:
-            dra_aoi_bands = dra_aoi[arr._rgb_bands,...]
-        arr = dra_aoi_bands.astype(np.uint8)
+        if bands is None:
+            bands = arr._rgb_bands
+        # skip if already DRA'ed
+        if not arr.options.get('dra'):
+            # add the RDA HistogramDRA op to get a RGB 8-bit image
+            from gbdxtools.rda.interface import RDA
+            rda = RDA()
+            dra = rda.HistogramDRA(arr)
+            # Reset the bounds and select the bands on the new Dask
+            arr = dra.aoi(bbox=arr.bounds)
+        arr = arr[bands,...].astype(np.uint8)
         dtype = 'uint8'
     else:
         if bands is not None:
