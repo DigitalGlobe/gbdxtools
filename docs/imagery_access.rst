@@ -266,6 +266,21 @@ For more information on the Sentinel2 sensor groups, see the `offical documentat
 
 Sentinel2 images also support the ``proj`` parameter for reprojection.
 
+Sentinel1 Images
+^^^^^^^^^^^^^^^^^^^^^
+
+Sentinel1 images are accessed through the CatalogImage class similar to Sentinel2 except that Sentinel supports ``polarizations"``. The default polarization is ``VH``, and valid polarizations are ``VH``, ``HV``, ``VV``, and ``HH``.
+
+.. code-block:: python
+
+    from gbdxtools import CatalogImage
+
+    img = CatalogImage('S1A_IW_GRDH_1SDV_20180713T142443_20180713T142508_022777_027819_7A96', polarization='VH')
+    print(type(img))
+    print('Resolution: {}m'.format(img.metadata['georef']['scaleX']))
+
+Sentinel1 images also support the ``proj`` parameter for reprojection.
+
 Defining AOIs
 --------------
 
