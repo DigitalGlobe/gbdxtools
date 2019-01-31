@@ -50,7 +50,6 @@ class PlotMixin(object):
             return self.histogram_stretch(use_bands, stretch=[0, 100], **kwargs)
         # DRA'ed images should be left alone if not explicitly adjusted
         elif kwargs["histogram"] == "ignore" or self.options.get('dra'):
-            print('DRA')
             data = self._read(self[use_bands,...], **kwargs)
             return np.rollaxis(data, 0, 3)
         else:
