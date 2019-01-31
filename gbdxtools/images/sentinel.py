@@ -1,6 +1,6 @@
 from gbdxtools.images.base import RDABaseImage
 from gbdxtools.images.drivers import RDADaskImageDriver
-from gbdxtools.images.util import reproject_params
+from gbdxtools.images.util.image import reproject_params
 from gbdxtools.rda.interface import RDA
 rda = RDA()
 
@@ -38,6 +38,36 @@ class Sentinel2(RDABaseImage):
     @classmethod
     def _build_graph(cls, prefix, spec="10m", proj=None, **kwargs):
         sentinel = rda.SentinelRead(SentinelId=prefix, sentinelProductSpec=spec)
+        if proj is not None:
+            sentinel = rda.Reproject(sentinel, **reproject_params(proj))
+        return sentinel
+
+class Sentinel1Driver(RDADaskImageDriver):
+    image_option_support = ["polarization", "proj"]
+    __image_option_defaults__ = {"polarization": "VH", "proj": None}
+
+class Sentinel1(RDABaseImage):
+    """
+     Dask based access to Sentinel1 images backed by rda Graphs.
+
+     Args:
+        catID (str): The Sentinel CatalogID from the Sentinel1 Catalog Item
+        polarization (str): The Polarization type. Defaults to 'VH' (default), 'VV', 'HH', or 'VV'
+        proj (str): EPSG code for the resulting image.
+    """
+    __Driver__ = Sentinel2Driver
+
+    @property
+    def _id(self):
+        return self.__rda_id__
+
+    @property
+    def polarization(self):
+        return self.options["polarization"]
+
+    @classmethod
+    def _build_graph(cls, catID, polarization="VH", proj=None, **kwargs):
+        sentinel = rda.Sentinel1Read(SentinelId=catID, sentinel1Polarization=polarization)
         if proj is not None:
             sentinel = rda.Reproject(sentinel, **reproject_params(proj))
         return sentinel

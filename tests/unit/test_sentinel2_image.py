@@ -6,7 +6,7 @@ Unit tests for the gbdxtools.Idaho class
 '''
 
 from gbdxtools import Interface
-from gbdxtools import Sentinel2
+from gbdxtools import Sentinel2, Sentinel1
 from auth_mock import gbdx
 import vcr
 from os.path import join, isfile, dirname, realpath
@@ -30,7 +30,7 @@ my_vcr.match_on = ['force']
 # 6. Edit the cassette to remove any possibly sensitive information (s3 creds for example)
 
 
-class IpeImageTest(unittest.TestCase):
+class SentinelImageTest(unittest.TestCase):
 
     _temp_path = None
 
@@ -55,3 +55,19 @@ class IpeImageTest(unittest.TestCase):
         self.assertTrue(isinstance(img, Sentinel2))
         assert img.shape == (4, 8841, 13446)
         assert img.proj == 'EPSG:4326'
+
+    @my_vcr.use_cassette('tests/unit/cassettes/test_sentinel1_image.yaml', filter_headers=['authorization'])
+    def test_sentinel1_image(self):
+        _id = 'S1A_IW_GRDH_1SDV_20180713T142443_20180713T142508_022777_027819_7A96'
+        img = self.gbdx.sentinel1(_id, bbox=[55.2143669128418, 25.184843769649808, 55.24784088134766, 25.226527054781688])
+        self.assertTrue(isinstance(img, Sentinel1))
+        assert img.shape == (1, 436, 351)
+        assert img.proj == 'EPSG:4326'
+
+    @my_vcr.use_cassette('tests/unit/cassettes/test_sentinel1_proj.yaml', filter_headers=['authorization'])
+    def test_sentinel1_proj(self):
+        _id = 'S1A_IW_GRDH_1SDV_20180713T142443_20180713T142508_022777_027819_7A96'
+        img = self.gbdx.sentinel1(_id, proj='EPSG:3857')
+        self.assertTrue(isinstance(img, Sentinel1))
+        assert img.proj == 'EPSG:3857'
+ 
