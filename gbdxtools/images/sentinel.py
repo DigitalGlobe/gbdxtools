@@ -65,14 +65,6 @@ class Sentinel1(RDABaseImage):
     def polarization(self):
         return self.options["polarization"]
 
-    @property
-    def _rgb_bands(self):
-        return [2,1,0]
-
-    @property
-    def _ndvi_bands(self):
-         return [1,3]
-
     @classmethod
     def _build_graph(cls, catID, polarization="VH", proj=None, **kwargs):
         sentinel = rda.Sentinel1Read(SentinelId=catID, sentinel1Polarization=polarization)
