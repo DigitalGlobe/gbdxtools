@@ -19,6 +19,20 @@ class BaseTemplate(object):
             require(['mapboxgl', 'html2canvas'], function(mapboxgl, html2canvas){
                 mapboxgl.accessToken = "$mbkey";
                 var layers = $layers;
+
+                // creates pop up html on clicks 
+                function html( attrs, id ) {
+                  var json = JSON.parse( attrs );
+                  var html = '<table><tbody>';
+                  html += '<tr><td>ID</td><td>' + id + '</td></tr>';
+                  for ( var i=0; i < Object.keys(json).length; i++) {
+                    var key = Object.keys( json )[ i ];
+                    var val = json[ key ];
+                    html += '<tr><td>' + key + '</td><td>' + val + '</td></tr>';
+                  }
+                  html += '</tbody></table>';
+                  return html;
+                }
                 
                 // will be an object with an 'id' field and a 'data' field
                 var datasource = $datasource;
@@ -39,6 +53,15 @@ class BaseTemplate(object):
                         }
                       }
                     }
+                });
+                map.on("click", function(e){
+                  var features = map.queryRenderedFeatures(e.point);
+                  if ( features.length ) {
+                    var popup = new mapboxgl.Popup({closeOnClick: false})
+                      .setLngLat(e.lngLat)
+                      .setHTML(html(features[0].properties.attributes, features[0].properties.id))
+                      .addTo(map);
+                  }
                 });
                 map.addControl(new mapboxgl.NavigationControl());
                 map.on('load', function(e) {
@@ -110,6 +133,7 @@ class BaseTemplate(object):
             #$map_id .mapboxgl-ctrl.mapboxgl-ctrl-group.ctrl-group-horizontal > button:first-child,
             #$map_id .mapboxgl-ctrl.mapboxgl-ctrl-group.ctrl-group-horizontal > button:last-child { border: none; }
             #$map_id .mapboxgl-ctrl.mapboxgl-ctrl-group.ctrl-group-horizontal > button:not(:first-child) { padding: 0 4px 0 4px; }
+            .mapboxgl-popup-content table tr { border: 1px solid #efefef; } .mapboxgl-popup-content table, td, tr { border: none; }
            <style>
         ''').substitute({"map_id": self.map_id})))
 
