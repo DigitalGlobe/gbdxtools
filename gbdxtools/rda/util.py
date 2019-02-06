@@ -45,6 +45,26 @@ RDA_TO_DTYPE = {
     "DOUBLE": "float64"
 }
 
+CUSTOM_PRJ = {
+    "EPSG:54008": "+proj=sinu +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs"
+}
+
+def get_proj(prj_code):
+    """
+      Helper method for handling projection codes that are unknown to pyproj
+
+      Args:
+          prj_code (str): an epsg proj code
+
+      Returns:
+          projection: a pyproj projection
+    """
+    if prj_code in CUSTOM_PRJ:
+        proj = pyproj.Proj(CUSTOM_PRJ[prj_code])
+    else:
+        proj = pyproj.Proj(init=prj_code)
+    return proj
+
 # TODO need to handle diff projections: project WGS84 bounds into image proj
 def preview(image, **kwargs):
     ''' Show a slippy map preview of the image. Requires iPython.

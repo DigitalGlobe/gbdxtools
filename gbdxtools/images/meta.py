@@ -7,7 +7,7 @@ import warnings
 import math
 
 from gbdxtools.rda.io import to_geotiff
-from gbdxtools.rda.util import RatPolyTransform, AffineTransform, pad_safe_positive, pad_safe_negative, RDA_TO_DTYPE, preview
+from gbdxtools.rda.util import RatPolyTransform, AffineTransform, pad_safe_positive, pad_safe_negative, RDA_TO_DTYPE, preview, get_proj
 from gbdxtools.images.mixins import PlotMixin, BandMethodsTemplate, Deprecations
 
 from shapely import ops, wkt
@@ -470,7 +470,7 @@ class GeoDaskImage(DaskImage, Container, PlotMixin, BandMethodsTemplate, Depreca
             from_proj = self._default_proj
         if to_proj is None:
             to_proj = self.proj if self.proj is not None else "EPSG:4326"
-        tfm = partial(pyproj.transform, pyproj.Proj(init=from_proj), pyproj.Proj(init=to_proj))
+        tfm = partial(pyproj.transform, get_proj(from_proj), get_proj(to_proj))
         return ops.transform(tfm, geometry)
 
     def _slice_padded(self, _bounds):
