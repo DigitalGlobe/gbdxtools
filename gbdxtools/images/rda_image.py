@@ -1,7 +1,7 @@
 import sys
 
 from gbdxtools.images.meta import DaskMeta, GeoDaskImage
-from gbdxtools.rda.util import RatPolyTransform, AffineTransform, deprecation
+from gbdxtools.rda.util import RatPolyTransform, AffineTransform, deprecation, get_proj
 from gbdxtools.rda.interface import DaskProps
 from gbdxtools.rda.graph import get_rda_graph
 from gbdxtools.auth import Auth
@@ -19,8 +19,13 @@ except NameError:
     xrange = range
 
 def _reproject(geo, from_proj, to_proj):
-    tfm = partial(pyproj.transform, pyproj.Proj(init=from_proj), pyproj.Proj(init=to_proj))
-    return ops.transform(tfm, geo)
+    if from_proj != to_proj:
+        from_proj = get_proj(from_proj)
+        to_proj = get_proj(to_proj)
+        tfm = partial(pyproj.transform, from_proj, to_proj)
+        #tfm = partial(pyproj.transform, pyproj.Proj(init=from_proj), pyproj.Proj(init=to_proj))
+        return ops.transform(tfm, geo)
+    return geo
 
 class GraphMeta(DaskProps):
     def __init__(self, graph_id, node_id=None, **kwargs):

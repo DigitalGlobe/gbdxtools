@@ -1,0 +1,59 @@
+interactions:
+- request:
+    body: !!python/unicode '{"edges": [{"destination": "131a5dbe-17a6-5441-8363-64253fb041ce",
+      "id": "fe8c66e8-c6c0-56ef-879e-39679edf5887", "index": 1, "source": "e227f99e-7d87-5479-ac1b-d9bba95592c3"}],
+      "nodes": [{"id": "131a5dbe-17a6-5441-8363-64253fb041ce", "operator": "Reproject",
+      "parameters": {"Dest SRS Code": "EPSG:4326", "Dest pixel-to-world transform":
+      "null", "Source SRS Code": "EPSG:4326", "Source pixel-to-world transform": "null"}},
+      {"id": "e227f99e-7d87-5479-ac1b-d9bba95592c3", "operator": "ModisRead", "parameters":
+      {"modisId": "MOD09GA.A2017137.h20v15.006.2017139030449"}}]}'
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      Content-Length: ['567']
+      Content-Type: [application/json]
+      User-Agent: [python-requests/2.18.4]
+    method: POST
+    uri: https://rda.geobigdata.io/v1/graph
+  response:
+    body: {string: !!python/unicode f2fc4801f28d6540c6162538619fd63d9896eb00c763a1e3ad928a51f174023c}
+    headers:
+      access-control-allow-headers: ['x-requested-with, X-Auth-Token, Content-Type,
+          Authorization']
+      access-control-allow-methods: ['GET, OPTIONS, HEAD, PUT, POST, DELETE']
+      access-control-allow-origin: ['*']
+      access-control-max-age: ['3600']
+      connection: [keep-alive]
+      content-length: ['64']
+      content-type: [text/plain;charset=UTF-8]
+      date: ['Fri, 08 Feb 2019 21:26:20 GMT']
+    status: {code: 200, message: ''}
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      User-Agent: [python-requests/2.18.4]
+    method: GET
+    uri: https://rda.geobigdata.io/v1/metadata/f2fc4801f28d6540c6162538619fd63d9896eb00c763a1e3ad928a51f174023c/131a5dbe-17a6-5441-8363-64253fb041ce/metadata.json
+  response:
+    body: {string: !!python/unicode '{"imageMetadata":{"imageId":"MOD09GA.A2017137.h20v15.006.2017139030449","version":1.1,"profileName":"georectified_image","tilePartition":"0000","tileXOffset":0,"tileYOffset":0,"numXTiles":27,"numYTiles":6,"tileXSize":256,"tileYSize":256,"numBands":7,"dataType":"SHORT","imageHeight":1220,"imageWidth":6547,"sensorPlatformName":"Terra","sensorName":"MOD09GA
+        Version 6 product provides an estimate of the surface spectral reflectance
+        of Terra MODIS Bands 1 through 7","vendorName":"NASA","vendorDatasetIdentifier":"MOD09GA.A2017137.h20v15.006.2017139030449","acquisitionDate":"2017-05-17T06:50:00Z","colorInterpretation":"MODIS_MOD09GA","imageBoundsWGS84":"POLYGON
+        ((35.382870356801966 -60.15006046727456, 88.94635161064662 -60.15006046727456,
+        88.94635161064662 -70.13134153183702, 35.382870356801966 -70.13134153183702,
+        35.382870356801966 -60.15006046727456))","groundSampleDistanceMeters":463.3127165279169,"minX":-570,"minY":-1,"maxX":5976,"maxY":1218,"minTileX":-3,"minTileY":-1,"maxTileX":23,"maxTileY":4,"cloudCover":0.0},"imageGeoreferencing":{"spatialReferenceSystemCode":"EPSG:4326","scaleX":0.008181377921772513,"scaleY":-0.008181377921772513,"translateX":40.0462557722123,"translateY":-60.15824184519633,"shearX":0.0,"shearY":0.0},"rpcSensorModel":null,"histogram":null,"sensorMetadata":null,"imageAssociations":null,"rrdMetadata":null}'}
+    headers:
+      access-control-allow-headers: ['x-requested-with, X-Auth-Token, Content-Type,
+          Authorization']
+      access-control-allow-methods: ['GET, OPTIONS, HEAD, PUT, POST, DELETE']
+      access-control-allow-origin: ['*']
+      access-control-max-age: ['3600']
+      connection: [keep-alive]
+      content-length: ['1345']
+      content-type: [application/json;charset=UTF-8]
+      date: ['Fri, 08 Feb 2019 21:26:36 GMT']
+    status: {code: 200, message: ''}
+version: 1

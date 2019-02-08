@@ -1,0 +1,54 @@
+interactions:
+- request:
+    body: !!python/unicode '{"edges": [], "nodes": [{"id": "e227f99e-7d87-5479-ac1b-d9bba95592c3",
+      "operator": "ModisRead", "parameters": {"modisId": "MOD09GA.A2017137.h20v15.006.2017139030449"}}]}'
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      Content-Length: ['169']
+      Content-Type: [application/json]
+      User-Agent: [python-requests/2.18.4]
+    method: POST
+    uri: https://rda.geobigdata.io/v1/graph
+  response:
+    body: {string: !!python/unicode 00652ea0ea6cc843f4bbff25d3285c4cc46635e6d4e751d475b04934290ab515}
+    headers:
+      access-control-allow-headers: ['x-requested-with, X-Auth-Token, Content-Type,
+          Authorization']
+      access-control-allow-methods: ['GET, OPTIONS, HEAD, PUT, POST, DELETE']
+      access-control-allow-origin: ['*']
+      access-control-max-age: ['3600']
+      connection: [keep-alive]
+      content-length: ['64']
+      content-type: [text/plain;charset=UTF-8]
+      date: ['Fri, 08 Feb 2019 21:44:22 GMT']
+    status: {code: 200, message: ''}
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      User-Agent: [python-requests/2.18.4]
+    method: GET
+    uri: https://rda.geobigdata.io/v1/metadata/00652ea0ea6cc843f4bbff25d3285c4cc46635e6d4e751d475b04934290ab515/e227f99e-7d87-5479-ac1b-d9bba95592c3/metadata.json
+  response:
+    body: {string: !!python/unicode '{"imageMetadata":{"imageId":"MOD09GA.A2017137.h20v15.006.2017139030449","version":1.1,"profileName":"georectified_image","tilePartition":"0000","tileXOffset":0,"tileYOffset":0,"numXTiles":10,"numYTiles":10,"tileXSize":256,"tileYSize":256,"numBands":7,"dataType":"SHORT","imageHeight":2400,"imageWidth":2400,"sensorPlatformName":"Terra","sensorName":"MOD09GA
+        Version 6 product provides an estimate of the surface spectral reflectance
+        of Terra MODIS Bands 1 through 7","vendorName":"NASA","vendorDatasetIdentifier":"MOD09GA.A2017137.h20v15.006.2017139030449","acquisitionDate":"2017-05-17T06:50:00Z","colorInterpretation":"MODIS_MOD09GA","imageBoundsWGS84":"POLYGON
+        ((40.0462557722123 -60.15824184519633, 60.06938365832746 -60.15824184519633,
+        87.91096881871572 -70.13152146289599, 58.6073125458017 -70.13152146289599,
+        40.0462557722123 -60.15824184519633))","groundSampleDistanceMeters":463.3127165279169,"minX":0,"minY":0,"maxX":2399,"maxY":2399,"minTileX":0,"minTileY":0,"maxTileX":9,"maxTileY":9,"cloudCover":0.0},"imageGeoreferencing":{"spatialReferenceSystemCode":"EPSG:54008","scaleX":463.3127165279167,"scaleY":-463.3127165279169,"translateX":2223901.039333,"translateY":-6671703.118,"shearX":0.0,"shearY":0.0},"rpcSensorModel":null,"histogram":null,"sensorMetadata":null,"imageAssociations":null,"rrdMetadata":null}'}
+    headers:
+      access-control-allow-headers: ['x-requested-with, X-Auth-Token, Content-Type,
+          Authorization']
+      access-control-allow-methods: ['GET, OPTIONS, HEAD, PUT, POST, DELETE']
+      access-control-allow-origin: ['*']
+      access-control-max-age: ['3600']
+      connection: [keep-alive]
+      content-length: ['1320']
+      content-type: [application/json;charset=UTF-8]
+      date: ['Fri, 08 Feb 2019 21:44:39 GMT']
+    status: {code: 200, message: ''}
+version: 1
