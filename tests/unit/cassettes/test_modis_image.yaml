@@ -1,0 +1,97 @@
+interactions:
+- request:
+    body: !!python/unicode client_secret=deprecated&grant_type=refresh_token&client_id=deprecated&refresh_token=tcWyI631ODFSm99dwKdEvwzm1Di2FdmmhmRiPayDDu1SG
+    headers:
+      Accept: [!!python/unicode application/json]
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      Content-Length: ['130']
+      Content-Type: [!!python/unicode application/x-www-form-urlencoded;charset=UTF-8]
+      User-Agent: [python-requests/2.18.4]
+    method: POST
+    uri: https://geobigdata.io/auth/v1/oauth/token/
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA5RUyZKjOBT8lY46jzsQeKNvZZu1WAoQCHQhAGEjFoMBm2V+fqDmMtEd0R1zUqBI
+        8uXLl3p/v0VJknZd2NdFen/78e0tnVQm9d+pSdUPD1hUO6tZLCXrt+POCjCo0ilV3+CzslcKIERc
+        9mkLAnDhSUxF1YV+Y6YFA9zSc2xh90DQttOykSGwTRuILoInQxdVGd6bXBeFAULRwZPKf18K10S2
+        h2SuXxpLyphVG8zaGZGEZ4SOrwAZecx5TyLyHfZxGa8CKjVL2DJX6EAj2WYSWd9rE3/HiKcRIkXg
+        25lWlQtfWSh5TU1JpAF0B1zpPc6zPHAYBiNhpyE1Ny+3PkB2ZkCF1S9iFcw39s+8Yh6wPIjv9jVC
+        1mpSbkBMdXjKTAcUAcSlBq1Rh7felJQddpgxgMmgXzy61AU6UlaDf9t3Uq396tQsO0p8o0yoSv70
+        D0Ygi9DwpSeS1SaZdjVGY29J9oIrmQCN91jiKXZ2ecwyq4Ym4fQV/x/en7FgWLQUBBlMhPinVomA
+        SLdBq4xX7BxXjpks/SwcGfHtWpfHe1DZ2+tFGY082K5eBr63zKGJleoXzT/58H9q8yBhvSlCuyqe
+        vrxpAn+ZRS4A41KwRi4s9d+X0HrbZMmMDl2gXxTWgAWrn1dNzbBmA0vq1oNejiq7hfMJOqLdJ2wm
+        WYA8HXjbGTLeulA0g3v91esy9wE7awaXE+2WB3EqYyQ28fn0whXuFj2l/5UPb06m9dEQJl3waFIn
+        jPCEfaP2OfsVsd5z9SaRxDnhyDJvi/o+893oeeH4PHL48ckKmjvsh3FP8VGJ/KILKPFCt+Ev5lnY
+        lCR3KIvr7jESGsGX3F7lgVesFt6ygaRJ8ujBgZnP4JwrV+Xuj6fQneWD4atpEYXcsS+28XBmQnuG
+        m07/qIXroH2qklL326oXLr197zZhKHNBJUFwFTiyf8rkoyuior/JIeFsbVvslfg2WiArpX1TVijf
+        Q9IewpJn08ND2wwX9d3vA/zsPx8Rs2dL91X2r63+mNODz6cAjBy3GUKu8HgxRwcHiKNnOIdERM3G
+        GVJBOtXyRx+z53f1aVlqG5WyhZju0pbqgbkR23rEfBtgz3z21yE5vpNN+Bn6U3AyInYCc4DOfDNE
+        cpv5w9tfy4obG9qmXUjXhbdntkeGWW6/NmDYT026rsFTGrVpu6K7pP73ajnulHz7Z6m5iZk5Cvlp
+        aTmZeanxkOJTqRYAx1zJnUkFAAA=
+    headers:
+      access-control-allow-origin: ['*']
+      connection: [keep-alive]
+      content-encoding: [gzip]
+      content-length: ['932']
+      content-type: [application/json]
+      date: ['Fri, 08 Feb 2019 21:26:00 GMT']
+      server: [nginx/1.14.1]
+      via: [kong/0.10.3]
+      x-kong-proxy-latency: ['0']
+      x-kong-upstream-latency: ['2644']
+    status: {code: 200, message: OK}
+- request:
+    body: !!python/unicode '{"edges": [], "nodes": [{"id": "e227f99e-7d87-5479-ac1b-d9bba95592c3",
+      "operator": "ModisRead", "parameters": {"modisId": "MOD09GA.A2017137.h20v15.006.2017139030449"}}]}'
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      Content-Length: ['169']
+      Content-Type: [application/json]
+      User-Agent: [python-requests/2.18.4]
+    method: POST
+    uri: https://rda.geobigdata.io/v1/graph
+  response:
+    body: {string: !!python/unicode 00652ea0ea6cc843f4bbff25d3285c4cc46635e6d4e751d475b04934290ab515}
+    headers:
+      access-control-allow-headers: ['x-requested-with, X-Auth-Token, Content-Type,
+          Authorization']
+      access-control-allow-methods: ['GET, OPTIONS, HEAD, PUT, POST, DELETE']
+      access-control-allow-origin: ['*']
+      access-control-max-age: ['3600']
+      connection: [keep-alive]
+      content-length: ['64']
+      content-type: [text/plain;charset=UTF-8]
+      date: ['Fri, 08 Feb 2019 21:26:01 GMT']
+    status: {code: 200, message: ''}
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      User-Agent: [python-requests/2.18.4]
+    method: GET
+    uri: https://rda.geobigdata.io/v1/metadata/00652ea0ea6cc843f4bbff25d3285c4cc46635e6d4e751d475b04934290ab515/e227f99e-7d87-5479-ac1b-d9bba95592c3/metadata.json
+  response:
+    body: {string: !!python/unicode '{"imageMetadata":{"imageId":"MOD09GA.A2017137.h20v15.006.2017139030449","version":1.1,"profileName":"georectified_image","tilePartition":"0000","tileXOffset":0,"tileYOffset":0,"numXTiles":10,"numYTiles":10,"tileXSize":256,"tileYSize":256,"numBands":7,"dataType":"SHORT","imageHeight":2400,"imageWidth":2400,"sensorPlatformName":"Terra","sensorName":"MOD09GA
+        Version 6 product provides an estimate of the surface spectral reflectance
+        of Terra MODIS Bands 1 through 7","vendorName":"NASA","vendorDatasetIdentifier":"MOD09GA.A2017137.h20v15.006.2017139030449","acquisitionDate":"2017-05-17T06:50:00Z","colorInterpretation":"MODIS_MOD09GA","imageBoundsWGS84":"POLYGON
+        ((40.0462557722123 -60.15824184519633, 60.06938365832746 -60.15824184519633,
+        87.91096881871572 -70.13152146289599, 58.6073125458017 -70.13152146289599,
+        40.0462557722123 -60.15824184519633))","groundSampleDistanceMeters":463.3127165279169,"minX":0,"minY":0,"maxX":2399,"maxY":2399,"minTileX":0,"minTileY":0,"maxTileX":9,"maxTileY":9,"cloudCover":0.0},"imageGeoreferencing":{"spatialReferenceSystemCode":"EPSG:54008","scaleX":463.3127165279167,"scaleY":-463.3127165279169,"translateX":2223901.039333,"translateY":-6671703.118,"shearX":0.0,"shearY":0.0},"rpcSensorModel":null,"histogram":null,"sensorMetadata":null,"imageAssociations":null,"rrdMetadata":null}'}
+    headers:
+      access-control-allow-headers: ['x-requested-with, X-Auth-Token, Content-Type,
+          Authorization']
+      access-control-allow-methods: ['GET, OPTIONS, HEAD, PUT, POST, DELETE']
+      access-control-allow-origin: ['*']
+      access-control-max-age: ['3600']
+      connection: [keep-alive]
+      content-length: ['1320']
+      content-type: [application/json;charset=UTF-8]
+      date: ['Fri, 08 Feb 2019 21:26:17 GMT']
+    status: {code: 200, message: ''}
+version: 1
