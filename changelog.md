@@ -1,3 +1,7 @@
+0.16.4
+* Adding support for Sentinel1 and MODIS Imagery
+* Re-adding the feature info click handler in vector maps 
+
 0.16.3 
 * several small bug fixes. 
 * pinned numpy to < 1.16.0 for pip installs to work
