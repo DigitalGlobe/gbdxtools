@@ -30,7 +30,7 @@ class ModisTest(unittest.TestCase):
     @my_vcr.use_cassette('tests/unit/cassettes/test_modis_image.yaml', filter_headers=['authorization'])
     def test_modis_image(self):
         cat_id = 'MOD09GA.A2017137.h20v15.006.2017139030449'
-        img = self.gbdx.modis(cat_id)
+        img = Modis(cat_id)
         self.assertTrue(isinstance(img, Modis))
         assert img.shape == (7, 2399, 2399)
         assert img.proj == 'EPSG:54008'
