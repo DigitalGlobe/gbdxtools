@@ -24,7 +24,7 @@ requirements:
     - ephem
     - toolz
     - cloudpickle
-    - dask =0.20.0
+    - dask >=0.20.0
     - {{ pin_compatible('numpy', min_pin='1.9') }}
     - pycurl
     - pyproj
@@ -50,7 +50,7 @@ requirements:
     - ephem
     - toolz
     - cloudpickle
-    - dask =0.20.0
+    - dask >=0.20.0
     - {{ pin_compatible('numpy', min_pin='1.9') }}
     - pycurl
     - pyproj
