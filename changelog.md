@@ -1,3 +1,6 @@
+0.16.5 
+* Fixing CatalogImage access to Modis
+
 0.16.4
 * Adding support for Sentinel1 and MODIS Imagery
 * Re-adding the feature info click handler in vector maps 
