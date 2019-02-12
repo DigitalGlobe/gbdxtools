@@ -115,9 +115,9 @@ class CatalogImage(object):
             return Sentinel1(cat_id, **kwargs)
         elif 'SENTINEL2' in types:
             return Sentinel2(rec['properties']['attributes']['bucketPrefix'], **kwargs)
-        elif 'RADARSAT2':
+        elif 'RADARSAT2' in types:
             return Radarsat(rec, **kwargs)
-        elif 'MODISProduct':
+        elif 'MODISProduct' in types:
             return Modis(cat_id, **kwargs)
         else:
             raise UnsupportedImageType('Unsupported image type: {}'.format(str(types)))
