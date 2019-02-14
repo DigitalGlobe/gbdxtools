@@ -369,8 +369,8 @@ class Vectors(object):
         if features is None and query is not None:
             wkt = box(*bbox).wkt
             features = self.query(wkt, query, index=None)
-        elif features is None and query is None:
-            print('Must provide either a list of features or a query')
+        elif features is None and query is None and image is None:
+            print('Must provide either a list of features or a query or an image')
             return
 
         if styles is not None and not isinstance(styles, list):
@@ -378,9 +378,14 @@ class Vectors(object):
 
         geojson = {"type":"FeatureCollection", "features": features}
 
-        if center is None:
+        if center is None and features is not None:
             union = cascaded_union([shape(f['geometry']) for f in features])
             lon, lat = union.centroid.coords[0]
+        elif center is None and image is not None:
+            try:
+                lon, lat = shape(image).centroid.coords[0]
+            except:
+                lon, lat = box(*image_bounds).centroid.coords[0]
         else:
             lat, lon = center
 
@@ -403,7 +408,8 @@ class Vectors(object):
     def _build_image_layer(self, image, image_bounds, cmap):
         if image is not None:
             if isinstance(image, da.Array):
-                if len(image.shape) == 2:
+                if len(image.shape) == 2 or \
+                    (image.shape[0] == 1 and len(image.shape) == 3):
                     arr = image.compute()
                 else:
                     arr = image.rgb()
