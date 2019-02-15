@@ -18,7 +18,8 @@ import skimage.transform as tf
 
 import pyproj
 import dask
-from dask import sharedict, optimization
+from dask.highlevelgraph import HighLevelGraph
+from dask import optimization
 from dask.delayed import delayed
 import dask.array as da
 from dask.base import is_dask_collection
@@ -148,7 +149,7 @@ class DaskImage(da.Array):
 
         The image is divided into a grid of tiles of size window_shape. Each iteration returns
         the next window.
-        
+
 
         Args:
             window_shape (tuple): The desired shape of each image as (height,
@@ -166,7 +167,7 @@ class DaskImage(da.Array):
 
         img = self
         if pad is True:
-            new_height, new_width = _nheight, _nwidth 
+            new_height, new_width = _nheight, _nwidth
             if _m != 0:
                 new_height = (nheight + 1) * size_y
             if _n != 0:
@@ -202,7 +203,7 @@ class GeoDaskImage(DaskImage, Container, PlotMixin, BandMethodsTemplate, Depreca
         Returns:
             GeoDaskImage: a dask array with the function queued up to run when the image is read
         '''
-        
+
         darr = super(GeoDaskImage, self).map_blocks(*args, **kwargs)
         return GeoDaskImage(darr, __geo_interface__ = self.__geo_interface__,
                             __geo_transform__ = self.__geo_transform__)
@@ -246,7 +247,7 @@ class GeoDaskImage(DaskImage, Container, PlotMixin, BandMethodsTemplate, Depreca
             bbox (list): optional. A bounding box array [minx, miny, maxx, maxy]
             wkt (str): optional. A WKT geometry string
             geojson (str): optional. A GeoJSON geometry dictionary
-        
+
         Returns:
             image: an image instance of the same type
         """
@@ -303,7 +304,7 @@ class GeoDaskImage(DaskImage, Container, PlotMixin, BandMethodsTemplate, Depreca
             spec (str): optional, if set to 'rgb', write out color-balanced 8-bit RGB tif
             bands (list): optional, list of bands to export. If spec='rgb' will default to RGB bands,
                 otherwise will export all bands
-        
+
         Returns:
             str: path the geotiff was written to """
 
@@ -397,7 +398,7 @@ class GeoDaskImage(DaskImage, Container, PlotMixin, BandMethodsTemplate, Depreca
                 ymin = y * y_size
                 geometry = px_to_geom(xmin, ymin)
                 daskmeta["dask"][(daskmeta["name"], 0, y, x)] = (self._warp, geometry, gsd, dem, proj, dtype, 5)
-        daskmeta["dask"], _ = optimization.cull(sharedict.merge(daskmeta["dask"], *dasks), list(daskmeta["dask"].keys()))
+        daskmeta["dask"], _ = optimization.cull(HighLevelGraph.merge(daskmeta["dask"], *dasks), list(daskmeta["dask"].keys()))
 
         gi = mapping(full_bounds)
         gt = AffineTransform(gtf, proj)
