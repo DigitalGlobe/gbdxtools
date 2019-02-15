@@ -341,7 +341,7 @@ class Vectors(object):
 
     def map(self, features=None, query=None, styles=None,
                   bbox=[-180,-90,180,90], zoom=10, center=None, 
-                  image=None, image_bounds=None, cmap=None,
+                  image=None, image_bounds=None, cmap='viridis',
                   api_key=os.environ.get('MAPBOX_API_KEY', None), **kwargs):
         """
           Renders a mapbox gl map from a vector service query or a list of geojson features
@@ -356,7 +356,7 @@ class Vectors(object):
             api_key (str): a valid Mapbox API key
             image (dict): a CatalogImage or a ndarray
             image_bounds (list): a list of bounds for image positioning 
-            cmap (str): MatPlotLib colormap to use for rendering single band images
+            cmap (str): MatPlotLib colormap to use for rendering single band images (default: viridis)
         
         """
         try:
@@ -405,7 +405,7 @@ class Vectors(object):
         })
         template.inject()
 
-    def _build_image_layer(self, image, image_bounds, cmap):
+    def _build_image_layer(self, image, image_bounds, cmap='viridis'):
         if image is not None:
             if isinstance(image, da.Array):
                 if len(image.shape) == 2 or \
