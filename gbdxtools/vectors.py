@@ -341,7 +341,7 @@ class Vectors(object):
 
     def map(self, features=None, query=None, styles=None,
                   bbox=[-180,-90,180,90], zoom=10, center=None, 
-                  image=None, image_bounds=None,
+                  image=None, image_bounds=None, cmap='viridis',
                   api_key=os.environ.get('MAPBOX_API_KEY', None), **kwargs):
         """
           Renders a mapbox gl map from a vector service query or a list of geojson features
@@ -356,6 +356,7 @@ class Vectors(object):
             api_key (str): a valid Mapbox API key
             image (dict): a CatalogImage or a ndarray
             image_bounds (list): a list of bounds for image positioning 
+            cmap (str): MatPlotLib colormap to use for rendering single band images (default: viridis)
         
         """
         try:
@@ -368,8 +369,8 @@ class Vectors(object):
         if features is None and query is not None:
             wkt = box(*bbox).wkt
             features = self.query(wkt, query, index=None)
-        elif features is None and query is None:
-            print('Must provide either a list of features or a query')
+        elif features is None and query is None and image is None:
+            print('Must provide either a list of features or a query or an image')
             return
 
         if styles is not None and not isinstance(styles, list):
@@ -377,15 +378,20 @@ class Vectors(object):
 
         geojson = {"type":"FeatureCollection", "features": features}
 
-        if center is None:
+        if center is None and features is not None:
             union = cascaded_union([shape(f['geometry']) for f in features])
             lon, lat = union.centroid.coords[0]
+        elif center is None and image is not None:
+            try:
+                lon, lat = shape(image).centroid.coords[0]
+            except:
+                lon, lat = box(*image_bounds).centroid.coords[0]
         else:
             lat, lon = center
 
         map_id = "map_{}".format(str(int(time.time())))
         map_data = VectorGeojsonLayer(geojson, styles=styles, **kwargs)
-        image_layer = self._build_image_layer(image, image_bounds)
+        image_layer = self._build_image_layer(image, image_bounds, cmap)
 
         template = BaseTemplate(map_id, **{
             "lat": lat, 
@@ -399,16 +405,20 @@ class Vectors(object):
         })
         template.inject()
 
-    def _build_image_layer(self, image, image_bounds):
+    def _build_image_layer(self, image, image_bounds, cmap='viridis'):
         if image is not None:
             if isinstance(image, da.Array):
-                arr = image.rgb()
+                if len(image.shape) == 2 or \
+                    (image.shape[0] == 1 and len(image.shape) == 3):
+                    arr = image.compute()
+                else:
+                    arr = image.rgb()
                 coords = box(*image.bounds)
             else:
                 assert image_bounds is not None, "Must pass image_bounds with ndarray images"
                 arr = image
                 coords = box(*image_bounds)
-            b64 = self._encode_image(arr)
+            b64 = self._encode_image(arr, cmap)
             return ImageLayer(b64, self._polygon_coords(coords))
         else:
             return 'false';
@@ -417,9 +427,9 @@ class Vectors(object):
         c = list(map(list, list(g.exterior.coords)))
         return [c[2], c[1], c[0], c[3]]
 
-    def _encode_image(self, arr):
+    def _encode_image(self, arr, cmap):
         io = BytesIO()
-        imsave(io, arr)
+        imsave(io, arr, cmap=cmap)
         io.seek(0)
         img_str = base64.b64encode(io.getvalue()).decode()
         return 'data:image/{};base64,{}'.format('png', img_str)
