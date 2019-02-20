@@ -281,6 +281,26 @@ Sentinel1 images are accessed through the CatalogImage class similar to Sentinel
 
 Sentinel1 images also support the ``proj`` parameter for reprojection.
 
+
+RDA Template Images
+^^^^^^^^^^^^^^^^^^^^^^^
+
+Any RDA Template can be directly accessed using `RDATemplateImage`. The class takes a template ID as the first argument, an optional node ID as the second argument, and the template parameters passed as keywords. If no node ID is supplied, the image will be generated from the last node.
+
+.. code-block:: python
+
+    from gbdxtools import RDATemplateImage
+
+    img = RDATemplateImage("DigitalGlobeStrip", # template ID
+                            None,               # node ID, optional
+                            crs="EPSG:4326",    # template parameters as keywords
+                            bands="MS", 
+                            catalogId="10400E0001DB6A00", 
+                            draType=None, 
+                            correctionType="DN", 
+                            bandSelection="All")
+
+
 Defining AOIs
 --------------
 
