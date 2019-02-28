@@ -73,6 +73,11 @@ S3Image
 .. autoclass:: gbdxtools.images.s3_image.S3Image
     :undoc-members:
 
+RDATemplateImage
+^^^^^^^^^^^^^^^^^^^^
+
+.. autoclass:: gbdxtools.images.template_image.RDATemplateImage
+    :undoc-members:
 
 Idaho
 -----------------------
