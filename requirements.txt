@@ -12,7 +12,7 @@ shapely
 ephem
 toolz
 cloudpickle
-dask == 0.20.0
+dask==1.1.4
 numpy < 1.16.0
 pycurl
 pyproj
