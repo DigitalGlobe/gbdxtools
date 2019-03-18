@@ -50,7 +50,7 @@ requirements:
     - ephem
     - toolz
     - cloudpickle
-    - dask >=0.20.0
+    - dask == 1.1.1
     - {{ pin_compatible('numpy', min_pin='1.9') }}
     - pycurl
     - pyproj
