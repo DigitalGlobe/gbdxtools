@@ -8,6 +8,8 @@ The vector map styles mirror their matching Mapbox GL styles - for more informat
 
 For these examples we show screenshots of the map viewer.
 
+.. note:: Vector maps require a valid MapBox API key. If you are using ``gbdxtools`` inside of GBDX Notebooks a key is automatically set for you. To use vector maps in a local Python environment you will need to provide your own API key. You can sign up for a free MapBox account at https://www.mapbox.com/pricing and generate a new key. The key can be set either in the  :meth:`gbdxtools.vectors.Vectors.map` call using the ``api_key`` keyword or as an environment variable called ``MAPBOX_API_KEY``.
+
 Vector Mapping Basics
 ------------------------
 

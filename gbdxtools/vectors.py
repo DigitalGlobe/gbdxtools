@@ -356,7 +356,9 @@ class Vectors(object):
             api_key (str): a valid Mapbox API key
             image (dict): a CatalogImage or a ndarray
             image_bounds (list): a list of bounds for image positioning 
-        
+
+            Use outside of GBDX Notebooks requires a MapBox API key, sign up for free at https://www.mapbox.com/pricing/
+            Pass the key using the `api_key` keyword or set an environmental variable called `MAPBOX API KEY`
         """
         try:
             from IPython.display import display
@@ -364,7 +366,7 @@ class Vectors(object):
             print("IPython is required to produce maps.")
             return
 
-        assert api_key is not None, "No Mapbox API Key found. You can either pass in a token or set the MAPBOX_API_KEY environment variable."
+        assert api_key is not None, "No Mapbox API Key found. You can either pass in a key or set the MAPBOX_API_KEY environment variable. Use outside of GBDX Notebooks requires a MapBox API key, sign up for free at https://www.mapbox.com/pricing/"
         if features is None and query is not None:
             wkt = box(*bbox).wkt
             features = self.query(wkt, query, index=None)
