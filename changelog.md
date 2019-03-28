@@ -1,3 +1,6 @@
+0.16.6 
+* Pin dask to v1.1.1 for both pip and conda
+
 0.16.5 
 * Fixing CatalogImage access to Modis
 
