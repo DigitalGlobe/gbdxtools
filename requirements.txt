@@ -15,7 +15,7 @@ cloudpickle
 dask == 1.1.1
 numpy < 1.16.0
 pycurl
-pyproj
+pyproj==2.1.3
 requests_futures
 configparser
 mercantile>=0.10.0
