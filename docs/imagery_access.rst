@@ -304,7 +304,7 @@ Any RDA Template can be directly accessed using `RDATemplateImage`. The class ta
 Defining AOIs
 --------------
 
-In addition to using the ``.aoi()`` method, the image bounding box can be specified when instantiating the image by passing a ``bbox`` parameter.  When passing `bbox`` to the image constructor, the list must be in the form of: `minx, miny, maxx, maxy` (or rather left, lower, right, upper) and be in `EPSG:4326` coordinates (lat/long).  
+In addition to using the ``.aoi()`` method, the image bounding box can be specified when instantiating the image by passing a ``bbox`` parameter.  When passing `bbox`` to the image constructor, the list must be in the form of: `minx, miny, maxx, maxy` (or rather left, lower, right, upper). By default, the coordinates are expected to be in `EPSG:4326` (lat/long).  
 
 .. code-block:: python
 
@@ -340,6 +340,28 @@ Image objects store their geospatial information and also support the `Python ge
     from shapely.geometry import shape
     print(img.__geo_interface__) # a geojson-like Python dictionary
     print(shape(img).area) # shape() returns a Shapely object for geometry operations
+
+
+Working with Projections
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Image objects can also be passed a ``proj`` parameter to define the output projection of the image. 
+To subset the image using a boundary box in a coordinate system other than the default EPSG:4326, the keyword ``from_proj`` must also be passed. Projections should be specified using EPSG strings. When slicing with a geometry object it is assumed that the geometry object is in the same coordinate system as the image output.
+
+.. code-block:: python
+
+    bbox_utm=[748438.1424217589, 4252250.579417545, 749443.6424217589, 4253256.079417545]
+
+    # using bbox when creating the image
+    img_utm = CatalogImage('1030010081A8A800', proj='EPSG:32634', bbox=bbox_utm, from_proj='EPSG:32634')
+
+    # using the aoi() method to subset
+    img_utm = CatalogImage('1030010081A8A800', proj='EPSG:32634')
+    img_utm = c_utm.aoi(bbox=bbox_utm, from_proj='EPSG:32634')
+
+    # geometric slicing does not need `from_proj`
+    geom = box(*bbox_utm)
+    img_utm = c_utm[geom]
 
 
 Chip Generation
