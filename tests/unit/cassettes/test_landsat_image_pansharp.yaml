@@ -1,36 +1,42 @@
 interactions:
 - request:
-    body: '{"edges": [{"destination": "7befa7c2-7fde-527a-ae2c-d5478ba6e143", "id":
-      "8f7985bb-1318-5fbc-943d-576d76cb5ef7", "index": 1, "source": "7d130cd0-3bd2-59be-80d0-0f7160ce0cfa"},
-      {"destination": "7befa7c2-7fde-527a-ae2c-d5478ba6e143", "id": "84073d97-c245-50ba-adf4-36562260f201",
-      "index": 2, "source": "25f12b47-9db6-51e5-8f91-51dd22cf2fb7"}], "nodes": [{"id":
-      "7befa7c2-7fde-527a-ae2c-d5478ba6e143", "operator": "LocallyProjectivePanSharpen",
-      "parameters": {}}, {"id": "7d130cd0-3bd2-59be-80d0-0f7160ce0cfa", "operator":
-      "LandsatRead", "parameters": {"landsatId": "LC80370302014268LGN00", "productSpec":
-      "multispectral"}}, {"id": "25f12b47-9db6-51e5-8f91-51dd22cf2fb7", "operator":
-      "LandsatRead", "parameters": {"landsatId": "LC80370302014268LGN00", "productSpec":
-      "panchromatic"}}]}'
+    body: null
     headers:
       Accept: ['*/*']
       Accept-Encoding: ['gzip, deflate']
       Connection: [keep-alive]
-      Content-Length: ['782']
-      Content-Type: [application/json]
       User-Agent: [python-requests/2.18.4]
-    method: POST
-    uri: https://rda.geobigdata.io/v1/graph
+    method: GET
+    uri: https://rda.geobigdata.io/v1/template
   response:
-    body: {string: 1cfdad9dbb81c8503631305922a500005b7e847248185395cfb75a45422d1deb}
+    body: {string: !!python/unicode "{\n    \"defaultNodeId\": \"SmartBandSelect\",\"id\": \"DigitalGlobeStrip\",\n
+        \   \"edges\": [\n        {\n            \"id\": \"56585213-84b1-441b-afc3-ff8f2aa50517\",\n
+        \           \"index\": 1,\n            \"source\": \"DigitalGlobeStrip\",\n
+        \           \"destination\": \"UniversalDRA\"\n        },\n        {\n            \"id\":
+        \"13e2b267-c4d5-444e-9cf3-9cfd7670dbca\",\n            \"index\": 1,\n            \"source\":
+        \"UniversalDRA\",\n            \"destination\": \"SmartBandSelect\"\n        }\n
+        \   ],\n    \"nodes\": [\n        {\n            \"id\": \"DigitalGlobeStrip\",\n
+        \           \"operator\": \"DigitalGlobeStrip\",\n            \"parameters\":
+        {\n                \"catId\": \"${catalogId}\",\n                \"CRS\":
+        \"${crs:-UTM}\",\n                \"correctionType\": \"${correctionType:-DN}\",\n
+        \               \"GSD\": \"${GSD}\",\n                \"fallbackToTOA\": \"${fallbackToTOA}\",\n
+        \               \"bands\": \"${bands:-MS}\"\n            }\n        },\n        {\n
+        \           \"id\": \"UniversalDRA\",\n            \"operator\": \"UniversalDRA\",\n
+        \           \"parameters\": {\n                \"draType\": \"${draType:-None}\"\n
+        \           }\n        },\n        {\n            \"id\": \"SmartBandSelect\",\n
+        \           \"operator\": \"SmartBandSelect\",\n            \"parameters\":
+        {\n                \"bandSelection\": \"${bandSelection:-All}\"\n            }\n
+        \       }\n    ]\n}"}
     headers:
-      Access-Control-Allow-Headers: ['x-requested-with, X-Auth-Token, Content-Type,
+      access-control-allow-headers: ['x-requested-with, X-Auth-Token, Content-Type,
           Authorization']
-      Access-Control-Allow-Methods: ['GET, OPTIONS, HEAD, PUT, POST, DELETE']
-      Access-Control-Allow-Origin: ['*']
-      Access-Control-Max-Age: ['3600']
-      Connection: [keep-alive]
-      Content-Length: ['64']
-      Content-Type: [text/plain;charset=UTF-8]
-      Date: ['Wed, 08 Aug 2018 15:14:01 GMT']
+      access-control-allow-methods: ['GET, OPTIONS, HEAD, PUT, POST, DELETE']
+      access-control-allow-origin: ['*']
+      access-control-max-age: ['3600']
+      connection: [keep-alive]
+      content-length: ['1252']
+      content-type: [application/json]
+      date: ['Tue, 21 Aug 2018 20:44:20 GMT']
     status: {code: 200, message: ''}
 - request:
     body: null
@@ -40,7 +46,7 @@ interactions:
       Connection: [keep-alive]
       User-Agent: [python-requests/2.18.4]
     method: GET
-    uri: https://rda.geobigdata.io/v1/metadata/1cfdad9dbb81c8503631305922a500005b7e847248185395cfb75a45422d1deb/7befa7c2-7fde-527a-ae2c-d5478ba6e143/metadata.json
+    uri: https://rda.geobigdata.io/v1/template/DigitalGlobeStrip/metadata?nodeId=73a9f833-bd5e-5cc7-9a83-a2cba6622661&catalogId=e9d158c6-2af0-481d-a1f0-d82b7234db33-inv&correctionType=AComp&draType=HistogramDRA&bands=PanSharp&bandSelection=RGB&crs=UTM
   response:
     body: {string: '{"imageMetadata":{"imageId":"LC80370302014268LGN00","version":1.1,"profileName":"georectified_image","tilePartition":"0000","tileXOffset":0,"tileYOffset":0,"numXTiles":61,"numYTiles":62,"tileXSize":256,"tileYSize":256,"numBands":8,"dataType":"UNSIGNED_SHORT","imageHeight":15661,"imageWidth":15401,"sensorPlatformName":"LANDSAT8","sensorName":"Operational
         Land Imager","vendorName":"NASA/USGS","vendorDatasetIdentifier":"Path=37:Row=30","acquisitionDate":"2014-09-25T18:01:18.581Z","colorInterpretation":"LANDSAT_8_30M","imageBoundsWGS84":"POLYGON

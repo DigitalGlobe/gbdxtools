@@ -37,18 +37,18 @@ except NameError:
 
 # NAMESPACE_UUID = uuid.NAMESPACE_DNS
 
-# class ContentHashedDict(dict):
-#     @property
-#     def _id(self):
-#         _id = str(uuid.uuid5(NAMESPACE_UUID, self.__hash__()))
-#         return _id
-#
-#     def __hash__(self):
-#         dup = OrderedDict({k:v for k,v in self.items() if k is not "id"})
-#         return sha256(str(dup).encode('utf-8')).hexdigest()
-#
-#     def populate_id(self):
-#         self.update({"id": self._id})
+class ContentHashedDict(dict):
+    @property
+    def _id(self):
+        _id = str(uuid.uuid5(NAMESPACE_UUID, self.__hash__()))
+        return _id
+
+    def __hash__(self):
+        dup = OrderedDict({k:v for k,v in self.items() if k is not "id"})
+        return sha256(str(dup).encode('utf-8')).hexdigest()
+
+    def populate_id(self):
+        self.update({"id": self._id})
 
 
 # class DaskProps(object):
