@@ -1,13 +1,12 @@
 from gbdxtools.images.base import RDABaseImage
 from gbdxtools.images.drivers import IdahoDriver
 from gbdxtools.images.util import vector_services_query
-from gbdxtools.rda.util import calc_toa_gain_offset, ortho_params
 from gbdxtools.rda.interface import RDA
+from gbdxtools.rda.template_api_utils import TemplateAPIConfig
 
-from shapely import wkt
-from shapely.geometry import box
 
-rda = RDA()
+# rda = RDA()
+
 
 class IdahoImage(RDABaseImage):
     """ Image based on IDAHO virtual tiles
@@ -39,9 +38,11 @@ class IdahoImage(RDABaseImage):
         correction = "ACOMP" if acomp else kwargs.get("correctionType")
         spec = kwargs.get('spec')
         if spec == "1b":
-            graph = rda.IdahoRead(bucketName=bucket, imageId=idaho_id, objectStore="S3", targetGSD=gsd)
+            # graph = rda.IdahoRead(bucketName=bucket, imageId=idaho_id, objectStore="S3", targetGSD=gsd)
+            graph = RDA(template_id="IdahoRead")
         else:
-            graph = rda.DigitalGlobeImage(bucketName=bucket, imageId=idaho_id, bands=bands, CRS=proj, correctionType=correction, GSD=gsd)
+            # graph = rda.DigitalGlobeImage(bucketName=bucket, imageId=idaho_id, bands=bands, CRS=proj, correctionType=correction, GSD=gsd)
+            graph = RDA(template_id="DigitalGlobeStrip")
 
         return graph
 

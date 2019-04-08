@@ -4,10 +4,12 @@ GBDX Template Image Interface.
 Contact: chris.helm@digitalglobe.com
 """
 from gbdxtools.images.rda_image import RDAImage, GraphMeta
-from gbdxtools.rda.interface import DaskProps
 from gbdxtools.rda.graph import get_rda_graph_template, get_rda_template_metadata, VIRTUAL_RDA_URL, get_template_stats
 from gbdxtools.auth import Auth
 from gbdxtools.rda.util import deprecation
+from gbdxtools.rda.fetch import easyfetch as load_url
+from gbdxtools.rda.util import RDA_TO_DTYPE
+
 
 try:
     from urllib import urlencode
@@ -21,7 +23,6 @@ except NameError:
 
 class TemplateMeta(GraphMeta):
     def __init__(self, template_id, node_id=None, **kwargs):
-        assert template_id is not None
         self._template_id = template_id
         self._rda_id = template_id
         self._params = kwargs 
@@ -65,6 +66,40 @@ class TemplateMeta(GraphMeta):
         return {(y, x): self._rda_tile(x, y, rda_id, nodeId=self._id, **self._params)
                 for y in xrange(img_md['minTileY'], img_md["maxTileY"]+1)
                 for x in xrange(img_md['minTileX'], img_md["maxTileX"]+1)}
+
+    @property
+    def dask(self):
+        token = self._interface.gbdx_connection.access_token
+        _chunks = self.chunks
+        _name = self.name
+        img_md = self.metadata["image"]
+        return {(_name, 0, y - img_md['minTileY'], x - img_md['minTileX']): (load_url, url, token, _chunks)
+                for (y, x), url in self._collect_urls().items()}
+
+    @property
+    def name(self):
+        return "image-{}".format(self._id)
+
+    @property
+    def chunks(self):
+        img_md = self.metadata["image"]
+        return (img_md["numBands"], img_md["tileYSize"], img_md["tileXSize"])
+
+    @property
+    def dtype(self):
+        try:
+            data_type = self.metadata["image"]["dataType"]
+            return RDA_TO_DTYPE[data_type]
+        except KeyError:
+            raise TypeError("Metadata indicates an unrecognized data type: {}".format(data_type))
+
+    @property
+    def shape(self):
+        img_md = self.metadata["image"]
+        return (img_md["numBands"],
+                (img_md["maxTileY"] - img_md["minTileY"] + 1)*img_md["tileYSize"],
+                (img_md["maxTileX"] - img_md["minTileX"] + 1)*img_md["tileXSize"])
+
 
 class RDATemplateImage(object):
     '''Creates an image instance matching the template ID with the given params.

@@ -59,16 +59,18 @@ class WorldViewImage(RDABaseImage):
         gsd = gsd if not None else ""
         correction = "ACOMP" if acomp else kwargs.get("correctionType", "TOAREFLECTANCE")
         if dra:
-            strip = rda.DigitalGlobeStrip(catId=cat_id, CRS=proj, GSD=gsd, correctionType=correction, bands=bands, fallbackToTOA=True)
-            graph = rda.RadiometricDRA(strip)
+            # strip = rda.DigitalGlobeStrip(catId=cat_id, CRS=proj, GSD=gsd, correctionType=correction, bands=bands, fallbackToTOA=True)
+            # graph = rda.RadiometricDRA(strip)
+            graph = RDA(template_id="DigitalGlobeStrip", node="RadiometricDRA")
         else:
-            graph = rda.DigitalGlobeStrip(catId=cat_id, CRS=proj, GSD=gsd, correctionType=correction, bands=bands, fallbackToTOA=True)
+            # graph = rda.DigitalGlobeStrip(catId=cat_id, CRS=proj, GSD=gsd, correctionType=correction, bands=bands, fallbackToTOA=True)
             try:
                 _dtype = RDA_DTYPES[dtype]
             except:
                 warnings.warn('Unknown dtype {}'.format(dtype))
                 _dtype = "4"
-            graph = rda.Format(graph, dataType=_dtype)
+            # graph = rda.Format(graph, dataType=_dtype)
+            graph = RDA(template_id="DigitalGlobeStrip", node="Format", dataType=dtype)
         #raise AcompUnavailable("Cannot apply acomp to this image, data unavailable in bucket: {}".format(_bucket))
         return graph
 

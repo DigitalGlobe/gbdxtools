@@ -2,7 +2,7 @@ import sys
 
 from gbdxtools.images.meta import DaskMeta, GeoDaskImage
 from gbdxtools.rda.util import RatPolyTransform, AffineTransform, deprecation, get_proj
-from gbdxtools.rda.interface import DaskProps
+# from gbdxtools.rda.interface import DaskProps
 from gbdxtools.rda.graph import get_rda_graph
 from gbdxtools.auth import Auth
 
@@ -27,7 +27,7 @@ def _reproject(geo, from_proj, to_proj):
         return ops.transform(tfm, geo)
     return geo
 
-class GraphMeta(DaskProps):
+class GraphMeta(object):
     def __init__(self, graph_id, node_id=None, **kwargs):
         assert graph_id is not None
         self._rda_id = graph_id
