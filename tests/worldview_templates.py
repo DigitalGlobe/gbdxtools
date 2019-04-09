@@ -1,4 +1,4 @@
-worldview_default = {
+digital_globe_strip = {
     "edges": [
         {
             "id": "edge-1",
@@ -40,4 +40,24 @@ worldview_default = {
         }
     ],
     "defaultNodeId": "Format"
+}
+
+digital_globe_image = {
+    "defaultNodeId": "DigitalGlobeImage",
+    "edges": [],
+    "nodes": [
+        {
+            "id": "DigitalGlobeImage",
+            "operator": "DigitalGlobeImage",
+            "parameters": {
+                "bucketName": "${bucketName}",
+                "imageId": "${imageId}",
+                "CRS": "${CRS}",
+                "correctionType": "${correctionType}",
+                "GSD": "${GSD}",
+                "fallbackToTOA": "true",
+                "bands": "${bands}"
+            }
+        }
+    ]
 }
