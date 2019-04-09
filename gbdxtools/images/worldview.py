@@ -3,8 +3,7 @@ GBDX Catalog Image Interface.
 Contact: chris.helm@digitalglobe.com
 """
 from __future__ import print_function
-import json
-import warnings 
+import warnings
 
 from gbdxtools.images.drivers import WorldViewDriver, RDADaskImageDriver
 from gbdxtools.images.base import RDABaseImage
@@ -89,6 +88,7 @@ class WorldViewImage(RDABaseImage):
     def _ndwi_bands(self):
         return [7, 0]
 
+
 class WV03_SWIR(WorldViewImage):
     @staticmethod
     def _find_parts(cat_id, band_type):
@@ -100,14 +100,17 @@ class WV03_SWIR(WorldViewImage):
         bands = "SWIR"
         gsd = gsd if not None else ""
         correction = "ACOMP" if acomp else kwargs.get("correctionType", "TOAREFLECTANCE")
-        graph = rda.DigitalGlobeStrip(catId=cat_id, CRS=proj, GSD=gsd, correctionType=correction, bands=bands, fallbackToTOA=True)
+        digital_globe_strip = rda.DigitalGlobeStrip(catId=cat_id, crs=proj, gsd=gsd, correctionType=correction,
+                                                    bands=bands, fallbackToTOA=True)
         try:
             _dtype = RDA_DTYPES[dtype]
-        except:
-            warnings.warn('Unknown dtype')
-            _dtype = "4" 
-        graph = rda.Format(graph, dataType=_dtype)
-        return graph
+        except Exception as e:
+            warnings.warn('Unknown dtype, Reason {}'.format(e))
+            _dtype = "4"
+
+        digital_globe_strip = digital_globe_strip(nodeId="Format", dataType=_dtype)
+
+        return digital_globe_strip
 
     @property
     def _rgb_bands(self):
