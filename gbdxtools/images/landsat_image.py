@@ -52,15 +52,10 @@ class LandsatImage(RDABaseImage):
         if spec == "thermal" and pansharpen:
             raise IncompatibleOptions('Cannot generate a pansharpened thermal Landsat image')
 
-        if pansharpen == True:
-            # landsat_ms = rda.LandsatRead(landsatId=_id, productSpec='multispectral')
-            # landsat_pan = rda.LandsatRead(landsatId=_id, productSpec='panchromatic')
-            # landsat = rda.LocallyProjectivePanSharpen(landsat_ms, landsat_pan)
-            landsat = RDA(template_id="DigitalGlobeStrip", node="RadiometricDRA")
+        if pansharpen is True:
+            landsat = rda.LandsatPanSharpen(catalogIdMultispectral=_id, catalogIdPanchromatic=_id)
         else:
-            # landsat = rda.LandsatRead(landsatId=_id, productSpec=spec)
-            landsat = RDA(template_id="DigitalGlobeStrip", node="RadiometricDRA")
+            landsat = rda.LandsatRead(landsatId=_id, productSpec=spec)
         if proj is not None:
-            # landsat = rda.Reproject(landsat, **reproject_params(proj))
-            landsat = RDA(template_id="DigitalGlobeStrip", node="RadiometricDRA")
+            landsat = landsat(nodeId="Reproject", **reproject_params(proj))
         return landsat

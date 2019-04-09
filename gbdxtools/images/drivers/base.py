@@ -165,7 +165,6 @@ class RDADaskImageDriver(RDADriverInterface):
         target.__supported_options__ = self.image_option_support
         target.__default_options__ = self.default_options
         self.build_payload(target)
-        self.graph._params = kwargs
         return target
 
 

@@ -6,7 +6,7 @@ import unittest
 import types
 
 from gbdxtools import Interface
-from gbdxtools.rda.interface import RDA, Op, ContentHashedDict
+from gbdxtools.rda.interface import RDA, Op
 
 from auth_mock import get_mock_gbdx_session
 

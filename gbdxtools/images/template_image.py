@@ -39,7 +39,7 @@ class TemplateMeta(GraphMeta):
         if self._rda_meta is not None:
             return self._rda_meta
         if self._interface is not None:
-            self._rda_meta = get_rda_template_metadata(self._interface.gbdx_futures_session, self._template_id, nodeId=self._id, **self._params)
+            self._rda_meta = get_rda_template_metadata(self._interface.gbdx_futures_session, self._template_id, **self._params)
         return self._rda_meta
 
     @property
@@ -57,13 +57,12 @@ class TemplateMeta(GraphMeta):
 
     def _rda_tile(self, x, y, rda_id, **kwargs):
         qs = urlencode(kwargs)
-        return "{}/template/{}/tile/{}/{}?{}".format(VIRTUAL_RDA_URL, rda_id, x, y, qs) 
+        return "{}/template/{}/tile/{}/{}?{}".format(VIRTUAL_RDA_URL, rda_id, x, y, qs)
 
     def _collect_urls(self):
         img_md = self.metadata["image"]
-        rda_id = self._rda_id
-        _id = self._id
-        return {(y, x): self._rda_tile(x, y, rda_id, nodeId=self._id, **self._params)
+        rda_id = self._template_id
+        return {(y, x): self._rda_tile(x, y, rda_id, **self._params)
                 for y in xrange(img_md['minTileY'], img_md["maxTileY"]+1)
                 for x in xrange(img_md['minTileX'], img_md["maxTileX"]+1)}
 
