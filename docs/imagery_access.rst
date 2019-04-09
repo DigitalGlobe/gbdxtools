@@ -126,7 +126,7 @@ The above code generates a geotiff on the filesystem with the name ``output.tif`
     img = CatalogImage('104001001BA7C400', bbox=[2.28, 48.87, 2.30, 48.89], proj='EPSG:3857')
     tif = img.geotiff(path="./output.tif", proj="EPSG:4326", bands=[4,2,1])
 
-This will create a geotiff on the the filesystem with only the bands `4,2,1` in that order.
+This will create a geotiff on the the filesystem with only the bands `4,2,1` in that order. *Note*: bands refers to the channel array indices and are zero-indexed. So the retrieve only the first band you pass ``bands=[0]``.
 
 .. code-block:: python
 
@@ -397,7 +397,7 @@ will default to showing the RGB bands of the image. If the image only has a sing
 Options available for plotting:
 
 * ``w,h`` : width and height of the plot, in inches at 72 dpi. This includes default borders and spacing. If the image is shown in Jupyter the outside whitespace will be automatically cropped to save size, resulting in a smaller sized image than expected. Default is ``w=10, h=10``.
-* ``bands``: list of bands to use for plotting, such as ``bands=[4,2,1]``. Defaults to the image's natural RGB bands. This option is useful for generating pseudocolor images when passed a list of three bands. If only a single band is provided, a colormapped plot will be generated instead.
+* ````: list of bands to use for plotting, such as ``bands=[4,2,1]``. Defaults to the image's natural RGB bands. This option is useful for generating pseudocolor images when passed a list of three bands. If only a single band is provided, a colormapped plot will be generated instead. *Note*: bands refers to the array channels and are zero-indexed.
 * ``title``: the title for the plot, if not specified no title is displayed.
 * ``fontsize``: the font size for the title, in points. Default is 22.
 * ``cmap``: MatPlotLib colormap to use for single band images. Default is ``cmap='Grey_R'``.

@@ -24,6 +24,7 @@ class CatalogImage(object):
         from_proj (str): Optional projection string to define the coordinate system of `bbox`, default is "EPSG:4327"
         dtype (str): The dtype for the returned image (only valid for Worldview). One of: "int8", "int16", "uint16", "int32", "float32", "float64"
         band_type (str): The product spec / band type for the image returned (band_type='MS'|'Pan')
+        bands (list of int): bands to include in the image. Bands are zero-indexed.
         pansharpen (bool): Whether or not to return a pansharpened image (defaults to False)
         acomp (bool): Perform atmospheric compensation on the image (defaults to False, i.e. Top of Atmosphere value)
         gsd (float): The Ground Sample Distance (GSD) of the image. Must be defined in the same projected units as the image projection.
