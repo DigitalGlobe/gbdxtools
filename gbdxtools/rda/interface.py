@@ -2,6 +2,9 @@ import sys
 from gbdxtools.auth import Auth
 from gbdxtools.images.template_image import TemplateMeta
 
+# Warn on deprecated module attribute access
+from gbdxtools.deprecate import deprecate_module_attr
+
 
 class Op(TemplateMeta):
     def __init__(self, name, interface=None, **kwargs):
@@ -15,6 +18,7 @@ class Op(TemplateMeta):
         self._interface = interface
 
     def __call__(self, *args, **kwargs):
+        # update template metadata query params
         self._params.update(kwargs)
         return self
 
@@ -23,8 +27,7 @@ class RDA(object):
     def __getattr__(self, name, **kwargs):
         return Op(name=name, interface=Auth(), **kwargs)
 
-# Warn on deprecated module attribute access
-from gbdxtools.deprecate import deprecate_module_attr
+
 sys.modules[__name__] = deprecate_module_attr(sys.modules[__name__], deprecated=["Ipe"])
 Ipe = RDA
 

@@ -2,7 +2,6 @@ from gbdxtools.images.base import RDABaseImage
 from gbdxtools.images.drivers import IdahoDriver
 from gbdxtools.images.util import vector_services_query
 from gbdxtools.rda.interface import RDA
-from gbdxtools.rda.template_api_utils import TemplateAPIConfig
 
 
 # rda = RDA()
