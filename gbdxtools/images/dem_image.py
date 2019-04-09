@@ -7,9 +7,11 @@ rda = RDA()
 
 from shapely.geometry import box
 
+
 class DemDriver(RDADaskImageDriver):
     image_option_support = ["proj", "bbox"]
     __image_option_defaults__ = {"bbox": None}
+
 
 class DemImage(RDABaseImage):
     ''' Image class for Digital Elevation Model (DEM) data from the NED/SRTM dataset.
@@ -37,7 +39,7 @@ class DemImage(RDABaseImage):
         bucket = kwargs.get("bucket", "idaho-dems-2018")
         imageId = kwargs.get("imageId", "dgdem-v20180406-DEFLATED-ca4649c5acb")
         wkt = box(*aoi).wkt
-        dem = rda.GeospatialCrop(rda.IdahoRead(bucketName=bucket, imageId=imageId, objectStore="S3"), geospatialWKT=str(wkt))
+        dem = rda.IdahoRead(bucketName=bucket, imageId=imageId, objectStore="S3", geospatialWKT=str(wkt), nodeId="GeospatialCrop")
         if proj is not "EPSG:4326":
-            dem = rda.Reproject(dem, **reproject_params(proj))
+            dem = dem(**reproject_params(proj), nodeId="Reproject")
         return dem
