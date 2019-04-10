@@ -50,11 +50,13 @@ class IkonosImage(RDABaseImage):
             raise IncompatibleOptions('Cannot generate a pansharpened thermal Ikonos image')
 
         params = ortho_params(proj, gsd=gsd)
-        if pansharpen == True:
-            ms = rda.Orthorectify(rda.IkonosRead(path="{}/{}/{}_0000000:{}".format(bucket, prefix, prefix, 'multispectral')), **params)
-            pan = rda.Orthorectify(rda.IkonosRead(path="{}/{}/{}_0000000:{}".format(bucket, prefix, prefix, 'panchromatic')), **params)
-            ikonos = rda.LocallyProjectivePanSharpen(ms, pan)
+        if pansharpen is True:
+            ikonos = rda.IkonosPanSharpen(
+                panPath="{}/{}/{}_0000000:{}".format(bucket, prefix, prefix, 'panchromatic'),
+                multiPath="{}/{}/{}_0000000:{}".format(bucket, prefix, prefix, 'multispectral'),
+                nodeId="LocallyProjectivePanSharpen", **params)
+
         else:
-            ikonos = rda.IkonosRead(path="{}/{}/{}_0000000:{}".format(bucket, prefix, prefix, spec))
-            ikonos = rda.Orthorectify(ikonos, **params)
+            ikonos = rda.Ikonos(path="{}/{}/{}_0000000:{}".format(bucket, prefix, prefix, spec), nodeId="Orthorectify",
+                                **params)
         return ikonos
