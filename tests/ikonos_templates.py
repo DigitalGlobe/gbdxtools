@@ -1,4 +1,5 @@
 Ikonos = {
+    "defaultNodeId": "Orthorectify",
     "edges": [
         {
             "id": "edge-1",
@@ -22,7 +23,7 @@ Ikonos = {
             "id": "IkonosRead",
             "operator": "IkonosRead",
             "parameters": {
-                "path": "${path}",
+                "path": "${path}"
             }
         }
     ]
@@ -76,7 +77,7 @@ IkonosPanSharpen = {
             "id": "IkonosReadMulti",
             "operator": "IkonosRead",
             "parameters": {
-                "path": "${multiPath}",
+                "path": "${multiPath}"
             }
         },
         {
