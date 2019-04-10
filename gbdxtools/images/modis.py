@@ -4,9 +4,11 @@ from gbdxtools.images.util.image import reproject_params
 from gbdxtools.rda.interface import RDA
 rda = RDA()
 
+
 class ModisDriver(RDADaskImageDriver):
     image_option_support = ["proj"]
     __image_option_defaults__ = {"proj": None}
+
 
 class Modis(RDABaseImage):
     """
@@ -31,8 +33,8 @@ class Modis(RDABaseImage):
 
     @classmethod
     def _build_graph(cls, cat_id, proj=None, **kwargs):
-        modis = rda.ModisRead(modisId=cat_id)
+        modis = rda.Modis(modisId=cat_id)
         if proj is not None:
-            modis = rda.Reproject(modis, **reproject_params(proj))
+            modis = modis(nodeId="Reproject", **reproject_params(proj))
         return modis
 
