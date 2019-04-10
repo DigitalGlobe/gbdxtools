@@ -3,11 +3,14 @@ from gbdxtools.images.base import RDABaseImage
 from gbdxtools.images.drivers import RDADaskImageDriver
 from gbdxtools.rda.util import ortho_params
 from gbdxtools.rda.interface import RDA
+
 rda = RDA()
+
 
 class RadarsatDriver(RDADaskImageDriver):
     image_option_support = ["proj"]
     __image_option_defaults__ = {"proj": "EPSG:4326"}
+
 
 class Radarsat(RDABaseImage):
     """
@@ -25,9 +28,10 @@ class Radarsat(RDABaseImage):
             prefix = record['properties']['attributes']['bucketPrefix']
             bucket = record['properties']['attributes']['bucketName']
         except Exception:
-            raise AttributeError("Radarsat Record missing bucketPrefix and bucketName. Most likely this is permissions issue.")
-        radarsat = rda.RadarsatRead(path=os.path.join(bucket, prefix))
+            raise AttributeError(
+                "Radarsat Record missing bucketPrefix and bucketName. Most likely this is permissions issue.")
+        radarsat = rda.Radarsat(path=os.path.join(bucket, prefix))
         if proj is not None:
             params = ortho_params(proj, gsd=gsd)
-            radarsat = rda.Orthorectify(radarsat, **params)
+            radarsat(nodeId="Orthorectify", **params)
         return radarsat
