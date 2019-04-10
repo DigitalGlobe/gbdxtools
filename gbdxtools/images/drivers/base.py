@@ -144,10 +144,7 @@ class RDADaskImageDriver(RDADriverInterface):
 
     @payload.setter
     def payload(self, payload):
-        if not isinstance(payload, DaskMeta):
-            raise Exception("To adapt GeoDaskImage, payload must be DaskMeta instance")
-        else:
-            self._payload = payload
+        self._payload = payload
 
     def build_payload(self, target):
         # build_graph should always return an rda graph / dask meta
@@ -155,6 +152,7 @@ class RDADaskImageDriver(RDADriverInterface):
         self._graph = graph
 
     def drive(self, target, **kwargs):
+        # TODO: are kwargs needed here?
         if not self.rda_id:
             rda_id = getattr(target, "__rda_id__", None)
             if not rda_id:
