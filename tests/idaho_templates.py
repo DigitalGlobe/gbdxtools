@@ -1,20 +1,4 @@
-idaho_read = {
-    "edges": [],
-    "nodes": [
-        {
-            "id": "IdahoRead",
-            "operator": "IdahoRead",
-            "parameters": {
-                "bucketName": "${bucketName}",
-                "imageId": "${imageId}",
-                "objectStore": "${objectStore}",
-                "targetGSD": "${targetGSD}"
-            }
-        }
-    ]
-}
-
-idaho_read_crop_and_format = {
+Idaho = {
     "edges": [
         {
             "id": "edge-2",

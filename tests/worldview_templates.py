@@ -1,4 +1,4 @@
-digital_globe_strip = {
+DigitalGlobeStrip = {
     "edges": [
         {
             "id": "edge-1",
@@ -42,7 +42,7 @@ digital_globe_strip = {
     "defaultNodeId": "Format"
 }
 
-digital_globe_image = {
+DigitalGlobeImage = {
     "defaultNodeId": "DigitalGlobeImage",
     "edges": [],
     "nodes": [

@@ -1,4 +1,4 @@
-landsat_pansharp = {
+LandsatPanSharpen = {
     "edges": [
         {
             "id": "edge-2",
@@ -55,7 +55,7 @@ landsat_pansharp = {
     "defaultNodeId": "LocallyProjectivePanSharpen"
 }
 
-landsat_proj = {
+Landsat = {
     "defaultNodeId": "LandsatRead",
     "edges": [{
         "destination": "Reproject",

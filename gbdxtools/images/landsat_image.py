@@ -55,7 +55,7 @@ class LandsatImage(RDABaseImage):
         if pansharpen is True:
             landsat = rda.LandsatPanSharpen(catalogIdMultispectral=_id, catalogIdPanchromatic=_id)
         else:
-            landsat = rda.LandsatRead(landsatId=_id, productSpec=spec)
+            landsat = rda.Landsat(landsatId=_id, productSpec=spec)
         if proj is not None:
             landsat = landsat(nodeId="Reproject", **reproject_params(proj))
         return landsat

@@ -36,7 +36,7 @@ class IdahoImage(RDABaseImage):
         correction = "ACOMP" if acomp else kwargs.get("correctionType")
         spec = kwargs.get('spec')
         if spec == "1b":
-            graph = rda.IdahoRead(bucketName=bucket, imageId=idaho_id, objectStore="S3", targetGSD=gsd)
+            graph = rda.Idaho(bucketName=bucket, imageId=idaho_id, objectStore="S3", targetGSD=gsd, nodeId="IdahoRead")
         else:
             graph = rda.DigitalGlobeImage(bucketName=bucket, imageId=idaho_id, bands=bands, CRS=proj,
                                           correctionType=correction, GSD=gsd)
