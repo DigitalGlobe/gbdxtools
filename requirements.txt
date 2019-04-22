@@ -13,7 +13,7 @@ ephem
 toolz
 cloudpickle
 dask == 1.1.1
-numpy < 1.16.0
+numpy==1.16.3
 pycurl
 pyproj
 requests_futures
