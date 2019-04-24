@@ -2,67 +2,73 @@ interactions:
 - request:
     body: null
     headers:
-      Accept: ['*/*']
-      Accept-Encoding: ['gzip, deflate']
-      Connection: [keep-alive]
-      User-Agent: [python-requests/2.18.4]
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.21.0
     method: GET
     uri: https://rda.geobigdata.io/v1/stripMetadata/1050410000B1BD00/capabilities
   response:
-    body: {string: !!python/unicode '{"error":"Metadata not found for catalog ID 1050410000B1BD00"}'}
+    body:
+      string: '{"error":"Metadata not found for catalog ID 1050410000B1BD00"}'
     headers:
-      access-control-allow-headers: ['x-requested-with, X-Auth-Token, Content-Type,
-          Authorization']
-      access-control-allow-methods: ['GET, OPTIONS, HEAD, PUT, POST, DELETE']
-      access-control-allow-origin: ['*']
-      access-control-max-age: ['3600']
-      connection: [keep-alive]
-      content-length: ['62']
-      content-type: [application/json;charset=UTF-8]
-      date: ['Thu, 06 Dec 2018 17:17:09 GMT']
-    status: {code: 404, message: ''}
+      Access-Control-Allow-Headers:
+      - x-requested-with, X-Auth-Token, Content-Type, Authorization
+      Access-Control-Allow-Methods:
+      - GET, OPTIONS, HEAD, PUT, POST, DELETE
+      Access-Control-Allow-Origin:
+      - '*'
+      Access-Control-Max-Age:
+      - '3600'
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '62'
+      Content-Type:
+      - application/json;charset=UTF-8
+      Date:
+      - Tue, 23 Apr 2019 21:30:16 GMT
+    status:
+      code: 404
+      message: ''
 - request:
     body: null
     headers:
-      Accept: ['*/*']
-      Accept-Encoding: ['gzip, deflate']
-      Connection: [keep-alive]
-      User-Agent: [python-requests/2.18.4]
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.21.0
     method: GET
     uri: https://rda.geobigdata.io/v1/stripMetadata/104001002ABEA500/capabilities
   response:
-    body: {string: !!python/unicode '{"acompVersion":"1.1","stripAcompVersion":null}'}
+    body:
+      string: '{"acompVersion":"1.1","stripAcompVersion":null}'
     headers:
-      access-control-allow-headers: ['x-requested-with, X-Auth-Token, Content-Type,
-          Authorization']
-      access-control-allow-methods: ['GET, OPTIONS, HEAD, PUT, POST, DELETE']
-      access-control-allow-origin: ['*']
-      access-control-max-age: ['3600']
-      connection: [keep-alive]
-      content-length: ['47']
-      content-type: [application/json]
-      date: ['Thu, 06 Dec 2018 17:17:10 GMT']
-    status: {code: 200, message: ''}
-- request:
-    body: null
-    headers:
-      Accept: ['*/*']
-      Accept-Encoding: ['gzip, deflate']
-      Connection: [keep-alive]
-      User-Agent: [python-requests/2.18.4]
-    method: GET
-    uri: https://rda.geobigdata.io/v1/stripMetadata/104001002ABEA500/capabilities
-  response:
-    body: {string: !!python/unicode '{"acompVersion":"1.1","stripAcompVersion":null}'}
-    headers:
-      access-control-allow-headers: ['x-requested-with, X-Auth-Token, Content-Type,
-          Authorization']
-      access-control-allow-methods: ['GET, OPTIONS, HEAD, PUT, POST, DELETE']
-      access-control-allow-origin: ['*']
-      access-control-max-age: ['3600']
-      connection: [keep-alive]
-      content-length: ['47']
-      content-type: [application/json]
-      date: ['Thu, 06 Dec 2018 17:17:10 GMT']
-    status: {code: 200, message: ''}
+      Access-Control-Allow-Headers:
+      - x-requested-with, X-Auth-Token, Content-Type, Authorization
+      Access-Control-Allow-Methods:
+      - GET, OPTIONS, HEAD, PUT, POST, DELETE
+      Access-Control-Allow-Origin:
+      - '*'
+      Access-Control-Max-Age:
+      - '3600'
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '47'
+      Content-Type:
+      - application/json
+      Date:
+      - Tue, 23 Apr 2019 21:30:17 GMT
+    status:
+      code: 200
+      message: ''
 version: 1

@@ -33,18 +33,18 @@ class S3Image(RDAImage):
 
     @staticmethod
     def _build_graph(path, proj=None, src_proj=None):
-        s3 = rda.S3Image(path=path)
+        s3 = rda.S3ImageTemplate(path=path)
         params = {
             "Dest pixel-to-world transform": "",
             "Resampling Kernel": "INTERP_BILINEAR",
-            "Source SRS Code": "",
+            "SourceSRSCode": "",
             "Source pixel-to-world transform": "",
-            "Dest SRS Code": "",
+            "DestSRSCode": "",
             "Background Values": "[0]"
         }
         if proj is not None:
-            params['Dest SRS Code'] =  proj
+            params['DestSRSCode'] = proj
             if src_proj is not None:
-                params['Source SRS Code'] = src_proj
+                params['SourceSRSCode'] = src_proj
             s3 = s3(nodeId="Reproject", **params)
         return s3

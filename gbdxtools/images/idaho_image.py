@@ -25,7 +25,7 @@ class IdahoImage(RDABaseImage):
         return self.__rda_id__
 
     @classmethod
-    def _build_graph(cls, idaho_id, proj=None, bucket="idaho-images", gsd=None, acomp=False, bands="MS", **kwargs):
+    def _build_graph(cls, idaho_id, proj=None, bucket="rda-images-1", gsd=None, acomp=False, bands="MS", **kwargs):
         if bucket is None:
             vq = "item_type:IDAHOImage AND id:{}".format(idaho_id)
             result = vector_services_query(vq)
@@ -36,9 +36,9 @@ class IdahoImage(RDABaseImage):
         correction = "ACOMP" if acomp else kwargs.get("correctionType")
         spec = kwargs.get('spec')
         if spec == "1b":
-            graph = rda.Idaho(bucketName=bucket, imageId=idaho_id, objectStore="S3", targetGSD=gsd, nodeId="IdahoRead")
+            graph = rda.IdahoTemplate(bucketName=bucket, imageId=idaho_id, objectStore="S3", targetGSD=gsd, nodeId="IdahoRead")
         else:
-            graph = rda.DigitalGlobeImage(bucketName=bucket, imageId=idaho_id, bands=bands, CRS=proj,
+            graph = rda.DigitalGlobeImageTemplate(bucketName=bucket, imageId=idaho_id, bands=bands, CRS=proj,
                                           correctionType=correction, GSD=gsd)
 
         return graph

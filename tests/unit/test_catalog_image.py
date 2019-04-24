@@ -38,32 +38,32 @@ class CatalogImageTest(unittest.TestCase):
 
     @my_vcr.use_cassette('tests/unit/cassettes/test_cat_image_wv2.yaml', filter_headers=['authorization'])
     def test_wv2_image(self):
-        wv2 = CatalogImage('1030010076B8F500')
+        wv2 = self.gbdx.catalog_image('1030010076B8F500')
         self.assertTrue(isinstance(wv2, WV02))
 
     @my_vcr.use_cassette('tests/unit/cassettes/test_cat_image_wv3.yaml', filter_headers=['authorization'])
     def test_wv3_image(self):
-        wv3 = CatalogImage('10400100343F3D00')
+        wv3 = self.gbdx.catalog_image('10400100343F3D00')
         self.assertTrue(isinstance(wv3, WV03_VNIR))
 
     @my_vcr.use_cassette('tests/unit/cassettes/test_cat_image_wv1.yaml', filter_headers=['authorization'])
     def test_wv1_image(self):
-        wv1 = CatalogImage('1020010044CEA300')
+        wv1 = self.gbdx.catalog_image('1020010044CEA300')
         self.assertTrue(isinstance(wv1, WV01))
 
     @my_vcr.use_cassette('tests/unit/cassettes/test_cat_image_landsat.yaml', filter_headers=['authorization'])
     def test_landsat_image(self):
-        lsat = CatalogImage('LC80380302013160LGN00')
+        lsat = self.gbdx.catalog_image('LC80380302013160LGN00')
         self.assertTrue(isinstance(lsat, LandsatImage))
 
     @my_vcr.use_cassette('tests/unit/cassettes/test_cat_image_wv4.yaml', filter_headers=['authorization'])
     def test_wv4_image(self):
-        wv4 = CatalogImage('03f4955d-c7da-45a8-8289-ba73bec5e127-inv')
+        wv4 = self.gbdx.catalog_image('03f4955d-c7da-45a8-8289-ba73bec5e127-inv')
         self.assertTrue(isinstance(wv4, WV04))
     
     def test_catalog_image_err(self):
         try:
-            img = CatalogImage('XXXX')
+            img = self.gbdx.catalog_image('XXXX')
         except:
             pass
 

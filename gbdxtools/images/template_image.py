@@ -4,12 +4,13 @@ GBDX Template Image Interface.
 Contact: chris.helm@digitalglobe.com
 """
 from gbdxtools.images.rda_image import RDAImage, GraphMeta
-from gbdxtools.rda.graph import get_rda_graph_template, get_rda_template_metadata, VIRTUAL_RDA_URL, get_template_stats
+from gbdxtools.rda.graph import get_rda_graph_template, get_rda_template_metadata, VIRTUAL_RDA_URL, get_template_stats, \
+    create_rda_template, materialize_status, materialize_template
 from gbdxtools.auth import Auth
 from gbdxtools.rda.util import deprecation
 from gbdxtools.rda.fetch import easyfetch as load_url
 from gbdxtools.rda.util import RDA_TO_DTYPE
-
+from shapely.geometry import box
 
 try:
     from urllib import urlencode
@@ -21,11 +22,13 @@ try:
 except NameError:
     xrange = range
 
+
 class TemplateMeta(GraphMeta):
-    def __init__(self, template_id, node_id=None, **kwargs):
-        self._template_id = template_id
-        self._rda_id = template_id
-        self._params = kwargs 
+    def __init__(self, name, node_id=None, **kwargs):
+        self._template_name = name
+        self._template_id = None
+        self._rda_id = None
+        self._params = kwargs
         self._node_id = node_id
         self._interface = Auth()
         self._rda_meta = None
@@ -39,20 +42,25 @@ class TemplateMeta(GraphMeta):
         if self._rda_meta is not None:
             return self._rda_meta
         if self._interface is not None:
-            self._rda_meta = get_rda_template_metadata(self._interface.gbdx_futures_session, self._template_id, **self._params)
+            self._rda_meta = get_rda_template_metadata(self._interface.gbdx_futures_session, self._template_id,
+                                                       **self._params)
         return self._rda_meta
 
     @property
     def display_stats(self):
-        deprecation('The use of display_stats has been deprecated. For scaling imagery use histograms in the image metdata.')
+        deprecation(
+            'The use of display_stats has been deprecated. For scaling imagery use histograms in the image metdata.')
         assert self.graph() is not None
         if self._rda_stats is None:
-            self._rda_stats = get_template_stats(self._interface.gbdx_futures_session, self._rda_id, self._id, **self._params)
+            self._rda_stats = get_template_stats(self._interface.gbdx_futures_session, self._rda_id, self._id,
+                                                 **self._params)
         return self._rda_stats
 
     def graph(self):
         if self._graph is None:
-            self._graph = get_rda_graph_template(self._interface.gbdx_connection, self._template_id)
+            template = get_rda_graph_template(self._interface.gbdx_connection, self._template_name)
+            self._graph = template
+            self._template_id = template.get("id")
         return self._graph
 
     def _rda_tile(self, x, y, rda_id, **kwargs):
@@ -63,8 +71,8 @@ class TemplateMeta(GraphMeta):
         img_md = self.metadata["image"]
         rda_id = self._template_id
         return {(y, x): self._rda_tile(x, y, rda_id, **self._params)
-                for y in xrange(img_md['minTileY'], img_md["maxTileY"]+1)
-                for x in xrange(img_md['minTileX'], img_md["maxTileX"]+1)}
+                for y in xrange(img_md['minTileY'], img_md["maxTileY"] + 1)
+                for x in xrange(img_md['minTileX'], img_md["maxTileX"] + 1)}
 
     @property
     def dask(self):
@@ -96,8 +104,36 @@ class TemplateMeta(GraphMeta):
     def shape(self):
         img_md = self.metadata["image"]
         return (img_md["numBands"],
-                (img_md["maxTileY"] - img_md["minTileY"] + 1)*img_md["tileYSize"],
-                (img_md["maxTileX"] - img_md["minTileX"] + 1)*img_md["tileXSize"])
+                (img_md["maxTileY"] - img_md["minTileY"] + 1) * img_md["tileYSize"],
+                (img_md["maxTileX"] - img_md["minTileX"] + 1) * img_md["tileXSize"])
+
+    def _materialize(self, node=None, bounds=None, callback=None, out_format='TILE_STREAM', **kwargs):
+        conn = self._interface.gbdx_futures_session
+        graph = self.graph()
+        graph.pop("id")
+        template_id = create_rda_template(conn, graph)
+        if node is None:
+            node = graph['nodes'][0]['id']
+        payload = self._create_materialize_payload(template_id, node, bounds, callback, out_format, **kwargs)
+        return materialize_template(conn, payload)
+
+    def _materialize_status(self, job_id):
+        return materialize_status(self._interface.gbdx_futures_session, job_id)
+
+    def _create_materialize_payload(self, templateId, node, bounds, callback, out_format, **kwargs):
+        payload = {
+            "imageReference": {
+                "templateId": templateId,
+                "nodeId": node,
+                "parameters": kwargs
+            },
+            "outputFormat": out_format
+        }
+        if bounds is not None:
+            payload["cropGeometryWKT"] = box(*bounds).wkt
+        if callback is not None:
+            payload["callbackUrl"] = callback
+        return payload
 
 
 class RDATemplateImage(object):
@@ -111,5 +147,6 @@ class RDATemplateImage(object):
     Returns:
         image (ndarray): An image instance
     '''
-    def __new__(cls, template_id, node_id=None, **kwargs):
-        return RDAImage(TemplateMeta(template_id, node_id, **kwargs))
+
+    def __new__(cls, name, node_id=None, **kwargs):
+        return RDAImage(TemplateMeta(name, node_id, **kwargs))

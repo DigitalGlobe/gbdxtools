@@ -60,10 +60,10 @@ class WorldViewImage(RDABaseImage):
         gsd = gsd if not None else ""
         correction = "ACOMP" if acomp else kwargs.get("correctionType", "TOAREFLECTANCE")
         if dra:
-            digital_globe_strip = rda.DigitalGlobeStrip(catId=cat_id, crs=proj, gsd=gsd, correctionType=correction,
+            digital_globe_strip = rda.DigitalGlobeStripTemplate(catId=cat_id, crs=proj, gsd=gsd, correctionType=correction,
                                                         bands=bands, fallbackToTOA=True, nodeId="RadiometricDRA")
         else:
-            digital_globe_strip = rda.DigitalGlobeStrip(catId=cat_id, crs=proj, gsd=gsd, correctionType=correction,
+            digital_globe_strip = rda.DigitalGlobeStripTemplate(catId=cat_id, crs=proj, gsd=gsd, correctionType=correction,
                                                         bands=bands,
                                                         fallbackToTOA=True)
             try:
@@ -100,7 +100,7 @@ class WV03_SWIR(WorldViewImage):
         bands = "SWIR"
         gsd = gsd if not None else ""
         correction = "ACOMP" if acomp else kwargs.get("correctionType", "TOAREFLECTANCE")
-        digital_globe_strip = rda.DigitalGlobeStrip(catId=cat_id, crs=proj, gsd=gsd, correctionType=correction,
+        digital_globe_strip = rda.DigitalGlobeStripTemplate(catId=cat_id, crs=proj, gsd=gsd, correctionType=correction,
                                                     bands=bands, fallbackToTOA=True)
         try:
             _dtype = RDA_DTYPES[dtype]

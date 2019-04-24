@@ -13,9 +13,9 @@ Modis = {
             "id": "Reproject",
             "operator": "Reproject",
             "parameters": {
-                "Dest SRS Code": "${Dest SRS Code}",
+                "Dest SRS Code": "${DestSRSCode}",
                 "Dest pixel-to-world transform": "null",
-                "Source SRS Code": "${Source SRS Code}",
+                "Source SRS Code": "${SourceSRSCode}",
                 "Source pixel-to-world transform": "null"
             }
         },

@@ -5,16 +5,12 @@ Contact: dmarino@digitalglobe.com
 Unit tests for the gbdxtools.Idaho class
 '''
 
-from gbdxtools import Interface
 from gbdxtools import RDAImage
 from auth_mock import gbdx
 import vcr
-from os.path import join, isfile, dirname, realpath
 import tempfile
 import unittest
-import dask.array as da
 
-from gbdxtools.images.idaho_image import IdahoImage
 
 
 def force(r1, r2):
@@ -46,22 +42,14 @@ class TemplateImageTest(unittest.TestCase):
 
     @my_vcr.use_cassette('tests/unit/cassettes/test_template_image.yaml', filter_headers=['authorization'])
     def test_template_image(self):
-        img = self.gbdx.rda_template_image('DigitalGlobeStrip',
-                                           catalogId='e9d158c6-2af0-481d-a1f0-d82b7234db33-inv',
+        img = self.gbdx.rda_template_image('DigitalGlobeStripTemplate',
+                                           catId='e9d158c6-2af0-481d-a1f0-d82b7234db33-inv',
                                            correctionType='AComp',
                                            draType='HistogramDRA',
                                            bands='PanSharp',
                                            bandSelection='RGB',
-                                           crs='UTM')
+                                           crs='UTM',
+                                           nodeId="SmartBandSelect")
         self.assertTrue(isinstance(img, RDAImage))
-        assert img.shape == (3, 95278, 42775)
+        assert img.shape == (3, 116277, 52241)
         assert img.proj == 'EPSG:32632'
-
-    @my_vcr.use_cassette('tests/unit/cassettes/test_template_image_idaho.yaml', filter_headers=['authorization'])
-    def test_template_image_idaho(self):
-        idahoid = '09d5acaf-12d4-4c67-adbb-cda26cbd2187'
-        img = self.gbdx.idaho_image(idahoid,
-                                    bucket='idaho-images')
-        self.assertTrue(isinstance(img, IdahoImage))
-        assert img.shape == (8, 11120, 10735)
-        assert img.proj == 'EPSG:4326'

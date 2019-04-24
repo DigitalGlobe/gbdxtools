@@ -51,12 +51,12 @@ class IkonosImage(RDABaseImage):
 
         params = ortho_params(proj, gsd=gsd)
         if pansharpen is True:
-            ikonos = rda.IkonosPanSharpen(
+            ikonos = rda.IkonosPanSharpenTemplate(
                 panPath="{}/{}/{}_0000000:{}".format(bucket, prefix, prefix, 'panchromatic'),
                 multiPath="{}/{}/{}_0000000:{}".format(bucket, prefix, prefix, 'multispectral'),
                 nodeId="LocallyProjectivePanSharpen", **params)
 
         else:
-            ikonos = rda.Ikonos(path="{}/{}/{}_0000000:{}".format(bucket, prefix, prefix, spec), nodeId="Orthorectify",
+            ikonos = rda.IkonosTemplate(path="{}/{}/{}_0000000:{}".format(bucket, prefix, prefix, spec), nodeId="Orthorectify",
                                 **params)
         return ikonos

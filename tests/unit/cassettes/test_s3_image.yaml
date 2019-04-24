@@ -1,52 +1,117 @@
 interactions:
 - request:
-    body: !!python/unicode '{"edges": [], "nodes": [{"id": "eedff459-696c-59e0-9f03-4cdbea81566b",
-      "operator": "GdalImageRead", "parameters": {"path": "/vsis3/landsat-pds/c1/L8/139/045/LC08_L1TP_139045_20170304_20170316_01_T1/LC08_L1TP_139045_20170304_20170316_01_T1_B3.TIF"}}]}'
+    body: null
     headers:
-      Accept: ['*/*']
-      Accept-Encoding: ['gzip, deflate']
-      Connection: [keep-alive]
-      Content-Length: ['250']
-      Content-Type: [application/json]
-      User-Agent: [python-requests/2.18.4]
-    method: POST
-    uri: https://rda.geobigdata.io/v1/graph
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.21.0
+    method: GET
+    uri: https://rda.geobigdata.io/v1/template/metadata/search?free-text=S3ImageTemplate
   response:
-    body: {string: !!python/unicode b28acb34f78f5fdb989795f1bcd161a2327e0a1b4d17daa3c7246e1dee2ea6ac}
+    body:
+      string: '[{"isPublic":false,"keywords":["S3ImageTemplate"],"sensors":["S3Image"],"keynodes":[{"id":"Reproject","description":"Reproject"}],"description":"S3Image
+        and Reproject","metadataAuthor":{"firstName":"Brett","familyName":"Cullen","email":"brett.cullen@digitalglobe.com"},"templateAuthor":{"firstName":"Brett","familyName":"Cullen","email":"brett.cullen@digitalglobe.com"},"datePublished":"2019-04-17T19:58:12.208Z","name":"S3ImageTemplate","templateId":"b2a944d3dc46ba8dc010764d71c8f6b974d4e86b06504cd840c0bb572972a1ce","id":"a0a73524eee3460487043f0ac64b524c"}]'
     headers:
-      access-control-allow-headers: ['x-requested-with, X-Auth-Token, Content-Type,
-          Authorization']
-      access-control-allow-methods: ['GET, OPTIONS, HEAD, PUT, POST, DELETE']
-      access-control-allow-origin: ['*']
-      access-control-max-age: ['3600']
-      connection: [keep-alive]
-      content-length: ['64']
-      content-type: [text/plain;charset=UTF-8]
-      date: ['Tue, 08 May 2018 03:01:42 GMT']
-    status: {code: 200, message: ''}
+      Access-Control-Allow-Headers:
+      - x-requested-with, X-Auth-Token, Content-Type, Authorization
+      Access-Control-Allow-Methods:
+      - GET, OPTIONS, HEAD, PUT, POST, DELETE
+      Access-Control-Allow-Origin:
+      - '*'
+      Access-Control-Max-Age:
+      - '3600'
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '559'
+      Content-Type:
+      - application/json
+      Date:
+      - Tue, 23 Apr 2019 21:31:02 GMT
+    status:
+      code: 200
+      message: ''
 - request:
     body: null
     headers:
-      Accept: ['*/*']
-      Accept-Encoding: ['gzip, deflate']
-      Connection: [keep-alive]
-      User-Agent: [python-requests/2.18.4]
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.21.0
     method: GET
-    uri: https://rda.geobigdata.io/v1/metadata/b28acb34f78f5fdb989795f1bcd161a2327e0a1b4d17daa3c7246e1dee2ea6ac/eedff459-696c-59e0-9f03-4cdbea81566b/metadata.json
+    uri: https://rda.geobigdata.io/v1/template/b2a944d3dc46ba8dc010764d71c8f6b974d4e86b06504cd840c0bb572972a1ce
   response:
-    body: {string: !!python/unicode '{"imageMetadata":{"imageId":"/vsis3/landsat-pds/c1/L8/139/045/LC08_L1TP_139045_20170304_20170316_01_T1/LC08_L1TP_139045_20170304_20170316_01_T1_B3.TIF","version":1.1,"profileName":"georectified_image","tilePartition":"0000","tileXOffset":0,"tileYOffset":0,"numXTiles":15,"numYTiles":16,"tileXSize":512,"tileYSize":512,"numBands":1,"dataType":"UNSIGNED_SHORT","imageHeight":7771,"imageWidth":7611,"colorInterpretation":"PAN","imageBoundsWGS84":"POLYGON
+    body:
+      string: '{"id":"b2a944d3dc46ba8dc010764d71c8f6b974d4e86b06504cd840c0bb572972a1ce","defaultNodeId":"GdalImageRead","edges":[{"id":"edge-1","index":1,"source":"GdalImageRead","destination":"Reproject"}],"nodes":[{"id":"Reproject","operator":"Reproject","parameters":{"Dest
+        pixel-to-world transform":"","Resampling Kernel":"INTERP_BILINEAR","Source
+        SRS Code":"${SourceSRSCode}","Source pixel-to-world transform":"","Dest SRS
+        Code":"${DestSRSCode}","Background Values":"[0]"}},{"id":"GdalImageRead","operator":"GdalImageRead","parameters":{"path":"${path}"}}]}'
+    headers:
+      Access-Control-Allow-Headers:
+      - x-requested-with, X-Auth-Token, Content-Type, Authorization
+      Access-Control-Allow-Methods:
+      - GET, OPTIONS, HEAD, PUT, POST, DELETE
+      Access-Control-Allow-Origin:
+      - '*'
+      Access-Control-Max-Age:
+      - '3600'
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '547'
+      Content-Type:
+      - application/json
+      Date:
+      - Tue, 23 Apr 2019 21:31:02 GMT
+    status:
+      code: 200
+      message: ''
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.21.0
+    method: GET
+    uri: https://rda.geobigdata.io/v1/template/b2a944d3dc46ba8dc010764d71c8f6b974d4e86b06504cd840c0bb572972a1ce/metadata?path=%2Fvsis3%2Flandsat-pds%2Fc1%2FL8%2F139%2F045%2FLC08_L1TP_139045_20170304_20170316_01_T1%2FLC08_L1TP_139045_20170304_20170316_01_T1_B3.TIF
+  response:
+    body:
+      string: '{"imageMetadata":{"imageId":"/vsis3/landsat-pds/c1/L8/139/045/LC08_L1TP_139045_20170304_20170316_01_T1/LC08_L1TP_139045_20170304_20170316_01_T1_B3.TIF","version":1.1,"profileName":"georectified_image","tilePartition":"0000","tileXOffset":0,"tileYOffset":0,"numXTiles":15,"numYTiles":16,"tileXSize":512,"tileYSize":512,"numBands":1,"dataType":"UNSIGNED_SHORT","imageHeight":7771,"imageWidth":7611,"colorInterpretation":"PAN","imageBoundsWGS84":"POLYGON
         ((85.8528200258007 22.715800302536994, 88.07610888865464 22.7162943635233,
         88.06059800714235 20.61034932140382, 85.86935479669117 20.609905339496233,
-        85.8528200258007 22.715800302536994))","groundSampleDistanceMeters":30.0,"minX":0,"minY":0,"maxX":7610,"maxY":7770,"minTileX":0,"minTileY":0,"maxTileX":14,"maxTileY":15},"imageGeoreferencing":{"spatialReferenceSystemCode":"EPSG:32645","scaleX":30.0,"scaleY":-30.0,"translateX":382185.0,"translateY":2512515.0,"shearX":0.0,"shearY":0.0},"rpcSensorModel":null,"histogram":null,"sensorMetadata":null,"imageAssociations":null,"rrdMetadata":{"reducedResolutionDataset":[{"sourceImage":"/vsis3/landsat-pds/c1/L8/139/045/LC08_L1TP_139045_20170304_20170316_01_T1/LC08_L1TP_139045_20170304_20170316_01_T1_B3.TIF","targetImage":"/vsis3/landsat-pds/c1/L8/139/045/LC08_L1TP_139045_20170304_20170316_01_T1/LC08_L1TP_139045_20170304_20170316_01_T1_B3.TIF","inverseScaleFactor":3.0},{"sourceImage":"/vsis3/landsat-pds/c1/L8/139/045/LC08_L1TP_139045_20170304_20170316_01_T1/LC08_L1TP_139045_20170304_20170316_01_T1_B3.TIF","targetImage":"/vsis3/landsat-pds/c1/L8/139/045/LC08_L1TP_139045_20170304_20170316_01_T1/LC08_L1TP_139045_20170304_20170316_01_T1_B3.TIF","inverseScaleFactor":9.0},{"sourceImage":"/vsis3/landsat-pds/c1/L8/139/045/LC08_L1TP_139045_20170304_20170316_01_T1/LC08_L1TP_139045_20170304_20170316_01_T1_B3.TIF","targetImage":"/vsis3/landsat-pds/c1/L8/139/045/LC08_L1TP_139045_20170304_20170316_01_T1/LC08_L1TP_139045_20170304_20170316_01_T1_B3.TIF","inverseScaleFactor":27.0},{"sourceImage":"/vsis3/landsat-pds/c1/L8/139/045/LC08_L1TP_139045_20170304_20170316_01_T1/LC08_L1TP_139045_20170304_20170316_01_T1_B3.TIF","targetImage":"/vsis3/landsat-pds/c1/L8/139/045/LC08_L1TP_139045_20170304_20170316_01_T1/LC08_L1TP_139045_20170304_20170316_01_T1_B3.TIF","inverseScaleFactor":81.0}]}}'}
+        85.8528200258007 22.715800302536994))","groundSampleDistanceMeters":30.0,"minX":0,"minY":0,"maxX":7610,"maxY":7770,"minTileX":0,"minTileY":0,"maxTileX":14,"maxTileY":15},"imageGeoreferencing":{"spatialReferenceSystemCode":"EPSG:32645","scaleX":30.0,"scaleY":-30.0,"translateX":382185.0,"translateY":2512515.0,"shearX":0.0,"shearY":0.0},"rpcSensorModel":null,"histogram":null,"sensorMetadata":null,"imageAssociations":null,"rrdMetadata":{"reducedResolutionDataset":[{"sourceImage":"/vsis3/landsat-pds/c1/L8/139/045/LC08_L1TP_139045_20170304_20170316_01_T1/LC08_L1TP_139045_20170304_20170316_01_T1_B3.TIF","targetImage":"/vsis3/landsat-pds/c1/L8/139/045/LC08_L1TP_139045_20170304_20170316_01_T1/LC08_L1TP_139045_20170304_20170316_01_T1_B3.TIF","inverseScaleFactor":3.0},{"sourceImage":"/vsis3/landsat-pds/c1/L8/139/045/LC08_L1TP_139045_20170304_20170316_01_T1/LC08_L1TP_139045_20170304_20170316_01_T1_B3.TIF","targetImage":"/vsis3/landsat-pds/c1/L8/139/045/LC08_L1TP_139045_20170304_20170316_01_T1/LC08_L1TP_139045_20170304_20170316_01_T1_B3.TIF","inverseScaleFactor":9.0},{"sourceImage":"/vsis3/landsat-pds/c1/L8/139/045/LC08_L1TP_139045_20170304_20170316_01_T1/LC08_L1TP_139045_20170304_20170316_01_T1_B3.TIF","targetImage":"/vsis3/landsat-pds/c1/L8/139/045/LC08_L1TP_139045_20170304_20170316_01_T1/LC08_L1TP_139045_20170304_20170316_01_T1_B3.TIF","inverseScaleFactor":27.0},{"sourceImage":"/vsis3/landsat-pds/c1/L8/139/045/LC08_L1TP_139045_20170304_20170316_01_T1/LC08_L1TP_139045_20170304_20170316_01_T1_B3.TIF","targetImage":"/vsis3/landsat-pds/c1/L8/139/045/LC08_L1TP_139045_20170304_20170316_01_T1/LC08_L1TP_139045_20170304_20170316_01_T1_B3.TIF","inverseScaleFactor":81.0}]}}'
     headers:
-      access-control-allow-headers: ['x-requested-with, X-Auth-Token, Content-Type,
-          Authorization']
-      access-control-allow-methods: ['GET, OPTIONS, HEAD, PUT, POST, DELETE']
-      access-control-allow-origin: ['*']
-      access-control-max-age: ['3600']
-      connection: [keep-alive]
-      content-length: ['2283']
-      content-type: [application/json;charset=UTF-8]
-      date: ['Tue, 08 May 2018 03:01:44 GMT']
-    status: {code: 200, message: ''}
+      Access-Control-Allow-Headers:
+      - x-requested-with, X-Auth-Token, Content-Type, Authorization
+      Access-Control-Allow-Methods:
+      - GET, OPTIONS, HEAD, PUT, POST, DELETE
+      Access-Control-Allow-Origin:
+      - '*'
+      Access-Control-Max-Age:
+      - '3600'
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '2283'
+      Content-Type:
+      - application/json
+      Date:
+      - Tue, 23 Apr 2019 21:31:07 GMT
+    status:
+      code: 200
+      message: ''
 version: 1

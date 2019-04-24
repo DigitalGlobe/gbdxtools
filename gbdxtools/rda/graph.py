@@ -41,13 +41,39 @@ def get_rda_graph(conn, graph_id):
     else:
         raise NotFound("No RDA graph found matching id: {}".format(graph_id))
 
+
 def get_rda_graph_template(conn, template_id):
+    # search for template metadata for template ID
+    template_id = _search_for_rda_template(conn, template_id)
     url = "{}/template/{}".format(VIRTUAL_RDA_URL, template_id)
     req = resolve_if_future(conn.get(url))
     if req.status_code == 200:
         return req.json()
     else:
         raise NotFound("No RDA Template found matching id: {}".format(template_id))
+
+
+def _search_for_rda_template(conn, template_name):
+    """
+    Searches for template Id, eventually RDA will have named templates and this method goes away.
+    :param conn:
+    :param template_name:
+    :return:
+    """
+    url = "{}/template/metadata/search?free-text={}".format(VIRTUAL_RDA_URL, template_name)
+    req = resolve_if_future(conn.get(url))
+    if req.status_code == 200:
+        request_json = req.json()
+        # make sure list is not empty
+        if request_json is not None:
+            # make sure list contains 1 entry
+            for template in request_json:
+                if template.get("name") == template_name:
+                    # parse template Id
+                    return template.get("templateId")
+
+    # if anything fails, raise as we should always get a template Id
+    raise Exception("Error fetching template Id")
 
 
 def register_rda_graph(conn, rda_graph):

@@ -53,9 +53,9 @@ class LandsatImage(RDABaseImage):
             raise IncompatibleOptions('Cannot generate a pansharpened thermal Landsat image')
 
         if pansharpen is True:
-            landsat = rda.LandsatPanSharpen(catalogIdMultispectral=_id, catalogIdPanchromatic=_id)
+            landsat = rda.LandsatPanSharpenTemplate(catalogIdMultispectral=_id, catalogIdPanchromatic=_id)
         else:
-            landsat = rda.Landsat(landsatId=_id, productSpec=spec)
+            landsat = rda.LandsatTemplate(catalogId=_id, productSpec=spec)
         if proj is not None:
             landsat = landsat(nodeId="Reproject", **reproject_params(proj))
         return landsat

@@ -1,4 +1,5 @@
 Idaho = {
+    "defaultNodeId": "GeospatialCrop",
     "edges": [
         {
             "id": "edge-2",

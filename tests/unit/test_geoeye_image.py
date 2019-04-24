@@ -13,6 +13,7 @@ import vcr
 from os.path import join, isfile, dirname, realpath
 import tempfile
 import unittest
+import pytest
 import dask.array as da
 
 def force(r1, r2):
@@ -30,7 +31,7 @@ my_vcr.match_on = ['force']
 # 5. Replace the real gbdx token with "dummytoken" again
 # 6. Edit the cassette to remove any possibly sensitive information (s3 creds for example)
 
-
+@pytest.mark.skip(reason="Catalog Id's must be of Product type, not Acquisition")
 class GE01ImageTest(unittest.TestCase):
 
     _temp_path = None

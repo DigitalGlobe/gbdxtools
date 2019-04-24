@@ -15,9 +15,9 @@ S3Image = {
             "parameters": {
                 "Dest pixel-to-world transform": "",
                 "Resampling Kernel": "INTERP_BILINEAR",
-                "Source SRS Code": "${Source SRS Code}",
+                "Source SRS Code": "${SourceSRSCode}",
                 "Source pixel-to-world transform": "",
-                "Dest SRS Code": "${Dest SRS Code}",
+                "Dest SRS Code": "${DestSRSCode}",
                 "Background Values": "[0]"
             }
         },

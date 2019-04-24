@@ -1,5 +1,5 @@
 Sentinel2 = {
-    "defaultNodeId": "SentinelRead",
+    "defaultNodeId": "Reproject",
     "edges": [{
         "destination": "Reproject",
         "id": "edge-1",
@@ -28,7 +28,7 @@ Sentinel2 = {
 }
 
 Sentinel1 = {
-    "defaultNodeId": "SentinelRead",
+    "defaultNodeId": "Reproject",
     "edges": [{
         "destination": "Reproject",
         "id": "edge-1",

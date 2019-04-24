@@ -11,6 +11,43 @@ interactions:
       User-Agent:
       - python-requests/2.21.0
     method: GET
+    uri: https://rda.geobigdata.io/v1/template/metadata/search?free-text=LandsatPanSharpenTemplate
+  response:
+    body:
+      string: '[{"isPublic":false,"keywords":["LandsatPanSharpenTemplate"],"sensors":["LandsatPanSharpen"],"keynodes":[{"id":"LocallyProjectivePanSharpen","description":"LocallyProjectivePanSharpen"}],"description":"LandsatPanSharpen
+        and LocallyProjectivePanSharpen","metadataAuthor":{"firstName":"Brett","familyName":"Cullen","email":"brett.cullen@digitalglobe.com"},"templateAuthor":{"firstName":"Brett","familyName":"Cullen","email":"brett.cullen@digitalglobe.com"},"datePublished":"2019-04-16T20:05:57.109Z","name":"LandsatPanSharpenTemplate","templateId":"d69cfa9981d778e67f2c62343b3e5d60ef194e46b8187f218e739939fc5b0297","id":"cdd6eef185f746c6a5656518f469ee18"}]'
+    headers:
+      Access-Control-Allow-Headers:
+      - x-requested-with, X-Auth-Token, Content-Type, Authorization
+      Access-Control-Allow-Methods:
+      - GET, OPTIONS, HEAD, PUT, POST, DELETE
+      Access-Control-Allow-Origin:
+      - '*'
+      Access-Control-Max-Age:
+      - '3600'
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '653'
+      Content-Type:
+      - application/json
+      Date:
+      - Tue, 23 Apr 2019 21:57:28 GMT
+    status:
+      code: 200
+      message: ''
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.21.0
+    method: GET
     uri: https://rda.geobigdata.io/v1/template/d69cfa9981d778e67f2c62343b3e5d60ef194e46b8187f218e739939fc5b0297
   response:
     body:
@@ -33,7 +70,7 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Tue, 09 Apr 2019 17:32:30 GMT
+      - Tue, 23 Apr 2019 21:57:29 GMT
     status:
       code: 200
       message: ''
@@ -73,7 +110,7 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Tue, 09 Apr 2019 17:32:38 GMT
+      - Tue, 23 Apr 2019 21:57:37 GMT
     status:
       code: 200
       message: ''

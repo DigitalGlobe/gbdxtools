@@ -28,7 +28,7 @@ class RadarsatImageTest(unittest.TestCase):
     @my_vcr.use_cassette('tests/unit/cassettes/test_radarsat_image.yaml', filter_headers=['authorization'])
     def test_radarsat_image(self):
         _id = '610476'
-        img = self.gbdx.catalog_image(_id)
+        img = self.gbdx.catalog_image(_id, proj=None)
         self.assertTrue(isinstance(img, Radarsat))
         assert img.shape == (1, 42104, 38482)
         assert img.proj == 'EPSG:4326'
@@ -38,5 +38,5 @@ class RadarsatImageTest(unittest.TestCase):
         _id = '610476'
         img = self.gbdx.catalog_image(_id, proj="EPSG:3857")
         self.assertTrue(isinstance(img, Radarsat))
-        assert img.shape == (1, 59725, 56016)
+        assert img.shape == (1, 59725, 56010)
         assert img.proj == 'EPSG:3857'

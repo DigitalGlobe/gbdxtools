@@ -33,7 +33,7 @@ class Modis(RDABaseImage):
 
     @classmethod
     def _build_graph(cls, cat_id, proj=None, **kwargs):
-        modis = rda.Modis(modisId=cat_id)
+        modis = rda.ModisTemplate(modisId=cat_id)
         if proj is not None:
             modis = modis(nodeId="Reproject", **reproject_params(proj))
         return modis

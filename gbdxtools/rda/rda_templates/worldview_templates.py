@@ -11,6 +11,12 @@ DigitalGlobeStrip = {
             "index": 1,
             "source": "DigitalGlobeStrip",
             "destination": "RadiometricDRA"
+        },
+        {
+            "id": "edge-3",
+            "index": 1,
+            "source": "DigitalGlobeStrip",
+            "destination": "SmartBandSelect"
         }
     ],
     "nodes": [
@@ -37,6 +43,13 @@ DigitalGlobeStrip = {
             "id": "RadiometricDRA",
             "operator": "RadiometricDRA",
             "parameters": {}
+        },
+        {
+            "id": "SmartBandSelect",
+            "operator": "SmartBandSelect",
+            "parameters": {
+                "bandSelection": "${bandSelection:-All}"
+            }
         }
     ],
     "defaultNodeId": "Format"

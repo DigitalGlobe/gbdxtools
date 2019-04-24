@@ -39,7 +39,7 @@ class Sentinel2(RDABaseImage):
 
     @classmethod
     def _build_graph(cls, prefix, spec="10m", proj=None, **kwargs):
-        sentinel2 = rda.Sentinel2(sentinelId=prefix, sentinelProductSpec=spec)
+        sentinel2 = rda.Sentinel2Template(sentinelId=prefix, sentinelProductSpec=spec, nodeId="Sentinel2Read")
         if proj is not None:
             sentinel2 = sentinel2(nodeId="Reproject", **reproject_params(proj))
         return sentinel2
@@ -71,7 +71,7 @@ class Sentinel1(RDABaseImage):
 
     @classmethod
     def _build_graph(cls, catID, polarization="VH", proj=None, **kwargs):
-        sentinel1 = rda.Sentinel1(sentinelId=catID, sentinel1Polarization=polarization)
+        sentinel1 = rda.Sentinel1Template(sentinelId=catID, sentinel1Polarization=polarization, nodeId="Sentinel1Read")
         if proj is not None:
             sentinel1 = sentinel1(nodeId="Reproject", **reproject_params(proj))
         return sentinel1

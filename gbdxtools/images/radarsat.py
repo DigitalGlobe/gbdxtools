@@ -23,14 +23,14 @@ class Radarsat(RDABaseImage):
         return self.__rda_id__
 
     @classmethod
-    def _build_graph(cls, record, proj="EPSG:4326", gsd=None, **kwargs):
+    def _build_graph(cls, record, proj=None, gsd=None):
         try:
             prefix = record['properties']['attributes']['bucketPrefix']
             bucket = record['properties']['attributes']['bucketName']
         except Exception:
             raise AttributeError(
                 "Radarsat Record missing bucketPrefix and bucketName. Most likely this is permissions issue.")
-        radarsat = rda.Radarsat(path=os.path.join(bucket, prefix))
+        radarsat = rda.RadarsatTemplate(path=os.path.join(bucket, prefix), nodeId="RadarsatRead")
         if proj is not None:
             params = ortho_params(proj, gsd=gsd)
             radarsat(nodeId="Orthorectify", **params)
