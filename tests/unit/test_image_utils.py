@@ -52,7 +52,7 @@ class ImageUtilTest(unittest.TestCase):
     @my_vcr.use_cassette('tests/unit/cassettes/test_image_ordered_fails_with_non_dg_cat_id.yaml', filter_headers=['authorization'])
     def test_image_ordered_fails_with_non_dg_cat_id(self):
         """
-        Test that a non DG cat Id raises exception when checking `is_ordered` method
+        Test that a non DG cat Id raises exception when checking `is_available_in_gbdx` method
         :return:
         """
         with self.assertRaises(Exception):
