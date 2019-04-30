@@ -32,10 +32,21 @@ class ImageUtilTest(unittest.TestCase):
         self.assertTrue(can_acomp)
 
     @my_vcr.use_cassette('tests/unit/cassettes/test_image_ordered.yaml', filter_headers=['authorization'])
-    def test_image_ordered(self):
-        ordered = CatalogImage.is_ordered('104001002ABEA500')
+    def test_is_available_in_gbdx(self):
+        ordered = CatalogImage.is_available_in_gbdx('104001002ABEA500')
         self.assertFalse(ordered)
-        ordered = CatalogImage.is_ordered('1030010076B8F500')
+        ordered = CatalogImage.is_available_in_gbdx('1030010076B8F500')
+        self.assertTrue(ordered)
+
+    @my_vcr.use_cassette('tests/unit/cassettes/test_is_available_in_rda.yaml', filter_headers=['authorization'])
+    def test_is_available_in_rda(self):
+        """
+        Test that is_ordered checks RDA for strip metadata
+        :return:
+        """
+        ordered = CatalogImage.is_ordered('1050410000B1BD00')
+        self.assertFalse(ordered)
+        ordered = CatalogImage.is_ordered('104001002ABEA500')
         self.assertTrue(ordered)
 
     @my_vcr.use_cassette('tests/unit/cassettes/test_image_ordered_fails_with_non_dg_cat_id.yaml', filter_headers=['authorization'])
@@ -46,4 +57,4 @@ class ImageUtilTest(unittest.TestCase):
         """
         with self.assertRaises(Exception):
             # landsat is not a DG catalog Id
-            CatalogImage.is_ordered('LC80380302013160LGN00')
+            CatalogImage.is_available_in_gbdx('LC80380302013160LGN00')

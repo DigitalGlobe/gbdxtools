@@ -53,6 +53,23 @@ def _req_with_retries(conn, url, retries=5):
 
 def is_ordered(cat_id):
     """
+      Checks to see if a CatalogID has been ordered or not.
+
+      Args:
+        catalogID (str): The catalog ID from the platform catalog.
+      Returns:
+        ordered (bool): Whether or not the image has been ordered
+    """
+    url = 'https://rda.geobigdata.io/v1/stripMetadata/{}'.format(cat_id)
+    auth = Auth()
+    r = _req_with_retries(auth.gbdx_connection, url)
+    if r is not None:
+        return r.status_code == 200
+    return False
+
+
+def is_available_in_gbdx(cat_id):
+    """
     Checks to see if a DG Catalog ID is ordered from GBDX ordering API.
     :param cat_id: DG catalog id
     :return: bool: True if the catalog id was delivered, False otherwise

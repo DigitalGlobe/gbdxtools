@@ -6,7 +6,7 @@ Contact: chris.helm@digitalglobe.com
 from gbdxtools import WV01, WV02, WV03_SWIR, WV03_VNIR, WV04, LandsatImage, IkonosImage, GE01, QB02, Sentinel2, Sentinel1, Radarsat, Modis
 from gbdxtools.images.rda_image import RDAImage, GraphMeta
 from gbdxtools.rda.error import UnsupportedImageType
-from gbdxtools.images.util.image import vector_services_query, can_acomp, is_ordered
+from gbdxtools.images.util.image import vector_services_query, can_acomp, is_ordered, is_available_in_gbdx
 
 from shapely import wkt
 from shapely.geometry import box
@@ -58,6 +58,14 @@ class CatalogImage(object):
           ordered (bool): Whether or not the image has been ordered
       """
       return is_ordered(cat_id)
+
+    @classmethod
+    def is_available_in_gbdx(cls, cat_id):
+        """
+        Checks to see if a DG Catalog ID is ordered from GBDX ordering API.
+        :return: True is ordered/delivered, False otherwise
+        """
+        return is_available_in_gbdx(cat_id)
 
     @classmethod
     def acomp_available(cls, cat_id):
