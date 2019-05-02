@@ -24,14 +24,14 @@ def get_graph_stats(conn, graph_id, node_id):
     else:
         raise NotFound("Could not fetch stats for graph/node: {} / {}".format(graph_id, node_id))
 
-def get_template_stats(conn, graph_id, node_id, **kwargs):
+def get_template_stats(conn, template_id, **kwargs):
     qs = urlencode(kwargs)
-    url = "{}/template/{}/display_stats.json?nodeId={}&{}".format(VIRTUAL_RDA_URL, graph_id, node_id, qs)
+    url = "{}/template/{}/display_stats.json?{}".format(VIRTUAL_RDA_URL, template_id, qs)
     req = resolve_if_future(conn.get(url))
     if req.status_code == 200:
         return req.json()
     else:
-        raise NotFound("Could not fetch stats for graph/node: {} / {}".format(graph_id, node_id))
+        raise NotFound("Could not fetch stats for template/args: {} / {}".format(template_id, kwargs))
 
 def get_rda_graph(conn, graph_id):
     url = "{}/graph/{}".format(VIRTUAL_RDA_URL, graph_id)

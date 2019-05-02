@@ -52,8 +52,7 @@ class TemplateMeta(GraphMeta):
             'The use of display_stats has been deprecated. For scaling imagery use histograms in the image metdata.')
         assert self.graph() is not None
         if self._rda_stats is None:
-            self._rda_stats = get_template_stats(self._interface.gbdx_futures_session, self._rda_id, self._id,
-                                                 **self._params)
+            self._rda_stats = get_template_stats(self._interface.gbdx_futures_session, self._template_id, **self._params)
         return self._rda_stats
 
     def graph(self):

@@ -9,7 +9,6 @@ from gbdxtools.deprecate import deprecate_module_attr
 class Op(TemplateMeta):
     def __init__(self, name, interface=None, **kwargs):
         super(Op, self).__init__(name=name, **kwargs)
-        self._operator = name
         self._rda_id = None     # The graph ID
         self._rda_graph = None  # the RDA graph
         self._rda_meta = None   # Image metadata
