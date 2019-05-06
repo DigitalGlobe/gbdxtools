@@ -15,6 +15,7 @@
                 "source": "IdahoRead"
             }
         ],
+        "id": "IdahoTemplate",
         "nodes": [
             {
                 "id": "Reproject",
@@ -55,6 +56,7 @@
                 "source": "IkonosRead"
             }
         ],
+        "id": "IkonosTemplate",
         "nodes": [
             {
                 "id": "Orthorectify",
@@ -103,6 +105,7 @@
                 "source": "IkonosReadPan"
             }
         ],
+        "id": "IkonosPanSharpenTemplate",
         "nodes": [
             {
                 "id": "LocallyProjectivePanSharpen",
@@ -156,6 +159,7 @@
                 "source": "LandsatRead"
             }
         ],
+        "id": "LandsatTemplate",
         "nodes": [
             {
                 "id": "Reproject",
@@ -199,6 +203,7 @@
                 "source": "LocallyProjectivePanSharpen"
             }
         ],
+        "id": "LandsatPanSharpenTemplate",
         "nodes": [
             {
                 "id": "Reproject",
@@ -243,6 +248,7 @@
                 "source": "ModisRead"
             }
         ],
+        "id": "ModisTemplate",
         "nodes": [
             {
                 "id": "Reproject",
@@ -273,6 +279,7 @@
                 "source": "RadarsatRead"
             }
         ],
+        "id": "RadarsatTemplate",
         "nodes": [
             {
                 "id": "Orthorectify",
@@ -303,6 +310,7 @@
                 "source": "GdalImageRead"
             }
         ],
+        "id": "S3ImageTemplate",
         "nodes": [
             {
                 "id": "Reproject",
@@ -335,6 +343,7 @@
                 "source": "Sentinel1Read"
             }
         ],
+        "id": "Sentinel1Template",
         "nodes": [
             {
                 "id": "Reproject",
@@ -366,6 +375,7 @@
                 "source": "Sentinel2Read"
             }
         ],
+        "id": "Sentinel2Template",
         "nodes": [
             {
                 "id": "Reproject",
@@ -390,6 +400,7 @@
     {
         "defaultNodeId": "DigitalGlobeImage",
         "edges": [],
+        "id": "DigitalGlobeImageTemplate",
         "nodes": [
             {
                 "id": "DigitalGlobeImage",
@@ -428,6 +439,7 @@
                 "source": "DigitalGlobeStrip"
             }
         ],
+        "id": "DigitalGlobeStripTemplate",
         "nodes": [
             {
                 "id": "Format",
