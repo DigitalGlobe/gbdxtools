@@ -2,7 +2,6 @@ import sys
 
 from gbdxtools.images.meta import DaskMeta, GeoDaskImage
 from gbdxtools.rda.util import RatPolyTransform, AffineTransform, deprecation, get_proj
-from gbdxtools.rda.interface import DaskProps
 from gbdxtools.rda.graph import get_rda_graph
 from gbdxtools.auth import Auth
 
@@ -27,7 +26,8 @@ def _reproject(geo, from_proj, to_proj):
         return ops.transform(tfm, geo)
     return geo
 
-class GraphMeta(DaskProps):
+
+class GraphMeta(object):
     def __init__(self, graph_id, node_id=None, **kwargs):
         assert graph_id is not None
         self._rda_id = graph_id
@@ -120,6 +120,7 @@ def rda_image_shift(image):
     minx, maxx = image.__geo__.minx, image.__geo__.maxx
     miny, maxy = image.__geo__.miny, image.__geo__.maxy
     return image[:, miny:maxy, minx:maxx]
+
 
 class RDAImage(GeoDaskImage):
     _default_proj = "EPSG:4326"

@@ -20,7 +20,7 @@ result = gbdx.vectors.aggregate_query(colorado_aoi, agg, query, index=search_ind
 # the result has a single-element list containing the top-level aggregation
 for entry in result[0]['terms']:  # the 'terms' field contains our buckets
     geohash_str = entry['term']  # the 'term' entry contains our geohash
-    print geohash_str
+    print(geohash_str)
     child_aggs = entry[ 'aggregations']  # the 'aggregations' field contains the child aggregations for the 'item_type' values
 
     # since the child aggregations have the same structure, we can walk it the same way.
@@ -30,4 +30,4 @@ for entry in result[0]['terms']:  # the 'terms' field contains our buckets
 
     # we could do something cool with these, but for now we'll just print them
     for item_type in types:
-        print '\t%s:%s' % (item_type, types[item_type])
+        print('\t%s:%s' % (item_type, types[item_type]))

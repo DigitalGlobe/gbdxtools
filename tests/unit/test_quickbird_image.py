@@ -13,6 +13,7 @@ import vcr
 from os.path import join, isfile, dirname, realpath
 import tempfile
 import unittest
+import pytest
 import dask.array as da
 
 def force(r1, r2):
@@ -31,6 +32,7 @@ my_vcr.match_on = ['force']
 # 6. Edit the cassette to remove any possibly sensitive information (s3 creds for example)
 
 
+@pytest.mark.skip(reason="Catalog Id's must be of Product type, not Acquisition")
 class GE01ImageTest(unittest.TestCase):
 
     _temp_path = None
@@ -44,7 +46,7 @@ class GE01ImageTest(unittest.TestCase):
     @my_vcr.use_cassette('tests/unit/cassettes/test_quickbird_image.yaml', filter_headers=['authorization'])
     def test_quickbird_image(self):
         _id = '1010010002B93F00'
-        img = self.gbdx.catalog_image(_id) 
+        img = self.gbdx.catalog_image(_id)
         self.assertTrue(isinstance(img, QB02))
         assert img.shape == (4, 37520, 9850)
         assert img.proj == 'EPSG:4326'
@@ -52,14 +54,14 @@ class GE01ImageTest(unittest.TestCase):
     @my_vcr.use_cassette('tests/unit/cassettes/test_quickbird_acomp.yaml', filter_headers=['authorization'])
     def test_quickbird_image_acomp(self):
         try:
-            _id = '1010010002B93F00'
+            _id = '1010010012D04200'
             img = self.gbdx.catalog_image(_id, acomp=True)
-        except AcompUnavailable:  
+        except AcompUnavailable:
             pass
 
     @my_vcr.use_cassette('tests/unit/cassettes/test_quickbird_image_proj.yaml', filter_headers=['authorization'])
     def test_quickbird_image_proj(self):
-        _id = '1010010002B93F00'
+        _id = '1010010012D04200'
         img = self.gbdx.catalog_image(_id, proj="EPSG:3857")
         self.assertTrue(isinstance(img, QB02))
         assert img.shape == (4, 42504, 8469)
@@ -67,14 +69,14 @@ class GE01ImageTest(unittest.TestCase):
 
     @my_vcr.use_cassette('tests/unit/cassettes/test_quickbird_image_pan.yaml', filter_headers=['authorization'])
     def test_quickbird_image_pan(self):
-        _id = '1010010002B93F00'
+        _id = '1010010012D04200'
         img = self.gbdx.catalog_image(_id, band_type="pan", bbox=[125.259159043295, 40.43603914103845, 125.27301998472511, 40.44990008246856])
         self.assertTrue(isinstance(img, QB02))
         assert img.shape == (1, 1999, 1998)
 
     @my_vcr.use_cassette('tests/unit/cassettes/test_quickbird_image_pansharpen.yaml', filter_headers=['authorization'])
     def test_quickbird_image_pansharpen(self):
-        _id = '1010010002B93F00'
+        _id = '1010010012D04200'
         img = self.gbdx.catalog_image(_id, pansharpen=True, bbox=[125.259159043295, 40.43603914103845, 125.27301998472511, 40.44990008246856])
         self.assertTrue(isinstance(img, QB02))
         assert img.shape == (4, 1999, 1998)

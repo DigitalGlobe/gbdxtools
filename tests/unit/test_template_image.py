@@ -5,21 +5,22 @@ Contact: dmarino@digitalglobe.com
 Unit tests for the gbdxtools.Idaho class
 '''
 
-from gbdxtools import Interface
 from gbdxtools import RDAImage
 from auth_mock import gbdx
 import vcr
-from os.path import join, isfile, dirname, realpath
 import tempfile
 import unittest
-import dask.array as da
+
+
 
 def force(r1, r2):
     return True
 
+
 my_vcr = vcr.VCR()
 my_vcr.register_matcher('force', force)
 my_vcr.match_on = ['force']
+
 
 # How to use the mock_gbdx_session and vcr to create unit tests:
 # 1. Add a new test that is dependent upon actually hitting GBDX APIs.
@@ -31,7 +32,6 @@ my_vcr.match_on = ['force']
 
 
 class TemplateImageTest(unittest.TestCase):
-
     _temp_path = None
 
     @classmethod
@@ -42,13 +42,14 @@ class TemplateImageTest(unittest.TestCase):
 
     @my_vcr.use_cassette('tests/unit/cassettes/test_template_image.yaml', filter_headers=['authorization'])
     def test_template_image(self):
-        img = self.gbdx.rda_template_image('DigitalGlobeStrip',
-                       catalogId='e9d158c6-2af0-481d-a1f0-d82b7234db33-inv', 
-                       correctionType='AComp', 
-                       draType='HistogramDRA', 
-                       bands='PanSharp', 
-                       bandSelection='RGB', 
-                       crs='UTM')
+        img = self.gbdx.rda_template_image('DigitalGlobeStripTemplate',
+                                           catId='e9d158c6-2af0-481d-a1f0-d82b7234db33-inv',
+                                           correctionType='AComp',
+                                           draType='HistogramDRA',
+                                           bands='PanSharp',
+                                           bandSelection='RGB',
+                                           crs='UTM',
+                                           nodeId="SmartBandSelect")
         self.assertTrue(isinstance(img, RDAImage))
-        assert img.shape == (3, 95278, 42775)
+        assert img.shape == (3, 116277, 52241)
         assert img.proj == 'EPSG:32632'

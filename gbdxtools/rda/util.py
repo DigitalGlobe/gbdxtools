@@ -223,9 +223,9 @@ def preview(image, **kwargs):
 def reproject_params(proj):
     _params = {}
     if proj is not None:
-        _params["Source SRS Code"] = "EPSG:4326"
+        _params["SourceSRSCode"] = "EPSG:4326"
         _params["Source pixel-to-world transform"] = None
-        _params["Dest SRS Code"] = proj
+        _params["DestSRSCode"] = proj
         _params["Dest pixel-to-world transform"] = None
     return _params
 

@@ -1,61 +1,117 @@
 interactions:
 - request:
-    body: '{"edges": [{"destination": "7befa7c2-7fde-527a-ae2c-d5478ba6e143", "id":
-      "8f7985bb-1318-5fbc-943d-576d76cb5ef7", "index": 1, "source": "7d130cd0-3bd2-59be-80d0-0f7160ce0cfa"},
-      {"destination": "7befa7c2-7fde-527a-ae2c-d5478ba6e143", "id": "84073d97-c245-50ba-adf4-36562260f201",
-      "index": 2, "source": "25f12b47-9db6-51e5-8f91-51dd22cf2fb7"}], "nodes": [{"id":
-      "7befa7c2-7fde-527a-ae2c-d5478ba6e143", "operator": "LocallyProjectivePanSharpen",
-      "parameters": {}}, {"id": "7d130cd0-3bd2-59be-80d0-0f7160ce0cfa", "operator":
-      "LandsatRead", "parameters": {"landsatId": "LC80370302014268LGN00", "productSpec":
-      "multispectral"}}, {"id": "25f12b47-9db6-51e5-8f91-51dd22cf2fb7", "operator":
-      "LandsatRead", "parameters": {"landsatId": "LC80370302014268LGN00", "productSpec":
-      "panchromatic"}}]}'
+    body: null
     headers:
-      Accept: ['*/*']
-      Accept-Encoding: ['gzip, deflate']
-      Connection: [keep-alive]
-      Content-Length: ['782']
-      Content-Type: [application/json]
-      User-Agent: [python-requests/2.18.4]
-    method: POST
-    uri: https://rda.geobigdata.io/v1/graph
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.21.0
+    method: GET
+    uri: https://rda.geobigdata.io/v1/template/metadata/search?free-text=LandsatPanSharpenTemplate
   response:
-    body: {string: 1cfdad9dbb81c8503631305922a500005b7e847248185395cfb75a45422d1deb}
+    body:
+      string: '[{"isPublic":false,"keywords":["LandsatPanSharpenTemplate"],"sensors":["LandsatPanSharpen"],"keynodes":[{"id":"LocallyProjectivePanSharpen","description":"LocallyProjectivePanSharpen"}],"description":"LandsatPanSharpen
+        and LocallyProjectivePanSharpen","metadataAuthor":{"firstName":"Brett","familyName":"Cullen","email":"brett.cullen@digitalglobe.com"},"templateAuthor":{"firstName":"Brett","familyName":"Cullen","email":"brett.cullen@digitalglobe.com"},"datePublished":"2019-04-16T20:05:57.109Z","name":"LandsatPanSharpenTemplate","templateId":"d69cfa9981d778e67f2c62343b3e5d60ef194e46b8187f218e739939fc5b0297","id":"cdd6eef185f746c6a5656518f469ee18"}]'
     headers:
-      Access-Control-Allow-Headers: ['x-requested-with, X-Auth-Token, Content-Type,
-          Authorization']
-      Access-Control-Allow-Methods: ['GET, OPTIONS, HEAD, PUT, POST, DELETE']
-      Access-Control-Allow-Origin: ['*']
-      Access-Control-Max-Age: ['3600']
-      Connection: [keep-alive]
-      Content-Length: ['64']
-      Content-Type: [text/plain;charset=UTF-8]
-      Date: ['Wed, 08 Aug 2018 15:14:01 GMT']
-    status: {code: 200, message: ''}
+      Access-Control-Allow-Headers:
+      - x-requested-with, X-Auth-Token, Content-Type, Authorization
+      Access-Control-Allow-Methods:
+      - GET, OPTIONS, HEAD, PUT, POST, DELETE
+      Access-Control-Allow-Origin:
+      - '*'
+      Access-Control-Max-Age:
+      - '3600'
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '653'
+      Content-Type:
+      - application/json
+      Date:
+      - Tue, 23 Apr 2019 21:57:28 GMT
+    status:
+      code: 200
+      message: ''
 - request:
     body: null
     headers:
-      Accept: ['*/*']
-      Accept-Encoding: ['gzip, deflate']
-      Connection: [keep-alive]
-      User-Agent: [python-requests/2.18.4]
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.21.0
     method: GET
-    uri: https://rda.geobigdata.io/v1/metadata/1cfdad9dbb81c8503631305922a500005b7e847248185395cfb75a45422d1deb/7befa7c2-7fde-527a-ae2c-d5478ba6e143/metadata.json
+    uri: https://rda.geobigdata.io/v1/template/d69cfa9981d778e67f2c62343b3e5d60ef194e46b8187f218e739939fc5b0297
   response:
-    body: {string: '{"imageMetadata":{"imageId":"LC80370302014268LGN00","version":1.1,"profileName":"georectified_image","tilePartition":"0000","tileXOffset":0,"tileYOffset":0,"numXTiles":61,"numYTiles":62,"tileXSize":256,"tileYSize":256,"numBands":8,"dataType":"UNSIGNED_SHORT","imageHeight":15661,"imageWidth":15401,"sensorPlatformName":"LANDSAT8","sensorName":"Operational
-        Land Imager","vendorName":"NASA/USGS","vendorDatasetIdentifier":"Path=37:Row=30","acquisitionDate":"2014-09-25T18:01:18.581Z","colorInterpretation":"LANDSAT_8_30M","imageBoundsWGS84":"POLYGON
-        ((-110.86347858369699 44.246853761678445, -107.9721339914049 44.206789904569156,
-        -108.07475186534529 42.09427294284964, -110.86811362682216 42.13149907506905,
-        -110.86347858369699 44.246853761678445))","groundSampleDistanceMeters":15.0,"minX":0,"minY":0,"maxX":15400,"maxY":15660,"minTileX":0,"minTileY":0,"maxTileX":60,"maxTileY":61,"sunAzimuth":156.24916298,"sunElevation":43.39473382,"cloudCover":0.04},"imageGeoreferencing":{"spatialReferenceSystemCode":"EPSG:32612","scaleX":15.0,"scaleY":-15.0,"translateX":510900.0,"translateY":4899300.0,"shearX":0.0,"shearY":0.0},"rpcSensorModel":null,"histogram":null,"sensorMetadata":null,"imageAssociations":null,"rrdMetadata":null}'}
+    body:
+      string: '{"id":"d69cfa9981d778e67f2c62343b3e5d60ef194e46b8187f218e739939fc5b0297","defaultNodeId":"LocallyProjectivePanSharpen","edges":[{"id":"edge-2","index":2,"source":"LandsatReadPanchromatic","destination":"LocallyProjectivePanSharpen"},{"id":"edge-1","index":1,"source":"LandsatReadMultispectral","destination":"LocallyProjectivePanSharpen"},{"id":"edge-3","index":1,"source":"LocallyProjectivePanSharpen","destination":"Reproject"}],"nodes":[{"id":"Reproject","operator":"Reproject","parameters":{"Dest
+        SRS Code":"${DestSRSCode:-EPSG:4326}","Dest pixel-to-world transform":"null","Source
+        SRS Code":"${SourceSRSCode:-EPSG:4326}","Source pixel-to-world transform":"null"}},{"id":"LocallyProjectivePanSharpen","operator":"LocallyProjectivePanSharpen","parameters":{}},{"id":"LandsatReadMultispectral","operator":"LandsatRead","parameters":{"landsatId":"${catalogIdMultispectral}","productSpec":"multispectral"}},{"id":"LandsatReadPanchromatic","operator":"LandsatRead","parameters":{"landsatId":"${catalogIdPanchromatic}","productSpec":"panchromatic"}}]}'
     headers:
-      Access-Control-Allow-Headers: ['x-requested-with, X-Auth-Token, Content-Type,
-          Authorization']
-      Access-Control-Allow-Methods: ['GET, OPTIONS, HEAD, PUT, POST, DELETE']
-      Access-Control-Allow-Origin: ['*']
-      Access-Control-Max-Age: ['3600']
-      Connection: [keep-alive]
-      Content-Length: ['1224']
-      Content-Type: [application/json;charset=UTF-8]
-      Date: ['Wed, 08 Aug 2018 15:14:18 GMT']
-    status: {code: 200, message: ''}
+      Access-Control-Allow-Headers:
+      - x-requested-with, X-Auth-Token, Content-Type, Authorization
+      Access-Control-Allow-Methods:
+      - GET, OPTIONS, HEAD, PUT, POST, DELETE
+      Access-Control-Allow-Origin:
+      - '*'
+      Access-Control-Max-Age:
+      - '3600'
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '1049'
+      Content-Type:
+      - application/json
+      Date:
+      - Tue, 23 Apr 2019 21:57:29 GMT
+    status:
+      code: 200
+      message: ''
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.21.0
+    method: GET
+    uri: https://rda.geobigdata.io/v1/template/d69cfa9981d778e67f2c62343b3e5d60ef194e46b8187f218e739939fc5b0297/metadata?catalogIdMultispectral=LC80370302014268LGN00&catalogIdPanchromatic=LC80370302014268LGN00
+  response:
+    body:
+      string: '{"imageMetadata":{"imageId":"LC80370302014268LGN00","version":1.1,"profileName":"georectified_image","tilePartition":"0000","tileXOffset":0,"tileYOffset":0,"numXTiles":61,"numYTiles":62,"tileXSize":256,"tileYSize":256,"numBands":8,"dataType":"UNSIGNED_SHORT","imageHeight":15661,"imageWidth":15401,"sensorPlatformName":"LANDSAT8","sensorName":"Operational
+        Land Imager","vendorName":"NASA/USGS","vendorDatasetIdentifier":"Path=37:Row=30","acquisitionDate":"2014-09-25T18:01:18.581Z","colorInterpretation":"LANDSAT_8_30M","imageBoundsWGS84":"POLYGON
+        ((-110.86347858369699 44.246853761678445, -107.9721339914049 44.20678990456917,
+        -108.07475186534529 42.09427294284964, -110.86811362682216 42.13149907506905,
+        -110.86347858369699 44.246853761678445))","groundSampleDistanceMeters":15.0,"minX":0,"minY":0,"maxX":15400,"maxY":15660,"minTileX":0,"minTileY":0,"maxTileX":60,"maxTileY":61,"sunAzimuth":156.24916298,"sunElevation":43.39473382,"cloudCover":0.04},"imageGeoreferencing":{"spatialReferenceSystemCode":"EPSG:32612","scaleX":15.0,"scaleY":-15.0,"translateX":510900.0,"translateY":4899300.0,"shearX":0.0,"shearY":0.0},"rpcSensorModel":null,"histogram":null,"sensorMetadata":null,"imageAssociations":null,"rrdMetadata":null}'
+    headers:
+      Access-Control-Allow-Headers:
+      - x-requested-with, X-Auth-Token, Content-Type, Authorization
+      Access-Control-Allow-Methods:
+      - GET, OPTIONS, HEAD, PUT, POST, DELETE
+      Access-Control-Allow-Origin:
+      - '*'
+      Access-Control-Max-Age:
+      - '3600'
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '1223'
+      Content-Type:
+      - application/json
+      Date:
+      - Tue, 23 Apr 2019 21:57:37 GMT
+    status:
+      code: 200
+      message: ''
 version: 1

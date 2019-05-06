@@ -47,12 +47,17 @@ def load_url(url, token, shape=(8, 256, 256)):
             _curl.setopt(_curl.WRITEDATA, temp.file)
             _curl.perform()
             code = _curl.getinfo(pycurl.HTTP_CODE)
+            content_type = _curl.getinfo(pycurl.CONTENT_TYPE)
+
             try:
                 if(code != 200):
                     raise TypeError("Request for {} returned unexpected error code: {}".format(url, code))
                 temp.file.flush()
                 temp.close()
-                arr = imread(temp.name)
+                if content_type == 'image/tiff':
+                    arr = imread(temp.name, plugin='tifffile')
+                else:
+                    arr = imread(temp.name)
                 if len(arr.shape) == 3:
                     arr = np.rollaxis(arr, 2, 0)
                 else:
@@ -67,5 +72,5 @@ def load_url(url, token, shape=(8, 256, 256)):
                 os.remove(temp.name)
 
     if success is False:
-        raise TypeError("Request for {} returned unexpected error code: {}".format(url, code))
+        raise TypeError("Unable to download tile in {} retries".format(MAX_RETRIES))
     return arr
