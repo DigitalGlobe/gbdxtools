@@ -1,0 +1,465 @@
+[
+    {
+        "defaultNodeId": "GeospatialCrop",
+        "edges": [
+            {
+                "destination": "Reproject",
+                "id": "edge-2",
+                "index": 1,
+                "source": "GeospatialCrop"
+            },
+            {
+                "destination": "GeospatialCrop",
+                "id": "edge-1",
+                "index": 1,
+                "source": "IdahoRead"
+            }
+        ],
+        "nodes": [
+            {
+                "id": "Reproject",
+                "operator": "Reproject",
+                "parameters": {
+                    "Dest SRS Code": "${DestSRSCode:-EPSG:4326}",
+                    "Dest pixel-to-world transform": "null",
+                    "Source SRS Code": "${SourceSRSCode:-EPSG:4326}",
+                    "Source pixel-to-world transform": "null"
+                }
+            },
+            {
+                "id": "GeospatialCrop",
+                "operator": "GeospatialCrop",
+                "parameters": {
+                    "geospatialWKT": "${geospatialWKT}"
+                }
+            },
+            {
+                "id": "IdahoRead",
+                "operator": "IdahoRead",
+                "parameters": {
+                    "bucketName": "${bucketName}",
+                    "imageId": "${imageId}",
+                    "objectStore": "${objectStore}",
+                    "targetGSD": "${targetGSD:-}"
+                }
+            }
+        ]
+    },
+    {
+        "defaultNodeId": "Orthorectify",
+        "edges": [
+            {
+                "destination": "Orthorectify",
+                "id": "edge-1",
+                "index": 1,
+                "source": "IkonosRead"
+            }
+        ],
+        "nodes": [
+            {
+                "id": "Orthorectify",
+                "operator": "Orthorectify",
+                "parameters": {
+                    "Elevation Source": "",
+                    "Output Coordinate Reference System": "${Output Coordinate Reference System}",
+                    "Output Pixel to World Transform": "",
+                    "Sensor Model": "null"
+                }
+            },
+            {
+                "id": "IkonosRead",
+                "operator": "IkonosRead",
+                "parameters": {
+                    "path": "${path}"
+                }
+            }
+        ]
+    },
+    {
+        "defaultNodeId": "LocallyProjectivePanSharpen",
+        "edges": [
+            {
+                "destination": "LocallyProjectivePanSharpen",
+                "id": "edge-4",
+                "index": 1,
+                "source": "OrthorectifyMulti"
+            },
+            {
+                "destination": "LocallyProjectivePanSharpen",
+                "id": "edge-3",
+                "index": 2,
+                "source": "OrthorectifyPan"
+            },
+            {
+                "destination": "OrthorectifyMulti",
+                "id": "edge-2",
+                "index": 1,
+                "source": "IkonosReadMulti"
+            },
+            {
+                "destination": "OrthorectifyPan",
+                "id": "edge-1",
+                "index": 1,
+                "source": "IkonosReadPan"
+            }
+        ],
+        "nodes": [
+            {
+                "id": "LocallyProjectivePanSharpen",
+                "operator": "LocallyProjectivePanSharpen",
+                "parameters": {}
+            },
+            {
+                "id": "OrthorectifyMulti",
+                "operator": "Orthorectify",
+                "parameters": {
+                    "Elevation Source": "",
+                    "Output Coordinate Reference System": "${Output Coordinate Reference System}",
+                    "Output Pixel to World Transform": "",
+                    "Sensor Model": "null"
+                }
+            },
+            {
+                "id": "IkonosReadMulti",
+                "operator": "IkonosRead",
+                "parameters": {
+                    "path": "${multiPath}"
+                }
+            },
+            {
+                "id": "OrthorectifyPan",
+                "operator": "Orthorectify",
+                "parameters": {
+                    "Elevation Source": "",
+                    "Output Coordinate Reference System": "${Output Coordinate Reference System}",
+                    "Output Pixel to World Transform": "",
+                    "Sensor Model": "null"
+                }
+            },
+            {
+                "id": "IkonosReadPan",
+                "operator": "IkonosRead",
+                "parameters": {
+                    "path": "${panPath}",
+                    "productSpec": "panchromatic"
+                }
+            }
+        ]
+    },
+    {
+        "defaultNodeId": "LandsatRead",
+        "edges": [
+            {
+                "destination": "Reproject",
+                "id": "edge-1",
+                "index": 1,
+                "source": "LandsatRead"
+            }
+        ],
+        "nodes": [
+            {
+                "id": "Reproject",
+                "operator": "Reproject",
+                "parameters": {
+                    "Dest SRS Code": "${DestSRSCode:-EPSG:4326}",
+                    "Dest pixel-to-world transform": "null",
+                    "Source SRS Code": "${SourceSRSCode:-EPSG:4326}",
+                    "Source pixel-to-world transform": "null"
+                }
+            },
+            {
+                "id": "LandsatRead",
+                "operator": "LandsatRead",
+                "parameters": {
+                    "landsatId": "${catalogId}",
+                    "productSpec": "${productSpec}"
+                }
+            }
+        ]
+    },
+    {
+        "defaultNodeId": "LocallyProjectivePanSharpen",
+        "edges": [
+            {
+                "destination": "LocallyProjectivePanSharpen",
+                "id": "edge-2",
+                "index": 2,
+                "source": "LandsatReadPanchromatic"
+            },
+            {
+                "destination": "LocallyProjectivePanSharpen",
+                "id": "edge-1",
+                "index": 1,
+                "source": "LandsatReadMultispectral"
+            },
+            {
+                "destination": "Reproject",
+                "id": "edge-3",
+                "index": 1,
+                "source": "LocallyProjectivePanSharpen"
+            }
+        ],
+        "nodes": [
+            {
+                "id": "Reproject",
+                "operator": "Reproject",
+                "parameters": {
+                    "Dest SRS Code": "${DestSRSCode:-EPSG:4326}",
+                    "Dest pixel-to-world transform": "null",
+                    "Source SRS Code": "${SourceSRSCode:-EPSG:4326}",
+                    "Source pixel-to-world transform": "null"
+                }
+            },
+            {
+                "id": "LocallyProjectivePanSharpen",
+                "operator": "LocallyProjectivePanSharpen",
+                "parameters": {}
+            },
+            {
+                "id": "LandsatReadMultispectral",
+                "operator": "LandsatRead",
+                "parameters": {
+                    "landsatId": "${catalogIdMultispectral}",
+                    "productSpec": "multispectral"
+                }
+            },
+            {
+                "id": "LandsatReadPanchromatic",
+                "operator": "LandsatRead",
+                "parameters": {
+                    "landsatId": "${catalogIdPanchromatic}",
+                    "productSpec": "panchromatic"
+                }
+            }
+        ]
+    },
+    {
+        "defaultNodeId": "ModisRead",
+        "edges": [
+            {
+                "destination": "Reproject",
+                "id": "edge-1",
+                "index": 1,
+                "source": "ModisRead"
+            }
+        ],
+        "nodes": [
+            {
+                "id": "Reproject",
+                "operator": "Reproject",
+                "parameters": {
+                    "Dest SRS Code": "${DestSRSCode}",
+                    "Dest pixel-to-world transform": "null",
+                    "Source SRS Code": "${SourceSRSCode}",
+                    "Source pixel-to-world transform": "null"
+                }
+            },
+            {
+                "id": "ModisRead",
+                "operator": "ModisRead",
+                "parameters": {
+                    "modisId": "${modisId}"
+                }
+            }
+        ]
+    },
+    {
+        "defaultNodeId": "RadarsatRead",
+        "edges": [
+            {
+                "destination": "Orthorectify",
+                "id": "edge-1",
+                "index": 1,
+                "source": "RadarsatRead"
+            }
+        ],
+        "nodes": [
+            {
+                "id": "Orthorectify",
+                "operator": "Orthorectify",
+                "parameters": {
+                    "Elevation Source": "",
+                    "Output Coordinate Reference System": "${Output Coordinate Reference System}",
+                    "Output Pixel to World Transform": "",
+                    "Sensor Model": "null"
+                }
+            },
+            {
+                "id": "RadarsatRead",
+                "operator": "RadarsatRead",
+                "parameters": {
+                    "path": "${path}"
+                }
+            }
+        ]
+    },
+    {
+        "defaultNodeId": "GdalImageRead",
+        "edges": [
+            {
+                "destination": "Reproject",
+                "id": "edge-1",
+                "index": 1,
+                "source": "GdalImageRead"
+            }
+        ],
+        "nodes": [
+            {
+                "id": "Reproject",
+                "operator": "Reproject",
+                "parameters": {
+                    "Background Values": "[0]",
+                    "Dest SRS Code": "${DestSRSCode}",
+                    "Dest pixel-to-world transform": "",
+                    "Resampling Kernel": "INTERP_BILINEAR",
+                    "Source SRS Code": "${SourceSRSCode}",
+                    "Source pixel-to-world transform": ""
+                }
+            },
+            {
+                "id": "GdalImageRead",
+                "operator": "GdalImageRead",
+                "parameters": {
+                    "path": "${path}"
+                }
+            }
+        ]
+    },
+    {
+        "defaultNodeId": "Reproject",
+        "edges": [
+            {
+                "destination": "Reproject",
+                "id": "edge-1",
+                "index": 1,
+                "source": "Sentinel1Read"
+            }
+        ],
+        "nodes": [
+            {
+                "id": "Reproject",
+                "operator": "Reproject",
+                "parameters": {
+                    "Dest SRS Code": "${DestSRSCode}",
+                    "Dest pixel-to-world transform": "null",
+                    "Source SRS Code": "${SourceSRSCode}",
+                    "Source pixel-to-world transform": "null"
+                }
+            },
+            {
+                "id": "Sentinel1Read",
+                "operator": "Sentinel1Read",
+                "parameters": {
+                    "SentinelId": "${sentinelId}",
+                    "sentinel1Polarization": "${sentinel1Polarization}"
+                }
+            }
+        ]
+    },
+    {
+        "defaultNodeId": "Reproject",
+        "edges": [
+            {
+                "destination": "Reproject",
+                "id": "edge-1",
+                "index": 1,
+                "source": "Sentinel2Read"
+            }
+        ],
+        "nodes": [
+            {
+                "id": "Reproject",
+                "operator": "Reproject",
+                "parameters": {
+                    "Dest SRS Code": "${DestSRSCode}",
+                    "Dest pixel-to-world transform": "null",
+                    "Source SRS Code": "${SourceSRSCode}",
+                    "Source pixel-to-world transform": "null"
+                }
+            },
+            {
+                "id": "Sentinel2Read",
+                "operator": "Sentinel2Read",
+                "parameters": {
+                    "SentinelId": "${sentinelId}",
+                    "sentinelProductSpec": "${sentinelProductSpec}"
+                }
+            }
+        ]
+    },
+    {
+        "defaultNodeId": "DigitalGlobeImage",
+        "edges": [],
+        "nodes": [
+            {
+                "id": "DigitalGlobeImage",
+                "operator": "DigitalGlobeImage",
+                "parameters": {
+                    "CRS": "${CRS}",
+                    "GSD": "${GSD}",
+                    "bands": "${bands}",
+                    "bucketName": "${bucketName}",
+                    "correctionType": "${correctionType}",
+                    "fallbackToTOA": "true",
+                    "imageId": "${imageId}"
+                }
+            }
+        ]
+    },
+    {
+        "defaultNodeId": "Format",
+        "edges": [
+            {
+                "destination": "Format",
+                "id": "edge-1",
+                "index": 1,
+                "source": "DigitalGlobeStrip"
+            },
+            {
+                "destination": "RadiometricDRA",
+                "id": "edge-2",
+                "index": 1,
+                "source": "DigitalGlobeStrip"
+            },
+            {
+                "destination": "SmartBandSelect",
+                "id": "edge-3",
+                "index": 1,
+                "source": "DigitalGlobeStrip"
+            }
+        ],
+        "nodes": [
+            {
+                "id": "Format",
+                "operator": "Format",
+                "parameters": {
+                    "dataType": "${dataType}"
+                }
+            },
+            {
+                "id": "DigitalGlobeStrip",
+                "operator": "DigitalGlobeStrip",
+                "parameters": {
+                    "CRS": "${crs}",
+                    "GSD": "${gsd}",
+                    "bands": "${bands}",
+                    "catId": "${catId}",
+                    "correctionType": "${correctionType}",
+                    "fallbackToTOA": "${fallbackToTOA}"
+                }
+            },
+            {
+                "id": "RadiometricDRA",
+                "operator": "RadiometricDRA",
+                "parameters": {}
+            },
+            {
+                "id": "SmartBandSelect",
+                "operator": "SmartBandSelect",
+                "parameters": {
+                    "bandSelection": "${bandSelection:-All}"
+                }
+            }
+        ]
+    }
+]
