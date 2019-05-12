@@ -3,7 +3,7 @@ future>=0.15.2
 requests>=2.12.1
 boto3
 gbdx-auth>=0.2.6
-pytest
+pytest==4.5.0
 pytest-runner
 vcrpy
 mock
