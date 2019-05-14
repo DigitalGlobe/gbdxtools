@@ -12,8 +12,8 @@ shapely
 ephem
 toolz
 cloudpickle
-dask == 1.1.1
-numpy < 1.16.0
+dask
+numpy
 pycurl
 pyproj
 requests_futures
