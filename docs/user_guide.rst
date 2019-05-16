@@ -100,6 +100,18 @@ If you are running in a virtualenv and run into issues you may need upgrade pip 
 	# you might also need to remove token from your .gbdx-config file
 	nano -w ~.gbdx-config
 	# then, remove the [gbdx_token] section and json= part
+
+Users installing gbdxtools on OS X Mojave have encountered::
+
+   __main__.ConfigurationError: Curl is configured to use SSL, but we have not been able to determine which SSL backend it is using. Please see PycURL documentation for how to specify the SSL backend manually.
+
+This solution was reported to work::
+
+   brew install openssl
+   PYCURL_SSL_LIBRARY=openssl LDFLAGS="-L/usr/local/opt/openssl/lib" CPPFLAGS="-I/usr/local/opt/openssl/include" pip install --no-cache-dir pycurl
+   pip install gbdxtools 
+
+This assumes you are installing in a fresh environment. If ``pycurl`` or ``gbdxtools`` are already installed they should be uninstalled first.
     
 
 **GDAL**
