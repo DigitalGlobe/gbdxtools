@@ -9,6 +9,10 @@ class PlotMock(np.ndarray, PlotMixin):
     @property
     def _rgb_bands(self):
         return [3,1,2]
+    
+    @property
+    def options(self):
+        return {}
 
     @property
     def _ndvi_bands(self):
@@ -16,6 +20,7 @@ class PlotMock(np.ndarray, PlotMixin):
 
     def _read(self, arr, **kwargs):
         return arr
+
 
 
 class PlotTest(unittest.TestCase):
