@@ -17,7 +17,11 @@ except ImportError:
 
 import numpy as np
 from affine import Affine
-from scipy.misc import imread
+
+try:
+    from scipy.misc import imread
+except ImportError:
+    from imageio import imread
 
 import mercantile
 
