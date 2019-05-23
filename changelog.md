@@ -1,5 +1,16 @@
+0.16.7
+* Unpin Numpy
+* Unpin max Dask version, set min pin
+* Fix import problem with imageio
+* Multiplexed task outputs are no longer ignored if there is a single output
+* Smarter image decoding of RDA tiles
+* NOTE: the next GBDXtools release will start the RDA graph deprecation process
+  See: https://github.com/DigitalGlobe/gbdxtools/issues/714
+
+
 0.16.6 
 * Pin dask to v1.1.1 for both pip and conda
+* Due to technical difficulties a Conda release was skipped
 
 0.16.5 
 * Fixing CatalogImage access to Modis
