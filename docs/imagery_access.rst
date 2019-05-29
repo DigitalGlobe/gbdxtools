@@ -223,7 +223,7 @@ Beyond replacing catalog ids for AOIs, the ``DemImage`` class shares all the sam
 TMS Images
 ^^^^^^^^^^^^^^^^^^^^^^^
 
-The ``TmsImage`` class is used to access imagery available from the `DigitalGlobe Maps API <https://platform.digitalglobe.com/maps-api/>`_. These are global mosiacs of imagery that can be an effective source for training Machine Learning algorithms or whenever high-resolution is needed. Since the Maps API is static, or changes less frequently, these images are best suited when there are no temporal requirements on an analysis. The zoom level to use can be specified (default is 22). Changing the zoom level will change the resolution of the image. Note that different image sources are used at different zoom levels.
+The ``TmsImage`` class is used to access imagery available from the `Mapbox Raster Tiles API <https://docs.mapbox.com/api/maps/#retrieve-raster-tiles>`_. These are global mosiacs of imagery that can be an effective source for training Machine Learning algorithms or whenever high-resolution is needed. Since Mapbox API is static, or changes less frequently, these images are best suited when there are no temporal requirements on an analysis. The zoom level to use can be specified (default is 22). Changing the zoom level will change the resolution of the image. Note that different image sources are used at different zoom levels.
 
 .. code-block:: python
 
