@@ -99,8 +99,15 @@ Multiple filters can be combined in the query:
 
 Search by Types
 ^^^^^^^^^^^^^^^^^^
-You can search by item type as well.  The usual type for Digital Globe imagery is "DigitalGlobeAcquisition".  
-To limit the search to only Landsat imagery:
+You can search by item type as well. For a list of types, see: https://gbdxdocs.digitalglobe.com/docs/catalog-v2-course#section-types
+
+If not specified, searches will default to the type ``Acquisition``. This type will cover all imagery except for 1B raw data, which is also catalogued.
+
+To search specifically for raw data, use the type ``1BProduct``.
+
+To limit searches to Digital Globe imagery, use ``DigitalGlobeAcquisition``. If multiple types are supplied, they will be ANDed together.
+
+For example, to limit the search to only Landsat imagery:
 
 .. code-block:: python
 
@@ -112,6 +119,7 @@ To limit the search to only Landsat imagery:
                                   startDate="2004-01-01T00:00:00.000Z",
                                   endDate="2012-01-01T00:00:00.000Z",
                                   types=types)
+
 
 Getting Metadata Info by Catalog ID
 ---------------------------------------------

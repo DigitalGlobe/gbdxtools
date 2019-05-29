@@ -202,7 +202,7 @@ class Catalog(object):
             ]
             startDate: string.  Optional.  Example: "2004-01-01T00:00:00.000Z"
             endDate: string.  Optional.  Example: "2004-01-01T00:00:00.000Z"
-            types: Array of types to search for.  Optional.  Example (and default):  ["Acquisition"]
+            types: Array of types to search for.  Defaults to ["Acquisition"] if not provided.
 
         Returns:
             catalog search resultset
