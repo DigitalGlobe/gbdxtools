@@ -78,7 +78,7 @@ def raise_aoi_required():
 
 class TmsMeta(object):
     def __init__(self, access_token=os.environ.get("MAPBOX_API_KEY"),
-                 url="https://api.mapbox.com/v4/digitalglobe.nal0g75k/{z}/{x}/{y}.png",
+                 url="https://api.mapbox.com/v4/mapbox.satellite/{z}/{x}/{y}.png",
                  zoom=22, bounds=None):
         self.zoom_level = zoom
         self._token = access_token
@@ -215,7 +215,7 @@ class TmsImage(GeoDaskImage):
     _default_proj = "EPSG:3857"
 
     def __new__(cls, access_token=os.environ.get("MAPBOX_API_KEY"),
-                url="https://api.mapbox.com/v4/digitalglobe.nal0g75k/{z}/{x}/{y}.png",
+                url="https://api.mapbox.com/v4/mapbox.satellite/{z}/{x}/{y}.png",
                 zoom=22, **kwargs):
         _tms_meta = TmsMeta(access_token=access_token, url=url, zoom=zoom, bounds=kwargs.get("bounds"))
         gi = mapping(box(*_tms_meta.bounds))

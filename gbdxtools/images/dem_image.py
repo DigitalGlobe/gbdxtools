@@ -41,5 +41,5 @@ class DemImage(RDABaseImage):
         wkt = box(*aoi).wkt
         dem = rda.IdahoTemplate(bucketName=bucket, imageId=imageId, objectStore="S3", geospatialWKT=str(wkt), nodeId="GeospatialCrop")
         if proj is not "EPSG:4326":
-            dem = dem(**reproject_params(proj), nodeId="Reproject")
+            dem = dem(nodeId="Reproject", **reproject_params(proj))
         return dem
