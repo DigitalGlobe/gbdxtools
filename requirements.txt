@@ -1,6 +1,6 @@
 six>=1.10.0
 future>=0.15.2
-requests>=2.12.1,<2.22
+requests>=2.12.1,<=2.21
 boto3
 gbdx-auth>=0.2.6
 pytest
@@ -12,8 +12,8 @@ shapely
 ephem
 toolz
 cloudpickle
-dask>=1.0.0
-numpy
+dask[array]>=1.1.0
+numpy>1.12
 pycurl
 pyproj
 requests_futures
