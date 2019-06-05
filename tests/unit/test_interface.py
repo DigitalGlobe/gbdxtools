@@ -29,7 +29,7 @@ def test_init_host(monkeypatch):
 
     monkeypatch.setattr(gbdxtools.auth.gbdx_auth, 'get_session', session)
 
-    gbdx = gbdxtools.Interface(host=test_host)
+    gbdx = gbdxtools.Interface(host=test_host, gbdx_connection=mock_gbdx_session)
     assert isinstance(gbdx, gbdxtools.Interface)
     assert gbdx.root_url == 'https://%s' % test_host
     assert gbdx.catalog.base_url == 'https://%s/catalog/v2' % test_host

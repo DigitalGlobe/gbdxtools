@@ -110,7 +110,7 @@ class WorkflowTests(unittest.TestCase):
 
         output = wf.get_stderr('4488969848362445219','4488969848354891944')
 
-        self.assertEquals('<empty>', output)
+        self.assertEqual('<empty>', output)
 
     @vcr.use_cassette('tests/unit/cassettes/test_workflow_search.yaml', filter_headers=['authorization'])
     def test_workflow_search(self):
