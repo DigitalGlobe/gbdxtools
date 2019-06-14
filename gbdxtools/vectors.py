@@ -50,14 +50,16 @@ class Vectors(object):
         self.aggregations_url = 'https://vector.geobigdata.io/insight-vector/api/aggregation'
         self.aggregations_by_index_url = 'https://vector.geobigdata.io/insight-vector/api/index/aggregation/%s'
 
-    def create(self,vectors):
+    def create(self, vectors, index=None):
         """ Create a vectors in the vector service.
 
         Args:
             vectors: A single geojson vector or a list of geojson vectors. Item_type and ingest_source are required.
+            index (str): optional index to write to, defaults to 'vector-user-provided'
 
         Returns:
-            (list): IDs of the vectors created
+            (dict): key 'SuccessfulItemIds' is a list of succesfully created feature URLs
+                    key 'errorMessages' is a list of failed feature error messages
 
         Example:
             >>> vectors.create(
@@ -96,11 +98,14 @@ class Vectors(object):
             if not 'ingest_source' in list(vector['properties'].keys()):
                 raise Exception('Vector does not contain "ingest_source".')
 
-        r = self.gbdx_connection.post(self.create_url, data=json.dumps(vectors))
+        url = self.create_url
+        if index is not None:
+            url = '%s/%s/' % (url, index)
+        r = self.gbdx_connection.post(url, data=json.dumps(vectors))
         r.raise_for_status()
         return r.json()
 
-    def create_from_wkt(self, wkt, item_type, ingest_source, **attributes):
+    def create_from_wkt(self, wkt, item_type, ingest_source, index=None, **attributes):
         '''
         Create a single vector in the vector service
 
@@ -109,9 +114,10 @@ class Vectors(object):
             item_type (str): item_type of the vector
             ingest_source (str): source of the vector
             attributes: a set of key-value pairs of attributes
+            index (str): optional index to write to, defaults to 'vector-user-provided'
 
         Returns:
-            id (str): string identifier of the vector created
+            (str): feature ID
         '''
         # verify the "depth" of the attributes is single layer
 
@@ -126,8 +132,12 @@ class Vectors(object):
             }
         }
 
-        return self.create(vector)[0]
-
+        results =  self.create(vector, index=index)
+        if len(results['errorMessages']) == 0:
+            item = results['successfulItemIds'][0]
+            return item.split('/')[-1]
+        else:
+            raise Exception(results['errorMessages'][0])
 
     def get(self, ID, index='vector-web-s'):
         '''Retrieves a vector.  Not usually necessary because searching is the best way to find & get stuff.
