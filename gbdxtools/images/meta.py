@@ -63,7 +63,9 @@ class DaskImage(da.Array):
             dm = DaskMeta._make(itr)
         else:
             raise ValueError("{} must be initialized with a DaskMeta, a dask array, or a dict with DaskMeta fields".format(cls.__name__))
-        self = da.Array.__new__(cls, *dm.values)
+        dask, name, chunks, dtype, shape = dm
+        chunks = da.core.normalize_chunks(chunks, shape=shape)
+        self = da.Array.__new__(cls, dask, name, chunks, dtype, shape=shape)
         if "__geo_transform__" in kwargs:
             self.__geo_transform__ = kwargs["__geo_transform__"]
         if "__geo_interface__" in kwargs:
