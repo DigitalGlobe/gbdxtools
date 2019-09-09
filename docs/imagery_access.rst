@@ -11,7 +11,7 @@ The available classes are ``CatalogImage``, ``IdahoImage``, ``WV02``, ``WV03_VNI
 Catalog Images
 ------------------
 
-``CatalogImage`` uses a `GBDX Catalog ID <http://gbdxdocs.digitalglobe.com/docs/catalog-course>`_ to provide a single point of access to multiple image sources. This class acts as a generic image wrapper which can accept a range of ID types (WorldView, Landsat, Ikonos, etc.). The first thing a ``CatalogImage`` does is query the GBDX Platform to discover metadata about the image type. It will then instantiate the base image class corresponding to the image source. 
+``CatalogImage`` uses a `GBDX Catalog ID <http://gbdxdocs.digitalglobe.com/docs/catalog-course>`_ to provide a single point of access to multiple image sources. This class acts as a generic image wrapper which can accept a range of ID types (WorldView, Landsat, Ikonos, etc.). The first thing a ``CatalogImage`` does is query the GBDX Platform to discover metadata about the image type. It will then return an instance of the base image class corresponding to the image source. 
 
 The following snippet will initialize a ``WorldviewImage`` from a WorldView 3 catalog ID and print some information about the image:
 
@@ -172,7 +172,7 @@ To check if acomp is available for an image:
 Base Image Classes
 --------------------------
 
-The following image classes represent different sources of imagery.
+The following image classes represent different sources of imagery. These classes are returned by the ``CatalogImage`` class but can be called directly when needed.
 
 Idaho Images
 ^^^^^^^^^^^^^^^^^^^^^^^
@@ -192,18 +192,19 @@ The methods of ``CatalogImage`` are also available in ``IdahoImage``. However, t
 Landsat Images
 ^^^^^^^^^^^^^^^^^^^^^^^
 
-GBDX also indexes all Landsat8 images. The images are served from Amazon Web Services. The ``LandsatImage`` class behaves exactly like a ``CatalogImage`` except it accepts a Landsat ID instead of a Catalog ID:
+GBDX also indexes all Landsat8 images. The images are served from Amazon Web Services. The ``LandsatImage`` class behaves exactly like a ``CatalogImage`` except it accepts a Landsat product identifier instead of a Catalog ID:
 
 .. code-block:: python
 
     from gbdxtools import LandsatImage
 
-    img = LandsatImage('LC80370302014268LGN00')
+    img = LandsatImage('LC08_L1TP_034032_20181102_20181115_01_T1')
     print(img.shape)
-    aoi = img.aoi(bbox=[-109.84, 43.19, -109.59, 43.34])
+    aoi = img.aoi(bbox=[-105.79, 40.32, -105.76, 40.35])
     print(aoi.shape)
     aoi.plot()
 
+Note that the Landsat product identifier for Collection 1 imagery is stored in the GBDX catalog in the ``productId`` field. ``LandsatImage`` does not accept GBDX Catalog IDs for Landsat records - use ``CatalogImage`` instead.
 
 DEM Images
 ^^^^^^^^^^^^^^^^^^^^^^^
