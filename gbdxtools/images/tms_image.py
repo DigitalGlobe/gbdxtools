@@ -200,20 +200,23 @@ class TmsMeta(object):
 
 
 class TmsImage(GeoDaskImage):
-    ''' An image built from the DigitalGlobe Maps API TMS tiles
+    ''' An image built from TMS tiles
 
-    These are global mosiacs of imagery that can be an effective source for training Machine Learning algorithms or whenever high-resolution is needed. Since the Maps API is static, or changes less frequently, these images are best suited when there are no temporal requirements on an analysis. 
+    Originally designed to access DigitalGlobe Maps API TMS service, now deprecated.
+
     
     Instead of an ID the zoom level to use can be specified (default is 22). Changing the zoom level will change the resolution of the image. Note that different image sources are used at different zoom levels.
 
     Supports the basic methods shared by Catalog Images such as plot() and geotiff().
 
     Args:
+        url (str): url of server with {x}, {y}, {z} templating
+        access_token: access token to use, this query string is automatically appended to the url
         zoom (int): (optional) Zoom level to use as the source if the image, default is 22
         bbox (list): (optional) Bounding box of AOI, if aoi() method is not used.
 
     Example:
-        >>> img = TmsImage(zoom=13, bbox=[-109.84, 43.19, -109.59, 43.34])'''
+        >>> img = TmsImage(zoom=12, access_token='', url='https://a.tile.openstreetmap.org/{z}/{x}/{y}.png') '''
 
 
     _default_proj = "EPSG:3857"
