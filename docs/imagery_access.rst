@@ -226,7 +226,7 @@ TMS Images
 
 The ``TmsImage`` class was used to access imagery available from the `DigitalGlobe Maps API <https://platform.digitalglobe.com/maps-api/>`_. This service is now deprecated, but the image class can still be used to convert TMS-based imagery into NumPy arrays. The zoom level to use can be specified (default is 22). Changing the zoom level will change the resolution of the image.
 
-The following example shows plotting and image generated from OpenStreetMap tiles:
+The following example shows plotting an image generated from OpenStreetMap tiles:
 
 .. code-block:: python
 
@@ -237,7 +237,7 @@ The following example shows plotting and image generated from OpenStreetMap tile
 
 Subscribers to the new EarthWatch TMS service can also use this image class to access EarthWatch base imagery in Python. Use the following configuration, substituting a valid ConnectID string:
 
-.. code-bock:: python
+.. code-block:: python
 
     img = TmsImage(zoom=13, access_token='', url='https://earthwatch.digitalglobe.com/earthservice/tmsaccess/tms/1.0.0/DigitalGlobe:ImageryTileService@EPSG:3857@png/{z}/{x}/{y}.png?flipy=true&connectId=<ConnectID>&')
 
