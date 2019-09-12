@@ -204,7 +204,6 @@ class TmsImage(GeoDaskImage):
 
     Originally designed to access DigitalGlobe Maps API TMS service, now deprecated.
 
-    
     Instead of an ID the zoom level to use can be specified (default is 22). Changing the zoom level will change the resolution of the image. Note that different image sources are used at different zoom levels.
 
     Supports the basic methods shared by Catalog Images such as plot() and geotiff().
