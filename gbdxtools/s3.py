@@ -120,6 +120,7 @@ class S3(object):
            Location can be a directory or a file (e.g., my_dir or my_dir/my_image.tif)
            If location is a directory, all files in the directory are deleted.
            If it is a file, then that file is deleted.
+           Limited to deleting 1000 objects at a time.
 
            Args:
                location (str): S3 location within prefix. Can be a directory or
