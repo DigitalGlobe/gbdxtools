@@ -118,13 +118,12 @@ class S3(object):
     def delete(self, location):
         '''Delete content in bucket/prefix/location.
            Location can be a directory or a file (e.g., my_dir or my_dir/my_image.tif)
-           If location is a directory, all files in the directory are deleted.
-           If it is a file, then that file is deleted.
+           Location is a wildcard match - 'image' will delete anything that matches "image*" including "image/foo/*"
+           This treats objects purely as a key/value store and does not respect directories.
            Limited to deleting 1000 objects at a time.
 
            Args:
-               location (str): S3 location within prefix. Can be a directory or
-                               a file (e.g., my_dir or my_dir/my_image.tif).
+               location (str): S3 location within prefix
         '''
         bucket = self.info['bucket']
         prefix = self.info['prefix']
