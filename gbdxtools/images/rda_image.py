@@ -148,11 +148,6 @@ class RDAImage(GeoDaskImage):
         return self._rda_op
 
     @property
-    def ipe(self):
-        deprecation('The use of ipe/IPE has been deprecated. Please use rda/RDA.')
-        return self._rda_op
-
-    @property
     def rda_id(self):
         return self.rda._rda_id
 
@@ -206,9 +201,3 @@ class RDAImage(GeoDaskImage):
             status (dict): the status of the job  
         """
         return self.rda._materialize_status(job_id)
-        
-
-# Warn on deprecated module attribute access
-from gbdxtools.deprecate import deprecate_module_attr
-sys.modules[__name__] = deprecate_module_attr(sys.modules[__name__], deprecated=["IpeImage"])
-IpeImage = RDAImage

@@ -28,9 +28,3 @@ class Op(TemplateMeta):
 class RDA(object):
     def __getattr__(self, name, **kwargs):
         return Op(name=name, interface=Auth(), **kwargs)
-
-
-sys.modules[__name__] = deprecate_module_attr(sys.modules[__name__], deprecated=["Ipe"])
-Ipe = RDA
-
-
