@@ -1,18 +1,11 @@
 """
 GBDX Catalog Image Interface.
 
-Contact: chris.helm@digitalglobe.com
+Contact: marc.pfister@digitalglobe.com
 """
 from gbdxtools import WV01, WV02, WV03_SWIR, WV03_VNIR, WV04, LandsatImage, IkonosImage, GE01, QB02, Sentinel2, Sentinel1, Radarsat, Modis
-from gbdxtools.images.rda_image import RDAImage, GraphMeta
 from gbdxtools.rda.error import UnsupportedImageType
 from gbdxtools.images.util.image import vector_services_query, can_acomp, is_ordered, is_available_in_gbdx
-
-from shapely import wkt
-from shapely.geometry import box
-import json
-import types as pytypes
-
 
 class CatalogImage(object):
     '''Creates an image instance matching the type of the Catalog ID.
@@ -38,14 +31,15 @@ class CatalogImage(object):
     Returns:
         image (ndarray): An image instance - one of IdahoImage, WV02, WV03_VNIR, LandsatImage, IkonosImage
     '''
-    def __new__(cls, cat_id=None, **kwargs):
-        inst = cls._image_by_type(cat_id, **kwargs)
-        fplg = kwargs.get("fetch_plugin")
-        if fplg:
-            for attrname in dir(fplg):
-                if isinstance(getattr(fplg, attrname), pytypes.MethodType) and attrname in ("__dask_optimize__", "__fetch__"):
-                    setattr(inst, attrname, getattr(fplg, attrname))
-        return inst
+    def __new__(cls, cat_id, **kwargs):
+        query = "item_type:GBDXCatalogRecord AND (attributes.catalogID.keyword:{} OR id:{})".format(cat_id, cat_id)
+        query += " AND NOT item_type:DigitalGlobeAcquisition"
+        result = vector_services_query(query, count=1)
+        if len(result) == 0:
+            raise Exception('Could not find a catalog entry for the given id: {}'.format(cat_id))
+        else:
+            return cls._image_class(result[0], **kwargs)
+
 
     @classmethod
     def is_ordered(cls, cat_id):
@@ -78,21 +72,6 @@ class CatalogImage(object):
           available (bool): Whether or not the image can be acomp'd
       """
       return can_acomp(cat_id)
-
-    @classmethod
-    def _image_by_type(cls, cat_id, **kwargs):
-        if cat_id is None:
-            try:
-                return RDAImage(GraphMeta(**kwargs))
-            except KeyError:
-                raise ValueError("Catalog Images must be initiated by a Catalog Id or an RDA Graph Id")
-        query = "item_type:GBDXCatalogRecord AND (attributes.catalogID.keyword:{} OR id:{})".format(cat_id, cat_id)
-        query += " AND NOT item_type:DigitalGlobeAcquisition"
-        result = vector_services_query(query, count=1)
-        if len(result) == 0:
-            raise Exception('Could not find a catalog entry for the given id: {}'.format(cat_id))
-        else:
-            return cls._image_class(result[0], **kwargs)
 
     @classmethod
     def _image_class(cls, rec, **kwargs):
