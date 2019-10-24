@@ -2,6 +2,7 @@ import os
 from collections import defaultdict
 import threading
 from tempfile import NamedTemporaryFile
+from time import sleep
 try:
     from urlparse import urlparse
 except ImportError:
@@ -67,6 +68,7 @@ def load_url(url, token, shape=(8, 256, 256)):
             except Exception as e:
                 _curl.close()
                 del _curl_pool[thread_id]
+                sleep(2**i)
             finally:
                 temp.close()
                 os.remove(temp.name)
