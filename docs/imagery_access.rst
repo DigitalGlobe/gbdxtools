@@ -126,7 +126,7 @@ The above code generates a geotiff on the filesystem with the name ``output.tif`
     img = CatalogImage('104001001BA7C400', bbox=[2.28, 48.87, 2.30, 48.89], proj='EPSG:3857')
     tif = img.geotiff(path="./output.tif", proj="EPSG:4326", bands=[4,2,1])
 
-This will create a geotiff on the the filesystem with only the bands `4,2,1` in that order.
+This will create a geotiff on the the filesystem with only the bands `4,2,1` in that order. *Note*: bands refers to the channel array indices and are zero-indexed. So the retrieve only the first band you pass ``bands=[0]``.
 
 .. code-block:: python
 
@@ -304,7 +304,7 @@ Any RDA Template can be directly accessed using `RDATemplateImage`. The class ta
 Defining AOIs
 --------------
 
-In addition to using the ``.aoi()`` method, the image bounding box can be specified when instantiating the image by passing a ``bbox`` parameter.  When passing `bbox`` to the image constructor, the list must be in the form of: `minx, miny, maxx, maxy` (or rather left, lower, right, upper) and be in `EPSG:4326` coordinates (lat/long).  
+In addition to using the ``.aoi()`` method, the image bounding box can be specified when instantiating the image by passing a ``bbox`` parameter.  When passing `bbox`` to the image constructor, the list must be in the form of: `minx, miny, maxx, maxy` (or rather left, lower, right, upper). By default, the coordinates are expected to be in `EPSG:4326` (lat/long).  
 
 .. code-block:: python
 
@@ -342,6 +342,28 @@ Image objects store their geospatial information and also support the `Python ge
     print(shape(img).area) # shape() returns a Shapely object for geometry operations
 
 
+Working with Projections
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Image objects can also be passed a ``proj`` parameter to define the output projection of the image. 
+To subset the image using a boundary box in a coordinate system other than the default EPSG:4326, the keyword ``from_proj`` must also be passed. Projections should be specified using EPSG strings. When slicing with a geometry object it is assumed that the geometry object is in the same coordinate system as the image output.
+
+.. code-block:: python
+
+    bbox_utm=[748438.1424217589, 4252250.579417545, 749443.6424217589, 4253256.079417545]
+
+    # using bbox when creating the image
+    img_utm = CatalogImage('1030010081A8A800', proj='EPSG:32634', bbox=bbox_utm, from_proj='EPSG:32634')
+
+    # using the aoi() method to subset
+    img_utm = CatalogImage('1030010081A8A800', proj='EPSG:32634')
+    img_utm = c_utm.aoi(bbox=bbox_utm, from_proj='EPSG:32634')
+
+    # geometric slicing does not need `from_proj`
+    geom = box(*bbox_utm)
+    img_utm = c_utm[geom]
+
+
 Chip Generation
 ^^^^^^^^^^^^^^^^^^^
 
@@ -375,7 +397,7 @@ will default to showing the RGB bands of the image. If the image only has a sing
 Options available for plotting:
 
 * ``w,h`` : width and height of the plot, in inches at 72 dpi. This includes default borders and spacing. If the image is shown in Jupyter the outside whitespace will be automatically cropped to save size, resulting in a smaller sized image than expected. Default is ``w=10, h=10``.
-* ``bands``: list of bands to use for plotting, such as ``bands=[4,2,1]``. Defaults to the image's natural RGB bands. This option is useful for generating pseudocolor images when passed a list of three bands. If only a single band is provided, a colormapped plot will be generated instead.
+* ````: list of bands to use for plotting, such as ``bands=[4,2,1]``. Defaults to the image's natural RGB bands. This option is useful for generating pseudocolor images when passed a list of three bands. If only a single band is provided, a colormapped plot will be generated instead. *Note*: bands refers to the array channels and are zero-indexed.
 * ``title``: the title for the plot, if not specified no title is displayed.
 * ``fontsize``: the font size for the title, in points. Default is 22.
 * ``cmap``: MatPlotLib colormap to use for single band images. Default is ``cmap='Grey_R'``.

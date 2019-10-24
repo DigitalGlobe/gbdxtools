@@ -464,16 +464,18 @@ class Workflow(object):
                                  input_port_name in t.inputs._portnames]
         for task in self.tasks:
             # only include multiplex output ports in this task if other tasks refer to them in their inputs.
+            # skip this if there is only one task in the workflow
             # 1. find the multplex output port_names in this task
             # 2. see if they are referred to in any other tasks inputs
             # 3. If not, exclude them from the workflow_def
             output_multiplex_ports_to_exclude = []
-            multiplex_output_port_names = [portname for portname in task.outputs._portnames if
-                                           task.outputs.__getattribute__(portname).is_multiplex]
-            for p in multiplex_output_port_names:
-                output_port_reference = 'source:' + task.name + ':' + p
-                if output_port_reference not in all_input_port_values:
-                    output_multiplex_ports_to_exclude.append(p)
+            if len(self.tasks) > 1:
+                multiplex_output_port_names = [portname for portname in task.outputs._portnames if
+                                            task.outputs.__getattribute__(portname).is_multiplex]
+                for p in multiplex_output_port_names:
+                    output_port_reference = 'source:' + task.name + ':' + p
+                    if output_port_reference not in all_input_port_values:
+                        output_multiplex_ports_to_exclude.append(p)
 
             task_def = task.generate_task_workflow_json(
                 output_multiplex_ports_to_exclude=output_multiplex_ports_to_exclude)

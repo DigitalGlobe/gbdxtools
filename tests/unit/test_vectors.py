@@ -1,7 +1,4 @@
 '''
-Authors: Nate Ricklin
-Contact: nricklin@digitalglobe.com
-
 Unit tests for the gbdxtools.Vectors class
 '''
 
@@ -32,6 +29,7 @@ class TestVectors(unittest.TestCase):
     def setUpClass(cls):
         mock_gbdx_session = get_mock_gbdx_session(token="dummytoken")
         cls.gbdx = Interface(gbdx_connection=mock_gbdx_session)
+        #cls.gbdx = Interface()
 
     def test_init(self):
         c = Vectors()
@@ -41,62 +39,63 @@ class TestVectors(unittest.TestCase):
     def test_vectors_search_paging(self):
         v = Vectors()
         aoi = "POLYGON ((180 -90, 180 90, -180 90, -180 -90, 180 -90))"
-        results = v.query(aoi, query="item_type:WV03_VNIR", index=None, count=1010)
+        results = v.query(aoi, query="item_type:WV03_VNIR", count=1010)
 
         assert len(results) == 1010
 
     @vcr.use_cassette('tests/unit/cassettes/test_vectors_search_1000.yaml', filter_headers=['authorization'], match_on=['method', 'scheme', 'host', 'port', 'path'])
     def test_vectors_search(self):
         v = Vectors()
-        aoi = "POLYGON((17.75390625 25.418470119273117,24.08203125 25.418470119273117,24.08203125 19.409611549990895,17.75390625 19.409611549990895,17.75390625 25.418470119273117))"
-        results = v.query(aoi, query="item_type:WV03", index=None, count=1000)
+        aoi = "POLYGON((17 25, 18 25, 18 24, 17 24, 17 25))"
+        results = v.query(aoi, query='item_type:WV02', count=1000)
 
-        assert len(results) == 310
+        assert len(results) == 218 
 
     @vcr.use_cassette('tests/unit/cassettes/test_vectors_search_55.yaml', filter_headers=['authorization'], match_on=['method', 'scheme', 'host', 'port', 'path'])
     def test_vectors_search_count_small(self):
         v = Vectors()
-        aoi = "POLYGON((17.75390625 25.418470119273117,24.08203125 25.418470119273117,24.08203125 19.409611549990895,17.75390625 19.409611549990895,17.75390625 25.418470119273117))"
-        results = v.query(aoi, query="item_type:WV03", index=None, count=55)
+        aoi = "POLYGON((17 25, 18 25, 18 24, 17 24, 17 25))"
+        results = v.query(aoi, query='item_type:WV02', count=55)
 
         assert len(results) == 55
 
     @vcr.use_cassette('tests/unit/cassettes/test_vectors_search_1.yaml', filter_headers=['authorization'], match_on=['method', 'scheme', 'host', 'port', 'path'])
     def test_vectors_search_count_single(self):
         v = Vectors()
-        aoi = "POLYGON((17.75390625 25.418470119273117,24.08203125 25.418470119273117,24.08203125 19.409611549990895,17.75390625 19.409611549990895,17.75390625 25.418470119273117))"
-        results = v.query(aoi, query="item_type:WV03", index=None, count=1)
+        aoi = "POLYGON((17 25, 18 25, 18 24, 17 24, 17 25))"
+        results = v.query(aoi, query="item_type:WV02", count=1)
 
         assert len(results) == 1
 
     @vcr.use_cassette('tests/unit/cassettes/test_vectors_search_310.yaml', filter_headers=['authorization'], match_on=['method', 'scheme', 'host', 'port', 'path'])
     def test_vectors_search_count_equal_to_num_records(self):
         v = Vectors()
-        aoi = "POLYGON((17.75390625 25.418470119273117,24.08203125 25.418470119273117,24.08203125 19.409611549990895,17.75390625 19.409611549990895,17.75390625 25.418470119273117))"
-        results = v.query(aoi, query="item_type:WV03", index=None, count=310)
+        aoi = "POLYGON((17 25, 18 25, 18 24, 17 24, 17 25))"
+        results = v.query(aoi, query="item_type:WV02", count=218)
 
-        assert len(results) == 310
+        assert len(results) == 218
 
     @vcr.use_cassette('tests/unit/cassettes/test_vectors_search_index.yaml', filter_headers=['authorization'], match_on=['method', 'scheme', 'host', 'port', 'path'])
     def test_vectors_search_index(self):
         v = Vectors()
         aoi = "POLYGON((17.75390625 25.418470119273117,24.08203125 25.418470119273117,24.08203125 19.409611549990895,17.75390625 19.409611549990895,17.75390625 25.418470119273117))"
-        results = v.query(aoi, query="item_type:WV03", index="vector-dgcatalog-2016", count=1000)
+        aoi = 'POLYGON ((-117.1142580000000066 37.9875040000000013, -117.1142580000000066 38.1431979999999982, -117.3339840000000009 38.1431979999999982, -117.3339840000000009 37.9875040000000013, -117.1142580000000066 37.9875040000000013))'
+        results = v.query(aoi, query="item_type:tweet", index="vector-sma-twitter*", count=1000)
 
-        assert len(results) == 140
+        assert len(results) == 114
 
     @vcr.use_cassette('tests/unit/cassettes/test_vectors_search_interate.yaml', filter_headers=['authorization'], match_on=['method', 'scheme', 'host', 'port', 'path'])
     def test_vectors_search_iteratively(self):
         v = Vectors()
-        aoi = "POLYGON((17.75390625 25.418470119273117,24.08203125 25.418470119273117,24.08203125 19.409611549990895,17.75390625 19.409611549990895,17.75390625 25.418470119273117))"
-        g = v.query_iteratively(aoi, query="item_type:WV03", index=None, count=1000)
+        aoi = "POLYGON((17 25, 18 25, 18 24, 17 24, 17 25))"
+        g = v.query_iteratively(aoi, query="item_type:WV02", count=1000)
 
         count = 0
         for vector in g:
           count += 1
 
         assert isinstance(g, types.GeneratorType)
-        assert count == 310
+        assert count == 218 
 
     @vcr.use_cassette('tests/unit/cassettes/test_vectors_create_single.yaml', filter_headers=['authorization'])
     def test_vectors_create_single(self):
@@ -120,8 +119,8 @@ class TestVectors(unittest.TestCase):
                 }
           })
 
-        for result in results:
-            assert result == '/insight-vector/api/vector/vector-web-s/ce0699f3-bef8-402f-a18e-d149dc2f5f90'
+        for result in results['successfulItemIds']:
+            assert result == '/api/vector/vector-user-provided/7411195a-ea4d-428a-bc3c-b92b0e5aa057'
 
     @vcr.use_cassette('tests/unit/cassettes/test_vectors_create_multiple.yaml', filter_headers=['authorization'])
     def test_vectors_create_multiple(self):
@@ -179,7 +178,7 @@ class TestVectors(unittest.TestCase):
             number=6,
             date='2015-06-06'
         )
-        assert result == '/insight-vector/api/vector/vector-web-s/b1af66c3-2e41-4696-9924-6ab264336692'
+        assert result == '2bfe706c-6247-482a-b53c-e55efab08330'
 
     @vcr.use_cassette('tests/unit/cassettes/test_vectors_aggregate_query_with_default_index.yaml', filter_headers=['authorization'])
     def test_vectors_aggregate_query_with_default_index(self):
@@ -210,44 +209,44 @@ class TestVectors(unittest.TestCase):
         wkt = 'POLYGON((-76.65 40.10, -76.65 40.14, -76.55 40.14, -76.55 40.10, -76.65 40.10))'
         aggs = 'terms:ingest_source'
         v = Vectors()
-        result = v.aggregate_query(wkt, aggs, index=None)
+        result = v.aggregate_query(wkt, aggs)
         assert len(result) == 1
         assert 'name' in result[0]
         assert result[0]['name'] == 'terms:ingest_source'
         assert 'terms' in result[0]
-        assert len(result[0]['terms']) == 6
+        assert len(result[0]['terms']) == 1
 
     @vcr.use_cassette('tests/unit/cassettes/test_vectors_aggregate_query_simple.yaml', filter_headers=['authorization'])
     def test_vectors_aggregate_query_agg_def(self):
         wkt = 'POLYGON((-76.65 40.10, -76.65 40.14, -76.55 40.14, -76.55 40.10, -76.65 40.10))'
         aggs = AggregationDef(agg_type='terms', value='ingest_source')
         v = Vectors()
-        result = v.aggregate_query(wkt, aggs, index=None)
+        result = v.aggregate_query(wkt, aggs)
         assert len(result) == 1
         assert 'name' in result[0]
         assert result[0]['name'] == 'terms:ingest_source'
         assert 'terms' in result[0]
-        assert len(result[0]['terms']) == 6
+        assert len(result[0]['terms']) == 1
 
     @vcr.use_cassette('tests/unit/cassettes/test_vectors_aggregate_query_complex.yaml', filter_headers=['authorization'])
     def test_vectors_aggregate_query_complex(self):
         wkt = 'POLYGON((-76.65 40.10, -76.65 40.14, -76.55 40.14, -76.55 40.10, -76.65 40.10))'
-        child_agg = AggregationDef(agg_type='date_hist', value='M')
+        child_agg = AggregationDef(agg_type='date_hist', value='month')
         aggs = AggregationDef(agg_type='geohash', value='4', children=child_agg)
         v = Vectors()
         query = 'item_type:tweet'
-        start_date = 'now-6M'
+        start_date = 'now-2M'
         end_date = 'now'
-        result = v.aggregate_query(wkt, aggs, index=None, query=query, start_date=start_date, end_date=end_date)
+        result = v.aggregate_query(wkt, aggs, index='vector-sma-twitter*', query=query, start_date=start_date, end_date=end_date)
         assert len(result) == 1
         assert 'name' in result[0]
         assert result[0]['name'] == 'geohash:4'
         assert 'terms' in result[0]
         terms = result[0]['terms']
-        assert len(terms) == 1
+        assert len(terms) == 2 
         assert terms[0]['term'] == 'dr1s'
         assert len(terms[0]['aggregations']) == 1
-        assert len(terms[0]['aggregations'][0]['terms']) == 4
+        assert len(terms[0]['aggregations'][0]['terms']) == 5
 
     def test_agg_def_repr_no_children(self):
         agg_def = AggregationDef(agg_type='terms', value='ingest_source')

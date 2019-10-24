@@ -3,30 +3,65 @@ interactions:
     body: !!python/unicode '{"type": "Polygon", "coordinates": [[[-76.65, 40.1], [-76.65,
       40.14], [-76.55, 40.14], [-76.55, 40.1], [-76.65, 40.1]]]}'
     headers:
-      Accept: ['*/*']
-      Accept-Encoding: ['gzip, deflate']
-      Connection: [keep-alive]
-      Content-Length: ['120']
-      Content-Type: [application/json]
-      User-Agent: [python-requests/2.12.1]
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '120'
+      Content-Type:
+      - application/json
+      User-Agent:
+      - sandman@digitalglobe.com
     method: POST
-    uri: https://vector.geobigdata.io/insight-vector/api/aggregation?count=10&query=item_type%3Atweet&end_date=now&start_date=now-6M&aggs=geohash%3A4%3Bdate_hist%3AM
+    uri: https://vector.geobigdata.io/insight-vector/api/index/aggregation/vector-sma-twitter*?count=10&query=item_type%3Atweet&end_date=now&start_date=now-2M&aggs=geohash%3A4%3Bdate_hist%3Amonth
   response:
-    body: {string: !!python/unicode '{"responseDate":"2017-04-20T18:10:36Z","geom":{"type":"Polygon","coordinates":[[[-76.65,40.1],[-76.65,40.14],[-76.55,40.14],[-76.55,40.1],[-76.65,40.1]]]},"query":"item_type:tweet","startDate":null,"endDate":null,"totalItems":109,"aggregations":[{"name":"geohash:4","terms":[{"term":"dr1s","count":109,"aggregations":[{"name":"date_hist:M","terms":[{"term":"2017-01-01T00:00:00.000Z","count":31,"aggregations":null},{"term":"2017-02-01T00:00:00.000Z","count":33,"aggregations":null},{"term":"2017-03-01T00:00:00.000Z","count":42,"aggregations":null},{"term":"2017-04-01T00:00:00.000Z","count":3,"aggregations":null}]}]}]}]}'}
+    body:
+      string: !!python/unicode '{"responseDate":"2019-06-14T19:52:30.351Z","geom":{"type":"Polygon","coordinates":[[[-76.65,40.1],[-76.65,40.14],[-76.55,40.14],[-76.55,40.1],[-76.65,40.1]]]},"query":"item_type:tweet","startDate":null,"endDate":null,"totalItems":195,"aggregations":[{"name":"geohash:4","terms":[{"term":"dr1s","count":194,"aggregations":[{"name":"date_hist:month","terms":[{"term":"2019-02-01T00:00:00.000Z","count":2,"aggregations":null},{"term":"2019-03-01T00:00:00.000Z","count":44,"aggregations":null},{"term":"2019-04-01T00:00:00.000Z","count":47,"aggregations":null},{"term":"2019-05-01T00:00:00.000Z","count":76,"aggregations":null},{"term":"2019-06-01T00:00:00.000Z","count":25,"aggregations":null}]}]},{"term":"dr1k","count":1,"aggregations":[{"name":"date_hist:month","terms":[{"term":"2019-05-01T00:00:00.000Z","count":1,"aggregations":null}]}]}]}]}'
     headers:
-      access-control-allow-credentials: ['true']
-      access-control-allow-headers: ['origin, content-type, accept, authorization']
-      access-control-allow-methods: ['GET, POST, PUT, DELETE, OPTIONS, HEAD']
-      access-control-allow-origin: ['*']
-      connection: [keep-alive]
-      content-encoding: [UTF-8]
-      content-length: ['623']
-      content-type: [application/json;charset=UTF-8]
-      date: ['Thu, 20 Apr 2017 18:10:36 GMT']
-      server: [WebLogic 12.2.1.1, Weblogic 12.2.1.1]
-      x-content-type-options: [nosniff]
-      x-frame-options: [SAMEORIGIN]
-      x-permitted-cross-domain-policies: [none]
-      x-xss-protection: [1; mode=block]
-    status: {code: 200, message: OK}
+      access-control-allow-credentials:
+      - 'true'
+      access-control-allow-headers:
+      - origin, content-type, accept, authorization
+      access-control-allow-methods:
+      - GET, POST, PUT, DELETE, OPTIONS, HEAD
+      access-control-allow-origin:
+      - '*'
+      cache-control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      connection:
+      - keep-alive
+      content-encoding:
+      - UTF-8
+      content-length:
+      - '844'
+      content-type:
+      - application/json;charset=UTF-8
+      date:
+      - Fri, 14 Jun 2019 19:52:30 GMT
+      expires:
+      - '0'
+      pragma:
+      - no-cache
+      server:
+      - Apache-Coyote/1.1
+      - Weblogic 12.2.1.1
+      strict-transport-security:
+      - max-age=604800 ; includeSubDomains
+      x-content-type-options:
+      - nosniff
+      - nosniff
+      x-frame-options:
+      - DENY
+      - SAMEORIGIN
+      x-permitted-cross-domain-policies:
+      - none
+      x-xss-protection:
+      - 1; mode=block
+      - 1; mode=block
+    status:
+      code: 200
+      message: OK
 version: 1
