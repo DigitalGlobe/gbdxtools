@@ -8,7 +8,7 @@ from gbdxtools.rda.graph import get_rda_graph_template, get_rda_template_metadat
     create_rda_template, materialize_status, materialize_template
 from gbdxtools.auth import Auth
 from gbdxtools.rda.util import deprecation
-from gbdxtools.rda.fetch import easyfetch as load_url
+from gbdxtools.rda.fetch import load_url
 from gbdxtools.rda.util import RDA_TO_DTYPE
 from shapely.geometry import box
 
