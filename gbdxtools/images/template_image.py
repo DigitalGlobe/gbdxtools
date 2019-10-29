@@ -88,8 +88,28 @@ class TemplateMeta(GraphMeta):
 
     @property
     def chunks(self):
+        ''' build the chunks
+            chunks is tuple of tuples in each dimension
+            where the elements are the chunk size '''
+
         img_md = self.metadata["image"]
-        return (img_md["numBands"], img_md["tileYSize"], img_md["tileXSize"])
+        bands, y_size, x_size = self.shape
+
+        y_full_chunks = y_size // img_md["tileYSize"]
+        y_remainder = y_size % img_md["tileYSize"]
+
+        y_chunks = (img_md["tileYSize"],) * y_full_chunks
+        if y_remainder != 0:
+            y_chunks = (*y_chunks, y_remainder)
+
+        x_full_chunks = x_size // img_md["tileXSize"]
+        x_remainder = x_size % img_md["tileXSize"]
+
+        x_chunks = (img_md["tileXSize"],) * x_full_chunks
+        if x_remainder != 0:
+            x_chunks = (*x_chunks, x_remainder)
+
+        return ((bands,), y_chunks, x_chunks)
 
     @property
     def dtype(self):
