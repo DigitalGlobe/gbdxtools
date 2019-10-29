@@ -2,7 +2,11 @@ import os
 import random
 from functools import partial
 from itertools import chain, product
-from collections import Container, namedtuple
+from collections import namedtuple
+try:
+    from collections.abc import Container
+except ImportError:
+    from collections import Container
 import warnings
 import math
 

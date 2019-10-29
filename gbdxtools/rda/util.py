@@ -6,7 +6,10 @@ import time
 import math
 import json
 from functools import wraps, partial
-from collections import Sequence
+try:
+    from collections.abc import Sequence
+except ImportError:  #python2.7
+    from collections import Sequence
 try:
     from itertools import izip
 except ImportError:  #python3.x
