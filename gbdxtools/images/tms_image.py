@@ -80,7 +80,7 @@ class TmsMeta(object):
     def __init__(self, url, zoom=18, bounds=None):
         self.zoom_level = zoom
         self._name = "image-{}".format(str(uuid.uuid4()))
-        self._url_template = url
+        self._url = url
 
         _first_tile = mercantile.Tile(z=self.zoom_level, x=0, y=0)
         _last_tile = mercantile.Tile(z=self.zoom_level, x=180, y=-85.05)
@@ -146,7 +146,7 @@ class TmsMeta(object):
 
     def _collect_urls(self, bounds):
         minx, miny, maxx, maxy = self._tile_coords(bounds)
-        urls = {(y - miny, x - minx): self._url_template.format(z=self.zoom_level, x=x, y=y)
+        urls = {(y - miny, x - minx): self._url.format(z=self.zoom_level, x=x, y=y)
                 for y in xrange(miny, maxy + 1) for x in xrange(minx, maxx + 1)}
         return urls, (3, self._tile_size * (maxy - miny + 1), self._tile_size * (maxx - minx + 1))
 
@@ -207,7 +207,7 @@ class TmsImage(GeoDaskImage):
         bbox (list): (optional) Bounding box of AOI, if aoi() method is not used.
 
     Example:
-        >>> img = TmsImage(url=r"https://earthwatch.digitalglobe.com/earthservice/tmsaccess/tms/1.0.0/DigitalGlobe:ImageryTileService@EPSG:3857@jpg/{z}/{x}/{y}.jpg?connectId=", zoom=13, bbox=[-109.84, 43.19, -109.59, 43.34])'''
+        >>> img = TmsImage(r"https://earthwatch.digitalglobe.com/earthservice/tmsaccess/tms/1.0.0/DigitalGlobe:ImageryTileService@EPSG:3857@jpg/{z}/{x}/{y}.jpg?connectId=", zoom=13, bbox=[-109.84, 43.19, -109.59, 43.34])'''
 
 
     _default_proj = "EPSG:3857"
