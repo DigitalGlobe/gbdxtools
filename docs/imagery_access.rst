@@ -223,17 +223,26 @@ Beyond replacing catalog ids for AOIs, the ``DemImage`` class shares all the sam
 TMS Images
 ^^^^^^^^^^^^^^^^^^^^^^^
 
-The ``TmsImage`` class is used to access imagery available from the `Mapbox Raster Tiles API <https://docs.mapbox.com/api/maps/#retrieve-raster-tiles>`_. These are global mosiacs of imagery that can be an effective source for training Machine Learning algorithms or whenever high-resolution is needed. Since Mapbox API is static, or changes less frequently, these images are best suited when there are no temporal requirements on an analysis. The zoom level to use can be specified (default is 22). Changing the zoom level will change the resolution of the image. Note that different image sources are used at different zoom levels.
+The ``TmsImage`` class is used to convert TMS-based imagery into NumPy arrays. The zoom level to use can be specified (default is 18). Changing the zoom level will change the resolution of the image.
+
+The following example shows plotting an image generated from OpenStreetMap tiles:
 
 .. code-block:: python
 
     from gbdxtools import TmsImage
 
-    img = TmsImage(zoom=13)
+    url = r'https://a.tile.openstreetmap.org/{z}/{x}/{y}.png'
+    img = TmsImage(url, zoom=13)
     print(img.shape)
     aoi = img.aoi(bbox=[-109.84, 43.19, -109.59, 43.34])
     print(aoi.shape)
     aoi.plot()
+
+Subscribers to the EarthWatch TMS service can use this image class to access EarthWatch base imagery in Python. Use the following configuration, substituting a valid ConnectID string:
+
+.. code-block:: python
+
+    img = TmsImage(r"https://earthwatch.digitalglobe.com/earthservice/tmsaccess/tms/1.0.0/DigitalGlobe:ImageryTileService@EPSG:3857@jpg/{z}/{x}/{y}.jpg?flipy=true&connectId=<connectid>", zoom=13)
 
 
 S3 Images
