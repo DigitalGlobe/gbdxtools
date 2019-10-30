@@ -197,7 +197,7 @@ class TmsImage(GeoDaskImage):
 
     These images will be subject to the rules and metadata of the source TMS tiles
     
-    Instead of an ID the zoom level to use can be specified (default is 18). Changing the zoom level will change the resolution of the image. Note that different image sources are used at different zoom levels.
+    Instead of an ID the zoom level to use can be specified (default is 18). Changing the zoom level will change the resolution of the image.
 
     Supports the basic methods shared by Catalog Images such as plot() and geotiff().
 
