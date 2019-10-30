@@ -223,20 +223,26 @@ Beyond replacing catalog ids for AOIs, the ``DemImage`` class shares all the sam
 TMS Images
 ^^^^^^^^^^^^^^^^^^^^^^^
 
-The ``TmsImage`` class is used to access imagery available from a Tile Map Service (TMS). These can be used as a static imagery source that can be an effective source for training Machine Learning algorithms or whenever high-resolution is needed. The zoom level to use can be specified (default is 18). Changing the zoom level will change the resolution of the image.
+The ``TmsImage`` class is used to convert TMS-based imagery into NumPy arrays. The zoom level to use can be specified (default is 18). Changing the zoom level will change the resolution of the image.
 
-Subscribers to the new EarthWatch TMS service can use this image class to access EarthWatch base imagery in Python. Use the following configuration, substituting a valid ConnectID string.
+The following example shows plotting an image generated from OpenStreetMap tiles:
 
 .. code-block:: python
 
     from gbdxtools import TmsImage
 
-    url = r"https://earthwatch.digitalglobe.com/earthservice/tmsaccess/tms/1.0.0/DigitalGlobe:ImageryTileService@EPSG:3857@jpg/{z}/{x}/{y}.jpg?flipy=true&connectId=<connectid>"
+    url = r'https://a.tile.openstreetmap.org/{z}/{x}/{y}.png'
     img = TmsImage(url, zoom=13)
     print(img.shape)
     aoi = img.aoi(bbox=[-109.84, 43.19, -109.59, 43.34])
     print(aoi.shape)
     aoi.plot()
+
+Subscribers to the EarthWatch TMS service can use this image class to access EarthWatch base imagery in Python. Use the following configuration, substituting a valid ConnectID string:
+
+.. code-block:: python
+
+    img = TmsImage(r"https://earthwatch.digitalglobe.com/earthservice/tmsaccess/tms/1.0.0/DigitalGlobe:ImageryTileService@EPSG:3857@jpg/{z}/{x}/{y}.jpg?flipy=true&connectId=<connectid>", zoom=13)
 
 
 S3 Images
