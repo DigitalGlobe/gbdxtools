@@ -225,6 +225,8 @@ TMS Images
 
 The ``TmsImage`` class is used to access imagery available from a Tile Map Service (TMS). These can be used as a static imagery source that can be an effective source for training Machine Learning algorithms or whenever high-resolution is needed. The zoom level to use can be specified (default is 18). Changing the zoom level will change the resolution of the image.
 
+Subscribers to the new EarthWatch TMS service can use this image class to access EarthWatch base imagery in Python. Use the following configuration, substituting a valid ConnectID string.
+
 .. code-block:: python
 
     from gbdxtools import TmsImage
