@@ -205,9 +205,9 @@ Submit a task and run a workflow
 
 A workflow chains together a series of tasks and runs them in the specified order. Running a workflow means creating a series of Task objects with their inputs and outputs and passing them to the Workflow fuction as a list.
 
-Note: All tasks require inputs.
-  When a task requires a GBDX S3 location as an input, find the location in the Order response. Location will only be displayed when the state = delivered.
-  
+.. note:: All tasks require inputs.
+   When a task requires a GBDX S3 location as an input, find the location in the Order response. Location will only be displayed when the state = delivered.
+
 For this tutorial, we'll create and run a workflow with one simple task (Getting_Started)::
 
   Getting_Started: a simple task that only requires "your_name" as an input, and outputs a .txt file.
@@ -217,11 +217,10 @@ Create and run a workflow
 
 Define and run your workflow::
 
-  data = "s3://receiving-dgcs-tdgplatform-com/054813633050_01_003" # An example of a delivered order
-  Getting_Started = gbdx.Task("Getting_Started", your_name="Your Name")
-  workflow = gbdx.Workflow([ Getting_Started ])
-  workflow.savedata(aoptask.outputs.data, location='getting_started_output')
-  workflow.execute()
+   Getting_Started = gbdx.Task("Getting_Started", your_name="Your Name")
+   workflow = gbdx.Workflow([ Getting_Started ])
+   workflow.savedata(Getting_Started.outputs.data, location='getting_started_output')
+   workflow.execute()
 
 This workflow example shows the input and output values of the Getting_Started task.
 
