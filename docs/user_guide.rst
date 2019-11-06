@@ -171,7 +171,7 @@ Let's search for acquisitions in a subsection of San Francisco, collected betwee
   results = gbdx.catalog.search(searchAreaWkt=searchAreaWkt,
                           startDate=startDate,
                           endDate=endDate,
-                          types=types
+                          types=types,
 			  filters=filters)
 			  
 Running a search returns a list of metadata items as dictionaries.
