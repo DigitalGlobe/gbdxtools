@@ -163,10 +163,10 @@ You can search the GBDX catalog by spatial area, by date range, or by both. Use 
 
 Let's search for acquisitions in a subsection of San Francisco, collected between March 1, 2015 and March 1, 2016, with cloud cover of less than 10%, and an off-nadir angle of less than 20.::
 
-  searchAreaWkt = "POLYGON ((-105.35202026367188 39.48113956424843, -105.35202026367188 40.044848254075546, -104.65988159179688 40.044848254075546, -104.65988159179688 39.48113956424843, -105.35202026367188 39.48113956424843))",
-  startDate = "2017-01-01T00:00:00.000Z",
-  endDate = "2018-09-01T23:59:59.999Z",
-  types = ["DigitalGlobeAcquisition"],
+  searchAreaWkt = "POLYGON ((-105.35202026367188 39.48113956424843, -105.35202026367188 40.044848254075546, -104.65988159179688 40.044848254075546, -104.65988159179688 39.48113956424843, -105.35202026367188 39.48113956424843))"
+  startDate = "2017-01-01T00:00:00.000Z"
+  endDate = "2018-09-01T23:59:59.999Z"
+  types = ["DigitalGlobeAcquisition"]
   filters = ["sensorPlatformName = WORLDVIEW03_VNIR AND cloudCover < 20 AND offNadirAngle < 10"]
   results = gbdx.catalog.search(searchAreaWkt=searchAreaWkt,
                           startDate=startDate,
