@@ -1,12 +1,12 @@
 Getting started
 ===============
 
-For this tutorial, we'll use the laterst version of gbdxtools, a python module for GBDX. We'll go over how to set up gbdxtools in your local environment for windows with optional ways to install using different operating systems.  Then we'll explain how to setup your local gbdxtools environment to to access GBDX. 
+For this tutorial, we'll use the latest version of gbdxtools, a python module for GBDX. We'll go over how to set up gbdxtools in your local environment for windows with optional ways to install using different operating systems.  Then we'll explain how to setup your local gbdxtools environment to to access GBDX.
 
 Get your account credentials
------------------------
+-------------------------------
 
-Before we start, you'll need your GBDX username and password.  All operations on GBDX require credentials. You can sign up for a GBDX account at https://www.geobigdata.io/contact-us/. ::
+Before we start, you'll need your GBDX username and password.  All operations on GBDX require credentials. If you're interested in purchasing a subscription, use the `Contact Us <https://www.geobigdata.io/contact-us/>`_ form to provide your information.  ::
 
   username = 'youremailagress@mail.com'  
   password = 'ThePasswordYouSetWhenYouActivatedYourAccount.'
@@ -15,7 +15,7 @@ Before we start, you'll need your GBDX username and password.  All operations on
 Installation
 -----------------
 
-Conda is the recommended way to install GBDXtools.  From the anaconda comand prompt::
+Conda is the recommended way to install GBDXtools.  From the anaconda command prompt::
 
     conda create -n envname python=3.5 rasterio gdal
     conda activate envname
@@ -213,7 +213,7 @@ For this tutorial, we'll create and run a workflow with one simple task (Getting
   Getting_Started: a simple task that only requires "your_name" as an input, and outputs a .txt file.
   
 Create and run a workflow
-^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Define and run your workflow::
 
