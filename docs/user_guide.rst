@@ -12,12 +12,6 @@ Before we start, you'll need your GBDX username and password.  All operations on
   password = 'ThePasswordYouSetWhenYouActivatedYourAccount.'
   
 
-Insalling gbdxtools
---------------------
-
-For questions or troubleshooting email GBDX-Support@digitalglobe.com.
-
-
 Installation
 -----------------
 
@@ -146,6 +140,7 @@ Install `gbdxtools`::
 A known issue exists, in certain environments, where conda will downgrade python from 3.x to 2.7x when installing `gbdxtools`. If conda does not keep your python version intact when installing `gbdxtools`, you need to::
 
    conda install -y gbdxtools -c digitalglobe -c conda-forge
+   
 
 Getting Authorized
 ----------------------
@@ -250,3 +245,9 @@ To access the information in your customer S3 bucket do::
   gbdx.s3.download(location='getting_started_output/Hello_World.txt', local_dir='C:/output/location')
   
 Inside this folder, you'll find a txt file called Hello_World.txt. Open the file to see this successful result!
+
+
+Questions
+--------------------
+
+For questions or troubleshooting email GBDX-Support@digitalglobe.com.
