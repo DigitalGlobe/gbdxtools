@@ -1,4 +1,4 @@
-Getting started
+Quickstart
 ===============
 
 For this tutorial, we'll use the latest version of gbdxtools, a python module for GBDX. We'll go over how to set up gbdxtools in your local environment for windows with optional ways to install using different operating systems.  Then we'll explain how to setup your local gbdxtools environment to to access GBDX.
