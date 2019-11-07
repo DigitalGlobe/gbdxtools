@@ -241,9 +241,9 @@ Access the output data from a workflow
 
 To access the information in your customer S3 bucket do::
 
-  gbdx.s3.download(location='getting_started_output/Hello_World.txt', local_dir='C:/output/location')
+  gbdx.s3.download(location='getting_started_output/hello_world.txt', local_dir='C:/output/location')
   
-Inside this folder, you'll find a txt file called Hello_World.txt. Open the file to see this successful result!
+Inside this folder, you'll find a txt file called hello_world.txt. Open the file to see this successful result!
 
 
 Questions
