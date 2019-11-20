@@ -126,7 +126,7 @@ class TemplateMeta(GraphMeta):
                 (img_md["maxTileY"] - img_md["minTileY"] + 1) * img_md["tileYSize"],
                 (img_md["maxTileX"] - img_md["minTileX"] + 1) * img_md["tileXSize"])
 
-    def _materialize(self, node=None, bounds=None, callback=None, out_format='TILE_STREAM', **kwargs):
+    def _materialize(self, node=None, bounds=None, callback=None, out_format='TIF', **kwargs):
         conn = self._interface.gbdx_futures_session
         graph = self.graph()
         graph.pop("id")
