@@ -96,7 +96,6 @@ class TmsMeta(object):
         self._nbands = 3
         self._dtype = "uint8"
         self.bounds = self._expand_bounds(bounds)
-        self._chunks = tuple([self._nbands] + [self._tile_size, self._tile_size])
 
     @property
     def bounds(self):
@@ -121,7 +120,7 @@ class TmsMeta(object):
             return {self._name: (raise_aoi_required, )}
         else:
             urls, shape = self._collect_urls(self.bounds)
-            return {(self._name, 0, y, x): (load_url, url, self._chunks) for (y, x), url in urls.items()}
+            return {(self._name, 0, y, x): (load_url, url, self.chunks) for (y, x), url in urls.items()}
 
     @property
     def dtype(self):
@@ -137,9 +136,28 @@ class TmsMeta(object):
         else:
             return self._shape
 
+
     @property
     def chunks(self):
-        return self._chunks
+        ''' calculate the chunks to build the Dask graph '''
+
+        bands, y_size, x_size = self.shape
+
+        y_full_chunks = y_size // self._tile_size
+        y_remainder = y_size % self._tile_size
+
+        y_chunks = (self._tile_size,) * y_full_chunks
+        if y_remainder != 0:
+            y_chunks = (*y_chunks, y_remainder)
+
+        x_full_chunks = x_size // self._tile_size
+        x_remainder = x_size % self._tile_size
+
+        x_chunks = (self._tile_size,) * x_full_chunks
+        if x_remainder != 0:
+            x_chunks = (*x_chunks, x_remainder)
+
+        return ((bands,), y_chunks, x_chunks)
 
     @property
     def __geo_transform__(self):
