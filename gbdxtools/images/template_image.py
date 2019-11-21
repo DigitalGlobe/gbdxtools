@@ -100,14 +100,14 @@ class TemplateMeta(GraphMeta):
 
         y_chunks = (img_md["tileYSize"],) * y_full_chunks
         if y_remainder != 0:
-            y_chunks = (*y_chunks, y_remainder)
+            y_chunks = y_chunks + (y_remainder,)
 
         x_full_chunks = x_size // img_md["tileXSize"]
         x_remainder = x_size % img_md["tileXSize"]
 
         x_chunks = (img_md["tileXSize"],) * x_full_chunks
         if x_remainder != 0:
-            x_chunks = (*x_chunks, x_remainder)
+            x_chunks = x_chunks + (x_remainder,)
 
         return ((bands,), y_chunks, x_chunks)
 

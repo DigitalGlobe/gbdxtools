@@ -148,14 +148,14 @@ class TmsMeta(object):
 
         y_chunks = (self._tile_size,) * y_full_chunks
         if y_remainder != 0:
-            y_chunks = (*y_chunks, y_remainder)
+            y_chunks = y_chunks + (y_remainder,)
 
         x_full_chunks = x_size // self._tile_size
         x_remainder = x_size % self._tile_size
 
         x_chunks = (self._tile_size,) * x_full_chunks
         if x_remainder != 0:
-            x_chunks = (*x_chunks, x_remainder)
+            x_chunks = x_chunks + (x_remainder,)
 
         return ((bands,), y_chunks, x_chunks)
 
