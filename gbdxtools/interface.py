@@ -70,5 +70,5 @@ class Interface(object):
     def Task(self, __task_name, **kwargs):
         return gbdxtools.simpleworkflows.Task(__task_name, **kwargs)
 
-    def Workflow(self, tasks, **kwargs):
-        return gbdxtools.simpleworkflows.Workflow(tasks, **kwargs)
+    def Workflow(self, tasks=[], workflow_id=None, **kwargs):
+        return gbdxtools.simpleworkflows.Workflow(tasks, workflow_id, **kwargs)
