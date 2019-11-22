@@ -378,10 +378,10 @@ class Task(object):
 
 
 class Workflow(object):
-    def __init__(self, tasks, **kwargs):
+    def __init__(self, tasks=[], workflow_id=None, **kwargs):
         self.workflow = WF()
         self.name = kwargs.get('name', str(uuid.uuid4())[:8] )
-        self.id = None
+        self.id = workflow_id
         self.callback = kwargs.get('callback', None )
 
         self.definition = None
