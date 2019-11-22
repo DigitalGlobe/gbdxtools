@@ -810,3 +810,10 @@ class Workflow(object):
     @stderr.setter
     def stderr(self, value):
         raise NotImplementedError("Cannot set workflow stderr, readonly.")
+
+    @classmethod    
+    def from_id(cls, id):
+        wf = cls([])
+        wf.id = id
+        return wf
+    
