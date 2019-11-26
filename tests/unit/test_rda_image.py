@@ -118,6 +118,7 @@ class RdaImageTest(unittest.TestCase):
     #    assert isinstance(rgb, np.ndarray)
 
     @my_vcr.use_cassette('tests/unit/cassettes/test_ipe_image_ortho.yaml', filter_headers=['authorization'])
+    @pytest.mark.skip(reason="warp dropped")
     def test_ipe_image_ortho(self):
         idahoid = '8c3c4fc6-abcb-4f5f-bce6-d496c1a91676'
         img = self.gbdx.idaho_image(idahoid, spec='1b', bucket='rda-images-1')

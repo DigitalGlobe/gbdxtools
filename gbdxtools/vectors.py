@@ -8,7 +8,8 @@ from string import Template
 from builtins import object
 import six
 
-from matplotlib.image import imsave
+from imageio import imsave
+
 import base64
 from io import BytesIO
 import dask.array as da
@@ -20,7 +21,6 @@ import json, time, os
 
 from shapely.ops import cascaded_union
 from shapely.geometry import shape, box
-from shapely.wkt import loads as from_wkt
 
 from gbdxtools.vector_layers import VectorGeojsonLayer, VectorTileLayer, \
                                     ImageLayer
@@ -173,7 +173,7 @@ class Vectors(object):
         '''
         if count < 1000:
             # issue a single page query
-            search_area_polygon = from_wkt(searchAreaWkt)
+            search_area_polygon = load_wkt(searchAreaWkt)
             left, lower, right, upper = search_area_polygon.bounds
 
             params = {
@@ -209,7 +209,7 @@ class Vectors(object):
     
         '''
 
-        search_area_polygon = from_wkt(searchAreaWkt)
+        search_area_polygon = load_wkt(searchAreaWkt)
         left, lower, right, upper = search_area_polygon.bounds
 
         params = {

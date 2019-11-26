@@ -13,7 +13,8 @@ try:
 except ImportError:
     from cachetools.func import lru_cache
 
-from skimage.io import imread
+from imageio import imread
+
 import pycurl
 import numpy as np
 

@@ -1,13 +1,14 @@
 {% set name = "gbdxtools" %}
-{% set version = "0.16.7" %}
+{% set version = "0.17.0.b3" %}
 
 package:
   name: "{{ name|lower }}"
   version: "{{ version }}"
 
 source:
-  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: 2a537f68c597b9f719414b8bbf56ce50ea2752fe0a4f8fdb6d98a36e4fb0bdb4
+  path: ./
+  # url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+  #sha256: 2a537f68c597b9f719414b8bbf56ce50ea2752fe0a4f8fdb6d98a36e4fb0bdb4
 
 build:
   number: 0
@@ -42,7 +43,7 @@ requirements:
     - python
     - requests >=2.12.1,<=2.21
     - requests-futures
-    - scikit-image
+    - imageio
     - shapely
     - six >=1.10.0
     - toolz
@@ -56,14 +57,7 @@ test:
     - gbdxtools.images.exceptions
     - gbdxtools.images.mixins
     - gbdxtools.images.util
-    - gbdxtools.ipe
     - gbdxtools.rda
-    - gbdxtools.rda.fetch
-    - gbdxtools.rda.fetch.conc
-    - gbdxtools.rda.fetch.conc.asyncio
-    - gbdxtools.rda.fetch.conc.libcurl
-    - gbdxtools.rda.fetch.threaded
-    - gbdxtools.rda.fetch.threaded.libcurl
   requires:
     - pytest
     - vcrpy

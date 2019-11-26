@@ -19,6 +19,6 @@ pyproj
 requests_futures
 configparser
 mercantile>=0.10.0
-scikit-image
+imageio
 cachetools >= 2.0.0
 affine
