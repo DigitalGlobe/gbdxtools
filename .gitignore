@@ -10,5 +10,6 @@ dist/
 chip.tif
 .pytest_cache
 
-Pipfile
-settings.json
+Pipfile*
+/.vscode
+.envrc
