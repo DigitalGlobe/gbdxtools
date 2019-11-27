@@ -13,7 +13,8 @@ try:
 except ImportError:
     from cachetools.func import lru_cache
 
-from imageio import imread
+import imageio
+import tifffile
 
 import pycurl
 import numpy as np
@@ -57,9 +58,9 @@ def load_url(url, token, shape=(8, 256, 256)):
                 temp.file.flush()
                 temp.close()
                 if content_type == 'image/tiff':
-                    arr = imread(temp.name, plugin='tifffile')
+                    arr = tifffile.imread(temp.name)
                 else:
-                    arr = imread(temp.name)
+                    arr = imageio.imread(temp.name)
                 if len(arr.shape) == 3:
                     arr = np.rollaxis(arr, 2, 0)
                 else:
@@ -67,6 +68,7 @@ def load_url(url, token, shape=(8, 256, 256)):
                 success = True
                 return arr
             except Exception as e:
+                print(e)
                 _curl.close()
                 del _curl_pool[thread_id]
                 sleep(2**i)
@@ -75,5 +77,5 @@ def load_url(url, token, shape=(8, 256, 256)):
                 os.remove(temp.name)
 
     if success is False:
-        raise TypeError("Unable to download tile in {} retries".format(MAX_RETRIES))
+        raise TypeError("Unable to download tile {} in {} retries".format(url, MAX_RETRIES))
     return arr
