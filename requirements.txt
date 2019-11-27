@@ -13,12 +13,13 @@ ephem
 toolz
 cloudpickle
 dask[array]>=1.1.0
-numpy>1.12
+numpy>=1.17
 pycurl
 pyproj
 requests_futures
 configparser
 mercantile>=0.10.0
 imageio
+tifffile
 cachetools >= 2.0.0
 affine

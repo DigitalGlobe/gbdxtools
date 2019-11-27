@@ -44,6 +44,7 @@ requirements:
     - requests >=2.12.1,<=2.21
     - requests-futures
     - imageio
+    - tifffile
     - shapely
     - six >=1.10.0
     - toolz
