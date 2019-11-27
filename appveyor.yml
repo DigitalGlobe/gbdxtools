@@ -1,24 +1,11 @@
+image:
+  - Visual Studio 2019
 environment:
-
   matrix:
-
     # For Python versions available on Appveyor, see
-    # http://www.appveyor.com/docs/installed-software#python
-    # The list here is complete (excluding Python 2.6, which
-    # isn't covered by this document) at the time of writing.
-
+    # https://www.appveyor.com/docs/windows-images-software/#python
     - PYTHON: "C:\\Python27"
-    #- PYTHON_VERSION: 2.7
-    #  MINICONDA: C:\\Miniconda
-    #- PYTHON: "C:\\Python33"
-    #- PYTHON: "C:\\Python34"
-    #- PYTHON: "C:\\Python35"
-    #- PYTHON: "C:\\Python27-x64"
-    #- PYTHON: "C:\\Python33-x64"
-    #  DISTUTILS_USE_SDK: "1"
-    #- PYTHON: "C:\\Python34-x64"
-    #  DISTUTILS_USE_SDK: "1"
-    #- PYTHON: "C:\\Python35-x64"
+    - PYTHON: "C:\\Python37"
 
 install:
   # We need wheel installed to build wheels
@@ -41,6 +28,7 @@ install:
   - "%PYTHON%\\python.exe -m pip install Shapely-1.5.17-cp27-cp27m-win32.whl"
   - "appveyor DownloadFile https://github.com/DigitalGlobe/gbdxtools-windows-binaries/raw/master/pyproj-1.9.5.1-cp27-cp27m-win32.whl"
   - "%PYTHON%\\python.exe -m pip install pyproj-1.9.5.1-cp27-cp27m-win32.whl"
+  #- "appveyor DownloadFile https://curl.haxx.se/windows/dl-7.67.0_4/curl-7.67.0_4-win64-mingw.zip"
   - "%PYTHON%\\python.exe -m pip install matplotlib pytest"
   - "%PYTHON%\\python.exe -m pip install -r requirements.txt"
 
