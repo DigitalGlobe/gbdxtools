@@ -28,7 +28,8 @@ install:
   - "%PYTHON%\\python.exe -m pip install Shapely-1.5.17-cp27-cp27m-win32.whl"
   - "appveyor DownloadFile https://github.com/DigitalGlobe/gbdxtools-windows-binaries/raw/master/pyproj-1.9.5.1-cp27-cp27m-win32.whl"
   - "%PYTHON%\\python.exe -m pip install pyproj-1.9.5.1-cp27-cp27m-win32.whl"
-  #- "appveyor DownloadFile https://curl.haxx.se/windows/dl-7.67.0_4/curl-7.67.0_4-win64-mingw.zip"
+  - "appveyor DownloadFile https://download.lfd.uci.edu/pythonlibs/t7epjj8p/pycurl-7.43.0.3-cp27-cp27-win_amd64.whl"
+  - "%PYTHON%\\python.exe -m pip install pycurl-7.43.0.3-cp27-cp27-win_amd64.whl"
   - "%PYTHON%\\python.exe -m pip install matplotlib pytest"
   - "%PYTHON%\\python.exe -m pip install -r requirements.txt"
 
