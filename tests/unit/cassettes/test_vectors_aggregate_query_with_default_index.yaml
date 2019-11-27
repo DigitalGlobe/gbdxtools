@@ -1,33 +1,67 @@
 interactions:
 - request:
-    body: '{"type": "Polygon", "coordinates": [[[-76.65, 40.1], [-76.65, 40.14], [-76.55,
-      40.14], [-76.55, 40.1], [-76.65, 40.1]]]}'
+    body: !!python/unicode '{"type": "Polygon", "coordinates": [[[-76.65, 40.1], [-76.65,
+      40.14], [-76.55, 40.14], [-76.55, 40.1], [-76.65, 40.1]]]}'
     headers:
-      Accept: ['*/*']
-      Accept-Encoding: ['gzip, deflate']
-      Connection: [keep-alive]
-      Content-Length: ['120']
-      Content-Type: [application/json]
-      User-Agent: [python-requests/2.12.1]
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '120'
+      Content-Type:
+      - application/json
+      User-Agent:
+      - sandman@digitalglobe.com
     method: POST
-    uri: https://vector.geobigdata.io/insight-vector/api/index/aggregation/vector-gbdx-alpha-catalog-v2-*?aggs=terms%3Aitem_type&count=10
+    uri: https://vector.geobigdata.io/insight-vector/api/index/aggregation/vector-gbdx-alpha-catalog-v2-*?count=10&aggs=terms%3Aitem_type
   response:
-    body: {string: '{"responseDate":"2017-05-03T17:52:56Z","geom":{"type":"Polygon","coordinates":[[[-76.65,40.1],[-76.65,40.14],[-76.55,40.14],[-76.55,40.1],[-76.65,40.1]]]},"query":null,"startDate":null,"endDate":null,"totalItems":310,"aggregations":[{"name":"terms:item_type","terms":[{"term":"GBDXCatalogRecord","count":310,"aggregations":null},{"term":"Acquisition","count":274,"aggregations":null},{"term":"Landsat8","count":184,"aggregations":null},{"term":"LandsatAcquisition","count":184,"aggregations":null},{"term":"DigitalGlobeAcquisition","count":86,"aggregations":null},{"term":"WV02","count":44,"aggregations":null},{"term":"DigitalGlobeProduct","count":36,"aggregations":null},{"term":"QB02","count":34,"aggregations":null},{"term":"WV01","count":21,"aggregations":null},{"term":"GE01","count":19,"aggregations":null}]}]}'}
+    body:
+      string: !!python/unicode '{"responseDate":"2019-06-13T21:30:06.337Z","geom":{"type":"Polygon","coordinates":[[[-76.65,40.1],[-76.65,40.14],[-76.55,40.14],[-76.55,40.1],[-76.65,40.1]]]},"query":null,"startDate":null,"endDate":null,"totalItems":1044,"aggregations":[{"name":"terms:item_type","terms":[{"term":"GBDXCatalogRecord","count":1044,"aggregations":null},{"term":"ESAProduct","count":491,"aggregations":null},{"term":"Acquisition","count":436,"aggregations":null},{"term":"SENTINEL2","count":350,"aggregations":null},{"term":"Landsat8","count":329,"aggregations":null},{"term":"LandsatAcquisition","count":329,"aggregations":null},{"term":"SENTINEL1","count":141,"aggregations":null},{"term":"DigitalGlobeAcquisition","count":98,"aggregations":null},{"term":"DigitalGlobeProduct","count":44,"aggregations":null},{"term":"MODISProduct","count":44,"aggregations":null}]}]}'
     headers:
-      Access-Control-Allow-Credentials: ['true']
-      Access-Control-Allow-Headers: ['origin, content-type, accept, authorization']
-      Access-Control-Allow-Methods: ['GET, POST, PUT, DELETE, OPTIONS, HEAD']
-      Access-Control-Allow-Origin: ['*']
-      Connection: [keep-alive]
-      Content-Encoding: [UTF-8]
-      Content-Length: ['817']
-      Content-Type: [application/json;charset=UTF-8]
-      Date: ['Wed, 03 May 2017 17:52:56 GMT']
-      Server: [WebLogic 12.2.1.1, Weblogic 12.2.1.1]
-      Strict-Transport-Security: [max-age=604800 ; includeSubDomains]
-      X-Content-Type-Options: [nosniff]
-      X-Frame-Options: [SAMEORIGIN]
-      X-Permitted-Cross-Domain-Policies: [none]
-      X-XSS-Protection: [1; mode=block]
-    status: {code: 200, message: OK}
+      access-control-allow-credentials:
+      - 'true'
+      access-control-allow-headers:
+      - origin, content-type, accept, authorization
+      access-control-allow-methods:
+      - GET, POST, PUT, DELETE, OPTIONS, HEAD
+      access-control-allow-origin:
+      - '*'
+      cache-control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      connection:
+      - keep-alive
+      content-encoding:
+      - UTF-8
+      content-length:
+      - '850'
+      content-type:
+      - application/json;charset=UTF-8
+      date:
+      - Thu, 13 Jun 2019 21:30:06 GMT
+      expires:
+      - '0'
+      pragma:
+      - no-cache
+      server:
+      - Apache-Coyote/1.1
+      - Weblogic 12.2.1.1
+      strict-transport-security:
+      - max-age=604800 ; includeSubDomains
+      x-content-type-options:
+      - nosniff
+      - nosniff
+      x-frame-options:
+      - DENY
+      - SAMEORIGIN
+      x-permitted-cross-domain-policies:
+      - none
+      x-xss-protection:
+      - 1; mode=block
+      - 1; mode=block
+    status:
+      code: 200
+      message: OK
 version: 1

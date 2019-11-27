@@ -61,5 +61,5 @@ class GE01ImageTest(unittest.TestCase):
         _id = '2001110218231680000010116110'
         img = self.gbdx.catalog_image(_id, proj="EPSG:3857")
         self.assertTrue(isinstance(img, IkonosImage))
-        assert img.shape == (4, 33625, 4870)
+        assert img.shape == (4, 33624, 4870)
         assert img.proj == 'EPSG:3857'

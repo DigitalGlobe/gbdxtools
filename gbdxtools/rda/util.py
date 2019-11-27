@@ -6,7 +6,10 @@ import time
 import math
 import json
 from functools import wraps, partial
-from collections import Sequence
+try:
+    from collections.abc import Sequence
+except ImportError:  #python2.7
+    from collections import Sequence
 try:
     from itertools import izip
 except ImportError:  #python3.x
@@ -14,7 +17,6 @@ except ImportError:  #python3.x
 
 import numpy as np
 from numpy.linalg import pinv
-from skimage.transform._geometric import GeometricTransform
 
 import xml.etree.cElementTree as ET
 from xml.dom import minidom
@@ -223,9 +225,9 @@ def preview(image, **kwargs):
 def reproject_params(proj):
     _params = {}
     if proj is not None:
-        _params["Source SRS Code"] = "EPSG:4326"
+        _params["SourceSRSCode"] = "EPSG:4326"
         _params["Source pixel-to-world transform"] = None
-        _params["Dest SRS Code"] = proj
+        _params["DestSRSCode"] = proj
         _params["Dest pixel-to-world transform"] = None
     return _params
 
@@ -286,6 +288,14 @@ def calc_toa_gain_offset(meta):
     # Radiance = Scale * Image + offset, Reflectance = Radiance * Scale2
     return zip(scale, scale2, offset)
 
+#from skimage.transform._geometric import GeometricTransform
+class GeometricTransform():
+    ''' Tranforms could inherit from skimage's GeometricTransform base class
+        but the interface doesn't provide enough value to justify installing skimage
+        
+        Check it out if you need more information about image transforms'''
+
+    pass
 
 class RatPolyTransform(GeometricTransform):
     def __init__(self, A, B, offset, scale, px_offset, px_scale, gsd=None, proj=None, default_z=0):

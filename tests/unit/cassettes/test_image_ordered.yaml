@@ -2,45 +2,215 @@ interactions:
 - request:
     body: null
     headers:
-      Accept: ['*/*']
-      Accept-Encoding: ['gzip, deflate']
-      Connection: [keep-alive]
-      User-Agent: [python-requests/2.18.4]
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.21.0
     method: GET
-    uri: https://rda.geobigdata.io/v1/stripMetadata/1050410000B1BD00/capabilities
+    uri: https://vector.geobigdata.io/insight-vector/api/index/query/vector-gbdx-alpha-catalog-v2-*/items?q=item_type%3ADigitalGlobeAcquisition+AND+%28attributes.catalogID.keyword%3A104001002ABEA500+OR+id%3A104001002ABEA500%29&count=1&left=-180.0&right=180.0&lower=-90.0&upper=90.0
   response:
-    body: {string: !!python/unicode '{"error":"Metadata not found for catalog ID 1050410000B1BD00"}'}
+    body:
+      string: '[{"type":"Feature","geometry":{"type":"MultiPolygon","coordinates":[[[[-1.571935407,12.49369903],[-1.451112527,12.49365052],[-1.451120308,12.46565292],[-1.451122613,12.43767673],[-1.451111144,12.40972327],[-1.451104786,12.38175878],[-1.451099543,12.35380314],[-1.451097588,12.32585193],[-1.451101317,12.29790097],[-1.451113068,12.26993675],[-1.451122401,12.2419843],[-1.451125788,12.23606342],[-1.57187035,12.23601642],[-1.571868079,12.24194874],[-1.571864543,12.26991424],[-1.57186017,12.2978735],[-1.571863236,12.32584111],[-1.57187378,12.35381156],[-1.571889137,12.38178169],[-1.571903936,12.40973852],[-1.571924216,12.43771162],[-1.571931762,12.46570057],[-1.571935407,12.49369903]]]]},"properties":{"ingest_source":"GBDX_INGEST_ALPHA","item_date":"2017-03-13T11:02:56.735Z","original_crs":"EPSG:4326","item_type":["GBDXCatalogRecord","Acquisition","DigitalGlobeAcquisition","WV03_VNIR"],"name":null,"format":null,"ingest_date":"2017-04-14T20:04:45.755Z","attributes":{"sunAzimuth_dbl":128.69589,"targetAzimuth_start_dbl":355.20242,"stereoPair":null,"cloudCover_int":25,"offNadirAngle_end_dbl":3.6520457,"scanDirection":"Forward","vendor":"DigitalGlobe","panResolution_end_dbl":0.30937606,"sunElevation_dbl":66.540054,"imageBands":"PAN_MS1_MS2","platformName":"WORLDVIEW03_VNIR","targetAzimuth_end_dbl":5.810849,"multiResolution_max_dbl":1.2378039,"offNadirAngle_min_dbl":3.3564575,"offNadirAngle_start_dbl":3.3564575,"sensorPlatformName":"WORLDVIEW03_VNIR","browseURL":"https://api.discover.digitalglobe.com/show?id=104001002ABEA500&f=jpeg","multiResolution_min_dbl":1.2374659,"offNadirAngle_max_dbl":3.6520457,"multiResolution_start_dbl":1.2378039,"offNadirAngle_dbl":3.4983432,"targetAzimuth_min_dbl":0.7344873,"sunElevation_max_dbl":66.63255,"panResolution_min_dbl":0.3093436,"catalogID":"104001002ABEA500","sunAzimuth_max_dbl":128.92831,"panResolution_dbl":0.30937606,"panResolution_start_dbl":0.30942786,"sunAzimuth_min_dbl":128.46788,"targetAzimuth_max_dbl":355.20242,"multiResolution_end_dbl":1.2375945,"sunElevation_min_dbl":66.44515,"multiResolution_dbl":1.2375957,"panResolution_max_dbl":0.30942786,"targetAzimuth_dbl":0.6824294},"ingest_attributes":{"_rest_user":"acquisition-gbdx-support@digitalglobe.com","_rest_url":"https://vector.geobigdata.io/insight-vector/api/vectors/gbdx-alpha-catalog-v2-%257Bitem_date%253Ayyyy%257D"},"id":"104001002ABEA500","source":null,"text":""}}]'
     headers:
-      access-control-allow-headers: ['x-requested-with, X-Auth-Token, Content-Type,
-          Authorization']
-      access-control-allow-methods: ['GET, OPTIONS, HEAD, PUT, POST, DELETE']
-      access-control-allow-origin: ['*']
-      access-control-max-age: ['3600']
-      connection: [keep-alive]
-      content-length: ['62']
-      content-type: [application/json;charset=UTF-8]
-      date: ['Thu, 06 Dec 2018 17:17:11 GMT']
-    status: {code: 404, message: ''}
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - origin, content-type, accept, authorization
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS, HEAD
+      Access-Control-Allow-Origin:
+      - '*'
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - UTF-8
+      Content-Length:
+      - '2395'
+      Content-Type:
+      - application/json;charset=UTF-8
+      Date:
+      - Mon, 29 Apr 2019 21:55:04 GMT
+      Expires:
+      - '0'
+      Pragma:
+      - no-cache
+      Server:
+      - Apache-Coyote/1.1
+      - Weblogic 12.2.1.1
+      Strict-Transport-Security:
+      - max-age=604800 ; includeSubDomains
+      X-Content-Type-Options:
+      - nosniff
+      - nosniff
+      X-Frame-Options:
+      - DENY
+      - SAMEORIGIN
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      X-XSS-Protection:
+      - 1; mode=block
+      - 1; mode=block
+    status:
+      code: 200
+      message: OK
 - request:
     body: null
     headers:
-      Accept: ['*/*']
-      Accept-Encoding: ['gzip, deflate']
-      Connection: [keep-alive]
-      User-Agent: [python-requests/2.18.4]
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.21.0
     method: GET
-    uri: https://rda.geobigdata.io/v1/stripMetadata/104001002ABEA500/capabilities
+    uri: https://geobigdata.io/orders/v2/location?acquisitionIds=[%22104001002ABEA500%22]
   response:
-    body: {string: !!python/unicode '{"acompVersion":"1.1","stripAcompVersion":null}'}
+    body:
+      string: '{"acquisitions": [{"acquisition_id": "104001002ABEA500", "state": "not_found",
+        "location": "not_delivered"}]}'
     headers:
-      access-control-allow-headers: ['x-requested-with, X-Auth-Token, Content-Type,
-          Authorization']
-      access-control-allow-methods: ['GET, OPTIONS, HEAD, PUT, POST, DELETE']
-      access-control-allow-origin: ['*']
-      access-control-max-age: ['3600']
-      connection: [keep-alive]
-      content-length: ['47']
-      content-type: [application/json]
-      date: ['Thu, 06 Dec 2018 17:17:11 GMT']
-    status: {code: 200, message: ''}
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '109'
+      Content-Type:
+      - application/json
+      Date:
+      - Mon, 29 Apr 2019 21:55:05 GMT
+      Via:
+      - kong/0.10.3
+      X-Amz-Cf-Id:
+      - hI1YXME4mDdCehk9xfahl1F7BfrQ45TLjxBraWvGMZ3uzhpcvPVqog==
+      X-Amzn-Trace-Id:
+      - Root=1-5cc772b9-fd11f7c278d558cb4beab89b;Sampled=0
+      X-Cache:
+      - Miss from cloudfront
+      X-Kong-Proxy-Latency:
+      - '0'
+      X-Kong-Upstream-Latency:
+      - '306'
+      x-amz-apigw-id:
+      - Y67c7GseIAMFSsA=
+      x-amzn-RequestId:
+      - 725ed96d-6ac9-11e9-8156-9981f552167b
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.21.0
+    method: GET
+    uri: https://vector.geobigdata.io/insight-vector/api/index/query/vector-gbdx-alpha-catalog-v2-*/items?q=item_type%3ADigitalGlobeAcquisition+AND+%28attributes.catalogID.keyword%3A1030010076B8F500+OR+id%3A1030010076B8F500%29&count=1&left=-180.0&right=180.0&lower=-90.0&upper=90.0
+  response:
+    body:
+      string: '[{"type":"Feature","geometry":{"type":"MultiPolygon","coordinates":[[[[-105.0939731999999,39.76564299000006],[-104.8670753,39.78167645000008],[-104.8670274999999,39.73471968000007],[-104.8669297,39.68776285000007],[-104.8669837,39.64454098000004],[-105.0935975,39.62813151000006],[-105.0938422999999,39.67124636000005],[-105.0938743999999,39.71847433000005],[-105.0939731999999,39.76564299000006]]]]},"properties":{"ingest_source":"GBDX_INGEST_ALPHA","item_date":"2018-01-20T17:54:28.000Z","original_crs":"EPSG:4326","item_type":["GBDXCatalogRecord","Acquisition","DigitalGlobeAcquisition","WV02"],"name":null,"format":null,"ingest_date":"2018-01-20T21:42:11.749Z","attributes":{"sunAzimuth_dbl":159.616,"targetAzimuth_start_dbl":239.48776,"stereoPair":null,"cloudCover_int":0,"offNadirAngle_end_dbl":23.20365,"scanDirection":"Forward","vendor":"DigitalGlobe","panResolution_end_dbl":0.5398698,"sunElevation_dbl":27.856,"imageBands":"PAN_MS1_MS2","platformName":"WORLDVIEW02","targetAzimuth_end_dbl":238.22418,"multiResolution_max_dbl":2.1641476,"offNadirAngle_min_dbl":23.098803,"offNadirAngle_start_dbl":23.098803,"sensorPlatformName":"WORLDVIEW02","browseURL":"https://api.discover.digitalglobe.com/show?id=1030010076B8F500&f=jpeg","multiResolution_min_dbl":2.160981,"offNadirAngle_max_dbl":23.20365,"multiResolution_start_dbl":2.160981,"offNadirAngle_dbl":23.159195,"targetAzimuth_min_dbl":238.22418,"sunElevation_max_dbl":27.923243,"panResolution_min_dbl":0.53909206,"catalogID":"1030010076B8F500","sunAzimuth_max_dbl":159.62927,"panResolution_dbl":0.53953975,"panResolution_start_dbl":0.53909206,"sunAzimuth_min_dbl":159.6063,"targetAzimuth_max_dbl":239.48776,"multiResolution_end_dbl":2.1641476,"sunElevation_min_dbl":27.763222,"multiResolution_dbl":2.162804,"panResolution_max_dbl":0.5398698,"targetAzimuth_dbl":238.75273},"ingest_attributes":{"_rest_user":"acquisition-gbdx-support@digitalglobe.com","_rest_url":"http://vector.geobigdata.io/api/vectors/gbdx-alpha-catalog-v2-%257Bitem_date%253Ayyyy%257D"},"id":"1030010076B8F500","source":null,"text":""}}]'
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - origin, content-type, accept, authorization
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS, HEAD
+      Access-Control-Allow-Origin:
+      - '*'
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - UTF-8
+      Content-Length:
+      - '2065'
+      Content-Type:
+      - application/json;charset=UTF-8
+      Date:
+      - Mon, 29 Apr 2019 21:55:05 GMT
+      Expires:
+      - '0'
+      Pragma:
+      - no-cache
+      Server:
+      - Apache-Coyote/1.1
+      - Weblogic 12.2.1.1
+      Strict-Transport-Security:
+      - max-age=604800 ; includeSubDomains
+      X-Content-Type-Options:
+      - nosniff
+      - nosniff
+      X-Frame-Options:
+      - DENY
+      - SAMEORIGIN
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      X-XSS-Protection:
+      - 1; mode=block
+      - 1; mode=block
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.21.0
+    method: GET
+    uri: https://geobigdata.io/orders/v2/location?acquisitionIds=[%221030010076B8F500%22]
+  response:
+    body:
+      string: '{"acquisitions": [{"acquisition_id": "1030010076B8F500", "state": "delivered",
+        "location": "s3://receiving-dgcs-tdgplatform-com/059670997010_01_003"}]}'
+    headers:
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '151'
+      Content-Type:
+      - application/json
+      Date:
+      - Mon, 29 Apr 2019 21:55:05 GMT
+      Via:
+      - kong/0.10.3
+      X-Amz-Cf-Id:
+      - cl_aktlgv0owxObojyS56R3WKZ1dHGrk_pB9AzteQlPqdNlXxoaKZw==
+      X-Amzn-Trace-Id:
+      - Root=1-5cc772b9-2581ea03307c7518f9b5ebbb;Sampled=0
+      X-Cache:
+      - Miss from cloudfront
+      X-Kong-Proxy-Latency:
+      - '0'
+      X-Kong-Upstream-Latency:
+      - '274'
+      x-amz-apigw-id:
+      - Y67dBGpRIAMFmzA=
+      x-amzn-RequestId:
+      - 72b6208f-6ac9-11e9-bf93-5f76ea467712
+    status:
+      code: 200
+      message: OK
 version: 1

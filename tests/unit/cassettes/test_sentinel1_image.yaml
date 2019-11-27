@@ -1,55 +1,118 @@
 interactions:
 - request:
-    body: !!python/unicode '{"edges": [], "nodes": [{"id": "5bf51a05-dacb-53d6-870d-dabc7a0c48de",
-      "operator": "Sentinel1Read", "parameters": {"SentinelId": "S1A_IW_GRDH_1SDV_20180713T142443_20180713T142508_022777_027819_7A96",
-      "sentinel1Polarization": "VH"}}]}'
+    body: null
     headers:
-      Accept: ['*/*']
-      Accept-Encoding: ['gzip, deflate']
-      Connection: [keep-alive]
-      Content-Length: ['233']
-      Content-Type: [application/json]
-      User-Agent: [python-requests/2.18.4]
-    method: POST
-    uri: https://rda.geobigdata.io/v1/graph
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.21.0
+    method: GET
+    uri: https://rda.geobigdata.io/v1/template/metadata/search?free-text=Sentinel1Template
   response:
-    body: {string: !!python/unicode 2e4ef960406d32668ea2704d108a722fd2a5a05b96103d0229914d1a13702e76}
+    body:
+      string: '[{"isPublic":false,"keywords":["Sentinel1Template"],"sensors":["Sentinel1Template"],"keynodes":[{"id":"Reproject","description":"Reproject"}],"description":"Sentinel1
+        and Reproject","metadataAuthor":{"firstName":"Brett","familyName":"Cullen","email":"brett.cullen@digitalglobe.com"},"templateAuthor":{"firstName":"Brett","familyName":"Cullen","email":"brett.cullen@digitalglobe.com"},"datePublished":"2019-04-17T19:37:44.536Z","name":"Sentinel1Template","templateId":"b376d59e836566cb1325d9fb5508d6683593e1762c16540a3478d78523475e70","id":"ee8c40cac0a0477abdc7825012765ff6"}]'
     headers:
-      access-control-allow-headers: ['x-requested-with, X-Auth-Token, Content-Type,
-          Authorization']
-      access-control-allow-methods: ['GET, OPTIONS, HEAD, PUT, POST, DELETE']
-      access-control-allow-origin: ['*']
-      access-control-max-age: ['3600']
-      connection: [keep-alive]
-      content-length: ['64']
-      content-type: [text/plain;charset=UTF-8]
-      date: ['Thu, 31 Jan 2019 15:46:52 GMT']
-    status: {code: 200, message: ''}
+      Access-Control-Allow-Headers:
+      - x-requested-with, X-Auth-Token, Content-Type, Authorization
+      Access-Control-Allow-Methods:
+      - GET, OPTIONS, HEAD, PUT, POST, DELETE
+      Access-Control-Allow-Origin:
+      - '*'
+      Access-Control-Max-Age:
+      - '3600'
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '575'
+      Content-Type:
+      - application/json
+      Date:
+      - Tue, 23 Apr 2019 21:31:20 GMT
+    status:
+      code: 200
+      message: ''
 - request:
     body: null
     headers:
-      Accept: ['*/*']
-      Accept-Encoding: ['gzip, deflate']
-      Connection: [keep-alive]
-      User-Agent: [python-requests/2.18.4]
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.21.0
     method: GET
-    uri: https://rda.geobigdata.io/v1/metadata/2e4ef960406d32668ea2704d108a722fd2a5a05b96103d0229914d1a13702e76/5bf51a05-dacb-53d6-870d-dabc7a0c48de/metadata.json
+    uri: https://rda.geobigdata.io/v1/template/b376d59e836566cb1325d9fb5508d6683593e1762c16540a3478d78523475e70
   response:
-    body: {string: !!python/unicode '{"imageMetadata":{"imageId":"S1A_IW_GRDH_1SDV_20180713T142443_20180713T142508_022777_027819_7A96","version":1.1,"profileName":"georectified_image","tilePartition":"0000","tileXOffset":0,"tileYOffset":0,"numXTiles":58,"numYTiles":158,"tileXSize":512,"tileYSize":128,"numBands":1,"dataType":"UNSIGNED_SHORT","imageHeight":20217,"imageWidth":29672,"sensorPlatformName":"Sentinel1","sensorName":"Sentinel
+    body:
+      string: '{"id":"b376d59e836566cb1325d9fb5508d6683593e1762c16540a3478d78523475e70","defaultNodeId":"Reproject","edges":[{"id":"edge-1","index":1,"source":"Sentinel1Read","destination":"Reproject"}],"nodes":[{"id":"Reproject","operator":"Reproject","parameters":{"Dest
+        SRS Code":"${DestSRSCode}","Dest pixel-to-world transform":"null","Source
+        SRS Code":"${SourceSRSCode}","Source pixel-to-world transform":"null"}},{"id":"Sentinel1Read","operator":"Sentinel1Read","parameters":{"SentinelId":"${sentinelId}","sentinel1Polarization":"${sentinel1Polarization}"}}]}'
+    headers:
+      Access-Control-Allow-Headers:
+      - x-requested-with, X-Auth-Token, Content-Type, Authorization
+      Access-Control-Allow-Methods:
+      - GET, OPTIONS, HEAD, PUT, POST, DELETE
+      Access-Control-Allow-Origin:
+      - '*'
+      Access-Control-Max-Age:
+      - '3600'
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '550'
+      Content-Type:
+      - application/json
+      Date:
+      - Tue, 23 Apr 2019 21:31:20 GMT
+    status:
+      code: 200
+      message: ''
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.21.0
+    method: GET
+    uri: https://rda.geobigdata.io/v1/template/b376d59e836566cb1325d9fb5508d6683593e1762c16540a3478d78523475e70/metadata?sentinelId=S1A_IW_GRDH_1SDV_20180713T142443_20180713T142508_022777_027819_7A96&sentinel1Polarization=VH&nodeId=Sentinel1Read
+  response:
+    body:
+      string: '{"imageMetadata":{"imageId":"S1A_IW_GRDH_1SDV_20180713T142443_20180713T142508_022777_027819_7A96","version":1.1,"profileName":"georectified_image","tilePartition":"0000","tileXOffset":0,"tileYOffset":0,"numXTiles":58,"numYTiles":158,"tileXSize":512,"tileYSize":128,"numBands":1,"dataType":"UNSIGNED_SHORT","imageHeight":20217,"imageWidth":29672,"sensorPlatformName":"Sentinel1","sensorName":"Sentinel
         1 Scheme (VH): Panchromatic with vertical transmit and horizontal receive
         polarization","vendorName":"ESA","vendorDatasetIdentifier":"S1A_IW_GRDH_1SDV_20180713T142443_20180713T142508_022777_027819_7A96","acquisitionDate":"2018-07-13T14:24:43Z","colorInterpretation":"SENTINEL_1_VH","imageBoundsWGS84":"POLYGON
         ((53.66469819764833 26.38309922370827, 56.49763554143578 26.38309922370827,
         56.49763554143578 24.452879006690516, 53.66469819764833 24.452879006690516,
-        53.66469819764833 26.38309922370827))","groundSampleDistanceMeters":10.628279246989898,"minX":0,"minY":0,"maxX":29671,"maxY":20216,"minTileX":0,"minTileY":0,"maxTileX":57,"maxTileY":157,"cloudCover":0.0},"imageGeoreferencing":{"spatialReferenceSystemCode":"EPSG:4326","scaleX":9.547510595131604E-5,"scaleY":-9.547510595131604E-5,"translateX":53.66469819764833,"translateY":26.38309922370827,"shearX":0.0,"shearY":0.0},"rpcSensorModel":null,"histogram":null,"sensorMetadata":null,"imageAssociations":null,"rrdMetadata":{"reducedResolutionDataset":[{"sourceImage":"/vsis3/sentinel-s1-l1c/GRD/2018/7/13/IW/DV/S1A_IW_GRDH_1SDV_20180713T142443_20180713T142508_022777_027819_7A96/measurement/iw-vh.tiff","targetImage":"/vsis3/sentinel-s1-l1c/GRD/2018/7/13/IW/DV/S1A_IW_GRDH_1SDV_20180713T142443_20180713T142508_022777_027819_7A96/measurement/iw-vh.tiff","inverseScaleFactor":2.0},{"sourceImage":"/vsis3/sentinel-s1-l1c/GRD/2018/7/13/IW/DV/S1A_IW_GRDH_1SDV_20180713T142443_20180713T142508_022777_027819_7A96/measurement/iw-vh.tiff","targetImage":"/vsis3/sentinel-s1-l1c/GRD/2018/7/13/IW/DV/S1A_IW_GRDH_1SDV_20180713T142443_20180713T142508_022777_027819_7A96/measurement/iw-vh.tiff","inverseScaleFactor":4.0},{"sourceImage":"/vsis3/sentinel-s1-l1c/GRD/2018/7/13/IW/DV/S1A_IW_GRDH_1SDV_20180713T142443_20180713T142508_022777_027819_7A96/measurement/iw-vh.tiff","targetImage":"/vsis3/sentinel-s1-l1c/GRD/2018/7/13/IW/DV/S1A_IW_GRDH_1SDV_20180713T142443_20180713T142508_022777_027819_7A96/measurement/iw-vh.tiff","inverseScaleFactor":8.0},{"sourceImage":"/vsis3/sentinel-s1-l1c/GRD/2018/7/13/IW/DV/S1A_IW_GRDH_1SDV_20180713T142443_20180713T142508_022777_027819_7A96/measurement/iw-vh.tiff","targetImage":"/vsis3/sentinel-s1-l1c/GRD/2018/7/13/IW/DV/S1A_IW_GRDH_1SDV_20180713T142443_20180713T142508_022777_027819_7A96/measurement/iw-vh.tiff","inverseScaleFactor":16.0}]}}'}
+        53.66469819764833 26.38309922370827))","groundSampleDistanceMeters":10.628279246989898,"minX":0,"minY":0,"maxX":29671,"maxY":20216,"minTileX":0,"minTileY":0,"maxTileX":57,"maxTileY":157,"cloudCover":0.0},"imageGeoreferencing":{"spatialReferenceSystemCode":"EPSG:4326","scaleX":9.547510595131604E-5,"scaleY":-9.547510595131604E-5,"translateX":53.66469819764833,"translateY":26.38309922370827,"shearX":0.0,"shearY":0.0},"rpcSensorModel":null,"histogram":null,"sensorMetadata":null,"imageAssociations":null,"rrdMetadata":{"reducedResolutionDataset":[{"sourceImage":"/vsis3/sentinel-s1-l1c/GRD/2018/7/13/IW/DV/S1A_IW_GRDH_1SDV_20180713T142443_20180713T142508_022777_027819_7A96/measurement/iw-vh.tiff","targetImage":"/vsis3/sentinel-s1-l1c/GRD/2018/7/13/IW/DV/S1A_IW_GRDH_1SDV_20180713T142443_20180713T142508_022777_027819_7A96/measurement/iw-vh.tiff","inverseScaleFactor":2.0},{"sourceImage":"/vsis3/sentinel-s1-l1c/GRD/2018/7/13/IW/DV/S1A_IW_GRDH_1SDV_20180713T142443_20180713T142508_022777_027819_7A96/measurement/iw-vh.tiff","targetImage":"/vsis3/sentinel-s1-l1c/GRD/2018/7/13/IW/DV/S1A_IW_GRDH_1SDV_20180713T142443_20180713T142508_022777_027819_7A96/measurement/iw-vh.tiff","inverseScaleFactor":4.0},{"sourceImage":"/vsis3/sentinel-s1-l1c/GRD/2018/7/13/IW/DV/S1A_IW_GRDH_1SDV_20180713T142443_20180713T142508_022777_027819_7A96/measurement/iw-vh.tiff","targetImage":"/vsis3/sentinel-s1-l1c/GRD/2018/7/13/IW/DV/S1A_IW_GRDH_1SDV_20180713T142443_20180713T142508_022777_027819_7A96/measurement/iw-vh.tiff","inverseScaleFactor":8.0},{"sourceImage":"/vsis3/sentinel-s1-l1c/GRD/2018/7/13/IW/DV/S1A_IW_GRDH_1SDV_20180713T142443_20180713T142508_022777_027819_7A96/measurement/iw-vh.tiff","targetImage":"/vsis3/sentinel-s1-l1c/GRD/2018/7/13/IW/DV/S1A_IW_GRDH_1SDV_20180713T142443_20180713T142508_022777_027819_7A96/measurement/iw-vh.tiff","inverseScaleFactor":16.0}]}}'
     headers:
-      access-control-allow-headers: ['x-requested-with, X-Auth-Token, Content-Type,
-          Authorization']
-      access-control-allow-methods: ['GET, OPTIONS, HEAD, PUT, POST, DELETE']
-      access-control-allow-origin: ['*']
-      access-control-max-age: ['3600']
-      connection: [keep-alive]
-      content-length: ['2721']
-      content-type: [application/json;charset=UTF-8]
-      date: ['Thu, 31 Jan 2019 15:46:52 GMT']
-    status: {code: 200, message: ''}
+      Access-Control-Allow-Headers:
+      - x-requested-with, X-Auth-Token, Content-Type, Authorization
+      Access-Control-Allow-Methods:
+      - GET, OPTIONS, HEAD, PUT, POST, DELETE
+      Access-Control-Allow-Origin:
+      - '*'
+      Access-Control-Max-Age:
+      - '3600'
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '2721'
+      Content-Type:
+      - application/json
+      Date:
+      - Tue, 23 Apr 2019 21:31:22 GMT
+    status:
+      code: 200
+      message: ''
 version: 1

@@ -4,9 +4,11 @@ from gbdxtools.images.util.image import reproject_params
 from gbdxtools.rda.interface import RDA
 rda = RDA()
 
+
 class Sentinel2Driver(RDADaskImageDriver):
     image_option_support = ["spec", "proj"]
     __image_option_defaults__ = {"spec": "10m", "proj": None}
+
 
 class Sentinel2(RDABaseImage):
     """
@@ -37,14 +39,16 @@ class Sentinel2(RDABaseImage):
 
     @classmethod
     def _build_graph(cls, prefix, spec="10m", proj=None, **kwargs):
-        sentinel = rda.SentinelRead(SentinelId=prefix, sentinelProductSpec=spec)
+        sentinel2 = rda.Sentinel2Template(sentinelId=prefix, sentinelProductSpec=spec, nodeId="Sentinel2Read")
         if proj is not None:
-            sentinel = rda.Reproject(sentinel, **reproject_params(proj))
-        return sentinel
+            sentinel2 = sentinel2(nodeId="Reproject", **reproject_params(proj))
+        return sentinel2
+
 
 class Sentinel1Driver(RDADaskImageDriver):
     image_option_support = ["polarization", "proj"]
     __image_option_defaults__ = {"polarization": "VH", "proj": None}
+
 
 class Sentinel1(RDABaseImage):
     """
@@ -67,7 +71,7 @@ class Sentinel1(RDABaseImage):
 
     @classmethod
     def _build_graph(cls, catID, polarization="VH", proj=None, **kwargs):
-        sentinel = rda.Sentinel1Read(SentinelId=catID, sentinel1Polarization=polarization)
+        sentinel1 = rda.Sentinel1Template(sentinelId=catID, sentinel1Polarization=polarization, nodeId="Sentinel1Read")
         if proj is not None:
-            sentinel = rda.Reproject(sentinel, **reproject_params(proj))
-        return sentinel
+            sentinel1 = sentinel1(nodeId="Reproject", **reproject_params(proj))
+        return sentinel1

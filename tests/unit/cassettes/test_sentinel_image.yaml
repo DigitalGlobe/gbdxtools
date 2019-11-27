@@ -1,54 +1,117 @@
 interactions:
 - request:
-    body: !!python/unicode '{"edges": [], "nodes": [{"id": "dfef4280-02bf-54d5-aa42-f56dc1d5e7fd",
-      "operator": "SentinelRead", "parameters": {"SentinelId": "tiles/21/U/VQ/2016/5/23/0",
-      "sentinelProductSpec": "10m"}}]}'
+    body: null
     headers:
-      Accept: ['*/*']
-      Accept-Encoding: ['gzip, deflate']
-      Connection: [keep-alive]
-      Content-Length: ['189']
-      Content-Type: [application/json]
-      User-Agent: [python-requests/2.18.4]
-    method: POST
-    uri: https://rda.geobigdata.io/v1/graph
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.21.0
+    method: GET
+    uri: https://rda.geobigdata.io/v1/template/metadata/search?free-text=Sentinel2Template
   response:
-    body: {string: !!python/unicode 3d938e9f94c77b55106858283579768e9272233a9e0d78093d35309c766f8e12}
+    body:
+      string: '[{"isPublic":false,"keywords":["Sentinel2Template"],"sensors":["Sentinel2Template"],"keynodes":[{"id":"Reproject","description":"Reproject"}],"description":"Sentinel2Template
+        and Reproject","metadataAuthor":{"firstName":"Brett","familyName":"Cullen","email":"brett.cullen@digitalglobe.com"},"templateAuthor":{"firstName":"Brett","familyName":"Cullen","email":"brett.cullen@digitalglobe.com"},"datePublished":"2019-04-17T19:41:12.283Z","name":"Sentinel2Template","templateId":"c125ff437f9be0b87d85b1790b170b3ac418113be19ff26d73aeba2680cfbb25","id":"2e97017774cb4f52b1004be647afbf0d"}]'
     headers:
-      access-control-allow-headers: ['x-requested-with, X-Auth-Token, Content-Type,
-          Authorization']
-      access-control-allow-methods: ['GET, OPTIONS, HEAD, PUT, POST, DELETE']
-      access-control-allow-origin: ['*']
-      access-control-max-age: ['3600']
-      connection: [keep-alive]
-      content-length: ['64']
-      content-type: [text/plain;charset=UTF-8]
-      date: ['Tue, 08 May 2018 03:02:09 GMT']
-    status: {code: 200, message: ''}
+      Access-Control-Allow-Headers:
+      - x-requested-with, X-Auth-Token, Content-Type, Authorization
+      Access-Control-Allow-Methods:
+      - GET, OPTIONS, HEAD, PUT, POST, DELETE
+      Access-Control-Allow-Origin:
+      - '*'
+      Access-Control-Max-Age:
+      - '3600'
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '583'
+      Content-Type:
+      - application/json
+      Date:
+      - Tue, 23 Apr 2019 21:31:28 GMT
+    status:
+      code: 200
+      message: ''
 - request:
     body: null
     headers:
-      Accept: ['*/*']
-      Accept-Encoding: ['gzip, deflate']
-      Connection: [keep-alive]
-      User-Agent: [python-requests/2.18.4]
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.21.0
     method: GET
-    uri: https://rda.geobigdata.io/v1/metadata/3d938e9f94c77b55106858283579768e9272233a9e0d78093d35309c766f8e12/dfef4280-02bf-54d5-aa42-f56dc1d5e7fd/metadata.json
+    uri: https://rda.geobigdata.io/v1/template/c125ff437f9be0b87d85b1790b170b3ac418113be19ff26d73aeba2680cfbb25
   response:
-    body: {string: !!python/unicode '{"imageMetadata":{"imageId":"S2A_OPER_MSI_L1C_DS_MTI__20160523T195155_S20160523T145721_N02.02","version":1.1,"profileName":"georectified_image","tilePartition":"0000","tileXOffset":0,"tileYOffset":0,"numXTiles":43,"numYTiles":43,"tileXSize":256,"tileYSize":256,"numBands":4,"dataType":"UNSIGNED_SHORT","imageHeight":10980,"imageWidth":10980,"sensorPlatformName":"Sentinel2","sensorName":"Sentinel
+    body:
+      string: '{"id":"c125ff437f9be0b87d85b1790b170b3ac418113be19ff26d73aeba2680cfbb25","defaultNodeId":"Reproject","edges":[{"id":"edge-1","index":1,"source":"Sentinel2Read","destination":"Reproject"}],"nodes":[{"id":"Reproject","operator":"Reproject","parameters":{"Dest
+        SRS Code":"${DestSRSCode}","Dest pixel-to-world transform":"null","Source
+        SRS Code":"${SourceSRSCode}","Source pixel-to-world transform":"null"}},{"id":"Sentinel2Read","operator":"Sentinel2Read","parameters":{"SentinelId":"${sentinelId}","sentinelProductSpec":"${sentinelProductSpec}"}}]}'
+    headers:
+      Access-Control-Allow-Headers:
+      - x-requested-with, X-Auth-Token, Content-Type, Authorization
+      Access-Control-Allow-Methods:
+      - GET, OPTIONS, HEAD, PUT, POST, DELETE
+      Access-Control-Allow-Origin:
+      - '*'
+      Access-Control-Max-Age:
+      - '3600'
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '546'
+      Content-Type:
+      - application/json
+      Date:
+      - Tue, 23 Apr 2019 21:31:28 GMT
+    status:
+      code: 200
+      message: ''
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.21.0
+    method: GET
+    uri: https://rda.geobigdata.io/v1/template/c125ff437f9be0b87d85b1790b170b3ac418113be19ff26d73aeba2680cfbb25/metadata?sentinelId=tiles%2F21%2FU%2FVQ%2F2016%2F5%2F23%2F0&sentinelProductSpec=10m&nodeId=Sentinel2Read
+  response:
+    body:
+      string: '{"imageMetadata":{"imageId":"S2A_OPER_MSI_L1C_DS_MTI__20160523T195155_S20160523T145721_N02.02","version":1.1,"profileName":"georectified_image","tilePartition":"0000","tileXOffset":0,"tileYOffset":0,"numXTiles":43,"numYTiles":43,"tileXSize":256,"tileYSize":256,"numBands":4,"dataType":"UNSIGNED_SHORT","imageHeight":10980,"imageWidth":10980,"sensorPlatformName":"Sentinel2","sensorName":"Sentinel
         2 Scheme (10M): Blue (B02), Green (B03), Red (B04), NIR (B08)","vendorName":"ESA","vendorDatasetIdentifier":"S2A_OPER_PRD_MSIL1C_PDMC_20160523T204441_R082_V20160523T145721_20160523T145721:S2A_OPER_MSI_L1C_DS_MTI__20160523T195155_S20160523T145721_N02.02","acquisitionDate":"2016-05-23T14:57:21.462Z","colorInterpretation":"SENTINEL_2_10M","imageBoundsWGS84":"POLYGON
         ((-58.38572763180613 49.644430072971986, -56.86478640421985 49.6526438682633,
         -56.86744867287709 48.664955151350924, -58.358453774912164 48.657020774572565,
-        -58.38572763180613 49.644430072971986))","groundSampleDistanceMeters":10.0,"minX":0,"minY":0,"maxX":10979,"maxY":10979,"minTileX":0,"minTileY":0,"maxTileX":42,"maxTileY":42,"cloudCover":1.17},"imageGeoreferencing":{"spatialReferenceSystemCode":"EPSG:32621","scaleX":10.0,"scaleY":-10.0,"translateX":399960.0,"translateY":5500020.0,"shearX":0.0,"shearY":0.0},"rpcSensorModel":null,"histogram":null,"sensorMetadata":null,"imageAssociations":null,"rrdMetadata":null}'}
+        -58.38572763180613 49.644430072971986))","groundSampleDistanceMeters":10.0,"minX":0,"minY":0,"maxX":10979,"maxY":10979,"minTileX":0,"minTileY":0,"maxTileX":42,"maxTileY":42,"cloudCover":1.17},"imageGeoreferencing":{"spatialReferenceSystemCode":"EPSG:32621","scaleX":10.0,"scaleY":-10.0,"translateX":399960.0,"translateY":5500020.0,"shearX":0.0,"shearY":0.0},"rpcSensorModel":null,"histogram":null,"sensorMetadata":null,"imageAssociations":null,"rrdMetadata":null}'
     headers:
-      access-control-allow-headers: ['x-requested-with, X-Auth-Token, Content-Type,
-          Authorization']
-      access-control-allow-methods: ['GET, OPTIONS, HEAD, PUT, POST, DELETE']
-      access-control-allow-origin: ['*']
-      access-control-max-age: ['3600']
-      connection: [keep-alive]
-      content-length: ['1383']
-      content-type: [application/json;charset=UTF-8]
-      date: ['Tue, 08 May 2018 03:02:14 GMT']
-    status: {code: 200, message: ''}
+      Access-Control-Allow-Headers:
+      - x-requested-with, X-Auth-Token, Content-Type, Authorization
+      Access-Control-Allow-Methods:
+      - GET, OPTIONS, HEAD, PUT, POST, DELETE
+      Access-Control-Allow-Origin:
+      - '*'
+      Access-Control-Max-Age:
+      - '3600'
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '1383'
+      Content-Type:
+      - application/json
+      Date:
+      - Tue, 23 Apr 2019 21:31:52 GMT
+    status:
+      code: 200
+      message: ''
 version: 1

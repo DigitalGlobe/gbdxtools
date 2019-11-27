@@ -1,13 +1,10 @@
 from gbdxtools.images.base import RDABaseImage
 from gbdxtools.images.drivers import IdahoDriver
 from gbdxtools.images.util import vector_services_query
-from gbdxtools.rda.util import calc_toa_gain_offset, ortho_params
 from gbdxtools.rda.interface import RDA
 
-from shapely import wkt
-from shapely.geometry import box
-
 rda = RDA()
+
 
 class IdahoImage(RDABaseImage):
     """ Image based on IDAHO virtual tiles
@@ -28,20 +25,20 @@ class IdahoImage(RDABaseImage):
         return self.__rda_id__
 
     @classmethod
-    def _build_graph(cls, idaho_id, proj=None, bucket="idaho-images", gsd=None, acomp=False, bands="MS", **kwargs):
+    def _build_graph(cls, idaho_id, proj=None, bucket="rda-images-1", gsd=None, acomp=False, bands="MS", **kwargs):
         if bucket is None:
             vq = "item_type:IDAHOImage AND id:{}".format(idaho_id)
             result = vector_services_query(vq)
             if result:
-               bucket = result[0]["properties"]["attributes"]["tileBucketName"]
+                bucket = result[0]["properties"]["attributes"]["tileBucketName"]
 
         gsd = gsd if gsd is not None else ""
         correction = "ACOMP" if acomp else kwargs.get("correctionType")
         spec = kwargs.get('spec')
         if spec == "1b":
-            graph = rda.IdahoRead(bucketName=bucket, imageId=idaho_id, objectStore="S3", targetGSD=gsd)
+            graph = rda.IdahoTemplate(bucketName=bucket, imageId=idaho_id, objectStore="S3", targetGSD=gsd, nodeId="IdahoRead")
         else:
-            graph = rda.DigitalGlobeImage(bucketName=bucket, imageId=idaho_id, bands=bands, CRS=proj, correctionType=correction, GSD=gsd)
+            graph = rda.DigitalGlobeImageTemplate(bucketName=bucket, imageId=idaho_id, bands=bands, CRS=proj,
+                                          correctionType=correction, GSD=gsd)
 
         return graph
-

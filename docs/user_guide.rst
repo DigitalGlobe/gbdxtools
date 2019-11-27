@@ -6,16 +6,33 @@ For this tutorial, we'll use the latest version of gbdxtools, a python module fo
 Get your account credentials
 -------------------------------
 
-Before we start, you'll need your GBDX username and password.  All operations on GBDX require credentials. If you're interested in purchasing a subscription, use the `Contact Us <https://www.geobigdata.io/contact-us/>`_ form to provide your information.  ::
+GBDXtools expects a config file to exist at ~/.gbdx-config with your credentials. Instead of a file your credentials can also be stored as the environmental variables GBDX_USERNAME and GBDX_PASSWORD. For more information on the credential file and other ways to manage authorization, see https://github.com/tdg-platform/gbdx-auth#ini-file.
 
-  username = 'youremailagress@mail.com'  
-  password = 'ThePasswordYouSetWhenYouActivatedYourAccount.'
-  
+GBDXtools automatically handles authentication and authorization. It is not required to manually log in or start a session.
+
+
+For questions or troubleshooting email GBDX-Support@digitalglobe.com.
+
+
+Using Gbdxtools 
+-----------------
+
+Local Python Environment
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+As an access library to GBDX APIs, GBDXtools can be run locally. See `Installation`_ below.
+
+
+Jupyter Notebooks
+^^^^^^^^^^^^^^^^^^^^^
+
+GBDXtools has additional features for visualization and mapping in IPython and Jupyter Notebooks. This is the recommended development environment for analysis.
+
 
 Installation
 -----------------
 
-Conda is the recommended way to install GBDXtools.  From the anaconda command prompt::
+Conda is the recommended way to install GBDXtools::
 
     conda create -n envname python=3.5 rasterio gdal
     conda activate envname
