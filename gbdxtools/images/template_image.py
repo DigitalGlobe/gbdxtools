@@ -156,10 +156,10 @@ class TemplateMeta(GraphMeta):
 
 
 class RDATemplateImage(object):
-    '''Creates an image instance matching the template ID with the given params.
+    '''Creates an image instance matching the template name with the given params.
 
     Args:
-        template_id (str): The RDA template ID
+        name (str): The RDA template name or ID
         node_id (str): the node ID to render as the image (defaults to None) 
         kwargs: Parameters needed to fill the template params
 
@@ -168,4 +168,6 @@ class RDATemplateImage(object):
     '''
 
     def __new__(cls, name, node_id=None, **kwargs):
+        if node_id and 'nodeId' not in kwargs:
+            kwargs['nodeId'] = node_id
         return RDAImage(TemplateMeta(name, node_id, **kwargs))
