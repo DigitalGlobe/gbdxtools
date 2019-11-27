@@ -1,5 +1,6 @@
 gbdxtools.egg-info/
 dist/
+build/
 *.pyc
 /.project
 .eggs
@@ -9,3 +10,6 @@ dist/
 /.idea/
 chip.tif
 .pytest_cache
+.gitignore
+settings.json
+
