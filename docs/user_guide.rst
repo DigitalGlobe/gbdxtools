@@ -1,10 +1,10 @@
-Quickstart
+Getting started
 ===============
 
-For this tutorial, we'll use the latest version of gbdxtools, a python module for GBDX. We'll go over how to set up gbdxtools in your local environment for windows with optional ways to install using different operating systems.  Then we'll explain how to setup your local gbdxtools environment to to access GBDX.
+Getting Access to GBDX
+-----------------------
 
-Get your account credentials
--------------------------------
+All operations on GBDX require credentials. You can sign up for a GBDX account at https://gbdx.geobigdata.io. Your GBDX credentials are found under your account profile.
 
 GBDXtools expects a config file to exist at ~/.gbdx-config with your credentials. Instead of a file your credentials can also be stored as the environmental variables GBDX_USERNAME and GBDX_PASSWORD. For more information on the credential file and other ways to manage authorization, see https://github.com/tdg-platform/gbdx-auth#ini-file.
 
@@ -34,8 +34,6 @@ Installation
 
 Conda is the recommended way to install GBDXtools::
 
-    conda create -n envname python=3.5 rasterio gdal
-    conda activate envname
     conda install -c conda-forge -c digitalglobe gbdxtools
 
 Pip can also be used::
@@ -157,113 +155,7 @@ Install `gbdxtools`::
 A known issue exists, in certain environments, where conda will downgrade python from 3.x to 2.7x when installing `gbdxtools`. If conda does not keep your python version intact when installing `gbdxtools`, you need to::
 
    conda install -y gbdxtools -c digitalglobe -c conda-forge
-   
-
-Getting Authorized
-----------------------
-
-GBDXtools expects a config file to exist at ~/.gbdx-config with your credentials. Instead of a file your credentials can also be stored as the environmental variables GBDX_USERNAME and GBDX_PASSWORD. For more information on the credential file and other ways to manage authorization, see https://github.com/tdg-platform/gbdx-auth#ini-file.  ::
-
-  from gbdxtools import Interface
-  gbdx = Interface()
-
-GBDXtools automatically handles authentication and authorization if you have the config file set. If you don't have the config file set you can pass auth directly to the Interface class::
-
-  from gbdxtools import Interface
-  gbdx = Interface(username='your.email@mail.com', password='yourpassword')
 
 
-Search the GBDX catalog
--------------------------
-
-You can search the GBDX catalog by spatial area, by date range, or by both. Use "types" to search by a single type or multiple types. Use filters to refine your data set.
-
-Let's search for acquisitions in a subsection of San Francisco, collected between March 1, 2015 and March 1, 2016, with cloud cover of less than 10%, and an off-nadir angle of less than 20.::
-
-  searchAreaWkt = "POLYGON ((-105.35202026367188 39.48113956424843, -105.35202026367188 40.044848254075546, -104.65988159179688 40.044848254075546, -104.65988159179688 39.48113956424843, -105.35202026367188 39.48113956424843))"
-  startDate = "2017-01-01T00:00:00.000Z"
-  endDate = "2018-09-01T23:59:59.999Z"
-  types = ["DigitalGlobeAcquisition"]
-  filters = ["sensorPlatformName = WORLDVIEW03_VNIR AND cloudCover < 20 AND offNadirAngle < 10"]
-  results = gbdx.catalog.search(searchAreaWkt=searchAreaWkt,
-                          startDate=startDate,
-                          endDate=endDate,
-                          types=types,
-			  filters=filters)
-			  
-Running a search returns a list of metadata items as dictionaries.
 
 
-Place an order and check its status
---------------------------------------------------
-
-The ordering function lets you order imagery and check your order's status. To place an order, you'll need a list of one or more acquisition catalog IDs. You can get the catalog IDs from the search example above::
-
-  catalogids =    [
-    "103001005275AC00",
-    "103001004046DC00",
-    "10504100106AA800",
-    "1020010030936B00",
-    "104001000680BA00",
-    "102001003648FC00",
-    "1010010012956800"
-   ]
-   order_id = gbdx.ordering.order(catalogids)
-   print(order_id)
-
-This request will return an order ID, and order information about each catalog ID. Save the order_id. You'll use it to check the status of your order.::
-
-   gbdx.ordering.status(order_id)
-   
-This request will return an order ID, and order information about each catalog ID. Save the order_id. You'll use it to check the status of your order.
-
-Submit a task and run a workflow
---------------------------------------------------
-
-A workflow chains together a series of tasks and runs them in the specified order. Running a workflow means creating a series of Task objects with their inputs and outputs and passing them to the Workflow fuction as a list.
-
-.. note:: All tasks require inputs.
-   When a task requires a GBDX S3 location as an input, find the location in the Order response. Location will only be displayed when the state = delivered.
-
-For this tutorial, we'll create and run a workflow with one simple task (Getting_Started)::
-
-  Getting_Started: a simple task that only requires "your_name" as an input, and outputs a .txt file.
-  
-Create and run a workflow
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Define and run your workflow::
-
-   Getting_Started = gbdx.Task("Getting_Started", your_name="Your Name")
-   workflow = gbdx.Workflow([ Getting_Started ])
-   workflow.savedata(Getting_Started.outputs.data, location='getting_started_output')
-   workflow.execute()
-
-This workflow example shows the input and output values of the Getting_Started task.
-
-How to find your account ID/prefix
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-The GBDX S3 location is the GBDX S3 bucket name and the Prefix name. GBDX uses your account ID as the prefix and "gbd=customer-data" as the bucket.::
-
- gbdx.s3.info
- {u'S3_access_key': u'blah',
- 'S3_secret_key': u'blah',
- 'S3_session_token': u'blah',
- 'bucket': u'gbd-customer-data',
- 'prefix': u'58600248-2927-4523-b44b-5fec3d278c09'}
- 
-Access the output data from a workflow
------------------------------------------
-
-To access the information in your customer S3 bucket do::
-
-  gbdx.s3.download(location='getting_started_output/hello_world.txt', local_dir='C:/output/location')
-  
-Inside this folder, you'll find a txt file called hello_world.txt. Open the file to see this successful result!
-
-
-Questions
---------------------
-
-For questions or troubleshooting email GBDX-Support@digitalglobe.com.

@@ -13,6 +13,8 @@ shapely
 ephem
 toolz
 cloudpickle
+dask[array]>=1.1.0
+numpy>1.12
 pycurl>=7.43.0
 pyproj
 requests_futures
