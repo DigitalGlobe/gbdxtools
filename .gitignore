@@ -1,5 +1,6 @@
 gbdxtools.egg-info/
 dist/
+build/
 *.pyc
 /.project
 .eggs
@@ -13,3 +14,4 @@ chip.tif
 Pipfile*
 /.vscode
 .envrc
+settings.json

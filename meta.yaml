@@ -1,5 +1,5 @@
 {% set name = "gbdxtools" %}
-{% set version = "0.17.0.b3" %}
+{% set version = "0.17.0.b4" %}
 
 package:
   name: "{{ name|lower }}"
@@ -44,6 +44,7 @@ requirements:
     - requests >=2.12.1,<=2.21
     - requests-futures
     - imageio
+    - tifffile
     - shapely
     - six >=1.10.0
     - toolz
