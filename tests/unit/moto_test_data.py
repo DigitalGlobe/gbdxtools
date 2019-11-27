@@ -10,22 +10,19 @@ def pre_load_s3_data(bucket_name, prefix, region='us-east-1'):
     res = s3.create_bucket(Bucket=bucket_name)
 
     default_kwargs = {"Body": b"Fake data for testing.", "Bucket": bucket_name}
-    s3.put_object(Key=f"{prefix}/readme.txt", **default_kwargs)
-    s3.put_object(Key=f"{prefix}/notes.md", **default_kwargs)
+    s3.put_object(Key="{}/readme.txt".format(prefix), **default_kwargs)
+    s3.put_object(Key="{}/notes.md".format(prefix), **default_kwargs)
 
     # load items, 3 directories
     for i, _ in enumerate(range(500)):
-        res = s3.put_object(Key=f"{prefix}/images/myimage{i}.tif",
+        res = s3.put_object(Key="{}/images/myimage{i}.tif".format(prefix),
                             **default_kwargs)
 
     for i, _ in enumerate(range(400)):
-        s3.put_object(
-            Key=f"{prefix}/scripts/myscripts{i}.py",
-            **default_kwargs
-        )
+        s3.put_object(Key="{}/scripts/myscripts{i}.py".format(prefix),
+                      **default_kwargs)
 
     for i, _ in enumerate(range(110)):
-       s3.put_object(
-           Key=f"{prefix}/scripts/subdir/otherscripts{i}.sh",
-           **default_kwargs
-       )
+        s3.put_object(
+            Key="{}/scripts/subdir/otherscripts{i}.sh".format(prefix),
+            **default_kwargs)
