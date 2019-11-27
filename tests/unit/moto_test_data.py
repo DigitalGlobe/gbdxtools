@@ -15,14 +15,14 @@ def pre_load_s3_data(bucket_name, prefix, region='us-east-1'):
 
     # load items, 3 directories
     for i, _ in enumerate(range(500)):
-        res = s3.put_object(Key="{}/images/myimage{i}.tif".format(prefix),
+        res = s3.put_object(Key="{}/images/myimage{}.tif".format(prefix, i),
                             **default_kwargs)
 
     for i, _ in enumerate(range(400)):
-        s3.put_object(Key="{}/scripts/myscripts{i}.py".format(prefix),
+        s3.put_object(Key="{}/scripts/myscripts{}.py".format(prefix, i),
                       **default_kwargs)
 
     for i, _ in enumerate(range(110)):
         s3.put_object(
-            Key="{}/scripts/subdir/otherscripts{i}.sh".format(prefix),
+            Key="{}/scripts/subdir/otherscripts{}.sh".format(prefix, i),
             **default_kwargs)
