@@ -80,18 +80,3 @@ class IdahoTest(unittest.TestCase):
         catid = '10400100384B1B00'
         result = i.get_chip([120.45363429504926, 30.247785383721883, 120.45511487442548, 30.249008773017273], catid)
         assert result
-
-    @my_vcr.use_cassette('tests/unit/cassettes/test_idaho_get_tms_layer.yaml', filter_headers=['authorization'])
-    def test_idaho_get_tms_layer(self):
-        i = Idaho()
-        catid = '10400100203F1300'
-        result = i.get_tms_layers(catid)
-        assert len(result[0]) == 6
-
-    @my_vcr.use_cassette('tests/unit/cassettes/test_idaho_create_leaflet_viewer.yaml', filter_headers=['authorization'])
-    def test_idaho_create_leaflet_viewer(self):
-        i = Idaho()
-        catid = '10400100203F1300'
-        temp_file = tempfile.mkstemp(".html", "test_idaho_create_leaflet_viewer")
-        i.create_leaflet_viewer(i.get_images_by_catid(catid=catid), temp_file[1])
-        assert os.path.getsize(temp_file[1]) > 0

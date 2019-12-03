@@ -16,6 +16,7 @@ import requests
 
 from gbdxtools.catalog import Catalog
 from gbdxtools.auth import Auth
+from gbdxtools.rda.util import deprecation
 
 
 class Idaho(object):
@@ -216,145 +217,12 @@ class Idaho(object):
             print('Cannot download chip')
             return False
 
-    def get_tms_layers(self,
-                       catid,
-                       bands='4,2,1',
-                       gamma=1.3,
-                       highcutoff=0.98,
-                       lowcutoff=0.02,
-                       brightness=1.0,
-                       contrast=1.0):
-        """Get list of urls and bounding boxes corrsponding to idaho images for a given catalog id.
+    def get_tms_layers(*args, **kwargs):
+        deprecation("""IDAHO TMS was deprecated 12/9/2019
+                       http://status.geobigdata.io/incidents/d59xzqdnb2nf
+                    """)
 
-        Args:
-           catid (str): Catalog id
-           bands (str): Bands to display, separated by commas (0-7).
-           gamma (float): gamma coefficient. This is for on-the-fly pansharpening.
-           highcutoff (float): High cut off coefficient (0.0 to 1.0). This is for on-the-fly pansharpening.
-           lowcutoff (float): Low cut off coefficient (0.0 to 1.0). This is for on-the-fly pansharpening.
-           brightness (float): Brightness coefficient (0.0 to 1.0). This is for on-the-fly pansharpening.
-           contrast (float): Contrast coefficient (0.0 to 1.0). This is for on-the-fly pansharpening.
-
-        Returns:
-           urls (list): TMS urls.
-           bboxes (list of tuples): Each tuple is (W, S, E, N) where (W,S,E,N) are the bounds of the corresponding idaho part.
-        """
-
-        description = self.describe_images(self.get_images_by_catid(catid))
-        service_url = 'http://idaho.geobigdata.io/v1/tile/'
-
-        urls, bboxes = [], []
-        for catid, images in description.items():
-            for partnum, part in images['parts'].items():
-                if 'PAN' in part.keys():
-                    pan_id = part['PAN']['id']
-                if 'WORLDVIEW_8_BAND' in part.keys():
-                    ms_id = part['WORLDVIEW_8_BAND']['id']
-                    ms_partname = 'WORLDVIEW_8_BAND'
-                elif 'RGBN' in part.keys():
-                    ms_id = part['RGBN']['id']
-                    ms_partname = 'RGBN'
-
-                if ms_id:
-                    if pan_id:
-                        band_str = ms_id + '/{z}/{x}/{y}?bands=' + bands + '&panId=' + pan_id
-                    else:
-                        band_str = ms_id + '/{z}/{x}/{y}?bands=' + bands
-                    bbox = from_wkt(part[ms_partname]['boundstr']).bounds
-                elif not ms_id and pan_id:
-                    band_str = pan_id + '/{z}/{x}/{y}?bands=0'
-                    bbox = from_wkt(part['PAN']['boundstr']).bounds
-                else:
-                    continue
-
-                bboxes.append(bbox)
-
-                # Get the bucket. It has to be the same for all entries in the part.
-                bucket = part[list(part.keys())[0]]['bucket']
-
-                # Get the token
-                token = self.gbdx_connection.access_token
-
-                # Assemble url
-                url = (service_url + bucket + '/'
-                       + band_str
-                       + """&gamma={}
-                                        &highCutoff={}
-                                        &lowCutoff={}
-                                        &brightness={}
-                                        &contrast={}
-                                        &token={}""".format(gamma,
-                                                            highcutoff,
-                                                            lowcutoff,
-                                                            brightness,
-                                                            contrast,
-                                                            token))
-                urls.append(url)
-
-        return urls, bboxes
-
-    def create_leaflet_viewer(self, idaho_image_results, filename):
-        """Create a leaflet viewer html file for viewing idaho images.
-
-        Args:
-            idaho_image_results (dict): IDAHO image result set as returned from
-                                        the catalog.
-            filename (str): Where to save output html file.
-        """
-
-        description = self.describe_images(idaho_image_results)
-        if len(description) > 0:
-            functionstring = ''
-            for catid, images in description.items():
-                for partnum, part in images['parts'].items():
-
-                    num_images = len(list(part.keys()))
-                    partname = None
-                    if num_images == 1:
-                        # there is only one image, use the PAN
-                        partname = [p for p in list(part.keys())][0]
-                        pan_image_id = ''
-                    elif num_images == 2:
-                        # there are two images in this part, use the multi (or pansharpen)
-                        partname = [p for p in list(part.keys()) if p is not 'PAN'][0]
-                        pan_image_id = part['PAN']['id']
-
-                    if not partname:
-                        self.logger.debug("Cannot find part for idaho image.")
-                        continue
-
-                    bandstr = {
-                        'RGBN': '0,1,2',
-                        'WORLDVIEW_8_BAND': '4,2,1',
-                        'PAN': '0'
-                    }.get(partname, '0,1,2')
-
-                    part_boundstr_wkt = part[partname]['boundstr']
-                    part_polygon = from_wkt(part_boundstr_wkt)
-                    bucketname = part[partname]['bucket']
-                    image_id = part[partname]['id']
-                    W, S, E, N = part_polygon.bounds
-
-                    functionstring += "addLayerToMap('%s','%s',%s,%s,%s,%s,'%s');\n" % (
-                        bucketname, image_id, W, S, E, N, pan_image_id)
-
-            __location__ = os.path.realpath(
-                os.path.join(os.getcwd(), os.path.dirname(__file__)))
-            try:
-                with open(os.path.join(__location__, 'leafletmap_template.html'), 'r') as htmlfile:
-                    data = htmlfile.read().decode("utf8")
-            except AttributeError:
-                with open(os.path.join(__location__, 'leafletmap_template.html'), 'r') as htmlfile:
-                    data = htmlfile.read()
-
-            data = data.replace('FUNCTIONSTRING', functionstring)
-            data = data.replace('CENTERLAT', str(S))
-            data = data.replace('CENTERLON', str(W))
-            data = data.replace('BANDS', bandstr)
-            data = data.replace('TOKEN', self.gbdx_connection.access_token)
-
-            with codecs.open(filename, 'w', 'utf8') as outputfile:
-                self.logger.debug("Saving %s" % filename)
-                outputfile.write(data)
-        else:
-            print('No items returned.')
+    def create_leaflet_viewer(*args, **kwargs):
+        deprecation("""IDAHO TMS was deprecated 12/9/2019
+                       http://status.geobigdata.io/incidents/d59xzqdnb2nf
+                    """)
