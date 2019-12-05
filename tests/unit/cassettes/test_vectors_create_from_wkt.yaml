@@ -1,10 +1,9 @@
 interactions:
 - request:
-    body: !!python/unicode '[{"geometry": {"type": "Polygon", "coordinates": [[[0.0,
-      3.0], [3.0, 3.0], [3.0, 0.0], [0.0, 0.0], [0.0, 3.0]]]}, "type": "Feature",
-      "properties": {"item_type": "test_type_123", "ingest_source": "api", "attributes":
-      {"attribute2": "something", "date": "2015-06-06", "attribute1": "nothing", "number":
-      6}}}]'
+    body: '[{"type": "Feature", "geometry": {"type": "Polygon", "coordinates": [[[0.0,
+      3.0], [3.0, 3.0], [3.0, 0.0], [0.0, 0.0], [0.0, 3.0]]]}, "properties": {"item_type":
+      "test_type_123", "ingest_source": "api", "attributes": {"attribute1": "nothing",
+      "attribute2": "something", "number": 6, "date": "2015-06-06"}}}]'
     headers:
       Accept:
       - '*/*'
@@ -15,56 +14,56 @@ interactions:
       Content-Length:
       - '306'
       User-Agent:
-      - sandman@digitalglobe.com
+      - python-requests/2.21.0
     method: POST
     uri: https://vector.geobigdata.io/insight-vector/api/vectors
   response:
     body:
       string: !!binary |
-        H4sIAAAAAAAAAwAAAP//LcwxDoMwDADAv3jGSpQQQP0BQ1+AGBLHQUitgmzCUvXvbaVOt90LtBGx
-        ammP+eTnnBVuC5h47OZiOqv8waYseEi99szZuFR4tAPh4PoR+8lFTMETcghcYrKT9xbWDlikyv37
-        x41/8/r+AJSp+oJyAAAA
+        H4sIAAAAAAAAAy3MQQqDMBAF0LvM2iGKMcbewEVPUFzE5CuCJTJj3JTevS109XbvRVpihOpS9vHE
+        c0xKtweZcGzmQjyz/OGiED4kX1tCMtb7pZldw6FrB7a2B88RieFc59ra1sEPNFUEkSz37x9W/Obp
+        /QG3GmzvcgAAAA==
     headers:
-      access-control-allow-credentials:
+      Access-Control-Allow-Credentials:
       - 'true'
-      access-control-allow-headers:
+      Access-Control-Allow-Headers:
       - origin, content-type, accept, authorization
-      access-control-allow-methods:
+      Access-Control-Allow-Methods:
       - GET, POST, PUT, DELETE, OPTIONS, HEAD
-      access-control-allow-origin:
+      Access-Control-Allow-Origin:
       - '*'
-      cache-control:
+      Cache-Control:
       - no-cache, no-store, max-age=0, must-revalidate
-      connection:
+      Connection:
       - keep-alive
-      content-encoding:
+      Content-Encoding:
       - gzip
-      content-length:
-      - '129'
-      content-type:
+      Content-Length:
+      - '124'
+      Content-Type:
       - application/json
-      date:
-      - Thu, 13 Jun 2019 21:27:42 GMT
-      expires:
+      Date:
+      - Wed, 04 Dec 2019 22:09:26 GMT
+      Expires:
       - '0'
-      pragma:
+      Pragma:
       - no-cache
-      server:
+      Server:
       - Apache-Coyote/1.1
       - Weblogic 12.2.1.1
-      strict-transport-security:
+      Strict-Transport-Security:
       - max-age=604800 ; includeSubDomains
-      vary:
+      Vary:
       - Accept-Encoding
-      x-content-type-options:
+      X-Content-Type-Options:
       - nosniff
       - nosniff
-      x-frame-options:
+      X-Frame-Options:
       - DENY
       - SAMEORIGIN
-      x-permitted-cross-domain-policies:
+      X-Permitted-Cross-Domain-Policies:
       - none
-      x-xss-protection:
+      X-XSS-Protection:
       - 1; mode=block
       - 1; mode=block
     status:

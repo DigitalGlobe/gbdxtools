@@ -1,9 +1,9 @@
 interactions:
 - request:
-    body: !!python/unicode '[{"geometry": {"type": "Point", "coordinates": [1.0, 1.0]},
-      "type": "Feature", "properties": {"text": "item text", "ingest_source": "source",
-      "attributes": {"latitude": 1, "institute_founded": "2015-07-17", "mascot": "moth"},
-      "name": "item name", "item_type": "type"}}]'
+    body: '[{"type": "Feature", "geometry": {"type": "Point", "coordinates": [1.0,
+      1.0]}, "properties": {"text": "item text", "name": "item name", "item_type":
+      "type", "ingest_source": "source", "attributes": {"latitude": 1, "institute_founded":
+      "2015-07-17", "mascot": "moth"}}}]'
     headers:
       Accept:
       - '*/*'
@@ -14,56 +14,56 @@ interactions:
       Content-Length:
       - '269'
       User-Agent:
-      - sandman@digitalglobe.com
+      - python-requests/2.21.0
     method: POST
     uri: https://vector.geobigdata.io/insight-vector/api/vectors
   response:
     body:
       string: !!binary |
-        H4sIAAAAAAAAAwAAAP//LcwxDoMwDADAv3iuFUITUfoDBl6AGBzHrZBaBdmEpeLvtFKn2+4DVpnF
-        7FFfwybvIRvcJ3C0Lm4X3or+wWqiuGrZlyzZdcF730dCoZAxtDfCxFfG1LepkUjUxA7mC4hq0fH7
-        01N+83ycVx2cxnIAAAA=
+        H4sIAAAAAAAAAy3MMQ6DMAwAwL94xkpAQIAfMPQFFUPiOAgJFGQTlqp/byt1uu1eoIWIVVPZ54uP
+        OSpMTzD+3MzNdGX5g0VZ8JR8b5GjYZuajmrC0boBW9cH9NRFbMmlYIcQ3OhhqYBFsjy+v1/5Ny/v
+        Dx5m9dRyAAAA
     headers:
-      access-control-allow-credentials:
+      Access-Control-Allow-Credentials:
       - 'true'
-      access-control-allow-headers:
+      Access-Control-Allow-Headers:
       - origin, content-type, accept, authorization
-      access-control-allow-methods:
+      Access-Control-Allow-Methods:
       - GET, POST, PUT, DELETE, OPTIONS, HEAD
-      access-control-allow-origin:
+      Access-Control-Allow-Origin:
       - '*'
-      cache-control:
+      Cache-Control:
       - no-cache, no-store, max-age=0, must-revalidate
-      connection:
+      Connection:
       - keep-alive
-      content-encoding:
+      Content-Encoding:
       - gzip
-      content-length:
-      - '128'
-      content-type:
+      Content-Length:
+      - '123'
+      Content-Type:
       - application/json
-      date:
-      - Thu, 13 Jun 2019 21:25:20 GMT
-      expires:
+      Date:
+      - Wed, 04 Dec 2019 22:09:27 GMT
+      Expires:
       - '0'
-      pragma:
+      Pragma:
       - no-cache
-      server:
+      Server:
       - Apache-Coyote/1.1
       - Weblogic 12.2.1.1
-      strict-transport-security:
+      Strict-Transport-Security:
       - max-age=604800 ; includeSubDomains
-      vary:
+      Vary:
       - Accept-Encoding
-      x-content-type-options:
+      X-Content-Type-Options:
       - nosniff
       - nosniff
-      x-frame-options:
+      X-Frame-Options:
       - DENY
       - SAMEORIGIN
-      x-permitted-cross-domain-policies:
+      X-Permitted-Cross-Domain-Policies:
       - none
-      x-xss-protection:
+      X-XSS-Protection:
       - 1; mode=block
       - 1; mode=block
     status:
