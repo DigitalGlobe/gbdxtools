@@ -1,7 +1,7 @@
 interactions:
 - request:
-    body: !!python/unicode '{"type": "Polygon", "coordinates": [[[-76.65, 40.1], [-76.65,
-      40.14], [-76.55, 40.14], [-76.55, 40.1], [-76.65, 40.1]]]}'
+    body: '{"type": "Polygon", "coordinates": [[[-76.65, 40.1], [-76.65, 40.14], [-76.55,
+      40.14], [-76.55, 40.1], [-76.65, 40.1]]]}'
     headers:
       Accept:
       - '*/*'
@@ -14,51 +14,51 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - sandman@digitalglobe.com
+      - python-requests/2.21.0
     method: POST
-    uri: https://vector.geobigdata.io/insight-vector/api/index/aggregation/vector-sma-twitter*?count=10&query=item_type%3Atweet&end_date=now&start_date=now-2M&aggs=geohash%3A4%3Bdate_hist%3Amonth
+    uri: https://vector.geobigdata.io/insight-vector/api/index/aggregation/vector-sma-twitter*?count=10&aggs=geohash%3A4%3Bdate_hist%3Amonth&query=item_type%3Atweet&start_date=now-12M&end_date=now
   response:
     body:
-      string: !!python/unicode '{"responseDate":"2019-06-14T19:52:30.351Z","geom":{"type":"Polygon","coordinates":[[[-76.65,40.1],[-76.65,40.14],[-76.55,40.14],[-76.55,40.1],[-76.65,40.1]]]},"query":"item_type:tweet","startDate":null,"endDate":null,"totalItems":195,"aggregations":[{"name":"geohash:4","terms":[{"term":"dr1s","count":194,"aggregations":[{"name":"date_hist:month","terms":[{"term":"2019-02-01T00:00:00.000Z","count":2,"aggregations":null},{"term":"2019-03-01T00:00:00.000Z","count":44,"aggregations":null},{"term":"2019-04-01T00:00:00.000Z","count":47,"aggregations":null},{"term":"2019-05-01T00:00:00.000Z","count":76,"aggregations":null},{"term":"2019-06-01T00:00:00.000Z","count":25,"aggregations":null}]}]},{"term":"dr1k","count":1,"aggregations":[{"name":"date_hist:month","terms":[{"term":"2019-05-01T00:00:00.000Z","count":1,"aggregations":null}]}]}]}]}'
+      string: '{"responseDate":"2019-12-05T21:39:20.061Z","geom":{"type":"Polygon","coordinates":[[[-76.65,40.1],[-76.65,40.14],[-76.55,40.14],[-76.55,40.1],[-76.65,40.1]]]},"query":"item_type:tweet","startDate":null,"endDate":null,"totalItems":49,"aggregations":[{"name":"geohash:4","terms":[{"term":"dr1s","count":49,"aggregations":[{"name":"date_hist:month","terms":[{"term":"2019-11-01T00:00:00.000Z","count":46,"aggregations":null},{"term":"2019-12-01T00:00:00.000Z","count":3,"aggregations":null}]}]}]}]}'
     headers:
-      access-control-allow-credentials:
+      Access-Control-Allow-Credentials:
       - 'true'
-      access-control-allow-headers:
+      Access-Control-Allow-Headers:
       - origin, content-type, accept, authorization
-      access-control-allow-methods:
+      Access-Control-Allow-Methods:
       - GET, POST, PUT, DELETE, OPTIONS, HEAD
-      access-control-allow-origin:
+      Access-Control-Allow-Origin:
       - '*'
-      cache-control:
+      Cache-Control:
       - no-cache, no-store, max-age=0, must-revalidate
-      connection:
+      Connection:
       - keep-alive
-      content-encoding:
+      Content-Encoding:
       - UTF-8
-      content-length:
-      - '844'
-      content-type:
+      Content-Length:
+      - '495'
+      Content-Type:
       - application/json;charset=UTF-8
-      date:
-      - Fri, 14 Jun 2019 19:52:30 GMT
-      expires:
+      Date:
+      - Thu, 05 Dec 2019 21:39:20 GMT
+      Expires:
       - '0'
-      pragma:
+      Pragma:
       - no-cache
-      server:
+      Server:
       - Apache-Coyote/1.1
       - Weblogic 12.2.1.1
-      strict-transport-security:
+      Strict-Transport-Security:
       - max-age=604800 ; includeSubDomains
-      x-content-type-options:
+      X-Content-Type-Options:
       - nosniff
       - nosniff
-      x-frame-options:
+      X-Frame-Options:
       - DENY
       - SAMEORIGIN
-      x-permitted-cross-domain-policies:
+      X-Permitted-Cross-Domain-Policies:
       - none
-      x-xss-protection:
+      X-XSS-Protection:
       - 1; mode=block
       - 1; mode=block
     status:

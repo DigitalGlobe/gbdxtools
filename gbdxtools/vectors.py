@@ -20,7 +20,7 @@ from collections import OrderedDict
 import json, time, os
 
 from shapely.ops import cascaded_union
-from shapely.geometry import shape, box
+from shapely.geometry import shape, box, mapping
 
 from gbdxtools.vector_layers import VectorGeojsonLayer, VectorTileLayer, \
                                     ImageLayer
@@ -161,10 +161,14 @@ class Vectors(object):
         Perform a vector services query using the QUERY API
         (https://gbdxdocs.digitalglobe.com/docs/vs-query-list-vector-items-returns-default-fields)
 
+        ElasticSearch spatial indexing has some slop in it and can return some features that are 
+        near to but not overlapping the search geometry. If you need precise overlapping of the
+        search API you will need to run a geometric check on each result.
+
         Args:
             searchAreaWkt: WKT Polygon of area to search
             query: Elastic Search query
-            count: Maximum number of results to return
+            count: Maximum number of results to return, default is 100
             ttl: Amount of time for each temporary vector page to exist
 
         Returns:
@@ -174,21 +178,18 @@ class Vectors(object):
         if count < 1000:
             # issue a single page query
             search_area_polygon = load_wkt(searchAreaWkt)
-            left, lower, right, upper = search_area_polygon.bounds
+            geojson = json.dumps(mapping(search_area_polygon))
 
             params = {
                 "q": query,
                 "count": min(count,1000),
-                "left": left,
-                "right": right,
-                "lower": lower,
-                "upper": upper
             }
 
             url = self.query_index_url % index if index else self.query_url
-            r = self.gbdx_connection.get(url, params=params)
+            r = self.gbdx_connection.post(url, data=geojson, params=params)
             r.raise_for_status()
             return r.json()
+
         else:
             return list(self.query_iteratively(searchAreaWkt, query, count, ttl, index))
 
@@ -210,27 +211,22 @@ class Vectors(object):
         '''
 
         search_area_polygon = load_wkt(searchAreaWkt)
-        left, lower, right, upper = search_area_polygon.bounds
+        geojson = json.dumps(mapping(search_area_polygon))
 
         params = {
             "q": query,
             "count": min(count,1000),
             "ttl": ttl,
-            "left": left,
-            "right": right,
-            "lower": lower,
-            "upper": upper
         }
 
         # initialize paging request
         url = self.query_index_page_url % index if index else self.query_page_url
-        r = self.gbdx_connection.get(url, params=params)
+        r = self.gbdx_connection.post(url, params=params, data=geojson)
         r.raise_for_status()
         page = r.json()
         paging_id = page['next_paging_id']
         item_count = int(page['item_count'])
         data = page['data']
-
 
         num_results = 0
         for vector in data:

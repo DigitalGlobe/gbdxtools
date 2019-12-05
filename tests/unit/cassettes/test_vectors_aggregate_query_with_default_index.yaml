@@ -1,7 +1,7 @@
 interactions:
 - request:
-    body: !!python/unicode '{"type": "Polygon", "coordinates": [[[-76.65, 40.1], [-76.65,
-      40.14], [-76.55, 40.14], [-76.55, 40.1], [-76.65, 40.1]]]}'
+    body: '{"type": "Polygon", "coordinates": [[[-76.65, 40.1], [-76.65, 40.14], [-76.55,
+      40.14], [-76.55, 40.1], [-76.65, 40.1]]]}'
     headers:
       Accept:
       - '*/*'
@@ -14,51 +14,51 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - sandman@digitalglobe.com
+      - python-requests/2.21.0
     method: POST
     uri: https://vector.geobigdata.io/insight-vector/api/index/aggregation/vector-gbdx-alpha-catalog-v2-*?count=10&aggs=terms%3Aitem_type
   response:
     body:
-      string: !!python/unicode '{"responseDate":"2019-06-13T21:30:06.337Z","geom":{"type":"Polygon","coordinates":[[[-76.65,40.1],[-76.65,40.14],[-76.55,40.14],[-76.55,40.1],[-76.65,40.1]]]},"query":null,"startDate":null,"endDate":null,"totalItems":1044,"aggregations":[{"name":"terms:item_type","terms":[{"term":"GBDXCatalogRecord","count":1044,"aggregations":null},{"term":"ESAProduct","count":491,"aggregations":null},{"term":"Acquisition","count":436,"aggregations":null},{"term":"SENTINEL2","count":350,"aggregations":null},{"term":"Landsat8","count":329,"aggregations":null},{"term":"LandsatAcquisition","count":329,"aggregations":null},{"term":"SENTINEL1","count":141,"aggregations":null},{"term":"DigitalGlobeAcquisition","count":98,"aggregations":null},{"term":"DigitalGlobeProduct","count":44,"aggregations":null},{"term":"MODISProduct","count":44,"aggregations":null}]}]}'
+      string: '{"responseDate":"2019-12-04T22:08:06.399Z","geom":{"type":"Polygon","coordinates":[[[-76.65,40.1],[-76.65,40.14],[-76.55,40.14],[-76.55,40.1],[-76.65,40.1]]]},"query":null,"startDate":null,"endDate":null,"totalItems":1233,"aggregations":[{"name":"terms:item_type","terms":[{"term":"GBDXCatalogRecord","count":1233,"aggregations":null},{"term":"ESAProduct","count":591,"aggregations":null},{"term":"Acquisition","count":471,"aggregations":null},{"term":"SENTINEL2","count":420,"aggregations":null},{"term":"Landsat8","count":340,"aggregations":null},{"term":"LandsatAcquisition","count":340,"aggregations":null},{"term":"SENTINEL1","count":171,"aggregations":null},{"term":"DigitalGlobeAcquisition","count":100,"aggregations":null},{"term":"DigitalGlobeProduct","count":92,"aggregations":null},{"term":"IDAHOImage","count":62,"aggregations":null}]}]}'
     headers:
-      access-control-allow-credentials:
+      Access-Control-Allow-Credentials:
       - 'true'
-      access-control-allow-headers:
+      Access-Control-Allow-Headers:
       - origin, content-type, accept, authorization
-      access-control-allow-methods:
+      Access-Control-Allow-Methods:
       - GET, POST, PUT, DELETE, OPTIONS, HEAD
-      access-control-allow-origin:
+      Access-Control-Allow-Origin:
       - '*'
-      cache-control:
+      Cache-Control:
       - no-cache, no-store, max-age=0, must-revalidate
-      connection:
+      Connection:
       - keep-alive
-      content-encoding:
+      Content-Encoding:
       - UTF-8
-      content-length:
-      - '850'
-      content-type:
+      Content-Length:
+      - '849'
+      Content-Type:
       - application/json;charset=UTF-8
-      date:
-      - Thu, 13 Jun 2019 21:30:06 GMT
-      expires:
+      Date:
+      - Wed, 04 Dec 2019 22:08:06 GMT
+      Expires:
       - '0'
-      pragma:
+      Pragma:
       - no-cache
-      server:
+      Server:
       - Apache-Coyote/1.1
       - Weblogic 12.2.1.1
-      strict-transport-security:
+      Strict-Transport-Security:
       - max-age=604800 ; includeSubDomains
-      x-content-type-options:
+      X-Content-Type-Options:
       - nosniff
       - nosniff
-      x-frame-options:
+      X-Frame-Options:
       - DENY
       - SAMEORIGIN
-      x-permitted-cross-domain-policies:
+      X-Permitted-Cross-Domain-Policies:
       - none
-      x-xss-protection:
+      X-XSS-Protection:
       - 1; mode=block
       - 1; mode=block
     status:

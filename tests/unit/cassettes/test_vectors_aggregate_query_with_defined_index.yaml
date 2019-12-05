@@ -1,7 +1,7 @@
 interactions:
 - request:
-    body: !!python/unicode '{"type": "Polygon", "coordinates": [[[-76.65, 40.1], [-76.65,
-      40.14], [-76.55, 40.14], [-76.55, 40.1], [-76.65, 40.1]]]}'
+    body: '{"type": "Polygon", "coordinates": [[[-76.65, 40.1], [-76.65, 40.14], [-76.55,
+      40.14], [-76.55, 40.1], [-76.65, 40.1]]]}'
     headers:
       Accept:
       - '*/*'
@@ -14,52 +14,52 @@ interactions:
       Content-Type:
       - application/json
       User-Agent:
-      - sandman@digitalglobe.com
+      - python-requests/2.21.0
     method: POST
     uri: https://vector.geobigdata.io/insight-vector/api/index/aggregation/read-vector-osm-*?count=10&aggs=terms%3Aitem_type
   response:
     body:
-      string: !!python/unicode '{"responseDate":"2019-06-13T21:30:56.825Z","geom":{"type":"Polygon","coordinates":[[[-76.65,40.1],[-76.65,40.14],[-76.55,40.14],[-76.55,40.1],[-76.65,40.1]]]},"query":null,"startDate":null,"endDate":null,"totalItems":553,"aggregations":[{"name":"terms:item_type","terms":[{"term":"Road","count":258,"aggregations":null},{"term":"Stream","count":39,"aggregations":null},{"term":"Tower","count":34,"aggregations":null},{"term":"Building","count":27,"aggregations":null},{"term":"Pedestrian","count":12,"aggregations":null},{"term":"House","count":10,"aggregations":null},{"term":"Uncategorized","count":10,"aggregations":null},{"term":"Terrace","count":9,"aggregations":null},{"term":"Farmland","count":8,"aggregations":null},{"term":"Turning
+      string: '{"responseDate":"2019-12-04T22:08:07.105Z","geom":{"type":"Polygon","coordinates":[[[-76.65,40.1],[-76.65,40.14],[-76.55,40.14],[-76.55,40.1],[-76.65,40.1]]]},"query":null,"startDate":null,"endDate":null,"totalItems":575,"aggregations":[{"name":"terms:item_type","terms":[{"term":"Road","count":271,"aggregations":null},{"term":"Stream","count":39,"aggregations":null},{"term":"Tower","count":34,"aggregations":null},{"term":"Building","count":27,"aggregations":null},{"term":"Uncategorized","count":13,"aggregations":null},{"term":"Pedestrian","count":12,"aggregations":null},{"term":"House","count":10,"aggregations":null},{"term":"Terrace","count":9,"aggregations":null},{"term":"Farmland","count":8,"aggregations":null},{"term":"Turning
         Circle","count":8,"aggregations":null}]}]}'
     headers:
-      access-control-allow-credentials:
+      Access-Control-Allow-Credentials:
       - 'true'
-      access-control-allow-headers:
+      Access-Control-Allow-Headers:
       - origin, content-type, accept, authorization
-      access-control-allow-methods:
+      Access-Control-Allow-Methods:
       - GET, POST, PUT, DELETE, OPTIONS, HEAD
-      access-control-allow-origin:
+      Access-Control-Allow-Origin:
       - '*'
-      cache-control:
+      Cache-Control:
       - no-cache, no-store, max-age=0, must-revalidate
-      connection:
+      Connection:
       - keep-alive
-      content-encoding:
+      Content-Encoding:
       - UTF-8
-      content-length:
+      Content-Length:
       - '783'
-      content-type:
+      Content-Type:
       - application/json;charset=UTF-8
-      date:
-      - Thu, 13 Jun 2019 21:30:56 GMT
-      expires:
+      Date:
+      - Wed, 04 Dec 2019 22:08:07 GMT
+      Expires:
       - '0'
-      pragma:
+      Pragma:
       - no-cache
-      server:
+      Server:
       - Apache-Coyote/1.1
       - Weblogic 12.2.1.1
-      strict-transport-security:
+      Strict-Transport-Security:
       - max-age=604800 ; includeSubDomains
-      x-content-type-options:
+      X-Content-Type-Options:
       - nosniff
       - nosniff
-      x-frame-options:
+      X-Frame-Options:
       - DENY
       - SAMEORIGIN
-      x-permitted-cross-domain-policies:
+      X-Permitted-Cross-Domain-Policies:
       - none
-      x-xss-protection:
+      X-XSS-Protection:
       - 1; mode=block
       - 1; mode=block
     status:
