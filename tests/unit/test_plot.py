@@ -1,3 +1,12 @@
+'''
+Unit tests for the gbdxtools.CatalogImage class
+
+These will only run if pyplot is installed. 
+They are also skipped in headless CI environments
+
+See tests/readme.md for more about tests
+'''
+
 import os
 import unittest
 import numpy as np
@@ -28,6 +37,10 @@ class PlotTest(unittest.TestCase):
     def setUp(self):
         if any(x in os.environ for x in ['TRAVIS', 'APPVEYOR']):
             self.skipTest("Travis can't test plots - no display")
+        try:
+            import pyplot
+        except ImportError:
+            self.skipTest("No pyplot installed")
 
     @classmethod
     def setUpClass(cls):

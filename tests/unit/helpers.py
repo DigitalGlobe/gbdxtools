@@ -20,6 +20,13 @@ from requests_oauthlib import OAuth2Session
 
 import vcr
 
+
+WV02_CATID = '103001007B9DD400'
+WV03_VNIR_CATID = '104001003A32FA00'
+WV04_CATID = '6060bafe-9c0a-4c7a-86c3-7bd10316ed61-inv'
+LANDSAT_ID = 'LC80380302013160LGN00'
+SENTINEL_ID = '24a34529-7701-584c-89bf-bf1686d681f6'
+
 def get_mock_gbdx_session(token='dummytoken'):
     ''' make a mock session so tests can make requests to VCRpy
         without having to authorize 

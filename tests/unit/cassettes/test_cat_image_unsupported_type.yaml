@@ -14,7 +14,7 @@ interactions:
       User-Agent:
       - python-requests/2.21.0
     method: POST
-    uri: https://vector.geobigdata.io/insight-vector/api/index/query/vector-gbdx-alpha-catalog-v2-*/items?q=item_type%3AGBDXCatalogRecord+AND+%28attributes.catalogID.keyword%3A1020010044CEA300+OR+id%3A1020010044CEA300%29+AND+NOT+item_type%3ADigitalGlobeAcquisition&count=1
+    uri: https://vector.geobigdata.io/insight-vector/api/index/query/vector-gbdx-alpha-catalog-v2-*/items?q=item_type%3AGBDXCatalogRecord+AND+%28attributes.catalogID.keyword%3AMONA_LISA+OR+id%3AMONA_LISA%29+AND+NOT+item_type%3ADigitalGlobeAcquisition&count=1
   response:
     body:
       string: '[]'
@@ -38,7 +38,7 @@ interactions:
       Content-Type:
       - application/json;charset=UTF-8
       Date:
-      - Fri, 06 Dec 2019 18:42:50 GMT
+      - Fri, 06 Dec 2019 18:42:40 GMT
       Expires:
       - '0'
       Pragma:

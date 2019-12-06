@@ -1,6 +1,7 @@
 interactions:
 - request:
-    body: null
+    body: '{"type": "Polygon", "coordinates": [[[180.0, -90.0], [180.0, 90.0], [-180.0,
+      90.0], [-180.0, -90.0], [180.0, -90.0]]]}'
     headers:
       Accept:
       - '*/*'
@@ -8,13 +9,15 @@ interactions:
       - gzip, deflate
       Connection:
       - keep-alive
+      Content-Length:
+      - '118'
       User-Agent:
       - python-requests/2.21.0
-    method: GET
-    uri: https://vector.geobigdata.io/insight-vector/api/index/query/vector-gbdx-alpha-catalog-v2-*/items?q=item_type%3AGBDXCatalogRecord+AND+%28attributes.catalogID.keyword%3ALC80380302013160LGN00+OR+id%3ALC80380302013160LGN00%29+AND+NOT+item_type%3ADigitalGlobeAcquisition&count=1&left=-180.0&right=180.0&lower=-90.0&upper=90.0
+    method: POST
+    uri: https://vector.geobigdata.io/insight-vector/api/index/query/vector-gbdx-alpha-catalog-v2-*/items?q=item_type%3AGBDXCatalogRecord+AND+%28attributes.catalogID.keyword%3ALC80380302013160LGN00+OR+id%3ALC80380302013160LGN00%29+AND+NOT+item_type%3ADigitalGlobeAcquisition&count=1
   response:
     body:
-      string: '[{"type":"Feature","geometry":{"type":"MultiPolygon","coordinates":[[[[-112.47753,42.16063],[-112.47753,44.18066],[-109.64058,44.18066],[-109.64058,42.16063],[-112.47753,42.16063]]]]},"properties":{"ingest_source":"GBDX_INGEST_ALPHA","item_date":"2013-06-09T18:09:25.351Z","original_crs":"EPSG:4326","item_type":["GBDXCatalogRecord","Acquisition","Landsat8","LandsatAcquisition"],"name":null,"format":null,"ingest_date":"2018-04-13T14:14:16.778Z","attributes":{"row_int":30,"bucketName":"landsat-pds","productID":"LC80380302013160LGN00","sensorPlatformName":"LANDSAT08","browseURL":"https://s3-us-west-2.amazonaws.com/landsat-pds/L8/038/030/LC80380302013160LGN00/LC80380302013160LGN00_thumb_large.jpg","cloudCover_int":0,"path_int":38,"catalogID":"LC80380302013160LGN00","panResolution_dbl":15.0,"vendor":"Landsat","bucketPrefix":"L8/038/030/LC80380302013160LGN00","platformName":"LANDSAT08","multiResolution_dbl":30.0},"ingest_attributes":{"_rest_user":"acquisition-gbdx-support@digitalglobe.com","_rest_url":"http://vector.geobigdata.io/api/vectors/gbdx-alpha-catalog-v2-%257Bitem_date%253Ayyyy%257D"},"id":"LC80380302013160LGN00","source":null,"text":""}}]'
+      string: '[{"geometry":{"coordinates":[[[[-112.47753,42.16063],[-112.47753,44.18066],[-109.64058,44.18066],[-109.64058,42.16063],[-112.47753,42.16063]]]],"type":"MultiPolygon"},"type":"Feature","properties":{"ingest_source":"GBDX_INGEST_ALPHA","item_date":"2013-06-09T18:09:25.351Z","original_crs":"EPSG:4326","item_type":["GBDXCatalogRecord","Acquisition","Landsat8","LandsatAcquisition"],"name":null,"format":null,"ingest_date":"2018-04-13T14:14:16.778Z","attributes":{"row_int":30,"bucketName":"landsat-pds","productID":"LC80380302013160LGN00","sensorPlatformName":"LANDSAT08","browseURL":"https://s3-us-west-2.amazonaws.com/landsat-pds/L8/038/030/LC80380302013160LGN00/LC80380302013160LGN00_thumb_large.jpg","cloudCover_int":0,"path_int":38,"catalogID":"LC80380302013160LGN00","panResolution_dbl":15.0,"vendor":"Landsat","bucketPrefix":"L8/038/030/LC80380302013160LGN00","platformName":"LANDSAT08","multiResolution_dbl":30.0},"ingest_attributes":{"_rest_user":"acquisition-gbdx-support@digitalglobe.com","_rest_url":"http://vector.geobigdata.io/api/vectors/gbdx-alpha-catalog-v2-%257Bitem_date%253Ayyyy%257D"},"id":"LC80380302013160LGN00","source":null,"text":""}}]'
     headers:
       Access-Control-Allow-Credentials:
       - 'true'
@@ -35,7 +38,7 @@ interactions:
       Content-Type:
       - application/json;charset=UTF-8
       Date:
-      - Tue, 23 Apr 2019 21:51:59 GMT
+      - Fri, 06 Dec 2019 18:42:41 GMT
       Expires:
       - '0'
       Pragma:
@@ -75,10 +78,10 @@ interactions:
   response:
     body:
       string: '[{"isPublic":false,"keywords":["LandsatTemplate"],"sensors":["Landsat"],"keynodes":[{"id":"Reproject","description":"Reproject"}],"description":"Landsat
-        Read and Reproject","metadataAuthor":{"firstName":"Brett","familyName":"Cullen","email":"brett.cullen@digitalglobe.com"},"templateAuthor":{"firstName":"Brett","familyName":"Cullen","email":"brett.cullen@digitalglobe.com"},"datePublished":"2019-04-16T20:05:28.084Z","name":"LandsatTemplate","templateId":"5109a915f6c5ba62397e3f0bde2cbf6c7c5f4c9030b055361d77a90c605cf550","id":"e1b505a03d9446ee8c6dad96a83403b1"}]'
+        Read and Reproject","metadataAuthor":{"firstName":"Brett","familyName":"Cullen","email":"brett.cullen@digitalglobe.com"},"templateAuthor":{"firstName":"Brett","familyName":"Cullen","email":"brett.cullen@digitalglobe.com"},"datePublished":"2019-05-06T20:26:22.481Z","name":"LandsatTemplate","templateId":"5109a915f6c5ba62397e3f0bde2cbf6c7c5f4c9030b055361d77a90c605cf550","id":"e1b505a03d9446ee8c6dad96a83403b1"}]'
     headers:
       Access-Control-Allow-Headers:
-      - x-requested-with, X-Auth-Token, Content-Type, Authorization
+      - x-requested-with, X-Auth-Token, Content-Type, Authorization, range
       Access-Control-Allow-Methods:
       - GET, OPTIONS, HEAD, PUT, POST, DELETE
       Access-Control-Allow-Origin:
@@ -92,7 +95,7 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Tue, 23 Apr 2019 21:52:00 GMT
+      - Fri, 06 Dec 2019 18:42:42 GMT
     status:
       code: 200
       message: ''
@@ -116,7 +119,7 @@ interactions:
         SRS Code":"${SourceSRSCode:-EPSG:4326}","Source pixel-to-world transform":"null"}},{"id":"LandsatRead","operator":"LandsatRead","parameters":{"landsatId":"${catalogId}","productSpec":"${productSpec}"}}]}'
     headers:
       Access-Control-Allow-Headers:
-      - x-requested-with, X-Auth-Token, Content-Type, Authorization
+      - x-requested-with, X-Auth-Token, Content-Type, Authorization, range
       Access-Control-Allow-Methods:
       - GET, OPTIONS, HEAD, PUT, POST, DELETE
       Access-Control-Allow-Origin:
@@ -130,7 +133,7 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Tue, 23 Apr 2019 21:52:00 GMT
+      - Fri, 06 Dec 2019 18:42:42 GMT
     status:
       code: 200
       message: ''
@@ -156,7 +159,7 @@ interactions:
         -112.47752985513819 44.18065964691234))","groundSampleDistanceMeters":30.0,"minX":0,"minY":0,"maxX":7680,"maxY":7480,"minTileX":0,"minTileY":0,"maxTileX":30,"maxTileY":29,"sunAzimuth":136.6577385,"sunElevation":64.79784228,"cloudCover":0.95},"imageGeoreferencing":{"spatialReferenceSystemCode":"EPSG:32612","scaleX":30.0,"scaleY":-30.0,"translateX":381900.0,"translateY":4893000.0,"shearX":0.0,"shearY":0.0},"rpcSensorModel":null,"histogram":null,"sensorMetadata":null,"imageAssociations":null,"rrdMetadata":null}'
     headers:
       Access-Control-Allow-Headers:
-      - x-requested-with, X-Auth-Token, Content-Type, Authorization
+      - x-requested-with, X-Auth-Token, Content-Type, Authorization, range
       Access-Control-Allow-Methods:
       - GET, OPTIONS, HEAD, PUT, POST, DELETE
       Access-Control-Allow-Origin:
@@ -170,7 +173,7 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Tue, 23 Apr 2019 21:52:09 GMT
+      - Fri, 06 Dec 2019 18:42:49 GMT
     status:
       code: 200
       message: ''
