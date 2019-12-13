@@ -1,5 +1,5 @@
 {% set name = "gbdxtools" %}
-{% set version = "0.17.0.b4" %}
+{% set version = "0.17.0.b6" %}
 
 package:
   name: "{{ name|lower }}"
@@ -41,7 +41,7 @@ requirements:
     - pytest
     - pytest-runner
     - python
-    - requests >=2.12.1,<=2.21
+    - requests >=2.12.1
     - requests-futures
     - imageio
     - tifffile

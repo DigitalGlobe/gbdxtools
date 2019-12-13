@@ -58,7 +58,10 @@ def filter_auth_calls(request):
     ''' VCRpy doesn't need to record auth calls '''
     if 'oauth/token' in request.path:
         return None
+    if 'geobigdata.io/s3creds' in request.path:
+        return None
     return request
+
     
 # A VCRpy recorder that that skips auth tokens and filters out auth keys
 # DO NOT CHECK AUTH TOKENS INTO VERSION CONTROL
@@ -68,5 +71,11 @@ gbdx_vcr = vcr.VCR(
     match_on=['method', 'scheme', 'host', 'port', 'path', 'body'],
     before_record_request=filter_auth_calls,
 )
+
+#TODO: We should probably also use the `path_transformer` hook to generate yaml paths based on the
+#  test and module names, i.e. /tests/unit/cassettes/<module>/<test fn name>.yaml
+#
+# Current set up of manually naming them and putting them in one folder makes it hard to find and 
+# examine them.
 
 

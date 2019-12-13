@@ -32,6 +32,8 @@ So in short, if you don't need to update a test file, it's probably best to leav
   - You can `export WRITE_CASSETTE=True` once, and `unset WRITE_CASSETTE` when you're done.
   - or set it temporarily in the command: `WRITE_CASSETTE=True python -m pytest tests/unit/test_vectors.py`
 
+If the test is an old one using `gbdx_mock` instead of `mockable_interface`, you would need to export `GBDX_MOCK` instead of `WRITE_CASSETTE`. But instead, update the test to use `mockable_interface`, because it doesn't make sense to set `GBDX_MOCK` when you're specifically not mocking the connection.
+
 
 ### Adding new tests to the test files
 
