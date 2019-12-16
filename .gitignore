@@ -8,7 +8,6 @@ build/
 /test-reports
 /venv
 /.idea/
-chip.tif
 .pytest_cache
 .gitignore
 settings.json
