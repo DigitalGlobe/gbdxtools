@@ -68,7 +68,6 @@ def load_url(url, token, shape=(8, 256, 256)):
                 success = True
                 return arr
             except Exception as e:
-                print(e)
                 _curl.close()
                 del _curl_pool[thread_id]
                 sleep(2**i)
@@ -77,5 +76,5 @@ def load_url(url, token, shape=(8, 256, 256)):
                 os.remove(temp.name)
 
     if success is False:
-        raise TypeError("Unable to download tile {} in {} retries".format(url, MAX_RETRIES))
+        raise TypeError("Unable to download tile {} in {} retries. \n\n Last fetch error: {}".format(url, MAX_RETRIES, e))
     return arr
