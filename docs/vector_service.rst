@@ -8,7 +8,7 @@ GBDX Vector Services is an ElasticSearch-based store of vectors that can be acce
 See https://gbdxdocs.digitalglobe.com/docs/vector-services-course for complete details.
 
 Typical use cases involve searching, aggregating, and filtering vectors from multiple sources that have been
-curated by Digitalglobe.  Vectors can also be stored for later retrieval.
+curated by Maxar.  Vectors can also be stored for later retrieval.
 
 Searching for Vectors
 -----------------------

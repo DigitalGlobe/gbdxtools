@@ -12,7 +12,7 @@ GBDX Platform
 
 * Raster Data Access
 
-    *Access to 100+ PB of DigitalGlobe satellite imagery plus Landsat, Sentinel, and other sources.*
+    *Access to 100+ PB of Maxar satellite imagery plus Landsat, Sentinel, and other sources.*
 
 * Image Catalog
 
