@@ -21,9 +21,8 @@ def _reproject(geo, from_proj, to_proj):
     if from_proj != to_proj:
         from_proj = get_proj(from_proj)
         to_proj = get_proj(to_proj)
-        tfm = partial(pyproj.transform, from_proj, to_proj)
-        #tfm = partial(pyproj.transform, pyproj.Proj(init=from_proj), pyproj.Proj(init=to_proj))
-        return ops.transform(tfm, geo)
+        tfm = pyproj.Transformer.from_crs(from_proj, to_proj, always_xy=True)
+        return ops.transform(tfm.transform, geo)
     return geo
 
 

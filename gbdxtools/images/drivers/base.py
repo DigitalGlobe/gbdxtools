@@ -7,12 +7,12 @@ import six
 rda = RDA()
 
 RDA_DEFAULT_OPTIONS = {
-    "proj": "EPSG:4326",
+    "proj": "epsg:4326",
     "gsd": None
     }
 
 IDAHO_DEFAULT_OPTIONS = {
-    "proj": "EPSG:4326",
+    "proj": "epsg:4326",
     "gsd": None,
     "acomp": False,
     "bucket": 'idaho-images',
@@ -22,7 +22,7 @@ IDAHO_DEFAULT_OPTIONS = {
     }
 
 WV_DEFAULT_OPTIONS = {
-    "proj": "EPSG:4326",
+    "proj": "epsg:4326",
     "gsd": None,
     "band_type": "pan",
     "correctionType": "DN",
@@ -31,7 +31,7 @@ WV_DEFAULT_OPTIONS = {
 
 WV_MODERN_OPTIONS = {
     "dra": False,
-    "proj": "EPSG:4326",
+    "proj": "epsg:4326",
     "gsd": None,
     "band_type": "MS",
     "acomp": False,

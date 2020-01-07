@@ -192,7 +192,7 @@ class DaskImage(da.Array):
 
 
 class GeoDaskImage(DaskImage, Container, PlotMixin, BandMethodsTemplate, Deprecations):
-    _default_proj = "EPSG:4326"
+    _default_proj = "epsg:4326"
 
     def map_blocks(self, *args, **kwargs):
         ''' Queue a deferred function to run on each block of image
@@ -349,8 +349,8 @@ class GeoDaskImage(DaskImage, Container, PlotMixin, BandMethodsTemplate, Depreca
             from_proj = self._default_proj
         if to_proj is None:
             to_proj = self.proj if self.proj is not None else "EPSG:4326"
-        tfm = partial(pyproj.transform, get_proj(from_proj), get_proj(to_proj))
-        return ops.transform(tfm, geometry)
+        tfm = pyproj.Transformer.from_crs(get_proj(from_proj), get_proj(to_proj), always_xy=True)
+        return ops.transform(tfm.transform, geometry)
 
     def _slice_padded(self, _bounds):
         pads = (max(-_bounds[0], 0), max(-_bounds[1], 0),

@@ -183,10 +183,8 @@ class TmsMeta(object):
 
     def _tile_coords(self, bounds):
         """ convert mercator bbox to tile index limits """
-        tfm = partial(pyproj.transform,
-                      pyproj.Proj(init="epsg:3857"),
-                      pyproj.Proj(init="epsg:4326"))
-        bounds = ops.transform(tfm, box(*bounds)).bounds
+        tfm = pyproj.Transformer.from_crs(3857, 4326, always_xy=True)
+        bounds = ops.transform(tfm.transform, box(*bounds)).bounds
 
         # because tiles have a common corner, the tiles that cover a
         # given tile includes the adjacent neighbors.

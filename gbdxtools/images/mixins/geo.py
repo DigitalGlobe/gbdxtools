@@ -85,7 +85,7 @@ class PlotMixin(object):
         data = np.rollaxis(data.astype(np.float32), 0, 3)
         if 0 in data:
             data = np.ma.masked_values(data, 0)
-        bounds = self._reproject(box(*self.bounds), from_proj=self.proj, to_proj="EPSG:4326").bounds
+        bounds = self._reproject(box(*self.bounds), from_proj=self.proj, to_proj="epsg:4326").bounds
         ref = BrowseImage(self.cat_id, bbox=bounds).read()
         out = np.dstack([rio_match(data[:,:,idx], ref[:,:,idx].astype(np.double)/255.0)
                         for idx in range(data.shape[-1])])
