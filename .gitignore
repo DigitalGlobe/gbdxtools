@@ -9,6 +9,8 @@ build/
 /venv
 /.idea/
 .pytest_cache
-.gitignore
-settings.json
 
+Pipfile*
+/.vscode
+.envrc
+settings.json
