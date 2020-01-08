@@ -30,6 +30,7 @@ class TestLegacySupport(unittest.TestCase):
         warnings.filters = original_filters
 
 
+    @unittest.skip(reason="This deprecated function was removed")
     @my_vcr.use_cassette('tests/unit/cassettes/test_cat_image_wv2.yaml', filter_headers=['authorization'])
     def test_base_layer_match_dep(self):
         # Test access raises warning
