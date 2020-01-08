@@ -29,14 +29,19 @@ class S3(object):
 
         self._info = None
         self._client = None
+        self._resource = None
 
     @property
     def client(self):
         if self._client is None:
-            self._client = boto3.client('s3', aws_access_key_id=self.info['S3_access_key'], 
-                                              aws_secret_access_key=self.info['S3_secret_key'],
-                                              aws_session_token=self.info['S3_session_token'])
+            self._client = boto3.client('s3', **self._get_connection_kwargs())
         return self._client
+
+    @property
+    def resource(self):
+        if self._resource is None:
+            self._resource = boto3.resource('s3', **self._get_connection_kwargs())
+        return self._resource
 
     @property
     def info(self):
@@ -47,6 +52,13 @@ class S3(object):
     @info.setter
     def info(self, value):
         self._info = value
+
+    def _get_connection_kwargs(self):
+        return {
+            "aws_access_key_id":self.info['S3_access_key'], 
+            "aws_secret_access_key":self.info['S3_secret_key'],
+            "aws_session_token":self.info['S3_session_token']
+        }
 
     def _load_info(self):
         '''Get user info for GBDX S3, put into instance vars for convenience.
@@ -115,34 +127,70 @@ class S3(object):
 
         self.logger.debug('Done!')
 
-    def delete(self, location):
+    def delete(self, location, delimiter=None):
         '''Delete content in bucket/prefix/location.
            Location can be a directory or a file (e.g., my_dir or my_dir/my_image.tif)
-           If location is a directory, all files in the directory are deleted.
-           If it is a file, then that file is deleted.
+           Location is a wildcard match - 'image' will delete anything that matches "image*" including "image/foo/*"
+           This treats objects purely as a key/value store and does not respect directories.
 
            Args:
-               location (str): S3 location within prefix. Can be a directory or
-                               a file (e.g., my_dir or my_dir/my_image.tif).
+               location (str): S3 location within prefix
+               delimiter (str): delimiter used to limit the key returned using hierarchy.
+                  For reference: https://docs.aws.amazon.com/AmazonS3/latest/dev/ListingKeysHierarchy.html
         '''
-        bucket = self.info['bucket']
-        prefix = self.info['prefix']
+        objects = self._get_objects(location, delimiter)
 
-        self.logger.debug('Connecting to S3')
-        s3conn = self.client 
+        # self.logger.debug('Deleting %s items!' % len(objects))
 
-        # remove head and/or trail backslash from location
-        if location[0] == '/':
-            location = location[1:]
-        if location[-1] == '/':
-            location = location[:-2]
-
-        self.logger.debug('Deleting contents')
-
-        for s3key in s3conn.list_objects(Bucket=bucket, Prefix=(prefix+'/'+location))['Contents']:
-            s3conn.delete_object(Bucket=bucket, Key=s3key['Key'])
+        for obj in objects:
+            self.logger.debug(obj.delete())
 
         self.logger.debug('Done!')
+
+    def list_contents(self, location, delimiter=None):
+        '''List the contents in bucket/prefix/location.
+           Location can be a directory or a file (e.g., my_dir or my_dir/my_image.tif)
+           Location is a wildcard match - 'image' will delete anything that matches "image*"
+
+           Args:
+               location (str): S3 location within prefix
+               delimiter (str): delimiter used to limit the key returned using hierarchy.
+                  For reference: https://docs.aws.amazon.com/AmazonS3/latest/dev/ListingKeysHierarchy.html
+        '''
+        objects = self._get_objects(location, delimiter)
+
+        # self.logger.debug('Found %s items!' % len(objects))
+
+        return [obj.key for obj in objects]
+
+    def _get_objects(self, location, delimiter):
+        '''
+        Retrieves Bucket objects and returns list of boto3 ObjectSummaries
+
+        Args:
+            location (str): S3 location within prefix
+            delimiter (str): delimiter used to limit the key returned using hierarchy.
+               For reference: https://docs.aws.amazon.com/AmazonS3/latest/dev/ListingKeysHierarchy.html
+        '''
+        bucket = self.info['bucket']
+        user_prefix = self.info['prefix']
+
+        self.logger.debug('Connecting to S3')
+        s3 = self.resource
+        bucket_resource = s3.Bucket(bucket)
+
+        filter_args = {
+            "Prefix": "{}/{}".format(user_prefix, location.lstrip("/"))
+        }
+        
+        if delimiter:
+            filter_args["Delimiter"] = delimiter
+        
+        objects = bucket_resource.objects.filter(
+            **filter_args
+        )
+
+        return objects
 
     def upload(self, local_file, s3_path=None):
         '''
