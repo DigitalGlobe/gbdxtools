@@ -1,25 +1,22 @@
-six>=1.10.0
-future>=0.15.2
 requests>=2.12.1
 boto3
 gbdx-auth>=0.2.6
-pytest
-pytest-runner
-vcrpy
-mock
-bumpversion
 shapely
 ephem
-toolz
-cloudpickle
-dask[array]>=1.1.0
-numpy>=1.14
 pycurl
-pyproj
+pyproj>=2.4.2
 requests_futures
 configparser
 mercantile>=0.10.0
 imageio
 tifffile
-cachetools >= 2.0.0
 affine
+
+# dask reqs
+dask[array]>=1.1.0
+numpy>=1.14
+
+# compatibilty stuff
+six>=1.10.0
+future>=0.15.2
+cachetools>=2.0.0
