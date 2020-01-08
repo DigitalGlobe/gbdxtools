@@ -1,10 +1,14 @@
-import requests
 import numpy as np
-from skimage import io
+from imageio import imread
 from shapely.geometry import shape
 from shapely.wkt import loads
 from gbdxtools.auth import Auth 
-import matplotlib.pyplot as plt
+try:
+    import matplotlib.pyplot as plt
+    has_matplotlib = True
+except ImportError:
+    has_matplotlib = False
+
 
 class BrowseImage(object):
     """
@@ -42,7 +46,7 @@ class BrowseImage(object):
             
     def _get_image(self):
         url = 'https://api.discover.digitalglobe.com/show?id={}'.format(self.catalog_id)
-        self.image = io.imread(url)
+        self.image = imread(url)
             
     def rgb(self):
         return self.read()
@@ -70,6 +74,7 @@ class BrowseImage(object):
             return self.image[miny:maxy,minx:maxx,:]
         
     def plot(self, w=10, h=10, title='', fontsize=24):
+        assert has_matplotlib, 'Matplotlib is required to plot images'
         plt.figure(figsize=(w, h))
         sp = plt.subplot(1, 1, 1)
         plt.axis('off')
