@@ -146,7 +146,7 @@ class Vectors(object):
         return r.json()
 
 
-    def query(self, searchAreaWkt, query, count=100, ttl='5m', index=default_index):
+    def query(self, searchAreaWkt, query, count=100, ttl='10s', index=default_index):
         '''
         Perform a vector services query using the QUERY API
         (https://gbdxdocs.digitalglobe.com/docs/vs-query-list-vector-items-returns-default-fields)
@@ -183,7 +183,7 @@ class Vectors(object):
             return list(self.query_iteratively(searchAreaWkt, query, count, ttl, index))
 
 
-    def query_iteratively(self, searchAreaWkt, query, count=100, ttl='5m', index=default_index):
+    def query_iteratively(self, searchAreaWkt, query, count=100, ttl='10s', index=default_index):
         '''
         Perform a vector services query using the QUERY API
         (https://gbdxdocs.digitalglobe.com/docs/vs-query-list-vector-items-returns-default-fields)
