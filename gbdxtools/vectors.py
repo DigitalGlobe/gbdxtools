@@ -156,7 +156,7 @@ class Vectors(object):
         return r.json()
 
 
-    def query(self, searchAreaWkt, query, count=100, ttl='5m', index=default_index):
+    def query(self, searchAreaWkt, query, count=100, ttl='10s', index=default_index):
         '''
         Perform a vector services query using the QUERY API
         (https://gbdxdocs.digitalglobe.com/docs/vs-query-list-vector-items-returns-default-fields)
@@ -164,6 +164,11 @@ class Vectors(object):
         ElasticSearch spatial indexing has some slop in it and can return some features that are 
         near to but not overlapping the search geometry. If you need precise overlapping of the
         search API you will need to run a geometric check on each result.
+        
+        If the caller requests more than 1000 records and it's possible that it will take longer than
+        the default TTL value to pull a single page of 1000 records into memory, it's possible to raise
+        the TTL duration by setting the 'ttl' parameter to something higher than the default of 10 seconds.
+        For example, to set the TTL to 30 seconds, use '30s'.  For one minute, use '1m'.
 
         Args:
             searchAreaWkt: WKT Polygon of area to search
@@ -194,10 +199,16 @@ class Vectors(object):
             return list(self.query_iteratively(searchAreaWkt, query, count, ttl, index))
 
 
-    def query_iteratively(self, searchAreaWkt, query, count=100, ttl='5m', index=default_index):
+    def query_iteratively(self, searchAreaWkt, query, count=100, ttl='10s', index=default_index):
         '''
         Perform a vector services query using the QUERY API
         (https://gbdxdocs.digitalglobe.com/docs/vs-query-list-vector-items-returns-default-fields)
+
+        If iterating through a page of results results in seeing duplicate records consistently,
+        it's possible that the query context TTL is expiring before the page is finished being
+        processed by the caller.  In that case, it's possible to raise the TTL duration by setting
+        the 'ttl' parameter to something higher than the default of 10 seconds.  For example, to
+        set the TTL to 30 seconds, use '30s'.  For one minute, use '1m'.
 
         Args:
             searchAreaWkt: WKT Polygon of area to search
