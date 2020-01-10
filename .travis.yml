@@ -14,7 +14,7 @@ before_install:
 # #command to install dependencies
 install:
   #- CPLUS_INCLUDE_PATH=/usr/include/gdal C_INCLUDE_PATH=/usr/include/gdal pip install GDAL==`gdal-config --version`
-  - pip install -r requirements.txt coverage
+  - pip install -r requirements.txt -r requirements_dev.txt coverage
 # command to run tests
 script: coverage run unit_tests.py
 after_success:
