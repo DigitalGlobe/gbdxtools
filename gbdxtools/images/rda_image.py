@@ -2,7 +2,6 @@ import sys
 
 from gbdxtools.images.meta import DaskMeta, GeoDaskImage
 from gbdxtools.rda.util import RatPolyTransform, AffineTransform, deprecation, get_proj
-from gbdxtools.rda.interface import DaskProps
 from gbdxtools.rda.graph import get_rda_graph
 from gbdxtools.auth import Auth
 
@@ -22,12 +21,12 @@ def _reproject(geo, from_proj, to_proj):
     if from_proj != to_proj:
         from_proj = get_proj(from_proj)
         to_proj = get_proj(to_proj)
-        tfm = partial(pyproj.transform, from_proj, to_proj)
-        #tfm = partial(pyproj.transform, pyproj.Proj(init=from_proj), pyproj.Proj(init=to_proj))
-        return ops.transform(tfm, geo)
+        tfm = pyproj.Transformer.from_crs(from_proj, to_proj, always_xy=True)
+        return ops.transform(tfm.transform, geo)
     return geo
 
-class GraphMeta(DaskProps):
+
+class GraphMeta(object):
     def __init__(self, graph_id, node_id=None, **kwargs):
         assert graph_id is not None
         self._rda_id = graph_id
@@ -121,6 +120,7 @@ def rda_image_shift(image):
     miny, maxy = image.__geo__.miny, image.__geo__.maxy
     return image[:, miny:maxy, minx:maxx]
 
+
 class RDAImage(GeoDaskImage):
     _default_proj = "EPSG:4326"
 
@@ -144,11 +144,6 @@ class RDAImage(GeoDaskImage):
 
     @property
     def rda(self):
-        return self._rda_op
-
-    @property
-    def ipe(self):
-        deprecation('The use of ipe/IPE has been deprecated. Please use rda/RDA.')
         return self._rda_op
 
     @property
@@ -205,9 +200,3 @@ class RDAImage(GeoDaskImage):
             status (dict): the status of the job  
         """
         return self.rda._materialize_status(job_id)
-        
-
-# Warn on deprecated module attribute access
-from gbdxtools.deprecate import deprecate_module_attr
-sys.modules[__name__] = deprecate_module_attr(sys.modules[__name__], deprecated=["IpeImage"])
-IpeImage = RDAImage

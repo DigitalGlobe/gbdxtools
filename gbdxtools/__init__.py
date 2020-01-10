@@ -27,7 +27,3 @@ from gbdxtools.simpleworkflows import Task, Workflow
 from gbdxtools.s3 import S3
 from gbdxtools.task_registry import TaskRegistry
 from .interface import Interface
-
-# Legacy support:
-from gbdxtools.deprecate import deprecate_class
-IpeImage = deprecate_class(RDAImage, "IpeImage")

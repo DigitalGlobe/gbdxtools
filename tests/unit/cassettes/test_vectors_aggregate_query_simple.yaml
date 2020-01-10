@@ -1,33 +1,67 @@
 interactions:
 - request:
-    body: !!python/unicode '{"type": "Polygon", "coordinates": [[[-76.65, 40.1], [-76.65,
-      40.14], [-76.55, 40.14], [-76.55, 40.1], [-76.65, 40.1]]]}'
+    body: '{"type": "Polygon", "coordinates": [[[-76.65, 40.1], [-76.65, 40.14], [-76.55,
+      40.14], [-76.55, 40.1], [-76.65, 40.1]]]}'
     headers:
-      Accept: ['*/*']
-      Accept-Encoding: ['gzip, deflate']
-      Connection: [keep-alive]
-      Content-Length: ['120']
-      Content-Type: [application/json]
-      User-Agent: [python-requests/2.12.1]
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '120'
+      Content-Type:
+      - application/json
+      User-Agent:
+      - python-requests/2.21.0
     method: POST
-    uri: https://vector.geobigdata.io/insight-vector/api/aggregation?count=10&aggs=terms%3Aingest_source
+    uri: https://vector.geobigdata.io/insight-vector/api/index/aggregation/vector-gbdx-alpha-catalog-v2-*?count=10&aggs=terms%3Aingest_source
   response:
-    body: {string: !!python/unicode '{"responseDate":"2017-04-20T17:37:02Z","geom":{"type":"Polygon","coordinates":[[[-76.65,40.1],[-76.65,40.14],[-76.55,40.14],[-76.55,40.1],[-76.65,40.1]]]},"query":null,"startDate":null,"endDate":null,"totalItems":1693,"aggregations":[{"name":"terms:ingest_source","terms":[{"term":"GDELT","count":680,"aggregations":null},{"term":"OSM","count":481,"aggregations":null},{"term":"GBDX_INGEST_ALPHA","count":309,"aggregations":null},{"term":"Twitter","count":109,"aggregations":null},{"term":"DG
-        Catalog","count":86,"aggregations":null},{"term":"Gazetteer","count":28,"aggregations":null}]}]}'}
+    body:
+      string: '{"responseDate":"2019-12-04T22:08:04.953Z","geom":{"type":"Polygon","coordinates":[[[-76.65,40.1],[-76.65,40.14],[-76.55,40.14],[-76.55,40.1],[-76.65,40.1]]]},"query":null,"startDate":null,"endDate":null,"totalItems":1233,"aggregations":[{"name":"terms:ingest_source","terms":[{"term":"GBDX_INGEST_ALPHA","count":1233,"aggregations":null}]}]}'
     headers:
-      access-control-allow-credentials: ['true']
-      access-control-allow-headers: ['origin, content-type, accept, authorization']
-      access-control-allow-methods: ['GET, POST, PUT, DELETE, OPTIONS, HEAD']
-      access-control-allow-origin: ['*']
-      connection: [keep-alive]
-      content-encoding: [UTF-8]
-      content-length: ['589']
-      content-type: [application/json;charset=UTF-8]
-      date: ['Thu, 20 Apr 2017 17:37:02 GMT']
-      server: [WebLogic 12.2.1.1, Weblogic 12.2.1.1]
-      x-content-type-options: [nosniff]
-      x-frame-options: [SAMEORIGIN]
-      x-permitted-cross-domain-policies: [none]
-      x-xss-protection: [1; mode=block]
-    status: {code: 200, message: OK}
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - origin, content-type, accept, authorization
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS, HEAD
+      Access-Control-Allow-Origin:
+      - '*'
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - UTF-8
+      Content-Length:
+      - '342'
+      Content-Type:
+      - application/json;charset=UTF-8
+      Date:
+      - Wed, 04 Dec 2019 22:08:04 GMT
+      Expires:
+      - '0'
+      Pragma:
+      - no-cache
+      Server:
+      - Apache-Coyote/1.1
+      - Weblogic 12.2.1.1
+      Strict-Transport-Security:
+      - max-age=604800 ; includeSubDomains
+      X-Content-Type-Options:
+      - nosniff
+      - nosniff
+      X-Frame-Options:
+      - DENY
+      - SAMEORIGIN
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      X-XSS-Protection:
+      - 1; mode=block
+      - 1; mode=block
+    status:
+      code: 200
+      message: OK
 version: 1

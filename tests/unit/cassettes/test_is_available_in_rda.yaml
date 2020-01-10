@@ -1,0 +1,95 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.21.0
+    method: GET
+    uri: https://rda.geobigdata.io/v1/stripMetadata/1050410000B1BD00
+  response:
+    body:
+      string: '{"error":"Metadata not found for catalog ID 1050410000B1BD00"}'
+    headers:
+      Access-Control-Allow-Headers:
+      - x-requested-with, X-Auth-Token, Content-Type, Authorization
+      Access-Control-Allow-Methods:
+      - GET, OPTIONS, HEAD, PUT, POST, DELETE
+      Access-Control-Allow-Origin:
+      - '*'
+      Access-Control-Max-Age:
+      - '3600'
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '62'
+      Content-Type:
+      - application/json;charset=UTF-8
+      Date:
+      - Tue, 30 Apr 2019 16:14:15 GMT
+    status:
+      code: 404
+      message: ''
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.21.0
+    method: GET
+    uri: https://rda.geobigdata.io/v1/stripMetadata/104001002ABEA500
+  response:
+    body:
+      string: '{"catalogIdentifier":"104001002ABEA500","vnirImages":[{"imageId":"68e04e68-153e-4fb0-87db-7bdb77bd0174","version":1.1,"profileName":"dg_1b","tileBucketName":"rda-images-1","tilePartition":"0000","nativeTileFileFormat":"TIF","tileXOffset":0,"tileYOffset":0,"numXTiles":42,"numYTiles":42,"tileXSize":256,"tileYSize":256,"numBands":8,"dataType":"UNSIGNED_SHORT","imageHeight":10506,"imageWidth":10651,"sensorPlatformName":"WV03","sensorName":"8-band
+        (Coastal, Blue, Green, Yellow, Red, Red-edge, NIR1, NIR2) Multispectral","vendorName":"DigitalGlobe,
+        Inc.","vendorDatasetIdentifier":"LV1B:058263525010_01_P001:104001002ABEA500:A01001039C728B00","acquisitionDate":"2017-03-13T11:02:56.905Z","colorInterpretation":"WORLDVIEW_8_BAND","imageBoundsWGS84":"POLYGON
+        ((-1.57198415 12.49360777, -1.57193381 12.37604212, -1.45118228 12.37601304,
+        -1.45119182 12.49355377, -1.57198415 12.49360777))","groundSampleDistanceMeters":1.236,"minX":0,"minY":0,"minTileX":0,"minTileY":0,"maxTileX":42,"maxTileY":42,"sunAzimuth":128.8,"sunElevation":66.5,"satAzimuth":177.9,"satElevation":86.1,"cloudCover":0.321,"offNadirAngle":3.4,"sensorAlias":"WV03_MULTI","oneBResamplingKernel":"MTF","absoluteCalibrationFactors":[0.0143287,0.0176201,0.0133187,0.00684307,0.0143856,0.00621996,0.0166926,0.0106378],"effectiveBandwidths":[0.0405,0.054,0.0618,0.0381,0.0585,0.0387,0.1004,0.0889],"tdiLevels":[24.0,14.0,14.0,24.0,10.0,24.0,10.0,24.0],"bandAliases":["C","B","G","Y","R","RE","N","N2"],"pniirs":3.7},{"imageId":"70d75461-20cb-4354-8316-883da982403e","version":1.1,"profileName":"dg_1b","tileBucketName":"rda-images-1","tilePartition":"0000","nativeTileFileFormat":"TIF","tileXOffset":0,"tileYOffset":0,"numXTiles":42,"numYTiles":45,"tileXSize":256,"tileYSize":256,"numBands":8,"dataType":"UNSIGNED_SHORT","imageHeight":11410,"imageWidth":10651,"sensorPlatformName":"WV03","sensorName":"8-band
+        (Coastal, Blue, Green, Yellow, Red, Red-edge, NIR1, NIR2) Multispectral","vendorName":"DigitalGlobe,
+        Inc.","vendorDatasetIdentifier":"LV1B:058263525010_01_P002:104001002ABEA500:A01001039C726300","acquisitionDate":"2017-03-13T11:02:58.535Z","colorInterpretation":"WORLDVIEW_8_BAND","imageBoundsWGS84":"POLYGON
+        ((-1.57194771 12.40241055, -1.57191169 12.27478825, -1.45118967 12.27480665,
+        -1.45118777 12.40238987, -1.57194771 12.40241055))","groundSampleDistanceMeters":1.235,"minX":0,"minY":0,"minTileX":0,"minTileY":0,"maxTileX":42,"maxTileY":45,"sunAzimuth":128.7,"sunElevation":66.6,"satAzimuth":181.5,"satElevation":86.0,"cloudCover":0.102,"offNadirAngle":3.5,"sensorAlias":"WV03_MULTI","oneBResamplingKernel":"MTF","absoluteCalibrationFactors":[0.0143287,0.0176201,0.0133187,0.00684307,0.0143856,0.00621996,0.0166926,0.0106378],"effectiveBandwidths":[0.0405,0.054,0.0618,0.0381,0.0585,0.0387,0.1004,0.0889],"tdiLevels":[24.0,14.0,14.0,24.0,10.0,24.0,10.0,24.0],"bandAliases":["C","B","G","Y","R","RE","N","N2"],"pniirs":3.7},{"imageId":"525b811f-a0d4-48c3-be8d-4e567258d4f5","version":1.1,"profileName":"dg_1b","tileBucketName":"rda-images-1","tilePartition":"0000","nativeTileFileFormat":"TIF","tileXOffset":0,"tileYOffset":0,"numXTiles":42,"numYTiles":23,"tileXSize":256,"tileYSize":256,"numBands":8,"dataType":"UNSIGNED_SHORT","imageHeight":5794,"imageWidth":10651,"sensorPlatformName":"WV03","sensorName":"8-band
+        (Coastal, Blue, Green, Yellow, Red, Red-edge, NIR1, NIR2) Multispectral","vendorName":"DigitalGlobe,
+        Inc.","vendorDatasetIdentifier":"LV1B:058263525010_01_P003:104001002ABEA500:A01001039C725D00","acquisitionDate":"2017-03-13T11:03:00.345Z","colorInterpretation":"WORLDVIEW_8_BAND","imageBoundsWGS84":"POLYGON
+        ((-1.57190873 12.30114966, -1.5719183 12.23635535, -1.45120454 12.2363862,
+        -1.45117931 12.30117174, -1.57190873 12.30114966))","groundSampleDistanceMeters":1.236,"minX":0,"minY":0,"minTileX":0,"minTileY":0,"maxTileX":42,"maxTileY":23,"sunAzimuth":128.5,"sunElevation":66.6,"satAzimuth":184.3,"satElevation":85.9,"cloudCover":0.332,"offNadirAngle":3.6,"sensorAlias":"WV03_MULTI","oneBResamplingKernel":"MTF","absoluteCalibrationFactors":[0.0143287,0.0176201,0.0133187,0.00684307,0.0143856,0.00621996,0.0166926,0.0106378],"effectiveBandwidths":[0.0405,0.054,0.0618,0.0381,0.0585,0.0387,0.1004,0.0889],"tdiLevels":[24.0,14.0,14.0,24.0,10.0,24.0,10.0,24.0],"bandAliases":["C","B","G","Y","R","RE","N","N2"],"pniirs":3.7}],"panImages":[{"imageId":"017c28aa-baab-45b1-b808-10a6d52f52a2","version":1.1,"profileName":"dg_1b","tileBucketName":"rda-images-1","tilePartition":"0000","nativeTileFileFormat":"PNG","tileXOffset":0,"tileYOffset":0,"numXTiles":42,"numYTiles":42,"tileXSize":1024,"tileYSize":1024,"numBands":1,"dataType":"UNSIGNED_SHORT","imageHeight":42024,"imageWidth":42500,"sensorPlatformName":"WV03","sensorName":"Panchromatic","vendorName":"DigitalGlobe,
+        Inc.","vendorDatasetIdentifier":"LV1B:058263525010_01_P001:104001002ABEA500:A01001039C728B00","acquisitionDate":"2017-03-13T11:02:56.905Z","colorInterpretation":"PAN","imageBoundsWGS84":"POLYGON
+        ((-1.57183669 12.49361192, -1.57178641 12.37603793, -1.45132117 12.3760089,
+        -1.45133075 12.49355804, -1.57183669 12.49361192))","groundSampleDistanceMeters":0.309,"minX":0,"minY":0,"minTileX":0,"minTileY":0,"maxTileX":42,"maxTileY":42,"sunAzimuth":128.8,"sunElevation":66.5,"satAzimuth":177.9,"satElevation":86.1,"cloudCover":0.322,"offNadirAngle":3.4,"sensorAlias":"WV03_P","oneBResamplingKernel":"MTF","absoluteCalibrationFactors":[0.0527336],"effectiveBandwidths":[0.2896],"tdiLevels":[48.0],"bandAliases":["P"],"pniirs":5.7},{"imageId":"292d5b3a-184e-42d5-9cd2-5f35afc63e2c","version":1.1,"profileName":"dg_1b","tileBucketName":"rda-images-1","tilePartition":"0000","nativeTileFileFormat":"PNG","tileXOffset":0,"tileYOffset":0,"numXTiles":42,"numYTiles":45,"tileXSize":1024,"tileYSize":1024,"numBands":1,"dataType":"UNSIGNED_SHORT","imageHeight":45640,"imageWidth":42500,"sensorPlatformName":"WV03","sensorName":"Panchromatic","vendorName":"DigitalGlobe,
+        Inc.","vendorDatasetIdentifier":"LV1B:058263525010_01_P002:104001002ABEA500:A01001039C726300","acquisitionDate":"2017-03-13T11:02:58.534Z","colorInterpretation":"PAN","imageBoundsWGS84":"POLYGON
+        ((-1.5718003 12.40241472, -1.57176435 12.27478413, -1.45132855 12.27480243,
+        -1.45132668 12.40239407, -1.5718003 12.40241472))","groundSampleDistanceMeters":0.309,"minX":0,"minY":0,"minTileX":0,"minTileY":0,"maxTileX":42,"maxTileY":45,"sunAzimuth":128.7,"sunElevation":66.6,"satAzimuth":181.6,"satElevation":86.0,"cloudCover":0.102,"offNadirAngle":3.5,"sensorAlias":"WV03_P","oneBResamplingKernel":"MTF","absoluteCalibrationFactors":[0.0527336],"effectiveBandwidths":[0.2896],"tdiLevels":[48.0],"bandAliases":["P"],"pniirs":5.7},{"imageId":"da68771b-022f-42af-9eb7-b61baa6ba145","version":1.1,"profileName":"dg_1b","tileBucketName":"rda-images-1","tilePartition":"0000","nativeTileFileFormat":"PNG","tileXOffset":0,"tileYOffset":0,"numXTiles":42,"numYTiles":23,"tileXSize":1024,"tileYSize":1024,"numBands":1,"dataType":"UNSIGNED_SHORT","imageHeight":23176,"imageWidth":42500,"sensorPlatformName":"WV03","sensorName":"Panchromatic","vendorName":"DigitalGlobe,
+        Inc.","vendorDatasetIdentifier":"LV1B:058263525010_01_P003:104001002ABEA500:A01001039C725D00","acquisitionDate":"2017-03-13T11:03:00.345Z","colorInterpretation":"PAN","imageBoundsWGS84":"POLYGON
+        ((-1.57176138 12.30115388, -1.57177098 12.23635124, -1.45134343 12.23638192,
+        -1.4513182 12.3011759, -1.57176138 12.30115388))","groundSampleDistanceMeters":0.309,"minX":0,"minY":0,"minTileX":0,"minTileY":0,"maxTileX":42,"maxTileY":23,"sunAzimuth":128.5,"sunElevation":66.6,"satAzimuth":184.2,"satElevation":86.0,"cloudCover":0.332,"offNadirAngle":3.6,"sensorAlias":"WV03_P","oneBResamplingKernel":"MTF","absoluteCalibrationFactors":[0.0527336],"effectiveBandwidths":[0.2896],"tdiLevels":[48.0],"bandAliases":["P"],"pniirs":5.7}],"swirImages":null,"cavisImages":null}'
+    headers:
+      Access-Control-Allow-Headers:
+      - x-requested-with, X-Auth-Token, Content-Type, Authorization
+      Access-Control-Allow-Methods:
+      - GET, OPTIONS, HEAD, PUT, POST, DELETE
+      Access-Control-Allow-Origin:
+      - '*'
+      Access-Control-Max-Age:
+      - '3600'
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '7826'
+      Content-Type:
+      - application/json
+      Date:
+      - Tue, 30 Apr 2019 16:14:15 GMT
+    status:
+      code: 200
+      message: ''
+version: 1

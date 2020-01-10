@@ -399,6 +399,12 @@ class Workflow(object):
         else:
             self.batch_values = None
 
+    @classmethod    
+    def from_id(cls, id):
+        wf = cls([])
+        wf.id = id
+        return wf
+
     def savedata(self, output, location=None):
         '''
         Save output data from any task in this workflow to S3

@@ -19,13 +19,6 @@ try:
 except: 
     from urllib.parse import urlparse
 
-# How to use the mock_gbdx_session and vcr to create unit tests:
-# 1. Add a new test that is dependent upon actually hitting GBDX APIs.
-# 2. Decorate the test with @vcr appropriately
-# 3. Replace "dummytoken" with a real gbdx token
-# 4. Run the tests (existing test shouldn't be affected by use of a real token).  This will record a "cassette".
-# 5. Replace the real gbdx token with "dummytoken" again
-# 6. Edit the cassette to remove any possibly sensitive information (s3 creds for example)
 
 def force(r1, r2):
     return True
@@ -83,7 +76,7 @@ class CatalogImageTest(unittest.TestCase):
         _id = '104001002838EC00'
         img = CatalogImage(_id, bbox=[-85.81455230712892,10.416235163695223,-85.77163696289064,10.457089934231618], proj='EPSG:3857')
         assert img.cat_id == _id
-        assert img.shape == (8, 3059, 3160)
+        assert img.shape == (8, 3087, 3190)
         assert img.proj == 'EPSG:3857' 
 
     @my_vcr.use_cassette('tests/unit/cassettes/test_wv_image_aoi.yaml', filter_headers=['authorization'])
@@ -118,7 +111,7 @@ class CatalogImageTest(unittest.TestCase):
         img = self.gbdx.catalog_image(_id)
         self.assertTrue(isinstance(img, WV03_SWIR))
         assert img.cat_id == _id
-        assert img.shape == (8, 1950, 1446)
+        assert img.shape == (8, 3804, 2822)
         assert img.proj == 'EPSG:4326'
 
     @my_vcr.use_cassette('tests/unit/cassettes/test_wv4_image.yaml', filter_headers=['authorization'])
@@ -134,7 +127,7 @@ class CatalogImageTest(unittest.TestCase):
         _id = '03f4955d-c7da-45a8-8289-ba73bec5e127-inv'
         img = self.gbdx.catalog_image(_id, proj="EPSG:3857")
         self.assertTrue(isinstance(img, WV04))
-        assert img.shape == (4, 45486, 10744)
+        assert img.shape == (4, 45542, 10757)
         assert img.proj == 'EPSG:3857'
 
 

@@ -2,6 +2,7 @@ import os
 from collections import defaultdict
 import threading
 from tempfile import NamedTemporaryFile
+from time import sleep
 try:
     from urlparse import urlparse
 except ImportError:
@@ -12,7 +13,9 @@ try:
 except ImportError:
     from cachetools.func import lru_cache
 
-from skimage.io import imread
+import imageio
+import tifffile
+
 import pycurl
 import numpy as np
 
@@ -55,9 +58,9 @@ def load_url(url, token, shape=(8, 256, 256)):
                 temp.file.flush()
                 temp.close()
                 if content_type == 'image/tiff':
-                    arr = imread(temp.name, plugin='tifffile')
+                    arr = tifffile.imread(temp.name)
                 else:
-                    arr = imread(temp.name)
+                    arr = imageio.imread(temp.name)
                 if len(arr.shape) == 3:
                     arr = np.rollaxis(arr, 2, 0)
                 else:
@@ -67,10 +70,11 @@ def load_url(url, token, shape=(8, 256, 256)):
             except Exception as e:
                 _curl.close()
                 del _curl_pool[thread_id]
+                sleep(2**i)
             finally:
                 temp.close()
                 os.remove(temp.name)
 
     if success is False:
-        raise TypeError("Unable to download tile in {} retries".format(MAX_RETRIES))
+        raise TypeError("Unable to download tile {} in {} retries. \n\n Last fetch error: {}".format(url, MAX_RETRIES, e))
     return arr

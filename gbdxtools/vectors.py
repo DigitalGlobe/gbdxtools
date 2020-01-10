@@ -8,7 +8,8 @@ from string import Template
 from builtins import object
 import six
 
-from matplotlib.image import imsave
+from imageio import imsave
+
 import base64
 from io import BytesIO
 import dask.array as da
@@ -19,8 +20,7 @@ from collections import OrderedDict
 import json, time, os
 
 from shapely.ops import cascaded_union
-from shapely.geometry import shape, box
-from shapely.wkt import loads as from_wkt
+from shapely.geometry import shape, box, mapping
 
 from gbdxtools.vector_layers import VectorGeojsonLayer, VectorTileLayer, \
                                     ImageLayer
@@ -50,14 +50,16 @@ class Vectors(object):
         self.aggregations_url = 'https://vector.geobigdata.io/insight-vector/api/aggregation'
         self.aggregations_by_index_url = 'https://vector.geobigdata.io/insight-vector/api/index/aggregation/%s'
 
-    def create(self,vectors):
+    def create(self, vectors, index=None):
         """ Create a vectors in the vector service.
 
         Args:
             vectors: A single geojson vector or a list of geojson vectors. Item_type and ingest_source are required.
+            index (str): optional index to write to, defaults to 'vector-user-provided'
 
         Returns:
-            (list): IDs of the vectors created
+            (dict): key 'SuccessfulItemIds' is a list of succesfully created feature URLs
+                    key 'errorMessages' is a list of failed feature error messages
 
         Example:
             >>> vectors.create(
@@ -96,11 +98,14 @@ class Vectors(object):
             if not 'ingest_source' in list(vector['properties'].keys()):
                 raise Exception('Vector does not contain "ingest_source".')
 
-        r = self.gbdx_connection.post(self.create_url, data=json.dumps(vectors))
+        url = self.create_url
+        if index is not None:
+            url = '%s/%s/' % (url, index)
+        r = self.gbdx_connection.post(url, data=json.dumps(vectors))
         r.raise_for_status()
         return r.json()
 
-    def create_from_wkt(self, wkt, item_type, ingest_source, **attributes):
+    def create_from_wkt(self, wkt, item_type, ingest_source, index=None, **attributes):
         '''
         Create a single vector in the vector service
 
@@ -109,9 +114,10 @@ class Vectors(object):
             item_type (str): item_type of the vector
             ingest_source (str): source of the vector
             attributes: a set of key-value pairs of attributes
+            index (str): optional index to write to, defaults to 'vector-user-provided'
 
         Returns:
-            id (str): string identifier of the vector created
+            (str): feature ID
         '''
         # verify the "depth" of the attributes is single layer
 
@@ -126,8 +132,12 @@ class Vectors(object):
             }
         }
 
-        return self.create(vector)[0]
-
+        results =  self.create(vector, index=index)
+        if len(results['errorMessages']) == 0:
+            item = results['successfulItemIds'][0]
+            return item.split('/')[-1]
+        else:
+            raise Exception(results['errorMessages'][0])
 
     def get(self, ID, index='vector-web-s'):
         '''Retrieves a vector.  Not usually necessary because searching is the best way to find & get stuff.
@@ -151,6 +161,10 @@ class Vectors(object):
         Perform a vector services query using the QUERY API
         (https://gbdxdocs.digitalglobe.com/docs/vs-query-list-vector-items-returns-default-fields)
 
+        ElasticSearch spatial indexing has some slop in it and can return some features that are 
+        near to but not overlapping the search geometry. If you need precise overlapping of the
+        search API you will need to run a geometric check on each result.
+        
         If the caller requests more than 1000 records and it's possible that it will take longer than
         the default TTL value to pull a single page of 1000 records into memory, it's possible to raise
         the TTL duration by setting the 'ttl' parameter to something higher than the default of 10 seconds.
@@ -159,7 +173,7 @@ class Vectors(object):
         Args:
             searchAreaWkt: WKT Polygon of area to search
             query: Elastic Search query
-            count: Maximum number of results to return
+            count: Maximum number of results to return, default is 100
             ttl: Amount of time for each temporary vector page to exist
 
         Returns:
@@ -168,22 +182,19 @@ class Vectors(object):
         '''
         if count < 1000:
             # issue a single page query
-            search_area_polygon = from_wkt(searchAreaWkt)
-            left, lower, right, upper = search_area_polygon.bounds
+            search_area_polygon = load_wkt(searchAreaWkt)
+            geojson = json.dumps(mapping(search_area_polygon))
 
             params = {
                 "q": query,
                 "count": min(count,1000),
-                "left": left,
-                "right": right,
-                "lower": lower,
-                "upper": upper
             }
 
             url = self.query_index_url % index if index else self.query_url
-            r = self.gbdx_connection.get(url, params=params)
+            r = self.gbdx_connection.post(url, data=geojson, params=params)
             r.raise_for_status()
             return r.json()
+
         else:
             return list(self.query_iteratively(searchAreaWkt, query, count, ttl, index))
 
@@ -210,28 +221,23 @@ class Vectors(object):
     
         '''
 
-        search_area_polygon = from_wkt(searchAreaWkt)
-        left, lower, right, upper = search_area_polygon.bounds
+        search_area_polygon = load_wkt(searchAreaWkt)
+        geojson = json.dumps(mapping(search_area_polygon))
 
         params = {
             "q": query,
             "count": min(count,1000),
             "ttl": ttl,
-            "left": left,
-            "right": right,
-            "lower": lower,
-            "upper": upper
         }
 
         # initialize paging request
         url = self.query_index_page_url % index if index else self.query_page_url
-        r = self.gbdx_connection.get(url, params=params)
+        r = self.gbdx_connection.post(url, params=params, data=geojson)
         r.raise_for_status()
         page = r.json()
         paging_id = page['next_paging_id']
         item_count = int(page['item_count'])
         data = page['data']
-
 
         num_results = 0
         for vector in data:

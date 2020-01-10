@@ -21,14 +21,6 @@ my_vcr = vcr.VCR()
 my_vcr.register_matcher('force', force)
 my_vcr.match_on = ['force']
 
-# How to use the mock_gbdx_session and vcr to create unit tests:
-# 1. Add a new test that is dependent upon actually hitting GBDX APIs.
-# 2. Decorate the test with @vcr appropriately
-# 3. Replace "dummytoken" with a real gbdx token
-# 4. Run the tests (existing test shouldn't be affected by use of a real token).  This will record a "cassette".
-# 5. Replace the real gbdx token with "dummytoken" again
-# 6. Edit the cassette to remove any possibly sensitive information (s3 creds for example)
-
 
 class GE01ImageTest(unittest.TestCase):
 
@@ -61,5 +53,5 @@ class GE01ImageTest(unittest.TestCase):
         _id = '2001110218231680000010116110'
         img = self.gbdx.catalog_image(_id, proj="EPSG:3857")
         self.assertTrue(isinstance(img, IkonosImage))
-        assert img.shape == (4, 33625, 4870)
+        assert img.shape == (4, 33624, 4870)
         assert img.proj == 'EPSG:3857'

@@ -2,18 +2,17 @@ from gbdxtools.rda.interface import RDA
 from gbdxtools.images.exceptions import *
 
 import collections
-import abc
 import six
 
 rda = RDA()
 
 RDA_DEFAULT_OPTIONS = {
-    "proj": "EPSG:4326",
+    "proj": "epsg:4326",
     "gsd": None
     }
 
 IDAHO_DEFAULT_OPTIONS = {
-    "proj": "EPSG:4326",
+    "proj": "epsg:4326",
     "gsd": None,
     "acomp": False,
     "bucket": 'idaho-images',
@@ -23,7 +22,7 @@ IDAHO_DEFAULT_OPTIONS = {
     }
 
 WV_DEFAULT_OPTIONS = {
-    "proj": "EPSG:4326",
+    "proj": "epsg:4326",
     "gsd": None,
     "band_type": "pan",
     "correctionType": "DN",
@@ -32,7 +31,7 @@ WV_DEFAULT_OPTIONS = {
 
 WV_MODERN_OPTIONS = {
     "dra": False,
-    "proj": "EPSG:4326",
+    "proj": "epsg:4326",
     "gsd": None,
     "band_type": "MS",
     "acomp": False,
@@ -92,7 +91,7 @@ class RDADriverInterface(object):
     def configure_options(self, options):
         raise NotImplementedError
 
-    def build_payload(self):
+    def build_payload(self, target):
         raise NotImplementedError
 
     def drive(self, target):
@@ -114,6 +113,8 @@ class RDADaskImageDriver(RDADriverInterface):
             options = self.parse_options(kwargs)
             options = self.configure_options(options._asdict())
         self._options = options
+        self._graph = None
+        self._payload = None
 
     def parse_options(self, inputs):
         options = self.parser(**{opt: inputs[opt] for opt in self.image_option_support if opt in inputs})
@@ -143,18 +144,14 @@ class RDADaskImageDriver(RDADriverInterface):
 
     @payload.setter
     def payload(self, payload):
-        if not isinstance(payload, DaskMeta):
-            raise DriverPayloadError("To adapt GeoDaskImage, payload must be DaskMeta instance")
-        else:
-            self._payload = payload
+        self._payload = payload
 
     def build_payload(self, target):
         # build_graph should always return an rda graph / dask meta
         graph = target._build_graph(self.rda_id, **self.options)
         self._graph = graph
-        return graph
 
-    def drive(self, target):
+    def drive(self, target, **kwargs):
         if not self.rda_id:
             rda_id = getattr(target, "__rda_id__", None)
             if not rda_id:

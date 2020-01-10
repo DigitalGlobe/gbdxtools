@@ -13,17 +13,6 @@ import unittest
 import os
 import json
 
-"""
-How to use the mock_gbdx_session and vcr to create unit tests:
-1. Add a new test that is dependent upon actually hitting GBDX APIs.
-2. Decorate the test with @vcr appropriately, supply a yaml file path to gbdxtools/tests/unit/cassettes
-    note: a yaml file will be created after the test is run
-
-3. Replace "dummytoken" with a real gbdx token after running test successfully
-4. Run the tests (existing test shouldn't be affected by use of a real token).  This will record a "cassette".
-5. Replace the real gbdx token with "dummytoken" again
-6. Edit the cassette to remove any possibly sensitive information (s3 creds for example)
-"""
 
 
 class WorkflowTests(unittest.TestCase):
@@ -110,7 +99,7 @@ class WorkflowTests(unittest.TestCase):
 
         output = wf.get_stderr('4488969848362445219','4488969848354891944')
 
-        self.assertEquals('<empty>', output)
+        self.assertEqual('<empty>', output)
 
     @vcr.use_cassette('tests/unit/cassettes/test_workflow_search.yaml', filter_headers=['authorization'])
     def test_workflow_search(self):

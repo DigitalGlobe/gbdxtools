@@ -13,6 +13,7 @@ import vcr
 from os.path import join, isfile, dirname, realpath
 import tempfile
 import unittest
+import pytest
 import dask.array as da
 
 def force(r1, r2):
@@ -22,15 +23,7 @@ my_vcr = vcr.VCR()
 my_vcr.register_matcher('force', force)
 my_vcr.match_on = ['force']
 
-# How to use the mock_gbdx_session and vcr to create unit tests:
-# 1. Add a new test that is dependent upon actually hitting GBDX APIs.
-# 2. Decorate the test with @vcr appropriately
-# 3. Replace "dummytoken" with a real gbdx token
-# 4. Run the tests (existing test shouldn't be affected by use of a real token).  This will record a "cassette".
-# 5. Replace the real gbdx token with "dummytoken" again
-# 6. Edit the cassette to remove any possibly sensitive information (s3 creds for example)
-
-
+@pytest.mark.skip(reason="Catalog Id's must be of Product type, not Acquisition")
 class GE01ImageTest(unittest.TestCase):
 
     _temp_path = None

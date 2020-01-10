@@ -3,7 +3,7 @@ Raster Data Access
 
 The image classes in `gbdxtools` provide access to remote imagery hosted on GBDX. The access is deferred, meaning that images can be initialized and manipulated as NumPy arrays and the actual pixel data is only fetched from the server when compute is necessary.
 
-The available classes are ``CatalogImage``, ``IdahoImage``, ``WV02``, ``WV03_VNIR``, ``IkonosImage``, ``LandsatImage``, ``TmsImage`` and ``DemImage``. Each class behaves in very similar ways and extends the base-class ``RDAImage``. Imagery at DigitalGlobe is stored and processed by a service called `Raster Data Access`, or RDA. This service accepts processing graphs that are capable of running many different operations on an image before serving the pixels. For example, image orthorectification, mosaicking, and pansharpening are all possible via RDA. Users submit graphs to RDA and a new image ID is created. However, the new ID is only a virtual ID, meaning that image tiles are only processed once requested. 
+The available classes are ``CatalogImage``, ``IdahoImage``, ``WV02``, ``WV03_VNIR``, ``IkonosImage``, ``LandsatImage``, ``TmsImage`` and ``DemImage``. Each class behaves in very similar ways and extends the base-class ``RDAImage``. Imagery at Maxar is stored and processed by a service called `Raster Data Access`, or RDA. This service accepts processing graphs that are capable of running many different operations on an image before serving the pixels. For example, image orthorectification, mosaicking, and pansharpening are all possible via RDA. Users submit graphs to RDA and a new image ID is created. However, the new ID is only a virtual ID, meaning that image tiles are only processed once requested. 
 
 **The image classes in `gbdxtools` attempt to hide the processing, graph creation and tile access from the end-user as much as possible.**
 
@@ -11,7 +11,7 @@ The available classes are ``CatalogImage``, ``IdahoImage``, ``WV02``, ``WV03_VNI
 Catalog Images
 ------------------
 
-``CatalogImage`` uses a `GBDX Catalog ID <http://gbdxdocs.digitalglobe.com/docs/catalog-course>`_ to provide a single point of access to multiple image sources. This class acts as a generic image wrapper which can accept a range of ID types (WorldView, Landsat, Ikonos, etc.). The first thing a ``CatalogImage`` does is query the GBDX Platform to discover metadata about the image type. It will then return an instance of the base image class corresponding to the image source. 
+``CatalogImage`` uses a `GBDX Catalog ID <http://gbdxdocs.digitalglobe.com/docs/catalog-course>`_ to provide a single point of access to multiple image sources. This class acts as a generic image wrapper which can accept a range of ID types (WorldView, Landsat, Ikonos, etc.). The first thing a ``CatalogImage`` does is query the GBDX Platform to discover metadata about the image type. It will then instantiate the base image class corresponding to the image source. 
 
 The following snippet will initialize a ``WorldviewImage`` from a WorldView 3 catalog ID and print some information about the image:
 
@@ -172,7 +172,7 @@ To check if acomp is available for an image:
 Base Image Classes
 --------------------------
 
-The following image classes represent different sources of imagery. These classes are returned by the ``CatalogImage`` class but can be called directly when needed.
+The following image classes represent different sources of imagery.
 
 Idaho Images
 ^^^^^^^^^^^^^^^^^^^^^^^
@@ -192,19 +192,18 @@ The methods of ``CatalogImage`` are also available in ``IdahoImage``. However, t
 Landsat Images
 ^^^^^^^^^^^^^^^^^^^^^^^
 
-GBDX also indexes all Landsat8 images. The images are served from Amazon Web Services. The ``LandsatImage`` class behaves exactly like a ``CatalogImage`` except it accepts a Landsat product identifier instead of a Catalog ID:
+GBDX also indexes all Landsat8 images. The images are served from Amazon Web Services. The ``LandsatImage`` class behaves exactly like a ``CatalogImage`` except it accepts a Landsat ID instead of a Catalog ID:
 
 .. code-block:: python
 
     from gbdxtools import LandsatImage
 
-    img = LandsatImage('LC08_L1TP_034032_20181102_20181115_01_T1')
+    img = LandsatImage('LC80370302014268LGN00')
     print(img.shape)
-    aoi = img.aoi(bbox=[-105.79, 40.32, -105.76, 40.35])
+    aoi = img.aoi(bbox=[-109.84, 43.19, -109.59, 43.34])
     print(aoi.shape)
     aoi.plot()
 
-Note that the Landsat product identifier for Collection 1 imagery is stored in the GBDX catalog in the ``productId`` field. ``LandsatImage`` does not accept GBDX Catalog IDs for Landsat records - use ``CatalogImage`` instead.
 
 DEM Images
 ^^^^^^^^^^^^^^^^^^^^^^^
@@ -224,23 +223,26 @@ Beyond replacing catalog ids for AOIs, the ``DemImage`` class shares all the sam
 TMS Images
 ^^^^^^^^^^^^^^^^^^^^^^^
 
-The ``TmsImage`` class was used to access imagery available from the `DigitalGlobe Maps API <https://platform.digitalglobe.com/maps-api/>`_. This service is now deprecated, but the image class can still be used to convert TMS-based imagery into NumPy arrays. The zoom level to use can be specified (default is 22). Changing the zoom level will change the resolution of the image.
+The ``TmsImage`` class is used to convert TMS-based imagery into NumPy arrays. The zoom level to use can be specified (default is 18). Changing the zoom level will change the resolution of the image.
 
 The following example shows plotting an image generated from OpenStreetMap tiles:
 
 .. code-block:: python
 
     from gbdxtools import TmsImage
-    img = TmsImage(zoom=12, access_token='', url='https://a.tile.openstreetmap.org/{z}/{x}/{y}.png')
+
+    url = r'https://a.tile.openstreetmap.org/{z}/{x}/{y}.png'
+    img = TmsImage(url, zoom=13)
+    print(img.shape)
     aoi = img.aoi(bbox=[-109.84, 43.19, -109.59, 43.34])
+    print(aoi.shape)
     aoi.plot()
 
-Subscribers to the new EarthWatch TMS service can also use this image class to access EarthWatch base imagery in Python. Use the following configuration, substituting a valid ConnectID string:
+Subscribers to the EarthWatch TMS service can use this image class to access EarthWatch base imagery in Python. Use the following configuration, substituting a valid ConnectID string:
 
 .. code-block:: python
 
-    img = TmsImage(zoom=13, access_token='', url='https://earthwatch.digitalglobe.com/earthservice/tmsaccess/tms/1.0.0/DigitalGlobe:ImageryTileService@EPSG:3857@png/{z}/{x}/{y}.png?flipy=true&connectId=<ConnectID>&')
-
+    img = TmsImage(r"https://earthwatch.digitalglobe.com/earthservice/tmsaccess/tms/1.0.0/DigitalGlobe:ImageryTileService@EPSG:3857@jpg/{z}/{x}/{y}.jpg?flipy=true&connectId=<connectid>", zoom=13)
 
 
 S3 Images

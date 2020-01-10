@@ -1,67 +1,75 @@
-{% set data = load_setup_py_data() %}
+{% set name = "gbdxtools" %}
+{% set version = "0.17.0.b6" %}
 
 package:
-  name: gbdxtools
-  version: {{ data.get('version') }}
-
-build:
-  build: 0
-  script: pip install .
-  noarch: python
+  name: "{{ name|lower }}"
+  version: "{{ version }}"
 
 source:
-  git_url: ./
+  path: ./
+  # url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+  #sha256: 2a537f68c597b9f719414b8bbf56ce50ea2752fe0a4f8fdb6d98a36e4fb0bdb4
+
+build:
+  number: 0
+  script: "{{ PYTHON }} -m pip install . --no-deps --ignore-installed -vv "
+  noarch: python
 
 requirements:
+  host:
+    - pip
+    - pytest
+    - pytest-runner
+    - python
+    - vcrpy
   run:
-    - setuptools
-    - python
-    - six >=1.10.0
-    - future >=0.15.2
-    - requests >=2.12.1
+    - affine
     - boto3
-    - shapely
-    - ephem
-    - toolz
+    - bumpversion
+    - cachetools >=2.0.0
     - cloudpickle
-    - dask == 1.1.1
-    - {{ pin_compatible('numpy', min_pin='1.9') }}
+    - configparser
+    - dask-core >=1.1.0 
+    - ephem
+    - future >=0.15.2
+    - gbdx-auth >=0.2.6
+    - mercantile >=0.10.0
+    - mock
+    - numpy >=1.14
     - pycurl
     - pyproj
-    - requests-futures
-    - configparser
-    - mercantile >=0.10.0
-    - scikit-image
-    - gbdx-auth >=0.2.6
-    - bumpversion
     - pytest
     - pytest-runner
-    - vcrpy
-    - cachetools >=2.0.0
-    - affine
-  build:
-    - setuptools
     - python
-    - six >=1.10.0
-    - future >=0.15.2
     - requests >=2.12.1
-    - boto3
-    - shapely
-    - ephem
-    - toolz
-    - cloudpickle
-    - dask == 1.1.1
-    - {{ pin_compatible('numpy', min_pin='1.9') }}
-    - pycurl
-    - pyproj
     - requests-futures
-    - configparser
-    - mercantile >=0.10.0
-    - scikit-image
-    - gbdx-auth >=0.2.6
-    - bumpversion
-    - pytest
-    - pytest-runner
+    - imageio
+    - tifffile
+    - shapely
+    - six >=1.10.0
+    - toolz
     - vcrpy
-    - cachetools >=2.0.0
-    - affine
+
+test:
+  imports:
+    - gbdxtools
+    - gbdxtools.images
+    - gbdxtools.images.drivers
+    - gbdxtools.images.exceptions
+    - gbdxtools.images.mixins
+    - gbdxtools.images.util
+    - gbdxtools.rda
+  requires:
+    - pytest
+    - vcrpy
+
+about:
+  home: https://github.com/DigitalGlobe/gbdxtools
+  license: MIT
+  license_family: MIT
+  summary: API wrapper and imagery access for the GBDX Platform
+  doc_url: https://gbdxtools.readthedocs.io
+
+extra:
+  recipe-maintainers:
+    - drwelby

@@ -13,17 +13,6 @@ import vcr
 import unittest
 import json
 
-"""
-How to use the mock_gbdx_session and vcr to create unit tests:
-1. Add a new test that is dependent upon actually hitting GBDX APIs.
-2. Decorate the test with @vcr appropriately, supply a yaml file path to gbdxtools/tests/unit/cassettes
-    note: a yaml file will be created after the test is run
-
-3. Replace "dummytoken" with a real gbdx token after running test successfully
-4. Run the tests (existing test shouldn't be affected by use of a real token).  This will record a "cassette".
-5. Replace the real gbdx token with "dummytoken" again
-6. Edit the cassette to remove any possibly sensitive information (s3 creds for example)
-"""
 
 
 class SimpleWorkflowTests(unittest.TestCase):
@@ -482,8 +471,8 @@ class SimpleWorkflowTests(unittest.TestCase):
         workflow.id = '4488969848362445219'
         task_ids = workflow.task_ids
 
-        self.assertEquals( 1, len(task_ids))
-        self.assertEquals(task_ids[0], '4488969848354891944')
+        self.assertEqual( 1, len(task_ids))
+        self.assertEqual(task_ids[0], '4488969848354891944')
 
     @vcr.use_cassette('tests/unit/cassettes/test_workflow_stdout.yaml', record_mode='new_episodes', filter_headers=['authorization'])
     def test_workflow_stdout(self):
@@ -492,16 +481,16 @@ class SimpleWorkflowTests(unittest.TestCase):
         workflow.id = '4488969848362445219'
         stdout = workflow.stdout
 
-        self.assertEquals(1, len(stdout))
+        self.assertEqual(1, len(stdout))
 
         self.assertTrue('id' in stdout[0].keys())
         self.assertTrue('name' in stdout[0].keys())
         self.assertTrue('taskType' in stdout[0].keys())
         self.assertTrue('stdout' in stdout[0].keys())
 
-        self.assertEquals(stdout[0]['id'], '4488969848354891944')
-        self.assertEquals(stdout[0]['taskType'], 'test-success')
-        self.assertEquals(stdout[0]['name'], 'test-success_b74a49cc-1090-46fa-a032-ff95c561a365')
+        self.assertEqual(stdout[0]['id'], '4488969848354891944')
+        self.assertEqual(stdout[0]['taskType'], 'test-success')
+        self.assertEqual(stdout[0]['name'], 'test-success_b74a49cc-1090-46fa-a032-ff95c561a365')
 
         self.assertTrue( len(stdout[0]['stdout']) > 0 )
 
@@ -512,18 +501,18 @@ class SimpleWorkflowTests(unittest.TestCase):
         workflow.id = '4488969848362445219'
         stderr = workflow.stderr
 
-        self.assertEquals(1, len(stderr))
+        self.assertEqual(1, len(stderr))
 
         self.assertTrue('id' in stderr[0].keys())
         self.assertTrue('name' in stderr[0].keys())
         self.assertTrue('taskType' in stderr[0].keys())
         self.assertTrue('stderr' in stderr[0].keys())
 
-        self.assertEquals(stderr[0]['id'], '4488969848354891944')
-        self.assertEquals(stderr[0]['taskType'], 'test-success')
-        self.assertEquals(stderr[0]['name'], 'test-success_b74a49cc-1090-46fa-a032-ff95c561a365')
+        self.assertEqual(stderr[0]['id'], '4488969848354891944')
+        self.assertEqual(stderr[0]['taskType'], 'test-success')
+        self.assertEqual(stderr[0]['name'], 'test-success_b74a49cc-1090-46fa-a032-ff95c561a365')
 
-        self.assertEquals( stderr[0]['stderr'], '<empty>' )
+        self.assertEqual( stderr[0]['stderr'], '<empty>' )
 
     # Regression test for https://github.com/DigitalGlobe/gbdxtools/issues/100
     @vcr.use_cassette('tests/unit/cassettes/test_task_version_chaining_bug.yaml', record_mode='new_episodes', filter_headers=['authorization'])    

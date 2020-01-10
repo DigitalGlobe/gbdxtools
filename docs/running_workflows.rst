@@ -5,7 +5,7 @@ Quick Workflow Example
 -----------------------
 
 Here's a quick workflow that starts with a Worldview 2 image over San Francisco, runs it through
-DigitalGlobe's "Fast Ortho" and "Acomp" tasks, then saves to a user-specified location
+the "Fast Ortho" and "Acomp" tasks, then saves to a user-specified location
 under s3://bucket/prefix.
 
 .. code-block:: python
@@ -254,13 +254,12 @@ Checking whether a workflow is complete (whether canceled, failed, or succeeded)
 
 Loading an Existing Workflow
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-To load an existing workflow, create an empty ``Interface.Workflow`` object and set its ID.
+To load an existing workflow, use the ``from_id()`` classmethod:
 
 .. code-block:: python
 
-    workflow = gbdx.Workflow( [] )  # instantiate a blank workflow
-    workflow.id = <known_workflow_id>
-    workflow.cancel() 
+    workflow = gbdx.Workflow.from_id(<known_workflow_id>)
+    workflow.status 
 
 Workflow Stdout and Stderr
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -323,8 +322,7 @@ If you need to cancel a workflow for which you have the id:
 
 .. code-block:: python
 
-   workflow = gbdx.Workflow( [] )  # instantiate a blank workflow
-   workflow.id = <known_workflow_id>
+   workflow = gbdx.Workflow.from_id(<known_workflow_id>)
    workflow.cancel()
 
 

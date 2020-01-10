@@ -17,7 +17,6 @@ except ImportError:
 
 import numpy as np
 from affine import Affine
-
 try:
     from scipy.misc import imread
 except ImportError:
@@ -81,13 +80,10 @@ def raise_aoi_required():
 
 
 class TmsMeta(object):
-    def __init__(self, access_token=os.environ.get("MAPBOX_API_KEY"),
-                 url="https://api.mapbox.com/v4/digitalglobe.nal0g75k/{z}/{x}/{y}.png",
-                 zoom=22, bounds=None):
+    def __init__(self, url, zoom=18, bounds=None):
         self.zoom_level = zoom
-        self._token = access_token
         self._name = "image-{}".format(str(uuid.uuid4()))
-        self._url_template = url + "?access_token={token}"
+        self._url = url
 
         _first_tile = mercantile.Tile(z=self.zoom_level, x=0, y=0)
         _last_tile = mercantile.Tile(z=self.zoom_level, x=180, y=-85.05)
@@ -100,7 +96,6 @@ class TmsMeta(object):
         self._nbands = 3
         self._dtype = "uint8"
         self.bounds = self._expand_bounds(bounds)
-        self._chunks = tuple([self._nbands] + [self._tile_size, self._tile_size])
 
     @property
     def bounds(self):
@@ -125,7 +120,7 @@ class TmsMeta(object):
             return {self._name: (raise_aoi_required, )}
         else:
             urls, shape = self._collect_urls(self.bounds)
-            return {(self._name, 0, y, x): (load_url, url, self._chunks) for (y, x), url in urls.items()}
+            return {(self._name, 0, y, x): (load_url, url, self.chunks) for (y, x), url in urls.items()}
 
     @property
     def dtype(self):
@@ -141,9 +136,28 @@ class TmsMeta(object):
         else:
             return self._shape
 
+
     @property
     def chunks(self):
-        return self._chunks
+        ''' calculate the chunks to build the Dask graph '''
+
+        bands, y_size, x_size = self.shape
+
+        y_full_chunks = y_size // self._tile_size
+        y_remainder = y_size % self._tile_size
+
+        y_chunks = (self._tile_size,) * y_full_chunks
+        if y_remainder != 0:
+            y_chunks = y_chunks + (y_remainder,)
+
+        x_full_chunks = x_size // self._tile_size
+        x_remainder = x_size % self._tile_size
+
+        x_chunks = (self._tile_size,) * x_full_chunks
+        if x_remainder != 0:
+            x_chunks = x_chunks + (x_remainder,)
+
+        return ((bands,), y_chunks, x_chunks)
 
     @property
     def __geo_transform__(self):
@@ -153,7 +167,7 @@ class TmsMeta(object):
 
     def _collect_urls(self, bounds):
         minx, miny, maxx, maxy = self._tile_coords(bounds)
-        urls = {(y - miny, x - minx): self._url_template.format(z=self.zoom_level, x=x, y=y, token=self._token)
+        urls = {(y - miny, x - minx): self._url.format(z=self.zoom_level, x=x, y=y)
                 for y in xrange(miny, maxy + 1) for x in xrange(minx, maxx + 1)}
         return urls, (3, self._tile_size * (maxy - miny + 1), self._tile_size * (maxx - minx + 1))
 
@@ -169,10 +183,8 @@ class TmsMeta(object):
 
     def _tile_coords(self, bounds):
         """ convert mercator bbox to tile index limits """
-        tfm = partial(pyproj.transform,
-                      pyproj.Proj(init="epsg:3857"),
-                      pyproj.Proj(init="epsg:4326"))
-        bounds = ops.transform(tfm, box(*bounds)).bounds
+        tfm = pyproj.Transformer.from_crs(3857, 4326, always_xy=True)
+        bounds = ops.transform(tfm.transform, box(*bounds)).bounds
 
         # because tiles have a common corner, the tiles that cover a
         # given tile includes the adjacent neighbors.
@@ -200,34 +212,31 @@ class TmsMeta(object):
 
 
 class TmsImage(GeoDaskImage):
-    ''' An image built from TMS tiles
+    ''' An image built from a user given API TMS tiles
 
-    Originally designed to access DigitalGlobe Maps API TMS service, now deprecated.
-
-    Instead of an ID the zoom level to use can be specified (default is 22). Changing the zoom level will change the resolution of the image. Note that different image sources are used at different zoom levels.
+    These images will be subject to the rules and metadata of the source TMS tiles
+    
+    Instead of an ID the zoom level to use can be specified (default is 18). Changing the zoom level will change the resolution of the image.
 
     Supports the basic methods shared by Catalog Images such as plot() and geotiff().
 
     Args:
-        url (str): url of server with {x}, {y}, {z} templating
-        access_token: access token to use, this query string is automatically appended to the url
-        zoom (int): (optional) Zoom level to use as the source if the image, default is 22
+        url (str): (required) The url of the Tms service to be used in the request (ex: https://earthwatch.digitalglobe.com/earthservice/tmsaccess/tms/1.0.0/DigitalGlobe:ImageryTileService@EPSG:3857@jpg/{z}/{x}/{y}.jpg?connectId=connectid)
+        zoom (int): (optional) Zoom level to use as the source if the image, default is 18
         bbox (list): (optional) Bounding box of AOI, if aoi() method is not used.
 
     Example:
-        >>> img = TmsImage(zoom=12, access_token='', url='https://a.tile.openstreetmap.org/{z}/{x}/{y}.png') '''
+        >>> img = TmsImage(r"https://earthwatch.digitalglobe.com/earthservice/tmsaccess/tms/1.0.0/DigitalGlobe:ImageryTileService@EPSG:3857@jpg/{z}/{x}/{y}.jpg?connectId=", zoom=13, bbox=[-109.84, 43.19, -109.59, 43.34])'''
 
 
     _default_proj = "EPSG:3857"
 
-    def __new__(cls, access_token=os.environ.get("MAPBOX_API_KEY"),
-                url="https://api.mapbox.com/v4/digitalglobe.nal0g75k/{z}/{x}/{y}.png",
-                zoom=22, **kwargs):
-        _tms_meta = TmsMeta(access_token=access_token, url=url, zoom=zoom, bounds=kwargs.get("bounds"))
+    def __new__(cls, url, zoom=18, **kwargs):
+        _tms_meta = TmsMeta(url=url, zoom=zoom, bounds=kwargs.get("bounds"))
         gi = mapping(box(*_tms_meta.bounds))
         gt = _tms_meta.__geo_transform__
         self =  super(TmsImage, cls).__new__(cls, _tms_meta, __geo_transform__ = gt, __geo_interface__ = gi)
-        self._base_args = {"access_token": access_token, "url": url, "zoom": zoom}
+        self._base_args = {"url": url, "zoom": zoom}
         self._tms_meta = _tms_meta
         g = self._parse_geoms(**kwargs)
         if g is not None:

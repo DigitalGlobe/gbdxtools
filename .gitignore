@@ -1,5 +1,6 @@
 gbdxtools.egg-info/
 dist/
+build/
 *.pyc
 /.project
 .eggs
@@ -7,5 +8,9 @@ dist/
 /test-reports
 /venv
 /.idea/
-chip.tif
 .pytest_cache
+
+Pipfile*
+/.vscode
+.envrc
+settings.json

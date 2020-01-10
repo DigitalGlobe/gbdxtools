@@ -140,9 +140,4 @@ Workflows
    :members:
 
 
-Workflow API
------------------------
-
-.. autoclass:: gbdxtools.workflow.Workflow
-   :members:
 

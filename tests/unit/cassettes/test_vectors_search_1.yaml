@@ -1,34 +1,65 @@
 interactions:
 - request:
-    body: null
+    body: '{"type": "Polygon", "coordinates": [[[17.0, 25.0], [18.0, 25.0], [18.0,
+      24.0], [17.0, 24.0], [17.0, 25.0]]]}'
     headers:
-      Accept: ['*/*']
-      Accept-Encoding: ['gzip, deflate']
-      Connection: [keep-alive]
-      Cookie: [AWSELB=07A771471E264EA5ADF82F0AA634B8F4B8E2289A69DA7708F294A947CA6FDB7DF9D9E34DA30506E41A1AEB88557CEA57C7ABBC5A51DB45B8724B74F9BAF006F829FAB04EDB97344B0642F59956862AAC9EBF6E7BD9;
-          JSESSIONID=B01633B41FDDF45D8AFDCCC088307E5E.node01; AWSELB=07A771471E264EA5ADF82F0AA634B8F4B8E2289A698586B9E14372D1AE74DA9FC7CFB9C5BA93FB63C102FAA8583EDF7ED92BBA915FF76AB945B1770B781DD1DD6A9A9AC1441D3A82E6197FD8E002BB6819C88C4CF8;
-          JSESSIONID=8F6F9C4A34E529D5465E6E981A53773E.173.50.252.167]
-      User-Agent: [python-requests/2.13.0]
-    method: GET
-    uri: https://vector.geobigdata.io/insight-vector/api/vectors/query/items?count=1&upper=25.4184701193&lower=19.40961155&right=24.08203125&q=item_type%3AWV03&left=17.75390625
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '108'
+      User-Agent:
+      - python-requests/2.21.0
+    method: POST
+    uri: https://vector.geobigdata.io/insight-vector/api/index/query/vector-gbdx-alpha-catalog-v2-*/items?q=item_type%3AWV02&count=1
   response:
-    body: {string: !!python/unicode '[{"type":"Feature","geometry":{"type":"MultiPolygon","coordinates":[[[[23.746158,25.009542],[23.799474,25.008714],[23.877954,25.007382],[23.877846,24.940746],[23.877702,24.922242],[23.877522,24.82947],[23.877414,24.75729],[23.877342,24.57819],[23.877414,24.540354],[23.877522,24.487722],[23.877774,24.389838],[23.87781,24.389802],[23.878134,24.292854],[23.878386,24.23007],[23.878458,24.222474],[23.878782,24.145362],[23.879142,24.085674],[23.87943,24.04755],[23.879754,23.99103],[23.775138,23.986386],[23.743818,23.985018],[23.743674,23.985018],[23.743782,24.003414],[23.743818,24.00345],[23.743998,24.037146],[23.744142,24.047658],[23.744358,24.086142],[23.74479,24.170238],[23.745114,24.234894],[23.74515,24.24339],[23.745294,24.26679],[23.74551,24.32619],[23.745618,24.349806],[23.745798,24.43239],[23.746086,24.54849],[23.746194,24.615702],[23.746266,24.63147],[23.746266,24.824178],[23.746194,24.874722],[23.74605,24.97185],[23.745942,25.009542],[23.746158,25.009542]]]]},"properties":{"ingest_source":"DG
-        Catalog","access":{"groups":["_ALL_"],"users":["_ALL_"]},"item_date":"2014-10-15T00:00:00.000Z","original_crs":"EPSG:4326","item_type":["WV03"],"format":"shapefile","ingest_date":"2016-03-03T14:47:44.764Z","source":null,"name":null,"attributes":{"MXTARGETAZ_dbl":317.43808,"ACQDATE":"2014-10-15","y4_dbl":24.0,"MXPANRES_dbl":0.332414448,"CATALOGID":"1040010003669800","x1_dbl":24.0,"AVMULTIRES_dbl":1.273315668,"AVSUNAZIM_dbl":100.0,"PLATFORM":"WV03","AVTARGETAZ_dbl":258.12927,"AVSUNELEV_dbl":50.0,"MXOFFNADIR_int":16,"MXSUNAZIM_dbl":100.0,"x2_dbl":24.0,"MNTARGETAZ_dbl":212.6395,"AVPANRES_dbl":0.318244964,"y1_dbl":25.0,"STEREOPAIR":"NONE","AVOFFNADIR_int":10,"MNMULTIRES_dbl":1.252035022,"x4_dbl":24.0,"MXSUNELEV_dbl":50.0,"x3_dbl":24.0,"IMAGEBANDS":"Pan_MS1_MS2","MNSUNELEV_dbl":50.0,"y2_dbl":25.0,"MXMULTIRES_dbl":1.33095932,"CLOUDCOVER_int":0,"MNSUNAZIM_dbl":100.0,"MNPANRES_dbl":0.312991261,"BROWSEURL":"https://browse.digitalglobe.com/imagefinder/showBrowseMetadata?catalogId=1040010003669800","y3_dbl":24.0,"MNOFFNADIR_int":7},"ingest_attributes":{"shapefile_name":"WV03_ImageLibraryStrips_merge.shp"},"id":"2ea4c76a-7860-4852-b956-918b224bf380","text":""}}]'}
+    body:
+      string: '[{"geometry":{"coordinates":[[[[17.13868542,25.03594608],[17.3248864,25.02059203],[17.32495621,24.96982266],[17.32510251,24.91876135],[17.32520777,24.86759617],[17.32533848,24.81631748],[17.32545805,24.7649499],[17.32552987,24.71347315],[17.3255365,24.66173281],[17.32563609,24.60997024],[17.3256891,24.55805315],[17.32581558,24.50595179],[17.32591919,24.47446298],[17.13724676,24.49247262],[17.13731786,24.5238097],[17.13742628,24.57566739],[17.1376093,24.62732983],[17.13774275,24.67883811],[17.13796263,24.73033825],[17.1381354,24.78152467],[17.13829497,24.83256415],[17.13836854,24.88362727],[17.13846691,24.93459701],[17.1385984,24.98532285],[17.13868542,25.03594608]]]],"type":"MultiPolygon"},"type":"Feature","properties":{"ingest_source":"GBDX_INGEST_ALPHA","item_date":"2009-12-25T09:47:45.576Z","original_crs":"EPSG:4326","item_type":["GBDXCatalogRecord","Acquisition","DigitalGlobeAcquisition","WV02"],"name":null,"format":null,"ingest_date":"2017-04-11T21:05:13.447Z","attributes":{"sunAzimuth_dbl":161.023468017578,"targetAzimuth_start_dbl":150.030548095703,"stereoPair":null,"cloudCover_int":0,"offNadirAngle_end_dbl":25.9078350067139,"scanDirection":"Forward","vendor":"DigitalGlobe","panResolution_end_dbl":0.561886847019196,"sunElevation_dbl":39.6108551025391,"imageBands":"PAN_MS1_MS2","platformName":"WORLDVIEW02","targetAzimuth_end_dbl":150.796493530273,"multiResolution_max_dbl":2.24955916404724,"offNadirAngle_min_dbl":24.2641429901123,"offNadirAngle_start_dbl":24.2641429901123,"sensorPlatformName":"WORLDVIEW02","browseURL":"https://api.discover.digitalglobe.com/show?id=1030010003502C00&f=jpeg","multiResolution_min_dbl":2.19245791435242,"offNadirAngle_max_dbl":25.9078350067139,"multiResolution_start_dbl":2.19245791435242,"offNadirAngle_dbl":25.0966625213623,"targetAzimuth_min_dbl":150.030548095703,"sunElevation_max_dbl":39.8809661865234,"panResolution_min_dbl":0.547668099403381,"catalogID":"1030010003502C00","sunAzimuth_max_dbl":161.087860107422,"panResolution_dbl":0.554554462432861,"panResolution_start_dbl":0.547668099403381,"sunAzimuth_min_dbl":160.959976196289,"targetAzimuth_max_dbl":150.796493530273,"multiResolution_end_dbl":2.24955916404724,"sunElevation_min_dbl":39.3336791992188,"multiResolution_dbl":2.22011423110962,"panResolution_max_dbl":0.561886847019196,"targetAzimuth_dbl":150.418212890625},"ingest_attributes":{"_rest_user":"acquisition-gbdx-support@digitalglobe.com","_rest_url":"https://vector.geobigdata.io/insight-vector/api/vectors/gbdx-alpha-catalog-v2-%257Bitem_date%253Ayyyy%257D"},"id":"1030010003502C00","source":null,"text":""}}]'
     headers:
-      access-control-allow-credentials: ['true']
-      access-control-allow-headers: ['origin, content-type, accept, authorization']
-      access-control-allow-methods: ['GET, POST, PUT, DELETE, OPTIONS, HEAD']
-      access-control-allow-origin: ['*']
-      connection: [keep-alive]
-      content-encoding: [UTF-8]
-      content-length: ['2179']
-      content-type: [application/json;charset=UTF-8]
-      date: ['Wed, 01 Nov 2017 16:22:48 GMT']
-      server: [Apache-Coyote/1.1, Weblogic 12.2.1.1]
-      strict-transport-security: [max-age=604800 ; includeSubDomains]
-      x-content-type-options: [nosniff]
-      x-frame-options: [SAMEORIGIN]
-      x-permitted-cross-domain-policies: [none]
-      x-xss-protection: [1; mode=block]
-    status: {code: 200, message: OK}
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - origin, content-type, accept, authorization
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS, HEAD
+      Access-Control-Allow-Origin:
+      - '*'
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - UTF-8
+      Content-Length:
+      - '2591'
+      Content-Type:
+      - application/json;charset=UTF-8
+      Date:
+      - Wed, 04 Dec 2019 22:08:08 GMT
+      Expires:
+      - '0'
+      Pragma:
+      - no-cache
+      Server:
+      - Apache-Coyote/1.1
+      - Weblogic 12.2.1.1
+      Strict-Transport-Security:
+      - max-age=604800 ; includeSubDomains
+      X-Content-Type-Options:
+      - nosniff
+      - nosniff
+      X-Frame-Options:
+      - DENY
+      - SAMEORIGIN
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      X-XSS-Protection:
+      - 1; mode=block
+      - 1; mode=block
+    status:
+      code: 200
+      message: OK
 version: 1

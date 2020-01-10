@@ -1,0 +1,180 @@
+interactions:
+- request:
+    body: '{"type": "Polygon", "coordinates": [[[180.0, -90.0], [180.0, 90.0], [-180.0,
+      90.0], [-180.0, -90.0], [180.0, -90.0]]]}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '118'
+      User-Agent:
+      - python-requests/2.21.0
+    method: POST
+    uri: https://vector.geobigdata.io/insight-vector/api/index/query/vector-gbdx-alpha-catalog-v2-*/items?q=item_type%3AGBDXCatalogRecord+AND+%28attributes.catalogID.keyword%3A24a34529-7701-584c-89bf-bf1686d681f6+OR+id%3A24a34529-7701-584c-89bf-bf1686d681f6%29+AND+NOT+item_type%3ADigitalGlobeAcquisition&count=1
+  response:
+    body:
+      string: '[{"geometry":{"coordinates":[[[-105.00023047979299,38.848998483385635],[-105.00022736409076,37.85944195889751],[-103.7521345912812,37.852829502855585],[-103.73503988520358,38.84214867244573],[-103.8447804086727,38.84328567101472],[-103.86184297836617,38.843453188617346],[-104.12658215980746,38.845732933973174],[-104.14398183355073,38.84586174971658],[-104.41068564423774,38.847511863926385],[-104.42603867990711,38.847588315735365],[-104.69377414283356,38.8485970759199],[-104.71343362594374,38.848646961821316],[-104.984001747759,38.848997388029154],[-104.99741854740837,38.84899845508781],[-105.00023047979299,38.848998483385635]]],"type":"Polygon"},"type":"Feature","properties":{"ingest_source":"GBDX_INGEST_ALPHA","item_date":"2018-08-27T17:40:39.024Z","original_crs":"EPSG:4326","item_type":["GBDXCatalogRecord","ESAProduct","SENTINEL2"],"name":null,"format":null,"ingest_date":"2019-05-26T08:17:07.886Z","attributes":{"bucketName":"sentinel-s2-l1c","utmSequenceNumber":"N","sunAzimuth_dbl":148.34759323586,"tileId":"S2B_OPER_MSI_L1C_TL_SGS__20180827T214315_A007703_T13SEC_N02.06","latitudeBand":"S","s3Region":"eu-central-1","xmlFile":"metadata.xml","browseJpgFile":"preview.jpg","cloudCover_int":0,"resolution_dbl":[60.0,10.0,10.0,10.0,20.0,20.0,20.0,10.0,20.0,60.0,60.0,20.0,20.0],"bandsList":["CoastalAerosol","Blue","Green","Red","VegRedEdge5","VegRedEdge6","VegRedEdge7","NIR","VegRedEdge8a","WaterVapor","Cirrus","SWIR11","SWIR12"],"imageFile":"preview.jpg","vendor":"ESA","sunElevation_dbl":32.0469112500363,"platformName":"SENTINEL2","productPath":"products/2018/8/27/S2B_MSIL1C_20180827T174039_N0206_R098_T13SEC_20180827T214315","gridSquare":"EC","sensorPlatformName":"SENTINEL2","vendorID":"ESA","offNadirAngle_dbl":3.4648492285772603,"catalogID":"S2B_OPER_MSI_L1C_DS_SGS__20180827T214315_S20180827T174842_N0206","productLevel":"Level-1C","part_int":0,"utmZone_int":13,"bucketPrefix":"tiles/13/S/EC/2018/8/27/0"},"ingest_attributes":{"_rest_user":"application-5b655a28-0b57-400b-a0f0-17e607aed5d5","_rest_url":"http://vector.geobigdata.io/api/vectors/gbdx-alpha-catalog-v2-%257Bitem_date%253Ayyyy%257D"},"id":"24a34529-7701-584c-89bf-bf1686d681f6","source":"Sentinel","text":""}}]'
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - origin, content-type, accept, authorization
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS, HEAD
+      Access-Control-Allow-Origin:
+      - '*'
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - UTF-8
+      Content-Length:
+      - '2199'
+      Content-Type:
+      - application/json;charset=UTF-8
+      Date:
+      - Fri, 06 Dec 2019 18:49:08 GMT
+      Expires:
+      - '0'
+      Pragma:
+      - no-cache
+      Server:
+      - Apache-Coyote/1.1
+      - Weblogic 12.2.1.1
+      Strict-Transport-Security:
+      - max-age=604800 ; includeSubDomains
+      X-Content-Type-Options:
+      - nosniff
+      - nosniff
+      X-Frame-Options:
+      - DENY
+      - SAMEORIGIN
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      X-XSS-Protection:
+      - 1; mode=block
+      - 1; mode=block
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.21.0
+    method: GET
+    uri: https://rda.geobigdata.io/v1/template/metadata/search?free-text=Sentinel2Template
+  response:
+    body:
+      string: '[{"isPublic":false,"keywords":["Sentinel2Template"],"sensors":["Sentinel2Template"],"keynodes":[{"id":"Reproject","description":"Reproject"}],"description":"Sentinel2Template
+        and Reproject","metadataAuthor":{"firstName":"Brett","familyName":"Cullen","email":"brett.cullen@digitalglobe.com"},"templateAuthor":{"firstName":"Brett","familyName":"Cullen","email":"brett.cullen@digitalglobe.com"},"datePublished":"2019-05-06T20:26:35.891Z","name":"Sentinel2Template","templateId":"c125ff437f9be0b87d85b1790b170b3ac418113be19ff26d73aeba2680cfbb25","id":"2e97017774cb4f52b1004be647afbf0d"}]'
+    headers:
+      Access-Control-Allow-Headers:
+      - x-requested-with, X-Auth-Token, Content-Type, Authorization, range
+      Access-Control-Allow-Methods:
+      - GET, OPTIONS, HEAD, PUT, POST, DELETE
+      Access-Control-Allow-Origin:
+      - '*'
+      Access-Control-Max-Age:
+      - '3600'
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '583'
+      Content-Type:
+      - application/json
+      Date:
+      - Fri, 06 Dec 2019 18:49:08 GMT
+    status:
+      code: 200
+      message: ''
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.21.0
+    method: GET
+    uri: https://rda.geobigdata.io/v1/template/c125ff437f9be0b87d85b1790b170b3ac418113be19ff26d73aeba2680cfbb25
+  response:
+    body:
+      string: '{"id":"c125ff437f9be0b87d85b1790b170b3ac418113be19ff26d73aeba2680cfbb25","defaultNodeId":"Reproject","edges":[{"id":"edge-1","index":1,"source":"Sentinel2Read","destination":"Reproject"}],"nodes":[{"id":"Reproject","operator":"Reproject","parameters":{"Dest
+        SRS Code":"${DestSRSCode}","Dest pixel-to-world transform":"null","Source
+        SRS Code":"${SourceSRSCode}","Source pixel-to-world transform":"null"}},{"id":"Sentinel2Read","operator":"Sentinel2Read","parameters":{"SentinelId":"${sentinelId}","sentinelProductSpec":"${sentinelProductSpec}"}}]}'
+    headers:
+      Access-Control-Allow-Headers:
+      - x-requested-with, X-Auth-Token, Content-Type, Authorization, range
+      Access-Control-Allow-Methods:
+      - GET, OPTIONS, HEAD, PUT, POST, DELETE
+      Access-Control-Allow-Origin:
+      - '*'
+      Access-Control-Max-Age:
+      - '3600'
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '546'
+      Content-Type:
+      - application/json
+      Date:
+      - Fri, 06 Dec 2019 18:49:09 GMT
+    status:
+      code: 200
+      message: ''
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.21.0
+    method: GET
+    uri: https://rda.geobigdata.io/v1/template/c125ff437f9be0b87d85b1790b170b3ac418113be19ff26d73aeba2680cfbb25/metadata?sentinelId=tiles%2F13%2FS%2FEC%2F2018%2F8%2F27%2F0&sentinelProductSpec=10m&nodeId=Sentinel2Read
+  response:
+    body:
+      string: '{"imageMetadata":{"imageId":"S2B_OPER_MSI_L1C_DS_SGS__20180827T214315_S20180827T174842_N02.06","version":1.1,"profileName":"georectified_image","tilePartition":"0000","tileXOffset":0,"tileYOffset":0,"numXTiles":43,"numYTiles":43,"tileXSize":256,"tileYSize":256,"numBands":4,"dataType":"UNSIGNED_SHORT","imageHeight":10980,"imageWidth":10980,"sensorPlatformName":"Sentinel2","sensorName":"Sentinel
+        2 Scheme (10M): Blue (B02), Green (B03), Red (B04), NIR (B08)","vendorName":"ESA","vendorDatasetIdentifier":"S2B_MSIL1C_20180827T174039_N0206_R098_T13SEC_20180827T214315:S2B_OPER_MSI_L1C_DS_SGS__20180827T214315_S20180827T174842_N02.06","acquisitionDate":"2018-08-27T17:48:42.295Z","colorInterpretation":"SENTINEL_2_10M","imageBoundsWGS84":"POLYGON
+        ((-105.00023047979299 38.84899848338314, -103.73503988520362 38.84214867244297,
+        -103.75213459128123 37.85282950285328, -105.00022736409076 37.85944195889543,
+        -105.00023047979299 38.84899848338314))","groundSampleDistanceMeters":10.0,"minX":0,"minY":0,"maxX":10979,"maxY":10979,"minTileX":0,"minTileY":0,"maxTileX":42,"maxTileY":42,"cloudCover":0.0},"imageGeoreferencing":{"spatialReferenceSystemCode":"EPSG:32613","scaleX":10.0,"scaleY":-10.0,"translateX":499980.0,"translateY":4300020.0,"shearX":0.0,"shearY":0.0},"rpcSensorModel":null,"histogram":null,"sensorMetadata":null,"imageAssociations":null,"rrdMetadata":{"reducedResolutionDataset":[{"sourceImage":"/vsis3/sentinel-s2-l1c/tiles/13/S/EC/2018/8/27/0/B02.jp2","targetImage":"/vsis3/sentinel-s2-l1c/tiles/13/S/EC/2018/8/27/0/B02.jp2","inverseScaleFactor":1.0},{"sourceImage":"/vsis3/sentinel-s2-l1c/tiles/13/S/EC/2018/8/27/0/B02.jp2","targetImage":"/vsis3/sentinel-s2-l1c/tiles/13/S/EC/2018/8/27/0/B02.jp2","inverseScaleFactor":4.0},{"sourceImage":"/vsis3/sentinel-s2-l1c/tiles/13/S/EC/2018/8/27/0/B02.jp2","targetImage":"/vsis3/sentinel-s2-l1c/tiles/13/S/EC/2018/8/27/0/B02.jp2","inverseScaleFactor":8.002915451895044},{"sourceImage":"/vsis3/sentinel-s2-l1c/tiles/13/S/EC/2018/8/27/0/B02.jp2","targetImage":"/vsis3/sentinel-s2-l1c/tiles/13/S/EC/2018/8/27/0/B02.jp2","inverseScaleFactor":16.005830903790088}]}}'
+    headers:
+      Access-Control-Allow-Headers:
+      - x-requested-with, X-Auth-Token, Content-Type, Authorization, range
+      Access-Control-Allow-Methods:
+      - GET, OPTIONS, HEAD, PUT, POST, DELETE
+      Access-Control-Allow-Origin:
+      - '*'
+      Access-Control-Max-Age:
+      - '3600'
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '2112'
+      Content-Type:
+      - application/json
+      Date:
+      - Fri, 06 Dec 2019 18:49:33 GMT
+    status:
+      code: 200
+      message: ''
+version: 1

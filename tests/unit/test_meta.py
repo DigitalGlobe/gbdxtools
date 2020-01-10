@@ -10,13 +10,6 @@ import vcr
 import tempfile
 import unittest
 
-# How to use the mock_gbdx_session and vcr to create unit tests:
-# 1. Add a new test that is dependent upon actually hitting GBDX APIs.
-# 2. Decorate the test with @vcr appropriately
-# 3. Replace "dummytoken" with a real gbdx token
-# 4. Run the tests (existing test shouldn't be affected by use of a real token).  This will record a "cassette".
-# 5. Replace the real gbdx token with "dummytoken" again
-# 6. Edit the cassette to remove any possibly sensitive information (s3 creds for example)
 
 def force(r1, r2):
     return True
@@ -44,10 +37,10 @@ class MetaImageTest(unittest.TestCase):
         width = image_bounds[2] - image_bounds[0] 
         clip_area = translate(image_shape, xoff=-0.5 * width)
         xmin, ymin, xmax, ymax = wv2.pxbounds(clip_area, clip=True)
-        self.assertEquals(xmin, 0)
-        self.assertEquals(ymin, 0)
-        self.assertEquals(xmax, xsize/2)
-        self.assertEquals(ymax, ysize)
+        self.assertEqual(xmin, 0)
+        self.assertEqual(ymin, 0)
+        self.assertEqual(xmax, xsize/2)
+        self.assertEqual(ymax, ysize)
 
     @my_vcr.use_cassette('tests/unit/cassettes/test_meta_pxbounds_disjoint.yaml', filter_headers=['authorization'])
     def test_image_pxbounds_disjoint(self):
@@ -66,8 +59,8 @@ class MetaImageTest(unittest.TestCase):
         c2 = shape(window).centroid
         bands, x, y = window.shape
         # check the window is the correct shape
-        self.assertEquals(x, 256)
-        self.assertEquals(y, 256)
+        self.assertEqual(x, 256)
+        self.assertEqual(y, 256)
         # make sure the center of the window is within 1 pixel
         # of where it should be
         self.assertTrue(c1.distance(c2) < wv2.metadata['georef']['scaleX'])
@@ -78,7 +71,7 @@ class MetaImageTest(unittest.TestCase):
         wv2 = CatalogImage('1030010076B8F500')
         aoi = wv2.randwindow((275,300))
         coverage = [dsk for dsk in aoi.window_cover((100,100), pad=True)]
-        self.assertEquals(len(coverage), 9)
+        self.assertEqual(len(coverage), 9)
 
     @my_vcr.use_cassette('tests/unit/cassettes/test_meta_window_cover_false.yaml', filter_headers=['authorization'])
     def test_image_window_cover_false(self):
@@ -86,6 +79,6 @@ class MetaImageTest(unittest.TestCase):
         wv2 = CatalogImage('1030010076B8F500')
         aoi = wv2.randwindow((325,300))
         coverage = [dsk for dsk in aoi.window_cover((100,100), pad=False)]
-        self.assertEquals(len(coverage), 9)
+        self.assertEqual(len(coverage), 9)
 
     
