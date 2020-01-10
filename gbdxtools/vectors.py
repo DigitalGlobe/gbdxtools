@@ -151,6 +151,11 @@ class Vectors(object):
         Perform a vector services query using the QUERY API
         (https://gbdxdocs.digitalglobe.com/docs/vs-query-list-vector-items-returns-default-fields)
 
+        If the caller requests more than 1000 records and it's possible that it will take longer than
+        the default TTL value to pull a single page of 1000 records into memory, it's possible to raise
+        the TTL duration by setting the 'ttl' parameter to something higher than the default of 10 seconds.
+        For example, to set the TTL to 30 seconds, use '30s'.  For one minute, use '1m'.
+
         Args:
             searchAreaWkt: WKT Polygon of area to search
             query: Elastic Search query
@@ -187,6 +192,12 @@ class Vectors(object):
         '''
         Perform a vector services query using the QUERY API
         (https://gbdxdocs.digitalglobe.com/docs/vs-query-list-vector-items-returns-default-fields)
+
+        If iterating through a page of results results in seeing duplicate records consistently,
+        it's possible that the query context TTL is expiring before the page is finished being
+        processed by the caller.  In that case, it's possible to raise the TTL duration by setting
+        the 'ttl' parameter to something higher than the default of 10 seconds.  For example, to
+        set the TTL to 30 seconds, use '30s'.  For one minute, use '1m'.
 
         Args:
             searchAreaWkt: WKT Polygon of area to search
