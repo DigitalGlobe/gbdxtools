@@ -59,7 +59,7 @@ class Sentinel1(RDABaseImage):
         polarization (str): The Polarization type. Defaults to 'VH' (default), 'VV', 'HH', or 'VV'
         proj (str): EPSG code for the resulting image.
     """
-    __Driver__ = Sentinel2Driver
+    __Driver__ = Sentinel1Driver
 
     @property
     def _id(self):
