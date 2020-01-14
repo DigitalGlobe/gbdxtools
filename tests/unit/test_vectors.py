@@ -65,7 +65,7 @@ class TestVectors(unittest.TestCase):
         
 
         self.assertIsInstance(generator, types.GeneratorType)
-        self.assertEqual(len(results), 142) 
+        self.assertEqual(len(results), count) 
         self.assertEqual(len(list(generator)), len(results)) 
 
     @gbdx_vcr.use_cassette('tests/unit/cassettes/test_vectors_create_single.yaml')

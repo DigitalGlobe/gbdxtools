@@ -4,8 +4,10 @@ GBDX Catalog Image Interface.
 Contact: marc.pfister@digitalglobe.com
 """
 from gbdxtools import WV01, WV02, WV03_SWIR, WV03_VNIR, WV04, LandsatImage, IkonosImage, GE01, QB02, Sentinel2, Sentinel1, Radarsat, Modis
-from gbdxtools.rda.error import UnsupportedImageType
-from gbdxtools.images.util.image import vector_services_query, can_acomp, is_ordered, is_available_in_gbdx
+from gbdxtools.rda.error import UnsupportedImageType, ImageNotAvailable, MissingMetadata
+from gbdxtools.images.worldview import WorldViewImage
+import warnings
+from gbdxtools.images.util.image import vector_services_query, can_acomp, is_available
 
 class CatalogImage(object):
     '''Creates an image instance matching the type of the Catalog ID.
@@ -38,30 +40,48 @@ class CatalogImage(object):
         query += " AND NOT item_type:DigitalGlobeAcquisition"
         result = vector_services_query(query, count=1)
         if len(result) == 0:
-            raise Exception('Could not find a catalog entry for the given id: {}'.format(cat_id))
-        else:
-            return cls._image_class(result[0], **kwargs)
+            # the image isn't in GBDX, check if it's an acquisition
+            query = "item_type:DigitalGlobeAcquisition AND (attributes.catalogID.keyword:{} OR id:{})".format(cat_id, cat_id)
+            result = vector_services_query(query, count=1)
+            if len(result) == 0:
+                raise Exception('Could not find a catalog entry for the given id: {}'.format(cat_id))
+            else:
+                msg = 'ID exists in Catalog but image is not in GBDX: {}'.format(cat_id)
+                msg += '\nOrder the image (see Ordering.order()) and/or wait for delivery'
+                raise ImageNotAvailable(msg)
 
+        image = cls._image_class(result[0], **kwargs)
+
+        if issubclass(type(image), WorldViewImage):
+            if not is_available(cat_id):
+                msg = '%s is not available in RDA. Order the image, or wait for an order to complete' % cat_id
+                msg += ' and finish ingestion into RDA'
+                raise ImageNotAvailable(msg)
+
+        return image
 
     @classmethod
     def is_ordered(cls, cat_id):
       """
-        Checks to see if a CatalogID has been ordered or not. 
+        Deprecated, see is_available() below
+
+        For information about orders, see the orders.py module
+      """
+      warnings.warn('is_ordered() is deprecated, use CatalogImage.is_available() instead')
+      return is_available(cat_id)
+
+    @classmethod
+    def is_available(cls, cat_id):
+      """
+        Checks to see if a CatalogID is available to be loaded from RDA. 
 
         Args:
           catalogID (str): The catalog ID from the platform catalog.
         Returns:
-          ordered (bool): Whether or not the image has been ordered
+          (bool): Whether or not the image is available to GBDXtools
       """
-      return is_ordered(cat_id)
+      return is_available(cat_id)
 
-    @classmethod
-    def is_available_in_gbdx(cls, cat_id):
-        """
-        Checks to see if a DG Catalog ID is ordered from GBDX ordering API.
-        :return: True is ordered/delivered, False otherwise
-        """
-        return is_available_in_gbdx(cat_id)
 
     @classmethod
     def acomp_available(cls, cat_id):

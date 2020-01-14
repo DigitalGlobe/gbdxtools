@@ -27,6 +27,9 @@ class UnsupportedImageType(Exception):
 class MissingMetadata(Exception):
     pass
 
+class ImageNotAvailable(MissingMetadata):
+    pass
+
 class MissingIdahoImages(Exception):
     pass
 

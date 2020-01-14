@@ -64,7 +64,6 @@ def get_proj(prj_code):
     if prj_code in CUSTOM_PRJ:
         proj = pyproj.CRS(CUSTOM_PRJ[prj_code])
     else:
-        print(prj_code)
         proj = pyproj.CRS(prj_code)
     return proj
 
@@ -95,11 +94,11 @@ def preview(image, **kwargs):
     wgs84_bounds = kwargs.get("bounds", list(loads(image.metadata["image"]["imageBoundsWGS84"]).bounds))
     center = kwargs.get("center", list(shape(image).centroid.bounds[0:2]))
     
-    if image.proj.lower() != 'epsg:4326':
+    if image.proj != 'EPSG:4326':
         code = image.proj.split(':')[1]
         conn = gbdx.gbdx_connection
         proj_info = conn.get('https://ughlicoordinates.geobigdata.io/ughli/v1/projinfo/{}'.format(code)).json()
-        tfm = pyproj.Transformer.from_crs('epsg:4326', image.proj, always_xy=True)
+        tfm = pyproj.Transformer.from_crs('EPSG:4326', image.proj, always_xy=True)
         bounds = list(ops.transform(tfm.transform, box(*wgs84_bounds)).bounds)
     else:
         proj_info = {}

@@ -192,7 +192,7 @@ class DaskImage(da.Array):
 
 
 class GeoDaskImage(DaskImage, Container, PlotMixin, BandMethodsTemplate, Deprecations):
-    _default_proj = "epsg:4326"
+    _default_proj = "EPSG:4326"
 
     def map_blocks(self, *args, **kwargs):
         ''' Queue a deferred function to run on each block of image
@@ -240,7 +240,8 @@ class GeoDaskImage(DaskImage, Container, PlotMixin, BandMethodsTemplate, Depreca
     @property
     def proj(self):
         """ The projection of the image """
-        return self.__geo_transform__.proj
+        # keep EPSG code strings upper case
+        return self.__geo_transform__.proj.replace('epsg', 'EPSG')
 
     def aoi(self, **kwargs):
         """ Subsets the Image by the given bounds

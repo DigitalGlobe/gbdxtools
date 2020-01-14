@@ -2,6 +2,7 @@ from gbdxtools.vectors import Vectors
 from gbdxtools.auth import Auth
 from shapely import wkt
 from shapely.geometry import box
+import warnings
 
 band_types = {
     'Ms': 'MS',
@@ -49,15 +50,20 @@ def _req_with_retries(conn, url, retries=5):
     return None
 
 
-def is_ordered(cat_id):
+def is_available(cat_id):
     """
-      Checks to see if a CatalogID has been ordered or not.
+      Checks to see if a CatalogID is ingested in RDA and available to GBDXtools
 
       Args:
         catalogID (str): The catalog ID from the platform catalog.
       Returns:
-        ordered (bool): Whether or not the image has been ordered
+        (bool): Whether or not the image is available in RDA
     """
+    # checking for RDA metadata is the most authorative way to make
+    # sure an image is available from RDA
+
+    # TODO align with metadata fetch
+
     url = 'https://rda.geobigdata.io/v1/stripMetadata/{}'.format(cat_id)
     auth = Auth()
     r = _req_with_retries(auth.gbdx_connection, url)
@@ -66,28 +72,12 @@ def is_ordered(cat_id):
     return False
 
 
-def is_available_in_gbdx(cat_id):
+def is_ordered(cat_id):
     """
-    Checks to see if a DG Catalog ID is ordered from GBDX ordering API.
-    :param cat_id: DG catalog id
-    :return: bool: True if the catalog id was delivered, False otherwise
+        deprecated
     """
-    try:
-        query = "item_type:DigitalGlobeAcquisition AND (attributes.catalogID.keyword:{} OR id:{})".format(cat_id, cat_id)
-        result = vector_services_query(query, count=1)
-        if len(result) == 0:
-            raise Exception('Error, must be a valid DG catalog id')
-
-        auth = Auth()
-        url = 'https://geobigdata.io/orders/v2/location?acquisitionIds=["{}"]'.format(cat_id)
-        response = auth.gbdx_connection.get(url)
-        response.raise_for_status()
-
-        return response.json()['acquisitions'][0]['state'] == "delivered"
-
-    except Exception as e:
-        print("Error checking if DG catalog Id is ordered, Reason {}".format(e))
-        raise
+    warnings.warn('deprecated, use is_available() instead')
+    return is_available(cat_id)
 
 
 def can_acomp(cat_id):

@@ -113,6 +113,19 @@ class Ordering(object):
         except:
             return False
 
+    def is_delivered(self, cat_id):
+        '''
+        Check to see if a CatID is delivered
+
+        Args:
+            cat_id(str): Catalog ID
+        
+        Returns:
+            bool: if the Catalog ID has been delivered
+        '''
+
+        locations = self.location(cat_id)
+        return state == 'delivered'
 
     def location(self, image_catalog_ids, batch_size=100):
         def _process_single_batch(url_, ids, results_dict):
@@ -136,7 +149,7 @@ class Ordering(object):
         for ids_batch in acq_ids_by_batch:
             _process_single_batch(url, ids_batch, res)
 
-        # Process reminder
+        # Process remainder
         remain_count = len(sanitized_ids) % batch_size
         if remain_count > 0:
             _process_single_batch(url, sanitized_ids[-remain_count:], res)

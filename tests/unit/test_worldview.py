@@ -1,141 +1,105 @@
 '''
-Authors: Donnie Marino, Kostas Stamatiou
-Contact: dmarino@digitalglobe.com
+Authors: Marc Pfister
+Contact: marc.pfister@maxar.com
 
-Unit tests for the gbdxtools.Idaho class
+Unit tests for the Worldview classes
 '''
 
-from gbdxtools import Interface
-from gbdxtools import CatalogImage, WV02, WV03_VNIR, WV03_SWIR, WV04
-from gbdxtools.rda.error import AcompUnavailable
-from auth_mock import gbdx
-import vcr
-from os.path import join, isfile, dirname, realpath
-import tempfile
 import unittest
 
-try:
-    from urlparse import urlparse
-except: 
-    from urllib.parse import urlparse
+from gbdxtools import CatalogImage
+from gbdxtools import WV01, WV02, WV03_VNIR, WV03_SWIR, WV04
+from gbdxtools.rda.error import AcompUnavailable
 
-
-def force(r1, r2):
-    return True
-
-my_vcr = vcr.VCR()
-my_vcr.register_matcher('force', force)
-my_vcr.match_on = ['force']
+from helpers import mockable_interface, gbdx_vcr
+from helpers import WV02_CATID, WV03_VNIR_CATID, WV03_SWIR_CATID, WV04_CATID
+from helpers import WV02_BBOX
 
 class CatalogImageTest(unittest.TestCase):
 
-    _temp_path = None
-
     @classmethod
     def setUpClass(cls):
-        cls.gbdx = gbdx
-        cls._temp_path = tempfile.mkdtemp()
-        print("Created: {}".format(cls._temp_path))
+        cls.gbdx = mockable_interface()
 
-    @my_vcr.use_cassette('tests/unit/cassettes/test_wv_image_default.yaml', filter_headers=['authorization'])
+    @gbdx_vcr.use_cassette('tests/unit/cassettes/test_wv_image_default.yaml')
     def test_basic_catalog_image(self):
-        _id = '104001002838EC00'
-        img = self.gbdx.catalog_image(_id)
-        self.assertTrue(isinstance(img, WV03_VNIR))
-        assert img.cat_id == _id
-        assert img.shape == (8, 79386, 10889)
-        assert img.proj == 'EPSG:4326'
-
-    @my_vcr.use_cassette('tests/unit/cassettes/test_wv_image_acomp.yaml', filter_headers=['authorization'])
-    def test_basic_catalog_acomp(self):
-        _id = '1030010079016D00'
-        img = self.gbdx.catalog_image(_id, acomp=True)
+        img = CatalogImage(WV02_CATID)
         self.assertTrue(isinstance(img, WV02))
-        assert img.cat_id == _id
-        assert img.shape == (8, 26331, 8741)
-        assert img.proj == 'EPSG:4326'
+        self.assertEqual(img.cat_id, WV02_CATID) 
+        self.assertEqual(img.shape, (8, 59907, 11468))
+        self.assertEqual(img.proj, 'EPSG:4326')
 
-    @my_vcr.use_cassette('tests/unit/cassettes/test_wv_image_no_acomp.yaml', filter_headers=['authorization'])
-    def test_basic_catalog_no_acomp(self):
-        try:
-            _id = '104001002838EC00'
-            img = self.gbdx.catalog_image(_id, acomp=True)
-        except AcompUnavailable:
-            pass
+    @gbdx_vcr.use_cassette('tests/unit/cassettes/test_wv_image_acomp.yaml')
+    def test_basic_catalog_acomp(self):
+        img = CatalogImage(WV02_CATID, acomp=True)
+        self.assertTrue(isinstance(img, WV02))
+        self.assertEqual(img.cat_id, WV02_CATID)
+        self.assertEqual(img.shape, (8, 59907, 11468))
+        self.assertEqual(img.proj, 'EPSG:4326')
 
-    @my_vcr.use_cassette('tests/unit/cassettes/test_wv_image_default_aoi.yaml', filter_headers=['authorization'])
+    @gbdx_vcr.use_cassette('tests/unit/cassettes/test_wv_image_default_aoi.yaml')
     def test_cat_image_with_aoi(self):
-        _id = '104001002838EC00'
-        img = self.gbdx.catalog_image(_id, bbox=[-85.81455230712892,10.416235163695223,-85.77163696289064,10.457089934231618])
-        assert img.cat_id == _id
-        assert img.shape == (8, 3037, 3190)
-        assert img.proj == 'EPSG:4326'
+        img = CatalogImage(WV02_CATID, bbox=WV02_BBOX)
+        self.assertEqual(img.cat_id, WV02_CATID)
+        self.assertEqual(img.shape, (8, 2323, 2322))
+        self.assertEqual(img.proj, 'EPSG:4326')
 
-    @my_vcr.use_cassette('tests/unit/cassettes/test_wv_image_proj.yaml', filter_headers=['authorization'])
+    @gbdx_vcr.use_cassette('tests/unit/cassettes/test_wv_image_proj.yaml')
     def test_cat_image_with_proj(self):
-        _id = '104001002838EC00'
-        img = CatalogImage(_id, bbox=[-85.81455230712892,10.416235163695223,-85.77163696289064,10.457089934231618], proj='EPSG:3857')
-        assert img.cat_id == _id
-        assert img.shape == (8, 3087, 3190)
-        assert img.proj == 'EPSG:3857' 
+        img = CatalogImage(WV02_CATID, bbox=WV02_BBOX, proj='EPSG:3857')
+        self.assertEqual(img.cat_id, WV02_CATID)
+        self.assertEqual(img.shape, (8, 3010, 2322))
+        self.assertEqual(img.proj, 'EPSG:3857') 
 
-    @my_vcr.use_cassette('tests/unit/cassettes/test_wv_image_aoi.yaml', filter_headers=['authorization'])
+    @gbdx_vcr.use_cassette('tests/unit/cassettes/test_wv_image_aoi.yaml')
     def test_cat_image_aoi(self):
-        _id = '104001002838EC00'
-        img = CatalogImage(_id)
-        assert img.cat_id == _id
-        aoi = img.aoi(bbox=[-85.81455230712892,10.416235163695223,-85.77163696289064,10.457089934231618])
-        assert aoi.shape == (8, 3037, 3190)
+        img = CatalogImage(WV02_CATID)
+        self.assertEqual(img.cat_id, WV02_CATID)
+        aoi = img.aoi(bbox=WV02_BBOX)
+        self.assertEqual(aoi.shape, (8, 2323, 2322))
 
-    @my_vcr.use_cassette('tests/unit/cassettes/test_wv_image_pan_band.yaml', filter_headers=['authorization'])
+    @gbdx_vcr.use_cassette('tests/unit/cassettes/test_wv_image_pan_band.yaml')
     def test_catalog_image_panchromatic(self):
-        _id = '104001002838EC00'
-        img = self.gbdx.catalog_image(_id, band_type='Pan')
-        self.assertTrue(isinstance(img, WV03_VNIR))
-        assert img.cat_id == _id
-        assert img.shape == (1, 317959, 43511)
-        assert img.proj == 'EPSG:4326'
+        img = CatalogImage(WV02_CATID, band_type='Pan')
+        self.assertEqual(img.cat_id, WV02_CATID)
+        self.assertTrue(isinstance(img, WV02))
+        self.assertEqual(img.shape, (1, 239755, 45773))
+        self.assertEqual(img.proj, 'EPSG:4326')
 
-    @my_vcr.use_cassette('tests/unit/cassettes/test_wv_image_pansharpen.yaml', filter_headers=['authorization'])
+    @gbdx_vcr.use_cassette('tests/unit/cassettes/test_wv_image_pansharpen.yaml')
     def test_catalog_image_pansharpen(self):
-        _id = '1040010039545B00'
-        img = self.gbdx.catalog_image(_id, pansharpen=True)
-        self.assertTrue(isinstance(img, WV03_VNIR))
-        assert img.cat_id == _id
-        assert img.shape == (8, 331239, 45390)
-        assert img.proj == 'EPSG:4326' 
+        img = CatalogImage(WV02_CATID, pansharpen=True)
+        self.assertTrue(isinstance(img, WV02))
+        self.assertEqual(img.cat_id, WV02_CATID)
+        self.assertEqual(img.shape, (8, 239755, 45773))
+        self.assertEqual(img.proj, 'EPSG:4326')
 
-    @my_vcr.use_cassette('tests/unit/cassettes/test_wv3_swir.yaml', filter_headers=['authorization'])
+    @gbdx_vcr.use_cassette('tests/unit/cassettes/test_wv3_swir.yaml')
     def test_catalog_image_swir(self):
-        _id = '104A010010C29F00'
-        img = self.gbdx.catalog_image(_id)
+        img = CatalogImage(WV03_SWIR_CATID)
         self.assertTrue(isinstance(img, WV03_SWIR))
-        assert img.cat_id == _id
+        assert img.cat_id == WV03_SWIR_CATID
         assert img.shape == (8, 3804, 2822)
         assert img.proj == 'EPSG:4326'
 
-    @my_vcr.use_cassette('tests/unit/cassettes/test_wv4_image.yaml', filter_headers=['authorization'])
+    @gbdx_vcr.use_cassette('tests/unit/cassettes/test_wv4_image.yaml')
     def test_catalog_image_wv4(self):
-        _id = '03f4955d-c7da-45a8-8289-ba73bec5e127-inv'
-        img = self.gbdx.catalog_image(_id)
+        img = CatalogImage(WV04_CATID)
         self.assertTrue(isinstance(img, WV04))
-        assert img.shape == (4, 45443, 10758)
-        assert img.proj == 'EPSG:4326'
+        self.assertEqual(img.shape, (4, 123760, 12792))
+        self.assertEqual(img.proj, 'EPSG:4326')
 
-    @my_vcr.use_cassette('tests/unit/cassettes/test_wv4_proj.yaml', filter_headers=['authorization'])
+    @gbdx_vcr.use_cassette('tests/unit/cassettes/test_wv4_proj.yaml')
     def test_catalog_image_wv4_proj(self):
-        _id = '03f4955d-c7da-45a8-8289-ba73bec5e127-inv'
-        img = self.gbdx.catalog_image(_id, proj="EPSG:3857")
+        img = CatalogImage(WV04_CATID, proj="EPSG:3857")
         self.assertTrue(isinstance(img, WV04))
-        assert img.shape == (4, 45542, 10757)
-        assert img.proj == 'EPSG:3857'
+        self.assertEqual(img.shape, (4, 156535, 12792))
+        self.assertEqual(img.proj, 'EPSG:3857')
 
-
-    @my_vcr.use_cassette('tests/unit/cassettes/test_wv4_pan.yaml', filter_headers=['authorization'])
+    @gbdx_vcr.use_cassette('tests/unit/cassettes/test_wv4_pan.yaml')
     def test_catalog_image_wv4_pan(self):
-        _id = '03f4955d-c7da-45a8-8289-ba73bec5e127-inv'
-        img = self.gbdx.catalog_image(_id, band_type="pan")
+        img = CatalogImage(WV04_CATID, band_type="pan")
         self.assertTrue(isinstance(img, WV04))
-        assert img.shape == (1, 181500, 42867)
-        assert img.proj == 'EPSG:4326'
+        self.assertEqual(img.shape, (1, 494688, 51014))
+        self.assertEqual(img.proj, 'EPSG:4326')
 

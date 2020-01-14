@@ -4,7 +4,6 @@ Unit tests for the gbdxtools.BrowseImage class
 See tests/readme.md for more about tests
 '''
 
-from gbdxtools import Interface
 import unittest
 from gbdxtools.images.browse_image import BrowseImage
 
