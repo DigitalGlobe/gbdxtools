@@ -79,7 +79,7 @@ interactions:
   response:
     body:
       string: '[{"isPublic":false,"keywords":["RadarsatTemplate"],"sensors":["Radarsat"],"keynodes":[{"id":"Orthorectify","description":"Orthorectify"}],"description":"Radarsat
-        and Orthorectify","metadataAuthor":{"firstName":"Brett","familyName":"Cullen","email":"brett.cullen@digitalglobe.com"},"templateAuthor":{"firstName":"Brett","familyName":"Cullen","email":"brett.cullen@digitalglobe.com"},"datePublished":"2019-04-16T20:06:39.963Z","name":"RadarsatTemplate","templateId":"da0020f5dafbf910e0deb657daa1a0d6f04c3e1044abc59e340941daa40d802e","id":"cfa9c0f4d01d45d5a343fabde21a31da"}]'
+        and Orthorectify","metadataAuthor":{"firstName":"Brett","familyName":"Cullen","email":"brett.cullen@digitalglobe.com"},"templateAuthor":{"firstName":"Brett","familyName":"Cullen","email":"brett.cullen@digitalglobe.com"},"datePublished":"2019-04-16T20:06:39.963Z","name":"RadarsatTemplate","templateId":"455fd97e2247bc3b9993cb51a6b709d31a63871a96ec269e52f6fc8b61def272","id":"cfa9c0f4d01d45d5a343fabde21a31da"}]'
     headers:
       Access-Control-Allow-Headers:
       - x-requested-with, X-Auth-Token, Content-Type, Authorization
@@ -112,12 +112,12 @@ interactions:
       User-Agent:
       - python-requests/2.21.0
     method: GET
-    uri: https://rda.geobigdata.io/v1/template/da0020f5dafbf910e0deb657daa1a0d6f04c3e1044abc59e340941daa40d802e
+    uri: https://rda.geobigdata.io/v1/template/455fd97e2247bc3b9993cb51a6b709d31a63871a96ec269e52f6fc8b61def272
   response:
     body:
-      string: '{"id":"da0020f5dafbf910e0deb657daa1a0d6f04c3e1044abc59e340941daa40d802e","defaultNodeId":"RadarsatRead","edges":[{"id":"edge-1","index":1,"source":"RadarsatRead","destination":"Orthorectify"}],"nodes":[{"id":"Orthorectify","operator":"Orthorectify","parameters":{"Elevation
+      string: '{"id":"455fd97e2247bc3b9993cb51a6b709d31a63871a96ec269e52f6fc8b61def272","defaultNodeId":"Radarsat2ProductRead","edges":[{"id":"edge-1","index":1,"source":"Radarsat2ProductRead","destination":"Orthorectify"}],"nodes":[{"id":"Orthorectify","operator":"Orthorectify","parameters":{"Elevation
         Source":"","Output Coordinate Reference System":"${Output Coordinate Reference
-        System}","Output Pixel to World Transform":"","Sensor Model":"null"}},{"id":"RadarsatRead","operator":"RadarsatRead","parameters":{"path":"${path}"}}]}'
+        System}","Output Pixel to World Transform":"","Sensor Model":"null"}},{"id":"Radarsat2ProductRead","operator":"Radarsat2ProductRead","parameters":{"path":"${path}","calibration":"${radarsatCalibration}"}}]}'
     headers:
       Access-Control-Allow-Headers:
       - x-requested-with, X-Auth-Token, Content-Type, Authorization
@@ -150,7 +150,7 @@ interactions:
       User-Agent:
       - python-requests/2.21.0
     method: GET
-    uri: https://rda.geobigdata.io/v1/template/da0020f5dafbf910e0deb657daa1a0d6f04c3e1044abc59e340941daa40d802e/metadata?path=gbdx-receiving-radarsat%2FRS2_OK96607_PK848296_DK779550_XF0W3_20180109_153450_HH_SGF&nodeId=Orthorectify&Output+Coordinate+Reference+System=EPSG%3A3857&Sensor+Model=null&Elevation+Source=&Output+Pixel+to+World+Transform=
+    uri: https://rda.geobigdata.io/v1/template/455fd97e2247bc3b9993cb51a6b709d31a63871a96ec269e52f6fc8b61def272/metadata?path=gbdx-receiving-radarsat%2FRS2_OK96607_PK848296_DK779550_XF0W3_20180109_153450_HH_SGF&nodeId=Orthorectify&Output+Coordinate+Reference+System=EPSG%3A3857&Sensor+Model=null&Elevation+Source=&Output+Pixel+to+World+Transform=
   response:
     body:
       string: '{"imageMetadata":{"imageId":"/vsis3/gbdx-receiving-radarsat/RS2_OK96607_PK848296_DK779550_XF0W3_20180109_153450_HH_SGF/imagery_HH.tif","version":1.1,"profileName":"georectified_image","tilePartition":"0000","tileXOffset":0,"tileYOffset":0,"numXTiles":220,"numYTiles":235,"tileXSize":256,"tileYSize":256,"numBands":1,"dataType":"UNSIGNED_SHORT","imageHeight":59726,"imageWidth":56011,"sensorPlatformName":"RADARSAT-2","sensorName":"SAR","vendorDatasetIdentifier":"PDS_06433170:SGF:GSS:610476","acquisitionDate":"2018-01-09T15:34:50.187622Z","colorInterpretation":"PAN","imageBoundsWGS84":"POLYGON
