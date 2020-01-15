@@ -57,14 +57,16 @@ def get_mock_gbdx_session(token='dummytoken'):
 
 # Set up a GBDX session for tests to use.
 # By default this object will be a mocked connection since we're testing against cassettes.
-# To get a real connection to regenerate VCRpy cassettes set the envvar "WRITE_CASSETTES"
+# To get a real connection to regenerate VCRpy cassettes set the envvar "WRITE_CASSETTE"
 # before you run the tests. See /tests/readme.md for more information
 def mockable_interface():
-    if 'WRITE_CASSETTE' not in os.environ:
+    if 'WRITE_CASSETTE' in os.environ:
+        # we need a authenticated connection to fetch real data
+        gbdx = Interface()
+    else:
+        # the is a dummy connection since the data is coming from the cassette
         mock_gbdx_session = get_mock_gbdx_session(token='dummytoken')
         gbdx = Interface(gbdx_connection=mock_gbdx_session)
-    else:
-        gbdx = Interface()
     return gbdx
 
 def filter_auth_calls(request):

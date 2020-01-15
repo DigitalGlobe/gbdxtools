@@ -25,6 +25,12 @@ Tests that run on images will need those images to be available in RDA. There ar
 
 So in short, if you don't need to update a test file, it's probably best to leave it in the older formats. But if you do need to update a single test, please update the whole file to the new patterns and regenerate new cassettes.
 
+### About `mockable_interface`
+
+The `mockable_interface` Interface object in `helpers` creates a dummy connection to GBDX when certain environment variables are set. This skips communication with the authentication server. Because the responses are expected to ocome from the cassette file there is no need to authenticate.
+
+If the environment variables are not set, `mockable_interface` will return a working `Interface` object with an authenticated connection.
+
 ### Regenerating cassettes
 
 - Delete the old cassette file
@@ -34,16 +40,22 @@ So in short, if you don't need to update a test file, it's probably best to leav
 
 If the test is an old one using `gbdx_mock` instead of `mockable_interface`, you would need to export `GBDX_MOCK` instead of `WRITE_CASSETTE`. But instead, update the test to use `mockable_interface`, because it doesn't make sense to set `GBDX_MOCK` when you're specifically not mocking the connection.
 
+If you're getting errors that are a mix of `401` errors for the token and `can't update str`, it's because you're trying to run the test using a dummy token, which is the default behavior for testing against the cassettes. This may be because something has changed and is not stored in the cassette. VCRpy is trying to request the real data but is not using an authenticated request. It some cases deleting the cassette and regenerating it completely (with the appropriate envvar as described above) can help.
+
 
 ### Adding new tests to the test files
 
-- If your test requires communicating with GBDX, use a VCRpy decorator, passing the path to where you would like to store the cassette. It is helpful for troubleshooting to have your cassette yaml file name match your test function name, but not necessary.
+- If your test requires communicating with GBDX, use the `gbdx_vcr` VCRpy decorator from `helpers`, passing the path to where you would like to store the cassette. It is helpful for troubleshooting to have your cassette yaml file name match your test function name, but not necessary.
 
 ``` python
 @gbdx_vcr.use_cassette('tests/unit/cassettes/test_some_gbdx_thing.yaml')
 def test_some_gbdx_thing(self):
     ...
 ```
+
+### Using cassettes across multiple tests
+
+In cases where tests isolate different types of functionality on the same object, you can use the same cassette file as long as the tests do not cause any additional server interaction after the object is created.
 
 ### Tests that don't have GBDX or other server interaction
 
