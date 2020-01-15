@@ -270,13 +270,13 @@
         ]
     },
     {
-        "defaultNodeId": "RadarsatRead",
+        "defaultNodeId": "Radarsat2ProductRead",
         "edges": [
             {
                 "destination": "Orthorectify",
                 "id": "edge-1",
                 "index": 1,
-                "source": "RadarsatRead"
+                "source": "Radarsat2ProductRead"
             }
         ],
         "id": "RadarsatTemplate",
@@ -292,10 +292,11 @@
                 }
             },
             {
-                "id": "RadarsatRead",
-                "operator": "RadarsatRead",
+                "id": "Radarsat2ProductRead",
+                "operator": "Radarsat2ProductRead",
                 "parameters": {
-                    "path": "${path}"
+                    "path": "${path}",
+                    "calibration": "${radarsatCalibration}"
                 }
             }
         ]
