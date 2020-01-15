@@ -4,7 +4,7 @@ GBDX Catalog Image Interface.
 Contact: marc.pfister@digitalglobe.com
 """
 from gbdxtools import WV01, WV02, WV03_SWIR, WV03_VNIR, WV04, LandsatImage, IkonosImage, GE01, QB02, Sentinel2, Sentinel1, Radarsat, Modis
-from gbdxtools.rda.error import UnsupportedImageType, ImageNotAvailable, MissingMetadata
+from gbdxtools.rda.error import UnsupportedImageType, ImageNotAvailable, MissingMetadata, AcompUnavailable
 from gbdxtools.images.worldview import WorldViewImage
 import warnings
 from gbdxtools.images.util.image import vector_services_query, can_acomp, is_available
@@ -44,19 +44,24 @@ class CatalogImage(object):
             query = "item_type:DigitalGlobeAcquisition AND (attributes.catalogID.keyword:{} OR id:{})".format(cat_id, cat_id)
             result = vector_services_query(query, count=1)
             if len(result) == 0:
-                raise Exception('Could not find a catalog entry for the given id: {}'.format(cat_id))
+                raise Exception('Could not find a catalog entry for {}'.format(cat_id))
             else:
-                msg = 'ID exists in Catalog but image is not in GBDX: {}'.format(cat_id)
+                msg = '\n{} exists in Catalog but image is not in GBDX'.format(cat_id)
                 msg += '\nOrder the image (see Ordering.order()) and/or wait for delivery'
                 raise ImageNotAvailable(msg)
+
 
         image = cls._image_class(result[0], **kwargs)
 
         if issubclass(type(image), WorldViewImage):
             if not is_available(cat_id):
-                msg = '%s is not available in RDA. Order the image, or wait for an order to complete' % cat_id
+                msg = '\n%s is not available in RDA. Order the image, or wait for an order to complete' % cat_id
                 msg += ' and finish ingestion into RDA'
                 raise ImageNotAvailable(msg)
+
+            if 'acomp' in kwargs and kwargs['acomp'] is True:
+                if not can_acomp(cat_id):
+                    raise AcompUnavailable('\nAcomp is not available for {}'.format(cat_id))
 
         return image
 

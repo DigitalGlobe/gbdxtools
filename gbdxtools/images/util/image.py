@@ -3,6 +3,7 @@ from gbdxtools.auth import Auth
 from shapely import wkt
 from shapely.geometry import box
 import warnings
+from gbdxtools.rda.error import MissingMetadata
 
 band_types = {
     'Ms': 'MS',
@@ -91,6 +92,13 @@ def can_acomp(cat_id):
     r = _req_with_retries(auth.gbdx_connection, url)
     try:
         data = r.json()
-        return data['acompVersion'] is not None
-    except:
-        return False
+        try:
+            return data['acompVersion'] is not None
+        except KeyError:
+            if 'error' in data:
+                if data['error'].startswith('Metadata not found'):
+                    raise MissingMetadata(data['error'])
+                raise Exception(data['error'])
+    except Exception as e:
+        # may need to handle some other errors
+        raise e

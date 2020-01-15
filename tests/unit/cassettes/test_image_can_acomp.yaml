@@ -9,51 +9,15 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - python-requests/2.21.0
+      - sandman@digitalglobe.com
     method: GET
-    uri: https://rda.geobigdata.io/v1/stripMetadata/1050410000B1BD00/capabilities
-  response:
-    body:
-      string: '{"error":"Metadata not found for catalog ID 1050410000B1BD00"}'
-    headers:
-      Access-Control-Allow-Headers:
-      - x-requested-with, X-Auth-Token, Content-Type, Authorization
-      Access-Control-Allow-Methods:
-      - GET, OPTIONS, HEAD, PUT, POST, DELETE
-      Access-Control-Allow-Origin:
-      - '*'
-      Access-Control-Max-Age:
-      - '3600'
-      Connection:
-      - keep-alive
-      Content-Length:
-      - '62'
-      Content-Type:
-      - application/json;charset=UTF-8
-      Date:
-      - Tue, 23 Apr 2019 21:30:16 GMT
-    status:
-      code: 404
-      message: ''
-- request:
-    body: null
-    headers:
-      Accept:
-      - '*/*'
-      Accept-Encoding:
-      - gzip, deflate
-      Connection:
-      - keep-alive
-      User-Agent:
-      - python-requests/2.21.0
-    method: GET
-    uri: https://rda.geobigdata.io/v1/stripMetadata/104001002ABEA500/capabilities
+    uri: https://rda.geobigdata.io/v1/stripMetadata/103001007B9DD400/capabilities
   response:
     body:
       string: '{"acompVersion":"1.1","stripAcompVersion":null}'
     headers:
       Access-Control-Allow-Headers:
-      - x-requested-with, X-Auth-Token, Content-Type, Authorization
+      - x-requested-with, X-Auth-Token, Content-Type, Authorization, range
       Access-Control-Allow-Methods:
       - GET, OPTIONS, HEAD, PUT, POST, DELETE
       Access-Control-Allow-Origin:
@@ -67,7 +31,43 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Tue, 23 Apr 2019 21:30:17 GMT
+      - Wed, 15 Jan 2020 22:23:48 GMT
+    status:
+      code: 200
+      message: ''
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - sandman@digitalglobe.com
+    method: GET
+    uri: https://rda.geobigdata.io/v1/stripMetadata/1020010044CEA300/capabilities
+  response:
+    body:
+      string: '{"acompVersion":null,"stripAcompVersion":null}'
+    headers:
+      Access-Control-Allow-Headers:
+      - x-requested-with, X-Auth-Token, Content-Type, Authorization, range
+      Access-Control-Allow-Methods:
+      - GET, OPTIONS, HEAD, PUT, POST, DELETE
+      Access-Control-Allow-Origin:
+      - '*'
+      Access-Control-Max-Age:
+      - '3600'
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '46'
+      Content-Type:
+      - application/json
+      Date:
+      - Wed, 15 Jan 2020 22:23:48 GMT
     status:
       code: 200
       message: ''
