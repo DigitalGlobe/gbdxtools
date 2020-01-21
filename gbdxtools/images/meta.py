@@ -316,13 +316,8 @@ class GeoDaskImage(DaskImage, Container, PlotMixin, BandMethodsTemplate, Depreca
         return to_geotiff(self, **kwargs)
 
     def preview(self, **kwargs):
-        raise NotImplementedError(
-            '''.preview() triggers image consumption and is not a preview. 
-            Use gbdxtools.rda.util.preview() if you need a slippy map
-            and accept that its use will decrement your data allowance.'''
-        )
+        raise NotImplementedError('Deprecated due to RDA Graph API deprecation')
         # this could be replaced with a slippy map that uses the browse thumbnails
-        #preview(self, **kwargs)
 
     def warp(self, *args, **kwargs):
         raise NotImplementedError('Warp has been broken for 2 years, dropping support')

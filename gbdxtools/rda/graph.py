@@ -1,8 +1,9 @@
 import os
 import json
+import time
 from concurrent.futures import Future
 from gbdxtools.rda.error import NotFound, BadRequest
-
+import warnings
 try:
     from urllib import urlencode
 except ImportError:
@@ -16,9 +17,25 @@ def resolve_if_future(future):
     else:
         return future
 
+def req_with_retries(conn, url, retries=5):
+    for i in range(retries):
+        try:
+            res = resolve_if_future(conn.get(url))
+            if res.status_code != 502:
+                return res
+            elif res.status_code == 501:
+                raise Exception('501 Auth error')
+        except:
+            pass
+        time.sleep(0.5 * (i + 1))
+    raise Exception('RDA is overloaded')
+
+
 def get_graph_stats(conn, graph_id, node_id):
+    warnings.warn('Graph API is deprecated')
     url = "{}/metadata/{}/{}/display_stats.json".format(VIRTUAL_RDA_URL, graph_id, node_id)
-    req = resolve_if_future(conn.get(url))
+    req = req_with_retries(conn, url)
+    #req = resolve_if_future(conn.get(url))
     if req.status_code == 200:
         return req.json()
     else:
@@ -27,15 +44,18 @@ def get_graph_stats(conn, graph_id, node_id):
 def get_template_stats(conn, template_id, **kwargs):
     qs = urlencode(kwargs)
     url = "{}/template/{}/display_stats.json?{}".format(VIRTUAL_RDA_URL, template_id, qs)
-    req = resolve_if_future(conn.get(url))
+    req = req_with_retries(conn, url)
+    #req = resolve_if_future(conn.get(url))
     if req.status_code == 200:
         return req.json()
     else:
         raise NotFound("Could not fetch stats for template/args: {} / {}".format(template_id, kwargs))
 
 def get_rda_graph(conn, graph_id):
+    warnings.warn('Graph API is deprecated')
     url = "{}/graph/{}".format(VIRTUAL_RDA_URL, graph_id)
-    req = resolve_if_future(conn.get(url))
+    #req = resolve_if_future(conn.get(url))
+    req = req_with_retries(conn, url)
     if req.status_code == 200:
         return req.json()
     else:
@@ -49,7 +69,8 @@ def get_rda_graph_template(conn, template_id):
     except:
         pass
     url = "{}/template/{}".format(VIRTUAL_RDA_URL, template_id)
-    req = resolve_if_future(conn.get(url))
+    #req = resolve_if_future(conn.get(url))
+    req = req_with_retries(conn, url)
     if req.status_code == 200:
         return req.json()
     else:
@@ -64,7 +85,8 @@ def _search_for_rda_template(conn, template_name):
     :return:
     """
     url = "{}/template/metadata/search?free-text={}".format(VIRTUAL_RDA_URL, template_name)
-    req = resolve_if_future(conn.get(url))
+    #req = resolve_if_future(conn.get(url))
+    req = req_with_retries(conn, url)
     if req.status_code == 200:
         request_json = req.json()
         # make sure list is not empty
@@ -80,6 +102,7 @@ def _search_for_rda_template(conn, template_name):
 
 
 def register_rda_graph(conn, rda_graph):
+    warnings.warn('Graph API is deprecated')
     url = "{}/graph".format(VIRTUAL_RDA_URL)
     res = resolve_if_future(conn.post(url, json.dumps(rda_graph, sort_keys=True),
                                       headers={'Content-Type': 'application/json'}))
@@ -91,7 +114,9 @@ def register_rda_graph(conn, rda_graph):
 
 
 def get_rda_metadata(conn, rda_id, node='toa_reflectance'):
-    md_response = conn.get(VIRTUAL_RDA_URL + "/metadata/{}/{}/metadata.json".format(rda_id, node)).result()
+    warnings.warn('Graph API is deprecated')
+    url = VIRTUAL_RDA_URL + "/metadata/{}/{}/metadata.json".format(rda_id, node)
+    md_response = req_with_retries(conn, url)
     if md_response.status_code != 200:
         md_json = md_response.json()
         if 'error' in md_json:
@@ -107,7 +132,8 @@ def get_rda_metadata(conn, rda_id, node='toa_reflectance'):
 
 def get_rda_template_metadata(conn, _id, **kwargs):
     qs = urlencode(kwargs)
-    md_response = conn.get(VIRTUAL_RDA_URL + "/template/{}/metadata?{}".format(_id, qs)).result()
+    url = VIRTUAL_RDA_URL + "/template/{}/metadata?{}".format(_id, qs)
+    md_response = req_with_retries(conn, url)
     if md_response.status_code != 200:
         md_json = md_response.json()
         if 'error' in md_json:

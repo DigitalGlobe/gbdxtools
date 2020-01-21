@@ -6,7 +6,8 @@ Unit tests for the gbdxtools.Idaho class
 """
 import unittest
 
-from helpers import WV02_CATID, gbdx_vcr, mockable_interface
+from helpers import gbdx_vcr, mockable_interface
+from helpers import WV02_CATID
 
 from gbdxtools import IdahoImage, CatalogImage
 from gbdxtools.images.meta import DaskImage
@@ -26,7 +27,7 @@ class RdaImageTest(unittest.TestCase):
     def setUpClass(cls):
         cls.gbdx = mockable_interface()
 
-    @gbdx_vcr.use_cassette('tests/unit/cassettes/test_ipe_image_default.yaml', filter_headers=['authorization'])
+    @gbdx_vcr.use_cassette('tests/unit/cassettes/test_ipe_image_default.yaml')
     def test_basic_ipe_image(self):
         idahoid = '8c3c4fc6-abcb-4f5f-bce6-d496c1a91676'
         img = self.gbdx.idaho_image(idahoid, bucket='rda-images-1')
@@ -34,21 +35,21 @@ class RdaImageTest(unittest.TestCase):
         assert img.shape == (4, 6510, 6955)
         assert img.proj == 'EPSG:4326'
 
-    @gbdx_vcr.use_cassette('tests/unit/cassettes/test_ipe_image_init_with_aoi2.yaml', filter_headers=['authorization'])
+    @gbdx_vcr.use_cassette('tests/unit/cassettes/test_ipe_image_init_with_aoi2.yaml')
     def test_ipe_image_with_aoi(self):
         idahoid = '8c3c4fc6-abcb-4f5f-bce6-d496c1a91676'
         img = self.gbdx.idaho_image(idahoid, bbox=[113, -6, 111, -7], bucket='rda-images-1')
         assert img.shape == (4, 43724, 87447)
         assert img.proj == 'EPSG:4326'
 
-    @gbdx_vcr.use_cassette('tests/unit/cassettes/test_ipe_image_with_proj.yaml', filter_headers=['authorization'])
+    @gbdx_vcr.use_cassette('tests/unit/cassettes/test_ipe_image_with_proj.yaml')
     def test_ipe_image_with_proj(self):
         idahoid = '8c3c4fc6-abcb-4f5f-bce6-d496c1a91676'
         img = self.gbdx.idaho_image(idahoid, bbox=[113, -6, 111, -7], proj='EPSG:3857', bucket='rda-images-1')
         assert img.shape == (4, 44007, 87447)
         assert img.proj == 'EPSG:3857'
 
-    @gbdx_vcr.use_cassette('tests/unit/cassettes/test_ipe_image_with_aoi.yaml', filter_headers=['authorization'])
+    @gbdx_vcr.use_cassette('tests/unit/cassettes/test_ipe_image_with_aoi.yaml')
     def test_ipe_image_aoi(self):
         idahoid = '8c3c4fc6-abcb-4f5f-bce6-d496c1a91676'
         img = self.gbdx.idaho_image(idahoid, bucket='rda-images-1')
@@ -57,7 +58,7 @@ class RdaImageTest(unittest.TestCase):
         rgb = aoi[[2,2,1], ...]
         assert isinstance(rgb, da.Array)
 
-    @gbdx_vcr.use_cassette('tests/unit/cassettes/test_ipe_image_read.yaml', filter_headers=['authorization'])
+    @gbdx_vcr.use_cassette('tests/unit/cassettes/test_ipe_image_read.yaml')
     def test_ipe_image_read(self):
         idahoid = '8c3c4fc6-abcb-4f5f-bce6-d496c1a91676'
         img = self.gbdx.idaho_image(idahoid, bucket='rda-images-1')
@@ -67,7 +68,7 @@ class RdaImageTest(unittest.TestCase):
         rgb = aoi.read(bands=[2,2,1])
         assert isinstance(rgb, np.ndarray)
 
-    @gbdx_vcr.use_cassette('tests/unit/cassettes/test_ipe_image_1b.yaml', filter_headers=['authorization'])
+    @gbdx_vcr.use_cassette('tests/unit/cassettes/test_ipe_image_1b.yaml')
     def test_ipe_image_1b(self):
         idahoid = '8c3c4fc6-abcb-4f5f-bce6-d496c1a91676'
         img = self.gbdx.idaho_image(idahoid, product="1b", bbox=[113, -6, 111, -7], bucket='rda-images-1')
@@ -77,7 +78,7 @@ class RdaImageTest(unittest.TestCase):
         assert img.shape == (4, 43724, 87447)
         assert isinstance(img, da.Array)
 
-    @gbdx_vcr.use_cassette('tests/unit/cassettes/test_ipe_image_default.yaml', filter_headers=['authorization'])
+    @gbdx_vcr.use_cassette('tests/unit/cassettes/test_ipe_image_default.yaml')
     def test_ipe_image_randwindow(self):
         idahoid = '8c3c4fc6-abcb-4f5f-bce6-d496c1a91676'
         img = self.gbdx.idaho_image(idahoid, bucket='rda-images-1')
@@ -95,7 +96,7 @@ class RdaImageTest(unittest.TestCase):
     #    rgb = aoi.rgb()
     #    assert isinstance(rgb, np.ndarray)
 
-    @gbdx_vcr.use_cassette('tests/unit/cassettes/test_ipe_image_ortho.yaml', filter_headers=['authorization'])
+    @gbdx_vcr.use_cassette('tests/unit/cassettes/test_ipe_image_ortho.yaml')
     @pytest.mark.skip(reason="warp dropped")
     def test_ipe_image_ortho(self):
         idahoid = '8c3c4fc6-abcb-4f5f-bce6-d496c1a91676'
@@ -106,7 +107,7 @@ class RdaImageTest(unittest.TestCase):
         ortho = aoi.warp()
         assert isinstance(ortho, DaskImage)
 
-    @gbdx_vcr.use_cassette('tests/unit/cassettes/test_materialize.yaml', filter_headers=['authorization'])
+    @gbdx_vcr.use_cassette('tests/unit/cassettes/test_materialize.yaml')
     @pytest.mark.skip(reason="400 error for some reason when getting templata geo metadata")
     def test_rda_materialize(self):
         # TODO: Fix this test
@@ -119,7 +120,7 @@ class RdaImageTest(unittest.TestCase):
         assert status['jobStatus'] == 'processing'
 
     # Test the payload creation method 
-    @gbdx_vcr.use_cassette('tests/unit/cassettes/test_materialize_payload.yaml', filter_headers=['authorization'])
+    @gbdx_vcr.use_cassette('tests/unit/cassettes/test_materialize_payload.yaml')
     def test_rda_materialize_payload(self):
         img = CatalogImage(WV02_CATID)
         pl = img.rda._create_materialize_payload('123', 'node', None, None, 'TILE_STREAM', sample='yes')
@@ -137,6 +138,3 @@ class RdaImageTest(unittest.TestCase):
         assert pl['imageReference']['nodeId'] == 'node'
         assert pl['imageReference']['templateId'] == '123'
         assert pl['imageReference']['parameters'] == {}
-        
-
-
