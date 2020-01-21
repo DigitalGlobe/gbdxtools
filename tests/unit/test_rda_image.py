@@ -7,7 +7,7 @@ Unit tests for the gbdxtools.Idaho class
 import unittest
 
 from helpers import gbdx_vcr, mockable_interface
-from helpers import WV02_CATID
+from helpers import WV02_CATID, WV04_CATID
 
 from gbdxtools import IdahoImage, CatalogImage
 from gbdxtools.images.meta import DaskImage
@@ -138,3 +138,12 @@ class RdaImageTest(unittest.TestCase):
         assert pl['imageReference']['nodeId'] == 'node'
         assert pl['imageReference']['templateId'] == '123'
         assert pl['imageReference']['parameters'] == {}
+
+
+    # Do not regenerate this test! This should be mocked instead.
+    # We accidentally recorded a cassette with 502s so we can use it.
+    @gbdx_vcr.use_cassette('tests/unit/cassettes/test_cat_image_wv4_502.yaml')
+    def test_rda_502(self):
+        with self.assertRaises(Exception) as context:
+            img = CatalogImage(WV04_CATID)
+        

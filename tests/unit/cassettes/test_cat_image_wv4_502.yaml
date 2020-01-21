@@ -1,0 +1,135 @@
+interactions:
+- request:
+    body: '{"type": "Polygon", "coordinates": [[[180.0, -90.0], [180.0, 90.0], [-180.0,
+      90.0], [-180.0, -90.0], [180.0, -90.0]]]}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '118'
+      User-Agent:
+      - sandman@digitalglobe.com
+    method: POST
+    uri: https://vector.geobigdata.io/insight-vector/api/index/query/vector-gbdx-alpha-catalog-v2-*/items?q=item_type%3AGBDXCatalogRecord+AND+%28attributes.catalogID.keyword%3A6060bafe-9c0a-4c7a-86c3-7bd10316ed61-inv+OR+id%3A6060bafe-9c0a-4c7a-86c3-7bd10316ed61-inv%29+AND+NOT+item_type%3ADigitalGlobeAcquisition&count=1
+  response:
+    body:
+      string: '[{"geometry":{"coordinates":[[[[-104.66445426,37.47114577],[-104.50768051,37.47104771],[-104.50779401,37.38141664],[-104.66433514,37.38112462],[-104.66445426,37.47114577]]]],"type":"MultiPolygon"},"type":"Feature","properties":{"ingest_source":"GBDX_INGEST_ALPHA","item_date":"2018-06-11T18:00:26.106Z","original_crs":"EPSG:4326","item_type":["GBDXCatalogRecord","IDAHOImage","DigitalGlobeProduct","WV04"],"name":null,"format":null,"ingest_date":"2018-06-12T01:34:09.719Z","attributes":{"profileName":"dg_1b","tilePartition":"0000","acquisitionDate":"2018-06-11T18:00:26.106Z","bucketName":"rda-images-1","numBands_int":4,"sunAzimuth_dbl":134.7,"nativeTileFileFormat":"TIF","colorInterpretation":"BGRN","cloudCover_int":9,"idahoImageId":"6c004e5c-fa57-4701-bb99-918cdde07245","satAzimuth_dbl":178.3,"satElevation_dbl":70.2,"pniirs_dbl":3.5,"numYTiles_int":28,"tileXOffset_int":0,"epsgCode":"4326","vendor":"DigitalGlobe","sunElevation_dbl":71.2,"platformName":null,"imageHeight_int":6937,"numXTiles_int":41,"sensorPlatformName":null,"sensorName":"4-band
+        (Blue, Green, Red, NIR) Multispectral","dataType":"UNSIGNED_SHORT","imageWidth_int":10308,"tileXSize_int":0,"tileYSize_int":0,"offNadirAngle_dbl":17.8,"tileBucketName":"rda-images-1","vendorName":"DigitalGlobe,
+        Inc.","version":"1.1","tileYOffset_int":0,"catalogID":"6060bafe-9c0a-4c7a-86c3-7bd10316ed61-inv","vendorDatasetIdentifier":"LV1B:I00000075525_01_P001:6060bafe-9c0a-4c7a-86c3-7bd10316ed61-inv:None","groundSampleDistanceMeters_dbl":1.392},"ingest_attributes":{"_rest_user":"idahosvc@digitalglobe.com","_rest_url":"http://vector.geobigdata.io/api/vectors/gbdx-alpha-catalog-v2-%257Bitem_date%253Ayyyy%257D"},"id":"6c004e5c-fa57-4701-bb99-918cdde07245","source":null,"text":""}}]'
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - origin, content-type, accept, authorization
+      Access-Control-Allow-Methods:
+      - GET, POST, PUT, DELETE, OPTIONS, HEAD
+      Access-Control-Allow-Origin:
+      - '*'
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - UTF-8
+      Content-Length:
+      - '1740'
+      Content-Type:
+      - application/json;charset=UTF-8
+      Date:
+      - Fri, 17 Jan 2020 21:55:36 GMT
+      Expires:
+      - '0'
+      Pragma:
+      - no-cache
+      Server:
+      - Apache-Coyote/1.1
+      - Weblogic 12.2.1.1
+      Strict-Transport-Security:
+      - max-age=604800 ; includeSubDomains
+      X-Content-Type-Options:
+      - nosniff
+      - nosniff
+      X-Frame-Options:
+      - DENY
+      - SAMEORIGIN
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      X-XSS-Protection:
+      - 1; mode=block
+      - 1; mode=block
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - sandman@digitalglobe.com
+    method: GET
+    uri: https://rda.geobigdata.io/v1/template/metadata/search?free-text=DigitalGlobeStripTemplate
+  response:
+    body:
+      string: '[{"isPublic":false,"keywords":["DigitalGlobeStripTemplate"],"sensors":["DigitalGlobeStripTemplate"],"keynodes":[{"id":"Format","description":"Format"}],"description":"DigitalGlobeStripTemplate
+        and Format","metadataAuthor":{"firstName":"Brett","familyName":"Cullen","email":"brett.cullen@digitalglobe.com"},"templateAuthor":{"firstName":"Brett","familyName":"Cullen","email":"brett.cullen@digitalglobe.com"},"datePublished":"2019-05-06T20:26:40.308Z","name":"DigitalGlobeStripTemplate","templateId":"d9b75d1acd350a65777e7533efb8a0eca02ca3d97572f0afb833c7f48bdf64a3","id":"8c1278beadd34612a531ba3d7fdd91ed"}]'
+    headers:
+      Access-Control-Allow-Headers:
+      - x-requested-with, X-Auth-Token, Content-Type, Authorization, range
+      Access-Control-Allow-Methods:
+      - GET, OPTIONS, HEAD, PUT, POST, DELETE
+      Access-Control-Allow-Origin:
+      - '*'
+      Access-Control-Max-Age:
+      - '3600'
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '606'
+      Content-Type:
+      - application/json
+      Date:
+      - Fri, 17 Jan 2020 21:55:59 GMT
+    status:
+      code: 200
+      message: ''
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - sandman@digitalglobe.com
+    method: GET
+    uri: https://rda.geobigdata.io/v1/template/d9b75d1acd350a65777e7533efb8a0eca02ca3d97572f0afb833c7f48bdf64a3
+  response:
+    body:
+      string: "<html>\r\n<head><title>502 Bad Gateway</title></head>\r\n<body bgcolor=\"white\">\r\n<center><h1>502
+        Bad Gateway</h1></center>\r\n</body>\r\n</html>\r\n"
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '138'
+      Content-Type:
+      - text/html
+      Date:
+      - Fri, 17 Jan 2020 21:56:28 GMT
+      Server:
+      - awselb/2.0
+    status:
+      code: 502
+      message: Bad Gateway
+version: 1
