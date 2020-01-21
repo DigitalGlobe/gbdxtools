@@ -23,7 +23,9 @@ The following snippet will look for all Worldview 3 footprints over Colorado:
 
     # Let's find all the Worldview 3 vector footprints in colorado
     colorado_aoi = "POLYGON((-108.89 40.87,-102.19 40.87,-102.19 37.03,-108.89 37.03,-108.89 40.87))"
-    results = gbdx.vectors.query(colorado_aoi, query="item_type:WV03")
+    results = gbdx.vectors.query(colorado_aoi, query="item_type:WV03_VNIR")
+
+By default this query will only retrieve 100 items.
 
 To save a geojson file that can be opened in your favorite GIS viewer:
 

@@ -35,7 +35,7 @@ To prevent massive amounts of data from being transferred, it is recommended to 
     aoi = img.aoi(bbox=[2.28, 48.87, 2.30, 48.89])
     print(aoi)
 
-The AOI is now a cropped portion of the larger catalog image, and still no data has been fetched. We use `Dask Arrays <http://dask.pydata.org/en/latest/array.html>`_ to coordinate the retrieval of data from the server. You can work with Dask arrays very similarly to NumPy arrays except that only when you need to access the underlying data will Dask fetch it in chunks from the server. The image bounding box can also be specified when instantiating the image by passing a ``bbox`` parameter. 
+The AOI is now a cropped portion of the larger catalog image, and still no data has been fetched. We use `Dask Arrays <https://docs.dask.org/en/latest/array.html>`_ to coordinate the retrieval of data from the server. You can work with Dask arrays very similarly to NumPy arrays except that only when you need to access the underlying data will Dask fetch it in chunks from the server. The image bounding box can also be specified when instantiating the image by passing a ``bbox`` parameter. 
 
 .. code-block:: python
 
@@ -72,13 +72,22 @@ By default, ``CatalogImage`` returns a multispectral image. ``CatalogImage`` can
     img = CatalogImage('104001001BA7C400', band_type='Pan', bbox=[2.28, 48.87, 2.30, 48.89])
     print(img.shape, img.bounds)
 
-To fetch 8-band pan-sharpened imagery you can pass the ``pansharpen=True|False`` flag:
+To fetch multi-band pan-sharpened imagery you can pass the ``pansharpen=True|False`` flag:
 
 .. code-block:: python
 
     from gbdxtools import CatalogImage
 
     img = CatalogImage('104001001BA7C400', pansharpen=True, bbox=[2.28, 48.87, 2.30, 48.89])
+    img.plot()
+
+To fetch imagery that has 8-bit Dynamic Range Adjustment applied, you can pass the ``dra=True|False`` flag:
+
+.. code-block:: python
+
+    from gbdxtools import CatalogImage
+
+    img = CatalogImage('104001001BA7C400', dra=True, bbox=[2.28, 48.87, 2.30, 48.89])
     img.plot()
 
 You can also specify projections in the image constructor:
@@ -123,8 +132,8 @@ The above code generates a geotiff on the filesystem with the name ``output.tif`
 
     from gbdxtools import CatalogImage
 
-    img = CatalogImage('104001001BA7C400', bbox=[2.28, 48.87, 2.30, 48.89], proj='EPSG:3857')
-    tif = img.geotiff(path="./output.tif", proj="EPSG:4326", bands=[4,2,1])
+    img = CatalogImage('104001001BA7C400', bbox=[2.28, 48.87, 2.30, 48.89])
+    tif = img.geotiff(path="./output.tif", bands=[4,2,1])
 
 This will create a geotiff on the the filesystem with only the bands `4,2,1` in that order. *Note*: bands refers to the channel array indices and are zero-indexed. So the retrieve only the first band you pass ``bands=[0]``.
 
@@ -132,10 +141,10 @@ This will create a geotiff on the the filesystem with only the bands `4,2,1` in 
 
     from gbdxtools import CatalogImage
 
-    img = CatalogImage('104001001BA7C400', bbox=[2.28, 48.87, 2.30, 48.87], proj='EPSG:3857')
+    img = CatalogImage('104001001BA7C400', bbox=[2.28, 48.87, 2.30, 48.87], dra=True)
     tif = img.geotiff(path="./output.tif", proj="EPSG:4326", spec='rgb')
 
-This will create a geotiff of the RGB bands, dynamically adjusted to an 8 bit range.
+This will create a geotiff of the sensor's RGB bands. The source image must be requested with ``dra=True`` so the imagery has the correct bit depth for RGB imagestest_wv_image_acomp.yaml.e
 
 Atmospheric Compensation
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -416,7 +425,7 @@ Options available for plotting:
 
         * ``histogram='equalize'``: performs histogram equalization on the image.
         * ``histogram='minmax'``: stretch the pixel range to the minimum and maximum input pixel values. Equivalent to ``stretch=[0,100]``.
-        * ``histogram='match'``: match the histogram to the Maps API imagery. Pass the additional keyword ``blm_source='browse'`` to match to the Browse Service (image thumbnail) instead.
+        * ``histogram='match'``: match the histogram to the images's Browse Service thumbnail. 
         * ``histogram='ignore'``: Skip dynamic range adjustment, in the event the image is already correctly balanced and the values are in the correct range.
 
     * ``stretch``: Stretch the histogram between two percentile values of the source image's dynamic range.

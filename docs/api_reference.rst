@@ -24,7 +24,6 @@ CatalogImages are also Dask arrays and support all of their properties and metho
     .. autocatmeta:: gbdxtools.images.mixins.geo.PlotMixin.ndvi
     .. autocatmeta:: gbdxtools.images.mixins.geo.PlotMixin.ndwi
     .. autocatmeta:: gbdxtools.images.mixins.geo.PlotMixin.plot
-    .. autocatmeta:: gbdxtools.rda.util.preview
     .. autocatmeta:: gbdxtools.images.meta.GeoDaskImage.pxbounds
     .. autocatmeta:: gbdxtools.images.meta.DaskImage.randwindow
     .. autocatmeta:: gbdxtools.images.meta.DaskImage.read
