@@ -5,10 +5,8 @@ team: GBDX Team
 language: python
 
 poc:
-  - name: Nate Ricklin
-    email: nricklin@digitalglobe.com
-  - name: Chris Helm
-    email: chelm@digitalglobe.com
+  - name: Marc Pfister
+    email: marc.pfister@digitalglobe.com
 
 documentation:
   - type: external

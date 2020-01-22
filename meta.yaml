@@ -1,14 +1,13 @@
 {% set name = "gbdxtools" %}
-{% set version = "0.17.0.b6" %}
+{% set version = "0.17.0rc1" %}
 
 package:
   name: "{{ name|lower }}"
   version: "{{ version }}"
 
 source:
-  path: ./
-  # url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  #sha256: 2a537f68c597b9f719414b8bbf56ce50ea2752fe0a4f8fdb6d98a36e4fb0bdb4
+  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+  sha256: 2cc579df74082141dc939b7c898594c8bed6628bd0ff32c9839814d26597b1cb
 
 build:
   number: 0
@@ -22,6 +21,7 @@ requirements:
     - pytest-runner
     - python
     - vcrpy
+    - moto
   run:
     - affine
     - boto3
@@ -62,6 +62,9 @@ test:
   requires:
     - pytest
     - vcrpy
+    - python
+    - pytest-runner
+    - moto
 
 about:
   home: https://github.com/DigitalGlobe/gbdxtools

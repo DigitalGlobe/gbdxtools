@@ -10,13 +10,8 @@ req_path = os.path.join(os.path.abspath(os.path.dirname(__file__)), "requirement
 with open(req_path) as f:
     requires = f.read().splitlines()
 
-# with open('README.md', **open_kwds) as f:
-#     readme = f.read()
-
-# long_description=readme,
-
 setup(name='gbdxtools',
-      version='0.17.0.b6',
+      version='0.17.0rc1',
       description='API wrapper and imagery access for the GBDX Platform',
       classifiers=[],
       keywords='',
