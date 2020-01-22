@@ -169,7 +169,7 @@ class RDAImage(GeoDaskImage):
             print('Fetching Image... {} {}'.format(self.ntiles, 'tiles' if self.ntiles > 1 else 'tile'))
         return super(RDAImage, self).read(bands=bands)
 
-    def materialize(self, node=None, bounds=None, callback=None, out_format='TILE_STREAM', **kwargs):
+    def materialize(self, node=None, bounds=None, callback=None, out_format='TIF', **kwargs):
         """
           Materializes images into gbdx user buckets in s3.
           Note: This method is only available to RDA based image classes. 

@@ -3,9 +3,15 @@ Raster Data Access
 
 The image classes in `gbdxtools` provide access to remote imagery hosted on GBDX. The access is deferred, meaning that images can be initialized and manipulated as NumPy arrays and the actual pixel data is only fetched from the server when compute is necessary.
 
-The available classes are ``CatalogImage``, ``IdahoImage``, ``WV02``, ``WV03_VNIR``, ``IkonosImage``, ``LandsatImage``, ``TmsImage`` and ``DemImage``. Each class behaves in very similar ways and extends the base-class ``RDAImage``. Imagery at Maxar is stored and processed by a service called `Raster Data Access`, or RDA. This service accepts processing graphs that are capable of running many different operations on an image before serving the pixels. For example, image orthorectification, mosaicking, and pansharpening are all possible via RDA. Users submit graphs to RDA and a new image ID is created. However, the new ID is only a virtual ID, meaning that image tiles are only processed once requested. 
+The available classes are ``CatalogImage``, ``IdahoImage``, ``WV02``, ``WV03_VNIR``, ``IkonosImage``, ``LandsatImage``, ``TmsImage`` and ``DemImage``. Each class behaves in very similar ways and extends the base-class ``RDAImage``. 
 
-**The image classes in `gbdxtools` attempt to hide the processing, graph creation and tile access from the end-user as much as possible.**
+Imagery at Maxar is stored and processed by a service called `Raster Data Access`, or RDA. This service accepts processing graphs that are capable of running many different operations on an image before serving the pixels. For example, image orthorectification, mosaicking, and pansharpening are all possible via RDA. Users submit graph templates to RDA that serve as a recipe for image creation. GBDXtools uses pre-configured templates to access imagery.
+
+RDA is a distributed processing service, with workers generating imagery in small tiles. GBDXtools pulls the image data tile by tile into an array using RDA's Streaming API. This is performed synchronously and RDA generates the imagery on demand.
+
+For large areas RDA can also materialize tiles in an asynchronous Batch mode, which writes the tiles to the user's customer S3 bucket. Letting RDA manage the resources to complete the known job makes the process faster and more efficient. 
+
+**The image classes in `gbdxtools` attempt to hide the processing, template management, and tile access from the end-user as much as possible.**
 
 
 Catalog Images
@@ -380,6 +386,16 @@ To subset the image using a boundary box in a coordinate system other than the d
     # geometric slicing does not need `from_proj`
     geom = box(*bbox_utm)
     img_utm = c_utm[geom]
+
+Materializing Imagery
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Instead of loading image data into a NumPy array GBDXtools image classes can also generate the imagery to the customer S3 bucket asynchronously. These two convenience methods are wrappers around the RDA API, see the API documentation at https://rda.geobigdata.io/docs/api.html for more information.
+
+.. automethod:: gbdxtools.images.rda_image.RDAImage.materialize
+.. automethod:: gbdxtools.images.rda_image.RDAImage.materialize_status
+
+This is the preferred method to generate large areas.
 
 
 Chip Generation
