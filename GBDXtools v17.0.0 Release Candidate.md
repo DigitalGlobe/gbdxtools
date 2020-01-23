@@ -6,7 +6,7 @@ GBDXtools v0.17 is coming soon with some major internal changes. Now is the time
 
 - pip: `pip install gbdxtools==0.17.0rc2`
 - pipenv: `pipenv install gbdxtools==0.17.0rc2`
-- conda: `conda install -c digitalglobe -c digitalglobe/label/rc gbdxtools=0.17.0rc2`
+- conda: `conda install -c conda-forge -c digitalglobe -c digitalglobe/label/rc gbdxtools=0.17.0rc2`
 - notebooks: https://staging-notebooks.geobigdata.io/ has v17.0.0rc1 for testing
 
 Windows dependencies have been collected here:
