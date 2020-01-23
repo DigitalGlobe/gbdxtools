@@ -3,39 +3,41 @@ Install Python
 --------------
 
 Open up a web browser and paste in this URL to download python:  
-```https://www.python.org/ftp/python/2.7.13/python-2.7.13.msi```
+```https://www.python.org/ftp/python/3.7.5/python-3.7.5-amd64.exe```
 
 Open up the download and make sure you check the box "add python.exe to path".
 
 Install Other Dependencies
 --------------
 
-Install gdal:
-
-Open windows powershell (not the cmd utility):
+Install numpy:
 
 ```
-curl -outf GDAL-2.1.3-cp27-cp27m-win32.whl https://github.com/DigitalGlobe/gbdxtools-windows-binaries/blob/master/GDAL-2.1.3-cp27-cp27m-win32.whl?raw=true
-pip install .\GDAL-2.1.3-cp27-cp27m-win32.whl
+pip install https://download.lfd.uci.edu/pythonlibs/q4hpdf1k/numpy-1.18.1+mkl-cp37-cp37m-win_amd64.whl
+```
+
+Install pycurl:
+
+```
+pip install https://github.com/DigitalGlobe/gbdxtools-windows-dependencies/raw/master/pycurl-7.43.0.4-cp37-cp37m-win_amd64.whl
 ```
 
 Install Shapely:
 
 ```
-curl -outf Shapely-1.5.17-cp27-cp27m-win32.whl https://github.com/DigitalGlobe/gbdxtools-windows-binaries/blob/master/Shapely-1.5.17-cp27-cp27m-win32.whl?raw=true
-pip install .\Shapely-1.5.17-cp27-cp27m-win32.whl
+pip install https://github.com/DigitalGlobe/gbdxtools-windows-dependencies/raw/master/Shapely-1.6.4.post2-cp37-cp37m-win_amd64.whl
 ```
 
-Install pyproj:
+Install scikit_image:
 
 ```
-curl -outf pyproj-1.9.5.1-cp27-cp27m-win32.whl https://github.com/DigitalGlobe/gbdxtools-windows-binaries/blob/master/pyproj-1.9.5.1-cp27-cp27m-win32.whl?raw=true
-pip install .\pyproj-1.9.5.1-cp27-cp27m-win32.whl
+pip install https://github.com/DigitalGlobe/gbdxtools-windows-dependencies/raw/master/scikit_image-0.16.2-cp37-cp37m-win_amd64.whl
 ```
 
-Install matplotlib:
+Install scipy:
+
 ```
-pip install matplotlib
+pip install https://github.com/DigitalGlobe/gbdxtools-windows-dependencies/raw/master/scipy-1.4.1-cp37-cp37m-win_amd64.whl
 ```
 
 Install gbdxtools
