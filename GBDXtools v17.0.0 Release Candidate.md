@@ -2,11 +2,16 @@
 
 
 
-GBDXtools v0.17 is coming soon with some major internal changes. Now is the time to test against critical systems. Because of internal changes older versions of GBDXtools will eventually be unable to fetch imagery. You can install and test v17 the following ways:
+GBDXtools v0.17 is coming soon with some major internal changes. Now is the time to test against critical systems. Because of internal changes older versions of GBDXtools will eventually be unable to fetch imagery. You can install and test the v0.17 release candidate the following ways:
 
-- `pip install gbdxtools==0.17.0rc1`
-- `conda install -c digitalglobe -c digitalglobe/label/rc gbdxtools=0.17.0rc1`
-- https://staging-notebooks.geobigdata.io/ has v17.0.0rc1
+- pip: `pip install gbdxtools==0.17.0rc1`
+- pipenv: `pipenv install gbdxtools==0.17.0rc1`
+- conda: `conda install -c digitalglobe -c digitalglobe/label/rc gbdxtools=0.17.0rc1`
+- notebooks: https://staging-notebooks.geobigdata.io/ has v17.0.0rc1 for testing
+
+Windows dependencies have been collected here:
+
+- https://github.com/DigitalGlobe/gbdxtools-windows-dependencies
 
 
 
@@ -24,12 +29,13 @@ GBDXtools v0.17 is coming soon with some major internal changes. Now is the time
 - Removed dependencies to full Dask and SciKit Image packages
 - Notebooks will continue to install Pandas (part of Dask) and SciKit Image
 
-#### Graph API deprecation
+#### Graph API sunset
 
-- Internally older versions of GBDXtools used the RDA Graph API to access imagery
+- Older versions of GBDXtools use the deprecated RDA Graph API to access imagery
 - The Graph API has been deprecated so GBDXtools now uses the Template API to access imagery
 - Any code that uses the `rda = RDA()` pattern to build or modify graphs will need to use templates
-- Older versions of GBDXtools will function until the Graph API is turned off
+- Older versions of GBDXtools will function until the Graph API is turned off in April 2020
+- **You will need to migrate to v0.17.x versions to access imagery after April 2020**
 
 #### `Preview()` removed
 
@@ -46,7 +52,7 @@ GBDXtools v0.17 is coming soon with some major internal changes. Now is the time
 * `spec=rgb` used to enable DRA on an image object without DRA
 * Going forward, the image object will need to be initialized with DRA to write "RGB" geotiffs
 * Geotiffs using just RGB _bands_ are possible by passing the RGB bands with the `bands` kwarg
-* Consider using the GDAL RDA Driver instead for small areas, and RDA Materialization for big areas
+* Consider using the GDAL RDA Driver instead for small areas, and RDA Materialization for large areas
 
 #### Base Layer Matching changes
 
@@ -55,12 +61,12 @@ GBDXtools v0.17 is coming soon with some major internal changes. Now is the time
 
 #### TMSImage is now bring-your-own-tiles
 
-* TMSImage also depended on Maps API imagery which was deprecated
+* TMSImage also depended on deprecated Maps API imagery 
 * The class now requires the user specify a TMS service to use
 
 #### PyProj updates
 
-* PyProj is updated, which may cause warnings in code using older classes
+* PyProj has seen major updates, which may cause warnings in code using older classes
 * You can now use `CRS(4326)` instead of `Proj('init=EPSG:4326')`
 
 #### More checks and better error messages
