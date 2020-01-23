@@ -1,12 +1,12 @@
-# GBDXtools v17.0.0 Release Candidate
+# GBDXtools v17.0.x Release Candidate
 
 
 
 GBDXtools v0.17 is coming soon with some major internal changes. Now is the time to test against critical systems. Because of internal changes older versions of GBDXtools will eventually be unable to fetch imagery. You can install and test the v0.17 release candidate the following ways:
 
-- pip: `pip install gbdxtools==0.17.0rc1`
-- pipenv: `pipenv install gbdxtools==0.17.0rc1`
-- conda: `conda install -c digitalglobe -c digitalglobe/label/rc gbdxtools=0.17.0rc1`
+- pip: `pip install gbdxtools==0.17.0rc2`
+- pipenv: `pipenv install gbdxtools==0.17.0rc2`
+- conda: `conda install -c digitalglobe -c digitalglobe/label/rc gbdxtools=0.17.0rc2`
 - notebooks: https://staging-notebooks.geobigdata.io/ has v17.0.0rc1 for testing
 
 Windows dependencies have been collected here:

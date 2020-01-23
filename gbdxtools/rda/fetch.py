@@ -17,6 +17,7 @@ import imageio
 import tifffile
 
 import pycurl
+import certifi
 import numpy as np
 
 #import warnings
@@ -45,6 +46,8 @@ def load_url(url, token, shape=(8, 256, 256)):
         _curl = _curl_pool[thread_id]
         _curl.setopt(_curl.URL, url)
         _curl.setopt(pycurl.NOSIGNAL, 1)
+        # for Windows local certificate errors
+        _curl.setopt(pycurl.CAINFO, certifi.where())
         _curl.setopt(pycurl.HTTPHEADER, ['Authorization: Bearer {}'.format(token)])
         with NamedTemporaryFile(prefix="gbdxtools", suffix=ext, delete=False) as temp: # TODO: apply correct file extension
             _curl.setopt(_curl.WRITEDATA, temp.file)
