@@ -15,16 +15,28 @@ Verify that documentation is building properly: check ```https://readthedocs.org
 3. Push to pypi
 ----------
 
+(You may need to `pip install twine anaconda-client`)
+
 ```
-python setup.py sdist upload -r pypi
+rm -rf dist
+rm -rf egginfo
+python setup.py sdist 
+twine upload dist/gbdx...
 ```
 
-4. Build conda packages
+4. Build Conda packages
 -------------
+
+Update the SHA in meta.yaml, using value from PyPi or use `openssl dgst -sha256 dist/gbdx...`
+
+Clean up old builds:
+```
+conda build purge
+```
 
 Build the package
 ```
-conda build -c digitalglobe -c conda-forge .
+conda build -c digitalglobe -c conda-forge --no-include-recipe .
 ```
 
 Upload the package for the platform you just built:
@@ -32,9 +44,11 @@ Upload the package for the platform you just built:
 anaconda upload -u digitalglobe <filename>
 ```
 
-If the above build fails due to missing dependencies, you may need to make sure that the dependencies are in fact available in conda.  If they are not, push them up to the digitalglobe channel.
 
+To upload a package for beta testing:
+```
+anaconda upload -u digitalglobe --label beta <filename>
+```
 
-5. Repeat for other python versions
----------
+If the above build fails due to missing dependencies, you may need to make sure that the dependencies are in fact available in Conda.  If they are not, push them up to the digitalglobe channel.
 

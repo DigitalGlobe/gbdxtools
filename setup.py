@@ -11,7 +11,7 @@ with open(req_path) as f:
     requires = f.read().splitlines()
 
 setup(name='gbdxtools',
-      version='0.17.0rc1',
+      version='0.17.0',
       description='API wrapper and imagery access for the GBDX Platform',
       classifiers=[],
       keywords='',

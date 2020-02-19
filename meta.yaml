@@ -1,5 +1,5 @@
 {% set name = "gbdxtools" %}
-{% set version = "0.17.0rc1" %}
+{% set version = "0.17.0" %}
 
 package:
   name: "{{ name|lower }}"
@@ -7,7 +7,7 @@ package:
 
 source:
   url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: 2cc579df74082141dc939b7c898594c8bed6628bd0ff32c9839814d26597b1cb
+  sha256: 26b1f7e0ccd6ae52868cf350587a8f7fdf883ab1acf8decb11cefe241f4e04ec 
 
 build:
   number: 0
@@ -29,7 +29,7 @@ requirements:
     - cachetools >=2.0.0
     - cloudpickle
     - configparser
-    - dask-core >=1.1.0 
+    - dask-core >=2.0.0 
     - ephem
     - future >=0.15.2
     - gbdx-auth >=0.2.6

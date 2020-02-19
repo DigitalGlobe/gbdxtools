@@ -13,7 +13,7 @@ tifffile
 affine
 
 # dask reqs
-dask[array]>=1.1.0
+dask[array]>=2.0.0
 numpy>=1.14
 
 # compatibilty stuff

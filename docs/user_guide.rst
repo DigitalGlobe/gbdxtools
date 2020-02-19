@@ -47,7 +47,7 @@ These are various tips to follow if your installation fails.
 
 **Dependencies**
 
-As of GBDXtools version 0.11.3 libcurl and GDAL (>=2.1.0) are required. To install these packages use::
+As of GBDXtools version 0.11.3 libcurl and GDAL (>=2.1.0) are required. If installing from source, install these packages using::
 
   # Ubuntu users:
   sudo add-apt-repository -y ppa:ubuntugis/ubuntugis-unstable
@@ -57,14 +57,20 @@ As of GBDXtools version 0.11.3 libcurl and GDAL (>=2.1.0) are required. To insta
   # Mac Users:
   xcode-select --install # to install libcurl
   brew install https://raw.githubusercontent.com/OSGeo/homebrew-osgeo4mac/master/Formula/gdal2.rb
+  
+Conda will usually manage the dependencies correctly.
 
 **Windows Users**
 
-Conda installation should work fine on windows for python version 2.7.  If you are using python 3, you can install with pip, first install some dependencies with conda::
+Conda installation should work fine on Windows:
 
-  conda install -c conda-forge scipy
-  conda install -c conda-forge scikit-image
+  conda install -c conda-forge -c digitalglobe gbdxtools
+
+Pip may not get all dependencies correct but should work:
+
   pip install gbdxtools
+
+Wheels for GBDXtools dependencies are collected here: https://github.com/DigitalGlobe/gbdxtools-windows-dependencies
 
 **pip**
 
@@ -140,19 +146,13 @@ Make sure that conda is in your path. Then create a conda environment::
    
 Activate the environment::
 
-   source activate env
+   conda activate env
 
 Upgrade pip (if required)::
 
    pip install pip --upgrade
 
 Install `gbdxtools`::
-
-   conda install -c digitalglobe  gbdxtools
-
-**Python versions and conda-forge**
-
-A known issue exists, in certain environments, where conda will downgrade python from 3.x to 2.7x when installing `gbdxtools`. If conda does not keep your python version intact when installing `gbdxtools`, you need to::
 
    conda install -y gbdxtools -c digitalglobe -c conda-forge
 
