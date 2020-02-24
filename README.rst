@@ -26,7 +26,7 @@ In order to use GBDXtools, you need GBDX credentials. Email GBDX-Support@maxar.c
 
 Documentation is hosted here: http://gbdxtools.readthedocs.org/en/latest/. 
 
-Currently, the following Python versions are supported: 3.6, 3.7 
+Currently, the following Python versions are supported: 3.6, 3.7, 3.8 
 
 See the license file for license rights and limitations (MIT).
 
