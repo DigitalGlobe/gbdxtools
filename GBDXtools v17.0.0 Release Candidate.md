@@ -2,18 +2,23 @@
 
 
 
-GBDXtools v0.17 is coming soon with some major internal changes. Now is the time to test against critical systems. Because of internal changes older versions of GBDXtools will eventually be unable to fetch imagery. You can install and test the v0.17 release candidate the following ways:
+GBDXtools v0.17.0 includes some major internal changes. Now is the time to test against critical systems. Because of internal changes older versions of GBDXtools will be unable to fetch imagery after April 27, 2020. You can install and test the v0.17.0 release the following ways:
 
-- pip: `pip install gbdxtools==0.17.0rc2`
-- pipenv: `pipenv install gbdxtools==0.17.0rc2`
-- conda: `conda install -c conda-forge -c digitalglobe -c digitalglobe/label/rc gbdxtools=0.17.0rc2`
-- notebooks: https://staging-notebooks.geobigdata.io/ has v17.0.0rc1 for testing
+- pip: `pip install gbdxtools`
+- pipenv: `pipenv install gbdxtools`
+- conda: `conda install -c conda-forge -c digitalglobe gbdxtools`
 
 Windows dependencies have been collected here:
 
 - https://github.com/DigitalGlobe/gbdxtools-windows-dependencies
 
 
+GBDX Notebooks users have the following options for testing:
+
+- https://staging-notebooks.geobigdata.io/ has v17.0.0rc1 for testing
+- This notebook shows how to upgrade the current Jupyter environment to 0.17.0: https://notebooks.geobigdata.io/hub/notebooks/z8rpwyl4y5kk4t818q03?tab=code. 
+
+The default Notebook environment will be automatically upgraded for all users the week of April 20th.
 
 ### Important Changes:
 
