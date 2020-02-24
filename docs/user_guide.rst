@@ -44,7 +44,7 @@ Pip can also be used::
 Upgrading
 ---------------
 
-In the period between 0.16.7 and 0.17.0 releases there have been significant changes to GBDXtools, Proj, and Dask. We highly recommend installing GBDXtools 0.17.0 into a new environment. To upgrade an existing environment the best practice is to uninstall the core dependencies first. In Conda we suggest:
+In the period between 0.16.7 and 0.17.0 releases there have been significant changes to GBDXtools, Proj, GDAL, and Dask. We highly recommend installing GBDXtools 0.17.0 into a new, clean environment. To upgrade an existing environment the best practice is to uninstall the core dependencies first. In Conda we suggest:
 
    conda remove -y dask dask-core pyproj proj4 pyveda rio-hist gbdxtools rasterio gdal
 
