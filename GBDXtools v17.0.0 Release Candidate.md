@@ -1,4 +1,4 @@
-# GBDXtools v17.0.x Release Candidate
+# GBDXtools v17.0.x Release
 
 
 
