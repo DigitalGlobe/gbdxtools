@@ -1,2 +1,22 @@
--r requirements.txt
+six>=1.10.0
+future>=0.15.2
+requests>=2.12.1
+boto3
+gbdx-auth>=0.2.4
+pytest
+pytest-runner
+vcrpy
 mock
+bumpversion
+shapely
+ephem
+toolz
+cloudpickle
+dask >= 0.16.0
+numpy < 1.16.0
+requests_futures
+configparser
+mercantile>=0.10.0
+scikit-image
+cachetools >=2.0.0
+affine
