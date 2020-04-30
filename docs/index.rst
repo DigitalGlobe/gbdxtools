@@ -36,7 +36,7 @@ GBDXTools extends the access to these services with additional functionality for
 
 * Image classes that wrap all of the API calls, manage the geospatial metadata, and return NumPy arrays. These classes are based on `Dask <http://dask.pydata.org/>`_ arrays which defer the server calls until the image data is needed. 
 
-* Simple visualization and analysis methods such as one-line plotting (using Matplotlib).
+* Simple visualization and analysis methods such as one-line plotting with Matplotlib (not included).
 
 
 CLI RdaTools
