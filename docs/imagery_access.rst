@@ -68,6 +68,8 @@ To fetch data from the server for the purpose of display or analysis ``CatalogIm
     # or call read directly to get a NumPy array:
     nd_array = img.read()
     print(nd_array.shape)
+    
+.. note:: Plotting images requires MatPlotlib to be installed.
 
 By default, ``CatalogImage`` returns a multispectral image. ``CatalogImage`` can be configured to return the panchromatic using the ``band_type=MS|Pan|pan`` parameter:
 
@@ -419,7 +421,7 @@ These two methods generate windows in random locations and are convenient for ge
 Visualizing Imagery
 ---------------------
 
-If run in iPython or Jupyter Notebooks, `gbdxtools` can show images using the MatPlotLib library. The most basic example is:
+`gbdxtools` can show images using the MatPlotLib library (if installed, it is included in Jupyter and IPython). The most basic example is:
 
 .. code-block:: python
 
