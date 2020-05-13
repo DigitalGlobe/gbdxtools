@@ -1,5 +1,5 @@
 {% set name = "gbdxtools" %}
-{% set version = "0.17.0" %}
+{% set version = "0.17.0.post1" %}
 
 package:
   name: "{{ name|lower }}"
@@ -7,7 +7,7 @@ package:
 
 source:
   url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: cc7ea167b1de29ee310c505143589de0697296c680ae8eda49a2b79afd9ad0f1
+  sha256: 449f727f43d2eb9dddf8472f7b39265073e0510c5a48b01615fc84d67816f0d4
 
 build:
   number: 0
