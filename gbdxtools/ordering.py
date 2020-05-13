@@ -125,7 +125,7 @@ class Ordering(object):
         '''
 
         locations = self.location(cat_id)
-        return state == 'delivered'
+        return locations['acquisitions'][0]['state'] == 'delivered'
 
     def location(self, image_catalog_ids, batch_size=100):
         def _process_single_batch(url_, ids, results_dict):
