@@ -15,7 +15,7 @@ IDAHO_DEFAULT_OPTIONS = {
     "proj": "EPSG:4326",
     "gsd": None,
     "acomp": False,
-    "bucket": 'idaho-images',
+    "bucket": 'rda-images-1',
     "correctionType": "TOAREFLECTANCE",
     "bands": "MS",
     "spec": None
