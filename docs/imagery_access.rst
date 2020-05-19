@@ -468,8 +468,9 @@ Use the ordering member of the Interface to order imagery and check the status o
 To order the image with DG factory catalog ID 10400100143FC900:
 
 .. code-block:: pycon
-
-   >>> order_id = gbdx.ordering.order('10400100143FC900')
+   >>> from gbdxtools.ordering import Ordering
+   >>> manager = Ordering()
+   >>> order_id = manager.order('10400100143FC900')
    >>> print(order_id)
    04aa8df5-8ac8-4b86-8b58-aa55d7353987
 
@@ -478,18 +479,18 @@ The ordered image sits in a directory on S3. The order status and output image l
 
 .. code-block:: pycon
 
-   >>> gbdx.ordering.status(order_id)
+   >>> manager.status(order_id)
    >>> [{u'acquisition_id': u'10400100143FC900',
          u'location': u's3://receiving-dgcs-tdgplatform-com/055093431010_01_003',
          u'state': u'delivered'}]
 
-Its possible to determine if an image has already been ordered by calling the `CatalogImage.is_ordered(CatalogID)` method:
+Its possible to determine if an image has already been ordered by calling the `CatalogImage.is_available(CatalogID)` method:
 
 .. code-block:: python
 
     from gbdxtools import CatalogImage
 
-    ordered = CatalogImage.is_ordered('104001001BA7C400')
+    ordered = CatalogImage.is_available('104001001BA7C400')
     print(ordered)
 
 
