@@ -16,6 +16,8 @@ except ImportError:
 import imageio
 import tifffile
 
+from io import BytesIO
+
 import pycurl
 import certifi
 import numpy as np
@@ -34,10 +36,42 @@ except NameError:
     xrange = range
 
 MAX_RETRIES = 5
-_curl_pool = defaultdict(pycurl.Curl)
+#_curl_pool = defaultdict(pycurl.Curl)
+
+
+from gbdxtools.auth import Auth
+conn = Auth().gbdx_connection
 
 @lru_cache(maxsize=128)
 def load_url(url, token, shape=(8, 256, 256)):
+    success = False
+    for i in xrange(MAX_RETRIES):
+        try:
+            r = conn.get(url)
+            r.raise_for_status()
+            memfile = BytesIO(r.content)
+            if r.headers['Content-Type'] == 'image/tiff':
+                arr = tifffile.imread(memfile)
+            else:
+                arr = imageio.imread(memfile)
+            if len(arr.shape) == 3:
+                arr = np.rollaxis(arr, 2, 0)
+            else:
+                arr = np.expand_dims(arr, axis=0)
+            success = True
+            return arr
+        except Exception as e:
+            sleep(2**i)
+
+    if success is False:
+        raise TypeError("Unable to download tile {} in {} retries. \n\n Last fetch error: {}".format(url, MAX_RETRIES, e))
+    return arr
+
+breakpoint()
+
+
+@lru_cache(maxsize=128)
+def load_url_curl(url, token, shape=(8, 256, 256)):
     """ Loads a geotiff url inside a thread and returns as an ndarray """
     _, ext = os.path.splitext(urlparse(url).path)
     success = False
