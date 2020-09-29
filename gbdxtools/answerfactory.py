@@ -4,8 +4,6 @@ AnswerFactory Project and Recipe interfaces
 Contact: nricklin@digitalglobe.com
 Contact: mtrotter@digitalglobe.com
 """
-from __future__ import absolute_import
-from builtins import object
 
 import json
 

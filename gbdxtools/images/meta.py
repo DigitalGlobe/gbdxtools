@@ -1,17 +1,12 @@
 import os
 import random
 from functools import partial
-from itertools import chain, product
+from itertools import product
 from collections import namedtuple
-try:
-    from collections.abc import Container
-except ImportError:
-    from collections import Container
-import warnings
-import math
+from collections.abc import Container
 
 from gbdxtools.rda.io import to_geotiff
-from gbdxtools.rda.util import RatPolyTransform, AffineTransform, pad_safe_positive, pad_safe_negative, RDA_TO_DTYPE, preview, get_proj
+from gbdxtools.rda.util import RatPolyTransform, AffineTransform, pad_safe_positive, pad_safe_negative, RDA_TO_DTYPE, get_proj
 from gbdxtools.images.mixins import PlotMixin, BandMethodsTemplate, Deprecations
 
 from shapely import ops, wkt
@@ -20,19 +15,12 @@ from shapely.geometry.base import BaseGeometry
 
 import pyproj
 import dask
-from dask.highlevelgraph import HighLevelGraph
 from dask import optimization
 from dask.delayed import delayed
 import dask.array as da
-from dask.base import is_dask_collection
 import numpy as np
 
 from affine import Affine
-
-try:
-    xrange
-except NameError:
-    xrange = range
 
 threads = int(os.environ.get('GBDX_THREADS', 8))
 threaded_get = partial(dask.threaded.get, num_workers=threads)
@@ -117,7 +105,7 @@ class DaskImage(da.Array):
             while True:
                 yield self.randwindow(window_shape)
         else:
-            for i in xrange(count):
+            for i in range(count):
                 yield self.randwindow(window_shape)
 
     def window_at(self, geom, window_shape):
@@ -314,13 +302,6 @@ class GeoDaskImage(DaskImage, Container, PlotMixin, BandMethodsTemplate, Depreca
         if 'proj' not in kwargs:
             kwargs['proj'] = self.proj
         return to_geotiff(self, **kwargs)
-
-    def preview(self, **kwargs):
-        raise NotImplementedError('Deprecated due to RDA Graph API deprecation')
-        # this could be replaced with a slippy map that uses the browse thumbnails
-
-    def warp(self, *args, **kwargs):
-        raise NotImplementedError('Warp has been broken for 2 years, dropping support')
 
     def _parse_geoms(self, **kwargs):
         """ Finds supported geometry types, parses them and returns the bbox """

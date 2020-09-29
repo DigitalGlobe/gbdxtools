@@ -1,5 +1,5 @@
 {% set name = "gbdxtools" %}
-{% set version = "0.17.0.post1" %}
+{% set version = "0.17.1" %}
 
 package:
   name: "{{ name|lower }}"
@@ -23,31 +23,22 @@ requirements:
     - vcrpy
     - moto
   run:
-    - affine
-    - boto3
-    - bumpversion
-    - cachetools >=2.0.0
-    - cloudpickle
-    - configparser
-    - dask-core >=2.0.0 
-    - ephem
-    - future >=0.15.2
-    - gbdx-auth >=0.2.6
-    - mercantile >=0.10.0
-    - mock
-    - numpy >=1.14
-    - pycurl
-    - pyproj
-    - pytest
-    - pytest-runner
     - python
+    - affine
     - requests >=2.12.1
-    - requests-futures
     - imageio
     - tifffile
     - shapely
-    - six >=1.10.0
-    - toolz
+    - boto3
+    - dask-core >=2.0.0 
+    - numpy >=1.14
+    - ephem
+    - gbdx-auth >=0.2.6
+    - mercantile >=0.10.0
+    - mock
+    - pyproj
+    - pytest
+    - pytest-runner
     - vcrpy
 
 test:

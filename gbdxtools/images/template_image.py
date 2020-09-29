@@ -1,26 +1,16 @@
 """
 GBDX Template Image Interface.
 
-Contact: chris.helm@digitalglobe.com
+Contact: marc.pfister@maxar.com
 """
 from gbdxtools.images.rda_image import RDAImage, GraphMeta
 from gbdxtools.rda.graph import get_rda_graph_template, get_rda_template_metadata, VIRTUAL_RDA_URL, get_template_stats, \
     create_rda_template, materialize_status, materialize_template
 from gbdxtools.auth import Auth
-from gbdxtools.rda.util import deprecation
 from gbdxtools.rda.fetch import load_url
 from gbdxtools.rda.util import RDA_TO_DTYPE
 from shapely.geometry import box
-
-try:
-    from urllib import urlencode
-except ImportError:
-    from urllib.parse import urlencode
-
-try:
-    xrange
-except NameError:
-    xrange = range
+from urllib.parse import urlencode
 
 
 class TemplateMeta(GraphMeta):
@@ -42,18 +32,9 @@ class TemplateMeta(GraphMeta):
         if self._rda_meta is not None:
             return self._rda_meta
         if self._interface is not None:
-            self._rda_meta = get_rda_template_metadata(self._interface.gbdx_futures_session, self._template_id,
+            self._rda_meta = get_rda_template_metadata(self._interface.gbdx_connection, self._template_id,
                                                        **self._params)
         return self._rda_meta
-
-    @property
-    def display_stats(self):
-        deprecation(
-            'The use of display_stats has been deprecated. For scaling imagery use histograms in the image metdata.')
-        assert self.graph() is not None
-        if self._rda_stats is None:
-            self._rda_stats = get_template_stats(self._interface.gbdx_futures_session, self._template_id, **self._params)
-        return self._rda_stats
 
     def graph(self):
         if self._graph is None:
@@ -62,24 +43,19 @@ class TemplateMeta(GraphMeta):
             self._template_id = template.get("id")
         return self._graph
 
-    def _rda_tile(self, x, y, rda_id, **kwargs):
-        qs = urlencode(kwargs)
-        return "{}/template/{}/tile/{}/{}?{}".format(VIRTUAL_RDA_URL, rda_id, x, y, qs)
-
     def _collect_urls(self):
         img_md = self.metadata["image"]
         rda_id = self._template_id
-        return {(y, x): self._rda_tile(x, y, rda_id, **self._params)
-                for y in xrange(img_md['minTileY'], img_md["maxTileY"] + 1)
-                for x in xrange(img_md['minTileX'], img_md["maxTileX"] + 1)}
+        qs = urlencode(self._params)
+        return {(y, x): f"{VIRTUAL_RDA_URL}/template/{rda_id}/tile/{x}/{y}?{qs}"
+                for y in range(img_md['minTileY'], img_md["maxTileY"] + 1)
+                for x in range(img_md['minTileX'], img_md["maxTileX"] + 1)}
 
     @property
     def dask(self):
-        token = self._interface.gbdx_connection.access_token
-        _chunks = self.chunks
         _name = self.name
         img_md = self.metadata["image"]
-        return {(_name, 0, y - img_md['minTileY'], x - img_md['minTileX']): (load_url, url, token, _chunks)
+        return {(_name, 0, y - img_md['minTileY'], x - img_md['minTileX']): (load_url, url)
                 for (y, x), url in self._collect_urls().items()}
 
     @property
@@ -127,7 +103,7 @@ class TemplateMeta(GraphMeta):
                 (img_md["maxTileX"] - img_md["minTileX"] + 1) * img_md["tileXSize"])
 
     def _materialize(self, node=None, bounds=None, callback=None, out_format='TIF', **kwargs):
-        conn = self._interface.gbdx_futures_session
+        conn = self._interface.gbdx_connection
         graph = self.graph()
         graph.pop("id")
         template_id = create_rda_template(conn, graph)
@@ -137,7 +113,7 @@ class TemplateMeta(GraphMeta):
         return materialize_template(conn, payload)
 
     def _materialize_status(self, job_id):
-        return materialize_status(self._interface.gbdx_futures_session, job_id)
+        return materialize_status(self._interface.gbdx_connection, job_id)
 
     def _create_materialize_payload(self, templateId, node, bounds, callback, out_format, **kwargs):
         payload = {

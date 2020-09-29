@@ -155,11 +155,6 @@ class RDAImage(GeoDaskImage):
         return self.rda.metadata
 
     @property
-    def display_stats(self):
-        deprecation('The use of display_stats has been deprecated. For scaling imagery use histograms in the image metdata.')
-        return self.rda.display_stats
-
-    @property
     def ntiles(self):
         size = float(self.rda.metadata['image']['tileXSize'])
         return math.ceil((float(self.shape[-1]) / size)) * math.ceil(float(self.shape[1]) / size)

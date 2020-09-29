@@ -2,7 +2,6 @@ from gbdxtools.rda.interface import RDA
 from gbdxtools.images.exceptions import *
 
 import collections
-import six
 
 rda = RDA()
 
@@ -100,8 +99,7 @@ class RDADriverInterface(object):
     def payload(self):
         raise NotImplementedError
 
-@six.add_metaclass(OptionParserFactory)
-class RDADaskImageDriver(RDADriverInterface):
+class RDADaskImageDriver(RDADriverInterface, metaclass=OptionParserFactory):
     __default_options__ = RDA_DEFAULT_OPTIONS
     __image_option_defaults__ = {}
     image_option_support = []

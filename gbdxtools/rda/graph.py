@@ -1,26 +1,17 @@
 import os
 import json
 import time
-from concurrent.futures import Future
 from gbdxtools.rda.error import NotFound, BadRequest
 import warnings
-try:
-    from urllib import urlencode
-except ImportError:
-    from urllib.parse import urlencode
+from urllib.parse import urlencode
 
 VIRTUAL_RDA_URL = os.environ.get("VIRTUAL_RDA_URL", "https://rda.geobigdata.io/v1")
 
-def resolve_if_future(future):
-    if isinstance(future, Future):
-        return future.result()
-    else:
-        return future
 
 def req_with_retries(conn, url, retries=5):
     for i in range(retries):
         try:
-            res = resolve_if_future(conn.get(url))
+            res = conn.get(url)
             if res.status_code != 502:
                 return res
             elif res.status_code == 501:
@@ -35,7 +26,6 @@ def get_graph_stats(conn, graph_id, node_id):
     warnings.warn('Graph API is deprecated')
     url = "{}/metadata/{}/{}/display_stats.json".format(VIRTUAL_RDA_URL, graph_id, node_id)
     req = req_with_retries(conn, url)
-    #req = resolve_if_future(conn.get(url))
     if req.status_code == 200:
         return req.json()
     else:
@@ -45,7 +35,6 @@ def get_template_stats(conn, template_id, **kwargs):
     qs = urlencode(kwargs)
     url = "{}/template/{}/display_stats.json?{}".format(VIRTUAL_RDA_URL, template_id, qs)
     req = req_with_retries(conn, url)
-    #req = resolve_if_future(conn.get(url))
     if req.status_code == 200:
         return req.json()
     else:
@@ -54,7 +43,6 @@ def get_template_stats(conn, template_id, **kwargs):
 def get_rda_graph(conn, graph_id):
     warnings.warn('Graph API is deprecated')
     url = "{}/graph/{}".format(VIRTUAL_RDA_URL, graph_id)
-    #req = resolve_if_future(conn.get(url))
     req = req_with_retries(conn, url)
     if req.status_code == 200:
         return req.json()
@@ -69,7 +57,6 @@ def get_rda_graph_template(conn, template_id):
     except:
         pass
     url = "{}/template/{}".format(VIRTUAL_RDA_URL, template_id)
-    #req = resolve_if_future(conn.get(url))
     req = req_with_retries(conn, url)
     if req.status_code == 200:
         return req.json()
@@ -85,7 +72,6 @@ def _search_for_rda_template(conn, template_name):
     :return:
     """
     url = "{}/template/metadata/search?free-text={}".format(VIRTUAL_RDA_URL, template_name)
-    #req = resolve_if_future(conn.get(url))
     req = req_with_retries(conn, url)
     if req.status_code == 200:
         request_json = req.json()
@@ -104,8 +90,8 @@ def _search_for_rda_template(conn, template_name):
 def register_rda_graph(conn, rda_graph):
     warnings.warn('Graph API is deprecated')
     url = "{}/graph".format(VIRTUAL_RDA_URL)
-    res = resolve_if_future(conn.post(url, json.dumps(rda_graph, sort_keys=True),
-                                      headers={'Content-Type': 'application/json'}))
+    headers={'Content-Type': 'application/json'}
+    res = conn.post(url, json.dumps(rda_graph, sort_keys=True), headers=headers)
     if res.status_code == 200:
         return res.text
     else:

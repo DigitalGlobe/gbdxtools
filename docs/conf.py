@@ -29,7 +29,7 @@ class Mock(MagicMock):
     def __getattr__(cls, name):
             return Mock()
 
-MOCK_MODULES = ['pycurl', 'pyproj', 'gbdx_auth', 'future', 'boto3']
+MOCK_MODULES = ['pyproj', 'gbdx_auth', 'boto3']
 sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
 
 #                'boto',

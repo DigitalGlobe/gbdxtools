@@ -1,28 +1,12 @@
-import os
 import uuid
-import threading
-from collections import defaultdict
-from itertools import chain
-from functools import partial
-from tempfile import NamedTemporaryFile
-try:
-    from urlparse import urlparse
-except ImportError:
-    from urllib.parse import urlparse
-
-try:
-    from functools import lru_cache # python 3
-except ImportError:
-    from cachetools.func import lru_cache
+from io import BytesIO
+from functools import lru_cache
 
 import numpy as np
-from affine import Affine
-try:
-    from scipy.misc import imread
-except ImportError:
-    from imageio import imread
-
 import mercantile
+import requests
+from affine import Affine
+from imageio import imread
 
 from gbdxtools.images.meta import GeoDaskImage, DaskMeta
 from gbdxtools.rda.util import AffineTransform
@@ -32,51 +16,14 @@ from shapely.geometry.base import BaseGeometry
 from shapely import ops
 import pyproj
 
-import pycurl
-import certifi
-
-_curl_pool = defaultdict(pycurl.Curl)
-
-try:
-    xrange
-except NameError:
-    xrange = range
-
-from io import BytesIO
-import time
 @lru_cache(maxsize=128)
-def load_url(url, shape=(3, 256, 256)):
-    if shape != (3, 256, 256):
-        shape = shape[0][0], shape[1][0], shape[2][0]
-    """ Loads a tms png inside a thread and returns as an ndarray """
-    thread_id = threading.current_thread().ident
-    _curl = _curl_pool[thread_id]
-    _curl.setopt(_curl.URL, url)
-    _curl.setopt(pycurl.NOSIGNAL, 1)
-    # cert errors on windows
-    _curl.setopt(pycurl.CAINFO, certifi.where())
-    _, ext = os.path.splitext(urlparse(url).path)
-    
-    with NamedTemporaryFile(prefix="gbdxtools", suffix=ext, delete=False) as temp: # TODO: apply correct file extension
-        _curl.setopt(_curl.WRITEDATA, temp.file)
-        _curl.perform()
-        code = _curl.getinfo(pycurl.HTTP_CODE)
-        try:
-            if(code != 200):
-                raise TypeError("Request for {} returned unexpected error code: {}".format(url, code))
-            temp.file.flush()
-            temp.close()
-            arr = np.rollaxis(imread(temp.name), 2, 0)
-        except Exception as e:
-            print(e)
-            arr = np.zeros(shape, dtype=np.uint8)
-            _curl.close()
-            del _curl_pool[thread_id]
-        finally:
-            temp.close()
-            os.remove(temp.name)
-        return arr
-
+def load_url(url):
+    user_agent = {'user-agent': 'GBDXtools v0.17.1 contact GBDX-Support@digitalglobe.com'}
+    r = requests.get(url, headers=user_agent)
+    r.raise_for_status()
+    memfile = BytesIO(r.content)
+    arr = imread(memfile)
+    return np.rollaxis(arr, 2, 0)
 
 class EphemeralImage(Exception):
     pass
@@ -127,7 +74,7 @@ class TmsMeta(object):
             return {self._name: (raise_aoi_required, )}
         else:
             urls, shape = self._collect_urls(self.bounds)
-            return {(self._name, 0, y, x): (load_url, url, self.chunks) for (y, x), url in urls.items()}
+            return {(self._name, 0, y, x): (load_url, url) for (y, x), url in urls.items()}
 
     @property
     def dtype(self):
@@ -175,7 +122,7 @@ class TmsMeta(object):
     def _collect_urls(self, bounds):
         minx, miny, maxx, maxy = self._tile_coords(bounds)
         urls = {(y - miny, x - minx): self._url.format(z=self.zoom_level, x=x, y=y)
-                for y in xrange(miny, maxy + 1) for x in xrange(minx, maxx + 1)}
+                for y in range(miny, maxy + 1) for x in range(minx, maxx + 1)}
         return urls, (3, self._tile_size * (maxy - miny + 1), self._tile_size * (maxx - minx + 1))
 
     def _expand_bounds(self, bounds):

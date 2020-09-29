@@ -17,7 +17,6 @@ try:
     has_pyplot = True
 except:
     has_pyplot = False
-import warnings
 
 
 class PlotMixin(object):
@@ -78,8 +77,7 @@ class PlotMixin(object):
             return image_equalized
 
     def histogram_match(self, use_bands, blm_source='browse', **kwargs):
-        ''' Match the histogram to existing imagery '''
-        warnings.warn('Histogram matching has changed due to the Maps API deprecation, see https://github.com/DigitalGlobe/gbdxtools/issues/778')
+        ''' Match the histogram to Browse imagery '''
         assert has_rio, "To match image histograms please install rio_hist"
         data = self._read(self[use_bands,...], **kwargs)
         data = np.rollaxis(data.astype(np.float32), 0, 3)

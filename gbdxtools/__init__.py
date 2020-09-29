@@ -1,4 +1,3 @@
-from __future__ import absolute_import
 from gbdxtools.images.rda_image import RDAImage
 from gbdxtools.images.idaho_image import IdahoImage
 from gbdxtools.images.ikonos import IkonosImage

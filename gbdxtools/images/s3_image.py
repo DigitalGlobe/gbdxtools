@@ -1,9 +1,7 @@
-from __future__ import print_function
 from gbdxtools.images.rda_image import RDAImage
 from gbdxtools.rda.interface import RDA
 
 rda = RDA()
-
 
 class S3Image(RDAImage):
     '''Dask based access to geotiffs on S3.
