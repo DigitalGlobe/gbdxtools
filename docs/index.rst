@@ -32,6 +32,8 @@ Python GBDXTools
 
 GBDXTools extends the access to these services with additional functionality for analysis and visualization. It can be thought of as having three layers:
 
+Current version is 0.17.1
+
 * A core API library to abstract GBDX services
 
 * Image classes that wrap all of the API calls, manage the geospatial metadata, and return NumPy arrays. These classes are based on `Dask <http://dask.pydata.org/>`_ arrays which defer the server calls until the image data is needed. 
@@ -59,11 +61,7 @@ To load a subset of an image covering the Denver area using its catalog identifi
 
 GBDXTools is MIT licenced.
 
-The recommended installation method is with Anaconda::
-
-    conda install -c conda-forge -c digitalglobe gbdxtools
-
-GBDXTools can also be installed with pip::
+GBDXTools can be installed with pip:
 
     pip install gbdxtools
 

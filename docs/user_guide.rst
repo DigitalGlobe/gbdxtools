@@ -32,22 +32,13 @@ GBDXtools has additional features for visualization and mapping in IPython and J
 Installation
 -----------------
 
-Conda is the recommended way to install GBDXtools::
-
-    conda install -c conda-forge -c digitalglobe gbdxtools
-
-Pip can also be used::
-
     pip install gbdxtools
 
 
 Upgrading
 ---------------
 
-In the period between 0.16.7 and 0.17.0 releases there have been significant changes to GBDXtools, Proj, GDAL, and Dask. We highly recommend installing GBDXtools 0.17.0 into a new, clean environment. To upgrade an existing environment the best practice is to uninstall the core dependencies first. In Conda we suggest:
-
-   conda remove -y dask dask-core pyproj proj4 pyveda rio-hist gbdxtools rasterio gdal
-
+In the period between 0.16.7 and 0.17.0 releases there have been significant changes to GBDXtools, Proj, GDAL, and Dask. We highly recommend installing GBDXtools 0.17.1 into a new, clean environment. To upgrade an existing environment the best practice is to uninstall the core dependencies first. We suggest unistalling the following: dask, dask-core, pyproj, proj4, rio-hist, rasterio, and gdal.
 
 Troubleshooting
 ^^^^^^^^^^^^^^^^^
@@ -56,28 +47,8 @@ These are various tips to follow if your installation fails.
 
 **Dependencies**
 
-As of GBDXtools version 0.11.3 libcurl and GDAL (>=2.1.0) are required. If installing from source, install these packages using::
-
-  # Ubuntu users:
-  sudo add-apt-repository -y ppa:ubuntugis/ubuntugis-unstable
-  sudo apt update 
-  sudo apt-get install gdal-bin python-gdal python3-gdal libcurl4-openssl-dev
-
-  # Mac Users:
-  xcode-select --install # to install libcurl
-  brew install https://raw.githubusercontent.com/OSGeo/homebrew-osgeo4mac/master/Formula/gdal2.rb
-  
-Conda will usually manage the dependencies correctly.
 
 **Windows Users**
-
-Conda installation should work fine on Windows:
-
-  conda install -c conda-forge -c digitalglobe gbdxtools
-
-Pip may not get all dependencies correct but should work:
-
-  pip install gbdxtools
 
 Wheels for GBDXtools dependencies are collected here: https://github.com/DigitalGlobe/gbdxtools-windows-dependencies
 
@@ -110,60 +81,3 @@ If you are running in a virtualenv and run into issues you may need upgrade pip 
 	# you might also need to remove token from your .gbdx-config file
 	nano -w ~.gbdx-config
 	# then, remove the [gbdx_token] section and json= part
-
-Users installing GBDXtools using ``pip`` on OS X Mojave have encountered::
-
-   __main__.ConfigurationError: Curl is configured to use SSL, but we have not been able to determine which SSL backend it is using. Please see PycURL documentation for how to specify the SSL backend manually.
-
-This solution was reported to work::
-
-   brew install openssl
-   PYCURL_SSL_LIBRARY=openssl LDFLAGS="-L/usr/local/opt/openssl/lib" CPPFLAGS="-I/usr/local/opt/openssl/include" pip install --no-cache-dir pycurl
-   pip install gbdxtools 
-
-You can run also run a shorter version::
-
-   brew install openssl
-   make osx
-
-This assumes you are installing in a fresh environment. If ``pycurl`` or ``gbdxtools`` are already installed they should be uninstalled first.
-
-Other errors related to ``pycurl`` and system libraries may indicate that you have previously used Conda to install ``pycurl``. If you are a Conda user you should use ``conda install gbdxtools`` instead of pip. 
-    
-
-**GDAL**
-
-Versions of `gbdxtools` >= 0.11.3 require the GDAL library (>= 2.1.0) to be installed. 
-
-**conda**
-
-If your installation with pip keeps failing, try creating a conda environment and installing `gbdxtools` within this environment. 
-
-For Ubuntu, install conda with the following commands (choose default options at prompt)::
-
-   wget https://repo.continuum.io/miniconda/Miniconda2-latest-Linux-x86_64.sh
-   bash Miniconda2-latest-Linux-x86_64.sh
-
-For OS X, install conda with the following commands (choose default options at prompt)::
-
-   wget https://repo.continuum.io/miniconda/Miniconda2-latest-MacOSX-x86_64.sh
-   bash Miniconda2-latest-MacOSX-x86_64.sh
-
-Make sure that conda is in your path. Then create a conda environment::
-
-   conda create -n env python ipython   
-   
-Activate the environment::
-
-   conda activate env
-
-Upgrade pip (if required)::
-
-   pip install pip --upgrade
-
-Install `gbdxtools`::
-
-   conda install -y gbdxtools -c digitalglobe -c conda-forge
-
-
-
