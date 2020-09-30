@@ -468,6 +468,9 @@ Use the ordering member of the Interface to order imagery and check the status o
 To order the image with DG factory catalog ID 10400100143FC900:
 
 .. code-block:: pycon
+   
+   >> from gbdxtools import Interface
+   >> gbdx = Interface()
 
    >>> order_id = gbdx.ordering.order('10400100143FC900')
    >>> print(order_id)
