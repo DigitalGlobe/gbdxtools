@@ -15,7 +15,7 @@ install:
   #- "activate test-environment"
   #- "conda install pycurl"
   - "%PYTHON%\\python.exe -m pip install wheel"
-  - "appveyor DownloadFile https://download.lfd.uci.edu/pythonlibs/q4hpdf1k/numpy-1.18.1+mkl-cp36-cp36m-win32.whl"
+  - "appveyor DownloadFile https://download.lfd.uci.edu/pythonlibs/x2tqcw5k/numpy-1.18.5+mkl-cp36-cp36m-win32.whl"
   - "%PYTHON%\\python.exe -m pip install numpy-1.18.1+mkl-cp36-cp36m-win32.whl"
   - "appveyor DownloadFile https://github.com/DigitalGlobe/gbdxtools-windows-dependencies/raw/master/Shapely-1.6.4.post2-cp36-cp36m-win32.whl"
   - "%PYTHON%\\python.exe -m pip install Shapely-1.6.4.post2-cp36-cp36m-win32.whl"
