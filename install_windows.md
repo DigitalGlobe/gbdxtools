@@ -12,8 +12,10 @@ Install Other Dependencies
 
 Install numpy:
 
+Download from https://www.lfd.uci.edu/~gohlke/pythonlibs/#numpy
+
 ```
-pip install https://download.lfd.uci.edu/pythonlibs/q4hpdf1k/numpy-1.18.1+mkl-cp37-cp37m-win_amd64.whl
+pip install numpy-1.18.1+mkl-cp37-cp37m-win_amd64.whl
 ```
 
 Install pycurl:
