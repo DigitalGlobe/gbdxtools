@@ -21,7 +21,7 @@ def req_with_retries(conn, url, retries=5):
     for i in range(retries):
         try:
             res = resolve_if_future(conn.get(url))
-            if res.status_code != 502:
+            if res.status_code not in [502, 429]:
                 return res
             elif res.status_code == 501:
                 raise Exception('501 Auth error')
