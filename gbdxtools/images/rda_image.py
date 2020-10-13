@@ -2,7 +2,6 @@ import sys
 
 from gbdxtools.images.meta import DaskMeta, GeoDaskImage
 from gbdxtools.rda.util import RatPolyTransform, AffineTransform, deprecation, get_proj
-from gbdxtools.rda.graph import get_rda_graph
 from gbdxtools.auth import Auth
 
 from shapely import wkt, ops
@@ -47,7 +46,7 @@ class GraphMeta(object):
             self._nid = graph["nodes"][-1]["id"]
         return self._nid
 
-    def graph(self):
+    def _graph(self):
         if self._graph is None:
             self._graph = get_rda_graph(self._interface.gbdx_connection, self._rda_id)
         return self._graph

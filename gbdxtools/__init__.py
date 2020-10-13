@@ -7,7 +7,6 @@ from gbdxtools.images.worldview import WV02, WV03_VNIR, WV01, WV03_SWIR, WV04
 from gbdxtools.images.landsat_image import LandsatImage
 from gbdxtools.images.dem_image import DemImage
 from gbdxtools.images.tms_image import TmsImage
-from gbdxtools.images.radarsat import Radarsat
 from gbdxtools.images.modis import Modis
 from gbdxtools.images.sentinel import Sentinel2, Sentinel1
 from gbdxtools.images.s3_image import S3Image

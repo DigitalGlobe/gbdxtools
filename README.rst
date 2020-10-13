@@ -2,14 +2,9 @@
 GBDXtools: Python tools for using GBDX
 ======================================
 
-.. image:: https://anaconda.org/digitalglobe/gbdxtools/badges/version.svg   
-    :target: https://anaconda.org/digitalglobe/gbdxtools
 
 .. image:: https://badge.fury.io/py/gbdxtools.svg
     :target: https://badge.fury.io/py/gbdxtools
-    
-.. image:: https://travis-ci.org/DigitalGlobe/gbdxtools.svg?branch=master
-    :target: https://travis-ci.org/DigitalGlobe/gbdxtools
     
 .. image:: https://readthedocs.org/projects/gbdxtools/badge/?version=latest
     :target: http://gbdxtools.readthedocs.org/en/latest/?badge=latest

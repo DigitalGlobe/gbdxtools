@@ -3,9 +3,10 @@
 * move tile fetcher to simple Requests to remove pycurl
 * clean out Python 2 compatibility stuff
 * clean out previously deprecated functionality
-* clean out old mystery files
+* clean out old mystery files, unused files
 * remove async requests stuff
-
+* add rate-limiting responses to retry logic
+* cache RDA template requests
 
 
 0.17.0

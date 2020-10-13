@@ -2,17 +2,19 @@ import os
 import json
 import time
 from gbdxtools.rda.error import NotFound, BadRequest
-import warnings
 from urllib.parse import urlencode
+from functools import lru_cache
 
 VIRTUAL_RDA_URL = os.environ.get("VIRTUAL_RDA_URL", "https://rda.geobigdata.io/v1")
 
 
+@lru_cache()
 def req_with_retries(conn, url, retries=5):
+    print(url)
     for i in range(retries):
         try:
             res = conn.get(url)
-            if res.status_code != 502:
+            if res.status_code not in [502, 429]:
                 return res
             elif res.status_code == 501:
                 raise Exception('501 Auth error')
@@ -22,15 +24,6 @@ def req_with_retries(conn, url, retries=5):
     raise Exception('RDA is overloaded')
 
 
-def get_graph_stats(conn, graph_id, node_id):
-    warnings.warn('Graph API is deprecated')
-    url = "{}/metadata/{}/{}/display_stats.json".format(VIRTUAL_RDA_URL, graph_id, node_id)
-    req = req_with_retries(conn, url)
-    if req.status_code == 200:
-        return req.json()
-    else:
-        raise NotFound("Could not fetch stats for graph/node: {} / {}".format(graph_id, node_id))
-
 def get_template_stats(conn, template_id, **kwargs):
     qs = urlencode(kwargs)
     url = "{}/template/{}/display_stats.json?{}".format(VIRTUAL_RDA_URL, template_id, qs)
@@ -39,15 +32,6 @@ def get_template_stats(conn, template_id, **kwargs):
         return req.json()
     else:
         raise NotFound("Could not fetch stats for template/args: {} / {}".format(template_id, kwargs))
-
-def get_rda_graph(conn, graph_id):
-    warnings.warn('Graph API is deprecated')
-    url = "{}/graph/{}".format(VIRTUAL_RDA_URL, graph_id)
-    req = req_with_retries(conn, url)
-    if req.status_code == 200:
-        return req.json()
-    else:
-        raise NotFound("No RDA graph found matching id: {}".format(graph_id))
 
 
 def get_rda_graph_template(conn, template_id):
@@ -87,35 +71,6 @@ def _search_for_rda_template(conn, template_name):
     raise Exception("Error fetching template Id")
 
 
-def register_rda_graph(conn, rda_graph):
-    warnings.warn('Graph API is deprecated')
-    url = "{}/graph".format(VIRTUAL_RDA_URL)
-    headers={'Content-Type': 'application/json'}
-    res = conn.post(url, json.dumps(rda_graph, sort_keys=True), headers=headers)
-    if res.status_code == 200:
-        return res.text
-    else:
-        raise BadRequest("Problem registering graph: {}".format(res.text))
-
-
-
-def get_rda_metadata(conn, rda_id, node='toa_reflectance'):
-    warnings.warn('Graph API is deprecated')
-    url = VIRTUAL_RDA_URL + "/metadata/{}/{}/metadata.json".format(rda_id, node)
-    md_response = req_with_retries(conn, url)
-    if md_response.status_code != 200:
-        md_json = md_response.json()
-        if 'error' in md_json:
-            raise BadRequest("RDA error: {}. RDA Graph: {}".format(md_json['error'], rda_id))
-        raise BadRequest("Problem fetching image metadata: status {} {}, graph_id: {}".format(md_response.status_code, md_response.reason, rda_id))
-    else:
-        md_json = md_response.json()
-        return {
-            "image": md_json["imageMetadata"],
-            "georef": md_json.get("imageGeoreferencing", None),
-            "rpcs": md_json.get("rpcSensorModel", None)
-        }
-
 def get_rda_template_metadata(conn, _id, **kwargs):
     qs = urlencode(kwargs)
     url = VIRTUAL_RDA_URL + "/template/{}/metadata?{}".format(_id, qs)
@@ -133,15 +88,18 @@ def get_rda_template_metadata(conn, _id, **kwargs):
             "rpcs": md_json.get("rpcSensorModel", None)
         }
 
+
 def create_rda_template(conn, graph):
     r = conn.post("{}/template".format(VIRTUAL_RDA_URL), json=graph).result()
     r.raise_for_status()
     return r.json()['id']
 
+
 def materialize_template(conn, payload):
     r = conn.post("{}/template/materialize".format(VIRTUAL_RDA_URL), json=payload).result()
     r.raise_for_status()
     return r.json()['jobId']
+
 
 def materialize_status(conn, job_id):
     r = conn.get("{}/template/materialize/status/{}".format(VIRTUAL_RDA_URL, job_id)).result()
