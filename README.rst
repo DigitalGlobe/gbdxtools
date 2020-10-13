@@ -15,7 +15,7 @@ GBDXtools: Python tools for using GBDX
 
 
 
-GBDXtools is a package for interfacing with Maxar's GBDX platform.
+GBDXtools is a package for interfacing with Maxar's GBDX platform. Current version is ``0.17.1``.
 
 In order to use GBDXtools, you need GBDX credentials. Email GBDX-Support@maxar.com to get these.
 
@@ -28,9 +28,9 @@ See the license file for license rights and limitations (MIT).
 Installation
 ------------
 
-Conda is the recommended way to install gbdxtools::
+GBDXtools is in Pypi so you can:
 
-    conda install -c conda-forge -c digitalglobe gbdxtools
+    pip install gbdxtools
 
 For more information on installation and troubleshooting, please see: 
 
