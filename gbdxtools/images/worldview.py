@@ -2,7 +2,6 @@
 GBDX Catalog Image Interface.
 Contact: chris.helm@digitalglobe.com
 """
-from __future__ import print_function
 import warnings
 
 from gbdxtools.images.drivers import WorldViewDriver, RDADaskImageDriver

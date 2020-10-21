@@ -3,10 +3,7 @@ GBDX Vector Services Interface.
 
 Contact: nate.ricklin@digitalglobe.com
 """
-#from __future__ import absolute_import
 from string import Template
-from builtins import object
-import six
 
 from imageio import imsave
 
@@ -485,7 +482,7 @@ class AggregationDef(object):
             base = '%s' % self.agg_type
 
         if self.children:
-            if isinstance(self.children, six.string_types):
+            if isinstance(self.children, str):
                 return '%s;%s' % (base, self.children)
             elif isinstance(self.children, AggregationDef):
                 return '%s;%s' % (base, self.children.__repr__())

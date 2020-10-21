@@ -1,3 +1,29 @@
+0.17.1
+* simplify requirements
+* move tile fetcher to simple Requests to remove pycurl
+* clean out Python 2 compatibility stuff
+* clean out previously deprecated functionality
+* clean out old mystery files, unused files
+* remove async requests stuff
+* add rate-limiting responses to retry logic
+* cache RDA template requests
+
+
+0.17.0
+* Streamlined installation and dependencies
+* Graph API sunset
+* Preview() removed
+* warp()ing removed
+* .geotiff(spec=rgb) change in behavior, image object will need to be initialized with DRA to write "RGB" geotiffs
+* Base Layer Matching now matches to the image's Browse image
+* TMSImage is now bring-your-own-tiles
+* PyProj updates
+* CatalogImage does better checking of an image's status and availability
+* Specific errors are thrown when images are not available in GBDX
+* S3 pagination and prefixes
+
+
+
 0.16.7
 * Unpin Numpy
 * Unpin max Dask version, set min pin

@@ -3,10 +3,6 @@ GBDX IDAHO Interface.
 
 Contact: nate.ricklin@digitalglobe.com
 """
-from __future__ import print_function
-from __future__ import division
-from builtins import str
-from builtins import object
 
 from shapely.wkt import loads as from_wkt
 import codecs
@@ -216,13 +212,3 @@ class Idaho(object):
         else:
             print('Cannot download chip')
             return False
-
-    def get_tms_layers(*args, **kwargs):
-        deprecation("""IDAHO TMS was deprecated 12/9/2019
-                       http://status.geobigdata.io/incidents/d59xzqdnb2nf
-                    """)
-
-    def create_leaflet_viewer(*args, **kwargs):
-        deprecation("""IDAHO TMS was deprecated 12/9/2019
-                       http://status.geobigdata.io/incidents/d59xzqdnb2nf
-                    """)

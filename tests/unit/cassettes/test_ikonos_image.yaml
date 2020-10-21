@@ -1,6 +1,7 @@
 interactions:
 - request:
-    body: null
+    body: '{"type": "Polygon", "coordinates": [[[180.0, -90.0], [180.0, 90.0], [-180.0,
+      90.0], [-180.0, -90.0], [180.0, -90.0]]]}'
     headers:
       Accept:
       - '*/*'
@@ -8,13 +9,15 @@ interactions:
       - gzip, deflate
       Connection:
       - keep-alive
+      Content-Length:
+      - '118'
       User-Agent:
-      - python-requests/2.21.0
-    method: GET
-    uri: https://vector.geobigdata.io/insight-vector/api/index/query/vector-gbdx-alpha-catalog-v2-*/items?q=item_type%3AGBDXCatalogRecord+AND+%28attributes.catalogID.keyword%3A2001110218231680000010116110+OR+id%3A2001110218231680000010116110%29+AND+NOT+item_type%3ADigitalGlobeAcquisition&count=1&left=-180.0&right=180.0&lower=-90.0&upper=90.0
+      - sandman@digitalglobe.com
+    method: POST
+    uri: https://vector.geobigdata.io/insight-vector/api/index/query/vector-gbdx-alpha-catalog-v2-*/items?q=item_type%3AGBDXCatalogRecord+AND+%28attributes.catalogID.keyword%3A2001110218231680000010116110+OR+id%3A2001110218231680000010116110%29+AND+NOT+item_type%3ADigitalGlobeAcquisition&count=1
   response:
     body:
-      string: '[{"type":"Feature","geometry":{"type":"MultiPolygon","coordinates":[[[[-111.9638092715832,36.81290122853262],[-111.9220226439808,36.81333419017205],[-111.8780593901595,36.8137297020557],[-111.878233367483,36.73823564577017],[-111.8786437208202,36.66135830113915],[-111.8788147517245,36.58600618050397],[-111.8790214764845,36.51046531992353],[-111.8791970504102,36.43523775625811],[-111.879411616176,36.35959502210984],[-111.8795646355624,36.28477106266746],[-111.8797135837009,36.21044042311449],[-111.8799081088434,36.13506797045719],[-111.8800834017154,36.05967334793932],[-111.8802966984626,35.98667824819438],[-111.9234781911831,35.98663839979486],[-111.9644571623843,35.98685240144139],[-112.0076944545667,35.98696882545276],[-112.0079088829463,36.05930271225932],[-112.007888792491,36.13454660365724],[-112.0076502103475,36.21136271655836],[-112.0075481850336,36.28692491948179],[-112.0076901343817,36.36107411992036],[-112.0078443516058,36.43542125456277],[-112.0078861551266,36.51053366350892],[-112.0079530835287,36.58563784475736],[-112.0080514790949,36.66074691401304],[-112.0081148814706,36.7361257478548],[-112.0079154245067,36.81258741609538],[-111.9638092715832,36.81290122853262]]]]},"properties":{"ingest_source":"GBDX_INGEST_ALPHA","item_date":"2001-11-02T18:23:16.000Z","original_crs":"EPSG:4326","item_type":["GBDXCatalogRecord","Acquisition","IKONOS","IKONOSAcquisition"],"name":null,"format":null,"ingest_date":"2017-03-09T19:20:10.785Z","attributes":{"bucketName":"ikonos-product","sunAzimuth_dbl":165.19904,"sensorPlatformName":"IKONOS","offNadirAngle_dbl":11.908405147224427,"cloudCover_int":4,"catalogID":"2001110218231680000010116110","zone":"12N","panResolution_dbl":0.8621521,"vendor":"DigitalGlobe","bucketPrefix":"po_1090993","components_int":1,"sunElevation_dbl":37.572853,"imageBands":"PAN_MS1","platformName":"IKONOS","multiResolution_dbl":3.4486084,"targetAzimuth_dbl":6.311525},"ingest_attributes":{"_rest_user":"acquisition-gbdx-support@digitalglobe.com","_rest_url":"https://vector.geobigdata.io/insight-vector/api/vectors/gbdx-alpha-catalog-v2-%257Bitem_date%253Ayyyy%257D"},"id":"2001110218231680000010116110","source":null,"text":""}}]'
+      string: '[{"geometry":{"coordinates":[[[[-111.9638092715832,36.81290122853262],[-111.9220226439808,36.81333419017205],[-111.8780593901595,36.8137297020557],[-111.878233367483,36.73823564577017],[-111.8786437208202,36.66135830113915],[-111.8788147517245,36.58600618050397],[-111.8790214764845,36.51046531992353],[-111.8791970504102,36.43523775625811],[-111.879411616176,36.35959502210984],[-111.8795646355624,36.28477106266746],[-111.8797135837009,36.21044042311449],[-111.8799081088434,36.13506797045719],[-111.8800834017154,36.05967334793932],[-111.8802966984626,35.98667824819438],[-111.9234781911831,35.98663839979486],[-111.9644571623843,35.98685240144139],[-112.0076944545667,35.98696882545276],[-112.0079088829463,36.05930271225932],[-112.007888792491,36.13454660365724],[-112.0076502103475,36.21136271655836],[-112.0075481850336,36.28692491948179],[-112.0076901343817,36.36107411992036],[-112.0078443516058,36.43542125456277],[-112.0078861551266,36.51053366350892],[-112.0079530835287,36.58563784475736],[-112.0080514790949,36.66074691401304],[-112.0081148814706,36.7361257478548],[-112.0079154245067,36.81258741609538],[-111.9638092715832,36.81290122853262]]]],"type":"MultiPolygon"},"type":"Feature","properties":{"ingest_source":"GBDX_INGEST_ALPHA","item_date":"2001-11-02T18:23:16.000Z","original_crs":"EPSG:4326","item_type":["GBDXCatalogRecord","Acquisition","IKONOS","IKONOSAcquisition"],"name":null,"format":null,"ingest_date":"2017-03-09T19:20:10.785Z","attributes":{"bucketName":"ikonos-product","sunAzimuth_dbl":165.19904,"sensorPlatformName":"IKONOS","offNadirAngle_dbl":11.908405147224427,"cloudCover_int":4,"catalogID":"2001110218231680000010116110","zone":"12N","panResolution_dbl":0.8621521,"vendor":"DigitalGlobe","bucketPrefix":"po_1090993","components_int":1,"sunElevation_dbl":37.572853,"imageBands":"PAN_MS1","platformName":"IKONOS","multiResolution_dbl":3.4486084,"targetAzimuth_dbl":6.311525},"ingest_attributes":{"_rest_user":"acquisition-gbdx-support@digitalglobe.com","_rest_url":"https://vector.geobigdata.io/insight-vector/api/vectors/gbdx-alpha-catalog-v2-%257Bitem_date%253Ayyyy%257D"},"id":"2001110218231680000010116110","source":null,"text":""}}]'
     headers:
       Access-Control-Allow-Credentials:
       - 'true'
@@ -35,7 +38,7 @@ interactions:
       Content-Type:
       - application/json;charset=UTF-8
       Date:
-      - Tue, 23 Apr 2019 21:29:58 GMT
+      - Tue, 13 Oct 2020 19:56:25 GMT
       Expires:
       - '0'
       Pragma:
@@ -69,16 +72,16 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - python-requests/2.21.0
+      - sandman@digitalglobe.com
     method: GET
     uri: https://rda.geobigdata.io/v1/template/metadata/search?free-text=IkonosTemplate
   response:
     body:
       string: '[{"isPublic":false,"keywords":["IkonosTemplate"],"sensors":["Ikonos"],"keynodes":[{"id":"Orthorectify","description":"Orthorectify"}],"description":"Ikonos
-        Read and Orthorectify","metadataAuthor":{"firstName":"Brett","familyName":"Cullen","email":"brett.cullen@digitalglobe.com"},"templateAuthor":{"firstName":"Brett","familyName":"Cullen","email":"brett.cullen@digitalglobe.com"},"datePublished":"2019-04-16T20:04:56.102Z","name":"IkonosTemplate","templateId":"b10b38b3bab268afa5adbd964acf504782e48231f490803f91d3b782c59a8731","id":"a0d3224627a84008a84e5c0609a54de8"}]'
+        Read and Orthorectify","metadataAuthor":{"firstName":"Brett","familyName":"Cullen","email":"brett.cullen@digitalglobe.com"},"templateAuthor":{"firstName":"Brett","familyName":"Cullen","email":"brett.cullen@digitalglobe.com"},"datePublished":"2019-05-06T20:26:17.018Z","name":"IkonosTemplate","templateId":"b10b38b3bab268afa5adbd964acf504782e48231f490803f91d3b782c59a8731","id":"a0d3224627a84008a84e5c0609a54de8"}]'
     headers:
       Access-Control-Allow-Headers:
-      - x-requested-with, X-Auth-Token, Content-Type, Authorization
+      - x-requested-with, X-Auth-Token, Content-Type, Authorization, range
       Access-Control-Allow-Methods:
       - GET, OPTIONS, HEAD, PUT, POST, DELETE
       Access-Control-Allow-Origin:
@@ -92,7 +95,7 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Tue, 23 Apr 2019 21:29:59 GMT
+      - Tue, 13 Oct 2020 19:56:39 GMT
     status:
       code: 200
       message: ''
@@ -106,7 +109,7 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - python-requests/2.21.0
+      - sandman@digitalglobe.com
     method: GET
     uri: https://rda.geobigdata.io/v1/template/b10b38b3bab268afa5adbd964acf504782e48231f490803f91d3b782c59a8731
   response:
@@ -116,7 +119,7 @@ interactions:
         System}","Output Pixel to World Transform":"","Sensor Model":"null"}},{"id":"IkonosRead","operator":"IkonosRead","parameters":{"path":"${path}"}}]}'
     headers:
       Access-Control-Allow-Headers:
-      - x-requested-with, X-Auth-Token, Content-Type, Authorization
+      - x-requested-with, X-Auth-Token, Content-Type, Authorization, range
       Access-Control-Allow-Methods:
       - GET, OPTIONS, HEAD, PUT, POST, DELETE
       Access-Control-Allow-Origin:
@@ -130,7 +133,7 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Tue, 23 Apr 2019 21:29:59 GMT
+      - Tue, 13 Oct 2020 19:56:39 GMT
     status:
       code: 200
       message: ''
@@ -144,19 +147,18 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - python-requests/2.21.0
+      - sandman@digitalglobe.com
     method: GET
     uri: https://rda.geobigdata.io/v1/template/b10b38b3bab268afa5adbd964acf504782e48231f490803f91d3b782c59a8731/metadata?path=ikonos-product%2Fpo_1090993%2Fpo_1090993_0000000%3Amultispectral&nodeId=Orthorectify&Output+Coordinate+Reference+System=EPSG%3A4326&Sensor+Model=null&Elevation+Source=&Output+Pixel+to+World+Transform=
   response:
     body:
-      string: '{"imageMetadata":{"imageId":"2001110218231680000010116110","version":1.1,"profileName":"georectified_image","tilePartition":"0000","tileXOffset":0,"tileYOffset":0,"numXTiles":21,"numYTiles":114,"tileXSize":256,"tileYSize":256,"numBands":4,"dataType":"UNSIGNED_SHORT","imageHeight":28914,"imageWidth":5221,"sensorPlatformName":"IKONOS-2","sensorName":"Four
-        band (QuickBird and Ikonos scheme): Blue, Green, Red, Near-infrared","vendorDatasetIdentifier":"Geo:000:2001110218231680000010116110:1090993","acquisitionDate":"2001-11-02T18:23:00Z","colorInterpretation":"BGRN","imageBoundsWGS84":"POLYGON
-        ((-112.0183049307096 36.81451509628113, -111.8682222860815 36.81451509628113,
-        -111.8682222860815 35.983354478243044, -112.0183049307096 35.983354478243044,
-        -112.0183049307096 36.81451509628113))","groundSampleDistanceMeters":3.430950500013,"minX":14,"minY":-13,"maxX":5234,"maxY":28900,"minTileX":0,"minTileY":-1,"maxTileX":20,"maxTileY":112,"sunAzimuth":165.3678,"sunElevation":37.41572,"satAzimuth":6.206315161856,"satElevation":76.76812769369,"sensorAlias":"IK02_MULTI","bandAliases":["B","G","R","N"]},"imageGeoreferencing":{"spatialReferenceSystemCode":"EPSG:4326","scaleX":2.8745957599712565E-5,"scaleY":-2.8745957599712565E-5,"translateX":-112.018707374116,"translateY":36.814141398832334,"shearX":0.0,"shearY":0.0},"rpcSensorModel":{"spatialReferenceSystem":"EPSG:4326","upperLeftCorner":{"x":-112.018707374116,"y":36.813019586264566},"upperRightCorner":{"x":-111.87805169372926,"y":36.814141398832334},"lowerRightCorner":{"x":-111.86875994703911,"y":35.98381701809311},"lowerLeftCorner":{"x":-112.00792775123575,"y":35.98272852999076},"gsd":2.8745957599712565E-5,"postScaleFactorX":1.0,"postScaleFactorY":1.0,"lineOffset":14392.12,"sampleOffset":1960.12,"latOffset":36.3984,"lonOffset":-111.9437,"heightOffset":1412.0,"lineScale":14392.5,"sampleScale":1960.5,"latScale":0.4146,"lonScale":0.0749,"heightScale":1412.0,"lineNumCoefs":[-0.001946965180893967,0.001425267076325787,-0.9987030379975046,0.007123747902049607,-7.179446755131883E-8,1.438937307385285E-6,-1.342304118738191E-8,-5.621811733783419E-5,-1.709531644675479E-9,-1.508955708596888E-6,-2.118481776979018E-7,8.088301638678051E-11,-1.297505210707186E-8,1.856707048130281E-8,-2.04520353969603E-8,6.083466225713669E-9,7.304991535341669E-9,-1.254978657078579E-6,-7.746648053474883E-7,-4.429648318236981E-9],"lineDenCoefs":[1.0,7.121810280842407E-6,-3.139824701022767E-5,4.570026574735414E-4,-1.076008527546033E-7,-2.08042425828675E-6,-7.734694617212393E-6,-2.412760696426733E-7,-3.427027209935134E-9,-3.680767438140699E-8,-1.005544830479195E-7,8.212109921991719E-11,-2.553535867573985E-9,7.350740799058291E-9,5.574473987437357E-9,3.861528443590605E-8,1.878597621246622E-8,2.954250493822688E-8,-1.863659542111371E-7,-5.89986206425123E-10],"sampleNumCoefs":[-0.003804001506251489,1.069912827819751,0.07303534673274827,-0.006254695134759323,-7.937454515791534E-5,3.397004700919887E-4,-0.004972339294189028,7.083525999933263E-6,7.302726523382083E-4,3.474173374681991E-5,-5.781485126344042E-6,1.476907535113852E-7,6.089962510731068E-6,-2.237143931502638E-7,-1.219211873707526E-6,5.512522679848588E-6,1.668148781119858E-6,1.024304867429764E-6,-5.712184795062989E-6,-1.343070617978934E-8],"sampleDenCoefs":[1.0,1.03629475036144E-5,0.005239704419389691,-0.001981470036441984,-1.272508911226413E-6,-8.662869110725083E-7,-2.007448725117906E-5,5.570621739812584E-8,5.995784829104024E-5,-3.988664303964471E-7,1.216207299869283E-7,-2.486175927913614E-9,-8.59887876148624E-9,-3.152151652491055E-9,4.7021621557714E-9,4.09874204848807E-7,4.495123116238433E-8,-1.075130722974021E-8,-5.091287440603395E-7,1.488873039725279E-9]},"histogram":null,"sensorMetadata":{"version":"v1.0","sensorName":"IK02_MULTI","numBands":4,"bandAliases":["B","G","R","N"],"weightedBandCenters":[483.07,550.62,663.25,794.37],"eSun":[1921.26,1803.28,1517.76,1145.8],"absoluteCalibrationGains":[1.073,0.99,0.94,1.043],"absoluteCalibrationOffsets":[-9.699,-7.937,-4.767,-8.869]},"imageAssociations":null,"rrdMetadata":{"reducedResolutionDataset":[{"sourceImage":"ikonos-product/po_1090993/po_1090993_0000000:multispectral","targetImage":"ikonos-product/po_1090993/po_1090993_0000000:multispectral","inverseScaleFactor":2.0},{"sourceImage":"ikonos-product/po_1090993/po_1090993_0000000:multispectral","targetImage":"ikonos-product/po_1090993/po_1090993_0000000:multispectral","inverseScaleFactor":4.0},{"sourceImage":"ikonos-product/po_1090993/po_1090993_0000000:multispectral","targetImage":"ikonos-product/po_1090993/po_1090993_0000000:multispectral","inverseScaleFactor":8.0},{"sourceImage":"ikonos-product/po_1090993/po_1090993_0000000:multispectral","targetImage":"ikonos-product/po_1090993/po_1090993_0000000:multispectral","inverseScaleFactor":16.0},{"sourceImage":"ikonos-product/po_1090993/po_1090993_0000000:multispectral","targetImage":"ikonos-product/po_1090993/po_1090993_0000000:multispectral","inverseScaleFactor":32.0}]}}'
+      string: '{"imageMetadata":{"imageId":"2001110218231680000010116110","version":1.1,"profileName":"georectified_image","tilePartition":"0000","tileXOffset":0,"tileYOffset":0,"numXTiles":21,"numYTiles":114,"tileXSize":256,"tileYSize":256,"numBands":4,"dataType":"UNSIGNED_SHORT","imageHeight":28914,"imageWidth":5221,"sensorPlatformName":"IKONOS-2","sensorName":"BGRN","vendorDatasetIdentifier":"Geo:000:2001110218231680000010116110:1090993","acquisitionDate":"2001-11-02T06:23:00.000Z","colorInterpretation":"BGRN","imageBoundsWGS84":"POLYGON
+        ((-112.01830493070963 36.814515096281134, -111.86822228608153 36.814515096281134,
+        -111.86822228608153 35.98335447824305, -112.01830493070963 35.98335447824305,
+        -112.01830493070963 36.814515096281134))","groundSampleDistanceMeters":3.430950500013,"minX":14,"minY":-13,"maxX":5234,"maxY":28900,"minTileX":0,"minTileY":-1,"maxTileX":20,"maxTileY":112,"sunAzimuth":165.3678,"sunElevation":37.41572,"satAzimuth":6.206315161856,"satElevation":76.76812769369,"sensorAlias":"IK02_MULTI","bandAliases":["B","G","R","N"]},"imageGeoreferencing":{"spatialReferenceSystemCode":"EPSG:4326","scaleX":2.874595759971254E-5,"scaleY":-2.874595759971254E-5,"translateX":-112.01870737411603,"translateY":36.81414139883234,"shearX":0.0,"shearY":0.0},"rpcSensorModel":{"spatialReferenceSystem":"EPSG:4326","upperLeftCorner":{"x":-112.01870737411603,"y":36.81301958626457},"upperRightCorner":{"x":-111.87805169372929,"y":36.81414139883234},"lowerRightCorner":{"x":-111.86875994703914,"y":35.98381701809313},"lowerLeftCorner":{"x":-112.00792775123578,"y":35.982728529990766},"gsd":2.874595759971254E-5,"postScaleFactorX":1.0,"postScaleFactorY":1.0,"lineOffset":14392.12,"sampleOffset":1960.12,"latOffset":36.3984,"lonOffset":-111.9437,"heightOffset":1412.0,"lineScale":14392.5,"sampleScale":1960.5,"latScale":0.4146,"lonScale":0.0749,"heightScale":1412.0,"lineNumCoefs":[-0.001946965180893967,0.001425267076325787,-0.9987030379975046,0.007123747902049607,-7.179446755131883E-8,1.438937307385285E-6,-1.342304118738191E-8,-5.621811733783419E-5,-1.709531644675479E-9,-1.508955708596888E-6,-2.118481776979018E-7,8.088301638678051E-11,-1.297505210707186E-8,1.856707048130281E-8,-2.04520353969603E-8,6.083466225713669E-9,7.304991535341669E-9,-1.254978657078579E-6,-7.746648053474883E-7,-4.429648318236981E-9],"lineDenCoefs":[1.0,7.121810280842407E-6,-3.139824701022767E-5,4.570026574735414E-4,-1.076008527546033E-7,-2.08042425828675E-6,-7.734694617212393E-6,-2.412760696426733E-7,-3.427027209935134E-9,-3.680767438140699E-8,-1.005544830479195E-7,8.212109921991719E-11,-2.553535867573985E-9,7.350740799058291E-9,5.574473987437357E-9,3.861528443590605E-8,1.878597621246622E-8,2.954250493822688E-8,-1.863659542111371E-7,-5.89986206425123E-10],"sampleNumCoefs":[-0.003804001506251489,1.069912827819751,0.07303534673274827,-0.006254695134759323,-7.937454515791534E-5,3.397004700919887E-4,-0.004972339294189028,7.083525999933263E-6,7.302726523382083E-4,3.474173374681991E-5,-5.781485126344042E-6,1.476907535113852E-7,6.089962510731068E-6,-2.237143931502638E-7,-1.219211873707526E-6,5.512522679848588E-6,1.668148781119858E-6,1.024304867429764E-6,-5.712184795062989E-6,-1.343070617978934E-8],"sampleDenCoefs":[1.0,1.03629475036144E-5,0.005239704419389691,-0.001981470036441984,-1.272508911226413E-6,-8.662869110725083E-7,-2.007448725117906E-5,5.570621739812584E-8,5.995784829104024E-5,-3.988664303964471E-7,1.216207299869283E-7,-2.486175927913614E-9,-8.59887876148624E-9,-3.152151652491055E-9,4.7021621557714E-9,4.09874204848807E-7,4.495123116238433E-8,-1.075130722974021E-8,-5.091287440603395E-7,1.488873039725279E-9]},"histogram":null,"sensorMetadata":{"version":"v1.0","sensorName":"IK02_MULTI","numBands":4,"bandAliases":["B","G","R","N"],"weightedBandCenters":[483.07,550.62,663.25,794.37],"absoluteCalibrationGains":[1.0,1.0,1.0,1.0],"absoluteCalibrationOffsets":[0.0,0.0,0.0,0.0],"eSun":[1921.26,1803.28,1517.76,1145.8]},"imageAssociations":null,"rrdMetadata":{"reducedResolutionDataset":[{"sourceImage":"ikonos-product/po_1090993/po_1090993_0000000:multispectral","targetImage":"ikonos-product/po_1090993/po_1090993_0000000:multispectral","inverseScaleFactor":1.0},{"sourceImage":"ikonos-product/po_1090993/po_1090993_0000000:multispectral","targetImage":"ikonos-product/po_1090993/po_1090993_0000000:multispectral","inverseScaleFactor":3.996941896024465},{"sourceImage":"ikonos-product/po_1090993/po_1090993_0000000:multispectral","targetImage":"ikonos-product/po_1090993/po_1090993_0000000:multispectral","inverseScaleFactor":7.985743380855396},{"sourceImage":"ikonos-product/po_1090993/po_1090993_0000000:multispectral","targetImage":"ikonos-product/po_1090993/po_1090993_0000000:multispectral","inverseScaleFactor":15.939024390243903},{"sourceImage":"ikonos-product/po_1090993/po_1090993_0000000:multispectral","targetImage":"ikonos-product/po_1090993/po_1090993_0000000:multispectral","inverseScaleFactor":31.878048780487806}]}}'
     headers:
       Access-Control-Allow-Headers:
-      - x-requested-with, X-Auth-Token, Content-Type, Authorization
+      - x-requested-with, X-Auth-Token, Content-Type, Authorization, range
       Access-Control-Allow-Methods:
       - GET, OPTIONS, HEAD, PUT, POST, DELETE
       Access-Control-Allow-Origin:
@@ -166,11 +168,11 @@ interactions:
       Connection:
       - keep-alive
       Content-Length:
-      - '4955'
+      - '4934'
       Content-Type:
       - application/json
       Date:
-      - Tue, 23 Apr 2019 21:30:02 GMT
+      - Tue, 13 Oct 2020 19:56:41 GMT
     status:
       code: 200
       message: ''

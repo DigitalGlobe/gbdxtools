@@ -3,7 +3,7 @@ GBDX Catalog Image Interface.
 
 Contact: marc.pfister@digitalglobe.com
 """
-from gbdxtools import WV01, WV02, WV03_SWIR, WV03_VNIR, WV04, LandsatImage, IkonosImage, GE01, QB02, Sentinel2, Sentinel1, Radarsat, Modis
+from gbdxtools import WV01, WV02, WV03_SWIR, WV03_VNIR, WV04, LandsatImage, IkonosImage, GE01, QB02, Sentinel2, Sentinel1, Modis
 from gbdxtools.rda.error import UnsupportedImageType, ImageNotAvailable, MissingMetadata, AcompUnavailable
 from gbdxtools.images.worldview import WorldViewImage
 import warnings

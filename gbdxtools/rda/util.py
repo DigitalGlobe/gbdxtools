@@ -1,31 +1,15 @@
-import warnings
-import os
-import errno
 import datetime
 import time
 import math
-import json
-from functools import wraps, partial
-try:
-    from collections.abc import Sequence
-except ImportError:  #python2.7
-    from collections import Sequence
-try:
-    from itertools import izip
-except ImportError:  #python3.x
-    izip = zip
+from functools import lru_cache
+from collections.abc import Sequence
 
 import numpy as np
 from numpy.linalg import pinv
 
-import xml.etree.cElementTree as ET
-from xml.dom import minidom
 import ephem
-from string import Template
 
-from shapely.geometry import shape, box
-from shapely.wkt import loads
-from shapely import ops
+from shapely.geometry import shape
 from affine import Affine
 import pyproj
 
@@ -51,6 +35,7 @@ CUSTOM_PRJ = {
     "EPSG:54008": "+proj=sinu +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs"
 }
 
+@lru_cache()
 def get_proj(prj_code):
     """
       Helper method for handling projection codes that are unknown to pyproj
@@ -66,11 +51,6 @@ def get_proj(prj_code):
     else:
         proj = pyproj.CRS(prj_code)
     return proj
-
-def preview(image, **kwargs):
-    ''' used a deprecated api
-    '''
-    raise NotImplementedError('Image preview deprecated due to RDA Graph API deprecation')
 
 
 def reproject_params(proj):
@@ -196,7 +176,7 @@ class RatPolyTransform(GeometricTransform):
         if isinstance(x, (Sequence, np.ndarray)):
             if z is None:
                 z = [None]*len(x)
-            return  np.transpose(np.asarray([self.fwd(x_i, y_i, z_i) for x_i, y_i, z_i in izip(x, y, z)]))
+            return  np.transpose(np.asarray([self.fwd(x_i, y_i, z_i) for x_i, y_i, z_i in zip(x, y, z)]))
         coord = np.asarray([x, y])
         normed = np.sum(self._px_offscl * np.vstack([np.ones(coord.shape), coord]), axis=0)
         coord = np.dot(self._A_rev, normed)[[1,2,3]] # likely unstable
