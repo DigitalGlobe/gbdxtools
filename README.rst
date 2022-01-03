@@ -1,3 +1,13 @@
+NOTE
+
+GBDX is deprecated and no longer available as of January 4, 2022.
+
+This repository has been archived. The implementation of georeferenced Dask arrays is interesting and may be a useful reference for others.
+
+
+
+
+
 ======================================
 GBDXtools: Python tools for using GBDX
 ======================================
